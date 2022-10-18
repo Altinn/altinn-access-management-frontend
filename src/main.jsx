@@ -1,22 +1,29 @@
 import React from "react";
-import { render } from "react-dom";
+import ReactDOM from "react-dom/client";
 import {
-  BrowserRouter,
-  Routes,
+  createBrowserRouter,
+  RouterProvider,
   Route,
 } from "react-router-dom";
-import App from "./App";
-import Expenses from "./routes/expenses";
-import Invoices from "./routes/invoices";
+import "./index.css";
+import Root from "./routes/root";
+import ErrorPage from "./error-page";
+import ApiDelegation from './routes/api-delegation'
 
-const rootElement = document.getElementById("root");
-render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="expenses" element={<Expenses />} />
-      <Route path="invoices" element={<Invoices />} />
-    </Routes>
-  </BrowserRouter>,
-  rootElement
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root/>,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path:'api-delegation/1',
+    element: <ApiDelegation />,
+  }
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
