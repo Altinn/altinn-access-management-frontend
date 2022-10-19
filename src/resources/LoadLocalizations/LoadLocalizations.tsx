@@ -9,13 +9,13 @@ type Props = {
 const LoadLocalizations = ({ children }: Props) => {
   const { i18n } = useTranslation('common');
   const baseUrl = import.meta.env.BASE_URL;
-  const localeFilePath = `${baseUrl}localizations/${i18n.language}.json`;
-  const localeFileUrl = new URL(localeFilePath, import.meta.url).href;
+  const localizationsFilePath = `${baseUrl}localizations/${i18n.language}.json`;
+  const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url).href;
 
   useQuery(
     'Locales',
     async () => {
-      const data = await fetch(localeFileUrl);
+      const data = await fetch(localizationsFileUrl);
       const resource = await data.json();
       i18next.addResourceBundle(i18n.language, 'common', resource);
     },
