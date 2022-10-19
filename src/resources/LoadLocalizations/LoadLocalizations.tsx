@@ -22,6 +22,8 @@ const LoadLocalizations = ({ children }: Props) => {
     {
       staleTime: Infinity,
       suspense: true,
+
+      
     },
   );
 

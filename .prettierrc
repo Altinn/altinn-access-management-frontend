@@ -3,6 +3,16 @@
     "tabWidth": 2,
     "printWidth": 120,
     "singleQuote": true,
-    "trailingComma": "none",
-    "jsxBracketSameLine": true
+    "trailingComma": "all",
+    "jsxBracketSameLine": true,
+    "usetabs":"false",
+    "quoteProps": "as-needed",
+    "jsxSingleQuote": true,
+    "bracketSpacing": true,
+    "bracketSameLine": false,
+    "arrowParens": "always",
+    "endOfLine": "lf",
+    "proseWrap": "preserve",
+    "htmlWhitespaceSensitivity": "css",
+    "singleAttributePerLine": true
 }

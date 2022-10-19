@@ -3,7 +3,8 @@
       "basic": {
         "error": {
           "heading": "Beklager, noe gikk feil!",
-          "tryAgain": "Prøv igjen"
+          "tryAgain": "Prøv igjen eller gå tilbake i nettleseren",
+          "errorMessage": "Feilmelding"
         },
         "loading": "Laster…"
       }
@@ -12,7 +13,8 @@
       "basic": {
         "error": {
           "heading": "Beklager, noe gikk feil!",
-          "tryAgain": "Prøv igjen"
+          "tryAgain": "Prøv igjen eller gå tilbake i nettleseren",
+          "errorMessage": "Feilmelding"
         },
         "loading": "Laster…"
       }
@@ -21,7 +23,8 @@
       "basic": {
         "error": {
           "heading": "Sorry; something went wrong!",
-          "tryAgain": "Try again"
+          "tryAgain": "Try again or go back in the browser",
+          "errorMessage": "Error message"
         },
         "loading": "Loading…"
       }
