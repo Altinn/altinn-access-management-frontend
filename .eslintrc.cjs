@@ -28,9 +28,7 @@ module.exports = {
     'react/jsx-no-bind': 'off',
     '@typescript-eslint/consistent-type-exports': 'warn',
     '@typescript-eslint/consistent-type-imports': 'warn',
-    "@typescript-eslint/explicit-function-return-type": {
-      "allowExpressions": true
-    },
+    "@typescript-eslint/explicit-function-return-type": "off",
     'import/order': [
       'warn',
       {
