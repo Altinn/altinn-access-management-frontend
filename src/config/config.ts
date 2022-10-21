@@ -32,6 +32,7 @@ const envConfig: Config = {
 
 for (const key in envConfig) {
   if (envConfig[key as keyof Config] === undefined) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete envConfig[key as keyof Config];
   }
 }

@@ -1,7 +1,11 @@
+// eslint-env node
 module.exports = {
+  parser: '@typescript-eslint/parser',
   parserOptions: {
+    project: "./tsconfig.json",
     ecmaFeatures: { jsx: true },
-    project: './tsconfig.json',
+    ecmaVersion: "latest",
+    sourceType: "module"
   },
   env: {
     browser: true,
@@ -20,7 +24,6 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:prettier/recommended',
   ],
-  parser: '@typescript-eslint/parser',
   overrides: [],
   plugins: ['react'],
   rules: {
