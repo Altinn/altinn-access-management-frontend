@@ -2,7 +2,7 @@ import { useRouteError } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export const ErrorPage = () => {
-  const { t } = useTranslation('basic');
+  // use when completing this page
   const error = useRouteError();
 
   return (
