@@ -31,12 +31,7 @@ export interface DelegationAccordionProps {
   ) => void;
 }
 
-export const DelegationAccordion = ({
-  name,
-  id,
-  buisnesses,
-  setBuisnesses,
-}: DelegationAccordionProps) => {
+export const DelegationAccordion = ({ name, id, buisnesses, setBuisnesses }: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
 
   const handleAccordionClick = () => {
@@ -96,11 +91,17 @@ export const DelegationAccordion = ({
     <>
       <Button variant={ButtonVariant.Secondary}>Deleger ny virksomhet +</Button>
       {isAllSoftDeleted() ? (
-        <Button variant={ButtonVariant.Secondary} onClick={reinstateAll}>
+        <Button
+          variant={ButtonVariant.Secondary}
+          onClick={reinstateAll}
+        >
           Angre
         </Button>
       ) : (
-        <Button variant={ButtonVariant.Cancel} onClick={handleSoftDeleteAll}>
+        <Button
+          variant={ButtonVariant.Cancel}
+          onClick={handleSoftDeleteAll}
+        >
           Slett
         </Button>
       )}
@@ -108,15 +109,17 @@ export const DelegationAccordion = ({
   );
 
   return (
-    <Accordion onClick={handleAccordionClick} open={open}>
+    <Accordion
+      onClick={handleAccordionClick}
+      open={open}
+    >
       <AccordionHeader
         subtitle={buisnesses.length.toString() + ' virksomheter har tilgang'}
         actions={action}
       >
         <div
           className={cn({
-            [classes['delegation-accordion__accordion-header--soft-delete']]:
-              isAllSoftDeleted(),
+            [classes['delegation-accordion__accordion-header--soft-delete']]: isAllSoftDeleted(),
           })}
         >
           {name}

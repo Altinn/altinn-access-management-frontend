@@ -1,5 +1,4 @@
 import { useRouteError } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 export const ErrorPage = () => {
   // use when completing this page

@@ -9,29 +9,30 @@ export interface DeletableListItemProps {
   toggleDelState: () => void;
 }
 
-export const DeletableListItem = ({
-  itemName,
-  isSoftDelete,
-  toggleDelState,
-}: DeletableListItemProps) => {
+export const DeletableListItem = ({ itemName, isSoftDelete, toggleDelState }: DeletableListItemProps) => {
   return (
     <ListItem>
       <div className={classes['deletable-list-item__listItem']}>
         <div
           className={cn(classes['deletable-list-item__itemText'], {
-            [classes['deletable-list-item__itemText--soft-delete']]:
-              isSoftDelete,
+            [classes['deletable-list-item__itemText--soft-delete']]: isSoftDelete,
           })}
         >
           {itemName}
         </div>
         <div className={cn(classes['deletable-list-item__deleteSection'])}>
           {isSoftDelete ? (
-            <Button variant={ButtonVariant.Secondary} onClick={toggleDelState}>
+            <Button
+              variant={ButtonVariant.Secondary}
+              onClick={toggleDelState}
+            >
               Angre
             </Button>
           ) : (
-            <Button variant={ButtonVariant.Cancel} onClick={toggleDelState}>
+            <Button
+              variant={ButtonVariant.Cancel}
+              onClick={toggleDelState}
+            >
               Slett
             </Button>
           )}
