@@ -360,3 +360,6 @@ MigrationBackup/
 
 # Really don't want that
 /node_modules/
+
+# Mac files
+.DS_Store
