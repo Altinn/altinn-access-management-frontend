@@ -1,5 +1,5 @@
-import { React } from 'react';
-import { ReactDOM } from 'react-dom/client';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import i18next from 'i18next';
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'api-delegation/1',
+    path: 'api-delegations',
     element: <ApiDelegation />,
   },
 ]);
