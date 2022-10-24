@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { useRouteError } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 

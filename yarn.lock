@@ -5187,7 +5187,7 @@ __metadata:
     react-i18next: ^11.18.6
     react-query: ^3.39.2
     react-router-dom: ^6.4.2
-    typescript: "*"
+    typescript: 4.8.4
     vite: ^3.1.8
     vite-plugin-svgr: ^2.2.1
   languageName: unknown
@@ -6124,7 +6124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:*":
+"typescript@npm:4.8.4":
   version: 4.8.4
   resolution: "typescript@npm:4.8.4"
   bin:
@@ -6134,7 +6134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@*#~builtin<compat/typescript>":
+"typescript@patch:typescript@4.8.4#~builtin<compat/typescript>":
   version: 4.8.4
   resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"
   bin:
