@@ -3,8 +3,6 @@ import { Page, PageContent, PageHeader } from '@altinn/altinn-design-system';
 
 export const ExamplePage = () => {
   const { t } = useTranslation('common');
-  console.log("hey");
-  console.log("hey");
 
   return (
     <Page>
