@@ -47,5 +47,9 @@
     "typescript": "*",
     "vite": "^3.1.8"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs}": "yarn lint --cache --fix",
+    "*.{css,md,mdx,json}": "yarn prettier --write"
+  },
   "packageManager": "yarn@3.2.4"
 }
