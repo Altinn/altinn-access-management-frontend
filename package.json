@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
+    "test": "vite & wait-on http://localhost:5173 & cypress open",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
