@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Button,
-  Page,
-  PageHeader,
-  PageContent,
-} from '@altinn/altinn-design-system';
+import { Button, Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 
 import { DelegationAccordion } from './DelegationAccordion';
@@ -46,10 +41,7 @@ export const DelegationOverviewPage = () => {
     },
   ]);
 
-  const setBuisnessArray = (
-    apiID: number,
-    newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>,
-  ) => {
+  const setBuisnessArray = (apiID: number, newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>) => {
     const newDelegations = [...delegations];
     for (const api of newDelegations) {
       if (api.id === apiID) {
@@ -100,14 +92,13 @@ export const DelegationOverviewPage = () => {
       <Page>
         <PageHeader>Header her</PageHeader>
         <PageContent>
-          <div
-            className={cn(classes['delegation-overview-page__page-content'])}
-          >
+          <div className={cn(classes['delegation-overview-page__page-content'])}>
             {accordions}
-            <div
-              className={cn(classes['delegation-overview-page__save-section'])}
-            >
-              <Button disabled={!areDeletableItems()} onClick={saveChanges}>
+            <div className={cn(classes['delegation-overview-page__save-section'])}>
+              <Button
+                disabled={!areDeletableItems()}
+                onClick={saveChanges}
+              >
                 Lagre
               </Button>
             </div>

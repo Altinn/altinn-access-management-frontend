@@ -31,13 +31,9 @@ export interface DelegationAccordionProps {
   ) => void;
 }
 
-export const DelegationAccordion = ({
-  name,
-  id,
-  buisnesses,
-  setBuisnesses,
-}: DelegationAccordionProps) => {
+export const DelegationAccordion = ({ name, id, buisnesses, setBuisnesses }: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
+  const [isAllSoftDeleted, setAllSoftDeleted] = useState(false);
 
   const handleAccordionClick = () => {
     setOpen(!open);
@@ -51,24 +47,16 @@ export const DelegationAccordion = ({
       }
     }
     setBuisnesses(id, newArray);
+    // check for all soft delete
   };
 
-  const buisnessItems = buisnesses.map((b, index) => (
-    <DeletableListItem
-      key={index + b.id}
-      itemName={b.name}
-      isSoftDelete={b.isSoftDelete}
-      toggleDelState={() => toggleBuisnessState(b.id)}
-    ></DeletableListItem>
-  ));
-
-  const isAllSoftDeleted = () => {
+  const checkIsAllSoftDeleted = () => {
     for (const item of buisnesses) {
       if (!item.isSoftDelete) {
-        return false;
+        setAllSoftDeleted(false);
       }
     }
-    return true;
+    setAllSoftDeleted(true);
   };
 
   const softDeleteAll = () => {
@@ -77,46 +65,61 @@ export const DelegationAccordion = ({
       item.isSoftDelete = true;
     }
     setBuisnesses(id, newArray);
+    setAllSoftDeleted(true);
+    setOpen(true);
   };
 
-  const reinstateAll = () => {
+  const restoreAll = () => {
     const newArray = [...buisnesses];
     for (const item of newArray) {
       item.isSoftDelete = false;
     }
     setBuisnesses(id, newArray);
-  };
-
-  const handleSoftDeleteAll = () => {
-    softDeleteAll();
-    setOpen(true);
+    setAllSoftDeleted(false);
   };
 
   const action = (
     <>
       <Button variant={ButtonVariant.Secondary}>Deleger ny virksomhet +</Button>
-      {isAllSoftDeleted() ? (
-        <Button variant={ButtonVariant.Secondary} onClick={reinstateAll}>
+      {isAllSoftDeleted ? (
+        <Button
+          variant={ButtonVariant.Secondary}
+          onClick={restoreAll}
+        >
           Angre
         </Button>
       ) : (
-        <Button variant={ButtonVariant.Cancel} onClick={handleSoftDeleteAll}>
+        <Button
+          variant={ButtonVariant.Cancel}
+          onClick={softDeleteAll}
+        >
           Slett
         </Button>
       )}
     </>
   );
 
+  const buisnessItems = buisnesses.map((b, index) => (
+    <DeletableListItem
+      key={index + b.id}
+      itemText={b.name}
+      isSoftDelete={b.isSoftDelete}
+      toggleDeleteState={() => toggleBuisnessState(b.id)}
+    ></DeletableListItem>
+  ));
+
   return (
-    <Accordion onClick={handleAccordionClick} open={open}>
+    <Accordion
+      onClick={handleAccordionClick}
+      open={open}
+    >
       <AccordionHeader
         subtitle={buisnesses.length.toString() + ' virksomheter har tilgang'}
         actions={action}
       >
         <div
           className={cn({
-            [classes['delegation-accordion__accordion-header--soft-delete']]:
-              isAllSoftDeleted(),
+            [classes['delegation-accordion__accordion-header--soft-delete']]: isAllSoftDeleted,
           })}
         >
           {name}
