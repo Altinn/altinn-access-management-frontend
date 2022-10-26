@@ -4,3 +4,5 @@ describe('renders api-delegations', () => {
     cy.get('button[id=":r2:"]').click();
   });
 });
+
+export {};
