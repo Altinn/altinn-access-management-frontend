@@ -1,16 +1,14 @@
 import { useRouteError } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 export const ErrorPage = () => {
-  const { t } = useTranslation('basic');
+  // use when completing this page
   const error = useRouteError();
 
   return (
-    <div id="error-page">
-      <h1>{t('error.heading')}</h1>
-      <p>{t('error.tryAgain')}</p>
+    <div>
+      <h1>Det skjedde en feil</h1>
       <p>
-        <i>{t('error.errorMessage')}</i>
+        <i>Vennligst gå tilbake i nettleseren eller refresh siden</i>
       </p>
     </div>
   );

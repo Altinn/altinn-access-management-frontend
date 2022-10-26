@@ -10,8 +10,7 @@ const LoadLocalizations = ({ children }: Props) => {
   const { i18n } = useTranslation('common');
   const baseUrl = import.meta.env.BASE_URL;
   const localizationsFilePath = `${baseUrl}localizations/${i18n.language}.json`;
-  const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url)
-    .href;
+  const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url).href;
 
   useQuery(
     'Localizations',
