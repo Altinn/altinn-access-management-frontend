@@ -15,7 +15,7 @@ export const DelegationOverviewPage = () => {
     {
       id: unique(),
       apiName: 'Delegert API A',
-      buisnesses: [
+      organizations: [
         { id: unique(), name: 'Virksomhet 1', isSoftDelete: false },
         { id: unique(), name: 'Virksomhet 2', isSoftDelete: false },
         { id: unique(), name: 'Virksomhet 3', isSoftDelete: false },
@@ -24,7 +24,7 @@ export const DelegationOverviewPage = () => {
     {
       id: unique(),
       apiName: 'Delegert API B',
-      buisnesses: [
+      organizations: [
         { id: unique(), name: 'Virksomhet 1', isSoftDelete: false },
         { id: unique(), name: 'Virksomhet 4', isSoftDelete: false },
         { id: unique(), name: 'Virksomhet 6', isSoftDelete: false },
@@ -33,7 +33,7 @@ export const DelegationOverviewPage = () => {
     {
       id: unique(),
       apiName: 'Delegert API C',
-      buisnesses: [
+      organizations: [
         { id: unique(), name: 'Virksomhet 1', isSoftDelete: false },
         { id: unique(), name: 'Virksomhet 4', isSoftDelete: false },
         { id: unique(), name: 'Virksomhet 5', isSoftDelete: false },
@@ -41,11 +41,14 @@ export const DelegationOverviewPage = () => {
     },
   ]);
 
-  const setBuisnessArray = (apiID: number, newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>) => {
+  const setOrganizationsArray = (
+    apiID: number,
+    newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>,
+  ) => {
     const newDelegations = [...delegations];
     for (const api of newDelegations) {
       if (api.id === apiID) {
-        api.buisnesses = newArray;
+        api.organizations = newArray;
       }
     }
     setDelegations(newDelegations);
@@ -53,7 +56,7 @@ export const DelegationOverviewPage = () => {
 
   const areDeletableItems = () => {
     for (const api of delegations) {
-      for (const item of api.buisnesses) {
+      for (const item of api.organizations) {
         if (item.isSoftDelete) {
           return true;
         }
@@ -68,9 +71,9 @@ export const DelegationOverviewPage = () => {
       const updatedAPI = {
         id: api.id,
         apiName: api.apiName,
-        buisnesses: api.buisnesses.filter((b) => !b.isSoftDelete),
+        organizations: api.organizations.filter((b) => !b.isSoftDelete),
       };
-      if (updatedAPI.buisnesses.length > 0) {
+      if (updatedAPI.organizations.length > 0) {
         newState.push(updatedAPI);
       }
     }
@@ -82,8 +85,8 @@ export const DelegationOverviewPage = () => {
       key={i.id}
       name={i.apiName}
       id={i.id}
-      buisnesses={i.buisnesses}
-      setBuisnesses={setBuisnessArray}
+      organizations={i.organizations}
+      setOrganizations={setOrganizationsArray}
     ></DelegationAccordion>
   ));
 

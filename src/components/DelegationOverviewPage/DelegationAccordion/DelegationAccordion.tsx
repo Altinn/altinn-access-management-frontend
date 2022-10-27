@@ -16,12 +16,12 @@ import classes from './DelegationAccordion.module.css';
 export interface DelegationAccordionProps {
   name: string;
   id: number;
-  buisnesses: Array<{
+  organizations: Array<{
     id: number;
     name: string;
     isSoftDelete: boolean;
   }>;
-  setBuisnesses: (
+  setOrganizations: (
     id: number,
     newArray: Array<{
       id: number;
@@ -31,7 +31,7 @@ export interface DelegationAccordionProps {
   ) => void;
 }
 
-export const DelegationAccordion = ({ name, id, buisnesses, setBuisnesses }: DelegationAccordionProps) => {
+export const DelegationAccordion = ({ name, id, organizations, setOrganizations }: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const [isAllSoftDeleted, setAllSoftDeleted] = useState(false);
 
@@ -40,41 +40,42 @@ export const DelegationAccordion = ({ name, id, buisnesses, setBuisnesses }: Del
   };
 
   const toggleBuisnessState = (id: number) => {
-    const newArray = [...buisnesses];
+    const newArray = [...organizations];
     for (const item of newArray) {
       if (item.id === id) {
         item.isSoftDelete = !item.isSoftDelete;
       }
     }
-    setBuisnesses(id, newArray);
-    // check for all soft delete
+    setOrganizations(id, newArray);
+    checkIsAllSoftDeleted();
   };
 
   const checkIsAllSoftDeleted = () => {
-    for (const item of buisnesses) {
+    for (const item of organizations) {
       if (!item.isSoftDelete) {
         setAllSoftDeleted(false);
+        return;
       }
     }
     setAllSoftDeleted(true);
   };
 
   const softDeleteAll = () => {
-    const newArray = [...buisnesses];
+    const newArray = [...organizations];
     for (const item of newArray) {
       item.isSoftDelete = true;
     }
-    setBuisnesses(id, newArray);
+    setOrganizations(id, newArray);
     setAllSoftDeleted(true);
     setOpen(true);
   };
 
   const restoreAll = () => {
-    const newArray = [...buisnesses];
+    const newArray = [...organizations];
     for (const item of newArray) {
       item.isSoftDelete = false;
     }
-    setBuisnesses(id, newArray);
+    setOrganizations(id, newArray);
     setAllSoftDeleted(false);
   };
 
@@ -99,7 +100,7 @@ export const DelegationAccordion = ({ name, id, buisnesses, setBuisnesses }: Del
     </>
   );
 
-  const buisnessItems = buisnesses.map((b, index) => (
+  const buisnessItems = organizations.map((b, index) => (
     <DeletableListItem
       key={index + b.id}
       itemText={b.name}
@@ -114,7 +115,7 @@ export const DelegationAccordion = ({ name, id, buisnesses, setBuisnesses }: Del
       open={open}
     >
       <AccordionHeader
-        subtitle={buisnesses.length.toString() + ' virksomheter har tilgang'}
+        subtitle={organizations.length.toString() + ' virksomheter har tilgang'}
         actions={action}
       >
         <div
