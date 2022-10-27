@@ -35,5 +35,3 @@ jobs:
       - name: run build
         working-directory: ./
         run: yarn build
-
-      
