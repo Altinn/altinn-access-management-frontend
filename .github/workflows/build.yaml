@@ -28,7 +28,11 @@ jobs:
         working-directory: ./
         run: yarn lint
         
-      - name: run test coverage
+      - name: run test coverage components
+        working-directory: ./
+        run: yarn coverage
+
+      - name: run test coverage e2e
         working-directory: ./
         run: yarn coverage
           
