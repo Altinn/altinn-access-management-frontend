@@ -39,7 +39,7 @@ export const DelegationAccordion = ({ name, id, organizations, setOrganizations 
     setOpen(!open);
   };
 
-  const toggleBuisnessState = (id: number) => {
+  const toggleSoftDelete = (id: number) => {
     const newArray = [...organizations];
     for (const item of newArray) {
       if (item.id === id) {
@@ -100,12 +100,12 @@ export const DelegationAccordion = ({ name, id, organizations, setOrganizations 
     </>
   );
 
-  const buisnessItems = organizations.map((b, index) => (
+  const listItems = organizations.map((b, index) => (
     <DeletableListItem
       key={index + b.id}
       itemText={b.name}
       isSoftDelete={b.isSoftDelete}
-      toggleDeleteState={() => toggleBuisnessState(b.id)}
+      toggleSoftDelete={() => toggleSoftDelete(b.id)}
     ></DeletableListItem>
   ));
 
@@ -128,7 +128,7 @@ export const DelegationAccordion = ({ name, id, organizations, setOrganizations 
       </AccordionHeader>
       <AccordionContent>
         <div className={cn(classes['delegation-accordion__accordion-content'])}>
-          <List borderStyle={BorderStyle.Dashed}>{buisnessItems}</List>
+          <List borderStyle={BorderStyle.Dashed}>{listItems}</List>
         </div>
       </AccordionContent>
     </Accordion>

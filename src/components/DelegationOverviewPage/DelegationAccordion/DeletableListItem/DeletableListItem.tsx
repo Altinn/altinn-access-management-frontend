@@ -6,10 +6,10 @@ import classes from './DeletableListItem.module.css';
 export interface DeletableListItemProps {
   itemText: string;
   isSoftDelete: boolean;
-  toggleDeleteState: () => void;
+  toggleSoftDelete: () => void;
 }
 
-export const DeletableListItem = ({ itemText, isSoftDelete, toggleDeleteState }: DeletableListItemProps) => {
+export const DeletableListItem = ({ itemText, isSoftDelete, toggleSoftDelete }: DeletableListItemProps) => {
   return (
     <ListItem>
       <div className={classes['deletable-list-item__listItem']}>
@@ -24,14 +24,14 @@ export const DeletableListItem = ({ itemText, isSoftDelete, toggleDeleteState }:
           {isSoftDelete ? (
             <Button
               variant={ButtonVariant.Secondary}
-              onClick={toggleDeleteState}
+              onClick={toggleSoftDelete}
             >
               Angre
             </Button>
           ) : (
             <Button
               variant={ButtonVariant.Cancel}
-              onClick={toggleDeleteState}
+              onClick={toggleSoftDelete}
             >
               Slett
             </Button>
