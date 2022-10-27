@@ -27,6 +27,10 @@ jobs:
       - name: run eslint
         working-directory: ./
         run: yarn lint
+        
+      - name: run test coverage components
+        working-directory: ./
+        run: yarn coverage
           
       - name: run build
         working-directory: ./
