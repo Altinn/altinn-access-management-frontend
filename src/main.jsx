@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'api-delegation/1',
+    path: 'api-delegations',
     element: <ApiDelegation />,
   },
 ]);
