@@ -34,7 +34,7 @@ jobs:
 
       - name: run test coverage e2e
         working-directory: ./
-        run: yarn coverage
+        run: yarn coverage:e2e
           
       - name: run build
         working-directory: ./
