@@ -5,7 +5,8 @@ module.exports = {
     project: "./tsconfig.json",
     ecmaFeatures: { jsx: true },
     ecmaVersion: "latest",
-    sourceType: "module"
+    sourceType: "module",
+    extraFileExtensions: ".html",
   },
   env: {
     browser: true,
@@ -33,6 +34,8 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': 'warn',
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/strict-boolean-expressions": 0,
+    "@typescript-eslint/triple-slash-reference": "off",
+    "@typescript-eslint/no-namespace": "off",
     'import/order': [
       'warn',
       {
