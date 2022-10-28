@@ -84,7 +84,7 @@ export const DelegationOverviewPage = () => {
     <DelegationAccordion
       key={i.id}
       name={i.apiName}
-      id={i.id}
+      apiId={i.id}
       organizations={i.organizations}
       setOrganizations={setOrganizationsArray}
     ></DelegationAccordion>

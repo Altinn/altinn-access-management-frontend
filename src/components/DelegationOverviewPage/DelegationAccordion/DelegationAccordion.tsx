@@ -15,7 +15,7 @@ import classes from './DelegationAccordion.module.css';
 
 export interface DelegationAccordionProps {
   name: string;
-  id: number;
+  apiId: number;
   organizations: Array<{
     id: number;
     name: string;
@@ -31,7 +31,7 @@ export interface DelegationAccordionProps {
   ) => void;
 }
 
-export const DelegationAccordion = ({ name, id, organizations, setOrganizations }: DelegationAccordionProps) => {
+export const DelegationAccordion = ({ name, apiId, organizations, setOrganizations }: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const [isAllSoftDeleted, setAllSoftDeleted] = useState(false);
 
@@ -39,14 +39,14 @@ export const DelegationAccordion = ({ name, id, organizations, setOrganizations 
     setOpen(!open);
   };
 
-  const toggleSoftDelete = (id: number) => {
+  const toggleSoftDelete = (orgId: number) => {
     const newArray = [...organizations];
     for (const item of newArray) {
-      if (item.id === id) {
+      if (item.id === orgId) {
         item.isSoftDelete = !item.isSoftDelete;
       }
     }
-    setOrganizations(id, newArray);
+    setOrganizations(apiId, newArray);
     checkIsAllSoftDeleted();
   };
 
@@ -61,21 +61,25 @@ export const DelegationAccordion = ({ name, id, organizations, setOrganizations 
   };
 
   const softDeleteAll = () => {
-    const newArray = [...organizations];
-    for (const item of newArray) {
-      item.isSoftDelete = true;
-    }
-    setOrganizations(id, newArray);
+    const newArray = organizations.map((item) => {
+      return {
+        ...item,
+        isSoftDelete: true,
+      };
+    });
+    setOrganizations(apiId, newArray);
     setAllSoftDeleted(true);
     setOpen(true);
   };
 
   const restoreAll = () => {
-    const newArray = [...organizations];
-    for (const item of newArray) {
-      item.isSoftDelete = false;
-    }
-    setOrganizations(id, newArray);
+    const newArray = organizations.map((item) => {
+      return {
+        ...item,
+        isSoftDelete: false,
+      };
+    });
+    setOrganizations(apiId, newArray);
     setAllSoftDeleted(false);
   };
 
