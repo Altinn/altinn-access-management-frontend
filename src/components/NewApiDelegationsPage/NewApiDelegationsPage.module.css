@@ -1,0 +1,8 @@
+.pageContent{
+    --component-page-margin: 3rem;
+    margin: var(--component-page-margin);
+}
+
+.newApis_Accordions{
+    width: 50%;
+}

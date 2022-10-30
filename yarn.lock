@@ -5,20 +5,20 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@altinn/altinn-design-system@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "@altinn/altinn-design-system@npm:0.15.0"
+"@altinn/altinn-design-system@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "@altinn/altinn-design-system@npm:0.17.0"
   dependencies:
     "@altinn/figma-design-tokens": ^4.1.0
     "@radix-ui/react-popover": ^1.0.0
-    "@react-hookz/web": ^15.0.1
+    "@react-hookz/web": ^16.0.0
     leaflet: ^1.8.0
     react-leaflet: ^4.0.1
-    react-number-format: ^4.9.3
+    react-number-format: ^5.0.1
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 96a6f454efda28de17499b81c647fcfdd4ed4d39ed2169bfdd47beb3b88af1e6ffef6f73cf7197499bf38c70cd783b45d66661cb53201d873dfb7461d0a6587f
+  checksum: 18da10f930ba7af420e37d494c68fcf6e51c2f86479d868ff740af9575d579fd4e769610474990cbe5e3fef2da2fc667cf67e47d3b3fc4b6dacac92e6accc729
   languageName: node
   linkType: hard
 
@@ -891,9 +891,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-hookz/web@npm:^15.0.1":
-  version: 15.1.0
-  resolution: "@react-hookz/web@npm:15.1.0"
+"@react-hookz/web@npm:^16.0.0":
+  version: 16.1.0
+  resolution: "@react-hookz/web@npm:16.1.0"
   dependencies:
     "@react-hookz/deep-equal": ^1.0.3
   peerDependencies:
@@ -903,7 +903,7 @@ __metadata:
   peerDependenciesMeta:
     js-cookie:
       optional: true
-  checksum: 74854629a0e86d3035f8fec97a618c79c6d8ae5a71513e6a29b717c5142109e2ec33eea835b9250686d27e9fdb66e7ccf72c7e89edf9300596fac450821130cc
+  checksum: 5eb92b94d673e6252b380e1541696895875eefa373dcf94ec809390a3de221572f31280dff1c43cad56db5b59df2eaf7fb9c478d0300614b067ecf0ea7c30163
   languageName: node
   linkType: hard
 
@@ -5364,7 +5364,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-app@workspace:."
   dependencies:
-    "@altinn/altinn-design-system": ^0.15.0
+    "@altinn/altinn-design-system": ^0.17.0
     "@reduxjs/toolkit": ^1.8.6
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21
@@ -5456,15 +5456,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-number-format@npm:^4.9.3":
-  version: 4.9.4
-  resolution: "react-number-format@npm:4.9.4"
+"react-number-format@npm:^5.0.1":
+  version: 5.1.0
+  resolution: "react-number-format@npm:5.1.0"
   dependencies:
     prop-types: ^15.7.2
   peerDependencies:
-    react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 61df4ce5fecfcd3424309af65928327aebbe80094cda28941da324995e49152d71b28fedb4c6494ca2fdfb9be1879032da9077f4d33a41ecc999f251c604d5c9
+    react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^18.0.0
+    react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^18.0.0
+  checksum: 7217f53a912c8f6099f14c376e0f658b39ae9c8791f15531d212b7d77e523762a19451ce5efeba3c40badd32b94365aef7e0006248e537048f083df6f7a55d04
   languageName: node
   linkType: hard
 

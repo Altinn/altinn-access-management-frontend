@@ -10,6 +10,7 @@ import { ApiDelegation } from './routes/ApiDelegation';
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
+import { NewApiDelegations } from './routes/NewApiDelegations';
 
 /**
  * Special behaviour for react-query in dev environment
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: 'api-delegations',
     element: <ApiDelegation />,
+  },
+  {
+    path: 'new-api-delegations',
+    element: <NewApiDelegations />,
   },
 ]);
 
