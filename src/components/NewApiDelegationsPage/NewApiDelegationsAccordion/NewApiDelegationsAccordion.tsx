@@ -5,9 +5,10 @@ import { ReactComponent as AddIcon } from '../../../assets/add--circle.svg';
 
 export interface NewApiDelegationsAccordionsProps {
   headerTitle: string;
+  content?: string;
 }
 
-export const NewApiDelegationsAccordion = ({ headerTitle }: NewApiDelegationsAccordionsProps) => {
+export const NewApiDelegationsAccordion = ({ headerTitle, content }: NewApiDelegationsAccordionsProps) => {
   const [open, setOpen] = useState(false);
 
   const addToApiList = (api: any) => {
@@ -25,7 +26,7 @@ export const NewApiDelegationsAccordion = ({ headerTitle }: NewApiDelegationsAcc
       onClick={() => setOpen(!open)}
     >
       <AccordionHeader actions={addButton}>{headerTitle}</AccordionHeader>
-      <AccordionContent></AccordionContent>
+      <AccordionContent>{content}</AccordionContent>
     </Accordion>
   );
 };

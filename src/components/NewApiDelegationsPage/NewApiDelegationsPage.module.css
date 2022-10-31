@@ -1,8 +1,19 @@
+.pageContainer{
+    width: 60%;
+    margin: auto;
+    margin-top: 10rem;
+}
+
 .pageContent{
-    --component-page-margin: 3rem;
+    --component-page-margin: 1rem;
     margin: var(--component-page-margin);
 }
 
-.newApis_Accordions{
-    width: 50%;
+.pageContentAccordionsContainer{
+    grid-template-columns: 1fr 1fr;
+    display:grid;
+}
+
+.apiAccordions{
+    margin: 2rem;
 }
