@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Button, Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 
-import { DelegationAccordion } from './DelegationAccordion';
-import classes from './DelegationOverviewPage.module.css';
+import { ApiDelegationAccordion } from './ApiDelegationAccordion';
+import classes from './ApiDelegationOverviewPage.module.css';
 
-export const DelegationOverviewPage = () => {
+export const ApiDelegationOverviewPage = () => {
   function unique() {
     return ++unique.i;
   }
@@ -81,13 +81,14 @@ export const DelegationOverviewPage = () => {
   };
 
   const accordions = delegations.map((i) => (
-    <DelegationAccordion
+    <ApiDelegationAccordion
       key={i.id}
       name={i.apiName}
-      apiId={i.id}
       organizations={i.organizations}
-      setOrganizations={setOrganizationsArray}
-    ></DelegationAccordion>
+      setOrganizations={(newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>) =>
+        setOrganizationsArray(i.id, newArray)
+      }
+    ></ApiDelegationAccordion>
   ));
 
   return (

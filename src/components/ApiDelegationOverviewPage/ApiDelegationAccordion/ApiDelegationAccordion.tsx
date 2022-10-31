@@ -11,18 +11,16 @@ import {
 import cn from 'classnames';
 
 import { DeletableListItem } from './DeletableListItem';
-import classes from './DelegationAccordion.module.css';
+import classes from './ApiDelegationAccordion.module.css';
 
 export interface DelegationAccordionProps {
   name: string;
-  apiId: number;
   organizations: Array<{
     id: number;
     name: string;
     isSoftDelete: boolean;
   }>;
   setOrganizations: (
-    id: number,
     newArray: Array<{
       id: number;
       name: string;
@@ -31,9 +29,16 @@ export interface DelegationAccordionProps {
   ) => void;
 }
 
-export const DelegationAccordion = ({ name, apiId, organizations, setOrganizations }: DelegationAccordionProps) => {
+export const ApiDelegationAccordion = ({ name, organizations, setOrganizations }: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
-  const [isAllSoftDeleted, setAllSoftDeleted] = useState(false);
+  const [isAllSoftDeleted, setAllSoftDeleted] = useState(() => {
+    for (const item of organizations) {
+      if (!item.isSoftDelete) {
+        return false;
+      }
+    }
+    return true;
+  });
 
   const handleAccordionClick = () => {
     setOpen(!open);
@@ -46,7 +51,7 @@ export const DelegationAccordion = ({ name, apiId, organizations, setOrganizatio
         item.isSoftDelete = !item.isSoftDelete;
       }
     }
-    setOrganizations(apiId, newArray);
+    setOrganizations(newArray);
     checkIsAllSoftDeleted();
   };
 
@@ -67,7 +72,7 @@ export const DelegationAccordion = ({ name, apiId, organizations, setOrganizatio
         isSoftDelete: true,
       };
     });
-    setOrganizations(apiId, newArray);
+    setOrganizations(newArray);
     setAllSoftDeleted(true);
     setOpen(true);
   };
@@ -79,7 +84,7 @@ export const DelegationAccordion = ({ name, apiId, organizations, setOrganizatio
         isSoftDelete: false,
       };
     });
-    setOrganizations(apiId, newArray);
+    setOrganizations(newArray);
     setAllSoftDeleted(false);
   };
 
