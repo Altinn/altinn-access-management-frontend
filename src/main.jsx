@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import i18next from 'i18next';
@@ -11,6 +12,7 @@ import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
 import { NewApiDelegations } from './routes/NewApiDelegations';
+import store from './rtk/app/store';
 
 /**
  * Special behaviour for react-query in dev environment
@@ -53,11 +55,13 @@ i18next.use(initReactI18next).init(
 
     ReactDOM.createRoot(document.getElementById('root')).render(
       <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-          <LoadLocalizations>
-            <RouterProvider router={router} />
-          </LoadLocalizations>
-        </QueryClientProvider>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <LoadLocalizations>
+              <RouterProvider router={router} />
+            </LoadLocalizations>
+          </QueryClientProvider>
+        </Provider>
       </React.StrictMode>,
     );
   },

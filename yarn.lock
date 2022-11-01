@@ -1209,6 +1209,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/redux-logger@npm:^3.0.9":
+  version: 3.0.9
+  resolution: "@types/redux-logger@npm:3.0.9"
+  dependencies:
+    redux: ^4.0.0
+  checksum: c41fdc09198fae2d62ff7d6bd029ccae1fed655e6a7abd40614a8db5d6e01adbe565881b2c8d398789804a48259e3399af3939f994a532c11904ba2021799275
+  languageName: node
+  linkType: hard
+
 "@types/scheduler@npm:*":
   version: 0.16.2
   resolution: "@types/scheduler@npm:0.16.2"
@@ -5410,6 +5419,7 @@ __metadata:
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21
     "@types/react-dom": ^18.0.6
+    "@types/redux-logger": ^3.0.9
     "@typescript-eslint/eslint-plugin": ^5.40.1
     "@vitejs/plugin-react": ^2.1.0
     axios: ^1.1.3
@@ -5689,7 +5699,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.1.2":
+"redux@npm:^4.0.0, redux@npm:^4.1.2":
   version: 4.2.0
   resolution: "redux@npm:4.2.0"
   dependencies:
