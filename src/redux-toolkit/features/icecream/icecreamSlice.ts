@@ -4,7 +4,7 @@ const initialState = {
   numOfIceCreams: 20,
 };
 
-export const iceCreamSlice = createSlice({
+export const icecreamSlice = createSlice({
   name: 'icecream',
   initialState,
   reducers: {
@@ -16,3 +16,6 @@ export const iceCreamSlice = createSlice({
     },
   },
 });
+
+export const iceCreamReducer = icecreamSlice.reducer;
+export const icecreamActions = icecreamSlice.actions;
