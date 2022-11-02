@@ -21,7 +21,7 @@ export interface DelegationAccordionProps {
     isSoftDelete: boolean;
   }>;
   setOrganizations: (
-    newArray: Array<{
+    newOrgArray: Array<{
       id: number;
       name: string;
       isSoftDelete: boolean;
@@ -40,18 +40,14 @@ export const ApiDelegationAccordion = ({ name, organizations, setOrganizations }
     return true;
   });
 
-  const handleAccordionClick = () => {
-    setOpen(!open);
-  };
-
   const toggleSoftDelete = (orgId: number) => {
-    const newArray = [...organizations];
-    for (const item of newArray) {
+    const newOrgArray = [...organizations];
+    for (const item of newOrgArray) {
       if (item.id === orgId) {
         item.isSoftDelete = !item.isSoftDelete;
       }
     }
-    setOrganizations(newArray);
+    setOrganizations(newOrgArray);
     checkIsAllSoftDeleted();
   };
 
@@ -66,25 +62,25 @@ export const ApiDelegationAccordion = ({ name, organizations, setOrganizations }
   };
 
   const softDeleteAll = () => {
-    const newArray = organizations.map((item) => {
+    const newOrgArray = organizations.map((item) => {
       return {
         ...item,
         isSoftDelete: true,
       };
     });
-    setOrganizations(newArray);
+    setOrganizations(newOrgArray);
     setAllSoftDeleted(true);
     setOpen(true);
   };
 
   const restoreAll = () => {
-    const newArray = organizations.map((item) => {
+    const newOrgArray = organizations.map((item) => {
       return {
         ...item,
         isSoftDelete: false,
       };
     });
-    setOrganizations(newArray);
+    setOrganizations(newOrgArray);
     setAllSoftDeleted(false);
   };
 
@@ -120,23 +116,17 @@ export const ApiDelegationAccordion = ({ name, organizations, setOrganizations }
 
   return (
     <Accordion
-      onClick={handleAccordionClick}
+      onClick={() => setOpen(!open)}
       open={open}
     >
       <AccordionHeader
         subtitle={organizations.length.toString() + ' virksomheter har tilgang'}
         actions={action}
       >
-        <div
-          className={cn({
-            [classes['delegation-accordion__accordion-header--soft-delete']]: isAllSoftDeleted,
-          })}
-        >
-          {name}
-        </div>
+        <div className={cn({ [classes.accordionHeader__softDelete]: isAllSoftDeleted })}>{name}</div>
       </AccordionHeader>
       <AccordionContent>
-        <div className={cn(classes['delegation-accordion__accordion-content'])}>
+        <div className={classes.accordionContent}>
           <List borderStyle={BorderStyle.Dashed}>{listItems}</List>
         </div>
       </AccordionContent>

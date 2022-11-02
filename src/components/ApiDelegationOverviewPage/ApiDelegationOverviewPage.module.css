@@ -1,4 +1,4 @@
-.delegation-overview-page__save-section{
+.saveSection{
     margin-top: 3rem;
     margin-right: 0.5rem;
     display: flex;
@@ -6,7 +6,7 @@
     justify-content: space-around;
 }
 
-.delegation-overview-page__page-content{
+.pageContent{
     margin: 2rem;
     overflow: hidden;
 }

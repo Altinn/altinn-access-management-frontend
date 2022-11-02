@@ -12,15 +12,15 @@ export interface DeletableListItemProps {
 export const DeletableListItem = ({ itemText, isSoftDelete, toggleSoftDelete }: DeletableListItemProps) => {
   return (
     <ListItem>
-      <div className={classes['deletable-list-item__listItem']}>
+      <div className={classes.listItem}>
         <div
-          className={cn(classes['deletable-list-item__itemText'], {
-            [classes['deletable-list-item__itemText--soft-delete']]: isSoftDelete,
+          className={cn(classes.itemText, {
+            [classes.itemText__softDelete]: isSoftDelete,
           })}
         >
           {itemText}
         </div>
-        <div className={cn(classes['deletable-list-item__deleteSection'])}>
+        <div className={cn(classes.deleteSection)}>
           {isSoftDelete ? (
             <Button
               variant={ButtonVariant.Secondary}

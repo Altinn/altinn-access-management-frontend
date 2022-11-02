@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button, Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
-import cn from 'classnames';
 
 import { ApiDelegationAccordion } from './ApiDelegationAccordion';
 import classes from './ApiDelegationOverviewPage.module.css';
@@ -43,18 +42,18 @@ export const ApiDelegationOverviewPage = () => {
 
   const setOrganizationsArray = (
     apiID: number,
-    newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>,
+    newOrgArray: Array<{ id: number; name: string; isSoftDelete: boolean }>,
   ) => {
     const newDelegations = [...delegations];
     for (const api of newDelegations) {
       if (api.id === apiID) {
-        api.organizations = newArray;
+        api.organizations = newOrgArray;
       }
     }
     setDelegations(newDelegations);
   };
 
-  const areDeletableItems = () => {
+  const hasDeletableItems = () => {
     for (const api of delegations) {
       for (const item of api.organizations) {
         if (item.isSoftDelete) {
@@ -85,8 +84,8 @@ export const ApiDelegationOverviewPage = () => {
       key={i.id}
       name={i.apiName}
       organizations={i.organizations}
-      setOrganizations={(newArray: Array<{ id: number; name: string; isSoftDelete: boolean }>) =>
-        setOrganizationsArray(i.id, newArray)
+      setOrganizations={(newOrgArray: Array<{ id: number; name: string; isSoftDelete: boolean }>) =>
+        setOrganizationsArray(i.id, newOrgArray)
       }
     ></ApiDelegationAccordion>
   ));
@@ -96,11 +95,11 @@ export const ApiDelegationOverviewPage = () => {
       <Page>
         <PageHeader>Header her</PageHeader>
         <PageContent>
-          <div className={cn(classes['delegation-overview-page__page-content'])}>
+          <div className={classes.pageContent}>
             {accordions}
-            <div className={cn(classes['delegation-overview-page__save-section'])}>
+            <div className={classes.saveSection}>
               <Button
-                disabled={!areDeletableItems()}
+                disabled={!hasDeletableItems()}
                 onClick={saveChanges}
               >
                 Lagre

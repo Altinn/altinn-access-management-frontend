@@ -1,9 +1,9 @@
-.delegation-accordion__accordion-content{
+.accordionContent{
     padding-left: 8rem;
     padding-right: 0.3rem;
 }
 
-.delegation-accordion__accordion-header--soft-delete{
+.accordionHeader__softDelete{
     text-decoration: line-through;
     opacity: 70%;
 }
