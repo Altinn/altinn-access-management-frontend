@@ -1,1 +1,1 @@
-export { NewApiDelegationsAccordion } from './NewApiDelegationsAccordion';
+export { NewApiDelegationsAccordion, AccordionButtonType } from './NewApiDelegationsAccordion';

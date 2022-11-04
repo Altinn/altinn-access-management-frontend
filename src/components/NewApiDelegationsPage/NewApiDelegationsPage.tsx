@@ -3,8 +3,7 @@ import { Page, PageContent, PageHeader, SearchField } from '@altinn/altinn-desig
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
 import { useAppSelector } from '../../rtk/app/hooks';
 
-import { AccordionButtonType } from './NewApiDelegationsAccordion/NewApiDelegationsAccordion';
-import { NewApiDelegationsAccordion } from './NewApiDelegationsAccordion';
+import { NewApiDelegationsAccordion, AccordionButtonType } from './NewApiDelegationsAccordion';
 import classes from './NewApiDelegationsPage.module.css';
 
 export const NewApiDelegationsPage = () => {
