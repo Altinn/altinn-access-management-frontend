@@ -8,10 +8,18 @@ export interface DelegableOrgApi {
   description: string;
 }
 
+export interface SearchProps {
+  id: boolean;
+  name: boolean;
+  orgName: boolean;
+  description: boolean;
+}
+
 interface InitialState {
   loading: boolean;
   delegableOrgApiList: DelegableOrgApi[];
   chosenDelegableOrgApiList: DelegableOrgApi[];
+  searchProps: SearchProps;
   error: string;
 }
 
@@ -23,6 +31,90 @@ const initialState: InitialState = {
       name: 'API A',
       orgName: 'Skatteetaten',
       description: 'For å hente ut skatteklasser',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
+    },
+    {
+      id: '2',
+      name: 'API B',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatt',
     },
     {
       id: '2',
@@ -65,8 +157,14 @@ const delegableOrgApiSlice = createSlice({
         (orgApi) => orgApi.id !== action.payload.id,
       );
     },
+    search: (state, action) => {
+      const { delegableOrgApiList } = state;
+      state.delegableOrgApiList = delegableOrgApiList.filter(
+        (orgApi) => orgApi.name !== action.payload,
+      );
+    },
   },
 });
 
 export default delegableOrgApiSlice.reducer;
-export const { softAdd, softRemove } = delegableOrgApiSlice.actions;
+export const { softAdd, softRemove, search } = delegableOrgApiSlice.actions;

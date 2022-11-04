@@ -1,7 +1,10 @@
 import { Page, PageContent, PageHeader, SearchField } from '@altinn/altinn-design-system';
+import { useState } from 'react';
+
+import { search } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
-import { useAppSelector } from '../../rtk/app/hooks';
+import { useAppDispatch, useAppSelector } from '../../rtk/app/hooks';
 
 import { AccordionButtonType } from './NewApiDelegationsAccordion/NewApiDelegationsAccordion';
 import { NewApiDelegationsAccordion } from './NewApiDelegationsAccordion';
@@ -10,6 +13,13 @@ import classes from './NewApiDelegationsPage.module.css';
 export const NewApiDelegationsPage = () => {
   const delegableOrgApis = useAppSelector((state) => state.delegableOrgApi.delegableOrgApiList);
   const chosenOrgApis = useAppSelector((state) => state.delegableOrgApi.chosenDelegableOrgApiList);
+  const [searchString, setSearchString] = useState('');
+  const dispatch = useAppDispatch();
+
+  const handleSearch = (searchText: string) => {
+    setSearchString(searchText);
+    dispatch(search(searchText));
+  };
 
   const delegableApiAccordions = delegableOrgApis.map((api, index) => {
     return (
@@ -40,7 +50,10 @@ export const NewApiDelegationsPage = () => {
             <h2>Gi tilgang til API</h2>
             <h3>Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet.</h3>
             <div className={classes.searchField}>
-              <SearchField></SearchField>
+              <SearchField
+                value={searchString}
+                onChange={(e) => handleSearch(e.target.value)}
+              ></SearchField>
             </div>
             <div className={classes.pageContentAccordionsContainer}>
               <div className={classes.apiAccordions}>
