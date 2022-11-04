@@ -3,8 +3,8 @@ import { Page, PageContent, PageHeader, SearchField } from '@altinn/altinn-desig
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
 import { useAppSelector } from '../../rtk/app/hooks';
 
-import { NewApiDelegationsAccordion, AccordionButtonType } from './NewApiDelegationsAccordion';
-import classes from './NewApiDelegationsPage.module.css';
+import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
+import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
   const delegableOrgApis = useAppSelector((state) => state.delegableOrgApi.delegableOrgApiList);
@@ -12,21 +12,21 @@ export const NewApiDelegationsPage = () => {
 
   const delegableApiAccordions = delegableOrgApis.map((api, index) => {
     return (
-      <NewApiDelegationsAccordion
+      <NewApiDelegationAccordion
         delegableApi={api}
         key={index}
         buttonType={AccordionButtonType.Add}
-      ></NewApiDelegationsAccordion>
+      ></NewApiDelegationAccordion>
     );
   });
 
   const chosenApiAccordions = chosenOrgApis.map((api, index) => {
     return (
-      <NewApiDelegationsAccordion
+      <NewApiDelegationAccordion
         delegableApi={api}
         key={index}
         buttonType={AccordionButtonType.Remove}
-      ></NewApiDelegationsAccordion>
+      ></NewApiDelegationAccordion>
     );
   });
 

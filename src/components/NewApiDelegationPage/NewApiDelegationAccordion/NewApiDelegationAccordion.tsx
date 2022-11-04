@@ -12,15 +12,15 @@ export enum AccordionButtonType {
   Remove = 'remove',
 }
 
-export interface NewApiDelegationsAccordionsProps {
+export interface NewApiDelegationAccordionProps {
   delegableApi: DelegableOrgApi;
   buttonType: AccordionButtonType;
 }
 
-export const NewApiDelegationsAccordion = ({
+export const NewApiDelegationAccordion = ({
   delegableApi,
   buttonType,
-}: NewApiDelegationsAccordionsProps) => {
+}: NewApiDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
