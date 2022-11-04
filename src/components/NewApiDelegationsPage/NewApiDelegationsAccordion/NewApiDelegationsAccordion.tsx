@@ -1,47 +1,61 @@
 import { Accordion, AccordionHeader, AccordionContent } from '@altinn/altinn-design-system';
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 
-import { fetchUsers } from '../../../rtk/features/user/userSlice';
-import { ordered } from '../../../rtk/features/cake/cakeSlice';
-import { ReactComponent as AddIcon } from '../../../assets/add--circle.svg';
+import type { DelegableOrgApi } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
+import { ReactComponent as AddIcon } from '@/assets/add--circle.svg';
+import { useAppDispatch } from '@/rtk/app/hooks';
+import { softAdd, softRemove } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
+import { ReactComponent as MinusIcon } from '@/assets/minus--circle.svg';
+
+export enum AccordionButtonType {
+  Add = 'add',
+  Remove = 'remove',
+}
 
 export interface NewApiDelegationsAccordionsProps {
-  headerTitle: string;
-  content?: string;
+  delegableApi: DelegableOrgApi;
+  buttonType: AccordionButtonType;
 }
 
 export const NewApiDelegationsAccordion = ({
-  headerTitle,
-  content,
+  delegableApi,
+  buttonType,
 }: NewApiDelegationsAccordionsProps) => {
-  const user = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
-  const numOfCakes = useSelector((state) => state.cake.numOfCakes);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, []);
+  const dispatch = useAppDispatch();
 
-  const addToApiList = (api: any) => {
-    // Redux add to
-    dispatch(ordered());
-    console.log('click');
+  const handleSoftAdd = (orgApi: DelegableOrgApi) => {
+    dispatch(softAdd(orgApi));
   };
-  const addButton = (
+
+  const handleSoftRemove = (orgApi: DelegableOrgApi) => {
+    dispatch(softRemove(orgApi));
+  };
+
+  const actions = (
     <>
-      <AddIcon onClick={() => addToApiList}></AddIcon>
+      {buttonType === AccordionButtonType.Add && AccordionButtonType.Add && (
+        <AddIcon onClick={() => handleSoftAdd(delegableApi)}></AddIcon>
+      )}
+      {buttonType === AccordionButtonType.Remove && (
+        <MinusIcon onClick={() => handleSoftRemove(delegableApi)}></MinusIcon>
+      )}
     </>
   );
+
   return (
     <div>
-      {user.loading && <div>Loading...</div>}
       <Accordion
         open={open}
         onClick={() => setOpen(!open)}
       >
-        <AccordionHeader actions={addButton}>{headerTitle}</AccordionHeader>
-        <AccordionContent>{content}</AccordionContent>
+        <AccordionHeader
+          subtitle={delegableApi.orgName}
+          actions={actions}
+        >
+          {delegableApi.name}
+        </AccordionHeader>
+        <AccordionContent>{delegableApi.description}</AccordionContent>
       </Accordion>
     </div>
   );

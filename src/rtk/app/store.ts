@@ -1,9 +1,10 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createLogger } from 'redux-logger';
 
-import cakeReducer from '../features/cake/cakeSlice';
-import iceCreamReducer from '../features/icecream/icecreamSlice';
-import userReducer from '../features/user/userSlice';
+import cakeReducer from '../features/examples/cake/cakeSlice';
+import iceCreamReducer from '../features/examples/icecream/icecreamSlice';
+import userReducer from '../features/examples/user/userSlice';
+import delegableOrgApiReducer from '../features/delegableOrgApi/delegableOrgApiSlice';
 
 const logger = createLogger();
 
@@ -12,8 +13,11 @@ const store = configureStore({
     cake: cakeReducer,
     icecream: iceCreamReducer,
     user: userReducer,
+    delegableOrgApi: delegableOrgApiReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export default store;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

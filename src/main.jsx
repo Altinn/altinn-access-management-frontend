@@ -35,6 +35,7 @@ const router = createBrowserRouter([
   {
     path: 'new-api-delegations',
     element: <NewApiDelegations />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
