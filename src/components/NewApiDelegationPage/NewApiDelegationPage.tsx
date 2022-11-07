@@ -16,10 +16,10 @@ import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegati
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
-  const delegableOrgApis = useAppSelector((state) => state.delegableOrgApi.delegableOrgApiList);
-  const chosenOrgApis = useAppSelector((state) => state.delegableOrgApi.chosenDelegableOrgApiList);
+  const delegableApis = useAppSelector((state: any) => state.delegableApi.delegableApiList);
+  const chosenApis = useAppSelector((state: any) => state.delegableApi.chosenDelegableApiList);
 
-  const delegableApiAccordions = delegableOrgApis.map((api, index) => {
+  const delegableApiAccordions = delegableApis.map((api, index) => {
     return (
       <NewApiDelegationAccordion
         delegableApi={api}
@@ -29,7 +29,7 @@ export const NewApiDelegationsPage = () => {
     );
   });
 
-  const chosenApiAccordions = chosenOrgApis.map((api, index) => {
+  const chosenApiAccordions = chosenApis.map((api, index) => {
     return (
       <NewApiDelegationAccordion
         delegableApi={api}

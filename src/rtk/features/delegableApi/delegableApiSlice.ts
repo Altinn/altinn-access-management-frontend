@@ -1,23 +1,23 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export interface DelegableOrgApi {
+export interface DelegableApi {
   id: string;
   name: string;
   orgName: string;
   description: string;
 }
 
-interface InitialState {
+export interface InitialState {
   loading: boolean;
-  delegableOrgApiList: DelegableOrgApi[];
-  chosenDelegableOrgApiList: DelegableOrgApi[];
+  delegableApiList: DelegableApi[];
+  chosenDelegableApiList: DelegableApi[];
   error: string;
 }
 
 const initialState: InitialState = {
   loading: false,
-  delegableOrgApiList: [
+  delegableApiList: [
     {
       id: '1',
       name: 'API A',
@@ -31,12 +31,12 @@ const initialState: InitialState = {
       description: 'For å hente ut skatt',
     },
   ],
-  chosenDelegableOrgApiList: [],
+  chosenDelegableApiList: [],
   error: '',
 };
 
 export const fetchDelegableOrgApis = createAsyncThunk(
-  'delegableOrgApi/fetchDelegableOrgApis',
+  'delegableApi/fetchDelegableOrgApis',
   async () => {
     return await axios
       .get('https://jsonplaceholder.typicode.com/users')
@@ -46,23 +46,23 @@ export const fetchDelegableOrgApis = createAsyncThunk(
 );
 
 const delegableOrgApiSlice = createSlice({
-  name: 'delegableOrgApi',
+  name: 'delegableApi',
   initialState,
   reducers: {
     softAdd: (state, action) => {
-      const { delegableOrgApiList } = state;
-      state.delegableOrgApiList = delegableOrgApiList.filter(
-        (orgApi) => orgApi.id !== action.payload.id,
+      const { delegableApiList } = state;
+      state.delegableApiList = delegableApiList.filter(
+        (delegableApi) => delegableApi.id !== action.payload.id,
       );
 
-      state.chosenDelegableOrgApiList.push(action.payload);
+      state.chosenDelegableApiList.push(action.payload);
     },
     softRemove: (state, action) => {
-      state.delegableOrgApiList.push(action.payload);
+      state.delegableApiList.push(action.payload);
 
-      const { chosenDelegableOrgApiList } = state;
-      state.chosenDelegableOrgApiList = chosenDelegableOrgApiList.filter(
-        (orgApi) => orgApi.id !== action.payload.id,
+      const { chosenDelegableApiList } = state;
+      state.chosenDelegableApiList = chosenDelegableApiList.filter(
+        (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
   },
