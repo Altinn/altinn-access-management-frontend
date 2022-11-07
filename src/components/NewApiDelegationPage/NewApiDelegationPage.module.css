@@ -52,3 +52,8 @@
   margin-right: 0.5rem;
   width: 10rem;
 }
+
+.accordionScrollContainer {
+  max-height: 300px;
+  overflow-y: auto;
+}

@@ -59,11 +59,11 @@ export const NewApiDelegationsPage = () => {
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
                   <h4>Delegerbare API:</h4>
-                  {delegableApiAccordions}
+                  <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
                 </div>
                 <div className={classes.apiAccordions}>
                   <h4>Valgte API:</h4>
-                  {chosenApiAccordions}
+                  <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
               <div className={classes.buttonContainer}>

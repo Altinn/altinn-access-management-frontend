@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { ErrorPage } from './resources/ErrorPage/ErrorPage';
-import { ApiDelegation } from './routes/ApiDelegation';
+import { ApiDelegationOverview } from './routes/ApiDelegationOverview';
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
@@ -29,11 +29,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'api-delegations',
-    element: <ApiDelegation />,
+    path: 'api-delegations/overview',
+    element: <ApiDelegationOverview />,
   },
   {
-    path: 'new-api-delegations',
+    path: 'api-delegations/delegate-new',
     element: <NewApiDelegations />,
     errorElement: <ErrorPage />,
   },

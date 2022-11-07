@@ -1,14 +1,16 @@
-import { Accordion, AccordionHeader, AccordionContent } from '@altinn/altinn-design-system';
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionContent,
+  ButtonVariant,
+  ButtonColor,
+  Button,
+} from '@altinn/altinn-design-system';
 import { useState } from 'react';
-import classNames from 'classnames';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { ReactComponent as AddIcon } from '@/assets/add--circle.svg';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { ReactComponent as MinusIcon } from '@/assets/minus--circle.svg';
-
-import classes from './NewApiDelegationAccordion.module.css';
 
 export enum AccordionButtonType {
   Add = 'add',
@@ -38,16 +40,26 @@ export const NewApiDelegationAccordion = ({
   const actions = (
     <>
       {buttonType === AccordionButtonType.Add && AccordionButtonType.Add && (
-        <AddIcon onClick={() => handleSoftAdd(delegableApi)}></AddIcon>
+        <Button
+          iconName={'AddCircle'}
+          variant={ButtonVariant.Quiet}
+          color={ButtonColor.Success}
+          onClick={() => handleSoftAdd(delegableApi)}
+        ></Button>
       )}
       {buttonType === AccordionButtonType.Remove && (
-        <MinusIcon onClick={() => handleSoftRemove(delegableApi)}></MinusIcon>
+        <Button
+          iconName={'MinusCircle'}
+          variant={ButtonVariant.Quiet}
+          color={ButtonColor.Danger}
+          onClick={() => handleSoftRemove(delegableApi)}
+        ></Button>
       )}
     </>
   );
 
   return (
-    <div className={classes.accordionContainer}>
+    <div>
       <Accordion
         open={open}
         onClick={() => setOpen(!open)}
