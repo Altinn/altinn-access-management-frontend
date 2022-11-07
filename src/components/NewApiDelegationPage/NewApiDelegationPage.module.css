@@ -51,3 +51,14 @@
 .searchField{
   width: var(--searchField-width);
 }
+
+.buttonContainer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button{
+  margin-right: 0.5rem;
+  width: 10rem;
+}
