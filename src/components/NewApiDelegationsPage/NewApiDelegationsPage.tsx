@@ -1,8 +1,6 @@
 import { Page, PageContent, PageHeader, SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 
-import { search } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
-
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
 import { useAppDispatch, useAppSelector } from '../../rtk/app/hooks';
 
@@ -10,8 +8,10 @@ import { AccordionButtonType } from './NewApiDelegationsAccordion/NewApiDelegati
 import { NewApiDelegationsAccordion } from './NewApiDelegationsAccordion';
 import classes from './NewApiDelegationsPage.module.css';
 
+import { search } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
+
 export const NewApiDelegationsPage = () => {
-  const delegableOrgApis = useAppSelector((state) => state.delegableOrgApi.delegableOrgApiList);
+  const presentedOrgApiList = useAppSelector((state) => state.delegableOrgApi.presentedOrgApiList);
   const chosenOrgApis = useAppSelector((state) => state.delegableOrgApi.chosenDelegableOrgApiList);
   const [searchString, setSearchString] = useState('');
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ export const NewApiDelegationsPage = () => {
     dispatch(search(searchText));
   };
 
-  const delegableApiAccordions = delegableOrgApis.map((api, index) => {
+  const delegableApiAccordions = presentedOrgApiList.map((api, index) => {
     return (
       <NewApiDelegationsAccordion
         delegableApi={api}

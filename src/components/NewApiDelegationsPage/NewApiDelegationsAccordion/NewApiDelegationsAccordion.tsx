@@ -17,10 +17,7 @@ export interface NewApiDelegationsAccordionsProps {
   buttonType: AccordionButtonType;
 }
 
-export const NewApiDelegationsAccordion = ({
-  delegableApi,
-  buttonType,
-}: NewApiDelegationsAccordionsProps) => {
+export const NewApiDelegationsAccordion = ({ delegableApi, buttonType }: NewApiDelegationsAccordionsProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
