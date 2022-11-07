@@ -8,6 +8,9 @@ import {
   ButtonColor,
   ButtonSize,
 } from '@altinn/altinn-design-system';
+import type { Key } from 'react';
+
+import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
 import { useAppSelector } from '../../rtk/app/hooks';
@@ -19,17 +22,19 @@ export const NewApiDelegationsPage = () => {
   const delegableApis = useAppSelector((state: any) => state.delegableApi.delegableApiList);
   const chosenApis = useAppSelector((state: any) => state.delegableApi.chosenDelegableApiList);
 
-  const delegableApiAccordions = delegableApis.map((api, index) => {
-    return (
-      <NewApiDelegationAccordion
-        delegableApi={api}
-        key={index}
-        buttonType={AccordionButtonType.Add}
-      ></NewApiDelegationAccordion>
-    );
-  });
+  const delegableApiAccordions = delegableApis.map(
+    (api: DelegableApi, index: Key | null | undefined) => {
+      return (
+        <NewApiDelegationAccordion
+          delegableApi={api}
+          key={index}
+          buttonType={AccordionButtonType.Add}
+        ></NewApiDelegationAccordion>
+      );
+    },
+  );
 
-  const chosenApiAccordions = chosenApis.map((api, index) => {
+  const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
       <NewApiDelegationAccordion
         delegableApi={api}
