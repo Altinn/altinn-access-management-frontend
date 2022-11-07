@@ -2,16 +2,6 @@
   .pageContainer{
       --pageContainer-width: 100%;
   }
-
-  .searchField{
-    --searchField-width: 100%
-  }
-}
-
-@media only screen and (min-width: 500px) {
-  .searchField{
-    --searchField-width: 45%
-  }
 }
 
 @media only screen and (min-width: 700px) {
@@ -49,5 +39,16 @@
 
 
 .searchField{
-  width: var(--searchField-width);
+  width: 100%;
+}
+
+.buttonContainer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button{
+  margin-right: 0.5rem;
+  width: 10rem;
 }

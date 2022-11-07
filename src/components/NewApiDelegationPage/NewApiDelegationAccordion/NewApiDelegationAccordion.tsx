@@ -1,10 +1,13 @@
 import { Accordion, AccordionHeader, AccordionContent } from '@altinn/altinn-design-system';
 import { useState } from 'react';
+import classNames from 'classnames';
 
-import type { DelegableOrgApi } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
+import classes from './NewApiDelegationAccordion.module.css';
+
+import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { ReactComponent as AddIcon } from '@/assets/add--circle.svg';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import { softAdd, softRemove } from '@/rtk/features/delegableOrgApi/delegableOrgApiSlice';
+import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { ReactComponent as MinusIcon } from '@/assets/minus--circle.svg';
 
 export enum AccordionButtonType {
@@ -12,21 +15,21 @@ export enum AccordionButtonType {
   Remove = 'remove',
 }
 
-export interface NewApiDelegationsAccordionsProps {
-  delegableApi: DelegableOrgApi;
+export interface NewApiDelegationAccordionProps {
+  delegableApi: DelegableApi;
   buttonType: AccordionButtonType;
 }
 
-export const NewApiDelegationsAccordion = ({ delegableApi, buttonType }: NewApiDelegationsAccordionsProps) => {
+export const NewApiDelegationAccordion = ({ delegableApi, buttonType }: NewApiDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleSoftAdd = (orgApi: DelegableOrgApi) => {
-    dispatch(softAdd(orgApi));
+  const handleSoftAdd = (delegableApi: DelegableApi) => {
+    dispatch(softAdd(delegableApi));
   };
 
-  const handleSoftRemove = (orgApi: DelegableOrgApi) => {
-    dispatch(softRemove(orgApi));
+  const handleSoftRemove = (delegableApi: DelegableApi) => {
+    dispatch(softRemove(delegableApi));
   };
 
   const actions = (
@@ -41,7 +44,7 @@ export const NewApiDelegationsAccordion = ({ delegableApi, buttonType }: NewApiD
   );
 
   return (
-    <div>
+    <div className={classes.accordionContainer}>
       <Accordion
         open={open}
         onClick={() => setOpen(!open)}

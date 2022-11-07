@@ -1,5 +1,5 @@
-import { ExamplePage } from '../components/ExamplePage/ExamplePage';
+import { ApiDelegationOverviewPage } from '../components/ApiDelegationOverviewPage/ApiDelegationOverviewPage';
 
 export const ApiDelegation = () => {
-  return <ExamplePage />;
+  return <ApiDelegationOverviewPage />;
 };

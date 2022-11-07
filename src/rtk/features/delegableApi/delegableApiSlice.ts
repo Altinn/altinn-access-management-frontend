@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export interface DelegableOrgApi {
+export interface DelegableApi {
   id: string;
   name: string;
   orgName: string;
@@ -17,16 +17,16 @@ export interface SearchProps {
 
 interface InitialState {
   loading: boolean;
-  delegableOrgApiList: DelegableOrgApi[];
-  presentedOrgApiList: DelegableOrgApi[];
-  chosenDelegableOrgApiList: DelegableOrgApi[];
+  delegableApiList: DelegableApi[];
+  presentedApiList: DelegableApi[];
+  chosenDelegableApiList: DelegableApi[];
   searchProps: SearchProps;
   error: string;
 }
 
 const initialState: InitialState = {
   loading: false,
-  delegableOrgApiList: [
+  delegableApiList: [
     {
       id: '1',
       name: 'API A',
@@ -58,7 +58,7 @@ const initialState: InitialState = {
       description: 'Frukt av alle slag',
     },
   ],
-  presentedOrgApiList: [
+  presentedApiList: [
     {
       id: '1',
       name: 'API A',
@@ -90,11 +90,11 @@ const initialState: InitialState = {
       description: 'Frukt av alle slag',
     },
   ],
-  chosenDelegableOrgApiList: [],
+  chosenDelegableApiList: [],
   error: '',
 };
 
-export const fetchDelegableOrgApis = createAsyncThunk('delegableOrgApi/fetchDelegableOrgApis', async () => {
+export const fetchDelegableOrgApis = createAsyncThunk('delegableApi/fetchDelegableOrgApis', async () => {
   return await axios
     .get('https://jsonplaceholder.typicode.com/users')
     .then((response) => response.data)
@@ -102,31 +102,33 @@ export const fetchDelegableOrgApis = createAsyncThunk('delegableOrgApi/fetchDele
 });
 
 const delegableOrgApiSlice = createSlice({
-  name: 'delegableOrgApi',
+  name: 'delegableApi',
   initialState,
   reducers: {
     softAdd: (state, action) => {
-      const { delegableOrgApiList } = state;
-      const { presentedOrgApiList } = state;
-      state.delegableOrgApiList = delegableOrgApiList.filter((orgApi) => orgApi.id !== action.payload.id);
-      state.presentedOrgApiList = presentedOrgApiList.filter((orgApi) => orgApi.id !== action.payload.id);
+      const { delegableApiList } = state;
+      const { presentedApiList } = state;
+      state.delegableOrgApiList = delegableApiList.filter((delegableApi) => delegableApi.id !== action.payload.id);
+      state.presentedOrgApiList = presentedApiList.filter((delegableApi) => delegableApi.id !== action.payload.id);
 
-      state.chosenDelegableOrgApiList.push(action.payload);
+      state.chosenDelegableApiList.push(action.payload);
     },
     softRemove: (state, action) => {
       state.delegableOrgApiList.push(action.payload);
       state.presentedOrgApiList.push(action.payload);
 
-      const { chosenDelegableOrgApiList } = state;
-      state.chosenDelegableOrgApiList = chosenDelegableOrgApiList.filter((orgApi) => orgApi.id !== action.payload.id);
+      const { chosenDelegableApiList } = state;
+      state.chosenDelegableOrgApiList = chosenDelegableApiList.filter(
+        (delegableApi) => delegableApi.id !== action.payload.id,
+      );
     },
     search: (state, action) => {
-      const { delegableOrgApiList } = state;
-      state.presentedOrgApiList = delegableOrgApiList.filter(
-        (orgApi) =>
-          orgApi.name.includes(action.payload) ||
-          orgApi.description.includes(action.payload) ||
-          orgApi.orgName.includes(action.payload),
+      const { delegableApiList } = state;
+      state.presentedApiList = delegableApiList.filter(
+        (delegableApi) =>
+          delegableApi.name.includes(action.payload) ||
+          delegableApi.description.includes(action.payload) ||
+          delegableApi.orgName.includes(action.payload),
       );
     },
   },
