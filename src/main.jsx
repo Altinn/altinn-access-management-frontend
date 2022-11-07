@@ -2,13 +2,14 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
-import i18next from 'i18next';
+import i18next, { use } from 'i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { ErrorPage } from './resources/ErrorPage/ErrorPage';
 import { ApiDelegation } from './routes/ApiDelegation';
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
+import { ExamplePage } from './components/ExamplePage/ExamplePage';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
 
 /**
@@ -23,6 +24,7 @@ const queryClientDevDefaults = {
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <ExamplePage />,
     errorElement: <ErrorPage />,
   },
   {
@@ -31,10 +33,21 @@ const router = createBrowserRouter([
   },
 ]);
 
+const initLanguage = (lang) => {
+  if (lang === 'no') {
+    return 'no';
+  } else if (lang === 'en') {
+    return 'en';
+  } else if (lang === 'nn') {
+    return 'nn';
+  }
+};
+
 // Initialise i18next; start application when ready
-i18next.use(initReactI18next).init(
+use(initReactI18next).init(
   {
-    lng: getConfig('defaultLocale'),
+    lng: initLanguage('no'),
+    fallbackLng: getConfig('defaultLocale'),
     ns: ['common', 'basic'],
     defaultNS: 'common',
     resources: BaseLocalizations,
