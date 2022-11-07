@@ -8,29 +8,40 @@ import {
   ButtonColor,
   ButtonSize,
 } from '@altinn/altinn-design-system';
+import { useState } from 'react';
 import type { Key } from 'react';
 
+import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { search } from '@/rtk/features/delegableApi/delegableApiSlice';
+
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
-import { useAppSelector } from '../../rtk/app/hooks';
+import { useAppDispatch, useAppSelector } from '../../rtk/app/hooks';
 
 import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewApiDelegationPage.module.css';
 
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-
 export const NewApiDelegationsPage = () => {
   const presentedApiList = useAppSelector((state: any) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state: any) => state.delegableApi.chosenDelegableApiList);
+  const [searchString, setSearchString] = useState('');
+  const dispatch = useAppDispatch();
 
-  const delegableApiAccordions = presentedApiList.map((api: DelegableApi, index: Key | null | undefined) => {
-    return (
-      <NewApiDelegationAccordion
-        delegableApi={api}
-        key={index}
-        buttonType={AccordionButtonType.Add}
-      ></NewApiDelegationAccordion>
-    );
-  });
+  const handleSearch = (searchText: string) => {
+    setSearchString(searchText);
+    dispatch(search(searchText));
+  };
+
+  const delegableApiAccordions = presentedApiList.map(
+    (api: DelegableApi, index: Key | null | undefined) => {
+      return (
+        <NewApiDelegationAccordion
+          delegableApi={api}
+          key={index}
+          buttonType={AccordionButtonType.Add}
+        ></NewApiDelegationAccordion>
+      );
+    },
+  );
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
@@ -52,7 +63,10 @@ export const NewApiDelegationsPage = () => {
               <h2>Gi tilgang til API</h2>
               <h3>Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet.</h3>
               <div className={classes.searchField}>
-                <SearchField></SearchField>
+                <SearchField
+                  value={searchString}
+                  onChange={(e: any) => handleSearch(e.target.value)}
+                ></SearchField>
               </div>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>

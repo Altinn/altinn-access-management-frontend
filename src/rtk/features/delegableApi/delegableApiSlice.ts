@@ -20,7 +20,7 @@ interface InitialState {
   delegableApiList: DelegableApi[];
   presentedApiList: DelegableApi[];
   chosenDelegableApiList: DelegableApi[];
-  searchProps: SearchProps;
+  search: SearchProps;
   error: string;
 }
 
@@ -94,31 +94,35 @@ const initialState: InitialState = {
   error: '',
 };
 
-export const fetchDelegableOrgApis = createAsyncThunk('delegableApi/fetchDelegableOrgApis', async () => {
+export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     .get('https://jsonplaceholder.typicode.com/users')
     .then((response) => response.data)
     .catch((error) => console.log(error));
 });
 
-const delegableOrgApiSlice = createSlice({
+const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
     softAdd: (state, action) => {
       const { delegableApiList } = state;
       const { presentedApiList } = state;
-      state.delegableOrgApiList = delegableApiList.filter((delegableApi) => delegableApi.id !== action.payload.id);
-      state.presentedOrgApiList = presentedApiList.filter((delegableApi) => delegableApi.id !== action.payload.id);
+      state.delegableApiList = delegableApiList.filter(
+        (delegableApi) => delegableApi.id !== action.payload.id,
+      );
+      state.presentedApiList = presentedApiList.filter(
+        (delegableApi) => delegableApi.id !== action.payload.id,
+      );
 
       state.chosenDelegableApiList.push(action.payload);
     },
     softRemove: (state, action) => {
-      state.delegableOrgApiList.push(action.payload);
-      state.presentedOrgApiList.push(action.payload);
+      state.delegableApiList.push(action.payload);
+      state.presentedApiList.push(action.payload);
 
       const { chosenDelegableApiList } = state;
-      state.chosenDelegableOrgApiList = chosenDelegableApiList.filter(
+      state.chosenDelegableApiList = chosenDelegableApiList.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
@@ -134,5 +138,5 @@ const delegableOrgApiSlice = createSlice({
   },
 });
 
-export default delegableOrgApiSlice.reducer;
-export const { softAdd, softRemove, search } = delegableOrgApiSlice.actions;
+export default delegableApiSlice.reducer;
+export const { softAdd, softRemove, search } = delegableApiSlice.actions;
