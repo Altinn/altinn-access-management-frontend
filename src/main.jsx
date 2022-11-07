@@ -24,7 +24,6 @@ const queryClientDevDefaults = {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ExamplePage />,
     errorElement: <ErrorPage />,
   },
   {
