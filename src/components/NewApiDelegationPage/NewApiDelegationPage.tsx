@@ -11,9 +11,10 @@ import {
 import type { Key } from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/api.svg';
-import { useAppSelector } from '../../rtk/app/hooks';
 
 import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewApiDelegationPage.module.css';
@@ -21,6 +22,7 @@ import classes from './NewApiDelegationPage.module.css';
 export const NewApiDelegationsPage = () => {
   const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const dispatch = useAppDispatch();
 
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
@@ -29,6 +31,7 @@ export const NewApiDelegationsPage = () => {
           delegableApi={api}
           key={index}
           buttonType={AccordionButtonType.Add}
+          softAddCallback={() => dispatch(softAdd(api))}
         ></NewApiDelegationAccordion>
       );
     },
@@ -40,6 +43,7 @@ export const NewApiDelegationsPage = () => {
         delegableApi={api}
         key={index}
         buttonType={AccordionButtonType.Remove}
+        softRemoveCallback={() => dispatch(softRemove(api))}
       ></NewApiDelegationAccordion>
     );
   });

@@ -9,8 +9,6 @@ import {
 import { useState } from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { useAppDispatch } from '@/rtk/app/hooks';
-import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
 
 import classes from './NewApiDelegationAccordion.module.css';
 
@@ -22,14 +20,17 @@ export enum AccordionButtonType {
 export interface NewApiDelegationAccordionProps {
   delegableApi: DelegableApi;
   buttonType: AccordionButtonType;
+  softAddCallback?: () => { payload: DelegableApi; type: 'delegableApi/softAdd' };
+  softRemoveCallback?: () => { payload: DelegableApi; type: 'delegableApi/softRemove' };
 }
 
 export const NewApiDelegationAccordion = ({
   delegableApi,
   buttonType,
+  softAddCallback,
+  softRemoveCallback,
 }: NewApiDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
 
   const actions = (
     <>
@@ -38,7 +39,8 @@ export const NewApiDelegationAccordion = ({
           iconName={'AddCircle'}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Success}
-          onClick={() => dispatch(softAdd(delegableApi))}
+          onClick={softAddCallback}
+          aria-label={'soft-add'}
         ></Button>
       )}
       {buttonType === AccordionButtonType.Remove && (
@@ -46,7 +48,8 @@ export const NewApiDelegationAccordion = ({
           iconName={'MinusCircle'}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
-          onClick={() => dispatch(softRemove(delegableApi))}
+          onClick={softRemoveCallback}
+          aria-label={'soft-remove'}
         ></Button>
       )}
     </>
