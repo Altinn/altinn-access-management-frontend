@@ -42,11 +42,11 @@ describe('NewApiDelegationAccordion', () => {
         description: 'Dette er et API for skatteetaten',
       };
 
-      const softAdd = () => {
+      const softRemove = () => {
         cy.stub();
       };
 
-      const softRemoveSpy = cy.spy(softAdd).as('softAddSpy');
+      const softRemoveSpy = cy.spy(softRemove).as('softRemoveSpy');
 
       cy.mount(
         <NewApiDelegationAccordion
@@ -57,7 +57,7 @@ describe('NewApiDelegationAccordion', () => {
       );
 
       cy.findByRole('button', { name: 'soft-remove' }).click();
-      cy.get('@softAddSpy').should('have.been.called');
+      cy.get('@softRemoveSpy').should('have.been.called');
     });
   });
 });
