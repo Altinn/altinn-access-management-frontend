@@ -9,7 +9,6 @@ import { ErrorPage } from './resources/ErrorPage/ErrorPage';
 import { ApiDelegation } from './routes/ApiDelegation';
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
-import { ExamplePage } from './components/ExamplePage/ExamplePage';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
 
 /**
@@ -33,19 +32,20 @@ const router = createBrowserRouter([
 ]);
 
 const initLanguage = (lang) => {
-  if (lang === 'no') {
-    return 'no';
+  // get token here
+  if (lang === 'no_nb') {
+    return 'no_nb';
   } else if (lang === 'en') {
     return 'en';
-  } else if (lang === 'nn') {
-    return 'nn';
+  } else if (lang === 'no_nn') {
+    return 'no_nn';
   }
 };
 
 // Initialise i18next; start application when ready
 use(initReactI18next).init(
   {
-    lng: initLanguage('no'),
+    lng: initLanguage('no_nb'),
     fallbackLng: getConfig('defaultLocale'),
     ns: ['common', 'basic'],
     defaultNS: 'common',
