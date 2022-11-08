@@ -3898,7 +3898,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^22.0.2":
+"i18next@npm:^22.0.4":
   version: 22.0.4
   resolution: "i18next@npm:22.0.4"
   dependencies:
@@ -5459,7 +5459,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.31.10
     husky: ^8.0.1
-    i18next: ^22.0.2
+    i18next: ^22.0.4
     lint-staged: ^13.0.3
     prettier: ^2.7.1
     react: ^18.2.0
