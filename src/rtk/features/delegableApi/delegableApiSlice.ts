@@ -35,17 +35,14 @@ const initialState: InitialState = {
   error: '',
 };
 
-export const fetchDelegableOrgApis = createAsyncThunk(
-  'delegableApi/fetchDelegableOrgApis',
-  async () => {
-    return await axios
-      .get('https://jsonplaceholder.typicode.com/users')
-      .then((response) => response.data)
-      .catch((error) => console.log(error));
-  },
-);
+export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
+  return await axios
+    .get('https://jsonplaceholder.typicode.com/users')
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+});
 
-const delegableOrgApiSlice = createSlice({
+const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
@@ -68,5 +65,5 @@ const delegableOrgApiSlice = createSlice({
   },
 });
 
-export default delegableOrgApiSlice.reducer;
-export const { softAdd, softRemove } = delegableOrgApiSlice.actions;
+export default delegableApiSlice.reducer;
+export const { softAdd, softRemove } = delegableApiSlice.actions;

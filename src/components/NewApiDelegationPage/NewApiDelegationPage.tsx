@@ -19,8 +19,8 @@ import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegati
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
-  const delegableApis = useAppSelector((state: any) => state.delegableApi.delegableApiList);
-  const chosenApis = useAppSelector((state: any) => state.delegableApi.chosenDelegableApiList);
+  const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
 
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
@@ -66,8 +66,8 @@ export const NewApiDelegationsPage = () => {
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
-              <div className={classes.buttonContainer}>
-                <div className={classes.button}>
+              <div className={classes.navButtonContainer}>
+                <div className={classes.navButton}>
                   <Button
                     color={ButtonColor.Primary}
                     variant={ButtonVariant.Outline}
@@ -77,7 +77,7 @@ export const NewApiDelegationsPage = () => {
                     Forrige
                   </Button>
                 </div>
-                <div className={classes.button}>
+                <div className={classes.navButton}>
                   <Button
                     color={ButtonColor.Primary}
                     variant={ButtonVariant.Filled}

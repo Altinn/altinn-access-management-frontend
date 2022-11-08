@@ -42,13 +42,13 @@
   width: 100%;
 }
 
-.buttonContainer {
+.navButtonContainer {
   margin-top: 2rem;
   display: flex;
   justify-content: flex-end;
 }
 
-.button{
+.navButton{
   margin-right: 0.5rem;
   width: 10rem;
 }

@@ -1,4 +1,3 @@
-.accordionContainer {
-  max-height: 300px;
-  overflow-y: auto;
+.newApiAccordionContent{
+  margin: 2rem;
 }
