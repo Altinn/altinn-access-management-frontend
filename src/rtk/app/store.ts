@@ -8,7 +8,8 @@ import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 
 const logger = createLogger();
 
-const store = !import.meta.env.DEV
+// turn off redux-logger in production
+const store = !import.meta.env.PROD
   ? configureStore({
       reducer: {
         cake: cakeReducer,
@@ -16,7 +17,6 @@ const store = !import.meta.env.DEV
         user: userReducer,
         delegableApi: delegableApiReducer,
       },
-      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     })
   : configureStore({
       reducer: {
@@ -25,6 +25,7 @@ const store = !import.meta.env.DEV
         user: userReducer,
         delegableApi: delegableApiReducer,
       },
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     });
 
 export default store;
