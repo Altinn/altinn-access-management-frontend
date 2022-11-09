@@ -1,17 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { use } from 'i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { ErrorPage } from './resources/ErrorPage/ErrorPage';
-import { ApiDelegationOverview } from './routes/ApiDelegationOverview';
+import { Router } from '@/routes/Router';
+
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
-import { NewApiDelegations } from './routes/NewApiDelegations';
 import store from './rtk/app/store';
 
 /**
@@ -22,22 +21,6 @@ const queryClientDevDefaults = {
     retry: false, // Don't retry failed requests
   },
 };
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: 'api-delegations/overview',
-    element: <ApiDelegationOverview />,
-  },
-  {
-    path: 'api-delegations/delegate-new',
-    element: <NewApiDelegations />,
-    errorElement: <ErrorPage />,
-  },
-]);
 
 const initLanguage = (lang) => {
   // get token here
@@ -71,7 +54,7 @@ use(initReactI18next).init(
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <LoadLocalizations>
-              <RouterProvider router={router} />
+              <RouterProvider router={Router} />
             </LoadLocalizations>
           </QueryClientProvider>
         </Provider>
