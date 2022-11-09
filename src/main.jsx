@@ -1,15 +1,18 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { use } from 'i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { ErrorPage } from './resources/ErrorPage/ErrorPage';
-import { ApiDelegation } from './routes/ApiDelegation';
+import { ApiDelegationOverview } from './routes/ApiDelegationOverview';
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
+import { NewApiDelegations } from './routes/NewApiDelegations';
+import store from './rtk/app/store';
 
 /**
  * Special behaviour for react-query in dev environment
@@ -26,8 +29,13 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'api-delegations',
-    element: <ApiDelegation />,
+    path: 'api-delegations/overview',
+    element: <ApiDelegationOverview />,
+  },
+  {
+    path: 'api-delegations/delegate-new',
+    element: <NewApiDelegations />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
@@ -60,11 +68,13 @@ use(initReactI18next).init(
 
     ReactDOM.createRoot(document.getElementById('root')).render(
       <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-          <LoadLocalizations>
-            <RouterProvider router={router} />
-          </LoadLocalizations>
-        </QueryClientProvider>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <LoadLocalizations>
+              <RouterProvider router={router} />
+            </LoadLocalizations>
+          </QueryClientProvider>
+        </Provider>
       </React.StrictMode>,
     );
   },

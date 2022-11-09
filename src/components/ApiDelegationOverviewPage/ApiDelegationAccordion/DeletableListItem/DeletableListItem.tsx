@@ -9,7 +9,11 @@ export interface DeletableListItemProps {
   toggleSoftDelete: () => void;
 }
 
-export const DeletableListItem = ({ itemText, isSoftDelete, toggleSoftDelete }: DeletableListItemProps) => {
+export const DeletableListItem = ({
+  itemText,
+  isSoftDelete,
+  toggleSoftDelete,
+}: DeletableListItemProps) => {
   return (
     <ListItem>
       <div className={classes.listItem}>

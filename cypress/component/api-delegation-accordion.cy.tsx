@@ -1,6 +1,6 @@
 import * as cypress from '@testing-library/cypress';
 
-import { ApiDelegationAccordion } from '../../src/components/ApiDelegationOverviewPage/ApiDelegationAccordion/ApiDelegationAccordion';
+import { ApiDelegationAccordion } from '../../src/components/ApiDelegationOverviewPage/ApiDelegationAccordion';
 
 describe('ApiDelegationAccordion', () => {
   describe('AccordionHeader', () => {
@@ -53,7 +53,9 @@ describe('ApiDelegationAccordion', () => {
         />,
       );
 
-      cy.get('button').contains('API A').should('have.css', 'text-decoration', 'line-through solid rgb(0, 0, 0)');
+      cy.get('button')
+        .contains('API A')
+        .should('have.css', 'text-decoration', 'line-through solid rgb(0, 0, 0)');
       cy.findByRole('button', { name: /Angre/i }).should('exist');
     });
     it('should call update function on button click', () => {
@@ -114,7 +116,9 @@ describe('ApiDelegationAccordion', () => {
 
       cy.findByRole('button', { name: /API A/i }).click();
       cy.get('li').first().findByRole('button', { name: /Angre/i }).should('exist');
-      cy.get('li').contains('Virksomhet 1').should('have.css', 'text-decoration', 'line-through solid rgb(0, 0, 0)');
+      cy.get('li')
+        .contains('Virksomhet 1')
+        .should('have.css', 'text-decoration', 'line-through solid rgb(0, 0, 0)');
 
       cy.get('li').eq(1).findByRole('button', { name: /Slett/i }).should('exist');
       cy.get('li')

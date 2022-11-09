@@ -29,7 +29,11 @@ export interface DelegationAccordionProps {
   ) => void;
 }
 
-export const ApiDelegationAccordion = ({ name, organizations, setOrganizations }: DelegationAccordionProps) => {
+export const ApiDelegationAccordion = ({
+  name,
+  organizations,
+  setOrganizations,
+}: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const [isAllSoftDeleted, setAllSoftDeleted] = useState(() => {
     for (const item of organizations) {
@@ -123,7 +127,9 @@ export const ApiDelegationAccordion = ({ name, organizations, setOrganizations }
         subtitle={organizations.length.toString() + ' virksomheter har tilgang'}
         actions={action}
       >
-        <div className={cn({ [classes.accordionHeader__softDelete]: isAllSoftDeleted })}>{name}</div>
+        <div className={cn({ [classes.accordionHeader__softDelete]: isAllSoftDeleted })}>
+          {name}
+        </div>
       </AccordionHeader>
       <AccordionContent>
         <div className={classes.accordionContent}>

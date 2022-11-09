@@ -1,5 +1,5 @@
 import { ApiDelegationOverviewPage } from '../components/ApiDelegationOverviewPage/ApiDelegationOverviewPage';
 
-export const ApiDelegation = () => {
+export const ApiDelegationOverview = () => {
   return <ApiDelegationOverviewPage />;
 };
