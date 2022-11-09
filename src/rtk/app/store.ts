@@ -8,15 +8,24 @@ import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 
 const logger = createLogger();
 
-const store = configureStore({
-  reducer: {
-    cake: cakeReducer,
-    icecream: iceCreamReducer,
-    user: userReducer,
-    delegableApi: delegableApiReducer,
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-});
+const store = !import.meta.env.DEV
+  ? configureStore({
+      reducer: {
+        cake: cakeReducer,
+        icecream: iceCreamReducer,
+        user: userReducer,
+        delegableApi: delegableApiReducer,
+      },
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    })
+  : configureStore({
+      reducer: {
+        cake: cakeReducer,
+        icecream: iceCreamReducer,
+        user: userReducer,
+        delegableApi: delegableApiReducer,
+      },
+    });
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>;
