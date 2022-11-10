@@ -8,15 +8,25 @@ import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 
 const logger = createLogger();
 
-const store = configureStore({
-  reducer: {
-    cake: cakeReducer,
-    icecream: iceCreamReducer,
-    user: userReducer,
-    delegableApi: delegableApiReducer,
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-});
+// turn off redux-logger in production
+const store = !import.meta.env.PROD
+  ? configureStore({
+      reducer: {
+        cake: cakeReducer,
+        icecream: iceCreamReducer,
+        user: userReducer,
+        delegableApi: delegableApiReducer,
+      },
+    })
+  : configureStore({
+      reducer: {
+        cake: cakeReducer,
+        icecream: iceCreamReducer,
+        user: userReducer,
+        delegableApi: delegableApiReducer,
+      },
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    });
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>;
