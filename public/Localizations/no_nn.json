@@ -3,11 +3,17 @@
       "received": "Mottekne",
       "sent": "Sendte",
       "create_request": "Opprett ny forespørsel",
-      "delete": "Slett",
       "access_request": "Ber om tilgang",
       "employees": "Ansatte",
       "clients": "Klientar",
       "add_new_employee": "Legg til ny ansatt",
       "change_rights": "Endre rettegheitar"
+    },
+    "api_delegation": {
+      "businesses": "Virksomheitar",
+      "delegated_apis": "Delegerte API",
+      "api_accesses": "API-tilgangar",
+      "delegate_new_api": "Deleger nytt API",
+      "delete": "Slett"
     }
   }

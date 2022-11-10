@@ -9,5 +9,12 @@
       "clients": "Clients",
       "add_new_employee": "Add new employee",
       "change_rights": "Edit client rights"
+    },
+    "api_delegation": {
+      "businesses": "Virksomheitar",
+      "delegated_apis": "Delegerte API",
+      "api_accesses": "API-tilgangar",
+      "delegate_new_api": "Deleger nytt API",
+      "delete": "Slett"
     }
   }

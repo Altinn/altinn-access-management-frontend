@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Button, Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
+import { Button } from '@altinn/altinn-design-system';
 
-import { ApiDelegationAccordion } from './ApiDelegationAccordion';
-import classes from './ApiDelegationOverviewPage.module.css';
+import { ApiDelegationAccordion } from './OrgDelegationAccordion';
+import classes from './OrgDelegationOverviewPageContent.module.css';
 
-export const ApiDelegationOverviewPage = () => {
+export const OrgDelegationOverviewPageContent = () => {
   function unique() {
     return ++unique.i;
   }
@@ -13,29 +13,29 @@ export const ApiDelegationOverviewPage = () => {
   const [delegations, setDelegations] = useState([
     {
       id: unique(),
-      apiName: 'Delegert API A',
+      apiName: 'Evry',
       organizations: [
-        { id: unique(), name: 'Virksomhet 1', isSoftDelete: false },
-        { id: unique(), name: 'Virksomhet 2', isSoftDelete: false },
-        { id: unique(), name: 'Virksomhet 3', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API A', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API B', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API C', isSoftDelete: false },
       ],
     },
     {
       id: unique(),
-      apiName: 'Delegert API B',
+      apiName: 'Skatteetaten',
       organizations: [
-        { id: unique(), name: 'Virksomhet 1', isSoftDelete: false },
-        { id: unique(), name: 'Virksomhet 4', isSoftDelete: false },
-        { id: unique(), name: 'Virksomhet 6', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API A', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API B', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API C', isSoftDelete: false },
       ],
     },
     {
       id: unique(),
-      apiName: 'Delegert API C',
+      apiName: 'Accenture',
       organizations: [
-        { id: unique(), name: 'Virksomhet 1', isSoftDelete: false },
-        { id: unique(), name: 'Virksomhet 4', isSoftDelete: false },
-        { id: unique(), name: 'Virksomhet 5', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API A', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API B', isSoftDelete: false },
+        { id: unique(), name: 'Delegert API C', isSoftDelete: false },
       ],
     },
   ]);
@@ -91,23 +91,16 @@ export const ApiDelegationOverviewPage = () => {
   ));
 
   return (
-    <div>
-      <Page>
-        <PageHeader>Header her</PageHeader>
-        <PageContent>
-          <div className={classes.pageContent}>
-            {accordions}
-            <div className={classes.saveSection}>
-              <Button
-                disabled={!hasDeletableItems()}
-                onClick={saveChanges}
-              >
-                Lagre
-              </Button>
-            </div>
-          </div>
-        </PageContent>
-      </Page>
+    <div className={classes.overviewAccordionsContainer}>
+      {accordions}
+      <div className={classes.saveSection}>
+        <Button
+          disabled={!hasDeletableItems()}
+          onClick={saveChanges}
+        >
+          Lagre
+        </Button>
+      </div>
     </div>
   );
 };

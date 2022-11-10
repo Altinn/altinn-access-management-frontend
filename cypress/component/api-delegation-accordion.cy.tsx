@@ -1,6 +1,6 @@
 import * as cypress from '@testing-library/cypress';
 
-import { ApiDelegationAccordion } from '../../src/components/ApiDelegationOverviewPage/ApiDelegationAccordion';
+import { ApiDelegationAccordion } from '../../src/components/ApiDelegationOverviewPage/ApiDelegationOverviewPageContent/ApiDelegationAccordion';
 
 describe('ApiDelegationAccordion', () => {
   describe('AccordionHeader', () => {

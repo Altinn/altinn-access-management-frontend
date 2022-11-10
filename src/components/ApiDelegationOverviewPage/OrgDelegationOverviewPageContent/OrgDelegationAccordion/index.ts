@@ -1,0 +1,1 @@
+export { ApiDelegationAccordion } from './OrgDelegationAccordion';

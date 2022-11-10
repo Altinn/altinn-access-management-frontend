@@ -5,6 +5,7 @@ import cakeReducer from '../features/examples/cake/cakeSlice';
 import iceCreamReducer from '../features/examples/icecream/icecreamSlice';
 import userReducer from '../features/examples/user/userSlice';
 import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
+import overviewOrgReducer from '../features/overviewOrg/overviewOrg';
 
 const logger = createLogger();
 
@@ -16,6 +17,7 @@ const store = !import.meta.env.PROD
         icecream: iceCreamReducer,
         user: userReducer,
         delegableApi: delegableApiReducer,
+        overviewOrg: overviewOrgReducer,
       },
     })
   : configureStore({
@@ -24,6 +26,7 @@ const store = !import.meta.env.PROD
         icecream: iceCreamReducer,
         user: userReducer,
         delegableApi: delegableApiReducer,
+        overviewOrg: overviewOrgReducer,
       },
       middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     });
