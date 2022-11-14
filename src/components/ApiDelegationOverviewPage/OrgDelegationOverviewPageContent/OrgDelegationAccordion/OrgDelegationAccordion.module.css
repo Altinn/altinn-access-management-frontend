@@ -7,3 +7,7 @@
     text-decoration: line-through;
     opacity: 70%;
 }
+
+.accordionHeaderAction{
+  margin-right: 10rem;
+}

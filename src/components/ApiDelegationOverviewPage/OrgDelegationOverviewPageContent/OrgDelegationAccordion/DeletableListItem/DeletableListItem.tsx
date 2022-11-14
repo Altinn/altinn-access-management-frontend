@@ -1,49 +1,59 @@
 import { Button, ButtonVariant, ListItem, ButtonColor } from '@altinn/altinn-design-system';
 import cn from 'classnames';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import type { OverviewListItem, OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 
 import classes from './DeletableListItem.module.css';
 
 export interface DeletableListItemProps {
-  itemText: string;
-  isSoftDelete: boolean;
-  toggleSoftDeleteCallback: () => {};
+  softDeleteCallback: (overviewOrg: OverviewOrg, item: OverviewListItem) => {};
+  softAddCallback: (overviewOrg: OverviewOrg, item: OverviewListItem) => {};
+  overviewOrg: OverviewOrg;
+  item: OverviewListItem;
 }
 
 export const DeletableListItem = ({
-  itemText,
-  isSoftDelete,
-  toggleSoftDeleteCallback,
+  softDeleteCallback,
+  softAddCallback,
+  overviewOrg,
+  item,
 }: DeletableListItemProps) => {
   const { t } = useTranslation('common');
+
+  const handleSoftDelete = (overviewOrg: OverviewOrg, item: OverviewListItem) => {
+    softDeleteCallback(overviewOrg, item);
+  };
+  const handleSoftAdd = (overviewOrg: OverviewOrg, item: OverviewListItem) => {
+    softAddCallback(overviewOrg, item);
+  };
 
   return (
     <ListItem>
       <div className={classes.listItem}>
         <div
           className={cn(classes.itemText, {
-            [classes.itemText__softDelete]: isSoftDelete,
+            [classes.itemText__softDelete]: item.isSoftDelete,
           })}
         >
-          {itemText}
+          {item.name}
         </div>
         <div className={cn(classes.deleteSection)}>
-          {isSoftDelete ? (
+          {item.isSoftDelete ? (
             <Button
               variant={ButtonVariant.Quiet}
               color={ButtonColor.Secondary}
-              onClick={toggleSoftDeleteCallback}
-              iconName='Cancel'
+              onClick={() => handleSoftAdd(overviewOrg, item)}
+              iconName={'Cancel'}
             >
-              Angre
+              {t('api_delegation.undo')}
             </Button>
           ) : (
             <Button
               variant={ButtonVariant.Quiet}
               color={ButtonColor.Danger}
               iconName={'MinusCircle'}
-              onClick={toggleSoftDeleteCallback}
+              onClick={() => handleSoftDelete(overviewOrg, item)}
             >
               {t('api_delegation.delete')}
             </Button>

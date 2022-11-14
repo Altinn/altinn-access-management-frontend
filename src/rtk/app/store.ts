@@ -5,12 +5,12 @@ import cakeReducer from '../features/examples/cake/cakeSlice';
 import iceCreamReducer from '../features/examples/icecream/icecreamSlice';
 import userReducer from '../features/examples/user/userSlice';
 import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
-import overviewOrgReducer from '../features/overviewOrg/overviewOrg';
+import overviewOrgReducer from '../features/overviewOrg/overviewOrgSlice';
 
 const logger = createLogger();
 
 // turn off redux-logger in production
-const store = !import.meta.env.PROD
+const store = import.meta.env.PROD
   ? configureStore({
       reducer: {
         cake: cakeReducer,

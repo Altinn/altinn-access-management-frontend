@@ -1,70 +1,24 @@
+import { Button, ButtonColor } from '@altinn/altinn-design-system';
 import { useState } from 'react';
-import { Button } from '@altinn/altinn-design-system';
 
-import { ApiDelegationAccordion } from './OrgDelegationAccordion';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { save } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+
+import { OrgDelegationAccordion } from './OrgDelegationAccordion';
 import classes from './OrgDelegationOverviewPageContent.module.css';
 
 export const OrgDelegationOverviewPageContent = () => {
-  function unique() {
-    return ++unique.i;
-  }
-  unique.i = 0;
-
-  const [delegations, setDelegations] = useState([
-    {
-      id: unique(),
-      apiName: 'Evry',
-      organizations: [
-        { id: unique(), name: 'Delegert API A', isSoftDelete: false },
-        { id: unique(), name: 'Delegert API B', isSoftDelete: false },
-        { id: unique(), name: 'Delegert API C', isSoftDelete: false },
-      ],
-    },
-    {
-      id: unique(),
-      apiName: 'Skatteetaten',
-      organizations: [
-        { id: unique(), name: 'Delegert API A', isSoftDelete: false },
-        { id: unique(), name: 'Delegert API B', isSoftDelete: false },
-        { id: unique(), name: 'Delegert API C', isSoftDelete: false },
-      ],
-    },
-    {
-      id: unique(),
-      apiName: 'Accenture',
-      organizations: [
-        { id: unique(), name: 'Delegert API A', isSoftDelete: false },
-        { id: unique(), name: 'Delegert API B', isSoftDelete: false },
-        { id: unique(), name: 'Delegert API C', isSoftDelete: false },
-      ],
-    },
-  ]);
-
-  const setOrganizationsArray = (
-    apiID: number,
-    newOrgArray: Array<{ id: number; name: string; isSoftDelete: boolean }>,
-  ) => {
-    const newDelegations = [...delegations];
-    for (const api of newDelegations) {
-      if (api.id === apiID) {
-        api.organizations = newOrgArray;
-      }
+  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
+  const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedOrgsItems);
+  const dispatch = useAppDispatch();
+  const [disabled, setDisabled] = useState(true);
+  const hasSoftDeletedItems = () => {
+    if (softDeletedItems.length >= 1) {
+      setDisabled(true);
     }
-    setDelegations(newDelegations);
+    setDisabled(false);
   };
-
-  const hasDeletableItems = () => {
-    for (const api of delegations) {
-      for (const item of api.organizations) {
-        if (item.isSoftDelete) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  const saveChanges = () => {
+  /* const saveChanges = () => {
     const newState = [];
     for (const api of delegations) {
       const updatedAPI = {
@@ -77,26 +31,28 @@ export const OrgDelegationOverviewPageContent = () => {
       }
     }
     setDelegations(newState);
-  };
+  }; */
 
-  const accordions = delegations.map((i) => (
-    <ApiDelegationAccordion
-      key={i.id}
-      name={i.apiName}
-      organizations={i.organizations}
-      setOrganizations={(newOrgArray: Array<{ id: number; name: string; isSoftDelete: boolean }>) =>
-        setOrganizationsArray(i.id, newOrgArray)
-      }
-    ></ApiDelegationAccordion>
+  const accordions = overviewOrgs.map((org) => (
+    <OrgDelegationAccordion
+      key={org.id}
+      name={org.name}
+      organization={org}
+    ></OrgDelegationAccordion>
   ));
+
+  const handleSave = () => {
+    dispatch(save(overviewOrgs));
+  };
 
   return (
     <div className={classes.overviewAccordionsContainer}>
       {accordions}
       <div className={classes.saveSection}>
         <Button
-          disabled={!hasDeletableItems()}
-          onClick={saveChanges}
+          disabled={disabled}
+          onClick={handleSave}
+          color={ButtonColor.Success}
         >
           Lagre
         </Button>

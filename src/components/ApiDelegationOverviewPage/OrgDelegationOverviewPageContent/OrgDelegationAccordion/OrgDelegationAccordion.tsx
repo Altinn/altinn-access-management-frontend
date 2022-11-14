@@ -8,103 +8,52 @@ import {
   ButtonVariant,
   List,
   BorderStyle,
+  ButtonSize,
 } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { softAdd, toggleSoftDelete } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { useAppDispatch } from '@/rtk/app/hooks';
+
+import classes from './OrgDelegationAccordion.module.css';
 import { DeletableListItem } from './DeletableListItem';
-import classes from './ApiDelegationAccordion.module.css';
-import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 export interface DelegationAccordionProps {
   name: string;
-  organizations: Array<{
-    id: number;
-    name: string;
-    isSoftDelete: boolean;
-  }>;
-  setOrganizations: (
-    newOrgArray: Array<{
-      id: number;
-      name: string;
-      isSoftDelete: boolean;
-    }>,
-  ) => void;
+  organization: OverviewOrg;
 }
 
-export const ApiDelegationAccordion = ({
-  name,
-  organizations,
-  setOrganizations,
-}: DelegationAccordionProps) => {
+export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
-  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedItems);
   const dispatch = useAppDispatch();
-  
-
-
-  const [isAllSoftDeleted, setAllSoftDeleted] = useState(() => {
-    for (const item of organizations) {
-      if (!item.isSoftDelete) {
-        return false;
-      }
-    }
-    return true;
-  });
-
-  const toggleSoftDelete = (orgId: number) => {
-
-    
-  };
-
-  const checkIsAllSoftDeleted = () => {
-    for (const item of organizations) {
-      if (!item.isSoftDelete) {
-        setAllSoftDeleted(false);
-        return;
-      }
-    }
-    setAllSoftDeleted(true);
-  };
-
-  const softDeleteAll = () => {
-    const newOrgArray = organizations.map((item) => {
-      return {
-        ...item,
-        isSoftDelete: true,
-      };
-    });
-    setOrganizations(newOrgArray);
-    setAllSoftDeleted(true);
-    setOpen(true);
-  };
-
-  const restoreAll = () => {
-    const newOrgArray = organizations.map((item) => {
-      return {
-        ...item,
-        isSoftDelete: false,
-      };
-    });
-    setOrganizations(newOrgArray);
-    setAllSoftDeleted(false);
-  };
+  const numberOfConnections = organization.listItems.length.toString();
 
   const action = (
     <>
+      <div
+        className={cn(classes.accordionHeaderAction, {
+          [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
+        })}
+      >
+        {numberOfConnections} {t('api_delegation.api_accesses')}
+      </div>
       <Button
         variant={ButtonVariant.Quiet}
         color={ButtonColor.Primary}
         iconName={'AddCircle'}
+        size={ButtonSize.Small}
       >
         {t('api_delegation.delegate_new_api')}
       </Button>
-      {isAllSoftDeleted ? (
+      {organization.isAllSoftDeleted ? (
         <Button
           variant={ButtonVariant.Quiet}
-          color={ButtonColor.Danger}
+          color={ButtonColor.Secondary}
+          size={ButtonSize.Small}
+          iconName={'Cancel'}
         >
           {t('api_delegation.undo')}
         </Button>
@@ -113,6 +62,7 @@ export const ApiDelegationAccordion = ({
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
           iconName={'MinusCircle'}
+          size={ButtonSize.Small}
         >
           {t('api_delegation.delete')}
         </Button>
@@ -120,13 +70,13 @@ export const ApiDelegationAccordion = ({
     </>
   );
 
-  const listItems = organizations.map((b, index) => (
+  const listItems = organization.listItems.map((item, i) => (
     <DeletableListItem
-      key={index + b.id}
-      itemText={b.name}
-      isSoftDelete={b.isSoftDelete}
-      toggleSoftDeleteCallback={() => toggleSoftDelete(b.id)}
-      softDeleteCallback={() }
+      key={i}
+      softDeleteCallback={() => dispatch(toggleSoftDelete([organization, item]))}
+      softAddCallback={() => dispatch(softAdd([organization, item]))}
+      overviewOrg={organization}
+      item={item}
     ></DeletableListItem>
   ));
 
@@ -135,11 +85,12 @@ export const ApiDelegationAccordion = ({
       onClick={() => setOpen(!open)}
       open={open}
     >
-      <AccordionHeader
-        subtitle={organizations.length.toString() + ' ' + t('api_delegation.api_accesses')}
-        actions={action}
-      >
-        <div className={cn({ [classes.accordionHeader__softDelete]: isAllSoftDeleted })}>
+      <AccordionHeader actions={action}>
+        <div
+          className={cn({
+            [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
+          })}
+        >
           {name}
         </div>
       </AccordionHeader>
