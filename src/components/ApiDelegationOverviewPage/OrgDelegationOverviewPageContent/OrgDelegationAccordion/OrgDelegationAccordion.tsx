@@ -14,7 +14,12 @@ import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import { softAdd, toggleSoftDelete } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import {
+  softAddAll,
+  softDeleteAll,
+  softDelete,
+  softAdd,
+} from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
 
 import classes from './OrgDelegationAccordion.module.css';
@@ -54,6 +59,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
           color={ButtonColor.Secondary}
           size={ButtonSize.Small}
           iconName={'Cancel'}
+          onClick={() => dispatch(softAddAll(organization))}
         >
           {t('api_delegation.undo')}
         </Button>
@@ -63,6 +69,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
           color={ButtonColor.Danger}
           iconName={'MinusCircle'}
           size={ButtonSize.Small}
+          onClick={() => dispatch(softDeleteAll(organization))}
         >
           {t('api_delegation.delete')}
         </Button>
@@ -73,7 +80,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
   const listItems = organization.listItems.map((item, i) => (
     <DeletableListItem
       key={i}
-      softDeleteCallback={() => dispatch(toggleSoftDelete([organization, item]))}
+      softDeleteCallback={() => dispatch(softDelete([organization, item]))}
       softAddCallback={() => dispatch(softAdd([organization, item]))}
       overviewOrg={organization}
       item={item}
