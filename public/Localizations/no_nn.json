@@ -14,6 +14,12 @@
       "delegated_apis": "Delegerte API",
       "api_accesses": "API-tilgangar",
       "delegate_new_api": "Deleger nytt API",
-      "delete": "Slett"
+      "delete": "Slett",
+      "delegate_new_org": "Deleger til ny organisasjon",
+      "save": "Lagra",
+      "access_to_api_delegations": "Tilgangar til Programmeringsgrensesnitt - API",
+      "you_have_delegated_accesses": "Du har tidlegare delegert disse tilgangane:",
+      "api_panel_content": "API er eit grensesnitt som blir brukt for å utveksla data mellom to ulike system eller appar. Når APIet til to system er kopla saman, opnar det opp for ei straumlinjeforma deling av data og automatiserte prosessar.",
+      
     }
   }

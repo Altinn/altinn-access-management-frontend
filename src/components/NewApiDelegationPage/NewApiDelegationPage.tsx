@@ -14,7 +14,7 @@ import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice
 import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
-import { ReactComponent as ApiIcon } from '../../assets/api.svg';
+import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 
 import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewApiDelegationPage.module.css';

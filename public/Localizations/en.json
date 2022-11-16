@@ -15,6 +15,11 @@
       "delegated_apis": "Delegerte API",
       "api_accesses": "API-tilgangar",
       "delegate_new_api": "Deleger nytt API",
-      "delete": "Slett"
+      "delete": "Slett",
+      "delegate_new_org": "Delegate to new organisation",
+      "save": "Save",
+      "access_to_api_delegations": "Accesses to application programming interface - API",
+      "you_have_delegated_accesses": "You have earlier delegated these accesses:",
+      "api_panel_content": "API is an interface used to exchange data between two different systems or apps. When the API of two systems is connected, it opens up for a streamlined sharing of data and automated processes."
     }
   }

@@ -28,19 +28,16 @@ export const DelegationOverviewPage = () => {
   return (
     <div>
       <Page>
-        <PageHeader>Header her</PageHeader>
+        <PageHeader>{t('api_delegation.api_delegations')}</PageHeader>
         <PageContent>
           <div className={classes.pageContent}>
             <ToggleButtonGroup
               onChange={handleChange}
               selectedValue={selected}
             >
-              <ToggleButton value='organization'>Virksomheter</ToggleButton>
-              <ToggleButton value='api'>Delegerte API</ToggleButton>
+              <ToggleButton value='organization'>{t('api_delegation.businesses')}</ToggleButton>
+              <ToggleButton value='api'>{t('api_delegation.delegated_apis')}</ToggleButton>
             </ToggleButtonGroup>
-            <div>
-              <Button variant={ButtonVariant.Outline}>t</Button>
-            </div>
             {selected === 'organization' && <OrgDelegationOverviewPageContent />}
             {selected === 'api' && <ApiDelegationOverviewPageContent />}
           </div>

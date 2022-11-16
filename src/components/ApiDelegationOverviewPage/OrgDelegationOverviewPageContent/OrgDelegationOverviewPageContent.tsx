@@ -1,5 +1,6 @@
-import { Button, ButtonColor } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonVariant, Panel } from '@altinn/altinn-design-system';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { save } from '@/rtk/features/overviewOrg/overviewOrgSlice';
@@ -12,6 +13,7 @@ export const OrgDelegationOverviewPageContent = () => {
   const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedItems);
   const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(true);
+  const { t } = useTranslation('common');
 
   useEffect(() => {
     if (softDeletedItems.length >= 1) {
@@ -31,14 +33,21 @@ export const OrgDelegationOverviewPageContent = () => {
 
   return (
     <div className={classes.overviewAccordionsContainer}>
-      {accordions}
+      <div className={classes.delegateNewButton}>
+        <Button variant={ButtonVariant.Outline}>{t('api_delegation.delegate_new_org')}</Button>
+      </div>
+      <Panel title={'Programmeringsgrensesnitt - API'}>
+        {t('api_delegation.api_panel_content')}
+      </Panel>
+      <h2 className={classes.apiSubheading}>{t('api_delegation.you_have_delegated_accesses')}</h2>
+      <div className={classes.accordion}>{accordions}</div>
       <div className={classes.saveSection}>
         <Button
           disabled={disabled}
           onClick={() => dispatch(save())}
           color={ButtonColor.Success}
         >
-          Lagre
+          {t('api_delegation.save')}
         </Button>
       </div>
     </div>

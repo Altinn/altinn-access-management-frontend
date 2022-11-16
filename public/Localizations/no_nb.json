@@ -1,21 +1,26 @@
 {
-    "profile": {
-      "received": "Mottatte",
-      "sent": "Sendte",
-      "create_request": "Opprett ny forespørsel",
-      "delete": "Slett",
-      "access_request": "Ber om tilgang",
-      "employees": "Ansatte",
-      "clients": "Klienter",
-      "add_new_employee": "Legg til ny ansatt",
-      "change_rights": "Endre rettigheter"
-    },
-    "api_delegation": {
-      "businesses": "Virksomheter",
-      "delegated_apis": "Delegerte API",
-      "api_accesses": "API-tilganger",
-      "delegate_new_api": "Deleger nytt API",
-      "delete": "Slett",
-      "undo": "Angre"
-    }
+  "profile": {
+    "received": "Mottatte",
+    "sent": "Sendte",
+    "create_request": "Opprett ny forespørsel",
+    "delete": "Slett",
+    "access_request": "Ber om tilgang",
+    "employees": "Ansatte",
+    "clients": "Klienter",
+    "add_new_employee": "Legg til ny ansatt",
+    "change_rights": "Endre rettigheter"
+  },
+  "api_delegation": {
+    "businesses": "Virksomheter",
+    "delegated_apis": "Delegerte API",
+    "api_accesses": "API-tilganger",
+    "delegate_new_api": "Deleger nytt API",
+    "delete": "Slett",
+    "undo": "Angre",
+    "delegate_new_org": "Deleger til ny organisasjon",
+    "save": "Lagre",
+    "api_delegations": "Tilganger til programmeringsgrensesnitt - API",
+    "you_have_delegated_accesses": "Du har tidligere delegert disse tilgangene:",
+    "api_panel_content": "API er et grensesnitt som brukes for å utveksle data mellom to forskjellige systemer eller apper. Når APIet til to systemer er koblet sammen, åpner det opp for en strømlinjeformet deling av data og automatiserte prosesser."
   }
+}

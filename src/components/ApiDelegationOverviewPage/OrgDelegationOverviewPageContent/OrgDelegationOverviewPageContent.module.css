@@ -9,3 +9,12 @@
   float: right;
   justify-content: space-around;
 }
+
+.delegateNewButton{
+  margin-bottom: 3rem;
+}
+
+.apiSubheading{
+  margin-top: 4rem;
+  font-weight: normal;
+}
