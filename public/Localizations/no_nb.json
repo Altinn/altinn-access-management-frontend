@@ -21,6 +21,7 @@
     "save": "Lagre",
     "api_delegations": "Tilganger til programmeringsgrensesnitt - API",
     "you_have_delegated_accesses": "Du har tidligere delegert disse tilgangene:",
-    "api_panel_content": "API er et grensesnitt som brukes for å utveksle data mellom to forskjellige systemer eller apper. Når APIet til to systemer er koblet sammen, åpner det opp for en strømlinjeformet deling av data og automatiserte prosesser."
+    "api_panel_content": "API er et grensesnitt som brukes for å utveksle data mellom to forskjellige systemer eller apper. Når APIet til to systemer er koblet sammen, åpner det opp for en strømlinjeformet deling av data og automatiserte prosesser.",
+    "orgNr": "org.nr."
   }
 }

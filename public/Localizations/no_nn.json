@@ -20,6 +20,6 @@
       "access_to_api_delegations": "Tilgangar til Programmeringsgrensesnitt - API",
       "you_have_delegated_accesses": "Du har tidlegare delegert disse tilgangane:",
       "api_panel_content": "API er eit grensesnitt som blir brukt for å utveksla data mellom to ulike system eller appar. Når APIet til to system er kopla saman, opnar det opp for ei straumlinjeforma deling av data og automatiserte prosessar.",
-      
+      "orgNr": "org.nr."
     }
   }

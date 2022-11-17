@@ -21,6 +21,9 @@ import {
   softAdd,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
+import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
+import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
 import classes from './OrgDelegationAccordion.module.css';
 import { DeletableListItem } from './DeletableListItem';
@@ -48,7 +51,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
       <Button
         variant={ButtonVariant.Quiet}
         color={ButtonColor.Primary}
-        iconName={'AddCircle'}
+        svgIconComponent={<AddCircle />}
         size={ButtonSize.Small}
       >
         {t('api_delegation.delegate_new_api')}
@@ -58,7 +61,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Secondary}
           size={ButtonSize.Small}
-          iconName={'Cancel'}
+          svgIconComponent={<Cancel />}
           onClick={() => dispatch(softAddAll(organization))}
         >
           {t('api_delegation.undo')}
@@ -67,7 +70,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
         <Button
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
-          iconName={'MinusCircle'}
+          svgIconComponent={<MinusCircle />}
           size={ButtonSize.Small}
           onClick={() => dispatch(softDeleteAll(organization))}
         >
@@ -92,7 +95,10 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
       onClick={() => setOpen(!open)}
       open={open}
     >
-      <AccordionHeader actions={action}>
+      <AccordionHeader
+        actions={action}
+        subtitle={t('api_delegation.orgNr') + ' ' + organization.orgNr}
+      >
         <div
           className={cn({
             [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,

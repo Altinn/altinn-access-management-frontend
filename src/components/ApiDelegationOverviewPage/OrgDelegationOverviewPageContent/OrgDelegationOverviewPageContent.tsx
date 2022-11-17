@@ -1,9 +1,11 @@
 import { Button, ButtonColor, ButtonVariant, Panel } from '@altinn/altinn-design-system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { save } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { ReactComponent as Add } from '@/assets/Add.svg';
 
 import { OrgDelegationAccordion } from './OrgDelegationAccordion';
 import classes from './OrgDelegationOverviewPageContent.module.css';
@@ -14,6 +16,7 @@ export const OrgDelegationOverviewPageContent = () => {
   const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(true);
   const { t } = useTranslation('common');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (softDeletedItems.length >= 1) {
@@ -34,7 +37,13 @@ export const OrgDelegationOverviewPageContent = () => {
   return (
     <div className={classes.overviewAccordionsContainer}>
       <div className={classes.delegateNewButton}>
-        <Button variant={ButtonVariant.Outline}>{t('api_delegation.delegate_new_org')}</Button>
+        <Button
+          variant={ButtonVariant.Outline}
+          onClick={() => navigate('new-org')}
+          svgIconComponent={<Add />}
+        >
+          {t('api_delegation.delegate_new_org')}
+        </Button>
       </div>
       <Panel title={'Programmeringsgrensesnitt - API'}>
         {t('api_delegation.api_panel_content')}

@@ -12,6 +12,7 @@ export interface OverviewListItem {
 export interface OverviewOrg {
   id: string;
   name: string;
+  orgNr: string;
   isAllSoftDeleted: boolean;
   listItems: OverviewListItem[];
 }
@@ -34,6 +35,7 @@ const initialState: InitialState = {
         { id: '1', name: 'Delegert API A', isSoftDelete: false },
         { id: '2', name: 'Delegert API B', isSoftDelete: false },
       ],
+      orgNr: '123456789',
     },
     {
       id: '2',
@@ -43,6 +45,7 @@ const initialState: InitialState = {
         { id: '1', name: 'Delegert API A', isSoftDelete: false },
         { id: '2', name: 'Delegert API B', isSoftDelete: false },
       ],
+      orgNr: '123456789',
     },
   ],
   softDeletedItems: [],
@@ -83,6 +86,7 @@ const createCopyOrg = (org: OverviewOrg) => {
     id: org.id,
     name: org.name,
     isAllSoftDeleted: false,
+    orgNr: org.orgNr,
     listItems: [],
   };
 };

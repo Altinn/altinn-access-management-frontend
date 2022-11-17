@@ -3,6 +3,8 @@ import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import type { OverviewListItem, OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 
 import classes from './DeletableListItem.module.css';
 
@@ -44,7 +46,7 @@ export const DeletableListItem = ({
               variant={ButtonVariant.Quiet}
               color={ButtonColor.Secondary}
               onClick={() => handleSoftAdd(overviewOrg, item)}
-              iconName={'Cancel'}
+              svgIconComponent={<Cancel />}
             >
               {t('api_delegation.undo')}
             </Button>
@@ -52,7 +54,7 @@ export const DeletableListItem = ({
             <Button
               variant={ButtonVariant.Quiet}
               color={ButtonColor.Danger}
-              iconName={'MinusCircle'}
+              svgIconComponent={<MinusCircle />}
               onClick={() => handleSoftDelete(overviewOrg, item)}
             >
               {t('api_delegation.delete')}

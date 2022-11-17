@@ -10,7 +10,7 @@ export const Router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'api-delegations/overview',
+    path: 'api-delegations',
     element: <ApiDelegationOverview />,
   },
   {
