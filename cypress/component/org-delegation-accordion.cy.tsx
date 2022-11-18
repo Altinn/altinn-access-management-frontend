@@ -12,8 +12,22 @@ describe('OrgDelegationAccordion', () => {
         isAllSoftDeleted: false,
         orgNr: '123456789',
         listItems: [
-          { id: '1', name: 'Delegert API A', isSoftDelete: false },
-          { id: '2', name: 'Delegert API B', isSoftDelete: false },
+          {
+            id: '1',
+            name: 'Delegert API A',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
+          {
+            id: '2',
+            name: 'Delegert API B',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
         ],
       };
 
@@ -45,8 +59,22 @@ describe('OrgDelegationAccordion', () => {
         isAllSoftDeleted: false,
         orgNr: '123456789',
         listItems: [
-          { id: '1', name: 'Delegert API A', isSoftDelete: false },
-          { id: '2', name: 'Delegert API B', isSoftDelete: false },
+          {
+            id: '1',
+            name: 'Delegert API A',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
+          {
+            id: '2',
+            name: 'Delegert API B',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
         ],
       };
       const softUndoAll = () => {

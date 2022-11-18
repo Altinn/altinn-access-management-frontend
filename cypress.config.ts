@@ -13,6 +13,7 @@ export default defineConfig({
     devServer: {
       framework: 'react',
       bundler: 'vite',
+      viteConfig: require('./vite.config'),
     },
   },
 });
