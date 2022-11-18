@@ -15,12 +15,12 @@ import { useTranslation } from 'react-i18next';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import {
-  softAddAll,
+  softUndoAll,
   softDeleteAll,
   softDelete,
-  softAdd,
+  softUndo,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import { useAppDispatch } from '@/rtk/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
@@ -28,21 +28,44 @@ import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import classes from './OrgDelegationAccordion.module.css';
 import { DeletableListItem } from './DeletableListItem';
 
-export interface DelegationAccordionProps {
-  name: string;
+export interface OrgDelegationAccordionProps {
   organization: OverviewOrg;
+  isEditable?: boolean;
+  softUndoAllCallback: (organization: OverviewOrg) => void;
+  softDeleteAllCallback: (organization: OverviewOrg) => void;
 }
 
-export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordionProps) => {
+export const OrgDelegationAccordion = ({
+  organization,
+  softUndoAllCallback,
+  softDeleteAllCallback,
+  isEditable,
+}: OrgDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
   const dispatch = useAppDispatch();
   const numberOfConnections = organization.listItems.length.toString();
 
-  const action = (
+  const readonlyActions = (
+    <>
+      <div className={cn(classes.accordionHeaderAction__isReadonly)}>
+        {numberOfConnections} {t('api_delegation.api_accesses')}
+      </div>
+      <Button
+        variant={ButtonVariant.Quiet}
+        color={ButtonColor.Primary}
+        svgIconComponent={<AddCircle />}
+        size={ButtonSize.Small}
+      >
+        {t('api_delegation.delegate_new_api')}
+      </Button>
+    </>
+  );
+
+  const editActions = (
     <>
       <div
-        className={cn(classes.accordionHeaderAction, {
+        className={cn(classes.accordionHeaderAction__isEditable, {
           [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
         })}
       >
@@ -62,20 +85,22 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
           color={ButtonColor.Secondary}
           size={ButtonSize.Small}
           svgIconComponent={<Cancel />}
-          onClick={() => dispatch(softAddAll(organization))}
+          onClick={() => softUndoAllCallback(organization)}
         >
           {t('api_delegation.undo')}
         </Button>
       ) : (
-        <Button
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Danger}
-          svgIconComponent={<MinusCircle />}
-          size={ButtonSize.Small}
-          onClick={() => dispatch(softDeleteAll(organization))}
-        >
-          {t('api_delegation.delete')}
-        </Button>
+        <div className={classes.accordionDeleteButtonContainer}>
+          <Button
+            variant={ButtonVariant.Quiet}
+            color={ButtonColor.Danger}
+            svgIconComponent={<MinusCircle />}
+            size={ButtonSize.Small}
+            onClick={() => softDeleteAllCallback(organization)}
+          >
+            {t('api_delegation.delete')}
+          </Button>
+        </div>
       )}
     </>
   );
@@ -84,9 +109,10 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
     <DeletableListItem
       key={i}
       softDeleteCallback={() => dispatch(softDelete([organization, item]))}
-      softAddCallback={() => dispatch(softAdd([organization, item]))}
+      softUndoCallback={() => dispatch(softUndo([organization, item]))}
       overviewOrg={organization}
       item={item}
+      isEditable={isEditable}
     ></DeletableListItem>
   ));
 
@@ -96,7 +122,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
       open={open}
     >
       <AccordionHeader
-        actions={action}
+        actions={isEditable ? editActions : readonlyActions}
         subtitle={t('api_delegation.orgNr') + ' ' + organization.orgNr}
       >
         <div
@@ -104,7 +130,7 @@ export const OrgDelegationAccordion = ({ name, organization }: DelegationAccordi
             [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
           })}
         >
-          {name}
+          {organization.name}
         </div>
       </AccordionHeader>
       <AccordionContent>

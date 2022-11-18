@@ -19,9 +19,11 @@
     "undo": "Angre",
     "delegate_new_org": "Deleger til ny organisasjon",
     "save": "Lagre",
-    "api_delegations": "Tilganger til programmeringsgrensesnitt - API",
+    "api_delegations": "Delegerte tilganger til programmeringsgrensesnitt - API",
     "you_have_delegated_accesses": "Du har tidligere delegert disse tilgangene:",
     "api_panel_content": "API er et grensesnitt som brukes for å utveksle data mellom to forskjellige systemer eller apper. Når APIet til to systemer er koblet sammen, åpner det opp for en strømlinjeformet deling av data og automatiserte prosesser.",
-    "orgNr": "org.nr."
+    "orgNr": "org.nr.",
+    "editAccesses": "Rediger tilganger",
+    "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter."
   }
 }

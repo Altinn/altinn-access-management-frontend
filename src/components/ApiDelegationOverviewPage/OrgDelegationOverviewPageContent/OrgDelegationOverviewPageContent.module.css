@@ -12,9 +12,27 @@
 
 .delegateNewButton{
   margin-bottom: 3rem;
+  width: 282px;
 }
 
 .apiSubheading{
   margin-top: 4rem;
   font-weight: normal;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+.pageContentContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.editButton {
+  align-self: flex-end;
+}
+
+.pageContentText {
+  font-weight: normal;
+  margin-top: -2rem;
 }

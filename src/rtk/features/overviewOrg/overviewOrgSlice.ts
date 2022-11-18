@@ -7,6 +7,8 @@ export interface OverviewListItem {
   id: string;
   name: string;
   isSoftDelete: boolean;
+  owner: string;
+  description: string;
 }
 
 export interface OverviewOrg {
@@ -22,6 +24,7 @@ export interface InitialState {
   overviewOrgs: OverviewOrg[];
   softDeletedItems: OverviewOrg[];
   error: string;
+  overviewOrgIsEditable: boolean;
 }
 
 const initialState: InitialState = {
@@ -30,24 +33,53 @@ const initialState: InitialState = {
     {
       id: '1',
       name: 'Evry',
+      orgNr: '123456789',
       isAllSoftDeleted: false,
       listItems: [
-        { id: '1', name: 'Delegert API A', isSoftDelete: false },
-        { id: '2', name: 'Delegert API B', isSoftDelete: false },
+        {
+          id: '1',
+          name: 'Delegert API A',
+          isSoftDelete: false,
+          owner: 'Brønnøysundregisterene',
+          description:
+            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
+        },
+        {
+          id: '2',
+          name: 'Delegert API B',
+          isSoftDelete: false,
+          owner: 'Accenture',
+          description:
+            'Accenture er et forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+        },
       ],
-      orgNr: '123456789',
     },
     {
       id: '2',
       name: 'Skatteetaten',
+      orgNr: '123456789',
       isAllSoftDeleted: false,
       listItems: [
-        { id: '1', name: 'Delegert API A', isSoftDelete: false },
-        { id: '2', name: 'Delegert API B', isSoftDelete: false },
+        {
+          id: '1',
+          name: 'Delegert API A',
+          isSoftDelete: false,
+          owner: 'Brønnøysundregisterene',
+          description:
+            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
+        },
+        {
+          id: '2',
+          name: 'Delegert API B',
+          isSoftDelete: false,
+          owner: 'Accenture',
+          description:
+            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+        },
       ],
-      orgNr: '123456789',
     },
   ],
+  overviewOrgIsEditable: false,
   softDeletedItems: [],
   error: '',
 };
@@ -146,7 +178,7 @@ const overviewOrgSlice = createSlice({
         }
       }
     },
-    softAdd: (state, action) => {
+    softUndo: (state, action) => {
       for (const org of state.softDeletedItems) {
         if (org.id === action.payload[0].id) {
           org.listItems = org.listItems.filter((item) => item.id !== action.payload[1].id);
@@ -176,7 +208,7 @@ const overviewOrgSlice = createSlice({
       const list = mapToSoftDeletedOrgDto(state);
       console.log(list);
     },
-    softAddAll: (state, action) => {
+    softUndoAll: (state, action) => {
       for (const org of state.softDeletedItems) {
         if (org.id === action.payload.id) {
           removeSoftDeletedOrgReference(state, action);
@@ -196,8 +228,12 @@ const overviewOrgSlice = createSlice({
 
       setSoftDeleteState({ state, action, isSoftDelete: true });
     },
+    setOverviewOrgIsEditable: (state, action) => {
+      state.overviewOrgIsEditable = action.payload;
+    },
   },
 });
 
 export default overviewOrgSlice.reducer;
-export const { softDelete, softAdd, softDeleteAll, softAddAll, save } = overviewOrgSlice.actions;
+export const { softDelete, softUndo, softDeleteAll, softUndoAll, setOverviewOrgIsEditable, save } =
+  overviewOrgSlice.actions;

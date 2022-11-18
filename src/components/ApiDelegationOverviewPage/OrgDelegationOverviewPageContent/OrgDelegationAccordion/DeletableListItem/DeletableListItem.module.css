@@ -4,17 +4,23 @@
 }
 
 .listItem {
-    display: flex;
-    margin: 0.3rem;
+  --listItemHorizontalMargin: 1rem;
+  display: flex;
+  margin-top: var(--listItemHorizontalMargin);
+  margin-bottom: var(--listItemHorizontalMargin);
 }
 
 .itemText {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
 }
 
 .itemText__softDelete {
-    text-decoration: line-through;
-    opacity: 70%;
+  text-decoration: line-through;
+  opacity: 70%;
+}
+
+.listItemTexts {
+  margin-right: 1.5rem;
 }
