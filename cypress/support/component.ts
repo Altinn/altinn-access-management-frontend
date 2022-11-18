@@ -21,6 +21,8 @@ import './commands';
 
 import { mount } from 'cypress/react18';
 import '@testing-library/cypress/add-commands';
+import { Provider } from 'react-redux'
+import store from '@/rtk/app/store'
 
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
@@ -34,7 +36,16 @@ declare global {
   }
 }
 
-Cypress.Commands.add('mount', mount);
+Cypress.Commands.add('mount', (component, options = {}) => {
+  // Use the default store if one is not provided
+  const { reduxStore = store, ...mountOptions } = options
+
+  const wrapped = <Provider store={reduxStore}>
+  {component}
+  </Provider>);
+
+  return mount(wrapped, mountOptions)
+})
 
 // Example use:
 // cy.mount(<MyComponent />)

@@ -1,7 +1,10 @@
 import * as cypress from '@testing-library/cypress';
+import { Provider } from 'react-redux';
+import { mount } from 'cypress/react';
 
 import { OrgDelegationAccordion } from '@/components/ApiDelegationOverviewPage/OrgDelegationOverviewPageContent/OrgDelegationAccordion/OrgDelegationAccordion';
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import store from '@/rtk/app/store';
 
 describe('OrgDelegationAccordion', () => {
   describe('AccordionHeader', () => {
@@ -31,6 +34,8 @@ describe('OrgDelegationAccordion', () => {
         ],
       };
 
+      const { reduxStore = store, ...mountOptions } = options;
+
       const softUndoAll = () => {
         cy.stub();
       };
@@ -43,6 +48,18 @@ describe('OrgDelegationAccordion', () => {
 
       const softDeleteAllSpy = cy.spy(softDeleteAll).as('softDeleteAllSpy');
 
+      const wrapped = (
+        <Provider store={reduxStore}>
+          <OrgDelegationAccordion
+            softUndoAllCallback={softUndoAllSpy}
+            softDeleteAllCallback={softDeleteAllSpy}
+            organization={overviewOrg}
+          />
+          ,
+        </Provider>
+      );
+
+      return mount(wrapped, mountOptions);
       cy.mount(
         <OrgDelegationAccordion
           softUndoAllCallback={softUndoAllSpy}

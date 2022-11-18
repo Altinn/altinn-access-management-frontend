@@ -57,7 +57,6 @@ export const OrgDelegationOverviewPageContent = () => {
           variant={ButtonVariant.Outline}
           onClick={() => navigate('new-org')}
           svgIconComponent={<Add />}
-          fullWidth
         >
           {t('api_delegation.delegate_new_org')}
         </Button>
