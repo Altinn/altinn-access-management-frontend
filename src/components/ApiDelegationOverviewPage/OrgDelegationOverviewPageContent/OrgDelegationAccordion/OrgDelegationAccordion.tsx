@@ -39,7 +39,7 @@ export const OrgDelegationAccordion = ({
   organization,
   softUndoAllCallback,
   softDeleteAllCallback,
-  isEditable,
+  isEditable = false,
 }: OrgDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
@@ -116,13 +116,23 @@ export const OrgDelegationAccordion = ({
     ></DeletableListItem>
   ));
 
+  const handleActions = () => {
+    console.log('hey');
+    if (isEditable) {
+      return editActions;
+    } else if (!isEditable && !softDeleteAll) {
+      return readonlyActions;
+    }
+    return editActions;
+  };
+
   return (
     <Accordion
       onClick={() => setOpen(!open)}
       open={open}
     >
       <AccordionHeader
-        actions={isEditable ? editActions : readonlyActions}
+        actions={handleActions()}
         subtitle={t('api_delegation.orgNr') + ' ' + organization.orgNr}
       >
         <div
