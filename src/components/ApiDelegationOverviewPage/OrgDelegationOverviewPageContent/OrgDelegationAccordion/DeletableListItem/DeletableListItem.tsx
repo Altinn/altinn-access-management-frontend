@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import type { OverviewListItem, OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
-import { useAppSelector } from '@/rtk/app/hooks';
 
 import classes from './DeletableListItem.module.css';
 
@@ -54,6 +53,7 @@ export const DeletableListItem = ({
     <ListItem>
       <div className={classes.listItem}>
         <div
+          data-testid='list-item-texts'
           className={cn(classes.itemText, {
             [classes.itemText__softDelete]: item.isSoftDelete,
           })}

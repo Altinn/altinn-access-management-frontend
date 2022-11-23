@@ -14,13 +14,8 @@ import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import {
-  softUndoAll,
-  softDeleteAll,
-  softDelete,
-  softUndo,
-} from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { softDelete, softUndo } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
@@ -30,7 +25,7 @@ import { DeletableListItem } from './DeletableListItem';
 
 export interface OrgDelegationAccordionProps {
   organization: OverviewOrg;
-  isEditable?: boolean;
+  isEditable: boolean;
   softUndoAllCallback: (organization: OverviewOrg) => void;
   softDeleteAllCallback: (organization: OverviewOrg) => void;
 }
@@ -44,12 +39,12 @@ export const OrgDelegationAccordion = ({
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
   const dispatch = useAppDispatch();
-  const numberOfConnections = organization.listItems.length.toString();
+  const numberOfAccesses = organization.listItems.length.toString();
 
   const readonlyActions = (
     <>
       <div className={cn(classes.accordionHeaderAction__isReadonly)}>
-        {numberOfConnections} {t('api_delegation.api_accesses')}
+        {numberOfAccesses} {t('api_delegation.api_accesses')}
       </div>
       <Button
         variant={ButtonVariant.Quiet}
@@ -69,7 +64,7 @@ export const OrgDelegationAccordion = ({
           [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
         })}
       >
-        {numberOfConnections} {t('api_delegation.api_accesses')}
+        {numberOfAccesses} {t('api_delegation.api_accesses')}
       </div>
       <Button
         variant={ButtonVariant.Quiet}
@@ -117,10 +112,9 @@ export const OrgDelegationAccordion = ({
   ));
 
   const handleActions = () => {
-    console.log('hey');
     if (isEditable) {
       return editActions;
-    } else if (!isEditable && !softDeleteAll) {
+    } else if (!isEditable && !organization.isAllSoftDeleted) {
       return readonlyActions;
     }
     return editActions;

@@ -8,14 +8,6 @@
     opacity: 70%;
 }
 
-.accordionHeaderAction__isEditable{
-  margin-right: 10rem;
-}
-
-.accordionHeaderAction__isReadonly{
-  margin-right: 196.5px;
-}
-
 .accordionDeleteButtonContainer{
   margin-left: 7.2px;
 }

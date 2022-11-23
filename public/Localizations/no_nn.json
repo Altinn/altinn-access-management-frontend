@@ -22,6 +22,7 @@
       "api_panel_content": "API er eit grensesnitt som blir brukt for å utveksla data mellom to ulike system eller appar. Når APIet til to system er kopla saman, opnar det opp for ei straumlinjeforma deling av data og automatiserte prosessar.",
       "orgNr": "org.nr.",
       "editAccesses": "Rediger tilgangar",
-      "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder."
+      "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder.",
+      "cancel": "Avbryt"
     }
   }

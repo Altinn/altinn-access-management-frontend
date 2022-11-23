@@ -228,12 +228,29 @@ const overviewOrgSlice = createSlice({
 
       setSoftDeleteState({ state, action, isSoftDelete: true });
     },
-    setOverviewOrgIsEditable: (state, action) => {
+    setIsEditable: (state, action) => {
       state.overviewOrgIsEditable = action.payload;
+    },
+    emptySoftDeletedList: (state) => {
+      for (const org of state.overviewOrgs) {
+        org.isAllSoftDeleted = false;
+        for (const item of org.listItems) {
+          item.isSoftDelete = false;
+        }
+        org.isAllSoftDeleted = false;
+      }
+      state.softDeletedItems = [];
     },
   },
 });
 
 export default overviewOrgSlice.reducer;
-export const { softDelete, softUndo, softDeleteAll, softUndoAll, setOverviewOrgIsEditable, save } =
-  overviewOrgSlice.actions;
+export const {
+  softDelete,
+  softUndo,
+  softDeleteAll,
+  softUndoAll,
+  setIsEditable,
+  save,
+  emptySoftDeletedList,
+} = overviewOrgSlice.actions;

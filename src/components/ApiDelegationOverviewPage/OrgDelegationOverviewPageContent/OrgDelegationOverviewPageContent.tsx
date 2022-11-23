@@ -11,8 +11,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
+  emptySoftDeletedList,
   save,
-  setOverviewOrgIsEditable,
+  setIsEditable,
   softDeleteAll,
   softUndoAll,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
@@ -49,6 +50,12 @@ export const OrgDelegationOverviewPageContent = () => {
     ></OrgDelegationAccordion>
   ));
 
+  const handleSetIsEditable = () => {
+    if (softDeletedItems.length === 0) {
+      dispatch(setIsEditable(!isEditable));
+    }
+  };
+
   return (
     <div className={classes.overviewAccordionsContainer}>
       <h2 className={classes.pageContentText}>{t('api_delegation.api_overview_text')}</h2>
@@ -67,14 +74,25 @@ export const OrgDelegationOverviewPageContent = () => {
       <div className={classes.pageContentContainer}>
         <h2 className={classes.apiSubheading}>{t('api_delegation.you_have_delegated_accesses')}</h2>
         <div className={classes.editButton}>
-          <Button
-            variant={ButtonVariant.Quiet}
-            svgIconComponent={<Edit />}
-            onClick={() => dispatch(setOverviewOrgIsEditable(!isEditable))}
-            size={ButtonSize.Small}
-          >
-            Rediger tilganger
-          </Button>
+          {!isEditable ? (
+            <Button
+              variant={ButtonVariant.Quiet}
+              svgIconComponent={<Edit />}
+              onClick={handleSetIsEditable}
+              size={ButtonSize.Small}
+            >
+              {t('api_delegation.editAccesses')}
+            </Button>
+          ) : (
+            <Button
+              variant={ButtonVariant.Quiet}
+              svgIconComponent={<Edit />}
+              onClick={() => dispatch(emptySoftDeletedList())}
+              size={ButtonSize.Small}
+            >
+              {t('api_delegation.cancel')}
+            </Button>
+          )}
         </div>
       </div>
       <div className={classes.accordion}>{accordions}</div>
