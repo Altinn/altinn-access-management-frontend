@@ -7,7 +7,6 @@ import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
-  // Use the default store if one is not provided
   const { reduxStore = store, ...mountOptions } = options;
 
   const wrapped = <Provider store={reduxStore}>{component}</Provider>;

@@ -8,7 +8,6 @@ import store from '@/rtk/app/store';
 import { DeletableListItem } from '@/components/ApiDelegationOverviewPage/OrgDelegationOverviewPageContent/OrgDelegationAccordion/DeletableListItem';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
-  // Use the default store if one is not provided
   const { reduxStore = store, ...mountOptions } = options;
 
   const wrapped = <Provider store={reduxStore}>{component}</Provider>;
