@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ApiIcon } from '@/assets/Settings.svg';
 
-import classes from './DelegationOverviewPage.module.css';
+import classes from './ApiDelegationOverviewPage.module.css';
 import { OrgDelegationOverviewPageContent } from './OrgDelegationOverviewPageContent';
 
-export const DelegationOverviewPage = () => {
+export const ApiDelegationOverviewPage = () => {
   const { t } = useTranslation('common');
 
   return (
