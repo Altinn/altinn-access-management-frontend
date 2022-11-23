@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { ApiDelegationOverview } from '@/routes/RouterElements/ApiDelegationOverview';
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
-import { NewApiDelegations } from '@/routes/RouterElements/NewApiDelegations';
+import { NewApiDelegationsPage } from '@/components/NewApiDelegationPage';
+import { ApiDelegationOverviewPage } from '@/components/ApiDelegationOverviewPage';
 
 export const Router = createBrowserRouter([
   {
@@ -11,10 +11,12 @@ export const Router = createBrowserRouter([
   },
   {
     path: 'api-delegations',
-    element: <ApiDelegationOverview />,
+    element: <ApiDelegationOverviewPage />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'api-delegations/new-api',
-    element: <NewApiDelegations />,
+    element: <NewApiDelegationsPage />,
+    errorElement: <ErrorPage />,
   },
 ]);
