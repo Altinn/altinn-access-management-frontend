@@ -1,0 +1,59 @@
+@media only screen and (min-width: 0px) {
+  .pageContainer{
+      --pageContainer-width: 100%;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .pageContainer{
+    --pageContainer-width: 90%;
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .pageContainer{
+    --pageContainer-width: 60%;
+  }
+}
+
+.pageContent{
+  --component-page-margin-horizontal: 3rem;
+  margin-right: var(--component-page-margin-horizontal);
+  margin-left: var(--component-page-margin-horizontal);
+}
+
+.pageContainer{
+  width: var(--pageContainer-width);
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.pageContentAccordionsContainer{
+    grid-template-columns: 1fr 1fr;
+    display:grid;
+}
+
+.apiAccordions{
+    margin-right: 3rem;
+}
+
+
+.searchField{
+  width: 100%;
+}
+
+.navButtonContainer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navButton{
+  margin-right: 0.5rem;
+  width: 10rem;
+}
+
+.accordionScrollContainer {
+  max-height: 300px;
+  overflow-y: auto;
+}
