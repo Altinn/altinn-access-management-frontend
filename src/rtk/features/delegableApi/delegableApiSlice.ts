@@ -35,6 +35,7 @@ const initialState: InitialState = {
   error: '',
 };
 
+// example code for later
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     .get('https://jsonplaceholder.typicode.com/users')

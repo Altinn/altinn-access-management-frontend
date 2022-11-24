@@ -1,1 +1,1 @@
-export { NewOrgDelegationsPage } from './NewOrgDelegationPage';
+export { NewOrgDelegationPage } from './NewOrgDelegationPage';

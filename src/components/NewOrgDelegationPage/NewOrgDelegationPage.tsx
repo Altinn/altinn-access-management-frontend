@@ -10,28 +10,28 @@ import {
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
+import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
-import { ReactComponent as ApiIcon } from '../../assets/api.svg';
+import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 
 import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewOrgDelegationPage.module.css';
 
-export const NewOrgDelegationsPage = () => {
-  const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+export const NewOrgDelegationPage = () => {
+  const delegableOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
+  const chosenApis = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
 
-  const delegableApiAccordions = delegableApis.map(
-    (api: DelegableApi, index: Key | null | undefined) => {
+  const delegableApiAccordions = delegableOrgs.map(
+    (org: DelegableOrg, index: Key | null | undefined) => {
       return (
         <NewApiDelegationAccordion
-          delegableApi={api}
+          delegableApi={org}
           key={index}
           buttonType={AccordionButtonType.Add}
-          softAddCallback={() => dispatch(softAdd(api))}
+          softAddCallback={() => dispatch(softAdd(org))}
         ></NewApiDelegationAccordion>
       );
     },
