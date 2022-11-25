@@ -127,7 +127,7 @@ export const OrgDelegationAccordion = ({
     >
       <AccordionHeader
         actions={handleActions()}
-        subtitle={t('api_delegation.orgNr') + ' ' + organization.orgNr}
+        subtitle={t('api_delegation.org_nr') + ' ' + organization.orgNr}
       >
         <div
           className={cn({

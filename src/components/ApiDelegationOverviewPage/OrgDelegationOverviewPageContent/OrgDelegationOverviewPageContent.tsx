@@ -51,9 +51,11 @@ export const OrgDelegationOverviewPageContent = () => {
   ));
 
   const handleSetIsEditable = () => {
-    if (softDeletedItems.length === 0) {
+    if (isEditable) {
       dispatch(setIsEditable(!isEditable));
+      dispatch(emptySoftDeletedList());
     }
+    dispatch(setIsEditable(!isEditable));
   };
 
   return (
@@ -68,9 +70,7 @@ export const OrgDelegationOverviewPageContent = () => {
           {t('api_delegation.delegate_new_org')}
         </Button>
       </div>
-      <Panel title={'Programmeringsgrensesnitt - API'}>
-        {t('api_delegation.api_panel_content')}
-      </Panel>
+      <Panel title={t('api_delegation.card_title')}>{t('api_delegation.api_panel_content')}</Panel>
       <div className={classes.pageContentContainer}>
         <h2 className={classes.apiSubheading}>{t('api_delegation.you_have_delegated_accesses')}</h2>
         <div className={classes.editButton}>
@@ -81,13 +81,13 @@ export const OrgDelegationOverviewPageContent = () => {
               onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >
-              {t('api_delegation.editAccesses')}
+              {t('api_delegation.edit_accesses')}
             </Button>
           ) : (
             <Button
               variant={ButtonVariant.Quiet}
               svgIconComponent={<Edit />}
-              onClick={() => dispatch(emptySoftDeletedList())}
+              onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >
               {t('api_delegation.cancel')}
