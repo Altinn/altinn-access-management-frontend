@@ -11,7 +11,7 @@
       "change_rights": "Edit client rights"
     },
     "api_delegation": {
-      "businesses": "Virksomheitar",
+      "businesses": "Businesses",
       "delegated_apis": "Delegerte API",
       "api_accesses": "API-accesses",
       "delegate_new_api": "Delegate new API",
