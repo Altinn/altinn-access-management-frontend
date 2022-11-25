@@ -7,29 +7,35 @@ import {
   Button,
 } from '@altinn/altinn-design-system';
 import { useState } from 'react';
+import { t } from 'i18next';
 
+import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 
-import classes from './NewApiDelegationAccordion.module.css';
+import classes from './NewOrgDelegationAccordion.module.css';
 
 export enum AccordionButtonType {
   Add = 'add',
   Remove = 'remove',
 }
 
-export interface NewApiDelegationAccordionProps {
-  delegableApi: DelegableApi;
+export interface NewOrgDelegationAccordionProps {
+  title: string;
+  subtitle: string;
+  hasOrgNr?: boolean;
+  description: string;
   buttonType: AccordionButtonType;
-  softAddCallback?: () => { payload: DelegableApi; type: 'delegableApi/softAdd' };
-  softRemoveCallback?: () => { payload: DelegableApi; type: 'delegableApi/softRemove' };
+  callback: () => { payload: DelegableOrg | DelegableApi; type: string };
 }
 
-export const NewApiDelegationAccordion = ({
-  delegableApi,
+export const NewOrgDelegationAccordion = ({
+  title,
+  subtitle,
+  hasOrgNr = false,
+  description,
   buttonType,
-  softAddCallback,
-  softRemoveCallback,
-}: NewApiDelegationAccordionProps) => {
+  callback,
+}: NewOrgDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
 
   const actions = (
@@ -39,7 +45,7 @@ export const NewApiDelegationAccordion = ({
           iconName={'AddCircle'}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Success}
-          onClick={softAddCallback}
+          onClick={callback}
           aria-label={'soft-add'}
         ></Button>
       )}
@@ -48,12 +54,19 @@ export const NewApiDelegationAccordion = ({
           iconName={'MinusCircle'}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
-          onClick={softRemoveCallback}
+          onClick={callback}
           aria-label={'soft-remove'}
         ></Button>
       )}
     </>
   );
+
+  const getSubtitle = () => {
+    if (hasOrgNr) {
+      return hasOrgNr && t('api_delegation.orgNr') + ' ' + subtitle;
+    }
+    return subtitle;
+  };
 
   return (
     <div>
@@ -62,13 +75,13 @@ export const NewApiDelegationAccordion = ({
         onClick={() => setOpen(!open)}
       >
         <AccordionHeader
-          subtitle={delegableApi.orgName}
+          subtitle={getSubtitle()}
           actions={actions}
         >
-          {delegableApi.name}
+          {title}
         </AccordionHeader>
         <AccordionContent>
-          <div className={classes.newApiAccordionContent}>{delegableApi.description}</div>
+          <div className={classes.newApiAccordionContent}>{description}</div>
         </AccordionContent>
       </Accordion>
     </div>

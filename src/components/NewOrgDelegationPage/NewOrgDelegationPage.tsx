@@ -9,14 +9,15 @@ import {
   ButtonSize,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softAdd, softRemove } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 
-import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
+import { NewOrgDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewOrgDelegationPage.module.css';
 
 export const NewOrgDelegationPage = () => {
@@ -24,27 +25,33 @@ export const NewOrgDelegationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
 
-  const delegableApiAccordions = delegableOrgs.map(
-    (org: DelegableOrg, index: Key | null | undefined) => {
-      return (
-        <NewApiDelegationAccordion
-          delegableApi={org}
-          key={index}
-          buttonType={AccordionButtonType.Add}
-          softAddCallback={() => dispatch(softAdd(org))}
-        ></NewApiDelegationAccordion>
-      );
-    },
-  );
+  const { t } = useTranslation('common');
 
-  const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
+  const delegableApiAccordions = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
-      <NewApiDelegationAccordion
-        delegableApi={api}
+      <NewOrgDelegationAccordion
+        title={org.orgName}
+        subtitle={org.orgNr}
+        hasOrgNr={true}
+        description={org.description}
+        key={index}
+        buttonType={AccordionButtonType.Add}
+        callback={() => dispatch(softAdd(org))}
+      ></NewOrgDelegationAccordion>
+    );
+  });
+
+  const chosenApiAccordions = chosenApis.map((org: DelegableOrg, index: Key | null | undefined) => {
+    return (
+      <NewOrgDelegationAccordion
+        title={org.orgName}
+        subtitle={org.orgNr}
+        hasOrgNr={true}
+        description={org.description}
         key={index}
         buttonType={AccordionButtonType.Remove}
-        softRemoveCallback={() => dispatch(softRemove(api))}
-      ></NewApiDelegationAccordion>
+        callback={() => dispatch(softRemove(org))}
+      ></NewOrgDelegationAccordion>
     );
   });
 

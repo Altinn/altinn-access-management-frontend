@@ -65,7 +65,7 @@ export const NewApiDelegationAccordion = ({
           subtitle={delegableApi.orgName}
           actions={actions}
         >
-          {delegableApi.name}
+          {delegableApi.apiName}
         </AccordionHeader>
         <AccordionContent>
           <div className={classes.newApiAccordionContent}>{delegableApi.description}</div>

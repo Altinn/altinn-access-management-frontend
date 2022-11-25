@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
+import { createSlice } from '@reduxjs/toolkit';
 export interface DelegableOrg {
   id: string;
   orgName: string;
@@ -25,8 +24,8 @@ const initialState: InitialState = {
     },
     {
       id: '2',
-      orgName: 'Skatteetaten',
-      orgNr: '930124123',
+      orgName: 'Brønnøysundregistrene',
+      orgNr: '950124321',
       description: 'For å hente ut skatt',
     },
   ],
