@@ -13,9 +13,10 @@
     "api_delegation": {
       "businesses": "Virksomheitar",
       "delegated_apis": "Delegerte API",
-      "api_accesses": "API-tilgangar",
-      "delegate_new_api": "Deleger nytt API",
-      "delete": "Slett",
+      "api_accesses": "API-accesses",
+      "delegate_new_api": "Delegate new API",
+      "undelete": "Undo",
+      "delete": "Delete",
       "delegate_new_org": "Delegate to new organisation",
       "save": "Save",
       "access_to_api_delegations": "Delegated accesses to application programming interface - API",

@@ -22,7 +22,7 @@ describe('OrgDelegationAccordion', () => {
         name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
-        listItems: [
+        apiList: [
           {
             id: '1',
             name: 'Delegert API A',
@@ -42,22 +42,10 @@ describe('OrgDelegationAccordion', () => {
         ],
       };
 
-      const softUndoAll = () => {
-        cy.stub();
-      };
-
-      const softUndoAllSpy = cy.spy(softUndoAll).as('softUndoAllSpy');
-
-      const softDeleteAll = () => {
-        cy.stub();
-      };
-
-      const softDeleteAllSpy = cy.spy(softDeleteAll).as('softDeleteAllSpy');
-
       cy.mount(
         <OrgDelegationAccordion
-          softUndoAllCallback={softUndoAllSpy}
-          softDeleteAllCallback={softDeleteAllSpy}
+          softUndeleteAllCallback={() => null}
+          softDeleteAllCallback={() => null}
           organization={overviewOrgs}
           isEditable={false}
         />,
@@ -71,7 +59,7 @@ describe('OrgDelegationAccordion', () => {
         name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
-        listItems: [],
+        apiList: [],
       };
 
       const softUndoAll = () => {
@@ -88,7 +76,7 @@ describe('OrgDelegationAccordion', () => {
 
       cy.mount(
         <OrgDelegationAccordion
-          softUndoAllCallback={softUndoAllSpy}
+          softUndeleteAllCallback={softUndoAllSpy}
           softDeleteAllCallback={softDeleteAllSpy}
           organization={overviewOrgs}
           isEditable={true}
@@ -97,45 +85,33 @@ describe('OrgDelegationAccordion', () => {
       cy.findByRole('button', { name: /delete/i }).should('exist');
     });
 
-    it('should not show undo button when state is isEditable=false and isAllSoftDeleted=false', () => {
+    it('should not show undelete button when state is isEditable=false', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
         name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
-        listItems: [],
+        apiList: [],
       };
-
-      const softUndoAll = () => {
-        cy.stub();
-      };
-
-      const softUndoAllSpy = cy.spy(softUndoAll).as('softUndoAllSpy');
-
-      const softDeleteAll = () => {
-        cy.stub();
-      };
-
-      const softDeleteAllSpy = cy.spy(softDeleteAll).as('softDeleteAllSpy');
 
       cy.mount(
         <OrgDelegationAccordion
-          softUndoAllCallback={softUndoAllSpy}
-          softDeleteAllCallback={softDeleteAllSpy}
+          softUndeleteAllCallback={() => null}
+          softDeleteAllCallback={() => null}
           organization={overviewOrgs}
           isEditable={false}
         />,
       );
-      cy.findByRole('button', { name: /api_delegation.undo/i }).should('not.exist');
+      cy.findByRole('button', { name: /api_delegation.undelete/i }).should('not.exist');
     });
 
-    it('should show an undo button and display header with line through when all apis are soft deleted', () => {
+    it('should show an undelete button and display header with line through when all apis are soft deleted', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
         name: 'Evry',
         isAllSoftDeleted: true,
         orgNr: '123456789',
-        listItems: [
+        apiList: [
           {
             id: '1',
             name: 'Delegert API A',
@@ -154,22 +130,11 @@ describe('OrgDelegationAccordion', () => {
           },
         ],
       };
-      const softUndoAll = () => {
-        cy.stub();
-      };
-
-      const softUndoAllSpy = cy.spy(softUndoAll).as('softUndoAllSpy');
-
-      const softDeleteAll = () => {
-        cy.stub();
-      };
-
-      const softDeleteAllSpy = cy.spy(softDeleteAll).as('softDeleteAllSpy');
 
       cy.mount(
         <OrgDelegationAccordion
-          softUndoAllCallback={softUndoAllSpy}
-          softDeleteAllCallback={softDeleteAllSpy}
+          softUndeleteAllCallback={() => null}
+          softDeleteAllCallback={() => null}
           organization={overviewOrgs}
           isEditable={true}
         />,
@@ -178,7 +143,7 @@ describe('OrgDelegationAccordion', () => {
       cy.get('button')
         .contains('Evry')
         .should('have.css', 'text-decoration', 'line-through solid rgb(0, 0, 0)');
-      cy.findByRole('button', { name: /undo/i }).should('exist');
+      cy.findByRole('button', { name: /undelete/i }).should('exist');
     });
 
     it('should call softDeleteCallback on button click and isEditable=true ', () => {
@@ -187,7 +152,7 @@ describe('OrgDelegationAccordion', () => {
         name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
-        listItems: [
+        apiList: [
           {
             id: '1',
             name: 'Delegert API A',
@@ -223,7 +188,7 @@ describe('OrgDelegationAccordion', () => {
         <OrgDelegationAccordion
           organization={overviewOrgs}
           softDeleteAllCallback={softDeleteAllSpy}
-          softUndoAllCallback={softUndoAllSpy}
+          softUndeleteAllCallback={softUndoAllSpy}
           isEditable={true}
         />,
       );
@@ -238,7 +203,7 @@ describe('OrgDelegationAccordion', () => {
         name: 'Evry',
         isAllSoftDeleted: true,
         orgNr: '123456789',
-        listItems: [
+        apiList: [
           {
             id: '1',
             name: 'Delegert API A',
@@ -274,12 +239,12 @@ describe('OrgDelegationAccordion', () => {
         <OrgDelegationAccordion
           organization={overviewOrgs}
           softDeleteAllCallback={softDeleteAllSpy}
-          softUndoAllCallback={softUndoAllSpy}
-          isEditable={false}
+          softUndeleteAllCallback={softUndoAllSpy}
+          isEditable={true}
         />,
       );
 
-      cy.findByRole('button', { name: /undo/i }).click();
+      cy.findByRole('button', { name: /undelete/i }).click();
       cy.get('@softUndoAllSpy').should('have.been.called');
     });
   });

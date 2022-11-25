@@ -15,7 +15,7 @@ import {
   save,
   setIsEditable,
   softDeleteAll,
-  softUndoAll,
+  softUndeleteAll,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
@@ -25,7 +25,7 @@ import classes from './OrgDelegationOverviewPageContent.module.css';
 
 export const OrgDelegationOverviewPageContent = () => {
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedItems);
+  const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedOverviewOrgs);
   const isEditable = useAppSelector((state) => state.overviewOrg.overviewOrgIsEditable);
   const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(true);
@@ -45,8 +45,8 @@ export const OrgDelegationOverviewPageContent = () => {
       key={org.id}
       organization={org}
       isEditable={isEditable}
-      softDeleteAllCallback={() => dispatch(softDeleteAll(org))}
-      softUndoAllCallback={() => dispatch(softUndoAll(org))}
+      softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+      softUndeleteAllCallback={() => dispatch(softUndeleteAll(org.id))}
     ></OrgDelegationAccordion>
   ));
 
@@ -96,15 +96,17 @@ export const OrgDelegationOverviewPageContent = () => {
         </div>
       </div>
       <div className={classes.accordion}>{accordions}</div>
-      <div className={classes.saveSection}>
-        <Button
-          disabled={disabled}
-          onClick={() => dispatch(save())}
-          color={ButtonColor.Success}
-        >
-          {t('api_delegation.save')}
-        </Button>
-      </div>
+      {isEditable && (
+        <div className={classes.saveSection}>
+          <Button
+            disabled={disabled}
+            onClick={() => dispatch(save())}
+            color={ButtonColor.Success}
+          >
+            {t('api_delegation.save')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

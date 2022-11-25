@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { DeleteOrgDto } from '@/shared/dto/DeleteOrgDto';
 
-export interface OverviewListItem {
+export interface ApiListItem {
   id: string;
   name: string;
   isSoftDelete: boolean;
@@ -16,13 +16,13 @@ export interface OverviewOrg {
   name: string;
   orgNr: string;
   isAllSoftDeleted: boolean;
-  listItems: OverviewListItem[];
+  apiList: ApiListItem[];
 }
 
 export interface InitialState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
-  softDeletedItems: OverviewOrg[];
+  softDeletedOverviewOrgs: OverviewOrg[];
   error: string;
   overviewOrgIsEditable: boolean;
 }
@@ -35,7 +35,7 @@ const initialState: InitialState = {
       name: 'Evry',
       orgNr: '123456789',
       isAllSoftDeleted: false,
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -59,7 +59,7 @@ const initialState: InitialState = {
       name: 'Skatteetaten',
       orgNr: '123456789',
       isAllSoftDeleted: false,
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -80,31 +80,24 @@ const initialState: InitialState = {
     },
   ],
   overviewOrgIsEditable: false,
-  softDeletedItems: [],
+  softDeletedOverviewOrgs: [],
   error: '',
 };
 
-const removeSoftDeletedOrgReference = (
-  state: InitialState,
-  action: { payload: OverviewOrg; type: string },
-) => {
-  const { softDeletedItems } = state;
+const removeSoftDeletedOrgReference = (state: InitialState, orgId: string) => {
+  const { softDeletedOverviewOrgs: softDeletedItems } = state;
 
-  state.softDeletedItems = softDeletedItems.filter((org) => org.id !== action.payload.id);
+  state.softDeletedOverviewOrgs = softDeletedItems.filter((org) => org.id !== orgId);
 };
 
-const setSoftDeleteState = ({
-  state,
-  action,
-  isSoftDelete,
-}: {
-  state: InitialState;
-  action: { payload: OverviewOrg; type: string };
-  isSoftDelete: boolean;
-}) => {
+const setSoftDeleteState = (
+  state: InitialState,
+  softDeletedOrgId: string,
+  isSoftDelete: boolean,
+) => {
   for (const org of state.overviewOrgs) {
-    if (org.id === action.payload.id) {
-      for (const item of org.listItems) {
+    if (org.id === softDeletedOrgId) {
+      for (const item of org.apiList) {
         item.isSoftDelete = isSoftDelete;
       }
       org.isAllSoftDeleted = isSoftDelete;
@@ -119,14 +112,14 @@ const createCopyOrg = (org: OverviewOrg) => {
     name: org.name,
     isAllSoftDeleted: false,
     orgNr: org.orgNr,
-    listItems: [],
+    apiList: [],
   };
 };
 
 const mapToSoftDeletedOrgDto = (state: InitialState) => {
   const softDeletedOrgDtoList = [];
-  for (const item of state.softDeletedItems) {
-    softDeletedOrgDtoList.push(new DeleteOrgDto(item.id, item.name, item.listItems));
+  for (const item of state.softDeletedOverviewOrgs) {
+    softDeletedOrgDtoList.push(new DeleteOrgDto(item.id, item.name, item.apiList));
   }
   return softDeletedOrgDtoList;
 };
@@ -144,58 +137,53 @@ const overviewOrgSlice = createSlice({
   reducers: {
     softDelete: (state, action) => {
       let softDeleteCount = 0;
-      let orgIsAlreadyInList = false;
+      const softDeletedItemId = action.payload[1];
+      const softDeletedOrgId = action.payload[0];
 
-      for (const org of state.softDeletedItems) {
-        if (org.id === action.payload[0].id) {
-          org.listItems.push(action.payload[1]);
-          orgIsAlreadyInList = true;
-        }
-      }
       for (const org of state.overviewOrgs) {
-        if (org.id === action.payload[0].id) {
+        if (org.id === softDeletedOrgId) {
           const copyOrg: OverviewOrg = createCopyOrg(org);
 
-          for (const item of org.listItems) {
+          for (const item of org.apiList) {
             if (item.isSoftDelete) {
               softDeleteCount++;
             }
-            if (item.id === action.payload[1].id) {
+            if (item.id === softDeletedItemId) {
               item.isSoftDelete = true;
               softDeleteCount++;
-              if (!orgIsAlreadyInList) {
-                copyOrg.listItems.push(item);
-                state.softDeletedItems.push(copyOrg);
-              }
+              copyOrg.apiList.push(item);
+              state.softDeletedOverviewOrgs.push(copyOrg);
             }
-            if (softDeleteCount === org.listItems.length) {
-              org.isAllSoftDeleted = true;
-            }
-            if (softDeleteCount < org.listItems.length) {
-              org.isAllSoftDeleted = false;
-            }
+          }
+          if (softDeleteCount === org.apiList.length) {
+            org.isAllSoftDeleted = true;
+          }
+          if (softDeleteCount < org.apiList.length) {
+            org.isAllSoftDeleted = false;
           }
         }
       }
     },
-    softUndo: (state, action) => {
-      for (const org of state.softDeletedItems) {
-        if (org.id === action.payload[0].id) {
-          org.listItems = org.listItems.filter((item) => item.id !== action.payload[1].id);
+    softUndelete: (state, action) => {
+      const selectedOrgId = action.payload[0];
+      const undeletedListItemId = action.payload[1];
+      for (const org of state.softDeletedOverviewOrgs) {
+        if (org.id === selectedOrgId) {
+          org.apiList = org.apiList.filter((item) => item.id !== undeletedListItemId);
         }
-        if (org.listItems.length === 0) {
-          const { softDeletedItems } = state;
-          state.softDeletedItems = softDeletedItems.filter(
-            (org) => org.id !== action.payload[0].id,
+        if (org.apiList.length === 0) {
+          const { softDeletedOverviewOrgs } = state;
+          state.softDeletedOverviewOrgs = softDeletedOverviewOrgs.filter(
+            (org) => org.id !== selectedOrgId,
           );
           break;
         }
       }
 
       for (const org of state.overviewOrgs) {
-        if (org.id === action.payload[0].id) {
-          for (const item of org.listItems) {
-            if (item.id === action.payload[1].id) {
+        if (org.id === selectedOrgId) {
+          for (const item of org.apiList) {
+            if (item.id === undeletedListItemId) {
               item.isSoftDelete = false;
             }
           }
@@ -208,25 +196,27 @@ const overviewOrgSlice = createSlice({
       const list = mapToSoftDeletedOrgDto(state);
       console.log(list);
     },
-    softUndoAll: (state, action) => {
-      for (const org of state.softDeletedItems) {
-        if (org.id === action.payload.id) {
-          removeSoftDeletedOrgReference(state, action);
+    softUndeleteAll: (state, action) => {
+      const undeletedOrgId = action.payload;
+      for (const org of state.softDeletedOverviewOrgs) {
+        if (org.id === undeletedOrgId) {
+          removeSoftDeletedOrgReference(state, undeletedOrgId);
           break;
         }
       }
 
-      setSoftDeleteState({ state, action, isSoftDelete: false });
+      setSoftDeleteState(state, undeletedOrgId, false);
     },
     softDeleteAll: (state, action) => {
-      for (const softDeletedOrg of state.softDeletedItems) {
-        if (softDeletedOrg.id === action.payload.id) {
-          removeSoftDeletedOrgReference(state, action);
+      const selectedOrgId = action.payload;
+      for (const softDeletedOrg of state.softDeletedOverviewOrgs) {
+        if (softDeletedOrg.id === selectedOrgId) {
+          removeSoftDeletedOrgReference(state, selectedOrgId);
         }
       }
-      state.softDeletedItems.push(action.payload);
+      state.softDeletedOverviewOrgs.push(selectedOrgId);
 
-      setSoftDeleteState({ state, action, isSoftDelete: true });
+      setSoftDeleteState(state, selectedOrgId, true);
     },
     setIsEditable: (state, action) => {
       state.overviewOrgIsEditable = action.payload;
@@ -234,12 +224,12 @@ const overviewOrgSlice = createSlice({
     emptySoftDeletedList: (state) => {
       for (const org of state.overviewOrgs) {
         org.isAllSoftDeleted = false;
-        for (const item of org.listItems) {
+        for (const item of org.apiList) {
           item.isSoftDelete = false;
         }
         org.isAllSoftDeleted = false;
       }
-      state.softDeletedItems = [];
+      state.softDeletedOverviewOrgs = [];
     },
   },
 });
@@ -247,9 +237,9 @@ const overviewOrgSlice = createSlice({
 export default overviewOrgSlice.reducer;
 export const {
   softDelete,
-  softUndo,
+  softUndelete,
   softDeleteAll,
-  softUndoAll,
+  softUndeleteAll,
   setIsEditable,
   save,
   emptySoftDeletedList,

@@ -2,24 +2,22 @@ import { Button, ButtonVariant, ListItem, ButtonColor } from '@altinn/altinn-des
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import type { OverviewListItem, OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import type { ApiListItem } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 
 import classes from './DeletableListItem.module.css';
 
 export interface DeletableListItemProps {
-  softDeleteCallback: (overviewOrg: OverviewOrg, item: OverviewListItem) => void;
-  softUndoCallback: (overviewOrg: OverviewOrg, item: OverviewListItem) => void;
-  overviewOrg: OverviewOrg;
-  item: OverviewListItem;
+  softDeleteCallback: () => void;
+  softUndeleteCallback: () => void;
+  item: ApiListItem;
   isEditable: boolean;
 }
 
 export const DeletableListItem = ({
   softDeleteCallback,
-  softUndoCallback,
-  overviewOrg,
+  softUndeleteCallback,
   item,
   isEditable,
 }: DeletableListItemProps) => {
@@ -31,17 +29,17 @@ export const DeletableListItem = ({
         <Button
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Secondary}
-          onClick={() => softUndoCallback(overviewOrg, item)}
+          onClick={softUndeleteCallback}
           svgIconComponent={<Cancel />}
         >
-          {t('api_delegation.undo')}
+          {t('api_delegation.undelete')}
         </Button>
       ) : (
         <Button
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
           svgIconComponent={<MinusCircle />}
-          onClick={() => softDeleteCallback(overviewOrg, item)}
+          onClick={softDeleteCallback}
         >
           {t('api_delegation.delete')}
         </Button>
