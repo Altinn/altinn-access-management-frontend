@@ -1,17 +1,17 @@
 @media only screen and (min-width: 0px) {
-  .pageContainer{
+  .page{
       --pageContainer-width: 1055px;
   }
 }
 
 @media only screen and (min-width: 700px) {
-  .pageContainer{
+  .page{
     --pageContainer-width: 1055px;
   }
 }
 
 @media only screen and (min-width: 900px) {
-  .pageContainer{
+  .page{
     --pageContainer-width: 1055px;
   }
 }
@@ -22,10 +22,10 @@
   margin-left: var(--component-page-margin-horizontal);
 }
 
-.pageContainer{
+.page{
   width: var(--pageContainer-width);
   margin: auto;
-  margin-top: 2rem;
+  margin-top: 8rem;
 }
 
 .pageContentAccordionsContainer{

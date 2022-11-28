@@ -57,7 +57,7 @@ export const NewOrgDelegationPage = () => {
 
   return (
     <div>
-      <div className={classes.pageContainer}>
+      <div className={classes.page}>
         <Page>
           <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
           <PageContent>

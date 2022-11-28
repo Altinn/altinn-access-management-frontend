@@ -1,29 +1,29 @@
 {
-    "profile": {
-      "received": "Received",
-      "sent": "Sent",
-      "create_request": "Make new request",
-      "delete": "Delete",
-      "access_request": "Requests access",
-      "employees": "Employees",
-      "clients": "Clients",
-      "add_new_employee": "Add new employee",
-      "change_rights": "Edit client rights"
-    },
-    "api_delegation": {
-      "businesses": "Virksomheitar",
-      "delegated_apis": "Delegerte API",
-      "api_accesses": "API-tilgangar",
-      "delegate_new_api": "Deleger nytt API",
-      "delete": "Slett",
-      "delegate_new_org": "Delegate to new organisation",
-      "save": "Save",
-      "access_to_api_delegations": "Delegated accesses to application programming interface - API",
-      "you_have_delegated_accesses": "You have earlier delegated these accesses:",
-      "api_panel_content": "API is an interface used to exchange data between two different systems or apps. When the API of two systems is connected, it opens up for a streamlined sharing of data and automated processes.",
-      "orgNr": "Org.nr.",
-      "editAccesses": "Edit accesses",
-      "api_overview_text": "Here you'll find an overview over the API-accesses your organisation has delegated to other organisations",
-      "cancel": "Cancel"
-    }
+  "profile": {
+    "received": "Received",
+    "sent": "Sent",
+    "create_request": "Make new request",
+    "delete": "Delete",
+    "access_request": "Requests access",
+    "employees": "Employees",
+    "clients": "Clients",
+    "add_new_employee": "Add new employee",
+    "change_rights": "Edit client rights"
+  },
+  "api_delegation": {
+    "businesses": "Virksomheitar",
+    "delegated_apis": "Delegerte API",
+    "api_accesses": "API-tilgangar",
+    "delegate_new_api": "Deleger nytt API",
+    "delete": "Slett",
+    "delegate_new_org": "Delegate to new organisation",
+    "save": "Save",
+    "access_to_api_delegations": "Delegated accesses to application programming interface - API",
+    "you_have_delegated_accesses": "You have earlier delegated these accesses:",
+    "api_panel_content": "API is an interface used to exchange data between two different systems or apps. When the API of two systems is connected, it opens up for a streamlined sharing of data and automated processes.",
+    "orgNr": "Org.nr.",
+    "editAccesses": "Edit accesses",
+    "api_overview_text": "Here you'll find an overview over the API-accesses your organisation has delegated to other organisations",
+    "cancel": "Cancel"
   }
+}
