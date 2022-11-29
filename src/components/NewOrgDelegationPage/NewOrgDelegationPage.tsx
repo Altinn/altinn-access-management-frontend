@@ -2,13 +2,15 @@ import {
   Page,
   PageContent,
   PageHeader,
-  SearchField,
   Button,
   ButtonVariant,
   ButtonColor,
   ButtonSize,
+  PopoverPanel,
+  PanelVariant,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { softAdd, softRemove } from '@/rtk/features/delegableOrg/delegableOrgSlice';
@@ -25,6 +27,7 @@ export const NewOrgDelegationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
 
+  const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
 
   const delegableApiAccordions = delegableOrgs.map((org: DelegableOrg, index: Key) => {
@@ -61,19 +64,41 @@ export const NewOrgDelegationPage = () => {
         <Page>
           <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
           <PageContent>
+            <PopoverPanel
+              variant={PanelVariant.Info}
+              side={'bottom'}
+              title={t('api_delegation.add_new_business')}
+              open={open}
+              trigger={
+                <Button
+                  variant={ButtonVariant.Outline}
+                  color={ButtonColor.Secondary}
+                >
+                  {t('api_delegation.add_new_business')}
+                </Button>
+              }
+              onOpenChange={() => setOpen(!open)}
+              showPointer={true}
+              showIcon={false}
+            >
+              <div>Her kommer litt informasjon</div>
+              <Button
+                variant={ButtonVariant.Filled}
+                color={ButtonColor.Success}
+                size={ButtonSize.Small}
+              >
+                {'api_delegation.save'}
+              </Button>
+            </PopoverPanel>
             <div className={classes.pageContent}>
-              <h2>Gi tilgang til API</h2>
-              <h3>Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet.</h3>
-              <div className={classes.searchField}>
-                <SearchField></SearchField>
-              </div>
+              <h3>{t('api_delegation.new_org_accordion_content_text')}</h3>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
-                  <h4>Delegerbare API:</h4>
+                  <h5>{t('api_delegation.businesses_previously_delegated_to')}</h5>
                   <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
                 </div>
                 <div className={classes.apiAccordions}>
-                  <h4>Valgte API:</h4>
+                  <h5>{t('api_delegation.businesses_going_to_get_access')}</h5>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
@@ -85,7 +110,7 @@ export const NewOrgDelegationPage = () => {
                     size={ButtonSize.Small}
                     fullWidth={true}
                   >
-                    Forrige
+                    {t('api_delegation.previous')}
                   </Button>
                 </div>
                 <div className={classes.navButton}>
@@ -95,7 +120,7 @@ export const NewOrgDelegationPage = () => {
                     size={ButtonSize.Small}
                     fullWidth={true}
                   >
-                    Neste
+                    {t('api_delegation.next')}
                   </Button>
                 </div>
               </div>
