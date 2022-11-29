@@ -1,8 +1,10 @@
+import type { MultiSelectOption } from '@altinn/altinn-design-system';
 import {
   Page,
   PageContent,
   PageHeader,
   SearchField,
+  Select,
   Button,
   ButtonVariant,
   ButtonColor,
@@ -25,11 +27,24 @@ export const NewApiDelegationsPage = () => {
   const chosenApis = useAppSelector((state: any) => state.delegableApi.chosenDelegableApiList);
   const [searchString, setSearchString] = useState('');
   const dispatch = useAppDispatch();
+  const [filter, setFilter] = useState<string[]>([]);
 
   const handleSearch = (searchText: string) => {
     setSearchString(searchText);
     dispatch(search(searchText));
   };
+
+  const handleFilterChange = (e: string[]) => {
+    setFilter(e);
+    console.log(filter);
+  };
+
+  const filterOptions: MultiSelectOption[] = [
+    { label: 'Skatteetaten', value: 'Skatteetaten', deleteButtonLabel: 'Slett' },
+    { label: 'CakeBoss', value: 'CakeBoss', deleteButtonLabel: 'Slett' },
+    { label: 'Isbil', value: 'Isbil', deleteButtonLabel: 'Slett' },
+    { label: 'Bama', value: 'Bama', deleteButtonLabel: 'Slett' },
+  ];
 
   const delegableApiAccordions = presentedApiList.map(
     (api: DelegableApi, index: Key | null | undefined) => {
@@ -67,6 +82,13 @@ export const NewApiDelegationsPage = () => {
                   value={searchString}
                   onChange={(e: any) => handleSearch(e.target.value)}
                 ></SearchField>
+                <Select
+                  label='Filtrer basert på utrsteder'
+                  deleteButtonLabel='Fjern alle'
+                  multiple={true}
+                  onChange={handleFilterChange}
+                  options={filterOptions}
+                />
               </div>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>

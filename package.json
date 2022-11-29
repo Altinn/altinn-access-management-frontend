@@ -16,7 +16,7 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@altinn/altinn-design-system": "^0.19.1",
+    "@altinn/altinn-design-system": "^0.25.1",
     "@reduxjs/toolkit": "^1.9.0",
     "@types/redux-logger": "^3.0.9",
     "axios": "^1.1.3",

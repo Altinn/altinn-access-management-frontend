@@ -54,7 +54,7 @@ const initialState: InitialState = {
     {
       id: '5',
       name: 'API E',
-      orgName: 'Bamas',
+      orgName: 'Bama',
       description: 'Frukt av alle slag',
     },
   ],
@@ -86,7 +86,7 @@ const initialState: InitialState = {
     {
       id: '5',
       name: 'API E',
-      orgName: 'Bamas',
+      orgName: 'Bama',
       description: 'Frukt av alle slag',
     },
   ],
@@ -128,11 +128,13 @@ const delegableApiSlice = createSlice({
     },
     search: (state, action) => {
       const { delegableApiList } = state;
+      const searchText = action.payload.trim().toLowerCase();
+      console.log(searchText);
       state.presentedApiList = delegableApiList.filter(
         (delegableApi) =>
-          delegableApi.name.includes(action.payload) ||
-          delegableApi.description.includes(action.payload) ||
-          delegableApi.orgName.includes(action.payload),
+          delegableApi.name.toLowerCase().includes(searchText) ||
+          delegableApi.description.toLowerCase().includes(searchText) ||
+          delegableApi.orgName.toLowerCase().includes(searchText),
       );
     },
   },

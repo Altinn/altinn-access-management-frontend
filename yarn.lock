@@ -5,25 +5,25 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@altinn/altinn-design-system@npm:^0.19.1":
-  version: 0.19.1
-  resolution: "@altinn/altinn-design-system@npm:0.19.1"
+"@altinn/altinn-design-system@npm:^0.25.1":
+  version: 0.25.1
+  resolution: "@altinn/altinn-design-system@npm:0.25.1"
   dependencies:
-    "@altinn/figma-design-tokens": ^4.2.0
+    "@altinn/figma-design-tokens": ^4.3.0
     "@navikt/ds-icons": ^1.3.38
     "@radix-ui/react-popover": ^1.0.0
-    "@react-hookz/web": ^16.0.0
+    "@react-hookz/web": ^19.0.0
     leaflet: ^1.8.0
     react-leaflet: ^4.0.1
     react-number-format: ^5.1.1
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 33807342844f19065aac4cb542c8e99b4fe853096eafc69d0a179214e192dd446c2da7163be2206f9f486875159f276a94aa253f841121c6217385c85650230c
+  checksum: 840d40742de99b1c90dc40842a0f42c15cc4d4af102a887c4b6af84bf747eacc5e2cd27cfb7fbe760a21b2bf47344975f0386a6066f2482895064c2222bec0e5
   languageName: node
   linkType: hard
 
-"@altinn/figma-design-tokens@npm:^4.2.0":
+"@altinn/figma-design-tokens@npm:^4.3.0":
   version: 4.3.0
   resolution: "@altinn/figma-design-tokens@npm:4.3.0"
   checksum: dac7b1b98a354bafa0ce627ae9fdf34215101fb57669576795d7b40c48dd41761b301ba62ec9026a99a5f21838aee6c4d26c851572ea8f334eb421c94b659a4d
@@ -905,9 +905,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-hookz/web@npm:^16.0.0":
-  version: 16.1.0
-  resolution: "@react-hookz/web@npm:16.1.0"
+"@react-hookz/web@npm:^19.0.0":
+  version: 19.2.0
+  resolution: "@react-hookz/web@npm:19.2.0"
   dependencies:
     "@react-hookz/deep-equal": ^1.0.3
   peerDependencies:
@@ -917,7 +917,7 @@ __metadata:
   peerDependenciesMeta:
     js-cookie:
       optional: true
-  checksum: 5eb92b94d673e6252b380e1541696895875eefa373dcf94ec809390a3de221572f31280dff1c43cad56db5b59df2eaf7fb9c478d0300614b067ecf0ea7c30163
+  checksum: 0fda3d3a0f967b6b38817f1e72d111711fc01036a8e6d0850bd4e3b3fa41af8635b260babf19e384402ac6d2dfa7db779585c0c8b16700cc0f568df9662ca517
   languageName: node
   linkType: hard
 
@@ -5437,7 +5437,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-app@workspace:."
   dependencies:
-    "@altinn/altinn-design-system": ^0.19.1
+    "@altinn/altinn-design-system": ^0.25.1
     "@reduxjs/toolkit": ^1.9.0
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21
