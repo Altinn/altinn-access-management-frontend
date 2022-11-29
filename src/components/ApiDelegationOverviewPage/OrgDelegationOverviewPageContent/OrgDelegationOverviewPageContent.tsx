@@ -11,11 +11,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
-  emptySoftDeletedList,
+  emptySoftDeletedItems,
   save,
-  setIsEditable,
   softDeleteAll,
-  softUndeleteAll,
+  softRestoreAll,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
@@ -25,20 +24,29 @@ import classes from './OrgDelegationOverviewPageContent.module.css';
 
 export const OrgDelegationOverviewPageContent = () => {
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedOverviewOrgs);
-  const isEditable = useAppSelector((state) => state.overviewOrg.overviewOrgIsEditable);
+  const [isEditable, setIsEditable] = useState(false);
   const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(true);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (softDeletedItems.length >= 1) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
+    handleSetDisabled();
   });
+
+  const handleSetDisabled = () => {
+    for (const org of overviewOrgs) {
+      if (org.isAllSoftDeleted) {
+        return setDisabled(false);
+      }
+      for (const api of org.apiList) {
+        if (api.isSoftDelete) {
+          return setDisabled(false);
+        }
+      }
+    }
+    setDisabled(true);
+  };
 
   const accordions = overviewOrgs.map((org) => (
     <OrgDelegationAccordion
@@ -46,16 +54,15 @@ export const OrgDelegationOverviewPageContent = () => {
       organization={org}
       isEditable={isEditable}
       softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
-      softUndeleteAllCallback={() => dispatch(softUndeleteAll(org.id))}
+      softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
     ></OrgDelegationAccordion>
   ));
 
   const handleSetIsEditable = () => {
     if (isEditable) {
-      dispatch(setIsEditable(!isEditable));
-      dispatch(emptySoftDeletedList());
+      dispatch(emptySoftDeletedItems());
     }
-    dispatch(setIsEditable(!isEditable));
+    setIsEditable(!isEditable);
   };
 
   return (

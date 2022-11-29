@@ -14,7 +14,7 @@
       "delegated_apis": "Delegerte API",
       "api_accesses": "API-tilgangar",
       "delegate_new_api": "Deleger nytt API",
-      "undelete": "Angre",
+      "undo": "Angre",
       "delete": "Slett",
       "delegate_new_org": "Deleger til ny organisasjon",
       "save": "Lagra",
@@ -26,6 +26,5 @@
       "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder.",
       "cancel": "Avbryt",
       "card_title": "Programmeringsgrensesnitt - API"
-
     }
   }

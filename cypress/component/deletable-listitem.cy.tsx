@@ -38,7 +38,7 @@ describe('DeletableListItem', () => {
       <List>
         <DeletableListItem
           softDeleteCallback={() => null}
-          softUndeleteCallback={() => null}
+          softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
@@ -69,7 +69,7 @@ describe('DeletableListItem', () => {
       <List>
         <DeletableListItem
           softDeleteCallback={() => null}
-          softUndeleteCallback={() => null}
+          softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={false}
         />
@@ -100,7 +100,7 @@ describe('DeletableListItem', () => {
       <List>
         <DeletableListItem
           softDeleteCallback={() => null}
-          softUndeleteCallback={() => null}
+          softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
@@ -112,7 +112,7 @@ describe('DeletableListItem', () => {
       'text-decoration',
       'line-through solid rgb(0, 0, 0)',
     );
-    cy.findByRole('button', { name: /undelete/i }).should('exist');
+    cy.findByRole('button', { name: /undo/i }).should('exist');
   });
 
   it('should do softDeleteCallback on button click', () => {
@@ -133,12 +133,6 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndo = () => {
-      cy.stub();
-    };
-
-    const softUndoSpy = cy.spy(softUndo).as('softUndoSpy');
-
     const softDelete = () => {
       cy.stub();
     };
@@ -149,7 +143,7 @@ describe('DeletableListItem', () => {
       <List>
         <DeletableListItem
           softDeleteCallback={softDeleteSpy}
-          softUndeleteCallback={softUndoSpy}
+          softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
@@ -160,7 +154,7 @@ describe('DeletableListItem', () => {
     cy.get('@softDeleteSpy').should('have.been.called');
   });
 
-  it('should do softUndeleteCallback on button click', () => {
+  it('should do softRestoreCallback on button click', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
       name: 'Evry',
@@ -178,30 +172,24 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndo = () => {
+    const softRestore = () => {
       cy.stub();
     };
 
-    const softUndoSpy = cy.spy(softUndo).as('softUndoSpy');
-
-    const softDelete = () => {
-      cy.stub();
-    };
-
-    const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
+    const softRestoreSpy = cy.spy(softRestore).as('softRestoreSpy');
 
     cy.mount(
       <List>
         <DeletableListItem
-          softDeleteCallback={softDeleteSpy}
-          softUndeleteCallback={softUndoSpy}
+          softDeleteCallback={() => null}
+          softRestoreCallback={softRestoreSpy}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
       </List>,
     );
 
-    cy.findByRole('button', { name: /undelete/i }).click();
-    cy.get('@softUndoSpy').should('have.been.called');
+    cy.findByRole('button', { name: /undo/i }).click();
+    cy.get('@softRestoreSpy').should('have.been.called');
   });
 });

@@ -15,7 +15,7 @@
       "delegated_apis": "Delegerte API",
       "api_accesses": "API-accesses",
       "delegate_new_api": "Delegate new API",
-      "undelete": "Undo",
+      "undo": "Undo",
       "delete": "Delete",
       "delegate_new_org": "Delegate to new organisation",
       "save": "Save",
