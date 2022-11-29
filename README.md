@@ -1,11 +1,8 @@
-# altinn-access-management-frontend
-Frontend for access management
-
-# Front end for Altinn 3 Authorization
+# Frontend for access management
 
 ## Getting started 🚀
 
-To run or build the front end standalone (without Docker), you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` to install dependencies and then `yarn dev` to start the development environment.
+To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` to install dependencies and then `yarn start` to start the development environment.
 
 ## Project organisation 🧩
 
@@ -53,9 +50,23 @@ components\
 
 ## Coding conventions 👮‍♀️
 
-### TypeScript
+### ClassNames
 
-Use [PascalCase](https://techterms.com/definition/pascalcase) for both component and file names. We use ESLint with Prettier rules — you might want to add an ESLint plugin to your editor. 
+Use [PascalCase](https://techterms.com/definition/pascalcase) for both component and file names.
+
+### Code style
+
+We use [eslint](https://eslint.org/), [prettier](https://prettier.io/), typescript, and automatically set up git hooks to enforce
+these on commits. To avoid confusion, it is recommended to set this up your IDE.
+
+### Visual Studio Code
+
+Install the [eslint extension from the marketplace](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint). Configure your IDE to run `eslint --fix` on save (prettier will also reformat your code when doing this).
+
+### WebStorm and IntelliJ IDEA
+
+Configure your IDE to run `eslint --fix` on save (prettier will also reformat your code when doing this). It is also recommended to
+[set up Prettier as the default formatter](https://www.jetbrains.com/help/webstorm/prettier.html#ws_prettier_default_formatter).
 
 ### CSS
 
@@ -67,6 +78,8 @@ We name css classes using camelCase and use one concept from [BEM naming convent
 Run `yarn test` to run cypress tests in browser.
 
 Run `yarn coverage` to see pretty test coverage stats.
+
+Run 'yarn lint' to run lint checks
 
 ## Building and deploying 🚚
 
