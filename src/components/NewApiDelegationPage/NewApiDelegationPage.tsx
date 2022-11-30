@@ -15,10 +15,7 @@ import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSli
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import {
-  NewOrgDelegationAccordion,
-  AccordionButtonType,
-} from '../NewOrgDelegationPage/NewApiDelegationAccordion';
+import { NewDelegationAccordion, AccordionButtonType } from '../Common/NewDelegationAccordion';
 
 import classes from './NewApiDelegationPage.module.css';
 
@@ -30,28 +27,28 @@ export const NewApiDelegationsPage = () => {
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
       return (
-        <NewOrgDelegationAccordion
+        <NewDelegationAccordion
           title={api.apiName}
           subtitle={api.orgName}
           description={api.description}
           key={index}
           buttonType={AccordionButtonType.Add}
           callback={() => dispatch(softAdd(api))}
-        ></NewOrgDelegationAccordion>
+        ></NewDelegationAccordion>
       );
     },
   );
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
-      <NewOrgDelegationAccordion
+      <NewDelegationAccordion
         title={api.apiName}
         subtitle={api.orgName}
         description={api.description}
         key={index}
         buttonType={AccordionButtonType.Remove}
         callback={() => dispatch(softRemove(api))}
-      ></NewOrgDelegationAccordion>
+      ></NewDelegationAccordion>
     );
   });
 

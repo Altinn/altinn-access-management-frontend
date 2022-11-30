@@ -6,33 +6,31 @@ import {
   ButtonVariant,
   ButtonColor,
   ButtonSize,
-  PopoverPanel,
-  PanelVariant,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { softAdd, softRemove } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
+import { NewDelegationAccordion, AccordionButtonType } from '../Common/NewDelegationAccordion';
 
-import { NewOrgDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewOrgDelegationPage.module.css';
 
 export const NewOrgDelegationPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
-  const chosenApis = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
 
   const delegableApiAccordions = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
-      <NewOrgDelegationAccordion
+      <NewDelegationAccordion
         title={org.orgName}
         subtitle={org.orgNr}
         hasOrgNr={true}
@@ -40,13 +38,13 @@ export const NewOrgDelegationPage = () => {
         key={index}
         buttonType={AccordionButtonType.Add}
         callback={() => dispatch(softAdd(org))}
-      ></NewOrgDelegationAccordion>
+      ></NewDelegationAccordion>
     );
   });
 
-  const chosenApiAccordions = chosenApis.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const chosenApiAccordions = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
-      <NewOrgDelegationAccordion
+      <NewDelegationAccordion
         title={org.orgName}
         subtitle={org.orgNr}
         hasOrgNr={true}
@@ -54,7 +52,7 @@ export const NewOrgDelegationPage = () => {
         key={index}
         buttonType={AccordionButtonType.Remove}
         callback={() => dispatch(softRemove(org))}
-      ></NewOrgDelegationAccordion>
+      ></NewDelegationAccordion>
     );
   });
 
@@ -65,14 +63,14 @@ export const NewOrgDelegationPage = () => {
           <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
-              <h3>{t('api_delegation.new_org_accordion_content_text')}</h3>
+              <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
-                  <h5>{t('api_delegation.businesses_previously_delegated_to')}</h5>
+                  <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
                   <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
                 </div>
                 <div className={classes.apiAccordions}>
-                  <h5>{t('api_delegation.businesses_going_to_get_access')}</h5>
+                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
@@ -83,6 +81,7 @@ export const NewOrgDelegationPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
+                    onClick={() => navigate(-1)}
                   >
                     {t('api_delegation.previous')}
                   </Button>
@@ -93,6 +92,8 @@ export const NewOrgDelegationPage = () => {
                     variant={ButtonVariant.Filled}
                     size={ButtonSize.Small}
                     fullWidth={true}
+                    onClick={() => navigate('/api-delegations/new-api')}
+                    disabled={chosenOrgs.length === 0}
                   >
                     {t('api_delegation.next')}
                   </Button>
