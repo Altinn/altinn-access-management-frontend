@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
-  restoreSoftDeletedItems,
+  restoreAllSoftDeletedItems,
   save,
   softDeleteAll,
   softRestoreAll,
@@ -60,7 +60,7 @@ export const OrgDelegationOverviewPageContent = () => {
 
   const handleSetIsEditable = () => {
     if (isEditable) {
-      dispatch(restoreSoftDeletedItems());
+      dispatch(restoreAllSoftDeletedItems());
     }
     setIsEditable(!isEditable);
   };
