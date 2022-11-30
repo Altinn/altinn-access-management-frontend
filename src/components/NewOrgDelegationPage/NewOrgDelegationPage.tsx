@@ -64,32 +64,6 @@ export const NewOrgDelegationPage = () => {
         <Page>
           <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
           <PageContent>
-            <PopoverPanel
-              variant={PanelVariant.Info}
-              side={'bottom'}
-              title={t('api_delegation.add_new_business')}
-              open={open}
-              trigger={
-                <Button
-                  variant={ButtonVariant.Outline}
-                  color={ButtonColor.Secondary}
-                >
-                  {t('api_delegation.add_new_business')}
-                </Button>
-              }
-              onOpenChange={() => setOpen(!open)}
-              showPointer={true}
-              showIcon={false}
-            >
-              <div>Her kommer litt informasjon</div>
-              <Button
-                variant={ButtonVariant.Filled}
-                color={ButtonColor.Success}
-                size={ButtonSize.Small}
-              >
-                {'api_delegation.save'}
-              </Button>
-            </PopoverPanel>
             <div className={classes.pageContent}>
               <h3>{t('api_delegation.new_org_accordion_content_text')}</h3>
               <div className={classes.pageContentAccordionsContainer}>
