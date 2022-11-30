@@ -86,3 +86,7 @@ Run 'yarn lint' to run lint checks
 To create a distributable bundle, run `yarn build`. Environment variables set at build time will be baked into the bundle (e.g. `VITE_DEFAULT_LOCALE=en yarn build`). See the resulting `dist/index.html` for an example on how to load the build. At the moment you have to search for "/locales/${t.language}.json" and change it to "./locales/${t.language}.json".
 
 If the bundled files are to be served from a path other than the server root, you must pass the `--base=/path/to/folder/` argument to `yarn build`. The trailing slash is important.
+
+## Common problems in vs code
+1. Sometimes it's needed to restart eslint for it to work properly. E.g. When switching branches, eslint hangs sometimes. To fix this problem in vs code: Do the hot key for workbench.action.quickNaviagtePreviousInFilePicker and run command 'restart eslint server' or restart vs code.
+2. It's a common problem when writing reducers in rtk; invalid typescript-errors, prettier and lint-errors occur saying e.g. ',' is missing when in reality it's not. My suggestion is to restart vs code or ignore the error(if it's still possible to run the code). 
