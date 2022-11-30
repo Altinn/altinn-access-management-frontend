@@ -14,7 +14,7 @@ import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice
 
 import classes from './NewDelegationAccordion.module.css';
 
-export enum AccordionButtonType {
+export enum NewDelegationAccordionButtonType {
   Add = 'add',
   Remove = 'remove',
 }
@@ -24,7 +24,7 @@ export interface NewDelegationAccordionProps {
   subtitle: string;
   hasOrgNr?: boolean;
   description: string;
-  buttonType: AccordionButtonType;
+  buttonType: NewDelegationAccordionButtonType;
   callback: () => { payload: DelegableOrg | DelegableApi; type: string };
 }
 
@@ -40,7 +40,7 @@ export const NewDelegationAccordion = ({
 
   const actions = (
     <>
-      {buttonType === AccordionButtonType.Add && (
+      {buttonType === NewDelegationAccordionButtonType.Add && (
         <Button
           iconName={'AddCircle'}
           variant={ButtonVariant.Quiet}
@@ -49,7 +49,7 @@ export const NewDelegationAccordion = ({
           aria-label={'soft-add'}
         ></Button>
       )}
-      {buttonType === AccordionButtonType.Remove && (
+      {buttonType === NewDelegationAccordionButtonType.Remove && (
         <Button
           iconName={'MinusCircle'}
           variant={ButtonVariant.Quiet}

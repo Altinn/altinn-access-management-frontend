@@ -1,1 +1,4 @@
-export { NewDelegationAccordion, AccordionButtonType } from './NewDelegationAccordion';
+export {
+  NewDelegationAccordion,
+  NewDelegationAccordionButtonType as AccordionButtonType,
+} from './NewDelegationAccordion';
