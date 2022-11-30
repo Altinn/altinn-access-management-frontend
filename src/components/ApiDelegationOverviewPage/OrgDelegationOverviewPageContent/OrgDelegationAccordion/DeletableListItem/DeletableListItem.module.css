@@ -1,0 +1,35 @@
+.deleteSection {
+    display: flex;
+    align-items: center;
+}
+
+.listItem {
+  --listItemHorizontalMargin: 1rem;
+  display: flex;
+  margin-top: var(--listItemHorizontalMargin);
+  margin-bottom: var(--listItemHorizontalMargin);
+}
+
+.itemText {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+
+.itemText__softDelete {
+  text-decoration: line-through;
+  opacity: 70%;
+}
+
+.listItemTexts {
+  margin-right: 1.5rem;
+}
+
+.apiListItem {
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+}
+
+.ownerListItem {
+  margin-bottom: 0.7rem;
+}

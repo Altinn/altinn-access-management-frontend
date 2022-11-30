@@ -1,12 +1,17 @@
-.saveSection{
-    margin-top: 3rem;
-    margin-right: 0.5rem;
-    display: flex;
-    float: right;
-    justify-content: space-around;
+.pageContent{
+  --pageContentMargin: 1.5rem;
+  margin-left: var(--pageContentMargin);
+  margin-right: var(--pageContentMargin);
+  margin-bottom: var(--pageContentMargin);
+  padding: 0.5rem;
+  overflow: hidden;
 }
 
-.pageContent{
-    margin: 2rem;
-    overflow: hidden;
+.page{
+  --page-vertical-margins: 8rem;
+  width: 1055px;
+  margin: auto;
+  margin-top: var(--page-vertical-margins);
+  margin-bottom: var(--page-vertical-margins);
 }
+

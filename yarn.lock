@@ -5,11 +5,11 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@altinn/altinn-design-system@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "@altinn/altinn-design-system@npm:0.18.0"
+"@altinn/altinn-design-system@npm:^0.23.3":
+  version: 0.23.3
+  resolution: "@altinn/altinn-design-system@npm:0.23.3"
   dependencies:
-    "@altinn/figma-design-tokens": ^4.2.0
+    "@altinn/figma-design-tokens": ^4.3.0
     "@navikt/ds-icons": ^1.3.38
     "@radix-ui/react-popover": ^1.0.0
     "@react-hookz/web": ^16.0.0
@@ -19,11 +19,11 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 5edca1108653d3d21853853d8f76979091cc17370a8361fda6a9972de229cae955343d99137c1ab9d60cdccfa8d12ffbde3d4ffdbe7faa11666b3f03a6b18271
+  checksum: b222062a2eef00880ce83870cc15135a42add0af56b8b5140e478ffc14af9d010de4be331e2603c0462253b4094b77c26763b3162efa6d8e700975bd08fae896
   languageName: node
   linkType: hard
 
-"@altinn/figma-design-tokens@npm:^4.2.0":
+"@altinn/figma-design-tokens@npm:^4.3.0":
   version: 4.3.0
   resolution: "@altinn/figma-design-tokens@npm:4.3.0"
   checksum: dac7b1b98a354bafa0ce627ae9fdf34215101fb57669576795d7b40c48dd41761b301ba62ec9026a99a5f21838aee6c4d26c851572ea8f334eb421c94b659a4d
@@ -1223,15 +1223,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/redux-logger@npm:^3.0.9":
-  version: 3.0.9
-  resolution: "@types/redux-logger@npm:3.0.9"
-  dependencies:
-    redux: ^4.0.0
-  checksum: c41fdc09198fae2d62ff7d6bd029ccae1fed655e6a7abd40614a8db5d6e01adbe565881b2c8d398789804a48259e3399af3939f994a532c11904ba2021799275
-  languageName: node
-  linkType: hard
-
 "@types/scheduler@npm:*":
   version: 0.16.2
   resolution: "@types/scheduler@npm:0.16.2"
@@ -2291,13 +2282,6 @@ __metadata:
   dependencies:
     ms: ^2.1.1
   checksum: b3d8c5940799914d30314b7c3304a43305fd0715581a919dacb8b3176d024a782062368405b47491516d2091d6462d4d11f2f4974a405048094f8bfebfa3071c
-  languageName: node
-  linkType: hard
-
-"deep-diff@npm:^0.3.5":
-  version: 0.3.8
-  resolution: "deep-diff@npm:0.3.8"
-  checksum: 8a0fb6cbe468e50211836f8daa1c14798b2d7436bfbcb7d8eb0902e0d61bf1dfd48d5b9edd46a10596182b90ad25f87461b8e55111ff9257b6067ad0676f79c9
   languageName: node
   linkType: hard
 
@@ -5437,12 +5421,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-app@workspace:."
   dependencies:
-    "@altinn/altinn-design-system": ^0.18.0
+    "@altinn/altinn-design-system": ^0.23.3
     "@reduxjs/toolkit": ^1.8.6
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21
     "@types/react-dom": ^18.0.6
-    "@types/redux-logger": ^3.0.9
     "@typescript-eslint/eslint-plugin": ^5.40.1
     "@vitejs/plugin-react": ^2.1.0
     axios: ^1.1.3
@@ -5468,7 +5451,6 @@ __metadata:
     react-query: ^3.39.2
     react-redux: ^8.0.4
     react-router-dom: ^6.4.2
-    redux-logger: ^3.0.6
     typescript: 4.8.4
     vite: ^3.1.8
     vite-plugin-svgr: ^2.2.2
@@ -5704,15 +5686,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-logger@npm:^3.0.6":
-  version: 3.0.6
-  resolution: "redux-logger@npm:3.0.6"
-  dependencies:
-    deep-diff: ^0.3.5
-  checksum: c40f63c44c6475cf6374ae0eaa810d913f142614cb80692a0beacaf135c5dc3eb3e2cdd4296f01446ba48cb69b82e81363b84d829f1f6659382c991022a814ac
-  languageName: node
-  linkType: hard
-
 "redux-thunk@npm:^2.4.2":
   version: 2.4.2
   resolution: "redux-thunk@npm:2.4.2"
@@ -5722,7 +5695,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0, redux@npm:^4.2.0":
+"redux@npm:^4.2.0":
   version: 4.2.0
   resolution: "redux@npm:4.2.0"
   dependencies:
