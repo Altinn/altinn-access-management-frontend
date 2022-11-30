@@ -172,9 +172,8 @@ const overviewOrgSlice = createSlice({
 
       setAllItemsToGivenSoftDeleteState(state, selectedOrgId, true);
     },
-    emptySoftDeletedItems: (state) => {
+    restoreAllSoftDeletedItems: (state) => {
       for (const org of state.overviewOrgs) {
-        org.isAllSoftDeleted = false;
         for (const item of org.apiList) {
           item.isSoftDelete = false;
         }
@@ -191,5 +190,5 @@ export const {
   softDeleteAll,
   softRestoreAll,
   save,
-  emptySoftDeletedItems,
+  restoreAllSoftDeletedItems,
 } = overviewOrgSlice.actions;
