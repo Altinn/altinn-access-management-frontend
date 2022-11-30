@@ -14,7 +14,7 @@ import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import { softDelete, softUndo } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { softDelete, softRestore } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
@@ -26,20 +26,25 @@ import { DeletableListItem } from './DeletableListItem';
 export interface OrgDelegationAccordionProps {
   organization: OverviewOrg;
   isEditable: boolean;
-  softUndoAllCallback: (organization: OverviewOrg) => void;
-  softDeleteAllCallback: (organization: OverviewOrg) => void;
+  softRestoreAllCallback: () => void;
+  softDeleteAllCallback: () => void;
 }
 
 export const OrgDelegationAccordion = ({
   organization,
-  softUndoAllCallback,
+  softRestoreAllCallback,
   softDeleteAllCallback,
   isEditable = false,
 }: OrgDelegationAccordionProps) => {
-  const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
   const dispatch = useAppDispatch();
-  const numberOfAccesses = organization.listItems.length.toString();
+  const numberOfAccesses = organization.apiList.length.toString();
+  const [open, setOpen] = useState(false);
+
+  const handleSoftDeleteAll = () => {
+    softDeleteAllCallback();
+    setOpen(true);
+  };
 
   const readonlyActions = (
     <>
@@ -80,7 +85,7 @@ export const OrgDelegationAccordion = ({
           color={ButtonColor.Secondary}
           size={ButtonSize.Small}
           svgIconComponent={<Cancel />}
-          onClick={() => softUndoAllCallback(organization)}
+          onClick={softRestoreAllCallback}
         >
           {t('api_delegation.undo')}
         </Button>
@@ -91,7 +96,7 @@ export const OrgDelegationAccordion = ({
             color={ButtonColor.Danger}
             svgIconComponent={<MinusCircle />}
             size={ButtonSize.Small}
-            onClick={() => softDeleteAllCallback(organization)}
+            onClick={handleSoftDeleteAll}
           >
             {t('api_delegation.delete')}
           </Button>
@@ -100,25 +105,15 @@ export const OrgDelegationAccordion = ({
     </>
   );
 
-  const listItems = organization.listItems.map((item, i) => (
+  const listItems = organization.apiList.map((item, i) => (
     <DeletableListItem
       key={i}
-      softDeleteCallback={() => dispatch(softDelete([organization, item]))}
-      softUndoCallback={() => dispatch(softUndo([organization, item]))}
-      overviewOrg={organization}
+      softDeleteCallback={() => dispatch(softDelete([organization.id, item.id]))}
+      softRestoreCallback={() => dispatch(softRestore([organization.id, item.id]))}
       item={item}
       isEditable={isEditable}
     ></DeletableListItem>
   ));
-
-  const handleActions = () => {
-    if (isEditable) {
-      return editActions;
-    } else if (!isEditable && !organization.isAllSoftDeleted) {
-      return readonlyActions;
-    }
-    return editActions;
-  };
 
   return (
     <Accordion
@@ -126,8 +121,8 @@ export const OrgDelegationAccordion = ({
       open={open}
     >
       <AccordionHeader
-        actions={handleActions()}
-        subtitle={t('api_delegation.orgNr') + ' ' + organization.orgNr}
+        actions={isEditable ? editActions : readonlyActions}
+        subtitle={t('api_delegation.org_nr') + ' ' + organization.orgNr}
       >
         <div
           className={cn({

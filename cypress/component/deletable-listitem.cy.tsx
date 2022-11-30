@@ -22,7 +22,7 @@ describe('DeletableListItem', () => {
       name: 'Evry',
       isAllSoftDeleted: false,
       orgNr: '123456789',
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -34,25 +34,12 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndo = () => {
-      cy.stub();
-    };
-
-    const softUndoSpy = cy.spy(softUndo).as('softUndoSpy');
-
-    const softDelete = () => {
-      cy.stub();
-    };
-
-    const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
-
     cy.mount(
       <List>
         <DeletableListItem
-          overviewOrg={overviewOrg}
-          softDeleteCallback={softDeleteSpy}
-          softUndoCallback={softUndoSpy}
-          item={overviewOrg.listItems[0]}
+          softDeleteCallback={() => null}
+          softRestoreCallback={() => null}
+          item={overviewOrg.apiList[0]}
           isEditable={true}
         />
       </List>,
@@ -66,7 +53,7 @@ describe('DeletableListItem', () => {
       name: 'Evry',
       isAllSoftDeleted: false,
       orgNr: '123456789',
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -78,25 +65,12 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndo = () => {
-      cy.stub();
-    };
-
-    const softUndoSpy = cy.spy(softUndo).as('softUndoSpy');
-
-    const softDelete = () => {
-      cy.stub();
-    };
-
-    const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
-
     cy.mount(
       <List>
         <DeletableListItem
-          overviewOrg={overviewOrg}
-          softDeleteCallback={softDeleteSpy}
-          softUndoCallback={softUndoSpy}
-          item={overviewOrg.listItems[0]}
+          softDeleteCallback={() => null}
+          softRestoreCallback={() => null}
+          item={overviewOrg.apiList[0]}
           isEditable={false}
         />
       </List>,
@@ -110,7 +84,7 @@ describe('DeletableListItem', () => {
       name: 'Evry',
       isAllSoftDeleted: true,
       orgNr: '123456789',
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -122,25 +96,12 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndo = () => {
-      cy.stub();
-    };
-
-    const softUndoSpy = cy.spy(softUndo).as('softUndoSpy');
-
-    const softDelete = () => {
-      cy.stub();
-    };
-
-    const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
-
     cy.mount(
       <List>
         <DeletableListItem
-          overviewOrg={overviewOrg}
-          softDeleteCallback={softDeleteSpy}
-          softUndoCallback={softUndoSpy}
-          item={overviewOrg.listItems[0]}
+          softDeleteCallback={() => null}
+          softRestoreCallback={() => null}
+          item={overviewOrg.apiList[0]}
           isEditable={true}
         />
       </List>,
@@ -160,7 +121,7 @@ describe('DeletableListItem', () => {
       name: 'Evry',
       isAllSoftDeleted: false,
       orgNr: '123456789',
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -172,25 +133,18 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndoAll = () => {
+    const softDelete = () => {
       cy.stub();
     };
 
-    const softUndoSpy = cy.spy(softUndoAll).as('softUndoSpy');
-
-    const softDeleteAll = () => {
-      cy.stub();
-    };
-
-    const softDeleteSpy = cy.spy(softDeleteAll).as('softDeleteSpy');
+    const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
 
     cy.mount(
       <List>
         <DeletableListItem
-          overviewOrg={overviewOrg}
           softDeleteCallback={softDeleteSpy}
-          softUndoCallback={softUndoSpy}
-          item={overviewOrg.listItems[0]}
+          softRestoreCallback={() => null}
+          item={overviewOrg.apiList[0]}
           isEditable={true}
         />
       </List>,
@@ -200,13 +154,13 @@ describe('DeletableListItem', () => {
     cy.get('@softDeleteSpy').should('have.been.called');
   });
 
-  it('should do softUndoCallback on button click', () => {
+  it('should do softRestoreCallback on button click', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
       name: 'Evry',
       isAllSoftDeleted: true,
       orgNr: '123456789',
-      listItems: [
+      apiList: [
         {
           id: '1',
           name: 'Delegert API A',
@@ -218,31 +172,24 @@ describe('DeletableListItem', () => {
       ],
     };
 
-    const softUndoAll = () => {
+    const softRestore = () => {
       cy.stub();
     };
 
-    const softUndoSpy = cy.spy(softUndoAll).as('softUndoSpy');
-
-    const softDeleteAll = () => {
-      cy.stub();
-    };
-
-    const softDeleteSpy = cy.spy(softDeleteAll).as('softDeleteSpy');
+    const softRestoreSpy = cy.spy(softRestore).as('softRestoreSpy');
 
     cy.mount(
       <List>
         <DeletableListItem
-          overviewOrg={overviewOrg}
-          softDeleteCallback={softDeleteSpy}
-          softUndoCallback={softUndoSpy}
-          item={overviewOrg.listItems[0]}
+          softDeleteCallback={() => null}
+          softRestoreCallback={softRestoreSpy}
+          item={overviewOrg.apiList[0]}
           isEditable={true}
         />
       </List>,
     );
 
     cy.findByRole('button', { name: /undo/i }).click();
-    cy.get('@softUndoSpy').should('have.been.called');
+    cy.get('@softRestoreSpy').should('have.been.called');
   });
 });

@@ -20,7 +20,7 @@
     "access_to_api_delegations": "Delegerte tilgangar til Programmeringsgrensesnitt - API",
     "you_have_delegated_accesses": "Du har tidlegare delegert disse tilgangane:",
     "api_panel_content": "API er eit grensesnitt som blir brukt for å utveksla data mellom to ulike system eller appar. Når APIet til to system er kopla saman, opnar det opp for ei straumlinjeforma deling av data og automatiserte prosessar.",
-    "orgNr": "Org.nr.",
+    "org_nr": "Org.nr.",
     "editAccesses": "Rediger tilgangar",
     "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder.",
     "cancel": "Avbryt",
@@ -30,6 +30,9 @@
     "businesses_going_to_get_access":"Verksemder som skal få rett:",
     "previous":"Forrige",
     "next": "Neste",
-    "add_new_business": "Add new business"
+    "add_new_business": "Add new business",
+    "undo": "Angra",
+    "edit_accesses": "Rediger tilgangar",
+    "card_title": "Programmeringsgrensesnitt - API"
   }
 }

@@ -11,11 +11,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
-  emptySoftDeletedList,
+  restoreAllSoftDeletedItems,
   save,
-  setIsEditable,
   softDeleteAll,
-  softUndoAll,
+  softRestoreAll,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
@@ -25,35 +24,45 @@ import classes from './OrgDelegationOverviewPageContent.module.css';
 
 export const OrgDelegationOverviewPageContent = () => {
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const softDeletedItems = useAppSelector((state) => state.overviewOrg.softDeletedItems);
-  const isEditable = useAppSelector((state) => state.overviewOrg.overviewOrgIsEditable);
+  const [isEditable, setIsEditable] = useState(false);
   const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(true);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (softDeletedItems.length >= 1) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
+    handleSetDisabled();
   });
+
+  const handleSetDisabled = () => {
+    for (const org of overviewOrgs) {
+      if (org.isAllSoftDeleted) {
+        return setDisabled(false);
+      }
+      for (const api of org.apiList) {
+        if (api.isSoftDelete) {
+          return setDisabled(false);
+        }
+      }
+    }
+    setDisabled(true);
+  };
 
   const accordions = overviewOrgs.map((org) => (
     <OrgDelegationAccordion
       key={org.id}
       organization={org}
       isEditable={isEditable}
-      softDeleteAllCallback={() => dispatch(softDeleteAll(org))}
-      softUndoAllCallback={() => dispatch(softUndoAll(org))}
+      softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+      softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
     ></OrgDelegationAccordion>
   ));
 
   const handleSetIsEditable = () => {
-    if (softDeletedItems.length === 0) {
-      dispatch(setIsEditable(!isEditable));
+    if (isEditable) {
+      dispatch(restoreAllSoftDeletedItems());
     }
+    setIsEditable(!isEditable);
   };
 
   return (
@@ -68,9 +77,7 @@ export const OrgDelegationOverviewPageContent = () => {
           {t('api_delegation.delegate_new_org')}
         </Button>
       </div>
-      <Panel title={'Programmeringsgrensesnitt - API'}>
-        {t('api_delegation.api_panel_content')}
-      </Panel>
+      <Panel title={t('api_delegation.card_title')}>{t('api_delegation.api_panel_content')}</Panel>
       <div className={classes.pageContentContainer}>
         <h2 className={classes.apiSubheading}>{t('api_delegation.you_have_delegated_accesses')}</h2>
         <div className={classes.editButton}>
@@ -81,13 +88,13 @@ export const OrgDelegationOverviewPageContent = () => {
               onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >
-              {t('api_delegation.editAccesses')}
+              {t('api_delegation.edit_accesses')}
             </Button>
           ) : (
             <Button
               variant={ButtonVariant.Quiet}
               svgIconComponent={<Edit />}
-              onClick={() => dispatch(emptySoftDeletedList())}
+              onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >
               {t('api_delegation.cancel')}
@@ -96,15 +103,17 @@ export const OrgDelegationOverviewPageContent = () => {
         </div>
       </div>
       <div className={classes.accordion}>{accordions}</div>
-      <div className={classes.saveSection}>
-        <Button
-          disabled={disabled}
-          onClick={() => dispatch(save())}
-          color={ButtonColor.Success}
-        >
-          {t('api_delegation.save')}
-        </Button>
-      </div>
+      {isEditable && (
+        <div className={classes.saveSection}>
+          <Button
+            disabled={disabled}
+            onClick={() => dispatch(save())}
+            color={ButtonColor.Success}
+          >
+            {t('api_delegation.save')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

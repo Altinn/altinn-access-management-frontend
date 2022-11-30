@@ -63,7 +63,7 @@ export const NewDelegationAccordion = ({
 
   const getSubtitle = () => {
     if (hasOrgNr) {
-      return hasOrgNr && t('api_delegation.orgNr') + ' ' + subtitle;
+      return hasOrgNr && t('api_delegation.org_nr') + ' ' + subtitle;
     }
     return subtitle;
   };

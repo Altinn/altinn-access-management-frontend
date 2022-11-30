@@ -1,17 +1,17 @@
 @media only screen and (min-width: 0px) {
-  .page{
+  .pageContainer{
       --pageContainer-width: 1055px;
   }
 }
 
 @media only screen and (min-width: 700px) {
-  .page{
+  .pageContainer{
     --pageContainer-width: 1055px;
   }
 }
 
 @media only screen and (min-width: 900px) {
-  .page{
+  .pageContainer{
     --pageContainer-width: 1055px;
   }
 }

@@ -2,24 +2,22 @@ import { Button, ButtonVariant, ListItem, ButtonColor } from '@altinn/altinn-des
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import type { OverviewListItem, OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import type { ApiListItem } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 
 import classes from './DeletableListItem.module.css';
 
 export interface DeletableListItemProps {
-  softDeleteCallback: (overviewOrg: OverviewOrg, item: OverviewListItem) => void;
-  softUndoCallback: (overviewOrg: OverviewOrg, item: OverviewListItem) => void;
-  overviewOrg: OverviewOrg;
-  item: OverviewListItem;
+  softDeleteCallback: () => void;
+  softRestoreCallback: () => void;
+  item: ApiListItem;
   isEditable: boolean;
 }
 
 export const DeletableListItem = ({
   softDeleteCallback,
-  softUndoCallback,
-  overviewOrg,
+  softRestoreCallback,
   item,
   isEditable,
 }: DeletableListItemProps) => {
@@ -31,7 +29,7 @@ export const DeletableListItem = ({
         <Button
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Secondary}
-          onClick={() => softUndoCallback(overviewOrg, item)}
+          onClick={softRestoreCallback}
           svgIconComponent={<Cancel />}
         >
           {t('api_delegation.undo')}
@@ -41,7 +39,7 @@ export const DeletableListItem = ({
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
           svgIconComponent={<MinusCircle />}
-          onClick={() => softDeleteCallback(overviewOrg, item)}
+          onClick={softDeleteCallback}
         >
           {t('api_delegation.delete')}
         </Button>
@@ -59,8 +57,8 @@ export const DeletableListItem = ({
           })}
         >
           <div className={classes.listItemTexts}>
-            <div>{item.name}</div>
-            <div>{item.owner}</div>
+            <div className={classes.apiListItem}>{item.name}</div>
+            <div className={classes.ownerListItem}>{item.owner}</div>
             <div>{item.description}</div>
           </div>
         </div>

@@ -11,26 +11,27 @@
     "change_rights": "Edit client rights"
   },
   "api_delegation": {
-    "businesses": "Virksomheitar",
+    "businesses": "Businesses",
     "delegated_apis": "Delegerte API",
-    "api_accesses": "API-tilgangar",
-    "delegate_new_api": "Deleger nytt API",
-    "delete": "Slett",
+    "api_accesses": "API-accesses",
+    "delegate_new_api": "Delegate new API",
+    "undo": "Undo",
+    "delete": "Delete",
     "delegate_new_org": "Delegate to new organisation",
     "save": "Save",
     "access_to_api_delegations": "Delegated accesses to application programming interface - API",
     "you_have_delegated_accesses": "You have earlier delegated these accesses:",
     "api_panel_content": "API is an interface used to exchange data between two different systems or apps. When the API of two systems is connected, it opens up for a streamlined sharing of data and automated processes.",
-    "orgNr": "Org.nr.",
-    "editAccesses": "Edit accesses",
+    "org_nr": "Org.nr.",
+    "edit_accesses": "Edit accesses",
     "api_overview_text": "Here you'll find an overview over the API-accesses your organisation has delegated to other organisations",
     "cancel": "Cancel",
+    "card_title": "Application programming interface - API",
     "give_access_to_new_api": "Give access to new API",
     "new_org_accordion_content_text": "Select which users will have access by clicking the plus sign. You can also add new.",
     "businesses_previously_delegated_to": "Businesses previously delegated to:",
     "businesses_going_to_get_access":"Businesses that will receive the right:",
     "previous":"Previous",
-    "next": "Next",
-    "add_new_business": "Add new business"
+    "next": "Next"
   }
 }
