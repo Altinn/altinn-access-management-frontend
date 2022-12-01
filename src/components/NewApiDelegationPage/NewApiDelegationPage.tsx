@@ -83,7 +83,7 @@ export const NewApiDelegationsPage = () => {
                   onChange={(e: any) => handleSearch(e.target.value)}
                 ></SearchField>
                 <Select
-                  label='Filtrer basert på utrsteder'
+                  label='Filtrer basert på utsteder'
                   deleteButtonLabel='Fjern alle'
                   multiple={true}
                   onChange={handleFilterChange}
