@@ -1,13 +1,10 @@
 import * as cypress from '@testing-library/cypress';
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
-import { List } from '@altinn/altinn-design-system';
 
-import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
 import { NewDelegationAccordion } from '@/components/Common/NewDelegationAccordion';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { OrgDelegationAccordion } from '@/components/ApiDelegationOverviewPage/OrgDelegationOverviewPageContent/OrgDelegationAccordion';
 import { NewDelegationAccordionButtonType } from '@/components/Common/NewDelegationAccordion/NewDelegationAccordion';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
