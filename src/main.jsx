@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
-import i18next from 'i18next';
+import { use } from 'i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { ErrorPage } from './resources/ErrorPage/ErrorPage';
-import { ApiDelegation } from './routes/ApiDelegation';
+import { Router } from '@/routes/Router';
+
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
@@ -23,26 +23,22 @@ const queryClientDevDefaults = {
   },
 };
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: 'api-delegations',
-    element: <ApiDelegation />,
-  },
-  {
-    path: 'new-api-delegations',
-    element: <NewApiDelegations />,
-    errorElement: <ErrorPage />,
-  },
-]);
+const initLanguage = (lang) => {
+  // get token here
+  if (lang === 'no_nb') {
+    return 'no_nb';
+  } else if (lang === 'en') {
+    return 'en';
+  } else if (lang === 'no_nn') {
+    return 'no_nn';
+  }
+};
 
 // Initialise i18next; start application when ready
-i18next.use(initReactI18next).init(
+use(initReactI18next).init(
   {
-    lng: getConfig('defaultLocale'),
+    lng: initLanguage('no_nb'),
+    fallbackLng: getConfig('defaultLocale'),
     ns: ['common', 'basic'],
     defaultNS: 'common',
     resources: BaseLocalizations,
@@ -59,7 +55,7 @@ i18next.use(initReactI18next).init(
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <LoadLocalizations>
-              <RouterProvider router={router} />
+              <RouterProvider router={Router} />
             </LoadLocalizations>
           </QueryClientProvider>
         </Provider>

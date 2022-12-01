@@ -1,18 +1,18 @@
 @media only screen and (min-width: 0px) {
   .pageContainer{
-      --pageContainer-width: 100%;
+      --pageContainer-width: 1055px;
   }
 }
 
 @media only screen and (min-width: 700px) {
   .pageContainer{
-    --pageContainer-width: 90%;
+    --pageContainer-width: 1055px;
   }
 }
 
 @media only screen and (min-width: 900px) {
   .pageContainer{
-    --pageContainer-width: 60%;
+    --pageContainer-width: 1055px;
   }
 }
 
@@ -42,13 +42,18 @@
   width: 100%;
 }
 
-.buttonContainer {
+.navButtonContainer {
   margin-top: 2rem;
   display: flex;
   justify-content: flex-end;
 }
 
-.button{
+.navButton{
   margin-right: 0.5rem;
   width: 10rem;
+}
+
+.accordionScrollContainer {
+  max-height: 300px;
+  overflow-y: auto;
 }

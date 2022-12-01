@@ -1,0 +1,37 @@
+.overviewAccordionsContainer{
+  margin-top: 3rem;
+}
+
+.saveSection{
+  margin-top: 3rem;
+  margin-right: 0.5rem;
+  display: flex;
+  float: right;
+  justify-content: space-around;
+}
+
+.delegateNewButton{
+  margin-bottom: 3rem; 
+}
+
+.apiSubheading{
+  margin-top: 4rem;
+  font-weight: normal;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+.pageContentContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.editButton {
+  align-self: flex-end;
+}
+
+.pageContentText {
+  font-weight: normal;
+  margin-top: -2rem;
+}

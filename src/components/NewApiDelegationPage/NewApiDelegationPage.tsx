@@ -10,23 +10,22 @@ import {
   ButtonColor,
   ButtonSize,
 } from '@altinn/altinn-design-system';
-import { useState } from 'react';
 import type { Key } from 'react';
+import { useState } from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { search } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
-import { ReactComponent as ApiIcon } from '../../assets/api.svg';
-import { useAppDispatch, useAppSelector } from '../../rtk/app/hooks';
-
+import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
-  const presentedApiList = useAppSelector((state: any) => state.delegableApi.presentedApiList);
-  const chosenApis = useAppSelector((state: any) => state.delegableApi.chosenDelegableApiList);
-  const [searchString, setSearchString] = useState('');
+  const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const dispatch = useAppDispatch();
+  const [searchString, setSearchString] = useState('');
   const [filter, setFilter] = useState<string[]>([]);
 
   const handleSearch = (searchText: string) => {
@@ -46,13 +45,14 @@ export const NewApiDelegationsPage = () => {
     { label: 'Bama', value: 'Bama', deleteButtonLabel: 'Slett' },
   ];
 
-  const delegableApiAccordions = presentedApiList.map(
+  const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
       return (
         <NewApiDelegationAccordion
           delegableApi={api}
           key={index}
           buttonType={AccordionButtonType.Add}
+          softAddCallback={() => dispatch(softAdd(api))}
         ></NewApiDelegationAccordion>
       );
     },
@@ -64,6 +64,7 @@ export const NewApiDelegationsPage = () => {
         delegableApi={api}
         key={index}
         buttonType={AccordionButtonType.Remove}
+        softRemoveCallback={() => dispatch(softRemove(api))}
       ></NewApiDelegationAccordion>
     );
   });
@@ -93,15 +94,15 @@ export const NewApiDelegationsPage = () => {
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
                   <h4>Delegerbare API:</h4>
-                  {delegableApiAccordions}
+                  <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
                 </div>
                 <div className={classes.apiAccordions}>
                   <h4>Valgte API:</h4>
-                  {chosenApiAccordions}
+                  <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
-              <div className={classes.buttonContainer}>
-                <div className={classes.button}>
+              <div className={classes.navButtonContainer}>
+                <div className={classes.navButton}>
                   <Button
                     color={ButtonColor.Primary}
                     variant={ButtonVariant.Outline}
@@ -111,7 +112,7 @@ export const NewApiDelegationsPage = () => {
                     Forrige
                   </Button>
                 </div>
-                <div className={classes.button}>
+                <div className={classes.navButton}>
                   <Button
                     color={ButtonColor.Primary}
                     variant={ButtonVariant.Filled}

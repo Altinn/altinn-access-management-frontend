@@ -1,14 +1,16 @@
-import { Accordion, AccordionHeader, AccordionContent } from '@altinn/altinn-design-system';
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionContent,
+  ButtonVariant,
+  ButtonColor,
+  Button,
+} from '@altinn/altinn-design-system';
 import { useState } from 'react';
-import classNames from 'classnames';
-
-import classes from './NewApiDelegationAccordion.module.css';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { ReactComponent as AddIcon } from '@/assets/add--circle.svg';
-import { useAppDispatch } from '@/rtk/app/hooks';
-import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { ReactComponent as MinusIcon } from '@/assets/minus--circle.svg';
+
+import classes from './NewApiDelegationAccordion.module.css';
 
 export enum AccordionButtonType {
   Add = 'add',
@@ -18,33 +20,43 @@ export enum AccordionButtonType {
 export interface NewApiDelegationAccordionProps {
   delegableApi: DelegableApi;
   buttonType: AccordionButtonType;
+  softAddCallback?: () => { payload: DelegableApi; type: 'delegableApi/softAdd' };
+  softRemoveCallback?: () => { payload: DelegableApi; type: 'delegableApi/softRemove' };
 }
 
-export const NewApiDelegationAccordion = ({ delegableApi, buttonType }: NewApiDelegationAccordionProps) => {
+export const NewApiDelegationAccordion = ({
+  delegableApi,
+  buttonType,
+  softAddCallback,
+  softRemoveCallback,
+}: NewApiDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const handleSoftAdd = (delegableApi: DelegableApi) => {
-    dispatch(softAdd(delegableApi));
-  };
-
-  const handleSoftRemove = (delegableApi: DelegableApi) => {
-    dispatch(softRemove(delegableApi));
-  };
 
   const actions = (
     <>
-      {buttonType === AccordionButtonType.Add && AccordionButtonType.Add && (
-        <AddIcon onClick={() => handleSoftAdd(delegableApi)}></AddIcon>
+      {buttonType === AccordionButtonType.Add && (
+        <Button
+          iconName={'AddCircle'}
+          variant={ButtonVariant.Quiet}
+          color={ButtonColor.Success}
+          onClick={softAddCallback}
+          aria-label={'soft-add'}
+        ></Button>
       )}
       {buttonType === AccordionButtonType.Remove && (
-        <MinusIcon onClick={() => handleSoftRemove(delegableApi)}></MinusIcon>
+        <Button
+          iconName={'MinusCircle'}
+          variant={ButtonVariant.Quiet}
+          color={ButtonColor.Danger}
+          onClick={softRemoveCallback}
+          aria-label={'soft-remove'}
+        ></Button>
       )}
     </>
   );
 
   return (
-    <div className={classes.accordionContainer}>
+    <div>
       <Accordion
         open={open}
         onClick={() => setOpen(!open)}
@@ -55,7 +67,9 @@ export const NewApiDelegationAccordion = ({ delegableApi, buttonType }: NewApiDe
         >
           {delegableApi.name}
         </AccordionHeader>
-        <AccordionContent>{delegableApi.description}</AccordionContent>
+        <AccordionContent>
+          <div className={classes.newApiAccordionContent}>{delegableApi.description}</div>
+        </AccordionContent>
       </Accordion>
     </div>
   );

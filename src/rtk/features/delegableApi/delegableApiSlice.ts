@@ -15,12 +15,12 @@ export interface SearchProps {
   description: boolean;
 }
 
-interface InitialState {
+export interface InitialState {
   loading: boolean;
   delegableApiList: DelegableApi[];
   presentedApiList: DelegableApi[];
   chosenDelegableApiList: DelegableApi[];
-  search: SearchProps;
+  search?: SearchProps;
   error: string;
 }
 
