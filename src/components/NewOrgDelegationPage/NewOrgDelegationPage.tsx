@@ -60,7 +60,7 @@ export const NewOrgDelegationPage = () => {
     <div>
       <div className={classes.page}>
         <Page>
-          <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
               <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>

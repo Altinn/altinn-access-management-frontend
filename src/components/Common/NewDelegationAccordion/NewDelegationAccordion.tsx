@@ -11,6 +11,8 @@ import { t } from 'i18next';
 
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
 import classes from './NewDelegationAccordion.module.css';
 
@@ -42,7 +44,7 @@ export const NewDelegationAccordion = ({
     <>
       {buttonType === NewDelegationAccordionButtonType.Add && (
         <Button
-          iconName={'AddCircle'}
+          icon={<AddCircle />}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Success}
           onClick={callback}
@@ -51,7 +53,7 @@ export const NewDelegationAccordion = ({
       )}
       {buttonType === NewDelegationAccordionButtonType.Remove && (
         <Button
-          iconName={'MinusCircle'}
+          icon={<MinusCircle />}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
           onClick={callback}

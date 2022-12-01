@@ -9,6 +9,7 @@ import {
   ButtonSize,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
@@ -23,6 +24,7 @@ export const NewApiDelegationsPage = () => {
   const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation('common');
 
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
@@ -56,7 +58,7 @@ export const NewApiDelegationsPage = () => {
     <div>
       <div className={classes.page}>
         <Page>
-          <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
               <h2>Gi tilgang til API</h2>
