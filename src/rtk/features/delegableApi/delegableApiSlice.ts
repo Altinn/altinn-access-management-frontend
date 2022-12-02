@@ -35,7 +35,7 @@ const initialState: InitialState = {
   error: '',
 };
 
-// example code for
+// example code for populating accordions later on
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     .get('https://jsonplaceholder.typicode.com/users')
