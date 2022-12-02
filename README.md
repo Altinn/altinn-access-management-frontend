@@ -2,7 +2,7 @@
 
 ## Getting started 🚀
 
-To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` to install dependencies and then `yarn start` to start the development environment. Go to src/routes/Router to see different urls to different components. The current prefix is http://localhost:5173 (but this might changed).
+To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment. Go to src/routes/Router to see different urls to different components. The current prefix is http://localhost:5173 (but this might changed).
 
 ## Project organisation 🧩
 
@@ -29,22 +29,23 @@ components\
 
 
 If the subcomponents are reusable and being used by other classes
-components\
-  ComponentName\
+components/
+  ComponentName/
     - ComponentName.tsx
     - ComponentName.test.tsx (unit tests)
     - index.ts (public interface for the component)
     - style.css (if needed)
-  SubComponent1\
-    - SubComponent1.tsx (if the subcomponent is not reusable)
-    - SubComponent1.test.tsx (unit tests)
-    - index.ts (public interface for the component)
-    - style.css (if needed)
-  SubComponent2\
-    - SubComponent2.tsx (if the subcomponent is not reusable)
-    - SubComponent2.test.tsx (unit tests)
-    - index.ts (public interface for the component)
-    - style.css (if needed)
+  Common/
+    SubComponent1/
+      - SubComponent1.tsx (if the subcomponent is not reusable)
+      - SubComponent1.test.tsx (unit tests)
+      - index.ts (public interface for the component)
+      - style.css (if needed)
+    SubComponent2/
+      - SubComponent2.tsx (if the subcomponent is not reusable)
+      - SubComponent2.test.tsx (unit tests)
+      - index.ts (public interface for the component)
+      - style.css (if needed)
 
 ```
 
