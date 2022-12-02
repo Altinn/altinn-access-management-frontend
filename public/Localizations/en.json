@@ -32,6 +32,7 @@
     "businesses_previously_delegated_to": "Businesses previously delegated to:",
     "businesses_going_to_get_access":"Businesses that will receive the right:",
     "previous":"Previous",
-    "next": "Next"
+    "next": "Next",
+    "add_new_business": "Add new business",
   }
 }

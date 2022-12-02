@@ -16,7 +16,7 @@ Cypress.Commands.add('mount', (component, options = {}) => {
 });
 
 describe('NewDelegationAccordion', () => {
-  it('should do callback when button with label-text soft-add is clicked', () => {
+  it('should do callback when button with aria-label "soft-add" is clicked', () => {
     const delegableOrg: DelegableOrg = {
       id: '1',
       orgName: 'Skatteetaten',
@@ -45,7 +45,7 @@ describe('NewDelegationAccordion', () => {
     cy.get('@callbackSpy').should('have.been.called');
   });
 
-  it('should do callback when button with label-text soft-remove is clicked', () => {
+  it('should do callback when button with aria-label "soft-remove" is clicked', () => {
     const delegableOrg: DelegableOrg = {
       id: '1',
       orgName: 'Skatteetaten',
