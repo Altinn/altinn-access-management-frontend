@@ -2,7 +2,7 @@
 
 ## Getting started 🚀
 
-To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment.
+To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment. Go to src/routes/Router to see different urls to different components. The current prefix is http://localhost:5173 (but this might changed).
 
 ## Project organisation 🧩
 
