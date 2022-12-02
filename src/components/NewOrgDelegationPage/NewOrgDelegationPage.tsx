@@ -14,9 +14,11 @@ import { useNavigate } from 'react-router-dom';
 import { softAdd, softRemove } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-
-import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { NewDelegationAccordion, AccordionButtonType } from '../Common/NewDelegationAccordion';
+import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import {
+  NewDelegationAccordion,
+  NewDelegationAccordionButtonType,
+} from '@/components/Common/NewDelegationAccordion';
 
 import classes from './NewOrgDelegationPage.module.css';
 
@@ -36,7 +38,7 @@ export const NewOrgDelegationPage = () => {
         hasOrgNr={true}
         description={org.description}
         key={index}
-        buttonType={AccordionButtonType.Add}
+        buttonType={NewDelegationAccordionButtonType.Add}
         callback={() => dispatch(softAdd(org))}
       ></NewDelegationAccordion>
     );
@@ -50,7 +52,7 @@ export const NewOrgDelegationPage = () => {
         hasOrgNr={true}
         description={org.description}
         key={index}
-        buttonType={AccordionButtonType.Remove}
+        buttonType={NewDelegationAccordionButtonType.Remove}
         callback={() => dispatch(softRemove(org))}
       ></NewDelegationAccordion>
     );

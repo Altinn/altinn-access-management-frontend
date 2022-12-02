@@ -16,7 +16,10 @@ import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSli
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { AccordionButtonType, NewDelegationAccordion } from '../Common/NewDelegationAccordion';
+import {
+  NewDelegationAccordionButtonType,
+  NewDelegationAccordion,
+} from '../Common/NewDelegationAccordion';
 
 import classes from './NewApiDelegationPage.module.css';
 
@@ -34,7 +37,7 @@ export const NewApiDelegationsPage = () => {
           subtitle={api.orgName}
           description={api.description}
           key={index}
-          buttonType={AccordionButtonType.Add}
+          buttonType={NewDelegationAccordionButtonType.Add}
           callback={() => dispatch(softAdd(api))}
         ></NewDelegationAccordion>
       );
@@ -48,7 +51,7 @@ export const NewApiDelegationsPage = () => {
         subtitle={api.orgName}
         description={api.description}
         key={index}
-        buttonType={AccordionButtonType.Remove}
+        buttonType={NewDelegationAccordionButtonType.Remove}
         callback={() => dispatch(softRemove(api))}
       ></NewDelegationAccordion>
     );
