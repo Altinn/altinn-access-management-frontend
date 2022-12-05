@@ -34,12 +34,11 @@ export const NewOrgDelegationPage = () => {
     return (
       <NewDelegationAccordion
         title={org.orgName}
-        subtitle={org.orgNr}
-        hasOrgNr={true}
+        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
         description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Add}
-        callback={() => dispatch(softAdd(org))}
+        onActionClick={() => dispatch(softAdd(org))}
       ></NewDelegationAccordion>
     );
   });
@@ -48,12 +47,11 @@ export const NewOrgDelegationPage = () => {
     return (
       <NewDelegationAccordion
         title={org.orgName}
-        subtitle={org.orgNr}
-        hasOrgNr={true}
+        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
         description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        callback={() => dispatch(softRemove(org))}
+        onActionClick={() => dispatch(softRemove(org))}
       ></NewDelegationAccordion>
     );
   });
