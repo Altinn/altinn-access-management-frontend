@@ -3912,7 +3912,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^22.0.2":
+"i18next@npm:^22.0.4":
   version: 22.0.6
   resolution: "i18next@npm:22.0.6"
   dependencies:

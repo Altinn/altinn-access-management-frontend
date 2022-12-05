@@ -8,6 +8,14 @@ export interface DelegableApi {
   description: string;
 }
 
+export interface DelegableApiWithPriority {
+  id: string;
+  name: string;
+  orgName: string;
+  description: string;
+  priority: number;
+}
+
 export interface SearchProps {
   id: boolean;
   name: boolean;
@@ -15,16 +23,15 @@ export interface SearchProps {
   description: boolean;
 }
 
-export interface InitialState {
+export interface SliceState {
   loading: boolean;
   delegableApiList: DelegableApi[];
   presentedApiList: DelegableApi[];
   chosenDelegableApiList: DelegableApi[];
-  search?: SearchProps;
   error: string;
 }
 
-const initialState: InitialState = {
+const initialState: SliceState = {
   loading: false,
   delegableApiList: [
     {
@@ -105,7 +112,7 @@ const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
-    softAdd: (state, action) => {
+    softAdd: (state: SliceState, action: any) => {
       const { delegableApiList } = state;
       const { presentedApiList } = state;
       state.delegableApiList = delegableApiList.filter(
@@ -117,7 +124,7 @@ const delegableApiSlice = createSlice({
 
       state.chosenDelegableApiList.push(action.payload);
     },
-    softRemove: (state, action) => {
+    softRemove: (state: SliceState, action: any) => {
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
 
@@ -126,16 +133,50 @@ const delegableApiSlice = createSlice({
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
-    search: (state, action) => {
+    search: (state: SliceState, action: any) => {
       const { delegableApiList } = state;
-      const searchText = action.payload.trim().toLowerCase();
-      console.log(searchText);
-      state.presentedApiList = delegableApiList.filter(
-        (delegableApi) =>
-          delegableApi.name.toLowerCase().includes(searchText) ||
-          delegableApi.description.toLowerCase().includes(searchText) ||
-          delegableApi.orgName.toLowerCase().includes(searchText),
-      );
+      const filterList = action.payload[1];
+      const searchText = action.payload[0].trim().toLowerCase();
+      const seachWords = searchText ? searchText.split(' ') : [];
+
+      let searchPool = [...delegableApiList];
+      if (filterList && filterList.length > 0) {
+        searchPool = delegableApiList.filter((api) =>
+          filterList.some((filter: string) => {
+            if (api.orgName.toLocaleLowerCase().includes(filter.toLowerCase())) {
+              return true;
+            }
+            return false;
+          }),
+        );
+      }
+
+      const prioritizedApiList: DelegableApiWithPriority[] = [];
+      if (searchText) {
+        for (const api of searchPool) {
+          let numMatches = 0;
+          for (const word of seachWords) {
+            if (
+              api.name.toLowerCase().includes(word) ||
+              api.description.toLowerCase().includes(word) ||
+              api.orgName.toLowerCase().includes(word)
+            ) {
+              numMatches++;
+            }
+          }
+          if (numMatches > 0) {
+            prioritizedApiList.push({ ...api, priority: numMatches });
+          }
+        }
+
+        console.log(prioritizedApiList);
+        state.presentedApiList = prioritizedApiList
+          .sort((a, b) => (a.priority < b.priority ? 1 : -1))
+          .map(({ priority, ...otherAttr }) => otherAttr);
+        console.log(state.presentedApiList);
+      } else {
+        state.presentedApiList = searchPool;
+      }
     },
   },
 });

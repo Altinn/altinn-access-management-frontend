@@ -14,28 +14,29 @@ import type { Key } from 'react';
 import { useState } from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softAdd, softRemove, search } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
+
 import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
-  const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
+  const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
-  const [filter, setFilter] = useState<string[]>([]);
+  const [filters, setFilter] = useState<string[]>([]);
 
   const handleSearch = (searchText: string) => {
     setSearchString(searchText);
-    dispatch(search(searchText));
+    dispatch(search([searchText, filters]));
   };
 
   const handleFilterChange = (e: string[]) => {
     setFilter(e);
-    console.log(filter);
+    dispatch(search([searchString, e]));
   };
 
   const filterOptions: MultiSelectOption[] = [
