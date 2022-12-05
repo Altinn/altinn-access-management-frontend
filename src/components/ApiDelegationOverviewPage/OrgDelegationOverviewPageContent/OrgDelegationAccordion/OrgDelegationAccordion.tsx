@@ -21,7 +21,7 @@ import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
 import classes from './OrgDelegationAccordion.module.css';
-import { DeletableListItem } from './DeletableListItem';
+import { DeletableListItem } from '../../../Common/DeletableListItem';
 
 export interface OrgDelegationAccordionProps {
   organization: OverviewOrg;

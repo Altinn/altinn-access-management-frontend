@@ -7,42 +7,53 @@ import {
   ButtonVariant,
   ButtonColor,
   ButtonSize,
+  List,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
+import { DeletableListItem } from '../Common/DeletableListItem';
 
 import classes from './ApiDelegationConfirmationPage.module.css';
 
-export const NewApiDelegationsPage = () => {
-  const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
+export const ApiDelegationConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation('common');
+  const navigate = useNavigate();
+
+  const apiListItems = chosenApis.map((api: DelegableApi, index: Key) => {
+    return <List key={index}></List>;
+  });
+
+  const orgListItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
+    return <List key={index}></List>;
+  });
 
   return (
     <div>
-      <div className={classes.pageContainer}>
+      <div className={classes.page}>
         <Page>
-          <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
-              <h2>Gi tilgang til API</h2>
-              <h3>Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet.</h3>
-              <div className={classes.searchField}>
-                <SearchField></SearchField>
-              </div>
+              <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
-                  <h4>Delegerbare API:</h4>
-                  <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
+                  <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                  <div className={classes.accordionScrollContainer}>{apiListItems}</div>
                 </div>
                 <div className={classes.apiAccordions}>
-                  <h4>Valgte API:</h4>
-                  <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                  <div className={classes.accordionScrollContainer}>{orgListItems}</div>
                 </div>
               </div>
               <div className={classes.navButtonContainer}>
@@ -52,8 +63,9 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
+                    onClick={() => navigate(-1)}
                   >
-                    Forrige
+                    {t('api_delegation.previous')}
                   </Button>
                 </div>
                 <div className={classes.navButton}>
@@ -62,8 +74,10 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Filled}
                     size={ButtonSize.Small}
                     fullWidth={true}
+                    onClick={() => navigate('/api-delegations/new-api')}
+                    disabled={chosenOrgs.length === 0}
                   >
-                    Neste
+                    {t('api_delegation.next')}
                   </Button>
                 </div>
               </div>

@@ -1,0 +1,1 @@
+export { ApiDelegationConfirmationPage } from './ApiDelegationConfirmationPage';
