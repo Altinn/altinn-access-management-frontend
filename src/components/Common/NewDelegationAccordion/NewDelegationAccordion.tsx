@@ -8,8 +8,6 @@ import {
 } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
@@ -25,7 +23,7 @@ export interface NewDelegationAccordionProps {
   subtitle: string;
   description: string;
   buttonType: NewDelegationAccordionButtonType;
-  onActionClick: () => { payload: DelegableOrg | DelegableApi; type: string };
+  onActionClick: () => void;
 }
 
 export const NewDelegationAccordion = ({
