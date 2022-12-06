@@ -26,6 +26,8 @@
       "edit_accesses": "Edit accesses",
       "api_overview_text": "Here you'll find an overview over the API-accesses your organisation has delegated to other organisations",
       "cancel": "Cancel",
-      "card_title": "Application programming interface - API"
+      "card_title": "Application programming interface - API",
+      "filter_label": "Filter by supplier",
+      "filter_remove_all": "Remove all filters"
     }
   }

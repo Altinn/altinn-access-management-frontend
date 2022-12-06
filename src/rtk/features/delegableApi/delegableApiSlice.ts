@@ -28,75 +28,38 @@ export interface SliceState {
   delegableApiList: DelegableApi[];
   presentedApiList: DelegableApi[];
   chosenDelegableApiList: DelegableApi[];
+  delegableApiSearchPool: DelegableApi[];
+  apiSuppliers: string[];
   error: string;
 }
 
+const initalApiList = () => {
+  const list: DelegableApi[] = [];
+  for (let i = 0; i < 100; i++) {
+    list.push({
+      id: i.toString(),
+      name: 'API ' + i.toString(),
+      orgName: 'Org' + (i % 10).toString(),
+      description: 'Et api som gir deg info om ting' + i.toString(),
+    });
+  }
+  return list;
+};
+
+const initialOrgNames = () => {
+  const list = [];
+  for (let i = 0; i < 10; i++) {
+    list.push('Org' + i.toString());
+  }
+  return list;
+};
+
 const initialState: SliceState = {
   loading: false,
-  delegableApiList: [
-    {
-      id: '1',
-      name: 'API A',
-      orgName: 'Skatteetaten',
-      description: 'For å hente ut skatteklasser',
-    },
-    {
-      id: '2',
-      name: 'API B',
-      orgName: 'Skatteetaten',
-      description: 'For å hente ut skatt',
-    },
-    {
-      id: '3',
-      name: 'API C',
-      orgName: 'CakeBoss',
-      description: 'For å hente ut kake',
-    },
-    {
-      id: '4',
-      name: 'API D',
-      orgName: 'Isbil',
-      description: 'For å hente ut is',
-    },
-    {
-      id: '5',
-      name: 'API E',
-      orgName: 'Bama',
-      description: 'Frukt av alle slag',
-    },
-  ],
-  presentedApiList: [
-    {
-      id: '1',
-      name: 'API A',
-      orgName: 'Skatteetaten',
-      description: 'For å hente ut skatteklasser',
-    },
-    {
-      id: '2',
-      name: 'API B',
-      orgName: 'Skatteetaten',
-      description: 'For å hente ut skatt',
-    },
-    {
-      id: '3',
-      name: 'API C',
-      orgName: 'CakeBoss',
-      description: 'For å hente ut kake',
-    },
-    {
-      id: '4',
-      name: 'API D',
-      orgName: 'Isbil',
-      description: 'For å hente ut is',
-    },
-    {
-      id: '5',
-      name: 'API E',
-      orgName: 'Bama',
-      description: 'Frukt av alle slag',
-    },
-  ],
+  delegableApiList: initalApiList(),
+  presentedApiList: initalApiList(),
+  delegableApiSearchPool: initalApiList(),
+  apiSuppliers: initialOrgNames(),
   chosenDelegableApiList: [],
   error: '',
 };
@@ -115,10 +78,14 @@ const delegableApiSlice = createSlice({
     softAdd: (state: SliceState, action: any) => {
       const { delegableApiList } = state;
       const { presentedApiList } = state;
+      const { delegableApiSearchPool } = state;
       state.delegableApiList = delegableApiList.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
       state.presentedApiList = presentedApiList.filter(
+        (delegableApi) => delegableApi.id !== action.payload.id,
+      );
+      state.delegableApiSearchPool = delegableApiSearchPool.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
 
@@ -127,18 +94,16 @@ const delegableApiSlice = createSlice({
     softRemove: (state: SliceState, action: any) => {
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
+      state.delegableApiSearchPool.push(action.payload);
 
       const { chosenDelegableApiList } = state;
       state.chosenDelegableApiList = chosenDelegableApiList.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
-    search: (state: SliceState, action: any) => {
+    filter: (state: SliceState, action: any) => {
       const { delegableApiList } = state;
-      const filterList = action.payload[1];
-      const searchText = action.payload[0].trim().toLowerCase();
-      const seachWords = searchText ? searchText.split(' ') : [];
-
+      const filterList = action.payload;
       let searchPool = [...delegableApiList];
       if (filterList && filterList.length > 0) {
         searchPool = delegableApiList.filter((api) =>
@@ -149,11 +114,19 @@ const delegableApiSlice = createSlice({
             return false;
           }),
         );
+        state.delegableApiSearchPool = searchPool;
+      } else {
+        state.delegableApiSearchPool = delegableApiList;
       }
+    },
+    search: (state: SliceState, action: any) => {
+      const { delegableApiSearchPool } = state;
+      const searchText = action.payload.trim().toLowerCase();
+      const seachWords = searchText ? searchText.split(' ') : [];
 
       const prioritizedApiList: DelegableApiWithPriority[] = [];
       if (searchText) {
-        for (const api of searchPool) {
+        for (const api of delegableApiSearchPool) {
           let numMatches = 0;
           for (const word of seachWords) {
             if (
@@ -169,17 +142,15 @@ const delegableApiSlice = createSlice({
           }
         }
 
-        console.log(prioritizedApiList);
         state.presentedApiList = prioritizedApiList
           .sort((a, b) => (a.priority < b.priority ? 1 : -1))
           .map(({ priority, ...otherAttr }) => otherAttr);
-        console.log(state.presentedApiList);
       } else {
-        state.presentedApiList = searchPool;
+        state.presentedApiList = delegableApiSearchPool;
       }
     },
   },
 });
 
 export default delegableApiSlice.reducer;
-export const { softAdd, softRemove, search } = delegableApiSlice.actions;
+export const { softAdd, softRemove, search, filter } = delegableApiSlice.actions;

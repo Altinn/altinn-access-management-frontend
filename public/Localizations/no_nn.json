@@ -25,6 +25,8 @@
       "edit_accesses": "Rediger tilgangar",
       "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder.",
       "cancel": "Avbryt",
-      "card_title": "Programmeringsgrensesnitt - API"
+      "card_title": "Programmeringsgrensesnitt - API",
+      "filter_label": "Filtrer basert på utsteder",
+      "filter_remove_all": "Fjern alle filtra"
     }
   }
