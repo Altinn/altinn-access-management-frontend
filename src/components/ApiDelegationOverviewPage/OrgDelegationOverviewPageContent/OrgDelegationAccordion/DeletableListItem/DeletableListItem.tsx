@@ -30,7 +30,7 @@ export const DeletableListItem = ({
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Secondary}
           onClick={softRestoreCallback}
-          svgIconComponent={<Cancel />}
+          icon={<Cancel />}
         >
           {t('api_delegation.undo')}
         </Button>
@@ -38,7 +38,7 @@ export const DeletableListItem = ({
         <Button
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
-          svgIconComponent={<MinusCircle />}
+          icon={<MinusCircle />}
           onClick={softDeleteCallback}
         >
           {t('api_delegation.delete')}

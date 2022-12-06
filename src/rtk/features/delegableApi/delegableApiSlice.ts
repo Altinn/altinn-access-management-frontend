@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export interface DelegableApi {
   id: string;
-  name: string;
+  apiName: string;
   orgName: string;
   description: string;
 }
@@ -20,14 +20,14 @@ const initialState: InitialState = {
   delegableApiList: [
     {
       id: '1',
-      name: 'API A',
+      apiName: 'API A',
       orgName: 'Skatteetaten',
       description: 'For å hente ut skatteklasser',
     },
     {
       id: '2',
-      name: 'API B',
-      orgName: 'Skatteetaten',
+      apiName: 'API B',
+      orgName: 'Brønnøysundregistrene',
       description: 'For å hente ut skatt',
     },
   ],
@@ -35,6 +35,7 @@ const initialState: InitialState = {
   error: '',
 };
 
+// example code for populating accordions later on
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     .get('https://jsonplaceholder.typicode.com/users')

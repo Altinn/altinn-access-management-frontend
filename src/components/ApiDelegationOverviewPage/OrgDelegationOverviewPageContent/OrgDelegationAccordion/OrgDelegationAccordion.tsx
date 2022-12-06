@@ -54,7 +54,7 @@ export const OrgDelegationAccordion = ({
       <Button
         variant={ButtonVariant.Quiet}
         color={ButtonColor.Primary}
-        svgIconComponent={<AddCircle />}
+        icon={<AddCircle />}
         size={ButtonSize.Small}
       >
         {t('api_delegation.delegate_new_api')}
@@ -74,7 +74,7 @@ export const OrgDelegationAccordion = ({
       <Button
         variant={ButtonVariant.Quiet}
         color={ButtonColor.Primary}
-        svgIconComponent={<AddCircle />}
+        icon={<AddCircle />}
         size={ButtonSize.Small}
       >
         {t('api_delegation.delegate_new_api')}
@@ -84,7 +84,7 @@ export const OrgDelegationAccordion = ({
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Secondary}
           size={ButtonSize.Small}
-          svgIconComponent={<Cancel />}
+          icon={<Cancel />}
           onClick={softRestoreAllCallback}
         >
           {t('api_delegation.undo')}
@@ -94,7 +94,7 @@ export const OrgDelegationAccordion = ({
           <Button
             variant={ButtonVariant.Quiet}
             color={ButtonColor.Danger}
-            svgIconComponent={<MinusCircle />}
+            icon={<MinusCircle />}
             size={ButtonSize.Small}
             onClick={handleSoftDeleteAll}
           >

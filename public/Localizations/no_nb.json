@@ -26,6 +26,13 @@
     "edit_accesses": "Rediger tilganger",
     "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter.",
     "cancel": "Avbryt",
+    "give_access_to_new_api": "Gi tilgang til nytt API",
+    "new_org_accordion_content_text": "Velg hvilke brukere som skal få tilgang ved å klikke pluss-tegnet. Du kan også legge til ny.",
+    "businesses_previously_delegated_to": "Virksomheter det tidligere er delegert til:",
+    "businesses_going_to_get_access":"Virksomheter som skal få rettighet:",
+    "previous":"Forrige",
+    "next": "Neste",
+    "add_new_business": "Legg til ny virksomhet",
     "card_title": "Programmeringsgrensesnitt - API"
   }
 }
