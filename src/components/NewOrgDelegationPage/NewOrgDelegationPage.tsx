@@ -38,7 +38,7 @@ export const NewOrgDelegationPage = () => {
         description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Add}
-        onActionClick={() => dispatch(softAdd(org))}
+        addRemoveClick={() => dispatch(softAdd(org))}
       ></NewDelegationAccordion>
     );
   });
@@ -51,7 +51,7 @@ export const NewOrgDelegationPage = () => {
         description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        onActionClick={() => dispatch(softRemove(org))}
+        addRemoveClick={() => dispatch(softRemove(org))}
       ></NewDelegationAccordion>
     );
   });

@@ -23,7 +23,7 @@ export interface NewDelegationAccordionProps {
   subtitle: string;
   description: string;
   buttonType: NewDelegationAccordionButtonType;
-  onActionClick: () => void;
+  addRemoveClick: () => void;
 }
 
 export const NewDelegationAccordion = ({
@@ -31,7 +31,7 @@ export const NewDelegationAccordion = ({
   subtitle,
   description,
   buttonType,
-  onActionClick,
+  addRemoveClick,
 }: NewDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
 
@@ -42,7 +42,7 @@ export const NewDelegationAccordion = ({
           icon={<AddCircle />}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Success}
-          onClick={onActionClick}
+          onClick={addRemoveClick}
           aria-label={'soft-add'}
         ></Button>
       )}
@@ -51,7 +51,7 @@ export const NewDelegationAccordion = ({
           icon={<MinusCircle />}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
-          onClick={onActionClick}
+          onClick={addRemoveClick}
           aria-label={'soft-remove'}
         ></Button>
       )}
