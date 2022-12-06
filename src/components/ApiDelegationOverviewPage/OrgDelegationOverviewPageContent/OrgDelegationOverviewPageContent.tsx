@@ -18,6 +18,7 @@ import {
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
+import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 
 import { OrgDelegationAccordion } from './OrgDelegationAccordion';
 import classes from './OrgDelegationOverviewPageContent.module.css';
@@ -72,7 +73,7 @@ export const OrgDelegationOverviewPageContent = () => {
         <Button
           variant={ButtonVariant.Outline}
           onClick={() => navigate('new-org')}
-          svgIconComponent={<Add />}
+          icon={<Add />}
         >
           {t('api_delegation.delegate_new_org')}
         </Button>
@@ -84,7 +85,7 @@ export const OrgDelegationOverviewPageContent = () => {
           {!isEditable ? (
             <Button
               variant={ButtonVariant.Quiet}
-              svgIconComponent={<Edit />}
+              icon={<Edit />}
               onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >
@@ -93,7 +94,7 @@ export const OrgDelegationOverviewPageContent = () => {
           ) : (
             <Button
               variant={ButtonVariant.Quiet}
-              svgIconComponent={<Edit />}
+              icon={<Cancel />}
               onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >

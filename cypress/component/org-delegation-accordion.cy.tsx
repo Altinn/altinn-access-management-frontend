@@ -1,4 +1,3 @@
-import * as cypress from '@testing-library/cypress';
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 

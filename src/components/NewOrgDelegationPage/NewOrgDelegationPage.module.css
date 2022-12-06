@@ -1,27 +1,18 @@
 @media only screen and (min-width: 0px) {
-  .pageContainer{
+  .page{
       --pageContainer-width: 1055px;
-  }
-  .searchSection{
-    --searchFieldWidth: 100%
   }
 }
 
 @media only screen and (min-width: 700px) {
-  .pageContainer{
+  .page{
     --pageContainer-width: 1055px;
-  }
-  .searchSection{
-    --searchFieldWidth: 50%
   }
 }
 
 @media only screen and (min-width: 900px) {
-  .pageContainer{
+  .page{
     --pageContainer-width: 1055px;
-  }
-  .searchSection{
-    --searchFieldWidth: 50%
   }
 }
 
@@ -46,13 +37,9 @@
     margin-right: 3rem;
 }
 
-.searchSection{
-  width: var(--searchFieldWidth);
-}
 
-.filter {
-  width: 75%;
-  padding-top: 1rem;
+.searchField{
+  width: 100%;
 }
 
 .navButtonContainer {
@@ -62,19 +49,11 @@
 }
 
 .navButton{
-  margin-right: 0.5rem;
+  margin-right: 3rem;
   width: 10rem;
 }
 
 .accordionScrollContainer {
-  max-height: 300px;
+  height: 300px;
   overflow-y: auto;
-}
-
-.page{
-  --page-vertical-margins: 8rem;
-  width: 1055px;
-  margin: auto;
-  margin-top: var(--page-vertical-margins);
-  margin-bottom: var(--page-vertical-margins);
 }

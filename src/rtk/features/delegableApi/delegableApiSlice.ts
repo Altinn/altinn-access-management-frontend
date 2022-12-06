@@ -3,24 +3,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export interface DelegableApi {
   id: string;
-  name: string;
+  apiName: string;
   orgName: string;
   description: string;
 }
 
 export interface DelegableApiWithPriority {
   id: string;
-  name: string;
+  apiName: string;
   orgName: string;
   description: string;
   priority: number;
-}
-
-export interface SearchProps {
-  id: boolean;
-  name: boolean;
-  orgName: boolean;
-  description: boolean;
 }
 
 export interface SliceState {
@@ -38,7 +31,7 @@ const initalApiList = () => {
   for (let i = 0; i < 100; i++) {
     list.push({
       id: i.toString(),
-      name: 'API ' + i.toString(),
+      apiName: 'API ' + i.toString(),
       orgName: 'Org' + (i % 10).toString(),
       description: 'Et api som gir deg info om ting' + i.toString(),
     });
@@ -64,6 +57,7 @@ const initialState: SliceState = {
   error: '',
 };
 
+// example code for populating accordions later on
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     .get('https://jsonplaceholder.typicode.com/users')
@@ -130,7 +124,7 @@ const delegableApiSlice = createSlice({
           let numMatches = 0;
           for (const word of seachWords) {
             if (
-              api.name.toLowerCase().includes(word) ||
+              api.apiName.toLowerCase().includes(word) ||
               api.description.toLowerCase().includes(word) ||
               api.orgName.toLowerCase().includes(word)
             ) {

@@ -12,15 +12,18 @@ import {
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useState } from 'react';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softAdd, softRemove, search, filter } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
+import {
+  NewDelegationAccordionButtonType,
+  NewDelegationAccordion,
+} from '../Common/NewDelegationAccordion';
 
-import { NewApiDelegationAccordion, AccordionButtonType } from './NewApiDelegationAccordion';
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
@@ -29,13 +32,22 @@ export const NewApiDelegationsPage = () => {
   const apiSuppliers = useAppSelector((state) => state.delegableApi.apiSuppliers);
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
+  const [filters, setFilters] = useState([]);
+  const { t } = useTranslation('common');
 
   const handleSearch = (searchText: string) => {
     setSearchString(searchText);
     dispatch(search(searchText));
   };
 
-  const handleFilterChange = (filters: string[]) => {
+  const handleFilterChange = (filterList: string[]) => {
+    setFilters(filterList);
+    dispatch(filter(filterList));
+    dispatch(search(searchString));
+  };
+
+  const handleRemove = (api: DelegableApi) => {
+    dispatch(softRemove(api));
     dispatch(filter(filters));
     dispatch(search(searchString));
   };
@@ -49,32 +61,36 @@ export const NewApiDelegationsPage = () => {
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
       return (
-        <NewApiDelegationAccordion
-          delegableApi={api}
+        <NewDelegationAccordion
+          title={api.apiName}
+          subtitle={api.orgName}
+          description={api.description}
           key={index}
-          buttonType={AccordionButtonType.Add}
-          softAddCallback={() => dispatch(softAdd(api))}
-        ></NewApiDelegationAccordion>
+          buttonType={NewDelegationAccordionButtonType.Add}
+          addRemoveClick={() => dispatch(softAdd(api))}
+        ></NewDelegationAccordion>
       );
     },
   );
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
-      <NewApiDelegationAccordion
-        delegableApi={api}
+      <NewDelegationAccordion
+        title={api.apiName}
+        subtitle={api.orgName}
+        description={api.description}
         key={index}
-        buttonType={AccordionButtonType.Remove}
-        softRemoveCallback={() => dispatch(softRemove(api))}
-      ></NewApiDelegationAccordion>
+        buttonType={NewDelegationAccordionButtonType.Remove}
+        addRemoveClick={() => handleRemove(api)}
+      ></NewDelegationAccordion>
     );
   });
 
   return (
     <div>
-      <div className={classes.pageContainer}>
+      <div className={classes.page}>
         <Page>
-          <PageHeader icon={<ApiIcon />}>Deleger nye APIer</PageHeader>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
               <h2>Gi tilgang til API</h2>
