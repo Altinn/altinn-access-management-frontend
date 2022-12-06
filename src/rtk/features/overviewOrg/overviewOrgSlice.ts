@@ -28,7 +28,7 @@ const initialState: InitialState = {
   overviewOrgs: [
     {
       id: '1',
-      name: 'Evry',
+      name: 'Brønnøysundregisterene',
       orgNr: '123456789',
       isAllSoftDeleted: false,
       apiList: [
@@ -36,7 +36,7 @@ const initialState: InitialState = {
           id: '1',
           name: 'Delegert API A',
           isSoftDelete: false,
-          owner: 'Brønnøysundregisterene',
+          owner: 'Avanade',
           description:
             'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
         },

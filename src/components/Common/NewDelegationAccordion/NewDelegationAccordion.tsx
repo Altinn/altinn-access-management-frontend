@@ -7,10 +7,6 @@ import {
   Button,
 } from '@altinn/altinn-design-system';
 import { useState } from 'react';
-import { t } from 'i18next';
-
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
@@ -24,19 +20,17 @@ export enum NewDelegationAccordionButtonType {
 export interface NewDelegationAccordionProps {
   title: string;
   subtitle: string;
-  hasOrgNr?: boolean;
   description: string;
   buttonType: NewDelegationAccordionButtonType;
-  callback: () => { payload: DelegableOrg | DelegableApi; type: string };
+  addRemoveClick: () => void;
 }
 
 export const NewDelegationAccordion = ({
   title,
   subtitle,
-  hasOrgNr = false,
   description,
   buttonType,
-  callback,
+  addRemoveClick,
 }: NewDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
 
@@ -47,7 +41,7 @@ export const NewDelegationAccordion = ({
           icon={<AddCircle />}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Success}
-          onClick={callback}
+          onClick={addRemoveClick}
           aria-label={'soft-add'}
         ></Button>
       )}
@@ -56,19 +50,12 @@ export const NewDelegationAccordion = ({
           icon={<MinusCircle />}
           variant={ButtonVariant.Quiet}
           color={ButtonColor.Danger}
-          onClick={callback}
+          onClick={addRemoveClick}
           aria-label={'soft-remove'}
         ></Button>
       )}
     </>
   );
-
-  const getSubtitle = () => {
-    if (hasOrgNr) {
-      return hasOrgNr && t('api_delegation.org_nr') + ' ' + subtitle;
-    }
-    return subtitle;
-  };
 
   return (
     <div>
@@ -77,7 +64,7 @@ export const NewDelegationAccordion = ({
         onClick={() => setOpen(!open)}
       >
         <AccordionHeader
-          subtitle={getSubtitle()}
+          subtitle={subtitle}
           actions={actions}
         >
           {title}

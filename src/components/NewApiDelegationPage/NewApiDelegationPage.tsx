@@ -38,7 +38,7 @@ export const NewApiDelegationsPage = () => {
           description={api.description}
           key={index}
           buttonType={NewDelegationAccordionButtonType.Add}
-          callback={() => dispatch(softAdd(api))}
+          addRemoveClick={() => dispatch(softAdd(api))}
         ></NewDelegationAccordion>
       );
     },
@@ -52,7 +52,7 @@ export const NewApiDelegationsPage = () => {
         description={api.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        callback={() => dispatch(softRemove(api))}
+        addRemoveClick={() => dispatch(softRemove(api))}
       ></NewDelegationAccordion>
     );
   });
