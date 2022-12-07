@@ -33,6 +33,7 @@
     "previous":"Forrige",
     "next": "Neste",
     "add_new_business": "Legg til ny virksomhet",
-    "card_title": "Programmeringsgrensesnitt - API"
+    "card_title": "Programmeringsgrensesnitt - API",
+    "confirm_delegation": "Bekreft delegering"
   }
 }

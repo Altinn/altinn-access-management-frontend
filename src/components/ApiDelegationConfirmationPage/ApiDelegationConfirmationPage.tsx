@@ -8,34 +8,59 @@ import {
   ButtonColor,
   ButtonSize,
   List,
+  ListItem,
+  BorderStyle,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softRemove as softRemoveApi } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softRemove as softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { DeletableListItem } from '../Common/DeletableListItem';
+import { CompactDeletableListItem } from '../Common/CompactDeletableListItem';
 
 import classes from './ApiDelegationConfirmationPage.module.css';
 
 export const ApiDelegationConfirmationPage = () => {
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.delegableApiList);
+  const chosenOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 
   const apiListItems = chosenApis.map((api: DelegableApi, index: Key) => {
-    return <List key={index}></List>;
+    return (
+      <List
+        key={index}
+        borderStyle={BorderStyle.Dashed}
+      >
+        <CompactDeletableListItem
+          removeCallback={() => dispatch(softRemoveApi(api))}
+          firstText={api.apiName}
+          secondText={api.orgName}
+        ></CompactDeletableListItem>
+      </List>
+    );
   });
 
   const orgListItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
-    return <List key={index}></List>;
+    return (
+      <List
+        key={index}
+        borderStyle={BorderStyle.Dashed}
+      >
+        <CompactDeletableListItem
+          removeCallback={() => dispatch(softRemoveOrg(org))}
+          firstText={org.orgName}
+          secondText={org.orgNr}
+        ></CompactDeletableListItem>
+      </List>
+    );
   });
 
   return (
@@ -62,24 +87,19 @@ export const ApiDelegationConfirmationPage = () => {
                     color={ButtonColor.Primary}
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
-                    fullWidth={true}
                     onClick={() => navigate(-1)}
                   >
                     {t('api_delegation.previous')}
                   </Button>
                 </div>
-                <div className={classes.navButton}>
-                  <Button
-                    color={ButtonColor.Primary}
-                    variant={ButtonVariant.Filled}
-                    size={ButtonSize.Small}
-                    fullWidth={true}
-                    onClick={() => navigate('/api-delegations/new-api')}
-                    disabled={chosenOrgs.length === 0}
-                  >
-                    {t('api_delegation.next')}
-                  </Button>
-                </div>
+                <Button
+                  color={ButtonColor.Success}
+                  variant={ButtonVariant.Filled}
+                  size={ButtonSize.Small}
+                  onClick={() => navigate('/api-delegations/receipt')}
+                >
+                  {t('api_delegation.confirm_delegation')}
+                </Button>
               </div>
             </div>
           </PageContent>

@@ -10,6 +10,7 @@ import {
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
@@ -27,6 +28,7 @@ export const NewApiDelegationsPage = () => {
   const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { t } = useTranslation('common');
 
   const delegableApiAccordions = delegableApis.map(
@@ -86,6 +88,7 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
+                    onClick={() => navigate(-1)}
                   >
                     Forrige
                   </Button>
@@ -96,6 +99,7 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Filled}
                     size={ButtonSize.Small}
                     fullWidth={true}
+                    onClick={() => navigate('/api-delegations/confirmation')}
                   >
                     Neste
                   </Button>

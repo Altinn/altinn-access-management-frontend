@@ -1,0 +1,26 @@
+
+.listItemTexts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.itemText__softDelete {
+  text-decoration: line-through;
+  opacity: 70%;
+}
+
+.firstText {
+  flex: 1;
+  font-size: 16px;
+}
+
+.secondText {
+  flex: 1;
+  font-size: 16px;
+}
+
+.deleteSection {
+  display: flex;
+  align-items: center;
+}

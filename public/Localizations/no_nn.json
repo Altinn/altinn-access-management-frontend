@@ -32,6 +32,7 @@
     "next": "Neste",
     "add_new_business": "Legg til ny virksomheit",
     "undo": "Angra",
-    "card_title": "Programmeringsgrensesnitt - API"
+    "card_title": "Programmeringsgrensesnitt - API",
+    "confirm_delegation": "Stadfest delegering"
   }
 }

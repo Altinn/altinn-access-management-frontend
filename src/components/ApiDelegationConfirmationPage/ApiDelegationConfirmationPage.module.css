@@ -1,0 +1,21 @@
+.page{
+  width: 1055px;
+  margin: auto;
+  margin-top: 8rem;
+}
+
+.pageContent{
+  --component-page-margin-horizontal: 3rem;
+  margin-right: var(--component-page-margin-horizontal);
+  margin-left: var(--component-page-margin-horizontal);
+}
+
+.navButtonContainer{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8rem;
+}
+
+.navButton{
+  margin-right: 3rem;
+}
