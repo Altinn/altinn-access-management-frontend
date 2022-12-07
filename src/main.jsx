@@ -11,7 +11,6 @@ import { Router } from '@/routes/Router';
 import LoadLocalizations from './resources/LoadLocalizations';
 import { getConfig } from './config/config';
 import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
-import { NewApiDelegations } from './routes/NewApiDelegations';
 import store from './rtk/app/store';
 
 /**
