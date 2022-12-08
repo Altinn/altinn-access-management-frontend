@@ -1,25 +1,13 @@
-.compactlistItem {
+.compactListItem {
   display: flex;
-  justify-content: center;
-  align-items: center;
   margin-left: 10px;
   min-height: 40px;
 }
 
-.firstText {
+.baseListItemContent{
+  display: flex;
   flex: 1;
-  font-size: 16px;
-}
-
-.secondText {
-  flex: 1;
-  font-size: 16px;
-}
-
-.deleteSection {
-  flex:1;
   align-items: center;
-  justify-content: flex-end;
 }
 
 .listItemIcon {
@@ -29,10 +17,17 @@
 .listItemTexts{
   flex: 2;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 16px;
 }
 
-.baseListItemContent{
-  display: flex;
+.firstText {
+  width: 400px;
+}
+
+.secondText {
+  flex:1;
+}
+
+.deleteSection {
+  justify-content: flex-end;
 }

@@ -19,6 +19,7 @@ import { softRemove as softRemoveOrg } from '@/rtk/features/delegableOrg/delegab
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
+import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import { CompactDeletableListItem } from '../Common/CompactDeletableListItem';
@@ -36,6 +37,7 @@ export const ApiDelegationConfirmationPage = () => {
     return (
       <CompactDeletableListItem
         key={index}
+        startIcon={<SettingsIcon />}
         removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
         firstText={api.apiName}
         secondText={api.orgName}

@@ -32,16 +32,16 @@ export const CompactDeletableListItem = ({
         className={classes.compactListItem}
         data-testid='compact-list-item'
       >
-        {startIcon && (
-          <div className={classes.listItemIcon}>
-            <SvgIcon
-              width={14}
-              height={14}
-              svgIconComponent={startIcon}
-            ></SvgIcon>
-          </div>
-        )}
         <div className={classes.baseListItemContent}>
+          {startIcon && (
+            <div className={classes.listItemIcon}>
+              <SvgIcon
+                width={14}
+                height={14}
+                svgIconComponent={startIcon}
+              ></SvgIcon>
+            </div>
+          )}
           <div className={classes.listItemTexts}>
             <div className={classes.firstText}>{firstText}</div>
             <div className={classes.secondText}>{secondText}</div>
