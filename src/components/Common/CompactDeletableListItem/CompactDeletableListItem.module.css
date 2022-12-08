@@ -1,13 +1,9 @@
-
-.listItemTexts {
+.compactlistItem {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.itemText__softDelete {
-  text-decoration: line-through;
-  opacity: 70%;
+  margin-left: 10px;
+  min-height: 40px;
 }
 
 .firstText {
@@ -21,6 +17,22 @@
 }
 
 .deleteSection {
-  display: flex;
+  flex:1;
   align-items: center;
+  justify-content: flex-end;
+}
+
+.listItemIcon {
+  margin-right: 10px;
+}
+
+.listItemTexts{
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.baseListItemContent{
+  display: flex;
 }

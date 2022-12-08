@@ -29,7 +29,14 @@ const initialState: InitialState = {
       description: 'For å hente ut skatt',
     },
   ],
-  chosenDelegableOrgList: [],
+  chosenDelegableOrgList: [
+    {
+      id: '1',
+      orgName: 'Skatteetaten',
+      orgNr: '930124123',
+      description: 'For å hente ut skatteklasser',
+    },
+  ],
   error: '',
 };
 

@@ -12,10 +12,19 @@
 
 .navButtonContainer{
   display: flex;
-  justify-content: flex-end;
   margin-top: 8rem;
 }
 
 .navButton{
   margin-right: 3rem;
+}
+
+.secondText{
+  margin-top: 40px;
+  font-weight: normal;
+}
+
+.bottomText {
+  margin-top: 40px;
+  font-weight: normal;
 }

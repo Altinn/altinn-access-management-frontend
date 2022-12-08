@@ -33,6 +33,9 @@
     "add_new_business": "Legg til ny virksomheit",
     "undo": "Angra",
     "card_title": "Programmeringsgrensesnitt - API",
-    "confirm_delegation": "Stadfest delegering"
+    "confirm_delegation": "Stadfest delegering",
+    "confirmation_page_content_top_text": "Du ønskjer å gi rettar til følgjande API:",
+    "confirmation_page_content_second_text": "API-tilgangane blir gitt til:",
+    "confirmation_page_content_bottom_text": "Tilgangen blir gitt og er gyldig til den aktivt fjernas eller blir trekt tilbake. Mottakar får beskjed."
   }
 }

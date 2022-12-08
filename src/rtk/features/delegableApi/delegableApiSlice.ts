@@ -31,7 +31,20 @@ const initialState: InitialState = {
       description: 'For å hente ut skatt',
     },
   ],
-  chosenDelegableApiList: [],
+  chosenDelegableApiList: [
+    {
+      id: '1',
+      apiName: 'API A',
+      orgName: 'Skatteetaten',
+      description: 'For å hente ut skatteklasser',
+    },
+    {
+      id: '2',
+      apiName: 'API B',
+      orgName: 'Brønnøysundregistrene',
+      description: 'For å hente ut skatt',
+    },
+  ],
   error: '',
 };
 
