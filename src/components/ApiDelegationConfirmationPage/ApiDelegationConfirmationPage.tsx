@@ -26,7 +26,23 @@ import { CompactDeletableListItem } from '../Common/CompactDeletableListItem';
 
 import classes from './ApiDelegationConfirmationPage.module.css';
 
-export const ApiDelegationConfirmationPage = () => {
+interface ConfirmationPageProps {
+  firstListItems?: DelegableApi[];
+  secondListItems?: DelegableOrg[];
+  pageHeaderText: string;
+  firstListText?: string;
+  secondListText?: string;
+  bottomText?: string;
+  mainButton: React.ReactNode;
+  complementaryButton: React.ReactNode;
+}
+
+export const ApiDelegationConfirmationPage = ({
+  firstListItems,
+  secondListItems,
+  pageHeaderText,
+  firstListText,
+}: ConfirmationPageProps) => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
@@ -70,28 +86,30 @@ export const ApiDelegationConfirmationPage = () => {
                 {t('api_delegation.confirmation_page_content_second_text')}
               </h2>
               <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
-              <h4 className={classes.bottomText}>
+              <h3 className={classes.bottomText}>
                 {t('api_delegation.confirmation_page_content_bottom_text')}
-              </h4>
+              </h3>
               <div className={classes.navButtonContainer}>
-                <div className={classes.navButton}>
+                <div className={classes.previousButton}>
                   <Button
                     color={ButtonColor.Primary}
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     onClick={() => navigate(-1)}
                   >
-                    Forrige
+                    {t('api_delegation.previous')}
                   </Button>
                 </div>
-                <Button
-                  color={ButtonColor.Success}
-                  variant={ButtonVariant.Filled}
-                  size={ButtonSize.Small}
-                  onClick={() => navigate('/api-delegations/receipt')}
-                >
-                  {t('api_delegation.confirm_delegation')}
-                </Button>
+                <div className={classes.confirmButton}>
+                  <Button
+                    color={ButtonColor.Success}
+                    variant={ButtonVariant.Filled}
+                    size={ButtonSize.Small}
+                    onClick={() => navigate('/api-delegations/receipt')}
+                  >
+                    {t('api_delegation.confirm_delegation')}
+                  </Button>
+                </div>
               </div>
             </div>
           </PageContent>

@@ -11,12 +11,18 @@
 }
 
 .navButtonContainer{
-  display: flex;
   margin-top: 8rem;
+  display: flex;
+  justify-content: center;
 }
 
-.navButton{
+.previousButton{
+  display: flex;
   margin-right: 3rem;
+}
+
+.confirmButton{
+  display: flex;
 }
 
 .secondText{

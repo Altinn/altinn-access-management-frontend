@@ -1,7 +1,7 @@
 import { Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { ReactComponent as ApiIcon } from '@/assets/Settings.svg';
+import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
 import classes from './ApiDelegationOverviewPage.module.css';
 import { OrgDelegationOverviewPageContent } from './OrgDelegationOverviewPageContent';
