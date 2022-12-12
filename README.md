@@ -2,7 +2,7 @@
 
 ## Getting started 🚀
 
-To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment. Go to the folder src/routes/Router to see different paths to the different components. The current prefix is http://localhost:5173 (but this might changed later).
+To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). Simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment. The current prefix is http://localhost:5173 (but this port might changed later). FYI: http://localhost:5173 doesn't show anything right now and it shouldn't show anything either. Go to http://localhost:5173/accessmanagement/ui/api-delegations to see one of the main views of API delegations. Look in the folder src/routes/Router to see different paths to the different components.
 
 ## Project organisation 🧩
 
