@@ -11,12 +11,11 @@ import {
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softRemove as softRemoveApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softRemove as softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { useAppDispatch } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
@@ -36,7 +35,7 @@ interface ConfirmationPageProps {
   complementaryButton: React.ReactNode;
 }
 
-export const ApiDelegationConfirmationPage = ({
+export const ConfirmationPage = ({
   firstListItems,
   secondListItems,
   headerText,

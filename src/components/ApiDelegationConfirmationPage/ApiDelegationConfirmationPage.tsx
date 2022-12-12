@@ -20,66 +20,28 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
+import { ConfirmationPageProps } from '@/components/Common/ConfirmationPage';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import { CompactDeletableListItem } from '../Common/CompactDeletableListItem';
 
 import classes from './ApiDelegationConfirmationPage.module.css';
 
-interface ConfirmationPageProps {
-  firstListItems?: DelegableApi[];
-  secondListItems?: DelegableOrg[];
-  headerText: string;
-  firstListText?: string;
-  secondListText?: string;
-  bottomText?: string;
-  mainButton: React.ReactNode;
-  complementaryButton: React.ReactNode;
-}
-
-export const ApiDelegationConfirmationPage = ({
-  firstListItems,
-  secondListItems,
-  headerText,
-  firstListText,
-  secondListText,
-  bottomText,
-  mainButton,
-  complementaryButton,
-}: ConfirmationPageProps) => {
+export const ApiDelegationConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 
-  const apiListItems = chosenApis.map((api: DelegableApi, index: Key) => {
-    return (
-      <CompactDeletableListItem
-        key={index}
-        startIcon={<SettingsIcon />}
-        removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
-        firstText={api.apiName}
-        secondText={api.orgName}
-      ></CompactDeletableListItem>
-    );
-  });
-
-  const orgListItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
-    return (
-      <CompactDeletableListItem
-        key={index}
-        startIcon={<OfficeIcon />}
-        removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        firstText={org.orgName}
-        secondText={org.orgNr}
-      ></CompactDeletableListItem>
-    );
-  });
-
   return (
     <div>
       <div className={classes.page}>
+        <ConfirmationPageProps
+          firstListItems={chosenApis}
+          secondListItems={chosenOrgs}
+          headerText={t('api_delegation.give_access_to_new_api')}
+        />
         <Page>
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
