@@ -20,18 +20,17 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
+import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { CompactDeletableListItem } from '@/components/Common/CompactDeletableListItem';
 
-import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { CompactDeletableListItem } from '../Common/CompactDeletableListItem';
-
-import classes from './ApiDelegationConfirmationPage.module.css';
+import classes from './ConfirmationPage.module.css';
 
 interface ConfirmationPageProps {
-  firstListItems?: DelegableApi[];
-  secondListItems?: DelegableOrg[];
+  firstListItems: DelegableApi[];
+  secondListItems: DelegableOrg[];
   headerText: string;
-  firstListText?: string;
-  secondListText?: string;
+  firstContentText?: string;
+  secondContentText?: string;
   bottomText?: string;
   mainButton: React.ReactNode;
   complementaryButton: React.ReactNode;
@@ -41,36 +40,33 @@ export const ApiDelegationConfirmationPage = ({
   firstListItems,
   secondListItems,
   headerText,
-  firstListText,
-  secondListText,
+  firstContentText,
+  secondContentText,
   bottomText,
   mainButton,
   complementaryButton,
 }: ConfirmationPageProps) => {
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
-  const { t } = useTranslation('common');
   const navigate = useNavigate();
 
-  const apiListItems = chosenApis.map((api: DelegableApi, index: Key) => {
+  const apiListItems = firstListItems.map((api: DelegableApi, index: Key) => {
     return (
       <CompactDeletableListItem
         key={index}
         startIcon={<SettingsIcon />}
-        removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
+        removeCallback={firstListItems.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
         firstText={api.apiName}
         secondText={api.orgName}
       ></CompactDeletableListItem>
     );
   });
 
-  const orgListItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const orgListItems = secondListItems.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
       <CompactDeletableListItem
         key={index}
         startIcon={<OfficeIcon />}
-        removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
+        removeCallback={secondListItems.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         firstText={org.orgName}
         secondText={org.orgNr}
       ></CompactDeletableListItem>
@@ -81,18 +77,14 @@ export const ApiDelegationConfirmationPage = ({
     <div>
       <div className={classes.page}>
         <Page>
-          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
+          <PageHeader icon={<ApiIcon />}>{headerText}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
-              <h2>{t('api_delegation.confirmation_page_content_top_text')}</h2>
+              <h2>{firstContentText}</h2>
               <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
-              <h2 className={classes.secondText}>
-                {t('api_delegation.confirmation_page_content_second_text')}
-              </h2>
+              <h2 className={classes.secondText}>{secondContentText}</h2>
               <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
-              <h3 className={classes.bottomText}>
-                {t('api_delegation.confirmation_page_content_bottom_text')}
-              </h3>
+              <h3 className={classes.bottomText}>{bottomText}</h3>
               <div className={classes.navButtonContainer}>
                 <div className={classes.previousButton}>
                   <Button
@@ -101,7 +93,7 @@ export const ApiDelegationConfirmationPage = ({
                     size={ButtonSize.Small}
                     onClick={() => navigate(-1)}
                   >
-                    {t('api_delegation.previous')}
+                    {complementaryButton}
                   </Button>
                 </div>
                 <div className={classes.confirmButton}>
@@ -111,7 +103,7 @@ export const ApiDelegationConfirmationPage = ({
                     size={ButtonSize.Small}
                     onClick={() => navigate('/api-delegations/receipt')}
                   >
-                    {t('api_delegation.confirm_delegation')}
+                    {mainButton}
                   </Button>
                 </div>
               </div>
