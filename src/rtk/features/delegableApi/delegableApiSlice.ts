@@ -22,7 +22,7 @@ export interface SliceState {
   presentedApiList: DelegableApi[];
   chosenDelegableApiList: DelegableApi[];
   delegableApiSearchPool: DelegableApi[];
-  apiSuppliers: string[];
+  apiProviders: string[];
   error: string;
 }
 
@@ -52,7 +52,7 @@ const initialState: SliceState = {
   delegableApiList: initalApiList(),
   presentedApiList: initalApiList(),
   delegableApiSearchPool: initalApiList(),
-  apiSuppliers: initialOrgNames(),
+  apiProviders: initialOrgNames(),
   chosenDelegableApiList: [],
   error: '',
 };
@@ -69,7 +69,7 @@ const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
-    softAdd: (state: SliceState, action: any) => {
+    softAdd: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const { presentedApiList } = state;
       const { delegableApiSearchPool } = state;
@@ -85,7 +85,7 @@ const delegableApiSlice = createSlice({
 
       state.chosenDelegableApiList.push(action.payload);
     },
-    softRemove: (state: SliceState, action: any) => {
+    softRemove: (state: SliceState, action) => {
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
       state.delegableApiSearchPool.push(action.payload);
@@ -95,7 +95,7 @@ const delegableApiSlice = createSlice({
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
-    filter: (state: SliceState, action: any) => {
+    filter: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const filterList = action.payload;
       let searchPool = [...delegableApiList];
@@ -113,7 +113,7 @@ const delegableApiSlice = createSlice({
         state.delegableApiSearchPool = delegableApiList;
       }
     },
-    search: (state: SliceState, action: any) => {
+    search: (state: SliceState, action) => {
       const { delegableApiSearchPool } = state;
       const searchText = action.payload.trim().toLowerCase();
       const seachWords = searchText ? searchText.split(' ') : [];

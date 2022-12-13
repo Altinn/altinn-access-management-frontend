@@ -29,10 +29,10 @@ import classes from './NewApiDelegationPage.module.css';
 export const NewApiDelegationsPage = () => {
   const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const apiSuppliers = useAppSelector((state) => state.delegableApi.apiSuppliers);
+  const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState<string[]>([]);
   const { t } = useTranslation('common');
 
   const handleSearch = (searchText: string) => {
@@ -52,10 +52,10 @@ export const NewApiDelegationsPage = () => {
     dispatch(search(searchString));
   };
 
-  const filterOptions: MultiSelectOption[] = apiSuppliers.map((supplier: string) => ({
-    label: supplier,
-    value: supplier,
-    deleteButtonLabel: t('api_delegation.delete') + ' ' + supplier,
+  const filterOptions: MultiSelectOption[] = apiProviders.map((provider: string) => ({
+    label: provider,
+    value: provider,
+    deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
   const delegableApiAccordions = delegableApis.map(
@@ -98,7 +98,9 @@ export const NewApiDelegationsPage = () => {
               <div className={classes.searchSection}>
                 <SearchField
                   value={searchString}
-                  onChange={(e: any) => handleSearch(e.target.value)}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    handleSearch(event.target.value)
+                  }
                 ></SearchField>
                 <div className={classes.filter}>
                   <Select
