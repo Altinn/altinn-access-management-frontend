@@ -4,7 +4,6 @@ import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 import overviewOrgReducer from '../features/overviewOrg/overviewOrgSlice';
 import delegableOrgReducer from '../features/delegableOrg/delegableOrgSlice';
 
-// turn off redux-logger in production
 const store = configureStore({
   reducer: {
     delegableApi: delegableApiReducer,

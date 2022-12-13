@@ -1,18 +1,21 @@
+import type { MultiSelectOption } from '@altinn/altinn-design-system';
 import {
   Page,
   PageContent,
   PageHeader,
   SearchField,
+  Select,
   Button,
   ButtonVariant,
   ButtonColor,
   ButtonSize,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softAdd, softRemove } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softAdd, softRemove, search, filter } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
@@ -24,10 +27,36 @@ import {
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
-  const delegableApis = useAppSelector((state) => state.delegableApi.delegableApiList);
+  const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const dispatch = useAppDispatch();
+  const [searchString, setSearchString] = useState('');
+  const [filters, setFilters] = useState<string[]>([]);
   const { t } = useTranslation('common');
+
+  const handleSearch = (searchText: string) => {
+    setSearchString(searchText);
+    dispatch(search(searchText));
+  };
+
+  const handleFilterChange = (filterList: string[]) => {
+    setFilters(filterList);
+    dispatch(filter(filterList));
+    dispatch(search(searchString));
+  };
+
+  const handleRemove = (api: DelegableApi) => {
+    dispatch(softRemove(api));
+    dispatch(filter(filters));
+    dispatch(search(searchString));
+  };
+
+  const filterOptions: MultiSelectOption[] = apiProviders.map((provider: string) => ({
+    label: provider,
+    value: provider,
+    deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
+  }));
 
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
@@ -52,7 +81,7 @@ export const NewApiDelegationsPage = () => {
         description={api.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={() => dispatch(softRemove(api))}
+        addRemoveClick={() => handleRemove(api)}
       ></NewDelegationAccordion>
     );
   });
@@ -66,8 +95,22 @@ export const NewApiDelegationsPage = () => {
             <div className={classes.pageContent}>
               <h2>Gi tilgang til API</h2>
               <h3>Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet.</h3>
-              <div className={classes.searchField}>
-                <SearchField></SearchField>
+              <div className={classes.searchSection}>
+                <SearchField
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    handleSearch(event.target.value)
+                  }
+                ></SearchField>
+                <div className={classes.filter}>
+                  <Select
+                    label={t('api_delegation.filter_label')}
+                    deleteButtonLabel={t('api_delegation.filter_remove_all')}
+                    multiple={true}
+                    onChange={handleFilterChange}
+                    options={filterOptions}
+                  />
+                </div>
               </div>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>

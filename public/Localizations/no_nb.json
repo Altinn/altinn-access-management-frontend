@@ -33,6 +33,8 @@
     "previous":"Forrige",
     "next": "Neste",
     "add_new_business": "Legg til ny virksomhet",
-    "card_title": "Programmeringsgrensesnitt - API"
+    "card_title": "Programmeringsgrensesnitt - API",
+    "filter_label": "Filtrer på tilbyder",
+    "filter_remove_all": "Fjern alle filtre"
   }
 }

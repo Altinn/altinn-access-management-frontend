@@ -2,17 +2,26 @@
   .pageContainer{
       --pageContainer-width: 1055px;
   }
+  .searchSection{
+    --searchFieldWidth: 100%
+  }
 }
 
 @media only screen and (min-width: 700px) {
   .pageContainer{
     --pageContainer-width: 1055px;
   }
+  .searchSection{
+    --searchFieldWidth: 50%
+  }
 }
 
 @media only screen and (min-width: 900px) {
   .pageContainer{
     --pageContainer-width: 1055px;
+  }
+  .searchSection{
+    --searchFieldWidth: 50%
   }
 }
 
@@ -37,9 +46,13 @@
     margin-right: 3rem;
 }
 
+.searchSection{
+  width: var(--searchFieldWidth);
+}
 
-.searchField{
-  width: 47%;
+.filter {
+  width: 75%;
+  padding-top: 1rem;
 }
 
 .navButtonContainer {
