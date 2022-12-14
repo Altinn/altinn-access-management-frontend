@@ -2,13 +2,10 @@ import { Button, ButtonVariant, ButtonColor, ButtonSize } from '@altinn/altinn-d
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { CompactDeletableListItem } from '../Common/CompactDeletableListItem';
 import { ConfirmationPage } from '../Common/ConfirmationPage';
-
-import classes from './ApiDelegationConfirmationPage.module.css';
 
 export const ApiDelegationConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
