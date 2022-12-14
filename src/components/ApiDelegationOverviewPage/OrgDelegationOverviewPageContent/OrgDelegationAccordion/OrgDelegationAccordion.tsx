@@ -19,9 +19,9 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
+import { DeletableListItem } from '@/components/Common/DeletableListItem';
 
 import classes from './OrgDelegationAccordion.module.css';
-import { DeletableListItem } from '../../../Common/DeletableListItem';
 
 export interface OrgDelegationAccordionProps {
   organization: OverviewOrg;

@@ -7,6 +7,7 @@ import {
   Button,
 } from '@altinn/altinn-design-system';
 import { useState } from 'react';
+
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 

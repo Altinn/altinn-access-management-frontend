@@ -18,9 +18,9 @@ export const ApiDelegationConfirmationPage = () => {
       firstListItems={chosenApis}
       secondListItems={chosenOrgs}
       headerText={t('api_delegation.give_access_to_new_api')}
-      firstContentText={t('api_delegation.confirmation_page_content_top_text')}
-      secondContentText={t('api_delegation.confirmation_page_content_second_text')}
-      bottomText={t('api_delegation.confirmation_page_content_bottom_text')}
+      firstContentText={String(t('api_delegation.confirmation_page_content_top_text'))}
+      secondContentText={String(t('api_delegation.confirmation_page_content_second_text'))}
+      bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
       mainButton={
         <Button
           color={ButtonColor.Success}
