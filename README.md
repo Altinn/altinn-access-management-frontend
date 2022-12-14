@@ -95,10 +95,10 @@ If the bundled files are to be served from a path other than the server root, yo
 
 ## Run code with access-management backend
 
-To run the code together with access-manamgent backend to the following
+To run the code together with access-management backend to the following
 
 
-1. Checkout Altinn-Studio repo and Altinn-Access-Managment repo
+1. Checkout Altinn-Studio repo and Altinn-Access-Management repo
 
 1. Navigate to the `development` folder in the altinn-studio repo
 
