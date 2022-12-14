@@ -1,0 +1,36 @@
+.page{
+  width: 1055px;
+  margin: auto;
+  margin-top: 8rem;
+}
+
+.pageContent{
+  --component-page-margin-horizontal: 3rem;
+  margin-right: var(--component-page-margin-horizontal);
+  margin-left: var(--component-page-margin-horizontal);
+}
+
+.navButtonContainer{
+  margin-top: 8rem;
+  display: flex;
+  justify-content: center;
+}
+
+.previousButton{
+  display: flex;
+  margin-right: 3rem;
+}
+
+.confirmButton{
+  display: flex;
+}
+
+.secondText{
+  margin-top: 40px;
+  font-weight: normal;
+}
+
+.bottomText {
+  margin-top: 40px;
+  font-weight: normal;
+}

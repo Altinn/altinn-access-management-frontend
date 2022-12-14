@@ -81,7 +81,7 @@ export const NewOrgDelegationPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/api-delegations')}
                   >
                     {t('api_delegation.previous')}
                   </Button>

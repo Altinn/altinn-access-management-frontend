@@ -88,7 +88,7 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/api-delegations/new-org')}
                   >
                     Forrige
                   </Button>
