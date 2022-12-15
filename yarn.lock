@@ -5,12 +5,11 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@altinn/altinn-design-system@npm:^0.25.7":
-  version: 0.25.9
-  resolution: "@altinn/altinn-design-system@npm:0.25.9"
+"@altinn/altinn-design-system@npm:^0.25.10":
+  version: 0.25.10
+  resolution: "@altinn/altinn-design-system@npm:0.25.10"
   dependencies:
     "@altinn/figma-design-tokens": ^4.3.0
-    "@navikt/ds-icons": ^2.0.0
     "@navikt/ds-icons": ^2.0.0
     "@radix-ui/react-popover": ^1.0.0
     "@react-hookz/web": ^20.0.0
@@ -20,7 +19,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 433e66110b3589a68373fd94b933c5d7a8f579410fd75377a4b3cca94361bf09c0269c9ece603479749a1e44c257d35e89b1a3bf81396b66468cbe57aa0f4889
+  checksum: 53bb2b72a4f47c8dfcee635cefd50393ab038da75bb10b6cdebce1dc8f506bc739fc83cca5bacbad1cd286eecd9958a17d532f3d8017d637cfe43eafe1889c58
   languageName: node
   linkType: hard
 
@@ -933,7 +932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^1.9.0":
+"@reduxjs/toolkit@npm:^1.9.1":
   version: 1.9.1
   resolution: "@reduxjs/toolkit@npm:1.9.1"
   dependencies:
@@ -5446,8 +5445,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-app@workspace:."
   dependencies:
-    "@altinn/altinn-design-system": ^0.25.7
-    "@reduxjs/toolkit": ^1.8.6
+    "@altinn/altinn-design-system": ^0.25.10
+    "@reduxjs/toolkit": ^1.9.1
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21
     "@types/react-dom": ^18.0.6
