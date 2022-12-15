@@ -128,9 +128,7 @@ To run the code together with access-management backend to the following
    dotnet run
    ```
 
-- Set up database
-
-- Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
+- Set up database: Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
 - Install database server (choose your own admin password and save it some place you can find it again)
 - Start PG admin
 - Create database and call it authorizationdb
