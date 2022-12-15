@@ -146,15 +146,12 @@ To run the code together with access-management backend to the following
 
 - Start Access Management Frontend (if not started)
 
-Go to access-management-frontend repo
+- Go to access-management-frontend repo
 
-run 'yarn start'
+- run 'yarn start'
 
+- Open browser local.cloud.altinn
 
-- Test
+- You should now see localtest intro with access management as only application
 
-Open browser local.cloud.altinn
-
-You should now see localtest intro with access management as only application
-
-Log in and change url to http://local.altinn.cloud/
+- Log in and change url to http://local.altinn.cloud/
