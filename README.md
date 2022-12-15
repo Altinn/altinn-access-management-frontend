@@ -35,7 +35,7 @@ components/
     - ComponentName.test.tsx (unit tests)
     - index.ts (public interface for the component)
     - style.css (if needed)
-  Common/
+  Reusables/
     SubComponent1/
       - SubComponent1.tsx (if the subcomponent is not reusable)
       - SubComponent1.test.tsx (unit tests)
