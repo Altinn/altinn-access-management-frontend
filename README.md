@@ -128,15 +128,32 @@ To run the code together with access-management backend to the following
    dotnet run
    ```
 
-- Open Altinn-Access-Management repo in an IDE
+## Set up database
+
+To run Access Management locally you need to have PostgreSQL database installed
+
+- Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
+- Install database server (choose your own admin password and save it some place you can find it again)
+- Start PG admin
+
+
+Create database authorizationdb
+
+Create the following users (with priveliges for authorizationdb) 
+-platform_authorization_admin (superuser, canlogin)
+-platform_authorization (canlogin)
+password: Password
+
+Create schema delegations in authorizationdb
+
+Set platform_authorization_admin as owner
+
+- Open Altinn-Access-Management repo in an IDE and go to following folder.
 
   ```bash
    cd src/Altinn.AccessManagement
    ```
 - ON MAC: change WorkspacePath in file: src/Altinn.AccessManagement/appsettings.Development.json to "Altinn.AccessManagement.Persistence/Migration".
-
-   
-- Setup database
 
 - Start Access Management
 
