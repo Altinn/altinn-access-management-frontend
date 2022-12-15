@@ -21,7 +21,7 @@ export interface ConfirmationPageProps {
   bottomText?: string;
   mainButton: React.ReactNode;
   complementaryButton: React.ReactNode;
-  headerIcon: React.ReactElement;
+  headerIcon: React.ReactNode;
 }
 
 export const ConfirmationPage = ({

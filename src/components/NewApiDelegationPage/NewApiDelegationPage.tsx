@@ -106,8 +106,8 @@ export const NewApiDelegationsPage = () => {
                 ></SearchField>
                 <div className={classes.filter}>
                   <Select
-                    label={t('api_delegation.filter_label')}
-                    deleteButtonLabel={t('api_delegation.filter_remove_all')}
+                    label={String(t('api_delegation.filter_label'))}
+                    deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
                     multiple={true}
                     onChange={handleFilterChange}
                     options={filterOptions}
