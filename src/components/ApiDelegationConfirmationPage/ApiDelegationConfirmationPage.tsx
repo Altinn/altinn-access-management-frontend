@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { ConfirmationPage } from '../Common/ConfirmationPage';
+import { ConfirmationPage } from '../Reusables/ConfirmationPage';
 
 export const ApiDelegationConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);

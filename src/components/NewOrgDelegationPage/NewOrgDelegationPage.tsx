@@ -18,7 +18,7 @@ import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import {
   NewDelegationAccordion,
   NewDelegationAccordionButtonType,
-} from '@/components/Common/NewDelegationAccordion';
+} from '@/components/Reusables/NewDelegationAccordion';
 
 import classes from './NewOrgDelegationPage.module.css';
 

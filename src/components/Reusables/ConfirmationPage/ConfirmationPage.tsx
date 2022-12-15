@@ -8,7 +8,7 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
-import { CompactDeletableListItem } from '@/components/Common/CompactDeletableListItem';
+import { CompactDeletableListItem } from '@/components/Reusables/CompactDeletableListItem';
 
 import classes from './ConfirmationPage.module.css';
 
