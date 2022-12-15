@@ -98,56 +98,60 @@ If the bundled files are to be served from a path other than the server root, yo
 To run the code together with access-management backend to the following
 
 
-1. Checkout Altinn-Studio repo and Altinn-Access-Management repo
+- Checkout Altinn-Studio repo and 
 
-1. Navigate to the `development` folder in the altinn-studio repo
+- Navigate to the `development` folder in the altinn-studio repo
 
    ```bash
    cd src/development
    ```
 
-2. Start the loadbalancer container that routes between the local platform services and the app
+- Start the loadbalancer container that routes between the local platform services and the app
 
    ```bash
    docker-compose up -d --build
    ```
 
-3. Set path to app folder in local platform services. There are two ways to do this:
+- Set path to app folder in local platform services. There are two ways to do this:
 
-   1. Edit the appsettings.json file:
+   - Edit the appsettings.json file:
       - Open `appSettings.json` in the `LocalTest` folder in an editor, for example in Visual Studio Code
-      - Change the setting `"AppRepsitoryBasePath"` to the full path to your app on the disk. Save the file.
-   2. Define a value using [user-secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows#set-a-secret). User secrets is a set of developer specific settings that will overwrite values from the `appSettings.json` file when the application is started in developer "mode".
-      ```bash
-      dotnet user-secrets set "LocalPlatformSettings:AppRepositoryBasePath" "C:\Repos"
-      ```
+      - Change the setting `"AppRepsitoryBasePath"` to the path to the folder where you've cloned the altinn-studio repo.
+      - Be aware that on mac you don't have c:/ in your paths.
+      - Create folder AltinnPlatformLocal wherever you like, copy and paste path in LocalTestingStorageBasePath.
+      - Set LocalTestingStaticTestDataPath to your full path to the file in devlopment/TestData     
+          
 
-4. Start the local platform services (make sure you are in the LocalTest folder)
+- Start the local platform services (make sure you are in the LocalTest folder)
 
    ```bash
    dotnet run
    ```
 
-5. Go to Altinn-Access-Management repo
+- Open Altinn-Access-Management repo in an IDE
 
   ```bash
    cd src/Altinn.AccessManagement
    ```
+- ON MAC: change WorkspacePath in file: src/Altinn.AccessManagement/appsettings.Development.json to "Altinn.AccessManagement.Persistence/Migration".
 
-6. Start the Access Management backend
+   
+- Setup database
+
+- Start Access Management
 
    ```bash
    dotnet run
    ```
 
-7. Start Access Management Frontend (if not started)
+- Start Access Management Frontend (if not started)
 
 Go to access-management-frontend repo
 
 run 'yarn start'
 
 
-8. Test
+- Test
 
 Open browser local.cloud.altinn
 
