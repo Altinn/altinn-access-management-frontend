@@ -37,6 +37,8 @@
     "confirm_delegation": "Confirm delegation",
     "confirmation_page_content_top_text": "You wish to give access to the following APIs",
     "confirmation_page_content_second_text": "The API-accesses will be given to:",
-    "confirmation_page_content_bottom_text": "The accesses will be given and is valid until it actively is deleted. The receiver will be notified."
+    "confirmation_page_content_bottom_text": "The accesses will be given and is valid until it actively is deleted. The receiver will be notified.",
+    "filter_label": "Filter by provider",
+    "filter_remove_all": "Remove all filters"
   }
 }

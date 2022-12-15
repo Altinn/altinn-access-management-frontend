@@ -37,6 +37,8 @@
     "confirm_delegation": "Bekreft delegering",
     "confirmation_page_content_top_text": "Du ønsker å gi rettigheter til følgende API:",
     "confirmation_page_content_second_text": "API-tilgangene blir gitt til:",
-    "confirmation_page_content_bottom_text": "Tilgangen blir gitt og er gyldig til den aktivt slettes eller trekkes tilbake. Mottaker får beskjed."
+    "confirmation_page_content_bottom_text": "Tilgangen blir gitt og er gyldig til den aktivt slettes eller trekkes tilbake. Mottaker får beskjed.",
+    "filter_label": "Filtrer på tilbyder",
+    "filter_remove_all": "Fjern alle filtre"
   }
 }
