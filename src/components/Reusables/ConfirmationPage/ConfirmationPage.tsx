@@ -1,4 +1,11 @@
-import { Page, PageContent, PageHeader, List, BorderStyle } from '@altinn/altinn-design-system';
+import {
+  Page,
+  PageContent,
+  PageHeader,
+  List,
+  BorderStyle,
+  PageColor,
+} from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
@@ -22,6 +29,7 @@ export interface ConfirmationPageProps {
   mainButton: React.ReactNode;
   complementaryButton: React.ReactNode;
   headerIcon: React.ReactNode;
+  color?: PageColor;
 }
 
 export const ConfirmationPage = ({
@@ -34,6 +42,7 @@ export const ConfirmationPage = ({
   mainButton,
   complementaryButton,
   headerIcon,
+  color = PageColor.Primary,
 }: ConfirmationPageProps) => {
   const dispatch = useAppDispatch();
 
