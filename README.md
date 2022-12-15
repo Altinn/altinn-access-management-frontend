@@ -115,7 +115,7 @@ To run the code together with access-management backend to the following
 - Set path to app folder in local platform services. There are two ways to do this:
 
    - Edit the appsettings.json file:
-      - Open `appSettings.json` in the `LocalTest` folder in an editor, for example in Visual Studio Code
+      - Open `appSettings.json` in the `src/development/LocalTest` in an editor.
       - Change the setting `"AppRepsitoryBasePath"` to the path to the folder where you've cloned the altinn-studio repo.
       - Be aware that on mac you don't have c:/ in your paths.
       - Create folder AltinnPlatformLocal wherever you like, copy and paste path in LocalTestingStorageBasePath.
