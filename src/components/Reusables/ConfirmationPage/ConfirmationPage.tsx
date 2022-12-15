@@ -26,8 +26,8 @@ export interface ConfirmationPageProps {
   firstContentText?: string;
   secondContentText?: string;
   bottomText?: string;
-  mainButton: React.ReactNode;
-  complementaryButton: React.ReactNode;
+  mainButton?: React.ReactNode;
+  complementaryButton?: React.ReactNode;
   headerIcon: React.ReactNode;
   color?: PageColor;
 }
@@ -83,8 +83,10 @@ export const ConfirmationPage = ({
               <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
               <h3 className={classes.bottomText}>{bottomText}</h3>
               <div className={classes.navButtonContainer}>
-                <div className={classes.previousButton}>{complementaryButton}</div>
-                <div className={classes.confirmButton}>{mainButton}</div>
+                {complementaryButton && (
+                  <div className={classes.previousButton}>{complementaryButton}</div>
+                )}
+                {mainButton && <div className={classes.confirmButton}>{mainButton}</div>}
               </div>
             </div>
           </PageContent>
