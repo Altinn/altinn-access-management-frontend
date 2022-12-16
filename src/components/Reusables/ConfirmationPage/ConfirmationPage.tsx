@@ -73,7 +73,7 @@ export const ConfirmationPage = ({
   return (
     <div>
       <div className={classes.page}>
-        <Page>
+        <Page color={color}>
           <PageHeader icon={headerIcon}>{headerText}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
