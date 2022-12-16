@@ -50,7 +50,7 @@ describe('ConfirmationPage', () => {
     cy.findByRole('button').should('not.exist');
   });
 
-  it('should show mainButton and complmentaryButton when supplied to component', () => {
+  it('should show mainButton and complementaryButton when these props are supplied to component', () => {
     cy.mount(
       <ConfirmationPage
         firstListItems={delegableApiList}
