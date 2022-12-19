@@ -99,7 +99,7 @@ export const NewApiDelegationsPage = () => {
     return (
       <CompactDeletableListItem
         key={index}
-        startIcon={<OfficeIcon />}
+        icon={<OfficeIcon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
         middleText={org.orgNr}

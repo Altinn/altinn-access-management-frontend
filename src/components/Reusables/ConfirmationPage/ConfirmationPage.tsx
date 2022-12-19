@@ -50,7 +50,7 @@ export const ConfirmationPage = ({
     return (
       <CompactDeletableListItem
         key={index}
-        startIcon={<SettingsIcon />}
+        icon={<SettingsIcon />}
         removeCallback={apiList.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
         leftText={api.apiName}
         middleText={api.orgName}
@@ -62,7 +62,7 @@ export const ConfirmationPage = ({
     return (
       <CompactDeletableListItem
         key={index}
-        startIcon={<OfficeIcon />}
+        icon={<OfficeIcon />}
         removeCallback={orgList.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
         middleText={org.orgNr}
@@ -81,16 +81,16 @@ export const ConfirmationPage = ({
               {apiListItems.length > 0 && (
                 <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
               )}
-              <h2 className={classes.secondText}>{orgListContentHeader}</h2>
+              <h2 className={classes.orgListContentHeader}>{orgListContentHeader}</h2>
               {apiListItems.length > 0 && (
                 <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
               )}
               <h3 className={classes.bottomText}>{bottomText}</h3>
-              <div className={classes.navButtonContainer}>
+              <div className={classes.buttonsContainer}>
                 {complementaryButton && (
-                  <div className={classes.previousButton}>{complementaryButton}</div>
+                  <div className={classes.complementaryButton}>{complementaryButton}</div>
                 )}
-                {mainButton && <div className={classes.confirmButton}>{mainButton}</div>}
+                {mainButton && <div className={classes.mainButton}>{mainButton}</div>}
               </div>
             </div>
           </PageContent>

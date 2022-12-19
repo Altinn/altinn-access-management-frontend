@@ -10,22 +10,22 @@
   margin-left: var(--component-page-margin-horizontal);
 }
 
-.navButtonContainer{
+.buttonsContainer{
   margin-top: 8rem;
   display: flex;
   justify-content: center;
 }
 
-.previousButton{
+.complementaryButton{
   display: flex;
   margin-right: 3rem;
 }
 
-.confirmButton{
+.mainButton{
   display: flex;
 }
 
-.secondText{
+.orgListContentHeader{
   margin-top: 40px;
   font-weight: normal;
 }

@@ -15,14 +15,14 @@ export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
   leftText: string;
   middleText: string;
-  startIcon?: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 export const CompactDeletableListItem = ({
   removeCallback,
   leftText,
   middleText,
-  startIcon,
+  icon,
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
@@ -33,12 +33,12 @@ export const CompactDeletableListItem = ({
         data-testid='compact-list-item'
       >
         <div className={classes.baseListItemContent}>
-          {startIcon && (
+          {icon && (
             <div className={classes.listItemIcon}>
               <SvgIcon
                 width={14}
                 height={14}
-                svgIconComponent={startIcon}
+                svgIconComponent={icon}
               ></SvgIcon>
             </div>
           )}
