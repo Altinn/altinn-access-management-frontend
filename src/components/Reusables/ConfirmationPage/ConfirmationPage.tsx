@@ -20,11 +20,11 @@ import { CompactDeletableListItem } from '@/components/Reusables/CompactDeletabl
 import classes from './ConfirmationPage.module.css';
 
 export interface ConfirmationPageProps {
-  firstListItems: DelegableApi[];
-  secondListItems: DelegableOrg[];
-  headerText: string;
-  firstContentText?: string;
-  secondContentText?: string;
+  apiList: DelegableApi[];
+  orgList: DelegableOrg[];
+  pageHeaderText: string;
+  apiListContentHeader?: string;
+  orgListContentHeader?: string;
   bottomText?: string;
   mainButton?: React.ReactNode;
   complementaryButton?: React.ReactNode;
@@ -33,11 +33,11 @@ export interface ConfirmationPageProps {
 }
 
 export const ConfirmationPage = ({
-  firstListItems,
-  secondListItems,
-  headerText,
-  firstContentText,
-  secondContentText,
+  apiList,
+  orgList,
+  pageHeaderText,
+  apiListContentHeader,
+  orgListContentHeader,
   bottomText,
   mainButton,
   complementaryButton,
@@ -46,26 +46,26 @@ export const ConfirmationPage = ({
 }: ConfirmationPageProps) => {
   const dispatch = useAppDispatch();
 
-  const apiListItems = firstListItems.map((api: DelegableApi, index: Key) => {
+  const apiListItems = apiList.map((api: DelegableApi, index: Key) => {
     return (
       <CompactDeletableListItem
         key={index}
         startIcon={<SettingsIcon />}
-        removeCallback={firstListItems.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
-        firstText={api.apiName}
-        secondText={api.orgName}
+        removeCallback={apiList.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
+        leftText={api.apiName}
+        middleText={api.orgName}
       ></CompactDeletableListItem>
     );
   });
 
-  const orgListItems = secondListItems.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const orgListItems = orgList.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
       <CompactDeletableListItem
         key={index}
         startIcon={<OfficeIcon />}
-        removeCallback={secondListItems.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        firstText={org.orgName}
-        secondText={org.orgNr}
+        removeCallback={orgList.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
+        leftText={org.orgName}
+        middleText={org.orgNr}
       ></CompactDeletableListItem>
     );
   });
@@ -74,13 +74,17 @@ export const ConfirmationPage = ({
     <div>
       <div className={classes.page}>
         <Page color={color}>
-          <PageHeader icon={headerIcon}>{headerText}</PageHeader>
+          <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
-              <h2>{firstContentText}</h2>
-              <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
-              <h2 className={classes.secondText}>{secondContentText}</h2>
-              <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
+              <h2>{apiListContentHeader}</h2>
+              {apiListItems.length > 0 && (
+                <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
+              )}
+              <h2 className={classes.secondText}>{orgListContentHeader}</h2>
+              {apiListItems.length > 0 && (
+                <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
+              )}
               <h3 className={classes.bottomText}>{bottomText}</h3>
               <div className={classes.navButtonContainer}>
                 {complementaryButton && (

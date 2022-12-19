@@ -18,8 +18,8 @@ describe('CompactDeletableListItem', () => {
     cy.mount(
       <List>
         <CompactDeletableListItem
-          firstText={'Api'}
-          secondText={'Skattetaten'}
+          leftText={'Api'}
+          middleText={'Skattetaten'}
         />
       </List>,
     );
@@ -31,8 +31,8 @@ describe('CompactDeletableListItem', () => {
       <List>
         <CompactDeletableListItem
           removeCallback={() => null}
-          firstText={'Api'}
-          secondText={'Skattetaten'}
+          leftText={'Api'}
+          middleText={'Skattetaten'}
         />
       </List>,
     );
@@ -50,8 +50,8 @@ describe('CompactDeletableListItem', () => {
       <List>
         <CompactDeletableListItem
           removeCallback={softRemoveSpy}
-          firstText={'Api'}
-          secondText={'Org'}
+          leftText={'Api'}
+          middleText={'Org'}
         />
       </List>,
     );

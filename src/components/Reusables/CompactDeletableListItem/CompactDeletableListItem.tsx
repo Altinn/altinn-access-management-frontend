@@ -11,19 +11,19 @@ import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 
 import classes from './CompactDeletableListItem.module.css';
 
-export interface DeletableListItemProps {
+export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
-  firstText: string;
-  secondText: string;
+  leftText: string;
+  middleText: string;
   startIcon?: React.ReactNode;
 }
 
 export const CompactDeletableListItem = ({
   removeCallback,
-  firstText,
-  secondText,
+  leftText,
+  middleText,
   startIcon,
-}: DeletableListItemProps) => {
+}: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
   return (
@@ -43,8 +43,8 @@ export const CompactDeletableListItem = ({
             </div>
           )}
           <div className={classes.listItemTexts}>
-            <div className={classes.firstText}>{firstText}</div>
-            <div className={classes.secondText}>{secondText}</div>
+            <div className={classes.firstText}>{leftText}</div>
+            <div className={classes.secondText}>{middleText}</div>
           </div>
           <div className={classes.deleteSection}>
             {removeCallback && (

@@ -101,8 +101,8 @@ export const NewApiDelegationsPage = () => {
         key={index}
         startIcon={<OfficeIcon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        firstText={org.orgName}
-        secondText={org.orgNr}
+        leftText={org.orgName}
+        middleText={org.orgNr}
       ></CompactDeletableListItem>
     );
   });

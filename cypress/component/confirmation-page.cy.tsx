@@ -38,11 +38,11 @@ describe('ConfirmationPage', () => {
   it('should not show buttons when not supplied to component', () => {
     cy.mount(
       <ConfirmationPage
-        firstListItems={delegableApiList}
-        secondListItems={delegableOrgList}
-        headerText={'Confirmation Page'}
-        firstContentText={'Text'}
-        secondContentText={'Text'}
+        apiList={delegableApiList}
+        orgList={delegableOrgList}
+        pageHeaderText={'Confirmation Page'}
+        apiListContentHeader={'Text'}
+        orgListContentHeader={'Text'}
         bottomText={'Text'}
         headerIcon={<MinusCircle />}
       />,
@@ -53,11 +53,11 @@ describe('ConfirmationPage', () => {
   it('should show mainButton and complementaryButton when these props are supplied to component', () => {
     cy.mount(
       <ConfirmationPage
-        firstListItems={delegableApiList}
-        secondListItems={delegableOrgList}
-        headerText={'Confirmation Page'}
-        firstContentText={'Text'}
-        secondContentText={'Text'}
+        apiList={delegableApiList}
+        orgList={delegableOrgList}
+        pageHeaderText={'Confirmation Page'}
+        apiListContentHeader={'Text'}
+        orgListContentHeader={'Text'}
         mainButton={<Button>MainButton</Button>}
         complementaryButton={<Button>ComplementaryButton</Button>}
         bottomText={'Text'}

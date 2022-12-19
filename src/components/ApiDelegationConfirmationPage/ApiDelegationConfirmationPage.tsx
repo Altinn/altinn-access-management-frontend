@@ -15,11 +15,11 @@ export const ApiDelegationConfirmationPage = () => {
 
   return (
     <ConfirmationPage
-      firstListItems={chosenApis}
-      secondListItems={chosenOrgs}
-      headerText={t('api_delegation.give_access_to_new_api')}
-      firstContentText={String(t('api_delegation.confirmation_page_content_top_text'))}
-      secondContentText={String(t('api_delegation.confirmation_page_content_second_text'))}
+      apiList={chosenApis}
+      orgList={chosenOrgs}
+      pageHeaderText={t('api_delegation.give_access_to_new_api')}
+      apiListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
+      orgListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
       bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
       mainButton={
         <Button
@@ -27,6 +27,7 @@ export const ApiDelegationConfirmationPage = () => {
           variant={ButtonVariant.Filled}
           size={ButtonSize.Small}
           onClick={() => navigate('/api-delegations/receipt')}
+          disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
         >
           {t('api_delegation.confirm_delegation')}
         </Button>
