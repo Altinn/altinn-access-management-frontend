@@ -38,6 +38,11 @@
     "confirmation_page_content_second_text": "API-tilgangane blir gitt til:",
     "confirmation_page_content_bottom_text": "Tilgangen blir gitt og er gyldig til den aktivt fjernas eller blir trekt tilbake. Mottakar får beskjed.",
     "filter_label": "Filtrer på tilbyder",
-    "filter_remove_all": "Fjern alle filtra"
+    "filter_remove_all": "Fjern alle filtra",
+    "chosen_orgs": "Valgte organisasjonar",
+    "new_api_content_text2": "Vel kva API du vil gi tilgang til ved å klikka på pluss-teiknet. Du kan også søkja etter API eller filtrera på tilbydar.",
+    "delegable_apis": "Delegerbare API",
+    "chosen_apis": "Valgte API:",
+    "no_chosen_orgs": "Du har ingen valde organisasjonar å gi API-tilgang til. Vennlegast klikk på forrigeknappen nedst til høgre."
   }
 }
