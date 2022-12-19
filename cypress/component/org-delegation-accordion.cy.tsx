@@ -18,13 +18,13 @@ describe('OrgDelegationAccordion', () => {
     it('should show delegateNewApi-button on render', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
-        orgName: 'Evry',
+        name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
         apiList: [
           {
             id: '1',
-            apiName: 'Delegert API A',
+            name: 'Delegert API A',
             isSoftDelete: false,
             owner: 'Accenture',
             description:
@@ -32,7 +32,7 @@ describe('OrgDelegationAccordion', () => {
           },
           {
             id: '2',
-            apiName: 'Delegert API B',
+            name: 'Delegert API B',
             isSoftDelete: false,
             owner: 'Accenture',
             description:
@@ -55,7 +55,7 @@ describe('OrgDelegationAccordion', () => {
     it('should show delete button when state is isEditable=true', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
-        orgName: 'Evry',
+        name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
         apiList: [],
@@ -75,7 +75,7 @@ describe('OrgDelegationAccordion', () => {
     it('should not show undo button when state is isEditable=false', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
-        orgName: 'Evry',
+        name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
         apiList: [],
@@ -95,13 +95,13 @@ describe('OrgDelegationAccordion', () => {
     it('should show an undo button and display header with line through when all apis are soft deleted', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
-        orgName: 'Evry',
+        name: 'Evry',
         isAllSoftDeleted: true,
         orgNr: '123456789',
         apiList: [
           {
             id: '1',
-            apiName: 'Delegert API A',
+            name: 'Delegert API A',
             isSoftDelete: true,
             owner: 'Accenture',
             description:
@@ -109,7 +109,7 @@ describe('OrgDelegationAccordion', () => {
           },
           {
             id: '2',
-            apiName: 'Delegert API B',
+            name: 'Delegert API B',
             isSoftDelete: true,
             owner: 'Accenture',
             description:
@@ -136,13 +136,13 @@ describe('OrgDelegationAccordion', () => {
     it('should call softDeleteCallback on button click and isEditable=true ', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
-        orgName: 'Evry',
+        name: 'Evry',
         isAllSoftDeleted: false,
         orgNr: '123456789',
         apiList: [
           {
             id: '1',
-            apiName: 'Delegert API A',
+            name: 'Delegert API A',
             isSoftDelete: false,
             owner: 'Accenture',
             description:
@@ -150,7 +150,7 @@ describe('OrgDelegationAccordion', () => {
           },
           {
             id: '2',
-            apiName: 'Delegert API B',
+            name: 'Delegert API B',
             isSoftDelete: false,
             owner: 'Accenture',
             description:
@@ -181,13 +181,13 @@ describe('OrgDelegationAccordion', () => {
     it('should call softRestoreCallback on buttonclick', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
-        orgName: 'Evry',
+        name: 'Evry',
         isAllSoftDeleted: true,
         orgNr: '123456789',
         apiList: [
           {
             id: '1',
-            apiName: 'Delegert API A',
+            name: 'Delegert API A',
             isSoftDelete: false,
             owner: 'Accenture',
             description:
@@ -195,7 +195,7 @@ describe('OrgDelegationAccordion', () => {
           },
           {
             id: '2',
-            apiName: 'Delegert API B',
+            name: 'Delegert API B',
             isSoftDelete: false,
             owner: 'Accenture',
             description:

@@ -18,13 +18,13 @@ describe('DeletableListItem', () => {
   it('should show delete button when state isEditable=true', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
-      orgName: 'Evry',
+      name: 'Evry',
       isAllSoftDeleted: false,
       orgNr: '123456789',
       apiList: [
         {
           id: '1',
-          apiName: 'Delegert API A',
+          name: 'Delegert API A',
           isSoftDelete: false,
           owner: 'Accenture',
           description:
@@ -49,13 +49,13 @@ describe('DeletableListItem', () => {
   it('should not show delete button when state isEditable=false', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
-      orgName: 'Evry',
+      name: 'Evry',
       isAllSoftDeleted: false,
       orgNr: '123456789',
       apiList: [
         {
           id: '1',
-          apiName: 'Delegert API A',
+          name: 'Delegert API A',
           isSoftDelete: false,
           owner: 'Accenture',
           description:
@@ -80,13 +80,13 @@ describe('DeletableListItem', () => {
   it('should show an undo button and display list item texts with line through when state isEditable=true', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
-      orgName: 'Evry',
+      name: 'Evry',
       isAllSoftDeleted: true,
       orgNr: '123456789',
       apiList: [
         {
           id: '1',
-          apiName: 'Delegert API A',
+          name: 'Delegert API A',
           isSoftDelete: true,
           owner: 'Accenture',
           description:
@@ -117,13 +117,13 @@ describe('DeletableListItem', () => {
   it('should do softDeleteCallback on button click', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
-      orgName: 'Evry',
+      name: 'Evry',
       isAllSoftDeleted: false,
       orgNr: '123456789',
       apiList: [
         {
           id: '1',
-          apiName: 'Delegert API A',
+          name: 'Delegert API A',
           isSoftDelete: false,
           owner: 'Accenture',
           description:
@@ -156,13 +156,13 @@ describe('DeletableListItem', () => {
   it('should do softRestoreCallback on button click', () => {
     const overviewOrg: OverviewOrg = {
       id: '1',
-      orgName: 'Evry',
+      name: 'Evry',
       isAllSoftDeleted: true,
       orgNr: '123456789',
       apiList: [
         {
           id: '1',
-          apiName: 'Delegert API A',
+          name: 'Delegert API A',
           isSoftDelete: true,
           owner: 'Accenture',
           description:

@@ -51,6 +51,7 @@
 }
 
 .filter {
+  width: 75%;
   padding-top: 1rem;
 }
 
@@ -61,7 +62,7 @@
 }
 
 .navButton{
-  margin-right: 3rem;
+  margin-right: 0.5rem;
   width: 10rem;
 }
 

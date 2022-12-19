@@ -1,6 +1,5 @@
 import type { MultiSelectOption } from '@altinn/altinn-design-system';
 import {
-  BorderStyle,
   Page,
   PageContent,
   PageHeader,
@@ -10,36 +9,28 @@ import {
   ButtonVariant,
   ButtonColor,
   ButtonSize,
-  List,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { softAdd, softRemove, search, filter } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { softRemove as softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,
 } from '../Reusables/NewDelegationAccordion';
-import { CompactDeletableListItem } from '../Reusables/CompactDeletableListItem';
 
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
   const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [filters, setFilters] = useState<string[]>([]);
   const { t } = useTranslation('common');
@@ -95,18 +86,6 @@ export const NewApiDelegationsPage = () => {
     );
   });
 
-  const chosenDelegableOrgs = chosenOrgs.map((org: DelegableOrg, index: Key) => {
-    return (
-      <CompactDeletableListItem
-        key={index}
-        icon={<OfficeIcon />}
-        removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        leftText={org.orgName}
-        middleText={org.orgNr}
-      ></CompactDeletableListItem>
-    );
-  });
-
   return (
     <div>
       <div className={classes.page}>
@@ -114,15 +93,8 @@ export const NewApiDelegationsPage = () => {
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
-              {chosenDelegableOrgs.length < 0 ? (
-                <h4>{t('api_delegation.no_chosen_orgs')}</h4>
-              ) : (
-                <div>
-                  <h3>{t('api_delegation.chosen_orgs')}:</h3>
-                  <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
-                </div>
-              )}
-              <h3>{t('api_delegation.new_api_content_text2')}</h3>
+              <h2>Gi tilgang til API</h2>
+              <h3>Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet.</h3>
               <div className={classes.searchSection}>
                 <SearchField
                   value={searchString}
@@ -132,8 +104,8 @@ export const NewApiDelegationsPage = () => {
                 ></SearchField>
                 <div className={classes.filter}>
                   <Select
-                    label={String(t('api_delegation.filter_label'))}
-                    deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
+                    label={t('api_delegation.filter_label')}
+                    deleteButtonLabel={t('api_delegation.filter_remove_all')}
                     multiple={true}
                     onChange={handleFilterChange}
                     options={filterOptions}
@@ -142,11 +114,11 @@ export const NewApiDelegationsPage = () => {
               </div>
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.delegable_apis')}:</h4>
+                  <h4>Delegerbare API:</h4>
                   <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
                 </div>
                 <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.chosen_apis')}</h4>
+                  <h4>Valgte API:</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
@@ -157,9 +129,8 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
-                    onClick={() => navigate('/api-delegations/new-org')}
                   >
-                    {t('api_delegation.previous')}
+                    Forrige
                   </Button>
                 </div>
                 <div className={classes.navButton}>
@@ -168,10 +139,8 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Filled}
                     size={ButtonSize.Small}
                     fullWidth={true}
-                    onClick={() => navigate('/api-delegations/confirmation')}
-                    disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
                   >
-                    {t('api_delegation.next')}
+                    Neste
                   </Button>
                 </div>
               </div>

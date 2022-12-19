@@ -11,7 +11,7 @@ export class DeleteOrgDto {
     this.name = name;
     this.deletedApis = [];
     for (let i = 0; i < overviewListItems.length; i++) {
-      const item = new DeleteOrgApiDto(overviewListItems[i].id, overviewListItems[i].apiName);
+      const item = new DeleteOrgApiDto(overviewListItems[i].id, overviewListItems[i].name);
       this.deletedApis.push(item);
     }
   }
