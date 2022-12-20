@@ -11,7 +11,7 @@ import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { softAdd, softRemove } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { softAddOrg, softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
@@ -38,7 +38,7 @@ export const NewOrgDelegationPage = () => {
         description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Add}
-        addRemoveClick={() => dispatch(softAdd(org))}
+        addRemoveClick={() => dispatch(softAddOrg(org))}
       ></NewDelegationAccordion>
     );
   });
@@ -51,7 +51,7 @@ export const NewOrgDelegationPage = () => {
         description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={() => dispatch(softRemove(org))}
+        addRemoveClick={() => dispatch(softRemoveOrg(org))}
       ></NewDelegationAccordion>
     );
   });
@@ -92,7 +92,7 @@ export const NewOrgDelegationPage = () => {
                     variant={ButtonVariant.Filled}
                     size={ButtonSize.Small}
                     fullWidth={true}
-                    onClick={() => navigate('/api-delegations/new-api')}
+                    onClick={() => navigate('/api-delegations/new-api-delegation')}
                     disabled={chosenOrgs.length === 0}
                   >
                     {t('api_delegation.next')}

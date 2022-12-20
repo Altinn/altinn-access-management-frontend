@@ -37,7 +37,7 @@ const delegableOrgSlice = createSlice({
   name: 'delegableOrg',
   initialState,
   reducers: {
-    softAdd: (state, action) => {
+    softAddOrg: (state, action) => {
       const { delegableOrgList } = state;
       state.delegableOrgList = delegableOrgList.filter(
         (delegableOrg) => delegableOrg.id !== action.payload.id,
@@ -45,7 +45,7 @@ const delegableOrgSlice = createSlice({
 
       state.chosenDelegableOrgList.push(action.payload);
     },
-    softRemove: (state, action) => {
+    softRemoveOrg: (state, action) => {
       state.delegableOrgList.push(action.payload);
 
       const { chosenDelegableOrgList } = state;
@@ -58,4 +58,4 @@ const delegableOrgSlice = createSlice({
 });
 
 export default delegableOrgSlice.reducer;
-export const { softAdd, softRemove, resetDelegableOrgs } = delegableOrgSlice.actions;
+export const { softAddOrg, softRemoveOrg, resetDelegableOrgs } = delegableOrgSlice.actions;

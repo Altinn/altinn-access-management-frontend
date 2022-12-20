@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import {
   restoreAllSoftDeletedItems,
   save,
@@ -19,7 +20,7 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
-import { resetDelegableOrgs } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 
 import { OrgDelegationAccordion } from './OrgDelegationAccordion';
@@ -32,6 +33,11 @@ export const OrgDelegationOverviewPageContent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
+
+  const delegateToSpecificOrg = (org: OverviewOrg) => {
+    dispatch(softAddOrg(org));
+    navigate('new-api-delegation');
+  };
 
   useEffect(() => {
     handleSetDisabled();
@@ -60,6 +66,7 @@ export const OrgDelegationOverviewPageContent = () => {
       isEditable={isEditable}
       softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
       softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+      delegateToOrgCallback={() => delegateToSpecificOrg(org)}
     ></OrgDelegationAccordion>
   ));
 
@@ -76,7 +83,7 @@ export const OrgDelegationOverviewPageContent = () => {
       <div className={classes.delegateNewButton}>
         <Button
           variant={ButtonVariant.Outline}
-          onClick={() => navigate('new-org')}
+          onClick={() => navigate('new-org-delegation')}
           icon={<Add />}
         >
           {t('api_delegation.delegate_new_org')}

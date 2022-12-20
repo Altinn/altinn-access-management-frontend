@@ -9,8 +9,8 @@ import {
 import type { Key } from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softRemove as softRemoveApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softRemove as softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { softRemoveApi } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';

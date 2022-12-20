@@ -18,11 +18,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softAdd, softRemove, search, filter } from '@/rtk/features/delegableApi/delegableApiSlice';
+import {
+  softAddApi,
+  softRemoveApi,
+  search,
+  filter,
+} from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { softRemove as softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import {
@@ -56,7 +61,7 @@ export const NewApiDelegationsPage = () => {
   };
 
   const handleRemove = (api: DelegableApi) => {
-    dispatch(softRemove(api));
+    dispatch(softRemoveApi(api));
     dispatch(filter(filters));
     dispatch(search(searchString));
   };
@@ -76,7 +81,7 @@ export const NewApiDelegationsPage = () => {
           description={api.description}
           key={index}
           buttonType={NewDelegationAccordionButtonType.Add}
-          addRemoveClick={() => dispatch(softAdd(api))}
+          addRemoveClick={() => dispatch(softAddApi(api))}
         ></NewDelegationAccordion>
       );
     },
@@ -157,7 +162,7 @@ export const NewApiDelegationsPage = () => {
                     variant={ButtonVariant.Outline}
                     size={ButtonSize.Small}
                     fullWidth={true}
-                    onClick={() => navigate('/api-delegations/new-org')}
+                    onClick={() => navigate('/api-delegations/new-org-delegation')}
                   >
                     {t('api_delegation.previous')}
                   </Button>

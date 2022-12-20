@@ -26,7 +26,7 @@ export const ApiDelegationConfirmationPage = () => {
           color={ButtonColor.Success}
           variant={ButtonVariant.Filled}
           size={ButtonSize.Small}
-          onClick={() => navigate('/api-delegations')}
+          onClick={() => navigate('/api-delegations/receipt')}
           disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
         >
           {t('api_delegation.confirm_delegation')}
@@ -37,7 +37,7 @@ export const ApiDelegationConfirmationPage = () => {
           color={ButtonColor.Primary}
           variant={ButtonVariant.Outline}
           size={ButtonSize.Small}
-          onClick={() => navigate('/api-delegations/new-api')}
+          onClick={() => navigate('/api-delegations/new-api-delegation')}
         >
           {t('api_delegation.previous')}
         </Button>

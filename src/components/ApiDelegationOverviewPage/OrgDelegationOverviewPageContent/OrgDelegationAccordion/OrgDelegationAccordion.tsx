@@ -12,7 +12,6 @@ import {
 } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { softDelete, softRestore } from '@/rtk/features/overviewOrg/overviewOrgSlice';
@@ -21,8 +20,6 @@ import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import { DeletableListItem } from '@/components/Reusables/DeletableListItem';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { softAdd } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import classes from './OrgDelegationAccordion.module.css';
 
@@ -31,6 +28,7 @@ export interface OrgDelegationAccordionProps {
   isEditable: boolean;
   softRestoreAllCallback: () => void;
   softDeleteAllCallback: () => void;
+  delegateToOrgCallback?: () => void;
 }
 
 export const OrgDelegationAccordion = ({
@@ -38,21 +36,16 @@ export const OrgDelegationAccordion = ({
   softRestoreAllCallback,
   softDeleteAllCallback,
   isEditable = false,
+  delegateToOrgCallback,
 }: OrgDelegationAccordionProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
   const numberOfAccesses = organization.apiList.length.toString();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const handleSoftDeleteAll = () => {
     softDeleteAllCallback();
     setOpen(true);
-  };
-
-  const delegateToSpecificOrg = (org: DelegableOrg) => {
-    dispatch(softAdd(org));
-    navigate('new-api');
   };
 
   const actions = (
@@ -64,15 +57,17 @@ export const OrgDelegationAccordion = ({
       >
         {numberOfAccesses} {t('api_delegation.api_accesses')}
       </div>
-      <Button
-        variant={ButtonVariant.Quiet}
-        color={ButtonColor.Primary}
-        icon={<AddCircle />}
-        size={ButtonSize.Small}
-        onClick={() => delegateToSpecificOrg(organization)}
-      >
-        {t('api_delegation.delegate_new_api')}
-      </Button>
+      {delegateToOrgCallback && (
+        <Button
+          variant={ButtonVariant.Quiet}
+          color={ButtonColor.Primary}
+          icon={<AddCircle />}
+          size={ButtonSize.Small}
+          onClick={delegateToOrgCallback}
+        >
+          {t('api_delegation.delegate_new_api')}
+        </Button>
+      )}
       {isEditable &&
         (organization.isAllSoftDeleted ? (
           <Button

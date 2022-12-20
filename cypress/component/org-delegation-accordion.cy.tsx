@@ -15,7 +15,45 @@ Cypress.Commands.add('mount', (component, options = {}) => {
 
 describe('OrgDelegationAccordion', () => {
   describe('AccordionHeader', () => {
-    it('should show delegateNewApi-button on render', () => {
+    it('should show delegateNewApi-button on render when delegateToOrgCallback is set', () => {
+      const overviewOrgs: OverviewOrg = {
+        id: '1',
+        orgName: 'Evry',
+        isAllSoftDeleted: false,
+        orgNr: '123456789',
+        apiList: [
+          {
+            id: '1',
+            apiName: 'Delegert API A',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
+          {
+            id: '2',
+            apiName: 'Delegert API B',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
+        ],
+      };
+
+      cy.mount(
+        <OrgDelegationAccordion
+          softRestoreAllCallback={() => null}
+          softDeleteAllCallback={() => null}
+          organization={overviewOrgs}
+          isEditable={false}
+          delegateToOrgCallback={() => null}
+        />,
+      );
+      cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('exist');
+    });
+
+    it('should not show delegateNewApi-button on render when delegateToOrgCallback is not set', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
         orgName: 'Evry',
@@ -49,7 +87,7 @@ describe('OrgDelegationAccordion', () => {
           isEditable={false}
         />,
       );
-      cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('exist');
+      cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('not.exist');
     });
 
     it('should show delete button when state is isEditable=true', () => {
@@ -221,6 +259,52 @@ describe('OrgDelegationAccordion', () => {
 
       cy.findByRole('button', { name: /undo/i }).click();
       cy.get('@softRestoreAllSpy').should('have.been.called');
+    });
+
+    it('should call delegateToOrgCallback on buttonclick', () => {
+      const overviewOrgs: OverviewOrg = {
+        id: '1',
+        orgName: 'Evry',
+        isAllSoftDeleted: true,
+        orgNr: '123456789',
+        apiList: [
+          {
+            id: '1',
+            apiName: 'Delegert API A',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
+          {
+            id: '2',
+            apiName: 'Delegert API B',
+            isSoftDelete: false,
+            owner: 'Accenture',
+            description:
+              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+          },
+        ],
+      };
+
+      const delegateToNewOrg = () => {
+        cy.stub();
+      };
+
+      const delegateToNewOrgSpy = cy.spy(delegateToNewOrg).as('delegateToNewOrgSpy');
+
+      cy.mount(
+        <OrgDelegationAccordion
+          organization={overviewOrgs}
+          softDeleteAllCallback={() => null}
+          softRestoreAllCallback={() => null}
+          delegateToOrgCallback={delegateToNewOrgSpy}
+          isEditable={true}
+        />,
+      );
+
+      cy.findByRole('button', { name: /delegate_new_api/i }).click();
+      cy.get('@delegateToNewOrgSpy').should('have.been.called');
     });
   });
 });
