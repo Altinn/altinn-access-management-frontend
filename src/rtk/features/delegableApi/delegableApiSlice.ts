@@ -143,8 +143,10 @@ const delegableApiSlice = createSlice({
         state.presentedApiList = delegableApiSearchPool;
       }
     },
+    resetDelegableApis: () => initialState,
   },
 });
 
 export default delegableApiSlice.reducer;
-export const { softAdd, softRemove, search, filter } = delegableApiSlice.actions;
+export const { softAdd, softRemove, search, filter, resetDelegableApis } =
+  delegableApiSlice.actions;

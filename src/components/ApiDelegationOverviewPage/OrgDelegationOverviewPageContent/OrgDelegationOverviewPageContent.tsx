@@ -19,20 +19,24 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
+import { resetDelegableOrgs } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 
 import { OrgDelegationAccordion } from './OrgDelegationAccordion';
 import classes from './OrgDelegationOverviewPageContent.module.css';
 
 export const OrgDelegationOverviewPageContent = () => {
-  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const [isEditable, setIsEditable] = useState(false);
-  const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
 
   useEffect(() => {
     handleSetDisabled();
+    dispatch(resetDelegableApis());
+    dispatch(resetDelegableOrgs());
   });
 
   const handleSetDisabled = () => {

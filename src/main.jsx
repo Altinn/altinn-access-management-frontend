@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
-
 import { use } from 'i18next';
+
 import { Router } from '@/routes/Router';
 
 import { getConfig } from '../config';

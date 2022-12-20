@@ -53,8 +53,9 @@ const delegableOrgSlice = createSlice({
         (delegableOrg) => delegableOrg.id !== action.payload.id,
       );
     },
+    resetDelegableOrgs: () => initialState,
   },
 });
 
 export default delegableOrgSlice.reducer;
-export const { softAdd, softRemove } = delegableOrgSlice.actions;
+export const { softAdd, softRemove, resetDelegableOrgs } = delegableOrgSlice.actions;

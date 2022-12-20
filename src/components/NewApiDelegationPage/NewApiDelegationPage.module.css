@@ -63,10 +63,11 @@
 .navButton{
   margin-right: 3rem;
   width: 10rem;
+  margin-bottom: 70px;
 }
 
 .accordionScrollContainer {
-  max-height: 300px;
+  height: 300px;
   overflow-y: auto;
 }
 

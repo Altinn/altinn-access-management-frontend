@@ -13,7 +13,8 @@
 .navButtonContainer{
   margin-top: 8rem;
   display: flex;
-  justify-content: center;
+  justify-content: end;
+  margin-bottom: 70px;
 }
 
 .previousButton{
