@@ -1,0 +1,33 @@
+.compactListItem {
+  display: flex;
+  margin-left: 10px;
+  min-height: 40px;
+}
+
+.baseListItemContent{
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.listItemIcon {
+  margin-right: 10px;
+}
+
+.listItemTexts{
+  flex: 2;
+  display: flex;
+  font-size: 16px;
+}
+
+.firstText {
+  width: 400px;
+}
+
+.secondText {
+  flex:1;
+}
+
+.deleteSection {
+  justify-content: flex-end;
+}

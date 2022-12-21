@@ -57,7 +57,7 @@ export const DeletableListItem = ({
           })}
         >
           <div className={classes.listItemTexts}>
-            <div className={classes.apiListItem}>{item.name}</div>
+            <div className={classes.apiListItem}>{item.apiName}</div>
             <div className={classes.ownerListItem}>{item.owner}</div>
             <div>{item.description}</div>
           </div>

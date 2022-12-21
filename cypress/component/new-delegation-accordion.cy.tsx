@@ -1,11 +1,10 @@
-import * as cypress from '@testing-library/cypress';
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 
 import store from '@/rtk/app/store';
-import { NewDelegationAccordion } from '@/components/Common/NewDelegationAccordion';
+import { NewDelegationAccordion } from '@/components/Reusables/NewDelegationAccordion';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { NewDelegationAccordionButtonType } from '@/components/Common/NewDelegationAccordion/NewDelegationAccordion';
+import { NewDelegationAccordionButtonType } from '@/components/Reusables/NewDelegationAccordion/NewDelegationAccordion';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   const { reduxStore = store, ...mountOptions } = options;

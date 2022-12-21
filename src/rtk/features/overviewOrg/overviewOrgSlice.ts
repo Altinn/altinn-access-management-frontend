@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export interface ApiListItem {
   id: string;
-  name: string;
+  apiName: string;
   isSoftDelete: boolean;
   owner: string;
   description: string;
@@ -11,7 +11,7 @@ export interface ApiListItem {
 
 export interface OverviewOrg {
   id: string;
-  name: string;
+  orgName: string;
   orgNr: string;
   isAllSoftDeleted: boolean;
   apiList: ApiListItem[];
@@ -28,37 +28,13 @@ const initialState: InitialState = {
   overviewOrgs: [
     {
       id: '1',
-      name: 'Brønnøysundregisterene',
+      orgName: 'Skatteetaten',
       orgNr: '123456789',
       isAllSoftDeleted: false,
       apiList: [
         {
           id: '1',
-          name: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Avanade',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          name: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'Accenture er et forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Skatteetaten',
-      orgNr: '123456789',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          name: 'Delegert API A',
+          apiName: 'Delegert API A',
           isSoftDelete: false,
           owner: 'Brønnøysundregisterene',
           description:
@@ -66,11 +42,35 @@ const initialState: InitialState = {
         },
         {
           id: '2',
-          name: 'Delegert API B',
+          apiName: 'Delegert API B',
           isSoftDelete: false,
           owner: 'Accenture',
           description:
             'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+        },
+      ],
+    },
+    {
+      id: '2',
+      orgName: 'Brønnøysundregistrene',
+      orgNr: '950124321',
+      isAllSoftDeleted: false,
+      apiList: [
+        {
+          id: '1',
+          apiName: 'Delegert API A',
+          isSoftDelete: false,
+          owner: 'Avanade',
+          description:
+            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
+        },
+        {
+          id: '2',
+          apiName: 'Delegert API B',
+          isSoftDelete: false,
+          owner: 'Accenture',
+          description:
+            'Accenture er et forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
         },
       ],
     },
@@ -97,7 +97,7 @@ const setAllItemsToGivenSoftDeleteState = (
 const createCopyOrg = (org: OverviewOrg) => {
   return {
     id: org.id,
-    name: org.name,
+    name: org.orgName,
     isAllSoftDeleted: false,
     orgNr: org.orgNr,
     apiList: [],

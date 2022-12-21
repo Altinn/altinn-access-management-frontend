@@ -19,15 +19,16 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
+import { DeletableListItem } from '@/components/Reusables/DeletableListItem';
 
 import classes from './OrgDelegationAccordion.module.css';
-import { DeletableListItem } from './DeletableListItem';
 
 export interface OrgDelegationAccordionProps {
   organization: OverviewOrg;
   isEditable: boolean;
   softRestoreAllCallback: () => void;
   softDeleteAllCallback: () => void;
+  delegateToOrgCallback?: () => void;
 }
 
 export const OrgDelegationAccordion = ({
@@ -35,34 +36,19 @@ export const OrgDelegationAccordion = ({
   softRestoreAllCallback,
   softDeleteAllCallback,
   isEditable = false,
+  delegateToOrgCallback,
 }: OrgDelegationAccordionProps) => {
-  const { t } = useTranslation('common');
-  const dispatch = useAppDispatch();
-  const numberOfAccesses = organization.apiList.length.toString();
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation('common');
+  const numberOfAccesses = organization.apiList.length.toString();
+  const dispatch = useAppDispatch();
 
   const handleSoftDeleteAll = () => {
     softDeleteAllCallback();
     setOpen(true);
   };
 
-  const readonlyActions = (
-    <>
-      <div className={cn(classes.accordionHeaderAction__isReadonly)}>
-        {numberOfAccesses} {t('api_delegation.api_accesses')}
-      </div>
-      <Button
-        variant={ButtonVariant.Quiet}
-        color={ButtonColor.Primary}
-        icon={<AddCircle />}
-        size={ButtonSize.Small}
-      >
-        {t('api_delegation.delegate_new_api')}
-      </Button>
-    </>
-  );
-
-  const editActions = (
+  const actions = (
     <>
       <div
         className={cn(classes.accordionHeaderAction__isEditable, {
@@ -71,37 +57,41 @@ export const OrgDelegationAccordion = ({
       >
         {numberOfAccesses} {t('api_delegation.api_accesses')}
       </div>
-      <Button
-        variant={ButtonVariant.Quiet}
-        color={ButtonColor.Primary}
-        icon={<AddCircle />}
-        size={ButtonSize.Small}
-      >
-        {t('api_delegation.delegate_new_api')}
-      </Button>
-      {organization.isAllSoftDeleted ? (
+      {delegateToOrgCallback && (
         <Button
           variant={ButtonVariant.Quiet}
-          color={ButtonColor.Secondary}
+          color={ButtonColor.Primary}
+          icon={<AddCircle />}
           size={ButtonSize.Small}
-          icon={<Cancel />}
-          onClick={softRestoreAllCallback}
+          onClick={delegateToOrgCallback}
         >
-          {t('api_delegation.undo')}
+          {t('api_delegation.delegate_new_api')}
         </Button>
-      ) : (
-        <div className={classes.accordionDeleteButtonContainer}>
+      )}
+      {isEditable &&
+        (organization.isAllSoftDeleted ? (
           <Button
             variant={ButtonVariant.Quiet}
-            color={ButtonColor.Danger}
-            icon={<MinusCircle />}
+            color={ButtonColor.Secondary}
             size={ButtonSize.Small}
-            onClick={handleSoftDeleteAll}
+            icon={<Cancel />}
+            onClick={softRestoreAllCallback}
           >
-            {t('api_delegation.delete')}
+            {t('api_delegation.undo')}
           </Button>
-        </div>
-      )}
+        ) : (
+          <div className={classes.accordionDeleteButtonContainer}>
+            <Button
+              variant={ButtonVariant.Quiet}
+              color={ButtonColor.Danger}
+              icon={<MinusCircle />}
+              size={ButtonSize.Small}
+              onClick={handleSoftDeleteAll}
+            >
+              {t('api_delegation.delete')}
+            </Button>
+          </div>
+        ))}
     </>
   );
 
@@ -121,7 +111,7 @@ export const OrgDelegationAccordion = ({
       open={open}
     >
       <AccordionHeader
-        actions={isEditable ? editActions : readonlyActions}
+        actions={actions}
         subtitle={t('api_delegation.org_nr') + ' ' + organization.orgNr}
       >
         <div
@@ -129,7 +119,7 @@ export const OrgDelegationAccordion = ({
             [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
           })}
         >
-          {organization.name}
+          {organization.orgName}
         </div>
       </AccordionHeader>
       <AccordionContent>

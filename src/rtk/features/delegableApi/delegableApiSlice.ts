@@ -69,7 +69,7 @@ const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
-    softAdd: (state: SliceState, action) => {
+    softAddApi: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const { presentedApiList } = state;
       const { delegableApiSearchPool } = state;
@@ -85,7 +85,7 @@ const delegableApiSlice = createSlice({
 
       state.chosenDelegableApiList.push(action.payload);
     },
-    softRemove: (state: SliceState, action) => {
+    softRemoveApi: (state: SliceState, action) => {
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
       state.delegableApiSearchPool.push(action.payload);
@@ -143,8 +143,10 @@ const delegableApiSlice = createSlice({
         state.presentedApiList = delegableApiSearchPool;
       }
     },
+    resetDelegableApis: () => initialState,
   },
 });
 
 export default delegableApiSlice.reducer;
-export const { softAdd, softRemove, search, filter } = delegableApiSlice.actions;
+export const { softAddApi, softRemoveApi, search, filter, resetDelegableApis } =
+  delegableApiSlice.actions;
