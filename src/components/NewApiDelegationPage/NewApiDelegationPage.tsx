@@ -13,12 +13,13 @@ import {
   List,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import {
+  fetchDelegableApis,
   softAddApi,
   softRemoveApi,
   search,
@@ -43,16 +44,22 @@ export const NewApiDelegationsPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
+  const loading = useAppSelector((state) => state.delegableApi.loading);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [filters, setFilters] = useState<string[]>([]);
   const { t } = useTranslation('common');
+  const fetchData = async () => await dispatch(fetchDelegableApis());
 
-  const handleSearch = (searchText: string) => {
+  useEffect(() => {
+    void fetchData();
+  }, [delegableApis]);
+
+  function handleSearch(searchText: string) {
     setSearchString(searchText);
     dispatch(search(searchText));
-  };
+  }
 
   const handleFilterChange = (filterList: string[]) => {
     setFilters(filterList);
@@ -74,10 +81,12 @@ export const NewApiDelegationsPage = () => {
 
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
-      return (
+      return loading ? (
+        'Loading...'
+      ) : (
         <NewDelegationAccordion
-          title={api.apiName}
-          subtitle={api.orgName}
+          title={'api.title.en'}
+          subtitle={'api.title.en'}
           description={api.description}
           key={index}
           buttonType={NewDelegationAccordionButtonType.Add}

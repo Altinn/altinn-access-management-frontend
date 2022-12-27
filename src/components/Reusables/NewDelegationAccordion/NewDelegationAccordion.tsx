@@ -19,16 +19,16 @@ export enum NewDelegationAccordionButtonType {
 }
 
 export interface NewDelegationAccordionProps {
-  title: string;
-  subtitle: string;
-  description: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
   buttonType: NewDelegationAccordionButtonType;
   addRemoveClick: () => void;
 }
 
 export const NewDelegationAccordion = ({
-  title,
-  subtitle,
+  title = 'No info',
+  subtitle = 'No info',
   description,
   buttonType,
   addRemoveClick,
