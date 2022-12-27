@@ -53,8 +53,10 @@ export const NewApiDelegationsPage = () => {
   const fetchData = async () => await dispatch(fetchDelegableApis());
 
   useEffect(() => {
-    void fetchData();
-  }, [delegableApis]);
+    if (loading) {
+      void fetchData();
+    }
+  }, [delegableApis.length]);
 
   function handleSearch(searchText: string) {
     setSearchString(searchText);
@@ -85,9 +87,8 @@ export const NewApiDelegationsPage = () => {
         'Loading...'
       ) : (
         <NewDelegationAccordion
-          title={'api.title.en'}
-          subtitle={'api.title.en'}
-          description={api.description}
+          title={api.apiName}
+          subtitle={api.orgName}
           key={index}
           buttonType={NewDelegationAccordionButtonType.Add}
           addRemoveClick={() => dispatch(softAddApi(api))}
@@ -101,7 +102,8 @@ export const NewApiDelegationsPage = () => {
       <NewDelegationAccordion
         title={api.apiName}
         subtitle={api.orgName}
-        description={api.description}
+        topContentText={api.rightsDescription}
+        bottomContentText={api.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
         addRemoveClick={() => handleRemove(api)}

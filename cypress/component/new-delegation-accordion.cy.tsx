@@ -33,7 +33,6 @@ describe('NewDelegationAccordion', () => {
       <NewDelegationAccordion
         title={delegableOrg.orgName}
         subtitle={delegableOrg.orgNr}
-        description={delegableOrg.description}
         buttonType={NewDelegationAccordionButtonType.Add}
         addRemoveClick={callbackSpy}
       ></NewDelegationAccordion>,
@@ -61,7 +60,6 @@ describe('NewDelegationAccordion', () => {
       <NewDelegationAccordion
         title={delegableOrg.orgName}
         subtitle={delegableOrg.orgNr}
-        description={delegableOrg.description}
         buttonType={NewDelegationAccordionButtonType.Remove}
         addRemoveClick={callbackSpy}
       ></NewDelegationAccordion>,

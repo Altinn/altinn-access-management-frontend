@@ -11,14 +11,17 @@ export interface DelegableApi {
   scopes?: string[];
 }
 
-export interface DelegableApiResponse {
+export interface DelegableApiDto {
+  title: languageDto;
   identifier: string;
-  title: {
-    en: string;
-    no: string;
-    nn: string;
-  };
-  description: string;
+  hasCompetentAuthority: HasCompetentAuthority;
+  rightsDescription: languageDto;
+  description?: string;
+  scopes?: string[];
+}
+
+export interface HasCompetentAuthority {
+  name: languageDto;
 }
 
 export interface DelegableApiWithPriority {
@@ -40,44 +43,33 @@ export interface SliceState {
   error: string;
 }
 
-interface OrgName {
+interface languageDto {
   en: string;
   nb: string;
   nn: string;
 }
 
-/* const initalApiList = () => {
-  const list: DelegableApi[] = [];
-  for (let i = 0; i < 100; i++) {
-    list.push({
-      id: i.toString(),
-      apiName: 'API ' + i.toString(),
-      orgName: 'Org' + (i % 10).toString(),
-      description: 'Et api som gir deg info om ting' + i.toString(),
-    });
-  }
-  return list;
-}; */
-
-const mapToDelegableApi = (obj: any, orgName: OrgName) => {
-  console.log(obj);
+const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
   const delegableApi = {
     id: obj.identifier,
-    apiName: obj.title.language,
+    apiName: '',
     orgName: '',
     rightsDescription: '',
     description: obj.description,
     scopes: obj.scopes,
   };
   if (i18next.language === 'no_nb') {
-    delegableApi.rightsDescription = obj.rightsDescription.nb;
+    delegableApi.rightsDescription = obj.rightsDescription?.nb;
     delegableApi.orgName = orgName.nb;
+    delegableApi.apiName = obj.title.nb;
   } else if (i18next.language === 'en') {
-    delegableApi.rightsDescription = obj.rightsDescription.en;
+    delegableApi.rightsDescription = obj.rightsDescription?.en;
     delegableApi.orgName = orgName.en;
+    delegableApi.apiName = obj.title.en;
   } else {
-    delegableApi.rightsDescription = obj.rightsDescription.nn;
+    delegableApi.rightsDescription = obj.rightsDescription?.nn;
     delegableApi.orgName = orgName.nn;
+    delegableApi.apiName = obj.title.nn;
   }
 
   return delegableApi;
@@ -98,29 +90,12 @@ export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableA
     .catch((e) => console.log('error'));
 });
 
-/* const populateDelegableApis = () => {
-  const dataArray = fetchDelegableApis();
-  for (let i = 0; i < dataArray.length; i++) {
-    const orgName = dataArray[i].hasCompetentAuthority.name;
-    const rightsDescription = dataArray[i].rightsDescription;
-    if (rightsDescription) {
-      if (orgName) {
-        state.presentedApiList.push(
-          mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
-        );
-      } else if (dataArray[i].owner) {
-        state.presentedApiList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
-      }
-    }
-  }
-}; */
-
 const initialState: SliceState = {
-  loading: false,
+  loading: true,
   delegableApiList: [],
   presentedApiList: [],
   delegableApiSearchPool: [],
-  apiProviders: [],
+  apiProviders: initialOrgNames(),
   chosenDelegableApiList: [],
   error: '',
 };
@@ -155,7 +130,8 @@ const delegableApiSlice = createSlice({
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
-    filter: (state: SliceState, action) => {
+    // code for later
+    /*     filter: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const filterList = action.payload;
       let searchPool = [...delegableApiList];
@@ -202,28 +178,29 @@ const delegableApiSlice = createSlice({
       } else {
         state.presentedApiList = delegableApiSearchPool;
       }
-    },
+    }, */
     resetDelegableApis: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(fetchDelegableApis.fulfilled, (state, action) => {
-      state.loading = true;
       const dataArray = action.payload;
-      console.log('inni løkke');
-      console.log(dataArray);
+      const responseList: DelegableApi[] = [];
       for (let i = 0; i < dataArray.length; i++) {
-        const orgName = dataArray[i].hasCompetentAuthority.name;
-        const rightsDescription = dataArray[i].rightsDescription;
-        if (rightsDescription) {
+        const apiName = dataArray[i].title?.nb;
+        const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
+        const rightsDescription = dataArray[i].rightsDescription?.nb;
+        const owner = dataArray[i].owner?.nb;
+        if (/* rightsDescription && */ apiName) {
           if (orgName) {
-            state.presentedApiList.push(
+            responseList.push(
               mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
             );
-          } else if (dataArray[i].owner) {
-            state.presentedApiList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
+          } else if (owner) {
+            responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
           }
         }
       }
+      state.presentedApiList = responseList;
       state.loading = false;
     });
   },

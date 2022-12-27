@@ -7,9 +7,12 @@ import {
   Button,
 } from '@altinn/altinn-design-system';
 import { useState } from 'react';
+import { t } from 'i18next';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
+
+import { Line } from '../Line/Line';
 
 import classes from './NewDelegationAccordion.module.css';
 
@@ -21,7 +24,9 @@ export enum NewDelegationAccordionButtonType {
 export interface NewDelegationAccordionProps {
   title?: string;
   subtitle?: string;
-  description?: string;
+  topContentText?: string;
+  bottomContentText?: string;
+  textList?: string[];
   buttonType: NewDelegationAccordionButtonType;
   addRemoveClick: () => void;
 }
@@ -29,7 +34,9 @@ export interface NewDelegationAccordionProps {
 export const NewDelegationAccordion = ({
   title = 'No info',
   subtitle = 'No info',
-  description,
+  topContentText = 'Placeholder for beskrivelse Pga. mislykket uthenting av data',
+  bottomContentText = 'Placeholder for ytterligere beskrivelse Pga. mislykket uthenting av data',
+  textList = ['nav:aareg/v1/arbeidsforhold', 'nav:aareg/v1/arbeidsforhold/tekniskhistorikk'],
   buttonType,
   addRemoveClick,
 }: NewDelegationAccordionProps) => {
@@ -71,7 +78,41 @@ export const NewDelegationAccordion = ({
           {title}
         </AccordionHeader>
         <AccordionContent>
-          <div className={classes.newApiAccordionContent}>{description}</div>
+          <div className={classes.newApiAccordionContent}>
+            {textList.length > 0 && (
+              <div>
+                <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
+                {textList.map((scope, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className={classes.scopeItems}
+                    >
+                      {scope}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {topContentText && (
+              <div>
+                <div className={classes.line}>
+                  <Line />
+                </div>
+                <p className={classes.scopeText}>{'Beskrivelse:'}</p>
+                <div className={classes.contentTexts}>{topContentText}</div>
+              </div>
+            )}
+            {bottomContentText && (
+              <div>
+                <div className={classes.line}>
+                  <Line />
+                </div>
+                <p className={classes.scopeText}>{'Ytterligere beskrivelse:'}</p>
+                <div className={classes.bottomContentTexts}>{bottomContentText}</div>
+              </div>
+            )}
+          </div>
         </AccordionContent>
       </Accordion>
     </div>
