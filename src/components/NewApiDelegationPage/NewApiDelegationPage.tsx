@@ -143,8 +143,14 @@ export const NewApiDelegationsPage = () => {
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
             <div className={classes.pageContent}>
-              {chosenDelegableOrgs.length < 0 ? (
-                <h4>{t('api_delegation.no_chosen_orgs')}</h4>
+              {chosenDelegableOrgs.length < 1 ? (
+                <Panel
+                  title={t('common.error')}
+                  variant={PanelVariant.Warning}
+                  forceMobileLayout={false}
+                >
+                  {t('api_delegation.orgs_not_chosen_subtitle')}
+                </Panel>
               ) : (
                 <div>
                   <h3>{t('api_delegation.chosen_orgs')}:</h3>

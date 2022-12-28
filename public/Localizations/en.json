@@ -1,4 +1,7 @@
-{
+{ 
+  "common": {
+  "error": "Error"
+  },
   "profile": {
     "received": "Received",
     "sent": "Sent",
@@ -50,6 +53,7 @@
     "additional_description": "Additional description",
     "data_retrieval_failed": "Data retrieval failed, try refreshing in the browser.",
     "loading": "Lastar",
-    "error_message": "Feilmelding"
+    "error_message": "Feilmelding",
+    "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right."
   }
 }

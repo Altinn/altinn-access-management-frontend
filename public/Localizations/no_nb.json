@@ -1,4 +1,7 @@
 {
+  "common": {
+    "error": "Error"
+  },
   "profile": {
     "received": "Mottatte",
     "sent": "Sendte",
@@ -50,6 +53,7 @@
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
     "loading": "Laster",
-    "error_message": "Feilmelding"
+    "error_message": "Feilmelding",
+    "orgs_not_chosen_subtitle": "Kunne ikke hente ut valgte organisasjoner. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre."
   }
 }
