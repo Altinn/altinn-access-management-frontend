@@ -48,6 +48,8 @@
     "scopes": "Omfang",
     "rightsDescription": "Beskrivelse",
     "additional_description": "Ytterligere beskrivelse",
-    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden."
+    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
+    "loading": "Laster",
+    "error_message": "Feilmelding"
   }
 }

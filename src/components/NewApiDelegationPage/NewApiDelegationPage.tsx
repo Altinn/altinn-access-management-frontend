@@ -1,5 +1,7 @@
 import type { MultiSelectOption } from '@altinn/altinn-design-system';
 import {
+  PanelVariant,
+  Panel,
   BorderStyle,
   Page,
   PageContent,
@@ -40,15 +42,16 @@ import { CompactDeletableListItem } from '../Reusables/CompactDeletableListItem'
 import classes from './NewApiDelegationPage.module.css';
 
 export const NewApiDelegationsPage = () => {
+  const [searchString, setSearchString] = useState('');
+  const [filters, setFilters] = useState<string[]>([]);
   const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const loading = useAppSelector((state) => state.delegableApi.loading);
+  const error = useAppSelector((state) => state.delegableApi.error);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [searchString, setSearchString] = useState('');
-  const [filters, setFilters] = useState<string[]>([]);
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
 
@@ -83,8 +86,16 @@ export const NewApiDelegationsPage = () => {
 
   const delegableApiAccordions = delegableApis.map(
     (api: DelegableApi, index: Key | null | undefined) => {
-      return loading ? (
-        'Loading...'
+      return error ? (
+        <Panel
+          title={t('api_delegation.data_retrieval_failed')}
+          variant={PanelVariant.Error}
+          forceMobileLayout
+        >
+          <div>{t('api_delegation.error_message')}: + error</div>
+        </Panel>
+      ) : loading ? (
+        t('api_delegation.loading') + '...'
       ) : (
         <NewDelegationAccordion
           title={api.apiName}

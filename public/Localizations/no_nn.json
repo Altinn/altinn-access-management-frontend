@@ -47,6 +47,8 @@
     "scopes": "Omfang",
     "rightsDescription": "Skildring",
     "additional_description": "Ytterlegare skildring",
-    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden."
+    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
+    "loading": "Lastar",
+    "error_message": "Feilmelding"
   }
 }

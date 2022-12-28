@@ -40,7 +40,7 @@ export interface SliceState {
   chosenDelegableApiList: DelegableApi[];
   delegableApiSearchPool: DelegableApi[];
   apiProviders: string[];
-  error: string;
+  error: string | undefined;
 }
 
 interface languageDto {
@@ -85,10 +85,12 @@ const initialOrgNames = () => {
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
-    // TODO: This may fail in AT if axios doesn't automatically change the url
+    // TODO: This may fail in AT if axios doesn't automatically change the base url
     .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
     .then((response) => response.data)
-    .catch((e) => console.log('error'));
+    .catch((error) => {
+      console.error('error', error);
+    });
 });
 
 const initialState: SliceState = {
@@ -183,27 +185,31 @@ const delegableApiSlice = createSlice({
     resetDelegableApis: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchDelegableApis.fulfilled, (state, action) => {
-      const dataArray = action.payload;
-      const responseList: DelegableApi[] = [];
-      for (let i = 0; i < dataArray.length; i++) {
-        const apiName = dataArray[i].title?.nb;
-        const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
-        const rightsDescription = dataArray[i].rightsDescription?.nb;
-        const owner = dataArray[i].owner?.nb;
-        if (/* rightsDescription && */ apiName) {
-          if (orgName) {
-            responseList.push(
-              mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
-            );
-          } else if (owner) {
-            responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
+    builder
+      .addCase(fetchDelegableApis.fulfilled, (state, action) => {
+        const dataArray = action.payload;
+        const responseList: DelegableApi[] = [];
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title?.nb;
+          const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
+          const rightsDescription = dataArray[i].rightsDescription?.nb;
+          const owner = dataArray[i].owner?.nb;
+          if (/* rightsDescription && */ apiName) {
+            if (orgName) {
+              responseList.push(
+                mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
+              );
+            } else if (owner) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
+            }
           }
         }
-      }
-      state.presentedApiList = responseList;
-      state.loading = false;
-    });
+        state.presentedApiList = responseList;
+        state.loading = false;
+      })
+      .addCase(fetchDelegableApis.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
   },
 });
 

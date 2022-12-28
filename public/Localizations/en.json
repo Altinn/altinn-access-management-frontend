@@ -48,6 +48,8 @@
     "scopes": "scopes",
     "rightsDescription": "Description",
     "additional_description": "Additional description",
-    "data_retrieval_failed": "Data retrieval failed, try refreshing in the browser."
+    "data_retrieval_failed": "Data retrieval failed, try refreshing in the browser.",
+    "loading": "Lastar",
+    "error_message": "Feilmelding"
   }
 }
