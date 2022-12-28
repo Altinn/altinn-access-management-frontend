@@ -34,8 +34,8 @@ export interface NewDelegationAccordionProps {
 export const NewDelegationAccordion = ({
   title = 'No info',
   subtitle = 'No info',
-  topContentText = 'Placeholder for beskrivelse Pga. mislykket uthenting av data',
-  bottomContentText = 'Placeholder for ytterligere beskrivelse Pga. mislykket uthenting av data',
+  topContentText,
+  bottomContentText,
   textList = ['nav:aareg/v1/arbeidsforhold', 'nav:aareg/v1/arbeidsforhold/tekniskhistorikk'],
   buttonType,
   addRemoveClick,
@@ -103,6 +103,11 @@ export const NewDelegationAccordion = ({
                 <div className={classes.contentTexts}>{topContentText}</div>
               </div>
             )}
+            {topContentText === undefined && (
+              <div className={classes.contentTexts}>
+                {t('api_delegation.data_retrieval_failed')}
+              </div>
+            )}
             {bottomContentText && (
               <div>
                 <div className={classes.line}>
@@ -110,6 +115,11 @@ export const NewDelegationAccordion = ({
                 </div>
                 <p className={classes.scopeText}>{'Ytterligere beskrivelse:'}</p>
                 <div className={classes.bottomContentTexts}>{bottomContentText}</div>
+              </div>
+            )}
+            {bottomContentText === undefined && (
+              <div className={classes.contentTexts}>
+                {t('api_delegation.data_retrieval_failed')}
               </div>
             )}
           </div>

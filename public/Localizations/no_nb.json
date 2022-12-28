@@ -47,6 +47,7 @@
     "no_chosen_orgs": "Du har ingen valgte organisasjoner å gi API-tilgang til. Vennligst klikk på forrigeknappen nederst til høyre.",
     "scopes": "Omfang",
     "rightsDescription": "Beskrivelse",
-    "additional_description": "Ytterligere beskrivelse"
+    "additional_description": "Ytterligere beskrivelse",
+    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden."
   }
 }

@@ -90,6 +90,8 @@ export const NewApiDelegationsPage = () => {
           title={api.apiName}
           subtitle={api.orgName}
           key={index}
+          topContentText={api.rightsDescription}
+          bottomContentText={api.description}
           buttonType={NewDelegationAccordionButtonType.Add}
           addRemoveClick={() => dispatch(softAddApi(api))}
         ></NewDelegationAccordion>

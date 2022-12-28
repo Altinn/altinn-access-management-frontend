@@ -85,7 +85,8 @@ const initialOrgNames = () => {
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
-    .get('http://local.altinn.cloud/accessmanagement/api/v1/1337/resources/maskinportenschema', {})
+    // TODO: This may fail in AT if axios doesn't automatically change the url
+    .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
     .then((response) => response.data)
     .catch((e) => console.log('error'));
 });

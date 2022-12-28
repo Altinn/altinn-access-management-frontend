@@ -35,7 +35,6 @@ export const NewOrgDelegationPage = () => {
       <NewDelegationAccordion
         title={org.orgName}
         subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
-        description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Add}
         addRemoveClick={() => dispatch(softAddOrg(org))}
@@ -48,7 +47,6 @@ export const NewOrgDelegationPage = () => {
       <NewDelegationAccordion
         title={org.orgName}
         subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
-        description={org.description}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
         addRemoveClick={() => dispatch(softRemoveOrg(org))}
@@ -83,7 +81,7 @@ export const NewOrgDelegationPage = () => {
                     fullWidth={true}
                     onClick={() => navigate('/api-delegations')}
                   >
-                    {t('api_delegation.previous')}
+                    {t('api_delegation.cancel')}
                   </Button>
                 </div>
                 <div className={classes.navButton}>
