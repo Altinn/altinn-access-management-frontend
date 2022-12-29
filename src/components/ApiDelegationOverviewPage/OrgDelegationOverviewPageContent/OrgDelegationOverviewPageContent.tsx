@@ -19,7 +19,7 @@ import {
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
-import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
+import { ReactComponent as Error } from '@/assets/Error.svg';
 import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 
@@ -105,7 +105,7 @@ export const OrgDelegationOverviewPageContent = () => {
           ) : (
             <Button
               variant={ButtonVariant.Quiet}
-              icon={<Cancel />}
+              icon={<Error />}
               onClick={handleSetIsEditable}
               size={ButtonSize.Small}
             >
