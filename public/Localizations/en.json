@@ -1,6 +1,7 @@
 { 
   "common": {
-  "error": "Error"
+    "error": "Error",
+    "restart": "Restart"
   },
   "profile": {
     "received": "Received",
@@ -54,6 +55,7 @@
     "data_retrieval_failed": "Data retrieval failed, try refreshing in the browser.",
     "loading": "Lastar",
     "error_message": "Feilmelding",
-    "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right."
+    "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
+    "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process." 
   }
 }
