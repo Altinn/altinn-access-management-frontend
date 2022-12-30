@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
-import { PageWrapper } from '../Reusables/PageWrapper';
+import { PageContainer } from '../Reusables/PageContainer';
 
 import classes from './ApiDelegationOverviewPage.module.css';
 import { OrgDelegationOverviewPageContent } from './OrgDelegationOverviewPageContent';
@@ -12,7 +12,7 @@ export const ApiDelegationOverviewPage = () => {
   const { t } = useTranslation('common');
 
   return (
-    <PageWrapper>
+    <PageContainer>
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
         <PageContent>
@@ -21,6 +21,6 @@ export const ApiDelegationOverviewPage = () => {
           </div>
         </PageContent>
       </Page>
-    </PageWrapper>
+    </PageContainer>
   );
 };

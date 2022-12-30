@@ -6,7 +6,7 @@ import { useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import { ConfirmationPage } from '../Reusables/ConfirmationPage';
-import { PageWrapper } from '../Reusables/PageWrapper';
+import { PageContainer } from '../Reusables/PageContainer';
 
 export const ApiDelegationConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
@@ -15,7 +15,7 @@ export const ApiDelegationConfirmationPage = () => {
   const navigate = useNavigate();
 
   return (
-    <PageWrapper>
+    <PageContainer>
       <ConfirmationPage
         apiList={chosenApis}
         orgList={chosenOrgs}
@@ -47,6 +47,6 @@ export const ApiDelegationConfirmationPage = () => {
         }
         headerIcon={<ApiIcon />}
       />
-    </PageWrapper>
+    </PageContainer>
   );
 };

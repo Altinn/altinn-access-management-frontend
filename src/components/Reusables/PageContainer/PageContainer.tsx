@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as ExitIcon } from '@/assets/Error.svg';
 
-import classes from './PageWrapper.module.css';
+import classes from './PageContainer.module.css';
 
 export interface PageContainerProps {
   children: React.ReactNode;

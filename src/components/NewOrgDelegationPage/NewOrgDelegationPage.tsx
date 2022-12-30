@@ -20,7 +20,7 @@ import {
   NewDelegationAccordionButtonType,
 } from '@/components/Reusables/NewDelegationAccordion';
 
-import { PageWrapper } from '../Reusables/PageWrapper';
+import { PageContainer } from '../Reusables/PageContainer';
 
 import classes from './NewOrgDelegationPage.module.css';
 
@@ -57,7 +57,7 @@ export const NewOrgDelegationPage = () => {
   });
 
   return (
-    <PageWrapper>
+    <PageContainer>
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
@@ -101,6 +101,6 @@ export const NewOrgDelegationPage = () => {
           </div>
         </PageContent>
       </Page>
-    </PageWrapper>
+    </PageContainer>
   );
 };
