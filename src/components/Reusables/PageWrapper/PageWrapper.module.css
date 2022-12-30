@@ -1,0 +1,12 @@
+.pageWrapper{
+  width: 1055px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;;
+  background-color: #1EADF7;
+}
+
+.exitButton{
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,9 +1,3 @@
-.page{
-  width: 1055px;
-  margin: auto;
-  margin-top: 8rem;
-}
-
 .pageContent{
   --component-page-margin-horizontal: 3rem;
   margin-right: var(--component-page-margin-horizontal);

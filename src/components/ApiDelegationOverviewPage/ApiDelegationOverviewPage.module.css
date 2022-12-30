@@ -7,11 +7,4 @@
   overflow: hidden;
 }
 
-.page{
-  --page-vertical-margins: 8rem;
-  width: 1055px;
-  margin: auto;
-  margin-top: var(--page-vertical-margins);
-  margin-bottom: var(--page-vertical-margins);
-}
 

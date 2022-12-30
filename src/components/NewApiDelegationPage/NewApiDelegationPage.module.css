@@ -31,12 +31,6 @@
   margin-left: var(--component-page-margin-horizontal);
 }
 
-.page{
-  width: var(--pageContainer-width);
-  margin: auto;
-  margin-top: 8rem;
-}
-
 .pageContentAccordionsContainer{
     grid-template-columns: 1fr 1fr;
     display:grid;
@@ -69,12 +63,4 @@
 .accordionScrollContainer {
   height: 300px;
   overflow-y: auto;
-}
-
-.page{
-  --page-vertical-margins: 8rem;
-  width: 1055px;
-  margin: auto;
-  margin-top: var(--page-vertical-margins);
-  margin-bottom: var(--page-vertical-margins);
 }
