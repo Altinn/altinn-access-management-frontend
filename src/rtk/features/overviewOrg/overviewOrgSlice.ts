@@ -24,7 +24,7 @@ export interface InitialState {
 }
 
 const initialState: InitialState = {
-  loading: false,
+  loading: true,
   overviewOrgs: [
     {
       id: '1',
@@ -97,7 +97,7 @@ const setAllItemsToGivenSoftDeleteState = (
 const createCopyOrg = (org: OverviewOrg) => {
   return {
     id: org.id,
-    name: org.orgName,
+    orgName: org.orgName,
     isAllSoftDeleted: false,
     orgNr: org.orgNr,
     apiList: [],

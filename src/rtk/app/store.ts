@@ -4,6 +4,7 @@ import { createLogger } from 'redux-logger';
 import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 import overviewOrgReducer from '../features/overviewOrg/overviewOrgSlice';
 import delegableOrgReducer from '../features/delegableOrg/delegableOrgSlice';
+import delegationRequestReducer from '../features/DelegationRequest/DelegationRequestSlice';
 
 const logger = createLogger();
 
@@ -14,6 +15,7 @@ const store = import.meta.env.PROD
         delegableApi: delegableApiReducer,
         overviewOrg: overviewOrgReducer,
         delegableOrg: delegableOrgReducer,
+        delegationRequest: delegationRequestReducer,
       },
     })
   : configureStore({
@@ -21,6 +23,7 @@ const store = import.meta.env.PROD
         delegableApi: delegableApiReducer,
         overviewOrg: overviewOrgReducer,
         delegableOrg: delegableOrgReducer,
+        delegationRequest: delegationRequestReducer,
       },
       middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     });

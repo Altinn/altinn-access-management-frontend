@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
-import { PageContainer } from '../Reusables/PageContainer';
+import { PageContainer } from '../Reusables';
 
 import classes from './ApiDelegationOverviewPage.module.css';
 import { OrgDelegationOverviewPageContent } from './OrgDelegationOverviewPageContent';

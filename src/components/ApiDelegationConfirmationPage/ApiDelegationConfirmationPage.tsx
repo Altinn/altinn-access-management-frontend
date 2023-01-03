@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@/rtk/app/hooks';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { ConfirmationPage } from '../Reusables/ConfirmationPage';
-import { PageContainer } from '../Reusables/PageContainer';
+import { ConfirmationPage, PageContainer } from '../Reusables';
 
 export const ApiDelegationConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
@@ -17,12 +16,12 @@ export const ApiDelegationConfirmationPage = () => {
   return (
     <PageContainer>
       <ConfirmationPage
-        apiList={chosenApis}
-        orgList={chosenOrgs}
+        topList={chosenApis}
+        delegableOrgList={chosenOrgs}
         restartProcessPath={'/api-delegations/new-org-delegation'}
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
-        apiListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
-        orgListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
+        topListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
+        bottomListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
         bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
         mainButton={
           <Button

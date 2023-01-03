@@ -22,17 +22,19 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
-import { CompactDeletableListItem } from '@/components/Reusables/CompactDeletableListItem';
+import { CompactDeletableListItem } from '@/components/Reusables';
+import type { ApiDelegation } from '@/rtk/features/DelegationRequest/DelegationRequestSlice';
 
 import classes from './ConfirmationPage.module.css';
 
 export interface ConfirmationPageProps {
-  apiList: DelegableApi[];
-  orgList: DelegableOrg[];
+  topList: DelegableApi[] | ApiDelegation[];
+  delegableOrgList?: DelegableOrg[];
+  apiDelegationList?: ApiDelegation[];
   restartProcessPath?: string;
   pageHeaderText: string;
-  apiListContentHeader?: string;
-  orgListContentHeader?: string;
+  topListContentHeader?: string;
+  bottomListContentHeader?: string;
   bottomText?: string;
   mainButton?: React.ReactNode;
   complementaryButton?: React.ReactNode;
@@ -41,11 +43,12 @@ export interface ConfirmationPageProps {
 }
 
 export const ConfirmationPage = ({
-  apiList,
-  orgList,
+  topList,
+  delegableOrgList,
+  apiDelegationList,
   pageHeaderText,
-  apiListContentHeader,
-  orgListContentHeader,
+  topListContentHeader,
+  bottomListContentHeader,
   bottomText,
   mainButton,
   complementaryButton,
@@ -56,36 +59,56 @@ export const ConfirmationPage = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const apiListItems = apiList.map((api: DelegableApi, index: Key) => {
+  const topListItems = topList.map((api: DelegableApi | ApiDelegation, index: Key) => {
     return (
       <CompactDeletableListItem
         key={index}
         startIcon={<SettingsIcon />}
-        removeCallback={apiList.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
+        removeCallback={topList.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
         leftText={api.apiName}
         middleText={api.orgName}
       ></CompactDeletableListItem>
     );
   });
 
-  const orgListItems = orgList.map((org: DelegableOrg, index: Key | null | undefined) => {
-    return (
-      <CompactDeletableListItem
-        key={index}
-        startIcon={<OfficeIcon />}
-        removeCallback={orgList.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        leftText={org.orgName}
-        middleText={org.orgNr}
-      ></CompactDeletableListItem>
-    );
-  });
+  const delegableOrgListItems = delegableOrgList?.map(
+    (org: DelegableOrg, index: Key | null | undefined) => {
+      return (
+        <CompactDeletableListItem
+          key={index}
+          startIcon={<OfficeIcon />}
+          removeCallback={delegableOrgList.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
+          leftText={org.orgName}
+          middleText={org.orgNr}
+        ></CompactDeletableListItem>
+      );
+    },
+  );
+
+  const apiDelegationListItems = apiDelegationList?.map(
+    (apiDelegation: ApiDelegation, index: Key | null | undefined) => {
+      return (
+        <CompactDeletableListItem
+          key={index}
+          startIcon={<OfficeIcon />}
+          removeCallback={
+            apiDelegationList.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
+          }
+          leftText={apiDelegation.orgName}
+          middleText={apiDelegation.orgName}
+        ></CompactDeletableListItem>
+      );
+    },
+  );
 
   return (
     <Page color={color}>
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
         <div className={classes.pageContent}>
-          {(apiListItems.length < 1 || orgListItems.length < 1) &&
+          {(topList.length < 1 ||
+            delegableOrgList?.length === undefined ||
+            delegableOrgList?.length < 1) &&
           restartProcessPath !== undefined ? (
             <Panel
               title={t('common.error')}
@@ -107,13 +130,24 @@ export const ConfirmationPage = ({
           ) : (
             <div>
               <div>
-                <h2>{apiListContentHeader}</h2>
-                {apiListItems.length > 0 && (
-                  <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
+                <h2>{topListContentHeader}</h2>
+                {topListItems.length > 0 && (
+                  <List borderStyle={BorderStyle.Dashed}>{topListItems}</List>
                 )}
-                <h2 className={classes.secondText}>{orgListContentHeader}</h2>
-                {orgListItems.length > 0 && (
-                  <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
+                <h2 className={classes.secondText}>{bottomListContentHeader}</h2>
+                {delegableOrgList !== undefined && delegableOrgList.length > 0 && (
+                  <List borderStyle={BorderStyle.Dashed}>
+                    {delegableOrgList !== undefined &&
+                      delegableOrgList.length > 0 &&
+                      delegableOrgListItems}
+                  </List>
+                )}
+                {apiDelegationList !== undefined && apiDelegationList.length > 0 && (
+                  <List borderStyle={BorderStyle.Dashed}>
+                    {apiDelegationList !== undefined &&
+                      apiDelegationList.length > 0 &&
+                      apiDelegationListItems}
+                  </List>
                 )}
               </div>
               <h3 className={classes.bottomText}>{bottomText}</h3>

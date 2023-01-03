@@ -4,7 +4,7 @@ import { List } from '@altinn/altinn-design-system';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
-import { DeletableListItem } from '@/components/Reusables/DeletableListItem';
+import { DeletableListItem } from '@/components/Reusables';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   const { reduxStore = store, ...mountOptions } = options;
