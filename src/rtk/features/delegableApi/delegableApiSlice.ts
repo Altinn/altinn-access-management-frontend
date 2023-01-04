@@ -118,6 +118,12 @@ const delegableApiSlice = createSlice({
       const searchText = action.payload.trim().toLowerCase();
       const seachWords = searchText ? searchText.split(' ') : []; // BUG seachWords (sic)...
 
+      // NOTE: Several other BUGS also present in SearchField when using space before and after searchString "99 98"
+      // 1) Sometimes a punktuation mark is automatically added. Might be a browser setting?
+      // 2) "99 98" works --> finds API 99 and API 98, but "99  98" (i.e. two spaces) fails. Actually
+      // it seems to fail if the space is added in the middle, to an existing "99 98" string... probably
+      // a trim() function what needs to be fixed --> possibly trim() after split() might work
+
       const prioritizedApiList: DelegableApiWithPriority[] = [];
       if (searchText) {
         for (const api of delegableApiSearchPool) {
