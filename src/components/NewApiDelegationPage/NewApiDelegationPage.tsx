@@ -36,8 +36,11 @@ export const NewApiDelegationsPage = () => {
   const { t } = useTranslation('common');
 
   const handleSearch = (searchText: string) => {
-    setSearchString(searchText);
-    dispatch(search(searchText));
+    setSearchString(searchText); // set local state --> update input field
+    dispatch(search(searchText)); // set global state --> updates Accordion list/array
+    // search() is an action creator,
+    // hover-of-VSC gives search(payload: any, type: "delegableApi/search")
+    // reducer defined in delegableApiSlice.ts --> triggers update of state.delegableApi.presentedApiList
   };
 
   const handleFilterChange = (filterList: string[]) => {
@@ -102,6 +105,7 @@ export const NewApiDelegationsPage = () => {
                     handleSearch(event.target.value)
                   }
                 ></SearchField>
+
                 <div className={classes.filter}>
                   <Select
                     label={t('api_delegation.filter_label')}
