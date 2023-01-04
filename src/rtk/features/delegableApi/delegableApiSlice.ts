@@ -116,7 +116,7 @@ const delegableApiSlice = createSlice({
     search: (state: SliceState, action) => {
       const { delegableApiSearchPool } = state;
       const searchText = action.payload.trim().toLowerCase();
-      const seachWords = searchText ? searchText.split(' ') : [];
+      const seachWords = searchText ? searchText.split(' ') : []; // BUG seachWords (sic)...
 
       const prioritizedApiList: DelegableApiWithPriority[] = [];
       if (searchText) {
