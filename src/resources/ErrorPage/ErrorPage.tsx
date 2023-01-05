@@ -11,6 +11,8 @@ import {
   ButtonSize,
 } from '@altinn/altinn-design-system';
 
+import { ReactComponent as ApiIcon } from '../../assets/Cancel.svg';
+
 export const ErrorPage = () => {
   // use when completing this page
   const error = useRouteError(); // NB error har ikke Type ennå
@@ -18,7 +20,7 @@ export const ErrorPage = () => {
   return (
     <div>
       <Page>
-        <PageHeader>Det skjedde en feil</PageHeader>
+        <PageHeader icon={<ApiIcon />}>Det skjedde en feil</PageHeader>
         <PageContent>
           <p>
             <i>Vennligst gå tilbake i nettleseren eller refresh siden</i>
