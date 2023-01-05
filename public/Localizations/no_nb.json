@@ -26,6 +26,7 @@
     "delegate_new_org": "Deleger til ny organisasjon",
     "delete": "Slett",
     "edit_accesses": "Rediger tilganger",
+    "error_page_header": "Det skjedde en feil",
     "filter_label": "Filtrer på tilbyder",
     "filter_remove_all": "Fjern alle filtre",
     "give_access_to_new_api": "Gi tilgang til nytt API",
