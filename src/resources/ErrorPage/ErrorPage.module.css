@@ -1,0 +1,80 @@
+@media only screen and (min-width: 0px) {
+  .pageContainer{
+      --pageContainer-width: 1055px;
+  }
+  .searchSection{
+    --searchFieldWidth: 100%
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .pageContainer{
+    --pageContainer-width: 1055px;
+  }
+  .searchSection{
+    --searchFieldWidth: 50%
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .pageContainer{
+    --pageContainer-width: 1055px;
+  }
+  .searchSection{
+    --searchFieldWidth: 50%
+  }
+}
+
+.pageContent{
+  --component-page-margin-horizontal: 3rem;
+  margin-right: var(--component-page-margin-horizontal);
+  margin-left: var(--component-page-margin-horizontal);
+}
+
+.page{
+  width: var(--pageContainer-width);
+  margin: auto;
+  margin-top: 8rem;
+}
+
+.pageContentAccordionsContainer{
+    grid-template-columns: 1fr 1fr;
+    display:grid;
+}
+
+.apiAccordions{
+    margin-right: 3rem;
+}
+
+.searchSection{
+  width: var(--searchFieldWidth);
+}
+
+.filter {
+  width: 75%;
+  padding-top: 1rem;
+}
+
+.navButtonContainer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navButton{
+  margin-right: 0.5rem;
+  width: 10rem;
+}
+
+.accordionScrollContainer {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.page{
+  --page-vertical-margins: 8rem;
+  width: 1055px;
+  margin: auto;
+  margin-top: var(--page-vertical-margins);
+  margin-bottom: var(--page-vertical-margins);
+}
