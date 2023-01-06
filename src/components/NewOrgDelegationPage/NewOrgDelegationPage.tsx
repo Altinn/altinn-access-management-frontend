@@ -69,16 +69,19 @@ export const NewOrgDelegationPage = () => {
           <PageContent>
             <div className={classes.pageContent}>
               <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
+
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
                   <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
                 </div>
+
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               </div>
+
               <div className={classes.navButtonContainer}>
                 <div className={classes.navButton}>
                   <Button
@@ -91,6 +94,7 @@ export const NewOrgDelegationPage = () => {
                     {t('api_delegation.previous')}
                   </Button>
                 </div>
+
                 <div className={classes.navButton}>
                   <Button
                     color={ButtonColor.Primary}
