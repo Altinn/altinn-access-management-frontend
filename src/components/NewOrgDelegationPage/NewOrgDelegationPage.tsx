@@ -30,6 +30,11 @@ export const NewOrgDelegationPage = () => {
 
   const { t } = useTranslation('common');
 
+  // fixme: BUG i softAdd: om første accordion er åpen (viser org.description),
+  // og den er softAdd-ed (flyttes da til høyre kolonne)
+  // så lukkes den der (kanskje OK?!), men da rykker neste accordion opp i venstre kolonne,
+  // og så åpnes org.description for denne: antagelig et state problem
+
   const delegableApiAccordions = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
       <NewDelegationAccordion
