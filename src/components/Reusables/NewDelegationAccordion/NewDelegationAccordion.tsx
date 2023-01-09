@@ -36,7 +36,7 @@ export const NewDelegationAccordion = ({
   subtitle = 'No info',
   topContentText,
   bottomContentText,
-  textList = ['nav:aareg/v1/arbeidsforhold', 'nav:aareg/v1/arbeidsforhold/tekniskhistorikk'],
+  textList = [''],
   buttonType,
   addRemoveClick,
 }: NewDelegationAccordionProps) => {
