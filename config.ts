@@ -15,7 +15,7 @@ interface Config {
 
 const fallbackConfig: Config = {
   backendApiUrl: new URL(window.location.href).origin + '/api/',
-  defaultLocale: 'no',
+  defaultLocale: 'no_nb',
   // other configurable keys here…
 };
 

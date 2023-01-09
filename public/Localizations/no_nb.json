@@ -44,6 +44,12 @@
     "new_api_content_text2": "Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet. Du kan også søke etter API eller filtrere på tilbyder.",
     "delegable_apis": "Delegerbare API",
     "chosen_apis": "Valgte API:",
-    "no_chosen_orgs": "Du har ingen valgte organisasjoner å gi API-tilgang til. Vennligst klikk på forrigeknappen nederst til høyre."
+    "no_chosen_orgs": "Du har ingen valgte organisasjoner å gi API-tilgang til. Vennligst klikk på forrigeknappen nederst til høyre.",
+    "scopes": "Scopes",
+    "rightsDescription": "Beskrivelse",
+    "additional_description": "Ytterligere beskrivelse",
+    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
+    "loading": "Laster",
+    "error_message": "Feilmelding"
   }
 }

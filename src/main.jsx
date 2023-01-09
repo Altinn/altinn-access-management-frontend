@@ -11,7 +11,6 @@ import { Router } from '@/routes/Router';
 import { getConfig } from '../config';
 
 import LoadLocalizations from './resources/LoadLocalizations';
-import BaseLocalizations from './resources/BaseLocalizations/BaseLocalizations.json';
 import store from './rtk/app/store';
 
 /**
@@ -37,11 +36,11 @@ const initLanguage = (lang) => {
 // Initialise i18next; start application when ready
 use(initReactI18next).init(
   {
+    // TODO: replace no_nb below with result from backend call that checks which language is set
     lng: initLanguage('no_nb'),
     fallbackLng: getConfig('defaultLocale'),
-    ns: ['common', 'basic'],
+    ns: ['common'],
     defaultNS: 'common',
-    resources: BaseLocalizations,
     returnNull: false,
   },
 

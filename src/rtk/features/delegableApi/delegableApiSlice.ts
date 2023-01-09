@@ -1,18 +1,35 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 
 export interface DelegableApi {
   id: string;
   apiName: string;
   orgName: string;
-  description: string;
+  rightsDescription: string;
+  description?: string;
+  scopes?: string[];
+}
+
+export interface DelegableApiDto {
+  title: languageDto;
+  identifier: string;
+  hasCompetentAuthority: HasCompetentAuthority;
+  rightsDescription: languageDto;
+  description?: string;
+  scopes?: string[];
+}
+
+export interface HasCompetentAuthority {
+  name: languageDto;
 }
 
 export interface DelegableApiWithPriority {
   id: string;
   apiName: string;
   orgName: string;
-  description: string;
+  rightsDescription: string;
+  description?: string;
   priority: number;
 }
 
@@ -23,20 +40,39 @@ export interface SliceState {
   chosenDelegableApiList: DelegableApi[];
   delegableApiSearchPool: DelegableApi[];
   apiProviders: string[];
-  error: string;
+  error: string | undefined;
 }
 
-const initalApiList = () => {
-  const list: DelegableApi[] = [];
-  for (let i = 0; i < 100; i++) {
-    list.push({
-      id: i.toString(),
-      apiName: 'API ' + i.toString(),
-      orgName: 'Org' + (i % 10).toString(),
-      description: 'Et api som gir deg info om ting' + i.toString(),
-    });
+interface languageDto {
+  en: string;
+  nb: string;
+  nn: string;
+}
+
+const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
+  const delegableApi = {
+    id: obj.identifier,
+    apiName: '',
+    orgName: '',
+    rightsDescription: '',
+    description: obj.description,
+    scopes: obj.scopes,
+  };
+  if (i18next.language === 'no_nb') {
+    delegableApi.rightsDescription = obj.rightsDescription?.nb;
+    delegableApi.orgName = orgName.nb;
+    delegableApi.apiName = obj.title.nb;
+  } else if (i18next.language === 'en') {
+    delegableApi.rightsDescription = obj.rightsDescription?.en;
+    delegableApi.orgName = orgName.en;
+    delegableApi.apiName = obj.title.en;
+  } else {
+    delegableApi.rightsDescription = obj.rightsDescription?.nn;
+    delegableApi.orgName = orgName.nn;
+    delegableApi.apiName = obj.title.nn;
   }
-  return list;
+
+  return delegableApi;
 };
 
 const initialOrgNames = () => {
@@ -47,23 +83,25 @@ const initialOrgNames = () => {
   return list;
 };
 
+export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
+  return await axios
+    // TODO: This may fail in AT if axios doesn't automatically change the base url
+    .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error('error', error);
+    });
+});
+
 const initialState: SliceState = {
-  loading: false,
-  delegableApiList: initalApiList(),
-  presentedApiList: initalApiList(),
-  delegableApiSearchPool: initalApiList(),
+  loading: true,
+  delegableApiList: [],
+  presentedApiList: [],
+  delegableApiSearchPool: [],
   apiProviders: initialOrgNames(),
   chosenDelegableApiList: [],
   error: '',
 };
-
-// example code for populating accordions later on
-export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
-  return await axios
-    .get('https://jsonplaceholder.typicode.com/users')
-    .then((response) => response.data)
-    .catch((error) => console.log(error));
-});
 
 const delegableApiSlice = createSlice({
   name: 'delegableApi',
@@ -95,7 +133,8 @@ const delegableApiSlice = createSlice({
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
-    filter: (state: SliceState, action) => {
+    // code for later
+    /*     filter: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const filterList = action.payload;
       let searchPool = [...delegableApiList];
@@ -124,8 +163,8 @@ const delegableApiSlice = createSlice({
           let numMatches = 0;
           for (const word of seachWords) {
             if (
-              api.apiName.toLowerCase().includes(word) ||
-              api.description.toLowerCase().includes(word) ||
+              (api.apiName.toLowerCase().includes(word) ||
+                api.description?.toLowerCase().includes(word)) ??
               api.orgName.toLowerCase().includes(word)
             ) {
               numMatches++;
@@ -142,8 +181,35 @@ const delegableApiSlice = createSlice({
       } else {
         state.presentedApiList = delegableApiSearchPool;
       }
-    },
+    }, */
     resetDelegableApis: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchDelegableApis.fulfilled, (state, action) => {
+        const dataArray = action.payload;
+        const responseList: DelegableApi[] = [];
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title?.nb;
+          const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
+          const rightsDescription = dataArray[i].rightsDescription?.nb;
+          const owner = dataArray[i].owner?.nb;
+          if (/* rightsDescription && */ apiName) {
+            if (orgName) {
+              responseList.push(
+                mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
+              );
+            } else if (owner) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
+            }
+          }
+        }
+        state.presentedApiList = responseList;
+        state.loading = false;
+      })
+      .addCase(fetchDelegableApis.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
   },
 });
 

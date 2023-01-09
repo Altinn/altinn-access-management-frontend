@@ -22,6 +22,8 @@ const delegableApiList: DelegableApi[] = [
     apiName: 'Api',
     orgName: 'Org',
     description: 'Description',
+    rightsDescription: 'RightsDescription',
+    scopes: ['Scope 1', 'Scope 2'],
   },
 ];
 
