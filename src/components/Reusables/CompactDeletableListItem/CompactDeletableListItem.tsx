@@ -6,11 +6,16 @@ import {
   SvgIcon,
 } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
+import cn from 'classnames';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 
 import classes from './CompactDeletableListItem.module.css';
 
+export enum ListTextColor {
+  primary = 'primary',
+  error = 'error',
+}
 export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
   leftText: string;

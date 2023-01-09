@@ -25,10 +25,12 @@ import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import { CompactDeletableListItem } from '@/components/Reusables';
 import type { ApiDelegation } from '@/rtk/features/DelegationRequest/DelegationRequestSlice';
 
-import classes from './ConfirmationPage.module.css';
+import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 
+import classes from './ConfirmationPage.module.css';
 export interface ConfirmationPageProps {
   topList: DelegableApi[] | ApiDelegation[];
+  topListColor: ListTextColor;
   delegableOrgList?: DelegableOrg[];
   apiDelegationList?: ApiDelegation[];
   restartProcessPath?: string;
@@ -44,6 +46,7 @@ export interface ConfirmationPageProps {
 
 export const ConfirmationPage = ({
   topList,
+  topListColor = ListTextColor.error,
   delegableOrgList,
   apiDelegationList,
   pageHeaderText,

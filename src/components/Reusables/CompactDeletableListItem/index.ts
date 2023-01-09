@@ -1,1 +1,1 @@
-export { CompactDeletableListItem } from './CompactDeletableListItem';
+export { CompactDeletableListItem, ListTextColor as ListColor } from './CompactDeletableListItem';

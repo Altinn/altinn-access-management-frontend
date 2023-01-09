@@ -19,6 +19,6 @@ export const ApiDelegationReceiptPage = () => {
 
   return;
   <PageContainer>
-    <ConfirmationPage topList={failedApiDelegations}></ConfirmationPage>
+    <ConfirmationPage topList={failedApiDelegations} ></ConfirmationPage>
   </PageContainer>;
 };
