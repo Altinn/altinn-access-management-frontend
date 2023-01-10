@@ -1,4 +1,8 @@
 {
+  "common": {
+    "error": "Feil",
+    "restart": "Start på nytt"
+  },
   "profile": {
     "received": "Mottekne",
     "sent": "Sendte",
@@ -36,7 +40,7 @@
     "confirm_delegation": "Stadfest delegering",
     "confirmation_page_content_top_text": "Du ønskjer å gi rettar til følgjande API:",
     "confirmation_page_content_second_text": "API-tilgangane blir gitt til:",
-    "confirmation_page_content_bottom_text": "Tilgangen blir gitt og er gyldig til den aktivt fjernas eller blir trekt tilbake. Mottakar får beskjed.",
+    "confirmation_page_content_bottom_text": "Tilgangen vil bli gitt og er gyldig til den aktivt fjernas eller blir trekt tilbake. Mottakar får beskjed.",
     "filter_label": "Filtrer på tilbyder",
     "filter_remove_all": "Fjern alle filtra",
     "chosen_orgs": "Valgte organisasjonar",
@@ -49,6 +53,8 @@
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
     "loading": "Lastar",
-    "error_message": "Feilmelding"
+    "error_message": "Feilmelding",
+    "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valgte organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
+    "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt."
   }
 }
