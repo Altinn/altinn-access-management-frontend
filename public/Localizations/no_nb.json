@@ -49,7 +49,7 @@
     "delegable_apis": "Delegerbare API",
     "chosen_apis": "Valgte API:",
     "no_chosen_orgs": "Du har ingen valgte organisasjoner å gi API-tilgang til. Vennligst klikk på forrigeknappen nederst til høyre.",
-    "scopes": "Omfang",
+    "scopes": "Scopes",
     "rightsDescription": "Beskrivelse",
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",

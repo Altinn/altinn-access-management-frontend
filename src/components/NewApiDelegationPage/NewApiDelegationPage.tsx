@@ -59,7 +59,7 @@ export const NewApiDelegationsPage = () => {
     if (loading) {
       void fetchData();
     }
-  }, [delegableApis.length]);
+  }, []);
 
   function handleSearch(searchText: string) {
     setSearchString(searchText);
