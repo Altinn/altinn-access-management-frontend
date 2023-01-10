@@ -73,19 +73,27 @@ const delegableApiSlice = createSlice({
       const { delegableApiList } = state;
       const { presentedApiList } = state;
       const { delegableApiSearchPool } = state;
+
       state.delegableApiList = delegableApiList.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
+
       state.presentedApiList = presentedApiList.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
+
       state.delegableApiSearchPool = delegableApiSearchPool.filter(
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
 
       state.chosenDelegableApiList.push(action.payload);
     },
+
     softRemove: (state: SliceState, action) => {
+      // Possible BUG here: even if the user just softRemoved item A
+      // it doesn't mean that he wants it to be missing from the list
+      // in the next moment --> I think I have seen that a deleted item A
+      // is missing from the list to chose from... must be reproduced
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
       state.delegableApiSearchPool.push(action.payload);
@@ -95,6 +103,7 @@ const delegableApiSlice = createSlice({
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
+
     filter: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const filterList = action.payload;
