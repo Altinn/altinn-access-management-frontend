@@ -1,0 +1,1 @@
+export { ApiDelegationReceiptPage } from './ApiDelegationReceiptPage';

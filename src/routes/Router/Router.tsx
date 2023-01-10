@@ -5,6 +5,7 @@ import { NewApiDelegationsPage } from '@/components/NewApiDelegationPage';
 import { ApiDelegationOverviewPage } from '@/components/ApiDelegationOverviewPage';
 import { NewOrgDelegationPage } from '@/components/NewOrgDelegationPage';
 import { ApiDelegationConfirmationPage } from '@/components/ApiDelegationConfirmationPage';
+import { ApiDelegationReceiptPage } from '@/components/ApiDelegationReceiptPage';
 
 export const Router = createBrowserRouter(
   [
@@ -30,6 +31,11 @@ export const Router = createBrowserRouter(
     {
       path: 'api-delegations/confirmation',
       element: <ApiDelegationConfirmationPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: 'api-delegations/receipt',
+      element: <ApiDelegationReceiptPage />,
       errorElement: <ErrorPage />,
     },
   ],
