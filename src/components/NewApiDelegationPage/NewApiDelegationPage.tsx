@@ -18,6 +18,7 @@ import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import {
@@ -93,7 +94,9 @@ export const NewApiDelegationsPage = () => {
           variant={PanelVariant.Error}
           forceMobileLayout
         >
-          <div>{t('api_delegation.error_message')}: + error</div>
+          <div>
+            {t('api_delegation.error_message')}: {error}
+          </div>
         </Panel>
       );
     } else if (loading) {
