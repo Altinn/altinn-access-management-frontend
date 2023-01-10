@@ -94,6 +94,13 @@ const delegableApiSlice = createSlice({
       // it doesn't mean that he wants it to be missing from the list
       // in the next moment --> I think I have seen that a deleted item A
       // is missing from the list to chose from... must be reproduced
+      // OK, on new-api page, orgs are listed org0, org1, org2, org3...
+      // when chosen they appear in the right column... if deleted, they
+      // do not re-appear on the left side: actually can delete both org2 and
+      // then add and softRemove org3 too, and now the list on the left is
+      // org0, org1, org4, org5...
+      console.log('Er i softRemove reducer. Action payload is :');
+      console.log(action.payload);
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
       state.delegableApiSearchPool.push(action.payload);
@@ -122,6 +129,7 @@ const delegableApiSlice = createSlice({
         state.delegableApiSearchPool = delegableApiList;
       }
     },
+
     search: (state: SliceState, action) => {
       const { delegableApiSearchPool } = state;
       const searchText = action.payload.trim().toLowerCase();
