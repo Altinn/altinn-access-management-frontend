@@ -28,7 +28,7 @@ const initialState: InitialState = {
   overviewOrgs: [
     {
       id: '1',
-      orgName: 'Skatteetaten',
+      orgName: 'Netcompany',
       orgNr: '123456789',
       isAllSoftDeleted: false,
       apiList: [
@@ -52,7 +52,7 @@ const initialState: InitialState = {
     },
     {
       id: '2',
-      orgName: 'Brønnøysundregistrene',
+      orgName: 'Tieto',
       orgNr: '950124321',
       isAllSoftDeleted: false,
       apiList: [
