@@ -6,6 +6,7 @@ import { useAppSelector } from '@/rtk/app/hooks';
 import { ConfirmationPage, PageContainer } from '../Reusables';
 
 import classes from './ApiDelegationReceiptPage.module.css';
+import { ListTextColor } from '../Reusables/CompactDeletableListItem/CompactDeletableListItem';
 
 export const ApiDelegationReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
@@ -19,6 +20,6 @@ export const ApiDelegationReceiptPage = () => {
 
   return;
   <PageContainer>
-    <ConfirmationPage topList={failedApiDelegations} ></ConfirmationPage>
+    <ConfirmationPage topList={failedApiDelegations} topListColor={ListTextColor.primary} ></ConfirmationPage>
   </PageContainer>;
 };
