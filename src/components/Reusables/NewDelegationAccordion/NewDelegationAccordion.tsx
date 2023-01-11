@@ -8,6 +8,7 @@ import {
 } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { t } from 'i18next';
+import * as React from 'react';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
@@ -36,7 +37,7 @@ export const NewDelegationAccordion = ({
   subtitle = 'No info',
   topContentText,
   bottomContentText,
-  textList = ['nav:aareg/v1/arbeidsforhold', 'nav:aareg/v1/arbeidsforhold/tekniskhistorikk'],
+  textList = [''],
   buttonType,
   addRemoveClick,
 }: NewDelegationAccordionProps) => {

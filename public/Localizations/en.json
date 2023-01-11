@@ -56,6 +56,6 @@
     "loading": "Loading",
     "error_message": "Error message",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
-    "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process." 
+    "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process."
   }
 }

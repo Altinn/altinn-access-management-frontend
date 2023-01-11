@@ -12,11 +12,12 @@
 
 .line{
   margin-top: 25px;
-  margin-right: 2px;
+  margin-right: 5px;
 }
 
 .contentTexts{
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .bottomContentTexts{
