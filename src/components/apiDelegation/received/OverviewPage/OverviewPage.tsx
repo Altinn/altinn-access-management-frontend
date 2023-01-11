@@ -3,19 +3,21 @@ import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
-import classes from './ApiDelegationOverviewPage.module.css';
-import { OrgDelegationOverviewPageContent } from './OrgDelegationOverviewPageContent';
+import { OverviewPageContent } from '../../reusables/OverviewPageContent';
+import { LayoutState } from '../../reusables/LayoutState';
 
-export const ApiDelegationOverviewPage = () => {
+import classes from './OverviewPage.module.css';
+
+export const OverviewPage = () => {
   const { t } = useTranslation('common');
 
   return (
     <div className={classes.page}>
       <Page>
-        <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
+        <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations_received')}</PageHeader>
         <PageContent>
           <div className={classes.pageContent}>
-            <OrgDelegationOverviewPageContent />
+            <OverviewPageContent layout={LayoutState.Received} />
           </div>
         </PageContent>
       </Page>

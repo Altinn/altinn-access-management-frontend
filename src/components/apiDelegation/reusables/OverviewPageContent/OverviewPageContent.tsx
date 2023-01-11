@@ -23,10 +23,18 @@ import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 
-import { OrgDelegationAccordion } from './OrgDelegationAccordion';
-import classes from './OrgDelegationOverviewPageContent.module.css';
+import { LayoutState } from '../LayoutState';
 
-export const OrgDelegationOverviewPageContent = () => {
+import { OrgDelegationAccordion } from './OrgDelegationAccordion';
+import classes from './OverviewPageContent.module.css';
+
+export interface OverviewPageContentInterface {
+  layout: LayoutState;
+}
+
+export const OverviewPageContent = ({
+  layout = LayoutState.Given,
+}: OverviewPageContentInterface) => {
   const [disabled, setDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation('common');
@@ -59,6 +67,19 @@ export const OrgDelegationOverviewPageContent = () => {
     setDisabled(true);
   };
 
+  let overviewText = '';
+  let accessesHeader = '';
+  switch (layout) {
+    case LayoutState.Given:
+      overviewText = t('api_delegation.api_overview_text');
+      accessesHeader = t('api_delegation.you_have_delegated_accesses');
+      break;
+    case LayoutState.Received:
+      overviewText = t('api_delegation.api_received_overview_text');
+      accessesHeader = t('api_delegation.you_have_received_accesses');
+      break;
+  }
+
   const accordions = overviewOrgs.map((org) => (
     <OrgDelegationAccordion
       key={org.id}
@@ -66,7 +87,9 @@ export const OrgDelegationOverviewPageContent = () => {
       isEditable={isEditable}
       softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
       softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-      delegateToOrgCallback={() => delegateToSpecificOrg(org)}
+      delegateToOrgCallback={
+        layout === LayoutState.Given ? () => delegateToSpecificOrg(org) : undefined
+      }
     ></OrgDelegationAccordion>
   ));
 
@@ -79,19 +102,21 @@ export const OrgDelegationOverviewPageContent = () => {
 
   return (
     <div className={classes.overviewAccordionsContainer}>
-      <h2 className={classes.pageContentText}>{t('api_delegation.api_overview_text')}</h2>
-      <div className={classes.delegateNewButton}>
-        <Button
-          variant={ButtonVariant.Outline}
-          onClick={() => navigate('new-org-delegation')}
-          icon={<Add />}
-        >
-          {t('api_delegation.delegate_new_org')}
-        </Button>
-      </div>
+      <h2 className={classes.pageContentText}>{overviewText}</h2>
+      {layout === LayoutState.Given && (
+        <div className={classes.delegateNewButton}>
+          <Button
+            variant={ButtonVariant.Outline}
+            onClick={() => navigate('new-org-delegation')}
+            icon={<Add />}
+          >
+            {t('api_delegation.delegate_new_org')}
+          </Button>
+        </div>
+      )}
       <Panel title={t('api_delegation.card_title')}>{t('api_delegation.api_panel_content')}</Panel>
       <div className={classes.pageContentContainer}>
-        <h2 className={classes.apiSubheading}>{t('api_delegation.you_have_delegated_accesses')}</h2>
+        <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
         <div className={classes.editButton}>
           {!isEditable ? (
             <Button
