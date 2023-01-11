@@ -2,6 +2,45 @@
   margin-top: 3rem;
 }
 
+/* Visible only above 1200px screen */
+/* Note CSS priority if two instructions: lower in document
+overrides instruction higher in document: see red/blue text below 
+Note Altinn-design-system i Panel components operates with breakpoints:
+sm = 540px (min width) = 540 (i.e. xs is all below this),
+md = 768px (min width, and lower in document thus overrides sm)   
+lg = 960px
+xl = 1200px
+På ThinkPad Edge Browswer, 540px is about as narrow as you can get
+---> can go slightly lower so can do development for mobile I guess
+OK, Albert says 576 and 3 other break-points is the new standard
+MEN iPhoneSE / evt iPhone5S (320px??) også må testes.
+*/
+
+@media only screen and (max-width: 576px) {
+  .pageContentContainer {
+    background-color: lightgreen;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .pageContentContainer {
+    background-color: green;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .pageContentContainer {
+    background-color: yellow;
+  }
+}
+
+@media only screen and (min-width: 998px) {
+  .pageContentContainer {
+    background-color: red;
+  }
+}
+
+
 .saveSection{
   margin-top: 3rem;
   margin-right: 0.5rem;
@@ -22,16 +61,20 @@
 }
 
 .pageContentContainer {
+  color: red;
+}
+
+.pageContentContainer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+  color: blue;
+  
 }
+
+
 
 .editButton {
   align-self: flex-end;
 }
 
-.pageContentText {
-  font-weight: normal;
-  margin-top: -2rem;
-}

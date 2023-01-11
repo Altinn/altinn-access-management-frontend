@@ -4,7 +4,15 @@ import {
   ButtonSize,
   ButtonVariant,
   Panel,
-} from '@altinn/altinn-design-system';
+} from '@altinn/altinn-design-system'; // Note: Panel imported from altinn-design-system
+// already has defined breakpoints --> see Panel.module.css in altinn-design-system repo
+// --> som Panel title shrinks as browser window is narrowed ()
+// .css use
+//    /* breakpoints-xs */
+//    @media only screen and (min-width: 0) {...}
+// https://www.w3schools.com/howto/howto_css_media_query_breakpoints.asp
+// https://www.w3schools.com/css/css3_mediaqueries.asp
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -89,7 +97,9 @@ export const OrgDelegationOverviewPageContent = () => {
           {t('api_delegation.delegate_new_org')}
         </Button>
       </div>
+
       <Panel title={t('api_delegation.card_title')}>{t('api_delegation.api_panel_content')}</Panel>
+
       <div className={classes.pageContentContainer}>
         <h2 className={classes.apiSubheading}>{t('api_delegation.you_have_delegated_accesses')}</h2>
         <div className={classes.editButton}>
@@ -114,7 +124,9 @@ export const OrgDelegationOverviewPageContent = () => {
           )}
         </div>
       </div>
+
       <div className={classes.accordion}>{accordions}</div>
+
       {isEditable && (
         <div className={classes.saveSection}>
           <Button
