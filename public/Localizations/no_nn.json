@@ -48,13 +48,13 @@
     "delegable_apis": "Delegerbare API",
     "chosen_apis": "Valgte API:",
     "no_chosen_orgs": "Du har ingen valde organisasjonar å gi API-tilgang til. Vennlegast klikk på forrigeknappen nedst til høgre.",
-    "scopes": "Omfang",
+    "scopes": "Scopes",
     "rightsDescription": "Skildring",
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
     "loading": "Lastar",
     "error_message": "Feilmelding",
     "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valgte organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
-    "delegations_not_registered":< "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt."
+    "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt."
   }
 }
