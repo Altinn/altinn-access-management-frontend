@@ -41,7 +41,7 @@ export interface ConfirmationPageProps {
   mainButton?: React.ReactNode;
   complementaryButton?: React.ReactNode;
   headerIcon: React.ReactNode;
-  color?: PageColor;
+  headerColor?: PageColor;
 }
 
 export const ConfirmationPage = ({
@@ -57,7 +57,7 @@ export const ConfirmationPage = ({
   complementaryButton,
   headerIcon,
   restartProcessPath,
-  color = PageColor.Primary,
+  headerColor = PageColor.Primary,
 }: ConfirmationPageProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -105,7 +105,7 @@ export const ConfirmationPage = ({
   );
 
   return (
-    <Page color={color}>
+    <Page color={headerColor}>
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
         <div className={classes.pageContent}>
