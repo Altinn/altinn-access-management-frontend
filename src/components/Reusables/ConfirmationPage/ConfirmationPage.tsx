@@ -81,56 +81,52 @@ export const ConfirmationPage = ({
   });
 
   return (
-    <div>
-      <div className={classes.page}>
-        <Page color={color}>
-          <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
-          <PageContent>
-            <div className={classes.pageContent}>
-              {(apiListItems.length < 1 || orgListItems.length < 1) &&
-              restartProcessPath !== undefined ? (
-                <Panel
-                  title={t('common.error')}
-                  variant={PanelVariant.Error}
-                >
-                  <div>
-                    <p>{t('api_delegation.delegations_not_registered')}</p>
-                    <div className={classes.restartButton}>
-                      <Button
-                        variant={ButtonVariant.Outline}
-                        color={ButtonColor.Danger}
-                        onClick={() => navigate(restartProcessPath)}
-                      >
-                        {t('common.restart')}
-                      </Button>
-                    </div>
-                  </div>
-                </Panel>
-              ) : (
-                <div>
-                  <div>
-                    <h2>{apiListContentHeader}</h2>
-                    {apiListItems.length > 0 && (
-                      <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
-                    )}
-                    <h2 className={classes.secondText}>{orgListContentHeader}</h2>
-                    {orgListItems.length > 0 && (
-                      <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
-                    )}
-                  </div>
-                  <h3 className={classes.bottomText}>{bottomText}</h3>
-                  <div className={classes.navButtonContainer}>
-                    {complementaryButton && (
-                      <div className={classes.previousButton}>{complementaryButton}</div>
-                    )}
-                    {mainButton && <div className={classes.confirmButton}>{mainButton}</div>}
-                  </div>
+    <Page color={color}>
+      <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
+      <PageContent>
+        <div className={classes.pageContent}>
+          {(apiListItems.length < 1 || orgListItems.length < 1) &&
+          restartProcessPath !== undefined ? (
+            <Panel
+              title={t('common.error')}
+              variant={PanelVariant.Error}
+            >
+              <div>
+                <p>{t('api_delegation.delegations_not_registered')}</p>
+                <div className={classes.restartButton}>
+                  <Button
+                    variant={ButtonVariant.Outline}
+                    color={ButtonColor.Danger}
+                    onClick={() => navigate(restartProcessPath)}
+                  >
+                    {t('common.restart')}
+                  </Button>
                 </div>
-              )}
+              </div>
+            </Panel>
+          ) : (
+            <div>
+              <div>
+                <h2>{apiListContentHeader}</h2>
+                {apiListItems.length > 0 && (
+                  <List borderStyle={BorderStyle.Dashed}>{apiListItems}</List>
+                )}
+                <h2 className={classes.secondText}>{orgListContentHeader}</h2>
+                {orgListItems.length > 0 && (
+                  <List borderStyle={BorderStyle.Dashed}>{orgListItems}</List>
+                )}
+              </div>
+              <h3 className={classes.bottomText}>{bottomText}</h3>
+              <div className={classes.navButtonContainer}>
+                {complementaryButton && (
+                  <div className={classes.previousButton}>{complementaryButton}</div>
+                )}
+                {mainButton && <div className={classes.confirmButton}>{mainButton}</div>}
+              </div>
             </div>
-          </PageContent>
-        </Page>
-      </div>
-    </div>
+          )}
+        </div>
+      </PageContent>
+    </Page>
   );
 };
