@@ -29,12 +29,11 @@ import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListI
 
 import classes from './ConfirmationPage.module.css';
 export interface ConfirmationPageProps {
-  topList: DelegableApi[] | ApiDelegation[];
   topListColor: ListTextColor;
+  delegableApis: DelegableApi[];
   delegableOrgList?: DelegableOrg[];
-  apiDelegationList?: ApiDelegation[];
-  failedDelegations?: ApiDelegation[];
   successfulDelegations?: ApiDelegation[];
+  failedDelegations?: ApiDelegation[];
   restartProcessPath?: string;
   pageHeaderText: string;
   topListContentHeader?: string;
@@ -47,10 +46,10 @@ export interface ConfirmationPageProps {
 }
 
 export const ConfirmationPage = ({
-  topList,
+  delegableApis: topList,
   topListColor = ListTextColor.error,
   delegableOrgList,
-  apiDelegationList,
+  successfulDelegations,
   pageHeaderText,
   topListContentHeader,
   bottomListContentHeader,
@@ -90,14 +89,30 @@ export const ConfirmationPage = ({
     },
   );
 
-  const apiDelegationListItems = apiDelegationList?.map(
+  const failedDelegationsListItems = successfulDelegations?.map(
     (apiDelegation: ApiDelegation, index: Key | null | undefined) => {
       return (
         <CompactDeletableListItem
           key={index}
           startIcon={<OfficeIcon />}
           removeCallback={
-            apiDelegationList.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
+            successfulDelegations.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
+          }
+          leftText={apiDelegation.orgName}
+          middleText={apiDelegation.orgName}
+        ></CompactDeletableListItem>
+      );
+    },
+  );
+
+  const successfulDelegatedItems = successfulDelegations?.map(
+    (apiDelegation: ApiDelegation, index: Key | null | undefined) => {
+      return (
+        <CompactDeletableListItem
+          key={index}
+          startIcon={<OfficeIcon />}
+          removeCallback={
+            successfulDelegations.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
           }
           leftText={apiDelegation.orgName}
           middleText={apiDelegation.orgName}
@@ -147,11 +162,11 @@ export const ConfirmationPage = ({
                       delegableOrgListItems}
                   </List>
                 )}
-                {apiDelegationList !== undefined && apiDelegationList.length > 0 && (
+                {successfulDelegations !== undefined && successfulDelegations.length > 0 && (
                   <List borderStyle={BorderStyle.Dashed}>
-                    {apiDelegationList !== undefined &&
-                      apiDelegationList.length > 0 &&
-                      apiDelegationListItems}
+                    {successfulDelegatedItems !== undefined &&
+                      successfulDelegatedItems.length > 0 &&
+                      successfulDelegatedItems}
                   </List>
                 )}
               </div>

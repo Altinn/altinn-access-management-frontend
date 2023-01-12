@@ -21,6 +21,7 @@ export interface CompactDeletableListItemProps {
   leftText: string;
   middleText: string;
   startIcon?: React.ReactNode;
+  contentColor: ListTextColor;
 }
 
 export const CompactDeletableListItem = ({
@@ -28,6 +29,7 @@ export const CompactDeletableListItem = ({
   leftText,
   middleText,
   startIcon,
+  contentColor,
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
@@ -39,7 +41,7 @@ export const CompactDeletableListItem = ({
       >
         <div className={classes.baseListItemContent}>
           {startIcon && (
-            <div className={classes.listItemIcon}>
+            <div className={classes.listItemIcon, classes.listItemIcon--{contentColor}}>
               <SvgIcon
                 width={14}
                 height={14}

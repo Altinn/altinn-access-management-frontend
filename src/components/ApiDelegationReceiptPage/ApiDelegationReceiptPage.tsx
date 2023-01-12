@@ -21,11 +21,10 @@ export const ApiDelegationReceiptPage = () => {
   return;
   <PageContainer>
     <ConfirmationPage
-      topList={failedApiDelegations}
+      delegableApis={failedApiDelegations}
       topListColor={ListTextColor.primary}
       failedDelegations={failedApiDelegations}
       successfulDelegations={succesfulApiDelegations}
-      
     ></ConfirmationPage>
   </PageContainer>;
 };

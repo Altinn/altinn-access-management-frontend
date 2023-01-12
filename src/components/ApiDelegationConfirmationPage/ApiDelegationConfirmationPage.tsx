@@ -16,7 +16,7 @@ export const ApiDelegationConfirmationPage = () => {
   return (
     <PageContainer>
       <ConfirmationPage
-        topList={chosenApis}
+        delegableApis={chosenApis}
         delegableOrgList={chosenOrgs}
         restartProcessPath={'/api-delegations/new-org-delegation'}
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
