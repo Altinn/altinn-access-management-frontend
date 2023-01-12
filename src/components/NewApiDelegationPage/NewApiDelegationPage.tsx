@@ -18,6 +18,7 @@ import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import {
@@ -85,39 +86,46 @@ export const NewApiDelegationsPage = () => {
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
-  const delegableApiAccordions = delegableApis.map(
-    (api: DelegableApi, index: Key | null | undefined) => {
-      return error ? (
+  const delegableApiAccordions = () => {
+    if (error) {
+      return (
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
           forceMobileLayout
         >
-          <div>{t('api_delegation.error_message')}: + error</div>
+          <div>
+            {t('api_delegation.error_message')}: {error}
+          </div>
         </Panel>
-      ) : loading ? (
-        t('api_delegation.loading') + '...'
-      ) : (
+      );
+    } else if (loading) {
+      return t('api_delegation.loading') + '...';
+    }
+    return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
+      return (
         <NewDelegationAccordion
           title={api.apiName}
           subtitle={api.orgName}
           key={index}
-          topContentText={api.rightsDescription}
+          topContentText={api.rightDescription}
           bottomContentText={api.description}
+          textList={api.scopes}
           buttonType={NewDelegationAccordionButtonType.Add}
           addRemoveClick={() => dispatch(softAddApi(api))}
         ></NewDelegationAccordion>
       );
-    },
-  );
+    });
+  };
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
       <NewDelegationAccordion
         title={api.apiName}
         subtitle={api.orgName}
-        topContentText={api.rightsDescription}
+        topContentText={api.rightDescription}
         bottomContentText={api.description}
+        textList={api.scopes}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
         addRemoveClick={() => handleRemove(api)}
@@ -178,7 +186,7 @@ export const NewApiDelegationsPage = () => {
             <div className={classes.pageContentAccordionsContainer}>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
-                <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
+                <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>

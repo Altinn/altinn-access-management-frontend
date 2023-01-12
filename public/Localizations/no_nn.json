@@ -49,7 +49,7 @@
     "chosen_apis": "Valgte API:",
     "no_chosen_orgs": "Du har ingen valde organisasjonar å gi API-tilgang til. Vennlegast klikk på forrigeknappen nedst til høgre.",
     "scopes": "Scopes",
-    "rightsDescription": "Skildring",
+    "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
     "loading": "Lastar",
