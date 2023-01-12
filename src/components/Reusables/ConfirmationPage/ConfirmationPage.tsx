@@ -33,6 +33,8 @@ export interface ConfirmationPageProps {
   topListColor: ListTextColor;
   delegableOrgList?: DelegableOrg[];
   apiDelegationList?: ApiDelegation[];
+  failedDelegations?: ApiDelegation[];
+  successfulDelegations?: ApiDelegation[];
   restartProcessPath?: string;
   pageHeaderText: string;
   topListContentHeader?: string;
