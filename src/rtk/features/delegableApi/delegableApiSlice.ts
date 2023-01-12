@@ -30,6 +30,7 @@ export interface DelegableApiWithPriority {
   orgName: string;
   rightDescription: string;
   description?: string;
+  scopes: string[];
   priority: number;
 }
 

@@ -100,7 +100,7 @@ export const NewDelegationAccordion = ({
                 <div className={classes.line}>
                   <Line />
                 </div>
-                <p className={classes.scopeText}>{t('additional.description')}</p>
+                <p className={classes.scopeText}>{t('api_delegation.description')}</p>
                 <div className={classes.contentTexts}>{topContentText}</div>
               </div>
             )}
@@ -114,7 +114,7 @@ export const NewDelegationAccordion = ({
                 <div className={classes.line}>
                   <Line />
                 </div>
-                <p className={classes.scopeText}>{t('additional.description')}</p>
+                <p className={classes.scopeText}>{t('api_delegation.description')}</p>
                 <div className={classes.bottomContentTexts}>{bottomContentText}</div>
               </div>
             )}
