@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import i18next from 'i18next';
 
 export interface ApiListItem {
   id: string;
@@ -17,69 +18,80 @@ export interface OverviewOrg {
   apiList: ApiListItem[];
 }
 
-export interface InitialState {
+interface DelegationDTO {
+  coveredByName: string;
+  offeredByName?: string;
+  offeredByOrganizationNumber?: string;
+  coveredByOrganizationNumber: string;
+  resourceId: string;
+  resourceTitle: languageDto;
+}
+
+export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
 }
 
-const initialState: InitialState = {
-  loading: false,
-  overviewOrgs: [
-    {
-      id: '1',
-      orgName: 'Skatteetaten',
-      orgNr: '123456789',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Brønnøysundregisterene',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          apiName: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-    {
-      id: '2',
-      orgName: 'Brønnøysundregistrene',
-      orgNr: '950124321',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Avanade',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          apiName: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'Accenture er et forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-  ],
+interface languageDto {
+  en: string;
+  nb: string;
+  nn: string;
+}
+
+const initialState: SliceState = {
+  loading: true,
+  overviewOrgs: [],
   error: '',
 };
 
+const mapToOverviewOrgList = (delegationArray: DelegationDTO[]) => {
+  const overviewOrgList: OverviewOrg[] = [];
+  for (const delegation of delegationArray) {
+    let apiName = '';
+    switch (i18next.language) {
+      case 'no_nb':
+        apiName = delegation.resourceTitle.nb;
+        break;
+      case 'no_nn':
+        apiName = delegation.resourceTitle.nn;
+        break;
+      case 'en':
+        apiName = delegation.resourceTitle.en;
+        break;
+    }
+
+    const api: ApiListItem = {
+      id: delegation.resourceId,
+      apiName,
+      isSoftDelete: false,
+      owner: 'Owner unknown',
+      description: 'Description missing',
+    };
+
+    const delegatedToOrg = delegation.coveredByName;
+    const existingOrgIndex = overviewOrgList.findIndex((org) => org.id === delegatedToOrg);
+    if (existingOrgIndex >= 0) {
+      // Add delegation to existing org-entry
+      overviewOrgList[existingOrgIndex].apiList.push(api);
+    } else {
+      // Add new org
+      const newOrg: OverviewOrg = {
+        id: delegatedToOrg,
+        orgName: delegatedToOrg,
+        orgNr: delegation.coveredByOrganizationNumber,
+        isAllSoftDeleted: false,
+        apiList: [api],
+      };
+      overviewOrgList.push(newOrg);
+    }
+  }
+
+  return overviewOrgList;
+};
+
 const setAllItemsToGivenSoftDeleteState = (
-  state: InitialState,
+  state: SliceState,
   softDeletedOrgId: string,
   isSoftDelete: boolean,
 ) => {
@@ -105,8 +117,9 @@ const createCopyOrg = (org: OverviewOrg) => {
 };
 
 export const fetchOverviewOrgs = createAsyncThunk('overviewOrg/fetchOverviewOrgs', async () => {
+  // TODO: Replace r500000 with partyid of actual logged in org
   return await axios
-    .get('https://jsonplaceholder.typicode.com/users')
+    .get('/accessmanagement/api/v1/r500000/delegations/maskinportenschema/outbound')
     .then((response) => response.data)
     .catch((error) => console.log(error));
 });
@@ -180,6 +193,18 @@ const overviewOrgSlice = createSlice({
         org.isAllSoftDeleted = false;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOverviewOrgs.fulfilled, (state, action) => {
+        const dataArray = action.payload;
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray);
+        state.overviewOrgs = responseList;
+        state.loading = false;
+      })
+      .addCase(fetchOverviewOrgs.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+      });
   },
 });
 

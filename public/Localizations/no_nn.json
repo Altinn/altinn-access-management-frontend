@@ -50,7 +50,7 @@
     "scopes": "Scopes",
     "rightsDescription": "Skildring",
     "additional_description": "Ytterlegare skildring",
-    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
+    "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn sida på ny.",
     "loading": "Lastar",
     "error_message": "Feilmelding"
   }

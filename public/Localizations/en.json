@@ -51,7 +51,7 @@
     "scopes": "Scopes",
     "rightsDescription": "Description",
     "additional_description": "Additional description",
-    "data_retrieval_failed": "Data retrieval failed, try refreshing in the browser.",
+    "data_retrieval_failed": "Data retrieval failed, try refreshing the page.",
     "loading": "Loading",
     "error_message": "Error message"
   }

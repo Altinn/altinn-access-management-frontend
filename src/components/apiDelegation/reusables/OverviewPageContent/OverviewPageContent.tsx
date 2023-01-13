@@ -4,6 +4,7 @@ import {
   ButtonSize,
   ButtonVariant,
   Panel,
+  PanelVariant,
 } from '@altinn/altinn-design-system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +17,7 @@ import {
   save,
   softDeleteAll,
   softRestoreAll,
+  fetchOverviewOrgs,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
@@ -41,6 +43,9 @@ export const OverviewPageContent = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
+  const error = useAppSelector((state) => state.overviewOrg.error);
+  const loading = useAppSelector((state) => state.overviewOrg.loading);
+  const fetchData = async () => await dispatch(fetchOverviewOrgs());
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     dispatch(softAddOrg(org));
@@ -67,6 +72,12 @@ export const OverviewPageContent = ({
     setDisabled(true);
   };
 
+  useEffect(() => {
+    if (loading) {
+      void fetchData();
+    }
+  }, []);
+
   let overviewText = '';
   let accessesHeader = '';
   switch (layout) {
@@ -80,18 +91,33 @@ export const OverviewPageContent = ({
       break;
   }
 
-  const accordions = overviewOrgs.map((org) => (
-    <OrgDelegationAccordion
-      key={org.id}
-      organization={org}
-      isEditable={isEditable}
-      softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
-      softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-      delegateToOrgCallback={
-        layout === LayoutState.Given ? () => delegateToSpecificOrg(org) : undefined
-      }
-    ></OrgDelegationAccordion>
-  ));
+  const accordions = () => {
+    if (error) {
+      return (
+        <Panel
+          title={t('api_delegation.data_retrieval_failed')}
+          variant={PanelVariant.Error}
+          forceMobileLayout
+        >
+          <div>{t('api_delegation.error_message')}: + error</div>
+        </Panel>
+      );
+    } else if (loading) {
+      return t('api_delegation.loading') + '...';
+    }
+    return overviewOrgs.map((org) => (
+      <OrgDelegationAccordion
+        key={org.id}
+        organization={org}
+        isEditable={isEditable}
+        softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+        softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+        delegateToOrgCallback={
+          layout === LayoutState.Given ? () => delegateToSpecificOrg(org) : undefined
+        }
+      ></OrgDelegationAccordion>
+    ));
+  };
 
   const handleSetIsEditable = () => {
     if (isEditable) {
@@ -139,7 +165,7 @@ export const OverviewPageContent = ({
           )}
         </div>
       </div>
-      <div className={classes.accordion}>{accordions}</div>
+      <div className={classes.accordion}>{accordions()}</div>
       {isEditable && (
         <div className={classes.saveSection}>
           <Button
