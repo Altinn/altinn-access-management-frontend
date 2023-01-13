@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
@@ -18,6 +19,7 @@ import {
   softDeleteAll,
   softRestoreAll,
   fetchOverviewOrgs,
+  setLayout,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
@@ -45,7 +47,8 @@ export const OverviewPageContent = ({
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
-  const fetchData = async () => await dispatch(fetchOverviewOrgs());
+  const fetchData = async () => await dispatch(fetchOverviewOrgs(layout));
+  dispatch(setLayout(layout));
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     dispatch(softAddOrg(org));
