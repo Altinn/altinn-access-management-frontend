@@ -18,6 +18,7 @@ import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
 import {
@@ -38,6 +39,7 @@ import {
   NewDelegationAccordion,
 } from '../Reusables/NewDelegationAccordion';
 import { CompactDeletableListItem } from '../Reusables/CompactDeletableListItem';
+import { PageContainer } from '../Reusables/PageContainer';
 
 import classes from './NewApiDelegationPage.module.css';
 
@@ -84,39 +86,46 @@ export const NewApiDelegationsPage = () => {
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
-  const delegableApiAccordions = delegableApis.map(
-    (api: DelegableApi, index: Key | null | undefined) => {
-      return error ? (
+  const delegableApiAccordions = () => {
+    if (error) {
+      return (
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
           forceMobileLayout
         >
-          <div>{t('api_delegation.error_message')}: + error</div>
+          <div>
+            {t('api_delegation.error_message')}: {error}
+          </div>
         </Panel>
-      ) : loading ? (
-        t('api_delegation.loading') + '...'
-      ) : (
+      );
+    } else if (loading) {
+      return t('api_delegation.loading') + '...';
+    }
+    return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
+      return (
         <NewDelegationAccordion
           title={api.apiName}
           subtitle={api.orgName}
           key={index}
-          topContentText={api.rightsDescription}
+          topContentText={api.rightDescription}
           bottomContentText={api.description}
+          textList={api.scopes}
           buttonType={NewDelegationAccordionButtonType.Add}
           addRemoveClick={() => dispatch(softAddApi(api))}
         ></NewDelegationAccordion>
       );
-    },
-  );
+    });
+  };
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
       <NewDelegationAccordion
         title={api.apiName}
         subtitle={api.orgName}
-        topContentText={api.rightsDescription}
+        topContentText={api.rightDescription}
         bottomContentText={api.description}
+        textList={api.scopes}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
         addRemoveClick={() => handleRemove(api)}
@@ -137,77 +146,81 @@ export const NewApiDelegationsPage = () => {
   });
 
   return (
-    <div>
-      <div className={classes.page}>
-        <Page>
-          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-          <PageContent>
-            <div className={classes.pageContent}>
-              {chosenDelegableOrgs.length < 0 ? (
-                <h4>{t('api_delegation.no_chosen_orgs')}</h4>
-              ) : (
-                <div>
-                  <h3>{t('api_delegation.chosen_orgs')}:</h3>
-                  <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
-                </div>
-              )}
-              <h3>{t('api_delegation.new_api_content_text2')}</h3>
-              <div className={classes.searchSection}>
-                <SearchField
-                  value={searchString}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                    handleSearch(event.target.value)
-                  }
-                ></SearchField>
-                <div className={classes.filter}>
-                  <Select
-                    label={String(t('api_delegation.filter_label'))}
-                    deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
-                    multiple={true}
-                    onChange={handleFilterChange}
-                    options={filterOptions}
-                  />
-                </div>
+    <PageContainer>
+      <Page>
+        <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
+        <PageContent>
+          <div className={classes.pageContent}>
+            {chosenDelegableOrgs.length < 1 ? (
+              <Panel
+                title={t('common.error')}
+                variant={PanelVariant.Warning}
+                forceMobileLayout={false}
+              >
+                {t('api_delegation.orgs_not_chosen_subtitle')}
+              </Panel>
+            ) : (
+              <div>
+                <h3>{t('api_delegation.chosen_orgs')}:</h3>
+                <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
               </div>
-              <div className={classes.pageContentAccordionsContainer}>
-                <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.delegable_apis')}:</h4>
-                  <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
-                </div>
-                <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.chosen_apis')}</h4>
-                  <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
-                </div>
-              </div>
-              <div className={classes.navButtonContainer}>
-                <div className={classes.navButton}>
-                  <Button
-                    color={ButtonColor.Primary}
-                    variant={ButtonVariant.Outline}
-                    size={ButtonSize.Small}
-                    fullWidth={true}
-                    onClick={() => navigate('/api-delegations/new-org-delegation')}
-                  >
-                    {t('api_delegation.previous')}
-                  </Button>
-                </div>
-                <div className={classes.navButton}>
-                  <Button
-                    color={ButtonColor.Primary}
-                    variant={ButtonVariant.Filled}
-                    size={ButtonSize.Small}
-                    fullWidth={true}
-                    onClick={() => navigate('/api-delegations/confirmation')}
-                    disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
-                  >
-                    {t('api_delegation.next')}
-                  </Button>
-                </div>
+            )}
+            <h3>{t('api_delegation.new_api_content_text2')}</h3>
+            <div className={classes.searchSection}>
+              <SearchField
+                value={searchString}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  handleSearch(event.target.value)
+                }
+              ></SearchField>
+              <div className={classes.filter}>
+                <Select
+                  label={String(t('api_delegation.filter_label'))}
+                  deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
+                  multiple={true}
+                  onChange={handleFilterChange}
+                  options={filterOptions}
+                />
               </div>
             </div>
-          </PageContent>
-        </Page>
-      </div>
-    </div>
+            <div className={classes.pageContentAccordionsContainer}>
+              <div className={classes.apiAccordions}>
+                <h4>{t('api_delegation.delegable_apis')}:</h4>
+                <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
+              </div>
+              <div className={classes.apiAccordions}>
+                <h4>{t('api_delegation.chosen_apis')}</h4>
+                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+              </div>
+            </div>
+            <div className={classes.navButtonContainer}>
+              <div className={classes.navButton}>
+                <Button
+                  color={ButtonColor.Primary}
+                  variant={ButtonVariant.Outline}
+                  size={ButtonSize.Small}
+                  fullWidth={true}
+                  onClick={() => navigate('/api-delegations/new-org-delegation')}
+                >
+                  {t('api_delegation.previous')}
+                </Button>
+              </div>
+              <div className={classes.navButton}>
+                <Button
+                  color={ButtonColor.Primary}
+                  variant={ButtonVariant.Filled}
+                  size={ButtonSize.Small}
+                  fullWidth={true}
+                  onClick={() => navigate('/api-delegations/confirmation')}
+                  disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+                >
+                  {t('api_delegation.next')}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </PageContent>
+      </Page>
+    </PageContainer>
   );
 };

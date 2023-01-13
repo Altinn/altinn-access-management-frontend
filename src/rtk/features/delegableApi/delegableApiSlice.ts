@@ -6,18 +6,18 @@ export interface DelegableApi {
   id: string;
   apiName: string;
   orgName: string;
-  rightsDescription: string;
+  rightDescription: string;
   description?: string;
-  scopes?: string[];
+  scopes: string[];
 }
 
 export interface DelegableApiDto {
   title: languageDto;
   identifier: string;
   hasCompetentAuthority: HasCompetentAuthority;
-  rightsDescription: languageDto;
+  rightDescription: languageDto;
   description?: string;
-  scopes?: string[];
+  resourceReferences: resourceReferenceDTO[];
 }
 
 export interface HasCompetentAuthority {
@@ -28,8 +28,9 @@ export interface DelegableApiWithPriority {
   id: string;
   apiName: string;
   orgName: string;
-  rightsDescription: string;
+  rightDescription: string;
   description?: string;
+  scopes: string[];
   priority: number;
 }
 
@@ -49,38 +50,41 @@ interface languageDto {
   nn: string;
 }
 
+interface resourceReferenceDTO {
+  reference: string;
+  referenceType: string;
+  referenceSource: string;
+}
+
 const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
-  const delegableApi = {
+  const delegableApi: DelegableApi = {
     id: obj.identifier,
     apiName: '',
     orgName: '',
-    rightsDescription: '',
+    rightDescription: '',
     description: obj.description,
-    scopes: obj.scopes,
+    scopes: [],
   };
+  for (const ref of obj.resourceReferences) {
+    if (ref.referenceType === 'MaskinportenScope') {
+      delegableApi.scopes.push(ref.reference);
+    }
+  }
   if (i18next.language === 'no_nb') {
-    delegableApi.rightsDescription = obj.rightsDescription?.nb;
+    delegableApi.rightDescription = obj.rightDescription?.nb;
     delegableApi.orgName = orgName.nb;
     delegableApi.apiName = obj.title.nb;
   } else if (i18next.language === 'en') {
-    delegableApi.rightsDescription = obj.rightsDescription?.en;
+    delegableApi.rightDescription = obj.rightDescription?.en;
     delegableApi.orgName = orgName.en;
     delegableApi.apiName = obj.title.en;
   } else {
-    delegableApi.rightsDescription = obj.rightsDescription?.nn;
+    delegableApi.rightDescription = obj.rightDescription?.nn;
     delegableApi.orgName = orgName.nn;
     delegableApi.apiName = obj.title.nn;
   }
 
   return delegableApi;
-};
-
-const initialOrgNames = () => {
-  const list = [];
-  for (let i = 0; i < 10; i++) {
-    list.push('Org' + i.toString());
-  }
-  return list;
 };
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
@@ -98,7 +102,7 @@ const initialState: SliceState = {
   delegableApiList: [],
   presentedApiList: [],
   delegableApiSearchPool: [],
-  apiProviders: initialOrgNames(),
+  apiProviders: [''],
   chosenDelegableApiList: [],
   error: '',
 };
@@ -133,8 +137,7 @@ const delegableApiSlice = createSlice({
         (delegableApi) => delegableApi.id !== action.payload.id,
       );
     },
-    // code for later
-    /*     filter: (state: SliceState, action) => {
+    filter: (state: SliceState, action) => {
       const { delegableApiList } = state;
       const filterList = action.payload;
       let searchPool = [...delegableApiList];
@@ -163,9 +166,11 @@ const delegableApiSlice = createSlice({
           let numMatches = 0;
           for (const word of seachWords) {
             if (
-              (api.apiName.toLowerCase().includes(word) ||
-                api.description?.toLowerCase().includes(word)) ??
-              api.orgName.toLowerCase().includes(word)
+              api.apiName.toLowerCase().includes(word) ||
+              (api.description?.toLowerCase().includes(word) ??
+                api.rightDescription?.toLowerCase().includes(word)) ||
+              api.orgName.toLowerCase().includes(word) ||
+              api.scopes?.find((scope) => scope.includes(word))
             ) {
               numMatches++;
             }
@@ -181,7 +186,7 @@ const delegableApiSlice = createSlice({
       } else {
         state.presentedApiList = delegableApiSearchPool;
       }
-    }, */
+    },
     resetDelegableApis: () => initialState,
   },
   extraReducers: (builder) => {
@@ -189,22 +194,32 @@ const delegableApiSlice = createSlice({
       .addCase(fetchDelegableApis.fulfilled, (state, action) => {
         const dataArray = action.payload;
         const responseList: DelegableApi[] = [];
+        const providerList: string[] = [];
         for (let i = 0; i < dataArray.length; i++) {
           const apiName = dataArray[i].title?.nb;
           const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
-          const rightsDescription = dataArray[i].rightsDescription?.nb;
+          const rightDescription = dataArray[i].rightDescription?.nb;
           const owner = dataArray[i].owner?.nb;
-          if (/* rightsDescription && */ apiName) {
+          if (/* rightDescription && */ apiName) {
             if (orgName) {
               responseList.push(
                 mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
               );
+              if (!providerList.includes(orgName)) {
+                providerList.push(orgName);
+              }
             } else if (owner) {
               responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
+              if (!providerList.includes(owner)) {
+                providerList.push(owner);
+              }
             }
           }
         }
+        state.delegableApiList = responseList;
+        state.delegableApiSearchPool = responseList;
         state.presentedApiList = responseList;
+        state.apiProviders = providerList.sort((a, b) => a.localeCompare(b));
         state.loading = false;
       })
       .addCase(fetchDelegableApis.rejected, (state, action) => {
