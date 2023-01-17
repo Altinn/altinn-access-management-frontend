@@ -24,8 +24,18 @@ export interface DelegationRequest {
 const initialState: InitialState = {
   loading: true,
   error: '',
-  succesfulApiDelegations: [],
-  failedApiDelegations: [],
+  succesfulApiDelegations: [
+    {
+      orgName: 'Org blabla',
+      apiName: 'Api blabla',
+    },
+  ],
+  failedApiDelegations: [
+    {
+      orgName: 'Org blabla',
+      apiName: 'Api blabla',
+    },
+  ],
 };
 
 export const delegateApi = async (

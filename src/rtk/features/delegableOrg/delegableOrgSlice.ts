@@ -18,13 +18,13 @@ const initialState: InitialState = {
   delegableOrgList: [
     {
       id: '1',
-      orgName: 'Skatteetaten',
+      orgName: 'Evry',
       orgNr: '930124123',
       description: 'For å hente ut skatteklasser',
     },
     {
       id: '2',
-      orgName: 'Brønnøysundregistrene',
+      orgName: 'Accenture',
       orgNr: '950124321',
       description: 'For å hente ut skatt',
     },

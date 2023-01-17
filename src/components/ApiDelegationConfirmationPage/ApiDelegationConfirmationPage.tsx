@@ -17,11 +17,11 @@ export const ApiDelegationConfirmationPage = () => {
     <PageContainer>
       <ConfirmationPage
         delegableApis={chosenApis}
-        delegableOrgList={chosenOrgs}
+        delegableOrgs={chosenOrgs}
         restartProcessPath={'/api-delegations/new-org-delegation'}
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
-        topListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
-        bottomListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
+        topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
+        bottomListText={String(t('api_delegation.confirmation_page_content_second_text'))}
         bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
         mainButton={
           <Button

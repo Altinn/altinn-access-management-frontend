@@ -21,7 +21,7 @@ export interface CompactDeletableListItemProps {
   leftText: string;
   middleText: string;
   startIcon?: React.ReactNode;
-  contentColor: ListTextColor;
+  contentColor?: ListTextColor;
 }
 
 export const CompactDeletableListItem = ({
@@ -29,7 +29,7 @@ export const CompactDeletableListItem = ({
   leftText,
   middleText,
   startIcon,
-  contentColor,
+  contentColor = ListTextColor.primary,
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
@@ -41,17 +41,22 @@ export const CompactDeletableListItem = ({
       >
         <div className={classes.baseListItemContent}>
           {startIcon && (
-            <div className={classes.listItemIcon, classes.listItemIcon--{contentColor}}>
+            <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
               <SvgIcon
                 width={14}
                 height={14}
                 svgIconComponent={startIcon}
+                className={classes.listItemIcon__error}
               ></SvgIcon>
             </div>
           )}
           <div className={classes.listItemTexts}>
-            <div className={classes.firstText}>{leftText}</div>
-            <div className={classes.secondText}>{middleText}</div>
+            <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
+              {leftText}
+            </div>
+            <div className={(classes.middleText, classes[`middleText__${contentColor}`])}>
+              {middleText}
+            </div>
           </div>
           <div className={classes.deleteSection}>
             {removeCallback && (

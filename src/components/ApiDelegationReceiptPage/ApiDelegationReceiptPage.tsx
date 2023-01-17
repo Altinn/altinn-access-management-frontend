@@ -1,12 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import {
+  Button,
+  ButtonColor,
+  ButtonSize,
+  ButtonVariant,
+  PageColor,
+} from '@altinn/altinn-design-system';
+import { useEffect } from 'react';
 
-import { useAppSelector } from '@/rtk/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { resetDelegableOrgs } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 
 import { ConfirmationPage, PageContainer } from '../Reusables';
-import { ListTextColor } from '../Reusables/CompactDeletableListItem/CompactDeletableListItem';
-
-import classes from './ApiDelegationReceiptPage.module.css';
+import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 
 export const ApiDelegationReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
@@ -17,14 +25,36 @@ export const ApiDelegationReceiptPage = () => {
   );
   const { t } = useTranslation('common');
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  return;
-  <PageContainer>
-    <ConfirmationPage
-      delegableApis={failedApiDelegations}
-      topListColor={ListTextColor.primary}
-      failedDelegations={failedApiDelegations}
-      successfulDelegations={succesfulApiDelegations}
-    ></ConfirmationPage>
-  </PageContainer>;
+  useEffect(() => {
+    dispatch(resetDelegableOrgs());
+    dispatch(resetDelegableApis());
+  });
+
+  return (
+    <PageContainer>
+      <ConfirmationPage
+        failedDelegations={failedApiDelegations}
+        successfulDelegations={succesfulApiDelegations}
+        restartProcessPath={'/api-delegations/new-org-delegation'}
+        pageHeaderText={t('api_delegation.give_access_to_new_api')}
+        topListText={String(t('api_delegation.failed_delegations'))}
+        bottomListText={String(t('api_delegation.succesful_delegations'))}
+        bottomText={String(t('api_delegation.receipt_page_bottom_text'))}
+        mainButton={
+          <Button
+            color={ButtonColor.Primary}
+            size={ButtonSize.Small}
+            variant={ButtonVariant.Filled}
+            onClick={() => navigate('/api-delegations')}
+          >
+            {t('api_delegation.receipt_page_main_button')}
+          </Button>
+        }
+        headerIcon={<ApiIcon />}
+        headerColor={PageColor.Success}
+      ></ConfirmationPage>
+    </PageContainer>
+  );
 };

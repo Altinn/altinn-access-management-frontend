@@ -14,26 +14,29 @@
   margin-right: 10px;
 }
 
-.listItemIcon__error {
-  margin-right: 10px;
-}
-
 .listItemTexts{
   flex: 2;
   display: flex;
   font-size: 16px;
+  --list-text-color-error: #E02E49;
 }
 
-.listItemTexts__error{
-  color: #E02E49;
-}
-
-.firstText {
+.leftText {
   width: 400px;
 }
 
-.secondText {
+.middleText {
   flex:1;
+}
+
+.leftText__error {
+  width: 400px;
+  color: var(--list-text-color-error);
+}
+
+.middleText__error {
+  flex:1;
+  color: var(--list-text-color-error);
 }
 
 .deleteSection {
