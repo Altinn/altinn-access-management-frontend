@@ -19,7 +19,7 @@ export const Router = createBrowserRouter(
       errorElement: <ErrorPage />,
     },
     {
-      path: 'api-delegations-received',
+      path: 'received-api-delegations',
       element: <ReceivedOverviewPage />,
       errorElement: <ErrorPage />,
     },
