@@ -1,7 +1,9 @@
 import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@altinn/altinn-design-system';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import { ReactComponent as ExitIcon } from '@/assets/Error.svg';
+import { Paths } from '@/routes/Router';
 
 import classes from './PageContainer.module.css';
 
@@ -20,7 +22,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
           color={ButtonColor.Inverted}
           size={ButtonSize.Medium}
           icon={<ExitIcon />}
-          onClick={() => navigate('/Profile')}
+          onClick={() => navigate('/' + Paths.Profile)}
         ></Button>
       </div>
       <div>{children}</div>

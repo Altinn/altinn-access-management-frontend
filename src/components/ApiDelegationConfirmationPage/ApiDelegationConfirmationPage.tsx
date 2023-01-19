@@ -21,7 +21,9 @@ export const ApiDelegationConfirmationPage = () => {
       <ConfirmationPage
         apiList={chosenApis}
         orgList={chosenOrgs}
-        restartProcessPath={Paths.NewGivenOrgDelegation}
+        restartProcessPath={
+          '/' + Paths.GivenApiDelegationsOverview + '/' + Paths.NewGivenOrgDelegation
+        }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         apiListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
         orgListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
@@ -42,7 +44,16 @@ export const ApiDelegationConfirmationPage = () => {
             color={ButtonColor.Primary}
             variant={ButtonVariant.Outline}
             size={ButtonSize.Small}
-            onClick={() => navigate(Paths.NewGivenApiDelegation)}
+            onClick={() =>
+              navigate(
+                '/' +
+                  Paths.GivenApiDelegationsOverview +
+                  '/' +
+                  Paths.NewGivenOrgDelegation +
+                  '/' +
+                  Paths.NewGivenApiDelegation,
+              )
+            }
           >
             {t('api_delegation.previous')}
           </Button>
