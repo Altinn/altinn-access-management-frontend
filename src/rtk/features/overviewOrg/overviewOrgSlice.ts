@@ -128,7 +128,7 @@ const setAllItemsToGivenSoftDeleteState = (
 const createCopyOrg = (org: OverviewOrg) => {
   return {
     id: org.id,
-    name: org.orgName,
+    orgName: org.orgName,
     isAllSoftDeleted: false,
     orgNr: org.orgNr,
     apiList: [],

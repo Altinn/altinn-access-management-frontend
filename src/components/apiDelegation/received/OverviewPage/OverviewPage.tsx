@@ -1,5 +1,6 @@
 import { Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
+import * as React from 'react';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
