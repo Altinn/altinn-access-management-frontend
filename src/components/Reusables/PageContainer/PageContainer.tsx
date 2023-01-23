@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
 import { ReactComponent as ExitIcon } from '@/assets/Error.svg';
-import { Paths } from '@/routes/Router';
+import { RouterPath } from '@/routes/Router';
 
 import classes from './PageContainer.module.css';
 
@@ -22,7 +22,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
           color={ButtonColor.Inverted}
           size={ButtonSize.Medium}
           icon={<ExitIcon />}
-          onClick={() => navigate('/' + Paths.Profile)}
+          onClick={() => navigate('/' + RouterPath.Profile)}
         ></Button>
       </div>
       <div>{children}</div>

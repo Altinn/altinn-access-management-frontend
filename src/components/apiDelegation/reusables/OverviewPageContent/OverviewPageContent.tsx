@@ -26,7 +26,7 @@ import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
 import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { Paths } from '@/routes/Router';
+import { RouterPath } from '@/routes/Router';
 
 import { LayoutState } from '../LayoutState';
 
@@ -53,7 +53,7 @@ export const OverviewPageContent = ({
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     dispatch(softAddOrg(org));
-    navigate(Paths.NewGivenOrgDelegation + '/' + Paths.NewGivenApiDelegation);
+    navigate('/' + RouterPath.GivenApiDelegationOverview + '/' + RouterPath.NewGivenApiDelegation);
   };
 
   useEffect(() => {
@@ -137,7 +137,11 @@ export const OverviewPageContent = ({
         <div className={classes.delegateNewButton}>
           <Button
             variant={ButtonVariant.Outline}
-            onClick={() => navigate(Paths.NewGivenOrgDelegation)}
+            onClick={() =>
+              navigate(
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
+              )
+            }
             icon={<Add />}
           >
             {t('api_delegation.delegate_new_org')}

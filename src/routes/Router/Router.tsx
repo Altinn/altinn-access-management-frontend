@@ -8,13 +8,15 @@ import { OverviewPage as ReceivedOverviewPage } from '@/components/apiDelegation
 import { NewOrgDelegationPage } from '@/components/NewOrgDelegationPage';
 import { ApiDelegationConfirmationPage } from '@/components/ApiDelegationConfirmationPage';
 
-export enum Paths {
-  GivenApiDelegationsOverview = 'given-api-delegations',
+export enum RouterPath {
+  GivenApiDelegations = 'given-api-delegations',
+  GivenApiDelegationOverview = 'overview',
   NewGivenApiDelegation = 'pick-api',
   NewGivenOrgDelegation = 'pick-org',
-  ApiDelegationConfirmation = 'confirmation',
-  ApiDelegationReceipt = 'receipt',
-  ReceivedApiDelegationsOverview = 'received-api-delegations',
+  GivenApiDelegationConfirmation = 'confirmation',
+  GivenApiDelegationReceipt = 'receipt',
+  ReceivedApiDelegations = 'received-api-delegations',
+  ReceivedApiDelegationOverview = 'overview',
   Profile = 'Profile',
 }
 
@@ -25,40 +27,26 @@ export const Router = createBrowserRouter(
       errorElement={<ErrorPage />}
     >
       <Route
-        path={Paths.GivenApiDelegationsOverview}
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationOverview}
         element={<GivenOverviewPage />}
       />
       <Route
-        path={Paths.GivenApiDelegationsOverview + '/' + Paths.NewGivenOrgDelegation}
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation}
         element={<NewOrgDelegationPage />}
         errorElement={<ErrorPage />}
       />
       <Route
-        path={
-          Paths.GivenApiDelegationsOverview +
-          '/' +
-          Paths.NewGivenOrgDelegation +
-          '/' +
-          Paths.NewGivenApiDelegation
-        }
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation}
         element={<NewApiDelegationPage />}
         errorElement={<ErrorPage />}
       />
       <Route
-        path={
-          Paths.GivenApiDelegationsOverview +
-          '/' +
-          Paths.NewGivenOrgDelegation +
-          '/' +
-          Paths.NewGivenApiDelegation +
-          '/' +
-          Paths.ApiDelegationConfirmation
-        }
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationConfirmation}
         element={<ApiDelegationConfirmationPage />}
         errorElement={<ErrorPage />}
       />
       <Route
-        path={Paths.ReceivedApiDelegationsOverview}
+        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiDelegationOverview}
         element={<ReceivedOverviewPage />}
         errorElement={<ErrorPage />}
       />

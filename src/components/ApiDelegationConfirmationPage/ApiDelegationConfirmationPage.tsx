@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
 import { useAppSelector } from '@/rtk/app/hooks';
-import { Paths } from '@/routes/Router';
+import { RouterPath } from '@/routes/Router';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import { ConfirmationPage } from '../Reusables/ConfirmationPage';
@@ -22,7 +22,7 @@ export const ApiDelegationConfirmationPage = () => {
         apiList={chosenApis}
         orgList={chosenOrgs}
         restartProcessPath={
-          '/' + Paths.GivenApiDelegationsOverview + '/' + Paths.NewGivenOrgDelegation
+          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation
         }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         apiListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
@@ -33,7 +33,11 @@ export const ApiDelegationConfirmationPage = () => {
             color={ButtonColor.Success}
             variant={ButtonVariant.Filled}
             size={ButtonSize.Small}
-            onClick={() => navigate(Paths.ApiDelegationReceipt)}
+            onClick={() =>
+              navigate(
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationReceipt,
+              )
+            }
             disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
           >
             {t('api_delegation.confirm_delegation')}
@@ -46,12 +50,7 @@ export const ApiDelegationConfirmationPage = () => {
             size={ButtonSize.Small}
             onClick={() =>
               navigate(
-                '/' +
-                  Paths.GivenApiDelegationsOverview +
-                  '/' +
-                  Paths.NewGivenOrgDelegation +
-                  '/' +
-                  Paths.NewGivenApiDelegation,
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
               )
             }
           >

@@ -32,7 +32,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { Paths } from '@/routes/Router';
+import { RouterPath } from '@/routes/Router';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import {
@@ -206,7 +206,7 @@ export const NewApiDelegationPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + Paths.GivenApiDelegationsOverview + '/' + Paths.NewGivenOrgDelegation,
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
                     )
                   }
                 >
@@ -219,7 +219,14 @@ export const NewApiDelegationPage = () => {
                   variant={ButtonVariant.Filled}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate(Paths.ApiDelegationConfirmation)}
+                  onClick={() =>
+                    navigate(
+                      '/' +
+                        RouterPath.GivenApiDelegations +
+                        '/' +
+                        RouterPath.GivenApiDelegationConfirmation,
+                    )
+                  }
                   disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
                 >
                   {t('api_delegation.next')}

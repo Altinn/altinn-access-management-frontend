@@ -20,7 +20,7 @@ import {
   NewDelegationAccordion,
   NewDelegationAccordionButtonType,
 } from '@/components/Reusables/NewDelegationAccordion';
-import { Paths } from '@/routes/Router';
+import { RouterPath } from '@/routes/Router';
 
 import { PageContainer } from '../Reusables/PageContainer';
 
@@ -82,7 +82,14 @@ export const NewOrgDelegationPage = () => {
                   variant={ButtonVariant.Outline}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/' + Paths.GivenApiDelegationsOverview)}
+                  onClick={() =>
+                    navigate(
+                      '/' +
+                        RouterPath.GivenApiDelegations +
+                        '/' +
+                        RouterPath.GivenApiDelegationOverview,
+                    )
+                  }
                 >
                   {t('api_delegation.cancel')}
                 </Button>
@@ -93,7 +100,11 @@ export const NewOrgDelegationPage = () => {
                   variant={ButtonVariant.Filled}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate(Paths.NewGivenApiDelegation)}
+                  onClick={() =>
+                    navigate(
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
+                    )
+                  }
                   disabled={chosenOrgs.length === 0}
                 >
                   {t('api_delegation.next')}
