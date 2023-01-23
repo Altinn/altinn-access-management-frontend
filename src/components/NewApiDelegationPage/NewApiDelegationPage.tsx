@@ -61,6 +61,9 @@ export const NewApiDelegationsPage = () => {
     if (loading) {
       void fetchData();
     }
+    // Clear search and filters on mount
+    dispatch(filter([]));
+    dispatch(search(''));
   }, []);
 
   function handleSearch(searchText: string) {

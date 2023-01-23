@@ -1,14 +1,14 @@
 import { Page, PageHeader, PageContent } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
+import * as React from 'react';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
-import { PageContainer } from '../Reusables/PageContainer';
+import { OverviewPageContent } from '../../reusables/OverviewPageContent';
+import { LayoutState } from '../../reusables/LayoutState';
+import { PageContainer } from '../../../Reusables/PageContainer';
 
-import classes from './ApiDelegationOverviewPage.module.css';
-import { OrgDelegationOverviewPageContent } from './OrgDelegationOverviewPageContent';
-
-export const ApiDelegationOverviewPage = () => {
+export const OverviewPage = () => {
   const { t } = useTranslation('common');
 
   return (
@@ -16,9 +16,7 @@ export const ApiDelegationOverviewPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
         <PageContent>
-          <div className={classes.pageContent}>
-            <OrgDelegationOverviewPageContent />
-          </div>
+          <OverviewPageContent layout={LayoutState.Given} />
         </PageContent>
       </Page>
     </PageContainer>

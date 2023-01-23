@@ -1,7 +1,8 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
+import * as React from 'react';
 
-import { OrgDelegationAccordion } from '@/components/ApiDelegationOverviewPage/OrgDelegationOverviewPageContent/OrgDelegationAccordion/OrgDelegationAccordion';
+import { OrgDelegationAccordion } from '@/components/apiDelegation/reusables/OverviewPageContent/OrgDelegationAccordion';
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
 

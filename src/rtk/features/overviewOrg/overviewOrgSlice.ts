@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import i18next from 'i18next';
+
+import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
 
 export interface ApiListItem {
   id: string;
@@ -17,69 +20,108 @@ export interface OverviewOrg {
   apiList: ApiListItem[];
 }
 
-export interface InitialState {
+interface DelegationDTO {
+  coveredByName: string;
+  offeredByName: string;
+  offeredByOrganizationNumber: string;
+  coveredByOrganizationNumber: string;
+  resourceId: string;
+  resourceTitle: languageDto;
+  hasCompetentAuthority: HasCompetentAuthorityDTO;
+  rightDescription: languageDto;
+}
+
+export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
 }
 
-const initialState: InitialState = {
-  loading: false,
-  overviewOrgs: [
-    {
-      id: '1',
-      orgName: 'Netcompany',
-      orgNr: '123456789',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Brønnøysundregisterene',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          apiName: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-    {
-      id: '2',
-      orgName: 'Tieto',
-      orgNr: '950124321',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Avanade',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          apiName: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'Accenture er et forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-  ],
+interface HasCompetentAuthorityDTO {
+  organization: string;
+  orgcode: string;
+  name: languageDto;
+}
+
+interface languageDto {
+  en: string;
+  nb: string;
+  nn: string;
+}
+
+const initialState: SliceState = {
+  loading: true,
+  overviewOrgs: [],
   error: '',
 };
 
+const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
+  const overviewOrgList: OverviewOrg[] = [];
+  for (const delegation of delegationArray) {
+    let apiName = '';
+    let description = '';
+    let owner = '';
+    switch (i18next.language) {
+      case 'no_nb':
+        apiName = delegation.resourceTitle.nb;
+        description = delegation.rightDescription.nb;
+        owner = delegation.hasCompetentAuthority.name.nb;
+        break;
+      case 'no_nn':
+        apiName = delegation.resourceTitle.nn;
+        description = delegation.rightDescription.nn;
+        owner = delegation.hasCompetentAuthority.name.nn;
+        break;
+      case 'en':
+        apiName = delegation.resourceTitle.en;
+        description = delegation.rightDescription.en;
+        owner = delegation.hasCompetentAuthority.name.en;
+        break;
+    }
+
+    const api: ApiListItem = {
+      id: delegation.resourceId,
+      apiName,
+      isSoftDelete: false,
+      owner,
+      description,
+    };
+
+    let delegationOrg = '';
+    let delegationOrgNumber = '';
+    switch (layout) {
+      case LayoutState.Given:
+        delegationOrg = delegation.coveredByName;
+        delegationOrgNumber = delegation.coveredByOrganizationNumber;
+        break;
+      case LayoutState.Received:
+        delegationOrg = delegation.offeredByName;
+        delegationOrgNumber = delegation.offeredByOrganizationNumber;
+        break;
+    }
+
+    const existingOrgIndex = overviewOrgList.findIndex((org) => org.id === delegationOrg);
+    if (existingOrgIndex >= 0) {
+      // Add delegation to existing org-entry
+      overviewOrgList[existingOrgIndex].apiList.push(api);
+    } else {
+      // Add new org
+      const newOrg: OverviewOrg = {
+        id: delegationOrg,
+        orgName: delegationOrg,
+        orgNr: delegationOrgNumber,
+        isAllSoftDeleted: false,
+        apiList: [api],
+      };
+      overviewOrgList.push(newOrg);
+    }
+  }
+
+  return overviewOrgList;
+};
+
 const setAllItemsToGivenSoftDeleteState = (
-  state: InitialState,
+  state: SliceState,
   softDeletedOrgId: string,
   isSoftDelete: boolean,
 ) => {
@@ -97,19 +139,34 @@ const setAllItemsToGivenSoftDeleteState = (
 const createCopyOrg = (org: OverviewOrg) => {
   return {
     id: org.id,
-    name: org.orgName,
+    orgName: org.orgName,
     isAllSoftDeleted: false,
     orgNr: org.orgNr,
     apiList: [],
   };
 };
 
-export const fetchOverviewOrgs = createAsyncThunk('overviewOrg/fetchOverviewOrgs', async () => {
-  return await axios
-    .get('https://jsonplaceholder.typicode.com/users')
-    .then((response) => response.data)
-    .catch((error) => console.log(error));
-});
+export const fetchOverviewOrgsOutbound = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsOutbound',
+  async () => {
+    // TODO: Replace r500000 with partyid of actual logged in org
+    return await axios
+      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/outbound')
+      .then((response) => response.data)
+      .catch((error) => console.log(error));
+  },
+);
+
+export const fetchOverviewOrgsInbound = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsInbound',
+  async () => {
+    // TODO: Replace r500000 with partyid of actual logged in org
+    return await axios
+      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/inbound')
+      .then((response) => response.data)
+      .catch((error) => console.log(error));
+  },
+);
 
 const overviewOrgSlice = createSlice({
   name: 'overviewOrg',
@@ -180,6 +237,27 @@ const overviewOrgSlice = createSlice({
         org.isAllSoftDeleted = false;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOverviewOrgsInbound.fulfilled, (state, action) => {
+        const dataArray = action.payload;
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Received);
+        state.overviewOrgs = responseList;
+        state.loading = false;
+      })
+      .addCase(fetchOverviewOrgsInbound.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+      })
+      .addCase(fetchOverviewOrgsOutbound.fulfilled, (state, action) => {
+        const dataArray = action.payload;
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Given);
+        state.overviewOrgs = responseList;
+        state.loading = false;
+      })
+      .addCase(fetchOverviewOrgsOutbound.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+      });
   },
 });
 
