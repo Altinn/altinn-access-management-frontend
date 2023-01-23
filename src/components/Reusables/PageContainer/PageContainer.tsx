@@ -1,6 +1,7 @@
 import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@altinn/altinn-design-system';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as ExitIcon } from '@/assets/Error.svg';
 import { RouterPath } from '@/routes/Router';
@@ -13,6 +14,7 @@ export interface PageContainerProps {
 
 export const PageContainer = ({ children }: PageContainerProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('common');
 
   return (
     <div className={classes.pageWrapper}>
@@ -22,6 +24,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
           color={ButtonColor.Inverted}
           size={ButtonSize.Medium}
           icon={<ExitIcon />}
+          aria-label={String(t('common.close'))}
           onClick={() => navigate('/' + RouterPath.Profile)}
         ></Button>
       </div>

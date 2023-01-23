@@ -8,8 +8,6 @@ import { OverviewPageContent } from '../../reusables/OverviewPageContent';
 import { LayoutState } from '../../reusables/LayoutState';
 import { PageContainer } from '../../../Reusables/PageContainer';
 
-import classes from './OverviewPage.module.css';
-
 export const OverviewPage = () => {
   const { t } = useTranslation('common');
 
@@ -18,9 +16,7 @@ export const OverviewPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
         <PageContent>
-          <div className={classes.pageContent}>
-            <OverviewPageContent layout={LayoutState.Given} />
-          </div>
+          <OverviewPageContent layout={LayoutState.Given} />
         </PageContent>
       </Page>
     </PageContainer>
