@@ -8,7 +8,7 @@ import delegableOrgReducer from '../features/delegableOrg/delegableOrgSlice';
 const logger = createLogger();
 
 // turn off redux-logger in production
-const store = import.meta.env.PROD
+const store = import.meta.env.DEV
   ? configureStore({
       reducer: {
         delegableApi: delegableApiReducer,

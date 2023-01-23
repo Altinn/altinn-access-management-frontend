@@ -12,6 +12,7 @@ import { getConfig } from '../config';
 
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
+import { App } from './App';
 
 /**
  * Special behaviour for react-query in dev environment
@@ -54,9 +55,11 @@ use(initReactI18next).init(
       <React.StrictMode>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
-            <LoadLocalizations>
-              <RouterProvider router={Router} />
-            </LoadLocalizations>
+            <App>
+              <LoadLocalizations>
+                <RouterProvider router={Router}></RouterProvider>
+              </LoadLocalizations>
+            </App>
           </QueryClientProvider>
         </Provider>
       </React.StrictMode>,

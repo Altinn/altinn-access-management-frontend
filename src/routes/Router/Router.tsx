@@ -18,6 +18,7 @@ export enum RouterPath {
   ReceivedApiDelegations = 'received-api-delegations',
   ReceivedApiDelegationOverview = 'overview',
   Profile = 'Profile',
+  StartPage = 'www.altinn.no',
 }
 
 export const Router = createBrowserRouter(
