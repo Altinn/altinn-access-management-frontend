@@ -2,10 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
-enum LayoutState {
-  Given,
-  Received,
-}
+import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
 
 export interface ApiListItem {
   id: string;
@@ -30,13 +27,20 @@ interface DelegationDTO {
   coveredByOrganizationNumber: string;
   resourceId: string;
   resourceTitle: languageDto;
+  hasCompetentAuthority: HasCompetentAuthorityDTO;
+  rightDescription: languageDto;
 }
 
 export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
-  layout: LayoutState;
+}
+
+interface HasCompetentAuthorityDTO {
+  organization: string;
+  orgcode: string;
+  name: languageDto;
 }
 
 interface languageDto {
@@ -49,22 +53,29 @@ const initialState: SliceState = {
   loading: true,
   overviewOrgs: [],
   error: '',
-  layout: LayoutState.Given,
 };
 
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
   const overviewOrgList: OverviewOrg[] = [];
   for (const delegation of delegationArray) {
     let apiName = '';
+    let description = '';
+    let owner = '';
     switch (i18next.language) {
       case 'no_nb':
         apiName = delegation.resourceTitle.nb;
+        description = delegation.rightDescription.nb;
+        owner = delegation.hasCompetentAuthority.name.nb;
         break;
       case 'no_nn':
         apiName = delegation.resourceTitle.nn;
+        description = delegation.rightDescription.nn;
+        owner = delegation.hasCompetentAuthority.name.nn;
         break;
       case 'en':
         apiName = delegation.resourceTitle.en;
+        description = delegation.rightDescription.en;
+        owner = delegation.hasCompetentAuthority.name.en;
         break;
     }
 
@@ -72,8 +83,8 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
       id: delegation.resourceId,
       apiName,
       isSoftDelete: false,
-      owner: 'Owner unknown',
-      description: 'Description missing',
+      owner,
+      description,
     };
 
     let delegationOrg = '';
@@ -135,24 +146,25 @@ const createCopyOrg = (org: OverviewOrg) => {
   };
 };
 
-export const fetchOverviewOrgs = createAsyncThunk(
-  'overviewOrg/fetchOverviewOrgs',
-  async (layout: LayoutState = LayoutState.Given) => {
+export const fetchOverviewOrgsOutbound = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsOutbound',
+  async () => {
     // TODO: Replace r500000 with partyid of actual logged in org
-    switch (layout) {
-      case LayoutState.Given:
-        return await axios
-          .get('/accessmanagement/api/v1/r500000/delegations/maskinportenschema/outbound')
-          .then((response) => response.data)
-          .catch((error) => console.log(error));
-        break;
-      case LayoutState.Received:
-        return await axios
-          .get('/accessmanagement/api/v1/r500000/delegations/maskinportenschema/inbound')
-          .then((response) => response.data)
-          .catch((error) => console.log(error));
-        break;
-    }
+    return await axios
+      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/outbound')
+      .then((response) => response.data)
+      .catch((error) => console.log(error));
+  },
+);
+
+export const fetchOverviewOrgsInbound = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsInbound',
+  async () => {
+    // TODO: Replace r500000 with partyid of actual logged in org
+    return await axios
+      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/inbound')
+      .then((response) => response.data)
+      .catch((error) => console.log(error));
   },
 );
 
@@ -160,9 +172,6 @@ const overviewOrgSlice = createSlice({
   name: 'overviewOrg',
   initialState,
   reducers: {
-    setLayout: (state, action) => {
-      state.layout = action.payload;
-    },
     softDelete: (state, action) => {
       let softDeleteCount = 0;
       const softDeletedItemId = action.payload[1];
@@ -231,13 +240,22 @@ const overviewOrgSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOverviewOrgs.fulfilled, (state, action) => {
+      .addCase(fetchOverviewOrgsInbound.fulfilled, (state, action) => {
         const dataArray = action.payload;
-        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, state.layout);
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Received);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
-      .addCase(fetchOverviewOrgs.rejected, (state, action) => {
+      .addCase(fetchOverviewOrgsInbound.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+      })
+      .addCase(fetchOverviewOrgsOutbound.fulfilled, (state, action) => {
+        const dataArray = action.payload;
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Given);
+        state.overviewOrgs = responseList;
+        state.loading = false;
+      })
+      .addCase(fetchOverviewOrgsOutbound.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
       });
   },
@@ -245,7 +263,6 @@ const overviewOrgSlice = createSlice({
 
 export default overviewOrgSlice.reducer;
 export const {
-  setLayout,
   softDelete,
   softRestore,
   softDeleteAll,
