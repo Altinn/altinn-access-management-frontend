@@ -6,7 +6,7 @@ import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
 
-import { Router } from '@/routes/Router';
+import { Router, RouterPath } from '@/routes/Router';
 
 import { getConfig } from '../config';
 
@@ -55,7 +55,7 @@ use(initReactI18next).init(
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <LoadLocalizations>
-              <BrowserRouter basename='accessmanagement/ui'>
+              <BrowserRouter basename={RouterPath.BasePath}>
                 <Router></Router>
               </BrowserRouter>
             </LoadLocalizations>
