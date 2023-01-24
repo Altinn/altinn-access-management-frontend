@@ -14,12 +14,12 @@ import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import {
+  fetchOverviewOrgsOutbound,
+  fetchOverviewOrgsInbound,
   restoreAllSoftDeletedItems,
   save,
   softDeleteAll,
   softRestoreAll,
-  fetchOverviewOrgs,
-  setLayout,
 } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
@@ -48,12 +48,28 @@ export const OverviewPageContent = ({
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
-  const fetchData = async () => await dispatch(fetchOverviewOrgs(layout));
-  dispatch(setLayout(layout));
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let fetchData: () => any;
+  let overviewText: string;
+  let accessesHeader: string;
+
+  switch (layout) {
+    case LayoutState.Given:
+      fetchData = () => dispatch(fetchOverviewOrgsOutbound());
+      overviewText = t('api_delegation.api_overview_text');
+      accessesHeader = t('api_delegation.you_have_delegated_accesses');
+      break;
+    case LayoutState.Received:
+      fetchData = () => dispatch(fetchOverviewOrgsInbound());
+      overviewText = t('api_delegation.api_received_overview_text');
+      accessesHeader = t('api_delegation.you_have_received_accesses');
+      break;
+  }
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.GivenApiDelegationOverview + '/' + RouterPath.NewGivenApiDelegation);
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation);
   };
 
   useEffect(() => {
@@ -81,19 +97,6 @@ export const OverviewPageContent = ({
       void fetchData();
     }
   }, []);
-
-  let overviewText = '';
-  let accessesHeader = '';
-  switch (layout) {
-    case LayoutState.Given:
-      overviewText = t('api_delegation.api_overview_text');
-      accessesHeader = t('api_delegation.you_have_delegated_accesses');
-      break;
-    case LayoutState.Received:
-      overviewText = t('api_delegation.api_received_overview_text');
-      accessesHeader = t('api_delegation.you_have_received_accesses');
-      break;
-  }
 
   const accordions = () => {
     if (error) {
@@ -131,60 +134,64 @@ export const OverviewPageContent = ({
   };
 
   return (
-    <div className={classes.overviewAccordionsContainer}>
-      <h2 className={classes.pageContentText}>{overviewText}</h2>
-      {layout === LayoutState.Given && (
-        <div className={classes.delegateNewButton}>
-          <Button
-            variant={ButtonVariant.Outline}
-            onClick={() =>
-              navigate(
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
-              )
-            }
-            icon={<Add />}
-          >
-            {t('api_delegation.delegate_new_org')}
-          </Button>
-        </div>
-      )}
-      <Panel title={t('api_delegation.card_title')}>{t('api_delegation.api_panel_content')}</Panel>
-      <div className={classes.pageContentContainer}>
-        <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
-        <div className={classes.editButton}>
-          {!isEditable ? (
+    <div className={classes.pageContent}>
+      <div className={classes.overviewAccordionsContainer}>
+        <h2 className={classes.pageContentText}>{overviewText}</h2>
+        {layout === LayoutState.Given && (
+          <div className={classes.delegateNewButton}>
             <Button
-              variant={ButtonVariant.Quiet}
-              icon={<Edit />}
-              onClick={handleSetIsEditable}
-              size={ButtonSize.Small}
+              variant={ButtonVariant.Outline}
+              onClick={() =>
+                navigate(
+                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
+                )
+              }
+              icon={<Add />}
             >
-              {t('api_delegation.edit_accesses')}
+              {t('api_delegation.delegate_new_org')}
             </Button>
-          ) : (
-            <Button
-              variant={ButtonVariant.Quiet}
-              icon={<Error />}
-              onClick={handleSetIsEditable}
-              size={ButtonSize.Small}
-            >
-              {t('api_delegation.cancel')}
-            </Button>
-          )}
+          </div>
+        )}
+        <Panel title={t('api_delegation.card_title')}>
+          {t('api_delegation.api_panel_content')}
+        </Panel>
+        <div className={classes.pageContentContainer}>
+          <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+          <div className={classes.editButton}>
+            {!isEditable ? (
+              <Button
+                variant={ButtonVariant.Quiet}
+                icon={<Edit />}
+                onClick={handleSetIsEditable}
+                size={ButtonSize.Small}
+              >
+                {t('api_delegation.edit_accesses')}
+              </Button>
+            ) : (
+              <Button
+                variant={ButtonVariant.Quiet}
+                icon={<Error />}
+                onClick={handleSetIsEditable}
+                size={ButtonSize.Small}
+              >
+                {t('api_delegation.cancel')}
+              </Button>
+            )}
+          </div>
         </div>
+        <div className={classes.accordion}>{accordions()}</div>
+        {isEditable && (
+          <div className={classes.saveSection}>
+            <Button
+              disabled={disabled}
+              onClick={() => dispatch(save())}
+              color={ButtonColor.Success}
+            >
+              {t('api_delegation.save')}
+            </Button>
+          </div>
+        )}
       </div>
-      <div className={classes.accordion}>{accordions()}</div>
-      {isEditable && (
-        <div className={classes.saveSection}>
-          <Button
-            disabled={disabled}
-            onClick={() => dispatch(save())}
-            color={ButtonColor.Success}
-          >
-            {t('api_delegation.save')}
-          </Button>
-        </div>
-      )}
     </div>
   );
 };

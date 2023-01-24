@@ -1,7 +1,8 @@
 {
   "common": {
     "error": "Feil",
-    "restart": "Start på nytt"
+    "restart": "Start på nytt",
+    "close": "Lukk"
   },
   "profile": {
     "received": "Mottatte",

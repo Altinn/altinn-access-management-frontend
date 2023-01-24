@@ -1,7 +1,8 @@
 { 
   "common": {
     "error": "Error",
-    "restart": "Restart"
+    "restart": "Restart",
+    "close": "Close"
   },
   "profile": {
     "received": "Received",
