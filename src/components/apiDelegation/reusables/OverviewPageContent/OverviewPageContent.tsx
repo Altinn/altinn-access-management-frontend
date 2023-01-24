@@ -49,7 +49,8 @@ export const OverviewPageContent = ({
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
 
-  let fetchData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let fetchData: () => any;
   let overviewText: string;
   let accessesHeader: string;
 
