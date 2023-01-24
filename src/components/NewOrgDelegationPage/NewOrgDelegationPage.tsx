@@ -10,6 +10,7 @@ import {
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import { softAddOrg, softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -19,6 +20,7 @@ import {
   NewDelegationAccordion,
   NewDelegationAccordionButtonType,
 } from '@/components/Reusables/NewDelegationAccordion';
+import { RouterPath } from '@/routes/Router';
 
 import { PageContainer } from '../Reusables/PageContainer';
 
@@ -80,7 +82,14 @@ export const NewOrgDelegationPage = () => {
                   variant={ButtonVariant.Outline}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/api-delegations')}
+                  onClick={() =>
+                    navigate(
+                      '/' +
+                        RouterPath.GivenApiDelegations +
+                        '/' +
+                        RouterPath.GivenApiDelegationsOverview,
+                    )
+                  }
                 >
                   {t('api_delegation.cancel')}
                 </Button>
@@ -91,7 +100,11 @@ export const NewOrgDelegationPage = () => {
                   variant={ButtonVariant.Filled}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/api-delegations/new-api-delegation')}
+                  onClick={() =>
+                    navigate(
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
+                    )
+                  }
                   disabled={chosenOrgs.length === 0}
                 >
                   {t('api_delegation.next')}

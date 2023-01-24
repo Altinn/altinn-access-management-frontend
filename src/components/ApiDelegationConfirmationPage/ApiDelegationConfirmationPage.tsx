@@ -1,8 +1,10 @@
 import { Button, ButtonVariant, ButtonColor, ButtonSize } from '@altinn/altinn-design-system';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import * as React from 'react';
 
 import { useAppSelector } from '@/rtk/app/hooks';
+import { RouterPath } from '@/routes/Router';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import { ConfirmationPage } from '../Reusables/ConfirmationPage';
@@ -19,7 +21,9 @@ export const ApiDelegationConfirmationPage = () => {
       <ConfirmationPage
         apiList={chosenApis}
         orgList={chosenOrgs}
-        restartProcessPath={'/api-delegations/new-org-delegation'}
+        restartProcessPath={
+          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation
+        }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         apiListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
         orgListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
@@ -29,7 +33,11 @@ export const ApiDelegationConfirmationPage = () => {
             color={ButtonColor.Success}
             variant={ButtonVariant.Filled}
             size={ButtonSize.Small}
-            onClick={() => navigate('/api-delegations/receipt')}
+            onClick={() =>
+              navigate(
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsReceipt,
+              )
+            }
             disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
           >
             {t('api_delegation.confirm_delegation')}
@@ -40,7 +48,11 @@ export const ApiDelegationConfirmationPage = () => {
             color={ButtonColor.Primary}
             variant={ButtonVariant.Outline}
             size={ButtonSize.Small}
-            onClick={() => navigate('/api-delegations/new-api-delegation')}
+            onClick={() =>
+              navigate(
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
+              )
+            }
           >
             {t('api_delegation.previous')}
           </Button>

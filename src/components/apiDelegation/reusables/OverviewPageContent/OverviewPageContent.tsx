@@ -26,6 +26,7 @@ import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
 import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { RouterPath } from '@/routes/Router';
 
 import { LayoutState } from '../LayoutState';
 
@@ -48,17 +49,19 @@ export const OverviewPageContent = ({
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
 
-  let fetchData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let fetchData: () => any;
   let overviewText: string;
   let accessesHeader: string;
+
   switch (layout) {
     case LayoutState.Given:
-      fetchData = async () => await dispatch(fetchOverviewOrgsOutbound());
+      fetchData = () => dispatch(fetchOverviewOrgsOutbound());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
       break;
     case LayoutState.Received:
-      fetchData = async () => await dispatch(fetchOverviewOrgsInbound());
+      fetchData = () => dispatch(fetchOverviewOrgsInbound());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
       break;
@@ -66,11 +69,13 @@ export const OverviewPageContent = ({
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     dispatch(softAddOrg(org));
-    navigate('new-api-delegation');
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation);
   };
 
   useEffect(() => {
     handleSetDisabled();
+    dispatch(resetDelegableApis());
+    dispatch(resetDelegableOrgs());
   });
 
   const handleSetDisabled = () => {
@@ -136,7 +141,11 @@ export const OverviewPageContent = ({
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
-              onClick={() => navigate('new-org-delegation')}
+              onClick={() =>
+                navigate(
+                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
+                )
+              }
               icon={<Add />}
             >
               {t('api_delegation.delegate_new_org')}
