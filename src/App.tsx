@@ -39,7 +39,7 @@ export const App = () => {
         window.removeEventListener('keydown', refreshJwtToken);
       };
 
-      await refreshJwtToken();
+      refreshJwtToken();
     }
   });
 };

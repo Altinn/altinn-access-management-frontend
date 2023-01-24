@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, Routes } from 'react-router-dom';
 import * as React from 'react';
 
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
@@ -7,6 +7,7 @@ import { OverviewPage as GivenOverviewPage } from '@/components/apiDelegation/gi
 import { OverviewPage as ReceivedOverviewPage } from '@/components/apiDelegation/received/OverviewPage';
 import { NewOrgDelegationPage } from '@/components/NewOrgDelegationPage';
 import { ApiDelegationConfirmationPage } from '@/components/ApiDelegationConfirmationPage';
+import { App } from '@/App';
 
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
@@ -21,8 +22,9 @@ export enum RouterPath {
   StartPage = 'www.altinn.no',
 }
 
-export const Router = createBrowserRouter(
-  createRoutesFromElements(
+export const Router = (
+  <Routes>
+    createRoutesFromElements(
     <Route
       path='/'
       errorElement={<ErrorPage />}
@@ -51,7 +53,7 @@ export const Router = createBrowserRouter(
         element={<ReceivedOverviewPage />}
         errorElement={<ErrorPage />}
       />
-    </Route>,
-  ),
-  { basename: '/accessmanagement/ui' },
+    </Route>
+    , ),
+  </Routes>
 );
