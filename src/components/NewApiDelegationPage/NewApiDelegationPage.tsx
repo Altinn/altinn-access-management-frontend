@@ -224,7 +224,7 @@ export const NewApiDelegationPage = () => {
                       '/' +
                         RouterPath.GivenApiDelegations +
                         '/' +
-                        RouterPath.GivenApiDelegationConfirmation,
+                        RouterPath.GivenApiDelegationsConfirmation,
                     )
                   }
                   disabled={chosenApis.length < 1 || chosenOrgs.length < 1}

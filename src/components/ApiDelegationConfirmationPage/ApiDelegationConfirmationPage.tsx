@@ -35,7 +35,7 @@ export const ApiDelegationConfirmationPage = () => {
             size={ButtonSize.Small}
             onClick={() =>
               navigate(
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationReceipt,
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsReceipt,
               )
             }
             disabled={chosenApis.length < 1 || chosenOrgs.length < 1}

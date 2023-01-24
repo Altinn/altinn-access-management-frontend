@@ -3,20 +3,20 @@ import * as React from 'react';
 
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
 import { NewApiDelegationPage } from '@/components/NewApiDelegationPage';
-import { OverviewPage as GivenOverviewPage } from '@/components/apiDelegation/given/OverviewPage';
-import { OverviewPage as ReceivedOverviewPage } from '@/components/apiDelegation/received/OverviewPage';
+import { OverviewPage as GivenApiOverviewPage } from '@/components/apiDelegation/given/OverviewPage';
+import { OverviewPage as ReceivedApiOverviewPage } from '@/components/apiDelegation/received/OverviewPage';
 import { NewOrgDelegationPage } from '@/components/NewOrgDelegationPage';
 import { ApiDelegationConfirmationPage } from '@/components/ApiDelegationConfirmationPage';
 
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
-  GivenApiDelegationOverview = 'overview',
-  NewGivenApiDelegation = 'pick-api',
-  NewGivenOrgDelegation = 'pick-org',
-  GivenApiDelegationConfirmation = 'confirmation',
-  GivenApiDelegationReceipt = 'receipt',
+  GivenApiDelegationsOverview = 'overview',
+  NewGivenApiDelegation = 'choose-api',
+  NewGivenOrgDelegation = 'choose-org',
+  GivenApiDelegationsConfirmation = 'confirmation',
+  GivenApiDelegationsReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
-  ReceivedApiDelegationOverview = 'overview',
+  ReceivedApiDelegationsOverview = 'overview',
   Profile = 'Profile',
 }
 
@@ -27,8 +27,9 @@ export const Router = createBrowserRouter(
       errorElement={<ErrorPage />}
     >
       <Route
-        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationOverview}
-        element={<GivenOverviewPage />}
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsOverview}
+        element={<GivenApiOverviewPage />}
+        errorElement={<ErrorPage />}
       />
       <Route
         path={RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation}
@@ -41,13 +42,13 @@ export const Router = createBrowserRouter(
         errorElement={<ErrorPage />}
       />
       <Route
-        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationConfirmation}
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsConfirmation}
         element={<ApiDelegationConfirmationPage />}
         errorElement={<ErrorPage />}
       />
       <Route
-        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiDelegationOverview}
-        element={<ReceivedOverviewPage />}
+        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiDelegationsOverview}
+        element={<ReceivedApiOverviewPage />}
         errorElement={<ErrorPage />}
       />
     </Route>,

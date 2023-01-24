@@ -35,7 +35,6 @@ export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
-  layout: LayoutState;
 }
 
 interface HasCompetentAuthorityDTO {
@@ -54,7 +53,6 @@ const initialState: SliceState = {
   loading: true,
   overviewOrgs: [],
   error: '',
-  layout: LayoutState.Given,
 };
 
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
@@ -174,9 +172,6 @@ const overviewOrgSlice = createSlice({
   name: 'overviewOrg',
   initialState,
   reducers: {
-    setLayout: (state, action) => {
-      state.layout = action.payload;
-    },
     softDelete: (state, action) => {
       let softDeleteCount = 0;
       const softDeletedItemId = action.payload[1];
@@ -268,7 +263,6 @@ const overviewOrgSlice = createSlice({
 
 export default overviewOrgSlice.reducer;
 export const {
-  setLayout,
   softDelete,
   softRestore,
   softDeleteAll,

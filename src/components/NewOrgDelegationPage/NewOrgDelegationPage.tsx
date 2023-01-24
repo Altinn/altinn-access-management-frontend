@@ -87,7 +87,7 @@ export const NewOrgDelegationPage = () => {
                       '/' +
                         RouterPath.GivenApiDelegations +
                         '/' +
-                        RouterPath.GivenApiDelegationOverview,
+                        RouterPath.GivenApiDelegationsOverview,
                     )
                   }
                 >
