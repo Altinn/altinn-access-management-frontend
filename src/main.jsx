@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
@@ -12,7 +12,6 @@ import { getConfig } from '../config';
 
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
-import { App } from './App';
 
 /**
  * Special behaviour for react-query in dev environment
@@ -56,7 +55,9 @@ use(initReactI18next).init(
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <LoadLocalizations>
-              <BrowserRouter basename='/accessmanagement/ui'></BrowserRouter>
+              <BrowserRouter basename='accessmanagement/ui'>
+                <Router></Router>
+              </BrowserRouter>
             </LoadLocalizations>
           </QueryClientProvider>
         </Provider>
