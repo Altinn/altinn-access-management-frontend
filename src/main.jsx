@@ -56,7 +56,7 @@ use(initReactI18next).init(
           <QueryClientProvider client={queryClient}>
             <LoadLocalizations>
               <BrowserRouter basename={RouterPath.BasePath}>
-                <Router></Router>
+                <Router />
               </BrowserRouter>
             </LoadLocalizations>
           </QueryClientProvider>
