@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
@@ -55,7 +55,9 @@ use(initReactI18next).init(
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <LoadLocalizations>
-              <RouterProvider router={Router} />
+              <BrowserRouter basename='accessmanagement/ui'>
+                <Router></Router>
+              </BrowserRouter>
             </LoadLocalizations>
           </QueryClientProvider>
         </Provider>
