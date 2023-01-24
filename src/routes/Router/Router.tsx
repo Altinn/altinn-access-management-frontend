@@ -52,6 +52,7 @@ export const Router = () => {
     refreshJwtToken();
     setUpEventListeners();
   });
+
   return (
     <Routes>
       createRoutesFromElements(
@@ -62,6 +63,7 @@ export const Router = () => {
         <Route
           path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsOverview}
           element={<GivenOverviewPage />}
+          errorElement={<ErrorPage />}
         />
         <Route
           path={RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation}
