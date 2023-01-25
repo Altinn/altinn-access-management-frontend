@@ -111,6 +111,18 @@ To run the code together with access-management backend to the following
    ```bash
    docker-compose up -d --build
    ```
+   
+   
+- Navigate to the `development/LocalTest` folder in the altinn-studio repo
+
+   ```bash
+   cd src/development/LocalTest
+
+- Run below command in that folder
+
+   ```bash
+   docker-compose up
+   ```
 
 - Set path to app folder in local platform services. There are two ways to do this:
 
@@ -118,7 +130,7 @@ To run the code together with access-management backend to the following
       - Open `appSettings.json` in the `src/development/LocalTest` in an editor.
       - Change the setting `"AppRepsitoryBasePath"` to the path to the folder where you've cloned the altinn-studio repo.
       - Be aware that on mac you don't have c:/ in your paths.
-      - Create folder AltinnPlatformLocal wherever you like, copy and paste path in LocalTestingStorageBasePath.
+      - Create folder AltinnPlatformLocal wherever you like, copy and paste path to that folder in LocalTestingStorageBasePath.
       - Set LocalTestingStaticTestDataPath to your full path to the file in devlopment/TestData     
           
 
@@ -158,8 +170,8 @@ To run the code together with access-management backend to the following
 
 - run 'yarn start'
 
-- Open browser local.cloud.altinn
+- Go to http://local.altinn.cloud/
 
 - You should now see localtest intro with access management as only application
 
-- Log in and change url to http://local.altinn.cloud/
+- Choose an account and click on button to proceed to react-app
