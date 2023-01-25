@@ -10,6 +10,7 @@ import {
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
 
 import { softAddOrg, softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';

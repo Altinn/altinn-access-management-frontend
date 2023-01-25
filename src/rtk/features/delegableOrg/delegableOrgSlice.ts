@@ -15,20 +15,7 @@ export interface InitialState {
 
 const initialState: InitialState = {
   loading: false,
-  delegableOrgList: [
-    {
-      id: '1',
-      orgName: 'Skatteetaten',
-      orgNr: '930124123',
-      description: 'For å hente ut skatteklasser',
-    },
-    {
-      id: '2',
-      orgName: 'Brønnøysundregistrene',
-      orgNr: '950124321',
-      description: 'For å hente ut skatt',
-    },
-  ],
+  delegableOrgList: [],
   chosenDelegableOrgList: [],
   error: '',
 };
@@ -53,9 +40,16 @@ const delegableOrgSlice = createSlice({
         (delegableOrg) => delegableOrg.id !== action.payload.id,
       );
     },
-    resetDelegableOrgs: () => initialState,
+    populateDelegableOrgs: (state, action) => {
+      const orgList: DelegableOrg[] = action.payload;
+      state.delegableOrgList = orgList;
+    },
+    resetChosenOrgs: (state, action) => {
+      state.chosenDelegableOrgList = [];
+    },
   },
 });
 
 export default delegableOrgSlice.reducer;
-export const { softAddOrg, softRemoveOrg, resetDelegableOrgs } = delegableOrgSlice.actions;
+export const { softAddOrg, softRemoveOrg, resetChosenOrgs, populateDelegableOrgs } =
+  delegableOrgSlice.actions;

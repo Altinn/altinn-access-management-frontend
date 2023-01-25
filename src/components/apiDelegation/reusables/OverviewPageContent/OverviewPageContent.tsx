@@ -24,8 +24,7 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 import { LayoutState } from '../LayoutState';
 
@@ -53,20 +52,30 @@ export const OverviewPageContent = ({
   let accessesHeader: string;
   switch (layout) {
     case LayoutState.Given:
-      fetchData = async () => await dispatch(fetchOverviewOrgsOutbound());
+      fetchData = () => dispatch(fetchOverviewOrgsOutbound());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
       break;
     case LayoutState.Received:
-      fetchData = async () => await dispatch(fetchOverviewOrgsInbound());
+      fetchData = () => dispatch(fetchOverviewOrgsInbound());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
       break;
   }
 
+  const populateDelegatableOrgs = () => {
+    // dispatch method for populating list of orgs
+  };
+
   const delegateToSpecificOrg = (org: OverviewOrg) => {
+    populateDelegatableOrgs();
     dispatch(softAddOrg(org));
     navigate('new-api-delegation');
+  };
+
+  const newDelegation = () => {
+    populateDelegatableOrgs();
+    navigate('new-org-delegation');
   };
 
   useEffect(() => {
@@ -136,7 +145,7 @@ export const OverviewPageContent = ({
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
-              onClick={() => navigate('new-org-delegation')}
+              onClick={newDelegation}
               icon={<Add />}
             >
               {t('api_delegation.delegate_new_org')}
