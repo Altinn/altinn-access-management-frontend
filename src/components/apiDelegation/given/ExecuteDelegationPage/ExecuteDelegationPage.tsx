@@ -5,12 +5,11 @@ import * as React from 'react';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import { RouterPath } from '@/routes/Router';
+import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ConfirmationPage } from '@/components/Reusables/ConfirmationPage';
+import { PageContainer } from '@/components/Reusables/PageContainer';
 
-import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
-import { ConfirmationPage } from '../Reusables/ConfirmationPage';
-import { PageContainer } from '../Reusables/PageContainer';
-
-export const ApiDelegationConfirmationPage = () => {
+export const ExecuteDelegationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const { t } = useTranslation('common');
@@ -19,14 +18,14 @@ export const ApiDelegationConfirmationPage = () => {
   return (
     <PageContainer>
       <ConfirmationPage
-        apiList={chosenApis}
-        orgList={chosenOrgs}
+        delegableApis={chosenApis}
+        delegableOrgs={chosenOrgs}
         restartProcessPath={
-          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation
+          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
         }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
-        apiListContentHeader={String(t('api_delegation.confirmation_page_content_top_text'))}
-        orgListContentHeader={String(t('api_delegation.confirmation_page_content_second_text'))}
+        topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
+        bottomListText={String(t('api_delegation.confirmation_page_content_second_text'))}
         bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
         mainButton={
           <Button
@@ -34,9 +33,7 @@ export const ApiDelegationConfirmationPage = () => {
             variant={ButtonVariant.Filled}
             size={ButtonSize.Small}
             onClick={() =>
-              navigate(
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsReceipt,
-              )
+              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiReceipt)
             }
             disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
           >
@@ -49,9 +46,7 @@ export const ApiDelegationConfirmationPage = () => {
             variant={ButtonVariant.Outline}
             size={ButtonSize.Small}
             onClick={() =>
-              navigate(
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
-              )
+              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi)
             }
           >
             {t('api_delegation.previous')}

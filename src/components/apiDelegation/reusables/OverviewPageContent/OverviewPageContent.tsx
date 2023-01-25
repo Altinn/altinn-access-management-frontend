@@ -69,7 +69,7 @@ export const OverviewPageContent = ({
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation);
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi);
   };
 
   useEffect(() => {
@@ -142,9 +142,7 @@ export const OverviewPageContent = ({
             <Button
               variant={ButtonVariant.Outline}
               onClick={() =>
-                navigate(
-                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
-                )
+                navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg)
               }
               icon={<Add />}
             >
