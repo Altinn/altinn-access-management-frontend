@@ -38,9 +38,9 @@ import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,
-} from '../../../Reusables/NewDelegationAccordion';
-import { CompactDeletableListItem } from '../../../Reusables/CompactDeletableListItem';
-import { PageContainer } from '../../../Reusables/PageContainer';
+} from '../../../reusables/NewDelegationAccordion';
+import { CompactDeletableListItem } from '../../../reusables/CompactDeletableListItem';
+import { PageContainer } from '../../../reusables/PageContainer';
 
 import classes from './ChooseApiPage.module.css';
 

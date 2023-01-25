@@ -6,8 +6,8 @@ import * as React from 'react';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
-import { ConfirmationPage } from '@/components/Reusables/ConfirmationPage';
-import { PageContainer } from '@/components/Reusables/PageContainer';
+import { ConfirmationPage } from '@/components/reusables/ConfirmationPage';
+import { PageContainer } from '@/components/reusables/PageContainer';
 
 export const ExecuteDelegationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);

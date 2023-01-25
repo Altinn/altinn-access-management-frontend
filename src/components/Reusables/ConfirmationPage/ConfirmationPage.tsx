@@ -23,8 +23,8 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
-import { CompactDeletableListItem } from '@/components/Reusables';
-import type { ApiDelegation } from '@/rtk/features/DelegationRequest/DelegationRequestSlice';
+import { CompactDeletableListItem } from '@/components/reusables';
+import type { ApiDelegation } from '@/rtk/features/delegationRequest/delegationRequestSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 

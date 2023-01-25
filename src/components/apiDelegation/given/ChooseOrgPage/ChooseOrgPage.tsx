@@ -19,9 +19,9 @@ import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import {
   NewDelegationAccordion,
   NewDelegationAccordionButtonType,
-} from '@/components/Reusables/NewDelegationAccordion';
+} from '@/components/reusables/NewDelegationAccordion';
 import { RouterPath } from '@/routes/Router';
-import { PageContainer } from '@/components/Reusables/PageContainer';
+import { PageContainer } from '@/components/reusables/PageContainer';
 
 import classes from './ChooseOrgPage.module.css';
 

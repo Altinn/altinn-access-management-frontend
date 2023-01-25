@@ -6,7 +6,7 @@ import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
 import { OverviewPageContent } from '../../reusables/OverviewPageContent';
 import { LayoutState } from '../../reusables/LayoutState';
-import { PageContainer } from '../../../Reusables/PageContainer';
+import { PageContainer } from '../../../reusables/PageContainer';
 
 export const OverviewPage = () => {
   const { t } = useTranslation('common');

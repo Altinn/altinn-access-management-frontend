@@ -4,7 +4,7 @@ import { createLogger } from 'redux-logger';
 import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 import overviewOrgReducer from '../features/overviewOrg/overviewOrgSlice';
 import delegableOrgReducer from '../features/delegableOrg/delegableOrgSlice';
-import delegationRequestReducer from '../features/DelegationRequest/DelegationRequestSlice';
+import delegationRequestReducer from '../features/delegationRequest/delegationRequestSlice';
 
 const logger = createLogger();
 
