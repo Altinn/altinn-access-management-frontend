@@ -32,18 +32,19 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { RouterPath } from '@/routes/Router';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,
-  CompactDeletableListItem,
-  PageContainer,
-} from '../Reusables';
+} from '../Reusables/NewDelegationAccordion';
+import { CompactDeletableListItem } from '../Reusables/CompactDeletableListItem';
+import { PageContainer } from '../Reusables/PageContainer';
 
 import classes from './NewApiDelegationPage.module.css';
 
-export const NewApiDelegationsPage = () => {
+export const NewApiDelegationPage = () => {
   const [searchString, setSearchString] = useState('');
   const [filters, setFilters] = useState<string[]>([]);
   const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
@@ -61,7 +62,10 @@ export const NewApiDelegationsPage = () => {
     if (loading) {
       void fetchData();
     }
-  }, [delegableApis.length]);
+    // Clear search and filters on mount
+    dispatch(filter([]));
+    dispatch(search(''));
+  }, []);
 
   function handleSearch(searchText: string) {
     setSearchString(searchText);
@@ -86,39 +90,46 @@ export const NewApiDelegationsPage = () => {
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
-  const delegableApiAccordions = delegableApis.map(
-    (api: DelegableApi, index: Key | null | undefined) => {
-      return error ? (
+  const delegableApiAccordions = () => {
+    if (error) {
+      return (
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
           forceMobileLayout
         >
-          <div>{t('api_delegation.error_message')}: + error</div>
+          <div>
+            {t('api_delegation.error_message')}: {error}
+          </div>
         </Panel>
-      ) : loading ? (
-        t('api_delegation.loading') + '...'
-      ) : (
+      );
+    } else if (loading) {
+      return t('api_delegation.loading') + '...';
+    }
+    return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
+      return (
         <NewDelegationAccordion
           title={api.apiName}
           subtitle={api.orgName}
           key={index}
-          topContentText={api.rightsDescription}
+          topContentText={api.rightDescription}
           bottomContentText={api.description}
+          textList={api.scopes}
           buttonType={NewDelegationAccordionButtonType.Add}
           addRemoveClick={() => dispatch(softAddApi(api))}
         ></NewDelegationAccordion>
       );
-    },
-  );
+    });
+  };
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
       <NewDelegationAccordion
         title={api.apiName}
         subtitle={api.orgName}
-        topContentText={api.rightsDescription}
+        topContentText={api.rightDescription}
         bottomContentText={api.description}
+        textList={api.scopes}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
         addRemoveClick={() => handleRemove(api)}
@@ -179,7 +190,7 @@ export const NewApiDelegationsPage = () => {
             <div className={classes.pageContentAccordionsContainer}>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
-                <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
+                <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
@@ -193,7 +204,11 @@ export const NewApiDelegationsPage = () => {
                   variant={ButtonVariant.Outline}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/api-delegations/new-org-delegation')}
+                  onClick={() =>
+                    navigate(
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
+                    )
+                  }
                 >
                   {t('api_delegation.previous')}
                 </Button>
@@ -204,7 +219,14 @@ export const NewApiDelegationsPage = () => {
                   variant={ButtonVariant.Filled}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/api-delegations/confirmation')}
+                  onClick={() =>
+                    navigate(
+                      '/' +
+                        RouterPath.GivenApiDelegations +
+                        '/' +
+                        RouterPath.GivenApiDelegationsConfirmation,
+                    )
+                  }
                   disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
                 >
                   {t('api_delegation.next')}

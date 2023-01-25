@@ -12,6 +12,7 @@ import {
 } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
+import * as React from 'react';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { softDelete, softRestore } from '@/rtk/features/overviewOrg/overviewOrgSlice';

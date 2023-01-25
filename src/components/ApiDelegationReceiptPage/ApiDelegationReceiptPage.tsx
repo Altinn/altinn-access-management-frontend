@@ -8,10 +8,12 @@ import {
   PageColor,
 } from '@altinn/altinn-design-system';
 import { useEffect } from 'react';
+import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetDelegableOrgs } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { RouterPath } from '@/routes/Router';
 
 import { ConfirmationPage, PageContainer } from '../Reusables';
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
@@ -37,7 +39,9 @@ export const ApiDelegationReceiptPage = () => {
       <ConfirmationPage
         failedDelegations={failedApiDelegations}
         successfulDelegations={succesfulApiDelegations}
-        restartProcessPath={'/api-delegations/new-org-delegation'}
+        restartProcessPath={
+          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation
+        }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         topListText={String(t('api_delegation.failed_delegations'))}
         bottomListText={String(t('api_delegation.succesful_delegations'))}
@@ -47,7 +51,11 @@ export const ApiDelegationReceiptPage = () => {
             color={ButtonColor.Primary}
             size={ButtonSize.Small}
             variant={ButtonVariant.Filled}
-            onClick={() => navigate('/api-delegations')}
+            onClick={() =>
+              navigate(
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsOverview,
+              )
+            }
           >
             {t('api_delegation.receipt_page_main_button')}
           </Button>

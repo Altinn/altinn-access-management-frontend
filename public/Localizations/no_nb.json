@@ -1,7 +1,8 @@
 {
   "common": {
     "error": "Feil",
-    "restart": "Start på nytt"
+    "restart": "Start på nytt",
+    "close": "Lukk"
   },
   "profile": {
     "received": "Mottatte",
@@ -24,11 +25,14 @@
     "delegate_new_org": "Deleger til ny organisasjon",
     "save": "Lagre",
     "api_delegations": "Delegerte tilganger til programmeringsgrensesnitt - API",
+    "api_delegations_received": "Mottatte tilganger til programmeringsgrensesnitt - API",
     "you_have_delegated_accesses": "Du har tidligere delegert disse tilgangene:",
+    "you_have_received_accesses": "Du har mottatt disse tilgangene:",
     "api_panel_content": "API er et grensesnitt som brukes for å utveksle data mellom to forskjellige systemer eller apper. Når APIet til to systemer er koblet sammen, åpner det opp for en strømlinjeformet deling av data og automatiserte prosesser.",
     "org_nr": "Org.nr.",
     "edit_accesses": "Rediger tilganger",
     "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter.",
+    "api_received_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har blitt tildelt av andre virksomheter.",
     "cancel": "Avbryt",
     "give_access_to_new_api": "Gi tilgang til nytt API",
     "new_org_accordion_content_text": "Velg hvilke brukere som skal få tilgang ved å klikke pluss-tegnet. Du kan også legge til ny.",
@@ -49,17 +53,17 @@
     "delegable_apis": "Delegerbare API",
     "chosen_apis": "Valgte API:",
     "no_chosen_orgs": "Du har ingen valgte organisasjoner å gi API-tilgang til. Vennligst klikk på forrigeknappen nederst til høyre.",
-    "scopes": "Omfang",
-    "rightsDescription": "Beskrivelse",
+    "scopes": "Scopes",
+    "description": "Beskrivelse",
     "additional_description": "Ytterligere beskrivelse",
-    "data_retrieval_failed": "Datauthenting feilet, prøv å refresh siden.",
+    "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn siden på nytt.",
     "loading": "Laster",
     "error_message": "Feilmelding",
-    "orgs_not_chosen_subtitle": "Dine valgte organisasjoner ble ikke lagret. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre.",
+    "orgs_not_chosen_subtitle": "Kunne ikke hente ut valgte organisasjoner. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre.",
     "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegeringsprosessen på nytt.",
     "failed_delegations": "Disse api-delegeringene gikk galt og ble derfor ikke tildelt",
     "succesful_delegations": "Disse api-delegeringene ble gitt",
-    "receipt_page_bottom_text": "Tilgangene er gitt og gyldig til den aktivt slettes eller trekkes tilbake. Mottaker har fått beskjed.",
+    "receipt_page_bottom_text": "Tilgangene er gitt og er gyldig til den aktivt slettes eller trekkes tilbake. Mottaker har fått beskjed.",
     "receipt_page_main_button": "Til totaloversikt"
   }
 }

@@ -37,7 +37,7 @@ export const NewDelegationAccordion = ({
   subtitle = 'No info',
   topContentText,
   bottomContentText,
-  textList = ['nav:aareg/v1/arbeidsforhold', 'nav:aareg/v1/arbeidsforhold/tekniskhistorikk'],
+  textList = [''],
   buttonType,
   addRemoveClick,
 }: NewDelegationAccordionProps) => {
@@ -100,7 +100,7 @@ export const NewDelegationAccordion = ({
                 <div className={classes.line}>
                   <Line />
                 </div>
-                <p className={classes.scopeText}>{'Beskrivelse:'}</p>
+                <p className={classes.scopeText}>{t('api_delegation.description')}</p>
                 <div className={classes.contentTexts}>{topContentText}</div>
               </div>
             )}
@@ -114,7 +114,7 @@ export const NewDelegationAccordion = ({
                 <div className={classes.line}>
                   <Line />
                 </div>
-                <p className={classes.scopeText}>{'Ytterligere beskrivelse:'}</p>
+                <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
                 <div className={classes.bottomContentTexts}>{bottomContentText}</div>
               </div>
             )}
