@@ -1,1 +1,1 @@
-export { NewApiDelegationsPage } from './NewApiDelegationPage';
+export { NewApiDelegationPage } from './NewApiDelegationPage';

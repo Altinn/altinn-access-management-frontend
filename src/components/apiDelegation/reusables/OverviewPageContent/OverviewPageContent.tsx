@@ -24,7 +24,9 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import { softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { resetChosenOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
+import { RouterPath } from '@/routes/Router';
 
 import { LayoutState } from '../LayoutState';
 
@@ -47,9 +49,11 @@ export const OverviewPageContent = ({
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
 
-  let fetchData: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let fetchData: () => any;
   let overviewText: string;
   let accessesHeader: string;
+
   switch (layout) {
     case LayoutState.Given:
       fetchData = () => dispatch(fetchOverviewOrgsOutbound());
@@ -70,16 +74,18 @@ export const OverviewPageContent = ({
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     populateDelegatableOrgs();
     dispatch(softAddOrg(org));
-    navigate('new-api-delegation');
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation);
   };
 
   const newDelegation = () => {
     populateDelegatableOrgs();
-    navigate('new-org-delegation');
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation);
   };
 
   useEffect(() => {
     handleSetDisabled();
+    dispatch(resetDelegableApis());
+    dispatch(resetChosenOrgs());
   });
 
   const handleSetDisabled = () => {

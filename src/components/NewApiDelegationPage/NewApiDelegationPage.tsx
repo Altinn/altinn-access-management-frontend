@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import { RouterPath } from '@/routes/Router';
 
 import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
 import {
@@ -43,7 +44,7 @@ import { PageContainer } from '../Reusables/PageContainer';
 
 import classes from './NewApiDelegationPage.module.css';
 
-export const NewApiDelegationsPage = () => {
+export const NewApiDelegationPage = () => {
   const [searchString, setSearchString] = useState('');
   const [filters, setFilters] = useState<string[]>([]);
   const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
@@ -203,7 +204,11 @@ export const NewApiDelegationsPage = () => {
                   variant={ButtonVariant.Outline}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/api-delegations/new-org-delegation')}
+                  onClick={() =>
+                    navigate(
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
+                    )
+                  }
                 >
                   {t('api_delegation.previous')}
                 </Button>
@@ -214,7 +219,14 @@ export const NewApiDelegationsPage = () => {
                   variant={ButtonVariant.Filled}
                   size={ButtonSize.Small}
                   fullWidth={true}
-                  onClick={() => navigate('/api-delegations/confirmation')}
+                  onClick={() =>
+                    navigate(
+                      '/' +
+                        RouterPath.GivenApiDelegations +
+                        '/' +
+                        RouterPath.GivenApiDelegationsConfirmation,
+                    )
+                  }
                   disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
                 >
                   {t('api_delegation.next')}

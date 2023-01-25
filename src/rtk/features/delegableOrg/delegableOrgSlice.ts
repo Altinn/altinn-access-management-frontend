@@ -44,7 +44,7 @@ const delegableOrgSlice = createSlice({
       const orgList: DelegableOrg[] = action.payload;
       state.delegableOrgList = orgList;
     },
-    resetChosenOrgs: (state, action) => {
+    resetChosenOrgs: (state) => {
       state.chosenDelegableOrgList = [];
     },
   },
