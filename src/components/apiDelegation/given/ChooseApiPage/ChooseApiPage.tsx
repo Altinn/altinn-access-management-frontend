@@ -34,13 +34,12 @@ import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
-
+import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
+import { PageContainer } from '@/components/reusables/PageContainer';
 import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,
-} from '../../../reusables/NewDelegationAccordion';
-import { CompactDeletableListItem } from '../../../reusables/CompactDeletableListItem';
-import { PageContainer } from '../../../reusables/PageContainer';
+} from '@/components/reusables/NewDelegationAccordion';
 
 import classes from './ChooseApiPage.module.css';
 
