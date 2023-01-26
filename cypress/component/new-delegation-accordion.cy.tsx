@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 
 import store from '@/rtk/app/store';
-import { NewDelegationAccordion, NewDelegationAccordionButtonType } from '@/components/reusables';
+import { NewDelegationAccordion, NewDelegationAccordionButtonType } from '@/components/Reusables2';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
