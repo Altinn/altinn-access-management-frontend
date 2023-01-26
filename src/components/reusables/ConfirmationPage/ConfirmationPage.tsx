@@ -24,7 +24,7 @@ import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import { CompactDeletableListItem } from '@/components/reusables';
-import type { ApiDelegation } from '@/rtk/features/delegationRequest2/delegationRequestSlice';
+import type { ApiDelegation } from '@/rtk/features/delegationRequest/delegationRequestSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 
