@@ -142,7 +142,7 @@ export const ChooseApiPage = () => {
         startIcon={<OfficeIcon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
-        middleText={org.orgNr}
+        middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
       ></CompactDeletableListItem>
     );
   });

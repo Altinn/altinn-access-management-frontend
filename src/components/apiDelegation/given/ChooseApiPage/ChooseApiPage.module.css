@@ -16,9 +16,9 @@
   }
 }
 
-@media only screen and (min-width: 900px) {
+@media only screen and (min-width: 955px) {
   .pageContainer{
-    --pageContainer-width: 1055px;
+    --pageContainer-width: 955px;
   }
   .searchSection{
     --searchFieldWidth: 50%

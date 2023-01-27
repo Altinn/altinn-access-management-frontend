@@ -21,24 +21,21 @@
   --list-text-color-error: #E02E49;
 }
 
-.leftText {
-  width: 400px;
-}
-
 .middleText {
-  flex:1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .leftText__error {
-  width: 400px;
   color: var(--list-text-color-error);
 }
 
 .middleText__error {
-  flex:1;
   color: var(--list-text-color-error);
 }
 
 .deleteSection {
+  display: flex;
+  flex: 2;
   justify-content: flex-end;
 }
