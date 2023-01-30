@@ -70,6 +70,7 @@ export const CompactDeletableListItem = ({
                   color={ButtonColor.Danger}
                   icon={<MinusCircle />}
                   onClick={removeCallback}
+                  aria-label={String(t('api_delegation.delete'))}
                 >
                   {!isPhoneScreen && t('api_delegation.delete')}
                 </Button>

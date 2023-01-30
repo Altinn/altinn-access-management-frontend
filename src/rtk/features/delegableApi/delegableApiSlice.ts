@@ -207,7 +207,7 @@ const delegableApiSlice = createSlice({
     resetDelegableApis: () => initialState,
   },
   extraReducers: (builder) => {
-    /* builder
+    builder
       .addCase(fetchDelegableApis.fulfilled, (state, action) => {
         const dataArray = action.payload;
         const responseList: DelegableApi[] = [];
@@ -241,7 +241,7 @@ const delegableApiSlice = createSlice({
       })
       .addCase(fetchDelegableApis.rejected, (state, action) => {
         state.error = action.error.message;
-      }); */
+      });
   },
 });
 
