@@ -40,6 +40,7 @@ import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,
 } from '@/components/reusables/NewDelegationAccordion';
+import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -87,6 +88,8 @@ export const ChooseApiPage = () => {
     value: provider,
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
+
+  const isPhoneScreen = useMediaQuery('(max-width: 576px)');
 
   const delegableApiAccordions = () => {
     if (error) {
@@ -168,6 +171,12 @@ export const ChooseApiPage = () => {
               </div>
             )}
             <h3>{t('api_delegation.new_api_content_text2')}</h3>
+            {isPhoneScreen && chosenApis.length > 0 && (
+              <div className={classes.apiAccordions}>
+                <h4>{t('api_delegation.chosen_apis')}</h4>
+                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+              </div>
+            )}
             <div className={classes.searchSection}>
               <SearchField
                 value={searchString}
@@ -190,13 +199,15 @@ export const ChooseApiPage = () => {
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
                 <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
-              <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.chosen_apis')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
-              </div>
+              {!isPhoneScreen && (
+                <div className={classes.apiAccordions}>
+                  <h4>{t('api_delegation.chosen_apis')}</h4>
+                  <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+                </div>
+              )}
             </div>
             <div className={classes.navButtonContainer}>
-              <div className={classes.navButton}>
+              <div className={classes.navButtonLeft}>
                 <Button
                   color={ButtonColor.Primary}
                   variant={ButtonVariant.Outline}
@@ -211,7 +222,7 @@ export const ChooseApiPage = () => {
                   {t('api_delegation.previous')}
                 </Button>
               </div>
-              <div className={classes.navButton}>
+              <div className={classes.navButtonRight}>
                 <Button
                   color={ButtonColor.Primary}
                   variant={ButtonVariant.Filled}

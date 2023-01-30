@@ -1,25 +1,63 @@
 @media only screen and (min-width: 0px) {
-  .pageContainer{
-      --pageContainer-width: 1055px;
-  }
   .searchSection{
     --searchFieldWidth: 100%
   }
+
+  .accordionScrollContainer {
+    margin-bottom: 30px;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .pageContent{
+    --component-page-margin-horizontal: rem;
+    margin-right: var(--component-page-margin-horizontal);
+    margin-left: var(--component-page-margin-horizontal);
+  }
+
+  .navButtonContainer {
+    justify-content: center;
+  }
 }
 
-@media only screen and (min-width: 700px) {
-  .pageContainer{
-    --pageContainer-width: 1055px;
+@media only screen and (min-width: 576px) {
+  .searchSection{
+    --searchFieldWidth: 100%
   }
+
+  .accordionScrollContainer {
+    height: 300px;
+    overflow-y: auto;
+  }
+
+  .pageContent{
+    --component-page-margin-horizontal: 3rem;
+    margin-right: var(--component-page-margin-horizontal);
+    margin-left: var(--component-page-margin-horizontal);
+  }
+
+  .apiAccordions{
+    margin-right: 3rem;
+  }
+
+  .pageContentAccordionsContainer{
+    grid-template-columns: 1fr 1fr;
+    display:grid;
+  }
+
+  .navButtonContainer {
+    justify-content: flex-end;
+  }
+}
+
+@media only screen and (min-width: 768px) {
   .searchSection{
     --searchFieldWidth: 50%
   }
 }
 
-@media only screen and (min-width: 955px) {
-  .pageContainer{
-    --pageContainer-width: 955px;
-  }
+@media only screen and (min-width: 992px) {
   .searchSection{
     --searchFieldWidth: 50%
   }
@@ -29,15 +67,6 @@
   --component-page-margin-horizontal: 3rem;
   margin-right: var(--component-page-margin-horizontal);
   margin-left: var(--component-page-margin-horizontal);
-}
-
-.pageContentAccordionsContainer{
-    grid-template-columns: 1fr 1fr;
-    display:grid;
-}
-
-.apiAccordions{
-    margin-right: 3rem;
 }
 
 .searchSection{
@@ -51,16 +80,23 @@
 .navButtonContainer {
   margin-top: 2rem;
   display: flex;
-  justify-content: flex-end;
-}
-
-.navButton{
-  margin-right: 3rem;
-  width: 10rem;
   margin-bottom: 70px;
 }
 
-.accordionScrollContainer {
-  height: 300px;
-  overflow-y: auto;
+.navButtonLeft{
+  width: 10rem;
+  justify-content: flex-start;
+  display: flex;
+  flex:1;
+  margin-right: 10px;
+  max-width: 97.5px;
+}
+
+.navButtonRight{
+  width: 10rem;
+  justify-content: flex-end;
+  display: flex;
+  flex:1;
+  margin-left: 10px;
+  max-width: 97.5px;
 }

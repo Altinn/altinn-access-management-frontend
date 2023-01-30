@@ -98,8 +98,25 @@ export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableA
 });
 
 const initialState: SliceState = {
-  loading: true,
-  delegableApiList: [],
+  loading: false,
+  delegableApiList: [
+    {
+      id: '1',
+      apiName: 'Api1',
+      orgName: 'Org',
+      rightDescription: 'rightdescription',
+      description: 'description',
+      scopes: ['scope 1', 'scope2'],
+    },
+    {
+      id: '2',
+      apiName: 'Api2',
+      orgName: 'Org',
+      rightDescription: 'rightdescription',
+      description: 'description',
+      scopes: ['scope 1', 'scope2'],
+    },
+  ],
   presentedApiList: [],
   delegableApiSearchPool: [],
   apiProviders: [''],
@@ -190,7 +207,7 @@ const delegableApiSlice = createSlice({
     resetDelegableApis: () => initialState,
   },
   extraReducers: (builder) => {
-    builder
+    /* builder
       .addCase(fetchDelegableApis.fulfilled, (state, action) => {
         const dataArray = action.payload;
         const responseList: DelegableApi[] = [];
@@ -224,7 +241,7 @@ const delegableApiSlice = createSlice({
       })
       .addCase(fetchDelegableApis.rejected, (state, action) => {
         state.error = action.error.message;
-      });
+      }); */
   },
 });
 
