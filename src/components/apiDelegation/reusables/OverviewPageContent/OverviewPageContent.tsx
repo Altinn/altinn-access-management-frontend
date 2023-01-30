@@ -24,7 +24,12 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import { resetChosenOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import delegableOrgSlice, {
+  resetDelegableOrgs,
+  softAddOrg,
+  populateDelegableOrgs,
+} from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { RouterPath } from '@/routes/Router';
 
@@ -67,25 +72,34 @@ export const OverviewPageContent = ({
       break;
   }
 
-  const populateDelegatableOrgs = () => {
+  const transferDelegatableOrgs = () => {
     // dispatch method for populating list of orgs
+    const delegatableOrgList: DelegableOrg[] = [];
+    for (const org of overviewOrgs) {
+      delegatableOrgList.push({
+        id: org.id,
+        orgName: org.orgName,
+        orgNr: org.orgNr,
+      });
+    }
+    dispatch(populateDelegableOrgs(delegatableOrgList));
   };
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
-    populateDelegatableOrgs();
+    transferDelegatableOrgs();
     dispatch(softAddOrg(org));
     navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation);
   };
 
   const newDelegation = () => {
-    populateDelegatableOrgs();
+    transferDelegatableOrgs();
     navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation);
   };
 
   useEffect(() => {
     handleSetDisabled();
     dispatch(resetDelegableApis());
-    dispatch(resetChosenOrgs());
+    dispatch(resetDelegableOrgs());
   });
 
   const handleSetDisabled = () => {

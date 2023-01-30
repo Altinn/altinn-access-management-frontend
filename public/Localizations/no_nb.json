@@ -54,6 +54,7 @@
     "chosen_apis": "Valgte API:",
     "no_chosen_orgs": "Du har ingen valgte organisasjoner å gi API-tilgang til. Vennligst klikk på forrigeknappen nederst til høyre.",
     "scopes": "Scopes",
+    "search_for_buisness": "Søk på organisasjonsnummer",
     "description": "Beskrivelse",
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn siden på nytt.",

@@ -54,6 +54,7 @@
     "chosen_apis": "Chosen APIs:",
     "no_chosen_orgs": "You have no selected organizations to provide API access to. Please click the previous button at the bottom right.",
     "scopes": "Scopes",
+    "search_for_buisness": "Search by organisation number",
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Data retrieval failed, try refreshing the page.",

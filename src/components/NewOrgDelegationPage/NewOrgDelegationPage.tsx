@@ -6,13 +6,23 @@ import {
   ButtonVariant,
   ButtonColor,
   ButtonSize,
+  SearchField,
+  List,
+  ListItem,
+  BorderStyle,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 
-import { softAddOrg, softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import {
+  softAddOrg,
+  softRemoveOrg,
+  searchInCurrentOrgs,
+  lookupOrg,
+} from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
@@ -21,40 +31,78 @@ import {
   NewDelegationAccordionButtonType,
 } from '@/components/Reusables/NewDelegationAccordion';
 import { RouterPath } from '@/routes/Router';
+import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
 import { PageContainer } from '../Reusables/PageContainer';
 
 import classes from './NewOrgDelegationPage.module.css';
 
 export const NewOrgDelegationPage = () => {
-  const delegableOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
+  const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchString, setSearchString] = useState('');
+  const fetchLookupOrg = () => dispatch(lookupOrg(searchString));
 
   const { t } = useTranslation('common');
 
-  const delegableApiAccordions = delegableOrgs.map((org: DelegableOrg, index: Key) => {
+  const handleSoftRemove = (org: DelegableOrg) => {
+    dispatch(softRemoveOrg(org));
+    dispatch(searchInCurrentOrgs(searchString));
+  };
+
+  function handleSearch(searchText: string) {
+    setSearchString(searchText);
+    dispatch(searchInCurrentOrgs(searchText));
+  }
+
+  useEffect(() => {
+    if (delegableOrgs.length === 0 && searchString.length === 9) {
+      fetchLookupOrg();
+    }
+  }, [delegableOrgs]);
+
+  const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
-      <NewDelegationAccordion
-        title={org.orgName}
-        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
-        key={index}
-        buttonType={NewDelegationAccordionButtonType.Add}
-        addRemoveClick={() => dispatch(softAddOrg(org))}
-      ></NewDelegationAccordion>
+      <ListItem key={index}>
+        <div className={classes.listItem}>
+          <div>
+            <h4 className={classes.listTitle}>{org.orgName}</h4>
+            <div className={classes.subtitle}>{org.orgNr}</div>
+          </div>
+          <Button
+            className={classes.actionButton}
+            icon={<AddCircle />}
+            variant={ButtonVariant.Quiet}
+            color={ButtonColor.Success}
+            onClick={() => dispatch(softAddOrg(org))}
+            aria-label={'soft-add'}
+          ></Button>
+        </div>
+      </ListItem>
     );
   });
 
-  const chosenApiAccordions = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const chosenApiItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
-      <NewDelegationAccordion
-        title={org.orgName}
-        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
-        key={index}
-        buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={() => dispatch(softRemoveOrg(org))}
-      ></NewDelegationAccordion>
+      <ListItem key={index}>
+        <div className={classes.listItem}>
+          <div>
+            <h4 className={classes.listTitle}>{org.orgName}</h4>
+            <div className={classes.subtitle}>{org.orgNr}</div>
+          </div>
+          <Button
+            className={classes.actionButton}
+            icon={<MinusCircle />}
+            variant={ButtonVariant.Quiet}
+            color={ButtonColor.Danger}
+            onClick={() => handleSoftRemove(org)}
+            aria-label={'soft-remove'}
+          ></Button>
+        </div>
+      </ListItem>
     );
   });
 
@@ -65,14 +113,27 @@ export const NewOrgDelegationPage = () => {
         <PageContent>
           <div className={classes.pageContent}>
             <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
+            <div className={classes.searchSection}>
+              <SearchField
+                label={String(t('api_delegation.search_for_buisness'))}
+                value={searchString}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  handleSearch(event.target.value)
+                }
+              ></SearchField>
+            </div>
             <div className={classes.pageContentAccordionsContainer}>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
-                <div className={classes.accordionScrollContainer}>{delegableApiAccordions}</div>
+                <div className={classes.accordionScrollContainer}>
+                  <List borderStyle={BorderStyle.Solid}>{delegableOrgItems}</List>
+                </div>
               </div>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+                <div className={classes.accordionScrollContainer}>
+                  <List borderStyle={BorderStyle.Solid}>{chosenApiItems}</List>
+                </div>
               </div>
             </div>
             <div className={classes.navButtonContainer}>

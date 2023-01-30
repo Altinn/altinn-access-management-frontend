@@ -1,3 +1,23 @@
+@media only screen and (min-width: 0px) {
+  .searchSection{
+    --searchFieldWidth: 100%
+  }
+}
+
+@media only screen and (min-width: 700px) {
+
+  .searchSection{
+    --searchFieldWidth: 40%
+  }
+}
+
+@media only screen and (min-width: 900px) {
+
+  .searchSection{
+    --searchFieldWidth: 40%
+  }
+}
+
 .pageContent{
   --component-page-margin-horizontal: 3rem;
   margin-right: var(--component-page-margin-horizontal);
@@ -14,8 +34,8 @@
 }
 
 
-.searchField{
-  width: 100%;
+.searchSection{
+  width: var(--searchFieldWidth);
 }
 
 .navButtonContainer {
@@ -34,3 +54,26 @@
   height: 300px;
   overflow-y: auto;
 }
+
+.listItem{
+  display: flex;
+  margin-left: 1rem;
+}
+
+.listTitle {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.subtitle {
+  opacity: 60%;
+  font-weight: bold;
+}
+
+.actionButton {
+  margin-left: auto;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
