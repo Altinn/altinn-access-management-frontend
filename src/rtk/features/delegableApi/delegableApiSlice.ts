@@ -98,25 +98,8 @@ export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableA
 });
 
 const initialState: SliceState = {
-  loading: false,
-  delegableApiList: [
-    {
-      id: '1',
-      apiName: 'Automation Test Delegation Scheme Requires Level 3',
-      orgName: 'Org',
-      rightDescription: 'rightdescription',
-      description: 'description',
-      scopes: ['scope 1', 'scope2'],
-    },
-    {
-      id: '2',
-      apiName: 'Api2',
-      orgName: 'Org',
-      rightDescription: 'rightdescription',
-      description: 'description',
-      scopes: ['scope 1', 'scope2'],
-    },
-  ],
+  loading: true,
+  delegableApiList: [],
   presentedApiList: [],
   delegableApiSearchPool: [],
   apiProviders: [''],
