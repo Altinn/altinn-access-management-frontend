@@ -102,7 +102,7 @@ const initialState: SliceState = {
   delegableApiList: [
     {
       id: '1',
-      apiName: 'Api1',
+      apiName: 'Automation Test Delegation Scheme Requires Level 3',
       orgName: 'Org',
       rightDescription: 'rightdescription',
       description: 'description',

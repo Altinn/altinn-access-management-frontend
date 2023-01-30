@@ -8,10 +8,6 @@ import {
   PageHeader,
   SearchField,
   Select,
-  Button,
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
   List,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
@@ -41,6 +37,7 @@ import {
   NewDelegationAccordion,
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
+import { NavigationButtons } from '@/components/reusables';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -97,7 +94,7 @@ export const ChooseApiPage = () => {
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
-          forceMobileLayout
+          forceMobileLayout={isPhoneScreen}
         >
           <div>
             {t('api_delegation.error_message')}: {error}
@@ -160,7 +157,7 @@ export const ChooseApiPage = () => {
               <Panel
                 title={t('common.error')}
                 variant={PanelVariant.Warning}
-                forceMobileLayout={false}
+                forceMobileLayout={isPhoneScreen}
               >
                 {t('api_delegation.orgs_not_chosen_subtitle')}
               </Panel>
@@ -206,42 +203,17 @@ export const ChooseApiPage = () => {
                 </div>
               )}
             </div>
-            <div className={classes.navButtonContainer}>
-              <div className={classes.navButtonLeft}>
-                <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Outline}
-                  size={ButtonSize.Small}
-                  fullWidth={true}
-                  onClick={() =>
-                    navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg,
-                    )
-                  }
-                >
-                  {t('api_delegation.previous')}
-                </Button>
-              </div>
-              <div className={classes.navButtonRight}>
-                <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Filled}
-                  size={ButtonSize.Small}
-                  fullWidth={true}
-                  onClick={() =>
-                    navigate(
-                      '/' +
-                        RouterPath.GivenApiDelegations +
-                        '/' +
-                        RouterPath.GivenApiExecuteDelegation,
-                    )
-                  }
-                  disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
-                >
-                  {t('api_delegation.next')}
-                </Button>
-              </div>
-            </div>
+            <NavigationButtons
+              previousText={t('api_delegation.previous')}
+              previousPath={
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+              }
+              nextText={t('api_delegation.next')}
+              nextPath={
+                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation
+              }
+              nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+            ></NavigationButtons>
           </div>
         </PageContent>
       </Page>

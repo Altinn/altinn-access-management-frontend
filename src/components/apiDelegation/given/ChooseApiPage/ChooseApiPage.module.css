@@ -15,10 +15,6 @@
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
   }
-
-  .navButtonContainer {
-    justify-content: center;
-  }
 }
 
 @media only screen and (min-width: 576px) {
@@ -44,10 +40,6 @@
   .pageContentAccordionsContainer{
     grid-template-columns: 1fr 1fr;
     display:grid;
-  }
-
-  .navButtonContainer {
-    justify-content: flex-end;
   }
 }
 
@@ -75,28 +67,4 @@
 
 .filter {
   padding-top: 1rem;
-}
-
-.navButtonContainer {
-  margin-top: 2rem;
-  display: flex;
-  margin-bottom: 70px;
-}
-
-.navButtonLeft{
-  width: 10rem;
-  justify-content: flex-start;
-  display: flex;
-  flex:1;
-  margin-right: 10px;
-  max-width: 97.5px;
-}
-
-.navButtonRight{
-  width: 10rem;
-  justify-content: flex-end;
-  display: flex;
-  flex:1;
-  margin-left: 10px;
-  max-width: 97.5px;
 }

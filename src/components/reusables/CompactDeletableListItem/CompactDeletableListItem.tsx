@@ -63,18 +63,18 @@ export const CompactDeletableListItem = ({
                 {middleText}
               </div>
             )}
-          </div>
-          <div className={classes.deleteSection}>
-            {removeCallback && (
-              <Button
-                variant={ButtonVariant.Quiet}
-                color={ButtonColor.Danger}
-                icon={<MinusCircle />}
-                onClick={removeCallback}
-              >
-                {t('api_delegation.delete')}
-              </Button>
-            )}
+            <div className={classes.deleteSection}>
+              {removeCallback && (
+                <Button
+                  variant={ButtonVariant.Quiet}
+                  color={ButtonColor.Danger}
+                  icon={<MinusCircle />}
+                  onClick={removeCallback}
+                >
+                  {!isPhoneScreen && t('api_delegation.delete')}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>

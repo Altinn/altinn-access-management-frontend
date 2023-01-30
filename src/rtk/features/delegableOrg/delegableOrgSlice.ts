@@ -24,7 +24,7 @@ const initialState: InitialState = {
     },
     {
       id: '2',
-      orgName: 'Accenture',
+      orgName: 'Automation Test Delegation Scheme Requires Level 3',
       orgNr: '950124321',
       description: 'For å hente ut skatt',
     },
