@@ -16,7 +16,7 @@ import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlic
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 
-import { ConfirmationPage, PageContainer } from '../../../reusables';
+import { SummaryPage, PageContainer } from '../../../reusables';
 
 export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
@@ -36,7 +36,7 @@ export const ReceiptPage = () => {
 
   return (
     <PageContainer>
-      <ConfirmationPage
+      <SummaryPage
         failedDelegations={failedApiDelegations}
         successfulDelegations={succesfulApiDelegations}
         restartProcessPath={
@@ -60,7 +60,7 @@ export const ReceiptPage = () => {
         }
         headerIcon={<ApiIcon />}
         headerColor={PageColor.Success}
-      ></ConfirmationPage>
+      ></SummaryPage>
     </PageContainer>
   );
 };

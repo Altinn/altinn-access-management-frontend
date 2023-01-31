@@ -10,7 +10,7 @@ import { OverviewPage as GivenOverviewPage } from '@/components/apiDelegation/gi
 import { OverviewPage as ReceivedOverviewPage } from '@/components/apiDelegation/received/OverviewPage';
 import { ChooseOrgPage } from '@/components/apiDelegation/given/ChooseOrgPage';
 import { ReceiptPage } from '@/components/apiDelegation/given/ReceiptPage';
-import { ExecuteDelegationPage } from '@/components/apiDelegation/given/ExecuteDelegationPage';
+import { ConfirmationPage } from '@/components/apiDelegation/given/ConfirmationPage';
 
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
@@ -79,7 +79,7 @@ export const Router = () => {
         />
         <Route
           path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation}
-          element={<ExecuteDelegationPage />}
+          element={<ConfirmationPage />}
           errorElement={<ErrorPage />}
         />
         <Route

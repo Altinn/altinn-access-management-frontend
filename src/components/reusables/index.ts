@@ -1,5 +1,5 @@
 export { CompactDeletableListItem } from './CompactDeletableListItem';
-export { ConfirmationPage } from './ConfirmationPage';
+export { SummaryPage } from './SummaryPage';
 export { DeletableListItem } from './DeletableListItem';
 export { Line } from './Line';
 export { NewDelegationAccordion, NewDelegationAccordionButtonType } from './NewDelegationAccordion';

@@ -90,6 +90,7 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     // TODO: This may fail in AT if axios doesn't automatically change the base url
+    // TODO: Change 1337 with partytId that we get from token
     .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
     .then((response) => response.data)
     .catch((error) => {
@@ -98,8 +99,25 @@ export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableA
 });
 
 const initialState: SliceState = {
-  loading: true,
-  delegableApiList: [],
+  loading: false,
+  delegableApiList: [
+    {
+      id: '1',
+      apiName: 'Api Applikasjonsbrukergrensesnitt 1',
+      orgName: 'Organisasjon 1',
+      rightDescription: 'RightDescription',
+      description: 'description',
+      scopes: ['Scope 1, Scope 2'],
+    },
+    {
+      id: '2',
+      apiName: 'Api Applikasjonsbrukergrensesnitt 2',
+      orgName: 'Organisasjon 2',
+      rightDescription: 'RightDescription',
+      description: 'description',
+      scopes: ['Scope 1, Scope 2'],
+    },
+  ],
   presentedApiList: [],
   delegableApiSearchPool: [],
   apiProviders: [''],

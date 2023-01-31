@@ -24,7 +24,7 @@ const initialState: InitialState = {
     },
     {
       id: '2',
-      orgName: 'Accenture Accenture Accenture Accenture Accenture',
+      orgName: 'Accenture',
       orgNr: '950124321',
       description: 'For å hente ut skatt',
     },
