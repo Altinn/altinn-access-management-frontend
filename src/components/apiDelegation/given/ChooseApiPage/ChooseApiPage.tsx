@@ -13,7 +13,6 @@ import {
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
 import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
@@ -51,7 +50,6 @@ export const ChooseApiPage = () => {
   const loading = useAppSelector((state) => state.delegableApi.loading);
   const error = useAppSelector((state) => state.delegableApi.error);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
 
@@ -86,7 +84,7 @@ export const ChooseApiPage = () => {
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
-  const isPhoneScreen = useMediaQuery('(max-width: 576px)');
+  const isXs = useMediaQuery('(max-width: 576px)');
 
   const delegableApiAccordions = () => {
     if (error) {
@@ -94,7 +92,7 @@ export const ChooseApiPage = () => {
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
-          forceMobileLayout={isPhoneScreen}
+          forceMobileLayout={isXs}
         >
           <div>
             {t('api_delegation.error_message')}: {error}
@@ -157,7 +155,7 @@ export const ChooseApiPage = () => {
               <Panel
                 title={t('common.error')}
                 variant={PanelVariant.Warning}
-                forceMobileLayout={isPhoneScreen}
+                forceMobileLayout={isXs}
               >
                 {t('api_delegation.orgs_not_chosen_subtitle')}
               </Panel>
@@ -168,7 +166,7 @@ export const ChooseApiPage = () => {
               </div>
             )}
             <h3>{t('api_delegation.new_api_content_text2')}</h3>
-            {isPhoneScreen && chosenApis.length > 0 && (
+            {isXs && chosenApis.length > 0 && (
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
@@ -196,7 +194,7 @@ export const ChooseApiPage = () => {
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
                 <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
-              {!isPhoneScreen && (
+              {!isXs && (
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
