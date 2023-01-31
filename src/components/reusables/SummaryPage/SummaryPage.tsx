@@ -28,8 +28,9 @@ import type { ApiDelegation } from '@/rtk/features/delegationRequest/delegationR
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 
-import classes from './ConfirmationPage.module.css';
-export interface ConfirmationPageProps {
+import classes from './SummaryPage.module.css';
+
+export interface SummaryPageProps {
   delegableApis?: DelegableApi[];
   delegableOrgs?: DelegableOrg[];
   failedDelegations?: ApiDelegation[];
@@ -45,7 +46,7 @@ export interface ConfirmationPageProps {
   headerColor?: PageColor;
 }
 
-export const ConfirmationPage = ({
+export const SummaryPage = ({
   delegableApis,
   delegableOrgs,
   failedDelegations,
@@ -59,7 +60,7 @@ export const ConfirmationPage = ({
   headerIcon,
   restartProcessPath,
   headerColor = PageColor.Primary,
-}: ConfirmationPageProps) => {
+}: SummaryPageProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
