@@ -7,6 +7,7 @@ import {
 } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
+import * as React from 'react';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 
@@ -41,7 +42,7 @@ export const CompactDeletableListItem = ({
       >
         <div className={classes.baseListItemContent}>
           {startIcon && (
-            <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
+            <div className={cn(classes.listItemIcon)}>
               <SvgIcon
                 width={14}
                 height={14}
