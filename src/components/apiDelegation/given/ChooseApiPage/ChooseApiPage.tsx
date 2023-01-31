@@ -33,18 +33,17 @@ import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { RouterPath } from '@/routes/Router';
-
-import { ReactComponent as ApiIcon } from '../../assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
+import { PageContainer } from '@/components/reusables/PageContainer';
 import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,
-} from '../Reusables/NewDelegationAccordion';
-import { CompactDeletableListItem } from '../Reusables/CompactDeletableListItem';
-import { PageContainer } from '../Reusables/PageContainer';
+} from '@/components/reusables/NewDelegationAccordion';
 
-import classes from './NewApiDelegationPage.module.css';
+import classes from './ChooseApiPage.module.css';
 
-export const NewApiDelegationPage = () => {
+export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
   const [filters, setFilters] = useState<string[]>([]);
   const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
@@ -62,7 +61,6 @@ export const NewApiDelegationPage = () => {
     if (loading) {
       void fetchData();
     }
-    // Clear search and filters on mount
     dispatch(filter([]));
     dispatch(search(''));
   }, []);
@@ -206,7 +204,7 @@ export const NewApiDelegationPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation,
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg,
                     )
                   }
                 >
@@ -224,7 +222,7 @@ export const NewApiDelegationPage = () => {
                       '/' +
                         RouterPath.GivenApiDelegations +
                         '/' +
-                        RouterPath.GivenApiDelegationsConfirmation,
+                        RouterPath.GivenApiExecuteDelegation,
                     )
                   }
                   disabled={chosenApis.length < 1 || chosenOrgs.length < 1}

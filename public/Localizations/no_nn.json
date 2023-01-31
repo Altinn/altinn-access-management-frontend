@@ -44,7 +44,7 @@
     "confirm_delegation": "Stadfest delegering",
     "confirmation_page_content_top_text": "Du ønskjer å gi rettar til følgjande API:",
     "confirmation_page_content_second_text": "API-tilgangane blir gitt til:",
-    "confirmation_page_content_bottom_text": "Tilgangen vil bli gitt og er gyldig til den aktivt fjernas eller blir trekt tilbake. Mottakar får beskjed.",
+    "confirmation_page_content_bottom_text": "Tilgangen vil bli gitt og er gyldig til dei aktivt fjernas eller blir trekt tilbake. Mottakar får beskjed.",
     "filter_label": "Filtrer på tilbyder",
     "filter_remove_all": "Fjern alle filtra",
     "chosen_orgs": "Valgte organisasjonar",
@@ -59,6 +59,10 @@
     "loading": "Lastar",
     "error_message": "Feilmelding",
     "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valgte organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
-    "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt."
+    "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt.",
+    "failed_delegations": "Desse API-delegeringene gjekk gale og vart derfor ikkje tildelte",
+    "succesful_delegations": "Desse API-delegeringene vart tildelte",
+    "receipt_page_bottom_text": "Tilgangane er gitt og er gyldig til den aktivt slett eller blir trekte tilbake. Mottakar har fått beskjed.",
+    "receipt_page_main_button": "Til totaloversikt"
   }
 }

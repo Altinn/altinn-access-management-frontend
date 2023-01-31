@@ -19,14 +19,13 @@ import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import {
   NewDelegationAccordion,
   NewDelegationAccordionButtonType,
-} from '@/components/Reusables/NewDelegationAccordion';
+} from '@/components/reusables/NewDelegationAccordion';
 import { RouterPath } from '@/routes/Router';
+import { PageContainer } from '@/components/reusables/PageContainer';
 
-import { PageContainer } from '../Reusables/PageContainer';
+import classes from './ChooseOrgPage.module.css';
 
-import classes from './NewOrgDelegationPage.module.css';
-
-export const NewOrgDelegationPage = () => {
+export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const dispatch = useAppDispatch();
@@ -84,10 +83,7 @@ export const NewOrgDelegationPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' +
-                        RouterPath.GivenApiDelegations +
-                        '/' +
-                        RouterPath.GivenApiDelegationsOverview,
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview,
                     )
                   }
                 >
@@ -102,7 +98,7 @@ export const NewOrgDelegationPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi,
                     )
                   }
                   disabled={chosenOrgs.length === 0}

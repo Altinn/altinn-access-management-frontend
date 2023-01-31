@@ -1,1 +1,0 @@
-export { NewOrgDelegationPage } from './NewOrgDelegationPage';

@@ -3,7 +3,7 @@ import { mount } from 'cypress/react18';
 import { List } from '@altinn/altinn-design-system';
 
 import store from '@/rtk/app/store';
-import { CompactDeletableListItem } from '@/components/Reusables/CompactDeletableListItem';
+import { CompactDeletableListItem } from '@/components/reusables';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   const { reduxStore = store, ...mountOptions } = options;

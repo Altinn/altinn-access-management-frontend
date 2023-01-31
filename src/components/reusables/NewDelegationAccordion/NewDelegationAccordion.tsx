@@ -114,7 +114,7 @@ export const NewDelegationAccordion = ({
                 <div className={classes.line}>
                   <Line />
                 </div>
-                <p className={classes.scopeText}>{t('api_delegation.description')}</p>
+                <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
                 <div className={classes.bottomContentTexts}>{bottomContentText}</div>
               </div>
             )}
