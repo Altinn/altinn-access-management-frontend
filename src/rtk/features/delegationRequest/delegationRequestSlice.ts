@@ -44,7 +44,7 @@ export const delegateApi = async (
   orgList: DelegableOrg[],
 ) => {
   for (let i = 0; i < apiList.length; i++) {
-    for (let j = 0; i < orgList.length; i++) {
+    for (let j = 0; j < orgList.length; j++) {
       const delegationRequest = {
         apiIdentifier: apiList[i].id,
         orgNr: orgList[j].orgNr,
