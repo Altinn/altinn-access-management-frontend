@@ -5,7 +5,6 @@ import i18next from 'i18next';
 
 import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useTranslation } from 'react-i18next';
 
 export interface ApiListItem {
   id: string;

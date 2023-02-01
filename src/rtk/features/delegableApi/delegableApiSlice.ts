@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import i18next from 'i18next';
-import { useTranslation } from 'react-i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -105,24 +104,7 @@ export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableA
 
 const initialState: SliceState = {
   loading: true,
-  delegableApiList: [
-    {
-      id: '1',
-      apiName: 'Api Applikasjonsbrukergrensesnitt 1',
-      orgName: 'Organisasjon 1',
-      rightDescription: 'RightDescription',
-      description: 'description',
-      scopes: ['Scope 1, Scope 2'],
-    },
-    {
-      id: '2',
-      apiName: 'Api Applikasjonsbrukergrensesnitt 2',
-      orgName: 'Organisasjon 2',
-      rightDescription: 'RightDescription',
-      description: 'description',
-      scopes: ['Scope 1, Scope 2'],
-    },
-  ],
+  delegableApiList: [],
   presentedApiList: [],
   delegableApiSearchPool: [],
   apiProviders: [''],
