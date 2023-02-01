@@ -67,65 +67,59 @@ export const NewDelegationAccordion = ({
   );
 
   return (
-    <div>
-      <Accordion
-        open={open}
-        onClick={() => setOpen(!open)}
+    <Accordion
+      open={open}
+      onClick={() => setOpen(!open)}
+    >
+      <AccordionHeader
+        subtitle={subtitle}
+        actions={actions}
       >
-        <AccordionHeader
-          subtitle={subtitle}
-          actions={actions}
-        >
-          {title}
-        </AccordionHeader>
-        <AccordionContent>
-          <div className={classes.newApiAccordionContent}>
-            {textList.length > 0 && (
-              <div>
-                <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
-                {textList.map((scope, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className={classes.scopeItems}
-                    >
-                      {scope}
-                    </div>
-                  );
-                })}
+        {title}
+      </AccordionHeader>
+      <AccordionContent>
+        <div className={classes.newApiAccordionContent}>
+          {textList.length > 0 && (
+            <div>
+              <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
+              {textList.map((scope, i) => {
+                return (
+                  <div
+                    key={i}
+                    className={classes.scopeItems}
+                  >
+                    {scope}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {topContentText && (
+            <div>
+              <div className={classes.line}>
+                <Line />
               </div>
-            )}
-            {topContentText && (
-              <div>
-                <div className={classes.line}>
-                  <Line />
-                </div>
-                <p className={classes.scopeText}>{t('api_delegation.description')}</p>
-                <div className={classes.contentTexts}>{topContentText}</div>
+              <p className={classes.scopeText}>{t('api_delegation.description')}</p>
+              <div className={classes.contentTexts}>{topContentText}</div>
+            </div>
+          )}
+          {topContentText === undefined && (
+            <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
+          )}
+          {bottomContentText && (
+            <div>
+              <div className={classes.line}>
+                <Line />
               </div>
-            )}
-            {topContentText === undefined && (
-              <div className={classes.contentTexts}>
-                {t('api_delegation.data_retrieval_failed')}
-              </div>
-            )}
-            {bottomContentText && (
-              <div>
-                <div className={classes.line}>
-                  <Line />
-                </div>
-                <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
-                <div className={classes.bottomContentTexts}>{bottomContentText}</div>
-              </div>
-            )}
-            {bottomContentText === undefined && (
-              <div className={classes.contentTexts}>
-                {t('api_delegation.data_retrieval_failed')}
-              </div>
-            )}
-          </div>
-        </AccordionContent>
-      </Accordion>
-    </div>
+              <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
+              <div className={classes.bottomContentTexts}>{bottomContentText}</div>
+            </div>
+          )}
+          {bottomContentText === undefined && (
+            <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
+          )}
+        </div>
+      </AccordionContent>
+    </Accordion>
   );
 };

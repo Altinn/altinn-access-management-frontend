@@ -1,28 +1,17 @@
+
 @media only screen and (min-width: 0px) {
   .searchSection{
     --searchFieldWidth: 100%
   }
 }
 
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width: 576px) {
 
   .searchSection{
     --searchFieldWidth: 40%
   }
 }
 
-@media only screen and (min-width: 900px) {
-
-  .searchSection{
-    --searchFieldWidth: 40%
-  }
-}
-
-.pageContent{
-  --component-page-margin-horizontal: 3rem;
-  margin-right: var(--component-page-margin-horizontal);
-  margin-left: var(--component-page-margin-horizontal);
-}
 
 .pageContentAccordionsContainer{
     grid-template-columns: 1fr 1fr;

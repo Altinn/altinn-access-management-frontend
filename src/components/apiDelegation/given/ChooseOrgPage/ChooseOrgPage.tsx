@@ -28,6 +28,7 @@ import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
+import main from '@/main.module.css';
 
 import classes from './ChooseOrgPage.module.css';
 
@@ -130,7 +131,7 @@ export const ChooseOrgPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={classes.pageContent}>
+          <div className={main.pageContent}>
             <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
             <div className={classes.searchSection}>
               <SearchField

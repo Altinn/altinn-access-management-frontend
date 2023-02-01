@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
+import * as React from 'react';
 
 import store from '@/rtk/app/store';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
