@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface DelegableApi {
   id: string;
@@ -88,18 +91,20 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
 };
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
+  // TODO: Change code below when AltinnPartyId cookie doesn't have httpOnly flag anymore
+  const altinnPartyId = getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '1337';
+  // TODO: This may fail in AT if axios doesn't automatically change the base url
   return await axios
-    // TODO: This may fail in AT if axios doesn't automatically change the base url
-    // TODO: Change 1337 with partytId that we get from token
-    .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
+    .get(`/accessmanagement/api/v1/${altinnPartyId}/resources/maskinportenschema`)
     .then((response) => response.data)
     .catch((error) => {
-      console.error('error', error);
+      console.error(error);
+      throw new Error(String(error.response.status));
     });
 });
 
 const initialState: SliceState = {
-  loading: false,
+  loading: true,
   delegableApiList: [
     {
       id: '1',

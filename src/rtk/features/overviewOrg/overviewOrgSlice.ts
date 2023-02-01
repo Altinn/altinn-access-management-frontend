@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import i18next from 'i18next';
 
 import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useTranslation } from 'react-i18next';
 
 export interface ApiListItem {
   id: string;
@@ -149,11 +152,19 @@ const createCopyOrg = (org: OverviewOrg) => {
 export const fetchOverviewOrgsOutbound = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOutbound',
   async () => {
-    // TODO: Replace r500000 with partyid of actual logged in org
+    const altinnPartyId = getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '1337';
+    // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
-      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/outbound')
+      .get(
+        `/accessmanagement/api/v1/bff/${
+          'r' + altinnPartyId
+        }/delegations/maskinportenschema/outbound`,
+      )
       .then((response) => response.data)
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
   },
 );
 
