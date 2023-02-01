@@ -32,7 +32,7 @@ import { PageContainer } from '@/components/reusables/PageContainer';
 import classes from './ChooseOrgPage.module.css';
 
 export const ChooseOrgPage = () => {
-  const delegableOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
+  const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const dispatch = useAppDispatch();
