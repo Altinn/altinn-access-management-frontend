@@ -103,7 +103,7 @@ const initialState: SliceState = {
   delegableApiList: [
     {
       id: '1',
-      apiName: 'Api Applikasjonsbrukergrensesnitt 1',
+      apiName: 'Api App 1',
       orgName: 'Organisasjon 1',
       rightDescription: 'RightDescription',
       description: 'description',
@@ -111,7 +111,7 @@ const initialState: SliceState = {
     },
     {
       id: '2',
-      apiName: 'Api Applikasjonsbrukergrensesnitt 2',
+      apiName: 'Api App 2',
       orgName: 'Organisasjon 2',
       rightDescription: 'RightDescription',
       description: 'description',

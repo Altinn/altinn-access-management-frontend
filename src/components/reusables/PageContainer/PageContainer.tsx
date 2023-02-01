@@ -17,7 +17,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   const { t } = useTranslation('common');
 
   return (
-    <div className={classes.pageWrapper}>
+    <div className={classes.pageContainer}>
       <div className={classes.exitButton}>
         <Button
           variant={ButtonVariant.Quiet}

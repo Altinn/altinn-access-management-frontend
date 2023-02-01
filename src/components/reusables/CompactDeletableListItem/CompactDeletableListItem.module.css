@@ -15,30 +15,35 @@
 }
 
 .listItemTexts{
-  flex: 2;
+  flex: 1;
   display: flex;
   font-size: 16px;
   --list-text-color-error: #E02E49;
+  align-items: center;
 }
 
 .leftText {
-  width: 400px;
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .middleText {
-  flex:1;
+  flex: 1;
+  display: flex;
+  margin-right: auto;
+  margin-left: 30px;
 }
 
 .leftText__error {
-  width: 400px;
   color: var(--list-text-color-error);
 }
 
 .middleText__error {
-  flex:1;
   color: var(--list-text-color-error);
 }
 
 .deleteSection {
+  display: flex;
   justify-content: flex-end;
 }

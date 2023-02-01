@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
 
+import { useMediaQuery } from '@/resources/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 
 import classes from './CompactDeletableListItem.module.css';
@@ -34,6 +35,8 @@ export const CompactDeletableListItem = ({
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
+  const isXs = useMediaQuery(`(max-width: 576px)`);
+
   return (
     <ListItem>
       <div
@@ -42,7 +45,7 @@ export const CompactDeletableListItem = ({
       >
         <div className={classes.baseListItemContent}>
           {startIcon && (
-            <div className={cn(classes.listItemIcon)}>
+            <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
               <SvgIcon
                 width={14}
                 height={14}
@@ -55,21 +58,24 @@ export const CompactDeletableListItem = ({
             <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
               {leftText}
             </div>
-            <div className={(classes.middleText, classes[`middleText__${contentColor}`])}>
-              {middleText}
-            </div>
-          </div>
-          <div className={classes.deleteSection}>
-            {removeCallback && (
-              <Button
-                variant={ButtonVariant.Quiet}
-                color={ButtonColor.Danger}
-                icon={<MinusCircle />}
-                onClick={removeCallback}
-              >
-                {t('api_delegation.delete')}
-              </Button>
+            {!isXs && (
+              <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
+                {middleText}
+              </div>
             )}
+            <div className={classes.deleteSection}>
+              {removeCallback && (
+                <Button
+                  variant={ButtonVariant.Quiet}
+                  color={ButtonColor.Danger}
+                  icon={<MinusCircle />}
+                  onClick={removeCallback}
+                  aria-label={String(t('api_delegation.delete'))}
+                >
+                  {!isXs && t('api_delegation.delete')}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
