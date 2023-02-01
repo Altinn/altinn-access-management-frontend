@@ -151,14 +151,11 @@ const createCopyOrg = (org: OverviewOrg) => {
 export const fetchOverviewOrgsOutbound = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOutbound',
   async () => {
-    const altinnPartyId = getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '1337';
+    const altinnPartyId =
+      getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '500000';
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
-      .get(
-        `/accessmanagement/api/v1/bff/${
-          'r' + altinnPartyId
-        }/delegations/maskinportenschema/outbound`,
-      )
+      .get(`/accessmanagement/api/v1/bff/r${altinnPartyId}/delegations/maskinportenschema/outbound`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
