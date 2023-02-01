@@ -35,7 +35,7 @@ export const CompactDeletableListItem = ({
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
-  const isPhoneScreen = useMediaQuery(`(max-width: 576px)`);
+  const isXs = useMediaQuery(`(max-width: 576px)`);
 
   return (
     <ListItem>
@@ -58,7 +58,7 @@ export const CompactDeletableListItem = ({
             <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
               {leftText}
             </div>
-            {!isPhoneScreen && (
+            {!isXs && (
               <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
                 {middleText}
               </div>
@@ -72,7 +72,7 @@ export const CompactDeletableListItem = ({
                   onClick={removeCallback}
                   aria-label={String(t('api_delegation.delete'))}
                 >
-                  {!isPhoneScreen && t('api_delegation.delete')}
+                  {!isXs && t('api_delegation.delete')}
                 </Button>
               )}
             </div>

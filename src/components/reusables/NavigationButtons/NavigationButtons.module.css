@@ -17,19 +17,17 @@
 }
 
 .navButtonLeft{
-  width: 10rem;
   justify-content: flex-start;
   display: flex;
   flex:1;
   margin-right: 10px;
-  max-width: 100px;
+  max-width: 130px;
 }
 
 .navButtonRight{
-  width: 10rem;
   justify-content: flex-end;
   display: flex;
   flex:1;
   margin-left: 10px;
-  max-width: 100px;
+  max-width: 130px;
 }

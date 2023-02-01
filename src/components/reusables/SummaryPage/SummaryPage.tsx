@@ -25,6 +25,7 @@ import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import { CompactDeletableListItem } from '@/components/reusables';
 import type { ApiDelegation } from '@/rtk/features/delegationRequest/delegationRequestSlice';
+import main from '@/main.module.css';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 
@@ -144,7 +145,7 @@ export const SummaryPage = ({
     <Page color={headerColor}>
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
-        <div className={classes.pageContent}>
+        <div className={main.pageContent}>
           {showErrorPanel() ? (
             <Panel
               title={t('common.error')}

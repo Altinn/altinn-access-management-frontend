@@ -5,9 +5,9 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@altinn/altinn-design-system@npm:^0.27.2":
-  version: 0.27.2
-  resolution: "@altinn/altinn-design-system@npm:0.27.2"
+"@altinn/altinn-design-system@npm:^0.27.3":
+  version: 0.27.3
+  resolution: "@altinn/altinn-design-system@npm:0.27.3"
   dependencies:
     "@altinn/figma-design-tokens": ^5.0.0
     "@navikt/ds-icons": ^2.0.0
@@ -18,7 +18,7 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: b904178f3d15fa5c163cfa0843ff06e292dbc5cde1ee5542b5c7bd161e236370e26878615381856f79251fd6b061322a7e7a12fd640983a5e8bacc58b576315c
+  checksum: 0905fcc4dd308ce53597914f232de1e29a8f309e91f1080be3ff0730776c8747887b1b01c55c75fff3ae4be9c7a7455b930a16245c57b6bb8b495425cd12ff2d
   languageName: node
   linkType: hard
 
@@ -5415,7 +5415,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-app@workspace:."
   dependencies:
-    "@altinn/altinn-design-system": ^0.27.2
+    "@altinn/altinn-design-system": ^0.27.3
     "@reduxjs/toolkit": ^1.9.1
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21

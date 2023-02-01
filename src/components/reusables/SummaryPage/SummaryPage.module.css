@@ -1,9 +1,3 @@
-.pageContent{
-  --component-page-margin-horizontal: 3rem;
-  margin-right: var(--component-page-margin-horizontal);
-  margin-left: var(--component-page-margin-horizontal);
-}
-
 .navButtonContainer{
   margin-top: 8rem;
   display: flex;

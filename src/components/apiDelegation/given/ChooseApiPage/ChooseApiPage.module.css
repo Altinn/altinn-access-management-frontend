@@ -9,12 +9,6 @@
     max-height: 300px;
     overflow-y: auto;
   }
-
-  .pageContent{
-    --component-page-margin-horizontal: rem;
-    margin-right: var(--component-page-margin-horizontal);
-    margin-left: var(--component-page-margin-horizontal);
-  }
 }
 
 @media only screen and (min-width: 576px) {
@@ -23,23 +17,8 @@
   }
 
   .accordionScrollContainer {
-    height: 300px;
+    max-height: 300px;
     overflow-y: auto;
-  }
-
-  .pageContent{
-    --component-page-margin-horizontal: 3rem;
-    margin-right: var(--component-page-margin-horizontal);
-    margin-left: var(--component-page-margin-horizontal);
-  }
-
-  .apiAccordions{
-    margin-right: 3rem;
-  }
-
-  .pageContentAccordionsContainer{
-    grid-template-columns: 1fr 1fr;
-    display: grid;
   }
 }
 
@@ -47,18 +26,26 @@
   .searchSection{
     --searchFieldWidth: 50%
   }
+
+  .pageContentAccordionsContainer{
+    grid-template-columns: 1fr 1fr;
+    display: grid;
+  }
+
+  .apiAccordions{
+    margin-right: 3rem;
+  }
+
+  .accordionScrollContainer {
+    height: 300px;
+    overflow-y: auto;
+  }
 }
 
 @media only screen and (min-width: 992px) {
   .searchSection{
     --searchFieldWidth: 50%
   }
-}
-
-.pageContent{
-  --component-page-margin-horizontal: 3rem;
-  margin-right: var(--component-page-margin-horizontal);
-  margin-left: var(--component-page-margin-horizontal);
 }
 
 .searchSection{

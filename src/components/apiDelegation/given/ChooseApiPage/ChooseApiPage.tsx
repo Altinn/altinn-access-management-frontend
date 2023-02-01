@@ -37,6 +37,7 @@ import {
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
 import { NavigationButtons } from '@/components/reusables';
+import main from '@/main.module.css';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -84,7 +85,7 @@ export const ChooseApiPage = () => {
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
-  const isXs = useMediaQuery('(max-width: 576px)');
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   const delegableApiAccordions = () => {
     if (error) {
@@ -92,7 +93,7 @@ export const ChooseApiPage = () => {
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
-          forceMobileLayout={isXs}
+          forceMobileLayout={isSm}
         >
           <div>
             {t('api_delegation.error_message')}: {error}
@@ -150,12 +151,12 @@ export const ChooseApiPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={classes.pageContent}>
+          <div className={main.pageContent}>
             {chosenDelegableOrgs.length < 1 ? (
               <Panel
                 title={t('common.error')}
                 variant={PanelVariant.Warning}
-                forceMobileLayout={isXs}
+                forceMobileLayout={isSm}
               >
                 {t('api_delegation.orgs_not_chosen_subtitle')}
               </Panel>
@@ -166,7 +167,7 @@ export const ChooseApiPage = () => {
               </div>
             )}
             <h3>{t('api_delegation.new_api_content_text2')}</h3>
-            {isXs && chosenApis.length > 0 && (
+            {isSm && chosenApis.length > 0 && (
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
@@ -194,7 +195,7 @@ export const ChooseApiPage = () => {
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
                 <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
-              {!isXs && (
+              {!isSm && (
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
