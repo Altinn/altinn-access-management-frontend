@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { ActionBar, ActionIconVariant } from '@/components/reusables/ActionBar';
+import { ActionBar, ActionIconVariant } from '@/components/reusables';
 import {
   softAddOrg,
   softRemoveOrg,
