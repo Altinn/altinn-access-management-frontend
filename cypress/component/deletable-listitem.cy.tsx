@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 import { List } from '@altinn/altinn-design-system';
+import * as React from 'react';
 
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';

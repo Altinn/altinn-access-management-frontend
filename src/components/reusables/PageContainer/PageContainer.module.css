@@ -1,5 +1,28 @@
-.pageWrapper{
-  width: 1055px;
+@media only screen and (min-width: 0px) {
+  .pageContainer{
+    width: 315px;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .pageContainer{
+    width: 576px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .pageContainer{
+    width: 768px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .pageContainer{
+    width: 992px;
+  }
+}
+
+.pageContainer{
   margin-left: auto;
   margin-right: auto;
   margin-top: 1rem;;

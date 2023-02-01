@@ -1,0 +1,15 @@
+@media only screen and (min-width: 0px) {
+  .pageContent{
+    --component-page-margin-horizontal: 1rem;
+    margin-right: var(--component-page-margin-horizontal);
+    margin-left: var(--component-page-margin-horizontal);
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .pageContent{
+    --component-page-margin-horizontal: 3rem;
+    margin-right: var(--component-page-margin-horizontal);
+    margin-left: var(--component-page-margin-horizontal);
+  }
+}
