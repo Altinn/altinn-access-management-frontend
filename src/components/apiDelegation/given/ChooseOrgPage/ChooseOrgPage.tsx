@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { ActionBar, ActionIconVariant } from '@/components/Reusables/ActionBar';
+import { ActionBar, ActionIconVariant } from '@/components/reusables/ActionBar';
 import {
   softAddOrg,
   softRemoveOrg,
@@ -27,13 +27,12 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { RouterPath } from '@/routes/Router';
+import { PageContainer } from '@/components/reusables/PageContainer';
 
-import { PageContainer } from '../Reusables/PageContainer';
+import classes from './ChooseOrgPage.module.css';
 
-import classes from './NewOrgDelegationPage.module.css';
-
-export const NewOrgDelegationPage = () => {
-  const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
+export const ChooseOrgPage = () => {
+  const delegableOrgs = useAppSelector((state) => state.delegableOrg.delegableOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const dispatch = useAppDispatch();
@@ -166,10 +165,7 @@ export const NewOrgDelegationPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' +
-                        RouterPath.GivenApiDelegations +
-                        '/' +
-                        RouterPath.GivenApiDelegationsOverview,
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview,
                     )
                   }
                 >
@@ -184,7 +180,7 @@ export const NewOrgDelegationPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation,
+                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi,
                     )
                   }
                   disabled={chosenOrgs.length === 0}

@@ -20,12 +20,12 @@
   display: flex;
 }
 
-.secondText{
+.bottomText{
   margin-top: 40px;
   font-weight: normal;
 }
 
-.bottomText {
+.listText {
   margin-top: 40px;
   font-weight: normal;
 }

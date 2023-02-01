@@ -5,21 +5,22 @@ import * as React from 'react';
 import axios from 'axios';
 
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
-import { NewApiDelegationPage } from '@/components/NewApiDelegationPage';
+import { ChooseApiPage } from '@/components/apiDelegation/given/ChooseApiPage';
 import { OverviewPage as GivenOverviewPage } from '@/components/apiDelegation/given/OverviewPage';
 import { OverviewPage as ReceivedOverviewPage } from '@/components/apiDelegation/received/OverviewPage';
-import { NewOrgDelegationPage } from '@/components/NewOrgDelegationPage';
-import { ApiDelegationConfirmationPage } from '@/components/ApiDelegationConfirmationPage';
+import { ChooseOrgPage } from '@/components/apiDelegation/given/ChooseOrgPage';
+import { ReceiptPage } from '@/components/apiDelegation/given/ReceiptPage';
+import { ConfirmationPage } from '@/components/apiDelegation/given/ConfirmationPage';
 
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
-  GivenApiDelegationsOverview = 'overview',
-  NewGivenApiDelegation = 'choose-api',
-  NewGivenOrgDelegation = 'choose-org',
-  GivenApiDelegationsConfirmation = 'confirmation',
-  GivenApiDelegationsReceipt = 'receipt',
+  GivenApiOverview = 'overview',
+  GivenApiChooseApi = 'choose-api',
+  GivenApiChooseOrg = 'choose-org',
+  GivenApiExecuteDelegation = 'execute-delegation',
+  GivenApiReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
-  ReceivedApiDelegationsOverview = 'overview',
+  ReceivedApiOverview = 'overview',
   Profile = 'Profile',
   BasePath = 'accessmanagement/ui',
 }
@@ -37,7 +38,7 @@ export const Router = () => {
         .get('accessmanagement/api/v1/authentication/refresh')
         .then((response) => response.data)
         .catch((error) => {
-          window.location.pathname = '/';
+          !import.meta.env.DEV && (window.location.pathname = '/');
           console.error(error);
         });
     }
@@ -62,27 +63,32 @@ export const Router = () => {
         errorElement={<ErrorPage />}
       >
         <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsOverview}
+          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview}
           element={<GivenOverviewPage />}
           errorElement={<ErrorPage />}
         />
         <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation}
-          element={<NewOrgDelegationPage />}
+          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg}
+          element={<ChooseOrgPage />}
           errorElement={<ErrorPage />}
         />
         <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation}
-          element={<NewApiDelegationPage />}
+          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi}
+          element={<ChooseApiPage />}
           errorElement={<ErrorPage />}
         />
         <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiDelegationsConfirmation}
-          element={<ApiDelegationConfirmationPage />}
+          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation}
+          element={<ConfirmationPage />}
           errorElement={<ErrorPage />}
         />
         <Route
-          path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiDelegationsOverview}
+          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiReceipt}
+          element={<ReceiptPage />}
+          errorElement={<ErrorPage />}
+        />
+        <Route
+          path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiOverview}
           element={<ReceivedOverviewPage />}
           errorElement={<ErrorPage />}
         />

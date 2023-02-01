@@ -13,7 +13,7 @@ import * as React from 'react';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
-import { Line } from '../Line/Line';
+import { Line } from '../Line';
 
 import classes from './NewDelegationAccordion.module.css';
 
@@ -114,7 +114,7 @@ export const NewDelegationAccordion = ({
                 <div className={classes.line}>
                   <Line />
                 </div>
-                <p className={classes.scopeText}>{t('api_delegation.description')}</p>
+                <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
                 <div className={classes.bottomContentTexts}>{bottomContentText}</div>
               </div>
             )}

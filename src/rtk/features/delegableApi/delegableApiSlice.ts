@@ -90,6 +90,7 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
   return await axios
     // TODO: This may fail in AT if axios doesn't automatically change the base url
+    // TODO: Change 1337 with partytId that we get from token
     .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
     .then((response) => response.data)
     .catch((error) => {
@@ -200,7 +201,7 @@ const delegableApiSlice = createSlice({
           const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
           const rightDescription = dataArray[i].rightDescription?.nb;
           const owner = dataArray[i].owner?.nb;
-          if (/* rightDescription && */ apiName) {
+          if (rightDescription && apiName) {
             if (orgName) {
               responseList.push(
                 mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),

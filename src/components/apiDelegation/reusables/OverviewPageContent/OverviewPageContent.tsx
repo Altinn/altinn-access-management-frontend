@@ -88,12 +88,12 @@ export const OverviewPageContent = ({
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     transferDelegatableOrgs();
     dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenApiDelegation);
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi);
   };
 
   const newDelegation = () => {
     transferDelegatableOrgs();
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.NewGivenOrgDelegation);
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg);
   };
 
   useEffect(() => {

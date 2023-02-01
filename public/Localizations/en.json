@@ -2,7 +2,7 @@
   "common": {
     "error": "Error",
     "restart": "Restart",
-    "close": "Close"
+    "close": "Lukk"
   },
   "profile": {
     "received": "Received",
@@ -50,7 +50,7 @@
     "confirm_delegation": "Confirm delegation",
     "confirmation_page_content_top_text": "You wish to give access to the following APIs",
     "confirmation_page_content_second_text": "The API-accesses will be given to:",
-    "confirmation_page_content_bottom_text": "The accesses will be given and is valid until it actively is deleted. The receiver will be notified.",
+    "confirmation_page_content_bottom_text": "The accesses will be given and is valid until they're actively deleted. The receiver will be notified.",
     "filter_label": "Filter by provider",
     "filter_remove_all": "Remove all filters",
     "chosen_orgs": "Chosen organisations",
@@ -66,6 +66,10 @@
     "loading": "Loading",
     "error_message": "Error message",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
-    "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process."
+    "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process.",
+    "receipt_page_main_button": "To API-overview",
+    "failed_delegations": "These API delegations went wrong and were therefore not assigned",
+    "succesful_delegations": "These API delegations were successful",
+    "receipt_page_bottom_text": "The access is granted and valid until it is actively deleted or withdrawn. Recipient has been notified."
   }
 }
