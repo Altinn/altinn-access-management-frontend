@@ -7,9 +7,8 @@ import {
   ButtonColor,
   ButtonSize,
   SearchField,
-  List,
-  ListItem,
-  BorderStyle,
+  Panel,
+  PanelVariant,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
+import { ActionBar, ActionIconVariant } from '@/components/Reusables/ActionBar';
 import {
   softAddOrg,
   softRemoveOrg,
@@ -26,13 +26,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
-import {
-  NewDelegationAccordion,
-  NewDelegationAccordionButtonType,
-} from '@/components/Reusables/NewDelegationAccordion';
 import { RouterPath } from '@/routes/Router';
-import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
-import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
 import { PageContainer } from '../Reusables/PageContainer';
 
@@ -41,12 +35,16 @@ import classes from './NewOrgDelegationPage.module.css';
 export const NewOrgDelegationPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
-  const fetchLookupOrg = () => dispatch(lookupOrg(searchString));
+  const [promptOrgNumber, setPromptOrgNumber] = useState(false);
+  const fetchLookupOrg = async () => await dispatch(lookupOrg(searchString));
 
   const { t } = useTranslation('common');
+
+  const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
   const handleSoftRemove = (org: DelegableOrg) => {
     dispatch(softRemoveOrg(org));
@@ -54,57 +52,79 @@ export const NewOrgDelegationPage = () => {
   };
 
   function handleSearch(searchText: string) {
-    setSearchString(searchText);
-    dispatch(searchInCurrentOrgs(searchText));
+    if (IsOnlyNumbers(searchText) || searchText === '') {
+      setSearchString(searchText);
+      dispatch(searchInCurrentOrgs(searchText));
+    }
   }
 
   useEffect(() => {
-    if (delegableOrgs.length === 0 && searchString.length === 9) {
-      fetchLookupOrg();
+    // Clear search on mount
+    dispatch(searchInCurrentOrgs(searchString));
+  }, []);
+
+  useEffect(() => {
+    if (delegableOrgs.length > 0) {
+      setPromptOrgNumber(false);
+    } else if (searchString.length === 9) {
+      void fetchLookupOrg();
+    } else if (searchString.length !== 9) {
+      setPromptOrgNumber(true);
     }
   }, [delegableOrgs]);
 
   const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
-      <ListItem key={index}>
-        <div className={classes.listItem}>
-          <div>
-            <h4 className={classes.listTitle}>{org.orgName}</h4>
-            <div className={classes.subtitle}>{org.orgNr}</div>
-          </div>
-          <Button
-            className={classes.actionButton}
-            icon={<AddCircle />}
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Success}
-            onClick={() => dispatch(softAddOrg(org))}
-            aria-label={'soft-add'}
-          ></Button>
-        </div>
-      </ListItem>
+      <ActionBar
+        key={index}
+        title={org.orgName}
+        subtitle={org.orgNr}
+        icon={ActionIconVariant.Add}
+        actionCallBack={() => dispatch(softAddOrg(org))}
+      />
     );
   });
 
   const chosenApiItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
-      <ListItem key={index}>
-        <div className={classes.listItem}>
-          <div>
-            <h4 className={classes.listTitle}>{org.orgName}</h4>
-            <div className={classes.subtitle}>{org.orgNr}</div>
-          </div>
-          <Button
-            className={classes.actionButton}
-            icon={<MinusCircle />}
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Danger}
-            onClick={() => handleSoftRemove(org)}
-            aria-label={'soft-remove'}
-          ></Button>
-        </div>
-      </ListItem>
+      <ActionBar
+        key={index}
+        title={org.orgName}
+        subtitle={org.orgNr}
+        icon={ActionIconVariant.Remove}
+        actionCallBack={() => handleSoftRemove(org)}
+      />
     );
   });
+
+  const infoPanel = () => {
+    if (searchOrgNotExist) {
+      return (
+        <Panel
+          variant={PanelVariant.Error}
+          showIcon={false}
+          title={String(t('api_delegation.buisness_search_notfound_title'))}
+          forceMobileLayout={true}
+        >
+          <div>
+            {t('api_delegation.buisness_search_notfound_content')}{' '}
+            <a href='https://www.brreg.no/'>Brønnøysundregistrene.</a>
+          </div>
+        </Panel>
+      );
+    } else if (promptOrgNumber) {
+      return (
+        <Panel
+          variant={PanelVariant.Info}
+          showIcon={false}
+          title={String(t('api_delegation.buisness_search_info_title'))}
+          forceMobileLayout={true}
+        >
+          {t('api_delegation.buisness_search_info_content')}
+        </Panel>
+      );
+    }
+  };
 
   return (
     <PageContainer>
@@ -124,16 +144,17 @@ export const NewOrgDelegationPage = () => {
             </div>
             <div className={classes.pageContentAccordionsContainer}>
               <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
-                <div className={classes.accordionScrollContainer}>
-                  <List borderStyle={BorderStyle.Solid}>{delegableOrgItems}</List>
-                </div>
+                {searchString === '' ? (
+                  <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                ) : (
+                  <h4>{t('api_delegation.businesses_search_results')}</h4>
+                )}
+                {infoPanel()}
+                <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
               </div>
               <div className={classes.apiAccordions}>
                 <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                <div className={classes.accordionScrollContainer}>
-                  <List borderStyle={BorderStyle.Solid}>{chosenApiItems}</List>
-                </div>
+                <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
               </div>
             </div>
             <div className={classes.navButtonContainer}>

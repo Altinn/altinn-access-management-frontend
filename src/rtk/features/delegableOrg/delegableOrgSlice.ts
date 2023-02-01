@@ -12,6 +12,7 @@ export interface InitialState {
   presentedOrgList: DelegableOrg[];
   chosenDelegableOrgList: DelegableOrg[];
   error: string;
+  searchOrgNonexistant?: boolean;
 }
 
 interface OrgDTO {
@@ -35,6 +36,7 @@ export const lookupOrg = createAsyncThunk('delegableOrg/lookupOrg', async (orgNu
     .then((response) => response.data)
     .catch((error) => {
       console.error('error', error);
+      throw error;
     });
 });
 
@@ -60,15 +62,13 @@ const delegableOrgSlice = createSlice({
       );
     },
     searchInCurrentOrgs: (state, action) => {
+      state.searchOrgNonexistant = false;
       const searchString: string = action.payload;
       const delegableOrgList = state.delegableOrgList;
-      const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
-      if (IsOnlyNumbers(searchString) || searchString === '') {
-        state.presentedOrgList = delegableOrgList.filter((org) =>
-          org.orgNr.toString().includes(searchString),
-        );
-      }
+      state.presentedOrgList = delegableOrgList.filter((org) =>
+        org.orgNr.toString().includes(searchString),
+      );
     },
     populateDelegableOrgs: (state, action) => {
       const orgList: DelegableOrg[] = action.payload;
@@ -86,12 +86,18 @@ const delegableOrgSlice = createSlice({
           orgName: fetchedData.name,
           orgNr: fetchedData.orgNumber,
         };
+        state.searchOrgNonexistant = false;
         if (state.chosenDelegableOrgList.filter((o) => o.id === org.id).length === 0) {
           state.presentedOrgList.push(org);
         }
       })
       .addCase(lookupOrg.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.error.message ?? 'Unknown error';
+        if (action.error.code === 'ERR_BAD_REQUEST') {
+          state.searchOrgNonexistant = true;
+        } else {
+          state.searchOrgNonexistant = false;
+        }
       });
   },
 });
