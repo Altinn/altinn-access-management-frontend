@@ -48,3 +48,11 @@
 .infoPanelWrapper{
   overflow-wrap: anywhere;
 }
+
+@media only screen and (max-width: 576px) {
+  .apiSubheading{
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+  }
+}
