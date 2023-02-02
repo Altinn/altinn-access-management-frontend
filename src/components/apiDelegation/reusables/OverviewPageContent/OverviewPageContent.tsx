@@ -152,9 +152,14 @@ export const OverviewPageContent = ({
             </Button>
           </div>
         )}
-        <Panel title={t('api_delegation.card_title')}>
-          {t('api_delegation.api_panel_content')}
-        </Panel>
+        <div className={classes.infoPanelWrapper}>
+          <Panel
+            title={t('api_delegation.card_title')}
+            forceMobileLayout
+          >
+            {t('api_delegation.api_panel_content')}
+          </Panel>
+        </div>
         <div className={classes.pageContentContainer}>
           <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
           <div className={classes.editButton}>

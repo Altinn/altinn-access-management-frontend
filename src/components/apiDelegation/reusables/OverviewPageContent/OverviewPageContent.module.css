@@ -44,3 +44,7 @@
   font-weight: normal;
   margin-top: -2rem;
 }
+
+.infoPanelWrapper{
+  overflow-wrap: anywhere;
+}
