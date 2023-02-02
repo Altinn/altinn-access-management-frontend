@@ -21,7 +21,7 @@ export enum RouterPath {
   GivenApiReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
   ReceivedApiOverview = 'overview',
-  Profile = 'Profile',
+  Profile = 'profile',
   BasePath = 'accessmanagement/ui',
 }
 
