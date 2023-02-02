@@ -1,0 +1,14 @@
+.pageHeaderWrapper{
+    width: auto;
+    display: flex;
+    overflow-wrap: anywhere ;
+}
+
+@media only screen and (max-width: 576px) {
+    .pageHeaderWrapper{
+        background-color: #022f51;
+        height: 160px;
+        flex: none;
+        align-items: center;
+    }
+  }
