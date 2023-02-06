@@ -1,0 +1,48 @@
+@media only screen and (min-width: 0px) {
+  .userInfoBar{
+    width: 315px;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .userInfoBar{
+    width: 576px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .userInfoBar{
+    width: 768px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .userInfoBar{
+    width: 992px;
+  }
+}
+
+.altinnLogo{
+  flex: 1;
+}
+
+.userInfoBar{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  background-color: #1EADF7;
+  display: flex;
+}
+
+.userInfoBar{
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 13px;
+}
+
+.userText{ 
+  font-weight: 500;
+  margin: 0;
+  margin-right: 50px;
+}

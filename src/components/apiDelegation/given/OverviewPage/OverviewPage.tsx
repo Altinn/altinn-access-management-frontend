@@ -3,17 +3,18 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
-import { ProfileInfo } from '@/components/reusables/ProfileInfo/ProfileInfo';
+import { UserInfoBar } from '@/components/reusables';
+import { PageContainer } from '@/components/reusables/PageContainer';
 
 import { OverviewPageContent } from '../../reusables/OverviewPageContent';
 import { LayoutState } from '../../reusables/LayoutState';
-import { PageContainer } from '../../../reusables/PageContainer';
 
 export const OverviewPage = () => {
   const { t } = useTranslation('common');
 
   return (
-    <ProfileInfo>
+    <div>
+      <UserInfoBar></UserInfoBar>
       <PageContainer>
         <Page>
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')} test</PageHeader>
@@ -22,6 +23,6 @@ export const OverviewPage = () => {
           </PageContent>
         </Page>
       </PageContainer>
-    </ProfileInfo>
+    </div>
   );
 };

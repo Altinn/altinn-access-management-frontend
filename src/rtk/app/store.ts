@@ -5,6 +5,7 @@ import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
 import overviewOrgReducer from '../features/overviewOrg/overviewOrgSlice';
 import delegableOrgReducer from '../features/delegableOrg/delegableOrgSlice';
 import delegationRequestReducer from '../features/delegationRequest/delegationRequestSlice';
+import userInfoReducer from '../features/userInfo/userInfoSlice';
 
 const logger = createLogger();
 
@@ -16,6 +17,7 @@ const store = import.meta.env.PROD
         overviewOrg: overviewOrgReducer,
         delegableOrg: delegableOrgReducer,
         delegationRequest: delegationRequestReducer,
+        userInfo: userInfoReducer,
       },
     })
   : configureStore({
@@ -24,6 +26,7 @@ const store = import.meta.env.PROD
         overviewOrg: overviewOrgReducer,
         delegableOrg: delegableOrgReducer,
         delegationRequest: delegationRequestReducer,
+        userInfo: userInfoReducer,
       },
       middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     });
