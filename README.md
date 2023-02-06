@@ -145,10 +145,9 @@ To run the code together with access-management backend to the following
 - Install database server (choose your own admin password and save it some place you can find it again)
 - Start PG admin
 - Create database and call it authorizationdb
-- Create the following users (with priveliges for authorizationdb) 
-- platform_authorization_admin (superuser, canlogin)
-- platform_authorization (canlogin)
-- password: Password
+- Create the following users (with privileges for authorizationdb):
+  1. Name: platform_authorization_admin (superuser, canlogin). Set password as Password.
+  2. platform_authorization (canlogin). Set password as Password.
 - Create schema delegations in authorizationdb
 - Set platform_authorization_admin as owner
 
