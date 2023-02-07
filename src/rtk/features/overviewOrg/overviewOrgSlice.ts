@@ -153,7 +153,10 @@ export const fetchOverviewOrgsOutbound = createAsyncThunk(
     return await axios
       .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/outbound')
       .then((response) => response.data)
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
   },
 );
 
@@ -164,7 +167,10 @@ export const fetchOverviewOrgsInbound = createAsyncThunk(
     return await axios
       .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/inbound')
       .then((response) => response.data)
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
   },
 );
 

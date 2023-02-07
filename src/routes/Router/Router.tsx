@@ -38,7 +38,7 @@ export const Router = () => {
         .get('accessmanagement/api/v1/authentication/refresh')
         .then((response) => response.data)
         .catch((error) => {
-          !import.meta.env.DEV && (window.location.pathname = '/');
+          !import.meta.env.DEV && (window.location.pathname = '/ui/profile');
           console.error(error);
         });
     }
