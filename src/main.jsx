@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
+import axios from 'axios';
 
 import { Router, RouterPath } from '@/routes/Router';
 
@@ -22,14 +23,27 @@ const queryClientDevDefaults = {
   },
 };
 
+const userProfile = async () => {
+  await axios
+    .get('/accessmanagement/api/v1/profile/user')
+    .then((response) => {
+      console.log('response.data', response.data);
+      return response.data.profileSettingPreference.language;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw new Error(String(error.response.status));
+    });
+};
+
 const initLanguage = (lang) => {
   // get token here
-  if (lang === 'no_nb') {
-    return 'no_nb';
-  } else if (lang === 'en') {
+  if (lang === 'en') {
     return 'en';
-  } else if (lang === 'no_nn') {
+  } else if (lang === 'nn') {
     return 'no_nn';
+  } else {
+    return 'no_nb';
   }
 };
 
