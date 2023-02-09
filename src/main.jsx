@@ -23,19 +23,6 @@ const queryClientDevDefaults = {
   },
 };
 
-const userProfile = async () => {
-  await axios
-    .get('/accessmanagement/api/v1/profile/user')
-    .then((response) => {
-      console.log('response.data', response.data);
-      return response.data.profileSettingPreference.language;
-    })
-    .catch((error) => {
-      console.error(error);
-      throw new Error(String(error.response.status));
-    });
-};
-
 const initLanguage = (lang) => {
   // get token here
   if (lang === 'en') {
