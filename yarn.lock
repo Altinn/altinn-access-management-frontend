@@ -346,6 +346,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@digdir/design-system-react@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@digdir/design-system-react@npm:0.5.0"
+  peerDependencies:
+    react: ^18.1.0
+    react-dom: ^18.0.0
+  checksum: 3374bfc9a95fcc611fd4667d47ecd6f48124187087b8f5b6fffcfbb69b2f88bc3136d3c2fa2f1b458f0fae641d11e23711406a1c5fc564189bc130e6852bc7f3
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm64@npm:0.16.17":
   version: 0.16.17
   resolution: "@esbuild/android-arm64@npm:0.16.17"
@@ -5416,6 +5426,7 @@ __metadata:
   resolution: "react-app@workspace:."
   dependencies:
     "@altinn/altinn-design-system": ^0.27.3
+    "@digdir/design-system-react": ^0.5.0
     "@reduxjs/toolkit": ^1.9.1
     "@testing-library/cypress": ^8.0.3
     "@types/react": ^18.0.21
