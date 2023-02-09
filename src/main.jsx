@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 import { Router, RouterPath } from '@/routes/Router';
 
@@ -22,46 +23,37 @@ const queryClientDevDefaults = {
   },
 };
 
-const initLanguage = (lang) => {
-  // get token here
-  if (lang === 'no_nb') {
-    return 'no_nb';
-  } else if (lang === 'en') {
-    return 'en';
-  } else if (lang === 'no_nn') {
-    return 'no_nn';
-  }
-};
-
 // Initialise i18next; start application when ready
-use(initReactI18next).init(
-  {
-    // TODO: replace no_nb below with result from backend call that checks which language is set
-    lng: initLanguage('no_nb'),
-    fallbackLng: getConfig('defaultLocale'),
-    ns: ['common'],
-    defaultNS: 'common',
-    returnNull: false,
-  },
 
-  () => {
-    // Configure react-query
-    const queryClient = new QueryClient({
-      defaultOptions: import.meta.env.DEV ? queryClientDevDefaults : undefined,
-    });
+use(LanguageDetector)
+  .use(initReactI18next)
+  .init(
+    {
+      // TODO: replace no_nb below with result from backend call that checks which language is set
+      fallbackLng: getConfig('defaultLocale'),
+      ns: ['common'],
+      defaultNS: 'common',
+      returnNull: false,
+    },
 
-    ReactDOM.createRoot(document.getElementById('root')).render(
-      <React.StrictMode>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <LoadLocalizations>
-              <BrowserRouter basename={RouterPath.BasePath}>
-                <Router />
-              </BrowserRouter>
-            </LoadLocalizations>
-          </QueryClientProvider>
-        </Provider>
-      </React.StrictMode>,
-    );
-  },
-);
+    () => {
+      // Configure react-query
+      const queryClient = new QueryClient({
+        defaultOptions: import.meta.env.DEV ? queryClientDevDefaults : undefined,
+      });
+
+      ReactDOM.createRoot(document.getElementById('root')).render(
+        <React.StrictMode>
+          <Provider store={store}>
+            <QueryClientProvider client={queryClient}>
+              <LoadLocalizations>
+                <BrowserRouter basename={RouterPath.BasePath}>
+                  <Router />
+                </BrowserRouter>
+              </LoadLocalizations>
+            </QueryClientProvider>
+          </Provider>
+        </React.StrictMode>,
+      );
+    },
+  );

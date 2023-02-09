@@ -3,6 +3,7 @@
 import { Route, Routes } from 'react-router-dom';
 import * as React from 'react';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
 import { ChooseApiPage } from '@/components/apiDelegation/given/ChooseApiPage';
@@ -44,7 +45,7 @@ export const Router = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const setUpEventListeners = () => {
       window.addEventListener('mousemove', refreshJwtToken);
       window.addEventListener('scroll', refreshJwtToken);
