@@ -13,8 +13,11 @@ export interface PageContainerProps {
 }
 
 export const PageContainer = ({ children }: PageContainerProps) => {
-  const navigate = useNavigate();
   const { t } = useTranslation('common');
+
+  const redirectToProfile = () => {
+    window.location.pathname = '/ui/' + RouterPath.Profile;
+  };
 
   return (
     <div className={classes.pageContainer}>
@@ -25,7 +28,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
           size={ButtonSize.Medium}
           icon={<ExitIcon />}
           aria-label={String(t('common.close'))}
-          onClick={() => navigate('/' + RouterPath.Profile)}
+          onClick={redirectToProfile}
         ></Button>
       </div>
       <div>{children}</div>
