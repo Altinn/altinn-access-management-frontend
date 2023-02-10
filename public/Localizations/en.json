@@ -2,7 +2,7 @@
   "common": {
     "error": "Error",
     "restart": "Restart",
-    "close": "Lukk",
+    "close": "Close",
     "status_code": "Status code"
   },
   "profile": {
@@ -18,7 +18,7 @@
   },
   "api_delegation": {
     "businesses": "Businesses",
-    "delegated_apis": "Delegerte API",
+    "delegated_apis": "Delegated APIs",
     "api_accesses": "API-accesses",
     "delegate_new_api": "Delegate new API",
     "undo": "Undo",
