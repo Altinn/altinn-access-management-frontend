@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// <summary>
     /// Client that integrates with Delegations API
     /// </summary>
-    public  class DelegationsClient : IDelegationsClient
+    public class DelegationsClient : IDelegationsClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;

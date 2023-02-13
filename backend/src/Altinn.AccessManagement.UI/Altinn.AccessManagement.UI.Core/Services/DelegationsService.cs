@@ -5,10 +5,12 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
 using Microsoft.Extensions.Logging;
-using System.IO;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
+    /// <summary>
+    /// Service that integrates with the delegation client. Processes and maps the required data to the frontend model
+    /// </summary>
     public class DelegationsService : IDelegationsService
     {
         private readonly ILogger _logger;
@@ -22,7 +24,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="logger">handler for logger</param>
         /// <param name="delegationsClient">handler for delegations client</param>
         /// <param name="resourceAdministrationPoint">handler for resource registry</param>
-        public DelegationsService(ILogger<IDelegationsService> logger,
+        /// <param name="profileClient">handler for profile client</param>
+        public DelegationsService(
+            ILogger<IDelegationsService> logger,
             IDelegationsClient delegationsClient,
             IResourceAdministrationPoint resourceAdministrationPoint,
             IProfileClient profileClient)
@@ -33,6 +37,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             _profileClient = profileClient;
         }
 
+        /// <summary>
+        /// Gets all the delegations and maps to the frontend model
+        /// </summary>
+        /// <param name="party">reportee that delegates the resources</param>
+        /// <returns></returns>
         public async Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party)
         {
             List<Delegation> outboundDelegations = await _delegationsClient.GetOutboundDelegations(party);
@@ -47,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             foreach (Delegation delegation in outboundDelegations)
             {
                 DelegationsFE delegationsFE = new DelegationsFE();
-                delegationsFE.languageCode = languageCode;
+                delegationsFE.LanguageCode = languageCode;
                 delegationsFE.CoveredByName = delegation.CoveredByName;
                 delegationsFE.CoveredByOrganizationNumber = delegation.CoveredByOrganizationNumber;
                 delegationsFE.CoveredByPartyId = delegation.CoveredByPartyId;
@@ -69,6 +78,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return delegations;
         }
 
+        /// <summary>
+        /// Gets all the inbound delegations and maps to the frontend model
+        /// </summary>
+        /// <param name="party">reportee that receives the delegations</param>
+        /// <returns></returns>
         public async Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party)
         {
             List<Delegation> inboundDelegations = await _delegationsClient.GetInboundDelegations(party);
@@ -83,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             foreach (Delegation delegation in inboundDelegations)
             {
                 DelegationsFE delegationsFE = new DelegationsFE();
-                delegationsFE.languageCode = languageCode;
+                delegationsFE.LanguageCode = languageCode;
                 delegationsFE.OfferedByName = delegation.OfferedByName;
                 delegationsFE.OfferedByOrganizationNumber = delegation.OfferedByOrganizationNumber;
                 delegationsFE.CoveredByPartyId = delegation.CoveredByPartyId;

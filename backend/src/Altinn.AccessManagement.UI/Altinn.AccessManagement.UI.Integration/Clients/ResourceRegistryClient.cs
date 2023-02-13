@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     [ExcludeFromCodeCoverage]
     public class ResourceRegistryClient : IResourceRegistryClient
     {
-        private readonly HttpClient _httpClient = new();
+        private readonly HttpClient _httpClient = new ();
         private readonly ILogger<IResourceRegistryClient> _logger;
 
         /// <summary>

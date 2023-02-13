@@ -1,9 +1,9 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using Altinn.AccessManagement.Core.UI.Enums;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.Core.UI.Enums;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,7 +22,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="ResourceAdministrationPoint"/> class.
         /// </summary>
         /// <param name="logger">Logger instance.</param>
-        /// <param name="contextRetrievalService">the handler for resource registry client</param>
+        /// <param name="resourceRegistryClient">the handler for resource registry client</param>
+        /// <param name="cacheConfig">the handler for cache configuration</param>
+        /// <param name="memoryCache">the handler for cache</param>
         public ResourceAdministrationPoint(
             ILogger<IResourceAdministrationPoint> logger, 
             IResourceRegistryClient resourceRegistryClient,

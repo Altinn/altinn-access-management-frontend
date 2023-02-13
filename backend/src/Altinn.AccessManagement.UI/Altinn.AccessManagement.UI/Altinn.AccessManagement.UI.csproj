@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>a673dbb3-54f1-477a-b0d6-2751f915f4fb</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,10 @@
     <PackageReference Include="JWTCookieAuthentication" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
   </ItemGroup>
@@ -23,5 +28,14 @@
     <ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
     <ProjectReference Include="..\Altinn.AccessManagement.UI.Integration\Altinn.AccessManagement.UI.Integration.csproj" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='Debug'">
+		<PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.1.1.61" />
+		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
+			<Link>stylecop.json</Link>
+		</AdditionalFiles>
+  </ItemGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+		<CodeAnalysisRuleSet>$(SolutionDir)Altinn3.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 </Project>
