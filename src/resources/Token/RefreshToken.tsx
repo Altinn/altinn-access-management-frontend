@@ -9,11 +9,6 @@ export const RefreshToken = () => {
 
   async function refreshJwtToken() {
     const timeNow = Date.now();
-    console.log('timeNow', timeNow - lastRefreshTokenTimestamp.current);
-    console.log(
-      'result',
-      timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS,
-    );
 
     if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
       lastRefreshTokenTimestamp.current = timeNow;
