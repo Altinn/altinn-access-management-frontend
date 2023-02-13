@@ -16,6 +16,13 @@
     "change_rights": "Endre rettar"
   },
   "api_delegation": {
+    "error_page404_type": "Feil 404",
+    "error_page404_header": "Oi! Du har freista å komme til ei side vi ikkje veit om",
+    "error_page404_upper_text": "Vi veit ikkje kvar du i røynda skulle, men kanskje du kan finne det du leitar etter på nokre av desse sidene:",
+    "error_page404_lower_text": "Om dette ikkje var til hjelp kan du ta kontakt med Altinn brukarstøtte på telefon 75 00 60 00",
+    "error_page404_link1_messages": "Gå til innboks",
+    "error_page404_link2_profile": "Gå til profilsida",
+    "error_page404_link3_forms": "Finne og sende inn nytt skjema",
     "businesses": "Virksomheitar",
     "delegated_apis": "Delegerte API",
     "api_accesses": "API-tilgangar",
@@ -58,7 +65,6 @@
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn sida på ny.",
     "loading": "Lastar",
-    "error_message": "Statuskoden til feilmeldinga",
     "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valgte organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
     "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt.",
     "failed_delegations": "Desse API-delegeringene gjekk gale og vart derfor ikkje tildelte",

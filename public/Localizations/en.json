@@ -17,6 +17,13 @@
     "change_rights": "Edit client rights"
   },
   "api_delegation": {
+    "error_page404_type": "Error 404",
+    "error_page404_header": "Oops! You have tried to reach a page we do not know",
+    "error_page404_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",
+    "error_page404_lower_text": "If this was not helpful you are free to contact Altinn support on telephone 75 00 60 00",
+    "error_page404_link1_messages": "Go to inbox",
+    "error_page404_link2_profile": "Go to profile page",
+    "error_page404_link3_forms": "Find and submit a new form",
     "businesses": "Businesses",
     "delegated_apis": "Delegerte API",
     "api_accesses": "API-accesses",
@@ -59,7 +66,6 @@
     "additional_description": "Additional description",
     "data_retrieval_failed": "Data retrieval failed, try refreshing the page.",
     "loading": "Loading",
-    "error_message": "Error message status code",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
     "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process.",
     "receipt_page_main_button": "To API-overview",
