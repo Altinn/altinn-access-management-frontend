@@ -24,7 +24,7 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import delegableOrgSlice, {
+import {
   resetDelegableOrgs,
   softAddOrg,
   populateDelegableOrgs,
@@ -72,27 +72,26 @@ export const OverviewPageContent = ({
       break;
   }
 
-  const transferDelegatableOrgs = () => {
-    // dispatch method for populating list of orgs
-    const delegatableOrgList: DelegableOrg[] = [];
+  const transferDelegableOrgs = () => {
+    const delegableOrgList: DelegableOrg[] = [];
     for (const org of overviewOrgs) {
-      delegatableOrgList.push({
+      delegableOrgList.push({
         id: org.id,
         orgName: org.orgName,
         orgNr: org.orgNr,
       });
     }
-    dispatch(populateDelegableOrgs(delegatableOrgList));
+    dispatch(populateDelegableOrgs(delegableOrgList));
   };
 
   const delegateToSpecificOrg = (org: OverviewOrg) => {
-    transferDelegatableOrgs();
+    transferDelegableOrgs();
     dispatch(softAddOrg(org));
     navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi);
   };
 
   const newDelegation = () => {
-    transferDelegatableOrgs();
+    transferDelegableOrgs();
     navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg);
   };
 
