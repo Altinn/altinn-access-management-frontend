@@ -14,6 +14,7 @@ import { ConfirmationPage } from '@/components/apiDelegation/given/ConfirmationP
 
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
+  ErrorHack = 'error',
   GivenApiOverview = 'overview',
   GivenApiChooseApi = 'choose-api',
   GivenApiChooseOrg = 'choose-org',
@@ -65,6 +66,11 @@ export const Router = () => {
         <Route
           path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview}
           element={<GivenOverviewPage />}
+          errorElement={<ErrorPage />}
+        />
+        <Route
+          path={RouterPath.GivenApiDelegations + '/' + RouterPath.ErrorHack}
+          element={<ErrorPage />}
           errorElement={<ErrorPage />}
         />
         <Route
