@@ -1,16 +1,14 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Core.Extensions;
+using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
@@ -28,7 +26,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationsClient"/> class
         /// </summary>
-        public DelegationsClient(HttpClient httpClient, 
+        public DelegationsClient(
+            HttpClient httpClient, 
             ILogger<DelegationsClient> logger, 
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings,
@@ -42,6 +41,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _accessTokenGenerator = accessTokenGenerator;
         }
 
+        /// <inheritdoc/>
         public async Task<List<Delegation>> GetInboundDelegations(string party)
         {
             try
@@ -77,6 +77,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return null;
         }
 
+        /// <inheritdoc/>
         public async Task<List<Delegation>> GetOutboundDelegations(string party)
         {
             try

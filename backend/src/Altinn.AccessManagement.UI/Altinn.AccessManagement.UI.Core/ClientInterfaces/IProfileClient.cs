@@ -8,9 +8,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     public interface IProfileClient
     {
         /// <summary>
-        /// Gets user's preferences
+        /// Gets the user's preferences from altinn profile
         /// </summary>
-        /// <returns></returns>
+        /// <returns>users preferred settings</returns>
         Task<UserProfile> GetUserProfile();
     }
 }

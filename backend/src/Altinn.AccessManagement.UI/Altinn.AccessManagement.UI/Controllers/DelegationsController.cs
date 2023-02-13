@@ -1,9 +1,7 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+﻿using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.AccessControl;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -16,7 +14,14 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly ILogger<DelegationsController> _logger;
         private readonly IDelegationsService _delegation;
-        public DelegationsController(ILogger<DelegationsController> logger,
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DelegationsController"/> class.
+        /// </summary>
+        /// <param name="logger">the handler for logger service</param>
+        /// <param name="delegationsService">the handler for delegations service</param>
+        public DelegationsController(
+            ILogger<DelegationsController> logger,
             IDelegationsService delegationsService)
         {
             _logger = logger;
@@ -40,8 +45,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<DelegationsFE> delegations = await _delegation.GetAllInboundDelegationsAsync(party);
-                //List<DelegationExternal> delegationsExternal = _mapper.Map<List<DelegationExternal>>(delegations);
+                List<DelegationsFE> delegations = await _delegation.GetAllInboundDelegationsAsync(party);                
 
                 return delegations;
             }
@@ -74,8 +78,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<DelegationsFE> delegations = await _delegation.GetAllOutboundDelegationsAsync(party);
-                //List<DelegationExternal> delegationsExternal = _mapper.Map<List<DelegationExternal>>(delegations);
+                List<DelegationsFE> delegations = await _delegation.GetAllOutboundDelegationsAsync(party);                
 
                 return delegations;
             }
