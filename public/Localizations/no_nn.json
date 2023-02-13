@@ -64,6 +64,7 @@
     "failed_delegations": "Desse API-delegeringene gjekk gale og vart derfor ikkje tildelte",
     "succesful_delegations": "Desse API-delegeringene vart tildelte",
     "receipt_page_bottom_text": "Tilgangane er gitt og er gyldig til den aktivt slett eller blir trekte tilbake. Mottakar har fått beskjed.",
+    "receipt_page_bottom_text_failed": "Ojda, ser ut som dette ikkje gjekk heilt som planlagt. Vennlegst prøv igjen seinare. Kontakt Altinn Servicedesk om feilen vedvarer.",
     "receipt_page_main_button": "Til totaloversikt"
   }
 }

@@ -14,8 +14,8 @@ import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import {
-  fetchOverviewOrgsOutbound,
-  fetchOverviewOrgsInbound,
+  fetchOverviewOrgsOffered,
+  fetchOverviewOrgsReceived,
   restoreAllSoftDeletedItems,
   save,
   softDeleteAll,
@@ -27,6 +27,7 @@ import { ReactComponent as Error } from '@/assets/Error.svg';
 import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { RouterPath } from '@/routes/Router';
+import { resetDelegationRequests } from '@/rtk/features/delegationRequest/delegationRequestSlice';
 
 import { LayoutState } from '../LayoutState';
 
@@ -56,12 +57,12 @@ export const OverviewPageContent = ({
 
   switch (layout) {
     case LayoutState.Given:
-      fetchData = () => dispatch(fetchOverviewOrgsOutbound());
+      fetchData = () => dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
       break;
     case LayoutState.Received:
-      fetchData = () => dispatch(fetchOverviewOrgsInbound());
+      fetchData = () => dispatch(fetchOverviewOrgsReceived());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
       break;
@@ -76,6 +77,7 @@ export const OverviewPageContent = ({
     handleSetDisabled();
     dispatch(resetDelegableApis());
     dispatch(resetDelegableOrgs());
+    dispatch(resetDelegationRequests());
   });
 
   const handleSetDisabled = () => {
