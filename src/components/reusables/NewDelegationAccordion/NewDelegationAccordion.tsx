@@ -13,7 +13,7 @@ import * as React from 'react';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
-import { Line } from '../Line/Line';
+import { Line } from '../Line';
 
 import classes from './NewDelegationAccordion.module.css';
 
