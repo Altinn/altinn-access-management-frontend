@@ -24,24 +24,12 @@ const queryClientDevDefaults = {
   },
 };
 
-const initLanguage = (lang) => {
-  // get token here
-  if (lang === 'no_nb') {
-    return 'no_nb';
-  } else if (lang === 'en') {
-    return 'en';
-  } else if (lang === 'no_nn') {
-    return 'no_nn';
-  }
-};
-
 // Initialise i18next; start application when ready
 use(LanguageDetector)
   .use(initReactI18next)
   .init(
     {
       // TODO: replace no_nb below with result from backend call that checks which language is set
-      lng: initLanguage('no_nb'),
       fallbackLng: getConfig('defaultLocale'),
       ns: ['common'],
       defaultNS: 'common',
