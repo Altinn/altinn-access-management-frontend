@@ -19,7 +19,7 @@ export enum RouterPath {
   ReceivedApiDelegations = 'received-api-delegations',
   ReceivedApiOverview = 'overview',
   Profile = 'Profile',
-  BasePath = 'accessmanagement/ui',
+  BasePath = '/accessmanagement/ui',
 }
 
 export const Router = createBrowserRouter(

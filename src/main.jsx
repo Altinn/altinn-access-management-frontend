@@ -1,13 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 import { RefreshToken } from '@/resources/Token/RefreshToken';
-import { Router, RouterPath } from '@/routes/Router';
+import { Router } from '@/routes/Router';
 
 import { getConfig } from '../config';
 
@@ -35,33 +36,35 @@ const initLanguage = (lang) => {
 };
 
 // Initialise i18next; start application when ready
-use(initReactI18next).init(
-  {
-    // TODO: replace no_nb below with result from backend call that checks which language is set
-    lng: initLanguage('no_nb'),
-    fallbackLng: getConfig('defaultLocale'),
-    ns: ['common'],
-    defaultNS: 'common',
-    returnNull: false,
-  },
+use(LanguageDetector)
+  .use(initReactI18next)
+  .init(
+    {
+      // TODO: replace no_nb below with result from backend call that checks which language is set
+      lng: initLanguage('no_nb'),
+      fallbackLng: getConfig('defaultLocale'),
+      ns: ['common'],
+      defaultNS: 'common',
+      returnNull: false,
+    },
 
-  () => {
-    // Configure react-query
-    const queryClient = new QueryClient({
-      defaultOptions: import.meta.env.DEV ? queryClientDevDefaults : undefined,
-    });
+    () => {
+      // Configure react-query
+      const queryClient = new QueryClient({
+        defaultOptions: import.meta.env.DEV ? queryClientDevDefaults : undefined,
+      });
 
-    ReactDOM.createRoot(document.getElementById('root')).render(
-      <React.StrictMode>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <LoadLocalizations>
-              <RefreshToken />
-              <RouterProvider router={Router}></RouterProvider>
-            </LoadLocalizations>
-          </QueryClientProvider>
-        </Provider>
-      </React.StrictMode>,
-    );
-  },
-);
+      ReactDOM.createRoot(document.getElementById('root')).render(
+        <React.StrictMode>
+          <Provider store={store}>
+            <QueryClientProvider client={queryClient}>
+              <LoadLocalizations>
+                <RefreshToken />
+                <RouterProvider router={Router}></RouterProvider>
+              </LoadLocalizations>
+            </QueryClientProvider>
+          </Provider>
+        </React.StrictMode>,
+      );
+    },
+  );

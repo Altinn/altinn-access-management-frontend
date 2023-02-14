@@ -8,7 +8,8 @@ import store from '@/rtk/app/store';
 import { DeletableListItem } from '@/components/reusables';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
-  const { reduxStore = store, ...mountOptions } = options;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { reduxStore = store, ...mountOptions } = options as any;
 
   const wrapped = <Provider store={reduxStore}>{component}</Provider>;
 

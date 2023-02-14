@@ -7,7 +7,8 @@ import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
-  const { reduxStore = store, ...mountOptions } = options;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { reduxStore = store, ...mountOptions } = options as any;
 
   const wrapped = <Provider store={reduxStore}>{component}</Provider>;
 
@@ -91,7 +92,7 @@ describe('OrgDelegationAccordion', () => {
       cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('not.exist');
     });
 
-    it('should show delete button when state is isEditable=true', () => {
+    it('should show delete button when state isEditable=true', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
         orgName: 'Evry',
