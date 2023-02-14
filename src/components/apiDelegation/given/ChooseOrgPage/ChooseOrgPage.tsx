@@ -40,7 +40,6 @@ export const ChooseOrgPage = () => {
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
-  const fetchLookupOrg = async () => await dispatch(lookupOrg(searchString));
 
   const { t } = useTranslation('common');
 
@@ -67,7 +66,7 @@ export const ChooseOrgPage = () => {
     if (delegableOrgs.length > 0) {
       setPromptOrgNumber(false);
     } else if (searchString.length === 9) {
-      void fetchLookupOrg();
+      void dispatch(lookupOrg(searchString));
     } else if (searchString.length !== 9) {
       setPromptOrgNumber(true);
     }
