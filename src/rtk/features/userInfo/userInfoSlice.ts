@@ -6,7 +6,6 @@ export interface InitialState {
   reporteeLoading: boolean;
   name: string;
   reporteeName: string;
-  language: string;
   error: string;
 }
 
@@ -37,7 +36,6 @@ const userInfoSlice = createSlice({
       .addCase(fetchUserInfo.fulfilled, (state, action) => {
         const dataArray = action.payload;
         state.name = dataArray.party.name;
-        state.language = dataArray.profileSettingPreference.language;
         state.userLoading = false;
       })
       .addCase(fetchUserInfo.rejected, (state, action) => {
