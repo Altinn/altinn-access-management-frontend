@@ -129,7 +129,9 @@ export const OverviewPageContent = ({
           variant={PanelVariant.Error}
           forceMobileLayout
         >
-          <div>{t('api_delegation.error_message')}: + error</div>
+          <div>
+            {t('api_delegation.error_message')}: {error}
+          </div>
         </Panel>
       );
     } else if (loading) {

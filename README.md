@@ -140,17 +140,18 @@ To run the code together with access-management backend to the following
    dotnet run
    ```
 
-- Set up database: Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
+## Set up database: 
+  Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
 - Install database server (choose your own admin password and save it some place you can find it again)
 - Start PG admin
-- Create database and call it authorizationdb
-- Create the following users (with priveliges for authorizationdb) 
-- platform_authorization_admin (superuser, canlogin)
-- platform_authorization (canlogin)
-- password: Password
+- Create the following users by right clicking Login/Group Roles (with privileges for authorizationdb):
+  1. Name: platform_authorization_admin (superuser, canlogin). Set password as Password.
+  2. Name: platform_authorization (canlogin). Set password as Password.
+- Create database and call it authorizationdb and set owner to platform_authorization_admin.
 - Create schema delegations in authorizationdb
 - Set platform_authorization_admin as owner
 
+### Run backend and frontend
 - Open Altinn-Access-Management repo in an IDE and go to following folder.
 
   ```bash
