@@ -7,22 +7,23 @@ import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice
 import { NewDelegationAccordion, NewDelegationAccordionButtonType } from '@/components/reusables';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
-  const { reduxStore = store, ...mountOptions } = options;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { reduxStore = store, ...mountOptions } = options as any;
 
   const wrapped = <Provider store={reduxStore}>{component}</Provider>;
 
   return mount(wrapped, mountOptions);
 });
 
+const delegableOrg: DelegableOrg = {
+  id: '1',
+  orgName: 'Skatteetaten',
+  orgNr: '930124123',
+  description: 'For å hente ut skatteklasser',
+};
+
 describe('NewDelegationAccordion', () => {
   it('should do callback when button with aria-label "soft-add" is clicked', () => {
-    const delegableOrg: DelegableOrg = {
-      id: '1',
-      orgName: 'Skatteetaten',
-      orgNr: '930124123',
-      description: 'For å hente ut skatteklasser',
-    };
-
     const callback = () => {
       cy.stub();
     };
@@ -43,13 +44,6 @@ describe('NewDelegationAccordion', () => {
   });
 
   it('should do callback when button with aria-label "soft-remove" is clicked', () => {
-    const delegableOrg: DelegableOrg = {
-      id: '1',
-      orgName: 'Skatteetaten',
-      orgNr: '930124123',
-      description: 'For å hente ut skatteklasser',
-    };
-
     const callback = () => {
       cy.stub();
     };
