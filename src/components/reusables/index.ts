@@ -5,3 +5,4 @@ export { Line } from './Line';
 export { NewDelegationAccordion, NewDelegationAccordionButtonType } from './NewDelegationAccordion';
 export { PageContainer } from './PageContainer';
 export { NavigationButtons } from './NavigationButtons/NavigationButtons';
+export { ActionBar, ActionIconVariant } from './ActionBar';
