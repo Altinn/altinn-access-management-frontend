@@ -37,7 +37,6 @@ const initialState: SliceState = {
 export const postApiDelegation = createAsyncThunk(
   'delegationRequestSlice/postApiDelegation',
   async (delegationInfo: DelegationRequest) => {
-    console.log('inside Thunk!');
     const { apiIdentifier, apiName, orgNr, orgName }: DelegationRequest = delegationInfo;
     const delegation: ApiDelegation = {
       apiName,
@@ -50,8 +49,8 @@ export const postApiDelegation = createAsyncThunk(
       .post(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema`, {
         to: [
           {
-            id: 'urn:altinn:partyid',
-            value: '500000',
+            id: 'urn:altinn:organizationnumber',
+            value: String(orgNr),
           },
         ],
         rights: [
@@ -59,7 +58,7 @@ export const postApiDelegation = createAsyncThunk(
             resource: [
               {
                 id: 'urn:altinn:resourceregistry',
-                value: apiIdentifier,
+                value: String(apiIdentifier),
               },
             ],
           },
@@ -69,7 +68,6 @@ export const postApiDelegation = createAsyncThunk(
         return delegation;
       })
       .catch((error) => {
-        console.log(error);
         throw error;
       });
   },

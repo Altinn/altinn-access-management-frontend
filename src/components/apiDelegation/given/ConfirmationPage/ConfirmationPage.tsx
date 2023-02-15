@@ -36,7 +36,6 @@ export const ConfirmationPage = () => {
           orgName: org.orgName,
           orgNr: org.orgNr,
         };
-        console.log('gonna dispatch');
         void (async () => await dispatch(postApiDelegation(request)))().then();
       }
     }

@@ -170,7 +170,10 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
     return await axios
       .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/received`)
       .then((response) => response.data)
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
   },
 );
 
