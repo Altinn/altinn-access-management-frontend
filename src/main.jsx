@@ -29,7 +29,6 @@ use(LanguageDetector)
   .use(initReactI18next)
   .init(
     {
-      // TODO: replace no_nb below with result from backend call that checks which language is set
       fallbackLng: getConfig('defaultLocale'),
       ns: ['common'],
       defaultNS: 'common',
