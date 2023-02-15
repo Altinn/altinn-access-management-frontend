@@ -2,7 +2,7 @@
   "common": {
     "error": "Error",
     "restart": "Restart",
-    "close": "Lukk",
+    "close": "Close",
     "status_code": "Status code"
   },
   "profile": {
@@ -18,7 +18,7 @@
   },
   "api_delegation": {
     "businesses": "Businesses",
-    "delegated_apis": "Delegerte API",
+    "delegated_apis": "Delegated APIs",
     "api_accesses": "API-accesses",
     "delegate_new_api": "Delegate new API",
     "undo": "Undo",
@@ -37,8 +37,13 @@
     "cancel": "Cancel",
     "card_title": "Application programming interface - API",
     "give_access_to_new_api": "Give access to new API",
-    "new_org_accordion_content_text": "Select which users will have access by clicking the plus sign. You can also add new.",
+    "new_org_accordion_content_text": "Select which users will have access by clicking the plus sign. You can also add a new organization by using the search field.",
     "businesses_previously_delegated_to": "Businesses previously delegated to:",
+    "businesses_search_results": "Businesses resulting from your search:",
+    "buisness_search_notfound_title": "We can't find what you're looking for. Are you sure this is the right organization number?",
+    "buisness_search_notfound_content": "If you're unsure, you can search by name on the pages of ",
+    "buisness_search_info_title": "New organization?",
+    "buisness_search_info_content": "Search for the organization you wish to delegate to by inputting their complete 9 digit organization number",
     "businesses_going_to_get_access":"Businesses that will receive the right:",
     "previous":"Previous",
     "next": "Next",
@@ -55,6 +60,7 @@
     "chosen_apis": "Chosen APIs:",
     "no_chosen_orgs": "You have no selected organizations to provide API access to. Please click the previous button at the bottom right.",
     "scopes": "Scopes",
+    "search_for_buisness": "Search by organisation number",
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Data retrieval failed, try refreshing the page.",

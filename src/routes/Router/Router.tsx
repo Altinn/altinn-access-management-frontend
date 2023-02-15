@@ -3,6 +3,7 @@
 import { Route, Routes } from 'react-router-dom';
 import * as React from 'react';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
 import { ChooseApiPage } from '@/components/apiDelegation/given/ChooseApiPage';
@@ -12,6 +13,8 @@ import { ChooseOrgPage } from '@/components/apiDelegation/given/ChooseOrgPage';
 import { ReceiptPage } from '@/components/apiDelegation/given/ReceiptPage';
 import { ConfirmationPage } from '@/components/apiDelegation/given/ConfirmationPage';
 
+// when typescript 5 is released we can further improve the routing to use absolute paths.
+// This is because typescript 5 will have support for computed enums for strings https://github.com/microsoft/TypeScript/issues/40793
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
   GivenApiOverview = 'overview',
@@ -44,7 +47,7 @@ export const Router = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const setUpEventListeners = () => {
       window.addEventListener('mousemove', refreshJwtToken);
       window.addEventListener('scroll', refreshJwtToken);
