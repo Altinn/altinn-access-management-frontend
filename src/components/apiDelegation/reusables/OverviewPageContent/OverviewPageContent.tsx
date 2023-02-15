@@ -130,7 +130,7 @@ export const OverviewPageContent = ({
           forceMobileLayout
         >
           <div>
-            {t('api_delegation.error_message')}: {error}
+            {t('common.error_status_code')}: {error}
           </div>
         </Panel>
       );

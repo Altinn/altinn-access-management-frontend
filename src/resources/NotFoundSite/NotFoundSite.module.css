@@ -1,24 +1,15 @@
-.errorPageWrapper {
+.notFoundSiteWrapper {
   margin-left: 20px;
   margin-right: 20px;
 }
 
-.errorParagraph {
+.errorMessage {
   font-size: 14px;
   color: darkslategray;   
 }
 
-table, td {
-  border: transparent;
-  box-shadow: none;
-}
-
-h1 {
-  font-size: 44px;
-}
-
-p {
-  font-size: 24px;
+.contentText {
+  font-size: 20px;
 }
 
 .tabellKolonne1 {
@@ -29,13 +20,10 @@ p {
   width: 100%;
 }
 
-a:link {
+.link {
   color: black;
   text-decoration-line: underline;
   text-decoration-color: #1EADF7;
-}
-
-a {
   display: inline-block;
   background: transparent;
 }
@@ -45,11 +33,11 @@ a {
       display: none;
   }
 
-  h1 {
-      font-size: 24px;
+  .header {
+      font-size: 20px;
   }
 
-  p {
-      font-size: 18px;
+  .contentText {
+      font-size: 14px;
   }
 }

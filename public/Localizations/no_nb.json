@@ -3,7 +3,9 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
-    "status_code": "Statuskode"
+    "status_code": "Statuskode",
+    "error_message": "Feilmelding",
+    "error_status_code": "Feilmeldingens statuskode"
   },
   "profile": {
     "received": "Mottatte",
@@ -65,7 +67,6 @@
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn siden på nytt.",
     "loading": "Laster",
-    "error_message": "Feilmeldingens statuskode",
     "orgs_not_chosen_subtitle": "Kunne ikke hente ut valgte organisasjoner. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre.",
     "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegeringsprosessen på nytt.",
     "failed_delegations": "Disse api-delegeringene gikk galt og ble derfor ikke tildelt",
