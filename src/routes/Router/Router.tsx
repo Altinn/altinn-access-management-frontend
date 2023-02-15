@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import { Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import * as React from 'react';
-import axios from 'axios';
 
 import { ChooseApiPage } from '@/components/apiDelegation/given/ChooseApiPage';
 import { OverviewPage as GivenOverviewPage } from '@/components/apiDelegation/given/OverviewPage';
@@ -12,6 +9,8 @@ import { ReceiptPage } from '@/components/apiDelegation/given/ReceiptPage';
 import { ConfirmationPage } from '@/components/apiDelegation/given/ConfirmationPage';
 import { NotFoundSite } from '@/resources/NotFoundSite';
 
+// when typescript 5 is released we can further improve the routing to use absolute paths.
+// This is because typescript 5 will have support for computed enums for strings https://github.com/microsoft/TypeScript/issues/40793
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
   GivenApiOverview = 'overview',
@@ -21,79 +20,47 @@ export enum RouterPath {
   GivenApiReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
   ReceivedApiOverview = 'overview',
-  Profile = 'profile',
-  BasePath = 'accessmanagement/ui',
+  Profile = 'Profile',
+  BasePath = '/accessmanagement/ui',
 }
 
-export const Router = () => {
-  const lastRefreshTokenTimestamp = React.useRef(0);
-  const TEN_MINUTES_IN_MILLISECONDS = 600000;
-
-  async function refreshJwtToken() {
-    const timeNow = Date.now();
-    if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
-      lastRefreshTokenTimestamp.current = timeNow;
-      return await axios
-        // TODO: This may fail in AT if axios doesn't automatically change the base url
-        .get('accessmanagement/api/v1/authentication/refresh')
-        .then((response) => response.data)
-        .catch((error) => {
-          !import.meta.env.DEV && (window.location.pathname = '/ui/profile');
-          console.error(error);
-        });
-    }
-  }
-
-  React.useEffect(() => {
-    const setUpEventListeners = () => {
-      window.addEventListener('mousemove', refreshJwtToken);
-      window.addEventListener('scroll', refreshJwtToken);
-      window.addEventListener('onfocus', refreshJwtToken);
-      window.addEventListener('keydown', refreshJwtToken);
-    };
-    refreshJwtToken();
-    setUpEventListeners();
-  });
-
-  return (
-    <Routes>
-      createRoutesFromElements(
+export const Router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      path='/'
+      errorElement={<NotFoundSite />}
+    >
       <Route
-        path='/'
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview}
+        element={<GivenOverviewPage />}
         errorElement={<NotFoundSite />}
-      >
-        <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview}
-          element={<GivenOverviewPage />}
-          errorElement={<NotFoundSite />}
-        />
-        <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg}
-          element={<ChooseOrgPage />}
-          errorElement={<NotFoundSite />}
-        />
-        <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi}
-          element={<ChooseApiPage />}
-          errorElement={<NotFoundSite />}
-        />
-        <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation}
-          element={<ConfirmationPage />}
-          errorElement={<NotFoundSite />}
-        />
-        <Route
-          path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiReceipt}
-          element={<ReceiptPage />}
-          errorElement={<NotFoundSite />}
-        />
-        <Route
-          path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiOverview}
-          element={<ReceivedOverviewPage />}
-          errorElement={<NotFoundSite />}
-        />
-      </Route>
-      , ),
-    </Routes>
-  );
-};
+      />
+      <Route
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg}
+        element={<ChooseOrgPage />}
+        errorElement={<NotFoundSite />}
+      />
+      <Route
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi}
+        element={<ChooseApiPage />}
+        errorElement={<NotFoundSite />}
+      />
+      <Route
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation}
+        element={<ConfirmationPage />}
+        errorElement={<NotFoundSite />}
+      />
+      <Route
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiReceipt}
+        element={<ReceiptPage />}
+        errorElement={<NotFoundSite />}
+      />
+      <Route
+        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiOverview}
+        element={<ReceivedOverviewPage />}
+        errorElement={<NotFoundSite />}
+      />
+    </Route>,
+  ),
+  { basename: RouterPath.BasePath },
+);

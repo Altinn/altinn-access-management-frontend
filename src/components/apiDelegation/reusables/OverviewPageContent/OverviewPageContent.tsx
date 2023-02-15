@@ -24,7 +24,12 @@ import {
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import { resetDelegableOrgs, softAddOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import {
+  resetDelegableOrgs,
+  softAddOrg,
+  populateDelegableOrgs,
+} from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { RouterPath } from '@/routes/Router';
 
@@ -67,9 +72,27 @@ export const OverviewPageContent = ({
       break;
   }
 
+  const transferDelegableOrgs = () => {
+    const delegableOrgList: DelegableOrg[] = [];
+    for (const org of overviewOrgs) {
+      delegableOrgList.push({
+        id: org.id,
+        orgName: org.orgName,
+        orgNr: org.orgNr,
+      });
+    }
+    dispatch(populateDelegableOrgs(delegableOrgList));
+  };
+
   const delegateToSpecificOrg = (org: OverviewOrg) => {
+    transferDelegableOrgs();
     dispatch(softAddOrg(org));
     navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi);
+  };
+
+  const newDelegation = () => {
+    transferDelegableOrgs();
+    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg);
   };
 
   useEffect(() => {
@@ -143,9 +166,7 @@ export const OverviewPageContent = ({
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
-              onClick={() =>
-                navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg)
-              }
+              onClick={newDelegation}
               icon={<Add />}
             >
               {t('api_delegation.delegate_new_org')}
