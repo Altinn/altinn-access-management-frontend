@@ -6,7 +6,8 @@ export interface InitialState {
   reporteeLoading: boolean;
   name: string;
   reporteeName: string;
-  error: string;
+  userInfoError: string;
+  reporteeError: string;
 }
 
 const initialState: InitialState = {
@@ -14,10 +15,21 @@ const initialState: InitialState = {
   reporteeLoading: true,
   name: '',
   reporteeName: '',
-  error: '',
+  userInfoError: '',
+  reporteeError: '',
 };
 
 export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfoSlice', async () => {
+  return await axios
+    .get('/accessmanagement/api/v1/profile/user')
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw new Error(String(error.response.status));
+    });
+});
+
+export const fetchReportee = createAsyncThunk('userInfo/fetchReportee', async () => {
   return await axios
     .get('/accessmanagement/api/v1/profile/user')
     .then((response) => response.data)
@@ -39,7 +51,15 @@ const userInfoSlice = createSlice({
         state.userLoading = false;
       })
       .addCase(fetchUserInfo.rejected, (state, action) => {
-        state.error = action.error.message ?? 'Unknown error';
+        state.userInfoError = action.error.message ?? 'Unknown error';
+      })
+      .addCase(fetchReportee.fulfilled, (state, action) => {
+        const reporteeDataArray = action.payload;
+        state.name = reporteeDataArray.name;
+        state.reporteeLoading = false;
+      })
+      .addCase(fetchReportee.rejected, (state, action) => {
+        state.reporteeError = action.error.message ?? 'Unknown error';
       });
   },
 });

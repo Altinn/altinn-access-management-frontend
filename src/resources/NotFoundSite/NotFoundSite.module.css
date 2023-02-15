@@ -1,0 +1,55 @@
+.errorPageWrapper {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.errorParagraph {
+  font-size: 14px;
+  color: darkslategray;   
+}
+
+table, td {
+  border: transparent;
+  box-shadow: none;
+}
+
+h1 {
+  font-size: 44px;
+}
+
+p {
+  font-size: 24px;
+}
+
+.tabellKolonne1 {
+  width: 100%;
+}
+
+.tabellKolonne2 {
+  width: 100%;
+}
+
+a:link {
+  color: black;
+  text-decoration-line: underline;
+  text-decoration-color: #1EADF7;
+}
+
+a {
+  display: inline-block;
+  background: transparent;
+}
+
+@media only screen and (max-width: 576px) {
+  .tabellKolonne2 {
+      display: none;
+  }
+
+  h1 {
+      font-size: 24px;
+  }
+
+  p {
+      font-size: 18px;
+  }
+}
