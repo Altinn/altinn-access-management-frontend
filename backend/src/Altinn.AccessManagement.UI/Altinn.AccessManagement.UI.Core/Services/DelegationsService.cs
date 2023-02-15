@@ -58,10 +58,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceResource resource = resources.Find(r => r.Identifier == delegation.ResourceId);
                 delegationsFE.ResourceTitle = resource?.Title.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
                 delegationsFE.ResourceType = resource.ResourceType;
-                delegationsFE.Orgcode = resource.HasCompetentAuthority.Orgcode;
-                delegationsFE.Organization = resource.HasCompetentAuthority.Organization;
-                delegationsFE.Name = resource.HasCompetentAuthority.Name.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
-                delegationsFE.Description = resource.Description.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
+                delegationsFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority.Orgcode;
+                delegationsFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority.Organization;
+                delegationsFE.ResourceOwner = resource.HasCompetentAuthority.Name.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
+                delegationsFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
                 delegationsFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
                 delegations.Add(delegationsFE);
             }
@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             resourceIds = inboundDelegations.Select(d => Tuple.Create(d.ResourceId, d.ResourceType.ToString())).ToList();
 
             resources = await _resourceAdministrationPoint.GetResources(resourceIds);
-            languageCode = languageCode ?? "nb-no";
+            languageCode = languageCode ?? "nb";
             List<DelegationsFE> delegations = new List<DelegationsFE>();
             foreach (Delegation delegation in inboundDelegations)
             {
@@ -94,11 +94,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceResource resource = resources.Find(r => r.Identifier == delegation.ResourceId);
                 delegationsFE.ResourceTitle = resource?.Title.GetValueOrDefault(languageCode) ?? resource?.Title.GetValueOrDefault("nb");
                 delegationsFE.ResourceType = resource.ResourceType;
-                delegationsFE.Orgcode = resource.HasCompetentAuthority.Orgcode;
-                delegationsFE.Organization = resource.HasCompetentAuthority.Organization;
-                delegationsFE.Name = resource.HasCompetentAuthority.Name.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
-                delegationsFE.Description = resource.Description.GetValueOrDefault(languageCode) ?? resource.Description.GetValueOrDefault("nb");
-                delegationsFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode) ?? resource.RightDescription.GetValueOrDefault("nb");
+                delegationsFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority?.Orgcode;
+                delegationsFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority?.Organization;
+                delegationsFE.ResourceOwner = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name.GetValueOrDefault("nb");
+                delegationsFE.ResourceDescription = resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb");
+                delegationsFE.RightDescription = resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb");
                 delegations.Add(delegationsFE);
             }
 

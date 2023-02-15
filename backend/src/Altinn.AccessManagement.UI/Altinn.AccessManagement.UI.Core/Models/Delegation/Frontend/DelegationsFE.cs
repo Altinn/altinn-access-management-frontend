@@ -73,29 +73,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         public string ResourceOwner { get; set; }
 
         /// <summary>
-        /// Resource description
+        /// ORganisation number of resource owner
         /// </summary>
-        public string ResourceDescription { get; set; }
-
-        /// <summary>
-        /// The organization number
-        /// </summary>
-        public string Organization { get; set; }
+        public string ResourceOwnerOrgNumber { get; set; }
 
         /// <summary>
         /// The organization code
         /// </summary>
-        public string Orgcode { get; set; }
+        public string ResourceOwnerOrgcode { get; set; }
 
         /// <summary>
-        /// The organization name
+        /// Resource description
         /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Description
-        /// </summary>
-        public string Description { get; set; }
+        public string ResourceDescription { get; set; }
 
         /// <summary>
         /// Description explaining the rights a recipient will receive if given access to the resource

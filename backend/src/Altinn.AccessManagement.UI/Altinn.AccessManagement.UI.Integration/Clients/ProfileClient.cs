@@ -35,8 +35,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
         public async Task<UserProfile> GetUserProfile()
         {
-            try
-            {
+            //try
+            //{
                 string endpointUrl = $"accessmanagement/api/v1/profile/user";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
@@ -58,12 +58,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     _logger.LogError("Getting user settings information from bridge failed with {StatusCode}", response.StatusCode);
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement //UI // ProfileClient // GetUSerProfile // Exception");
-                throw;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, "AccessManagement //UI // ProfileClient // GetUSerProfile // Exception");
+            //    throw;
+            //}
 
             return null;
 
