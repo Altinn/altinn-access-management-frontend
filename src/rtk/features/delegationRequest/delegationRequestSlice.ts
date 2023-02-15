@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Action } from '@remix-run/router';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -44,7 +43,6 @@ export const postApiDelegation = createAsyncThunk(
     };
     const altinnPartyId =
       getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '50067798';
-    // TODO: Use orgNr instead of partyID
     return await axios
       .post(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema`, {
         to: [
