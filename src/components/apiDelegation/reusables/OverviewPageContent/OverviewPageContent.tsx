@@ -177,28 +177,32 @@ export const OverviewPageContent = ({
           {t('api_delegation.api_panel_content')}
         </Panel>
         <div className={classes.pageContentContainer}>
-          <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
-          <div className={classes.editButton}>
-            {!isEditable ? (
-              <Button
-                variant={ButtonVariant.Quiet}
-                icon={<Edit />}
-                onClick={handleSetIsEditable}
-                size={ButtonSize.Small}
-              >
-                {t('api_delegation.edit_accesses')}
-              </Button>
-            ) : (
-              <Button
-                variant={ButtonVariant.Quiet}
-                icon={<Error />}
-                onClick={handleSetIsEditable}
-                size={ButtonSize.Small}
-              >
-                {t('api_delegation.cancel')}
-              </Button>
-            )}
-          </div>
+          {overviewOrgs.length > 0 && (
+            <div>
+              <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+              <div className={classes.editButton}>
+                {!isEditable ? (
+                  <Button
+                    variant={ButtonVariant.Quiet}
+                    icon={<Edit />}
+                    onClick={handleSetIsEditable}
+                    size={ButtonSize.Small}
+                  >
+                    {t('api_delegation.edit_accesses')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant={ButtonVariant.Quiet}
+                    icon={<Error />}
+                    onClick={handleSetIsEditable}
+                    size={ButtonSize.Small}
+                  >
+                    {t('api_delegation.cancel')}
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         <div className={classes.accordion}>{accordions()}</div>
         {isEditable && (
