@@ -1,24 +1,18 @@
-@media only screen and (min-width: 0px) {
-  .userInfoBar{
-    width: 315px;
-  }
-}
-
 @media only screen and (min-width: 576px) {
-  .userInfoBar{
-    width: 576px;
+  .userInfoBarMargin{
+    margin: 0 8px 0 8px;
   }
 }
 
 @media only screen and (min-width: 768px) {
-  .userInfoBar{
-    width: 768px;
+  .userInfoBarMargin{
+    margin: 0 16px 0 16px;
   }
 }
 
 @media only screen and (min-width: 992px) {
-  .userInfoBar{
-    width: 992px;
+  .userInfoBarMargin{
+    margin: 0 40px 0 40px;
   }
 }
 
@@ -32,6 +26,8 @@
   margin-top: 1rem;
   background-color: #1EADF7;
   display: flex;
+  min-width: 320px;
+  max-width: 1056px;
 }
 
 .userInfoContent{

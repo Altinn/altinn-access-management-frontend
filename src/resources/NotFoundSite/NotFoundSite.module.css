@@ -12,12 +12,16 @@
   font-size: 20px;
 }
 
-.tabellKolonne1 {
-  width: 100%;
+.flexContainer {
+  display: flex;
 }
 
-.tabellKolonne2 {
-  width: 100%;
+.leftContainer {
+  flex: 3;
+}
+
+.rightContainer {
+  flex: 1;
 }
 
 .link {
@@ -29,7 +33,7 @@
 }
 
 @media only screen and (max-width: 576px) {
-  .tabellKolonne2 {
+  .rightContainer {
       display: none;
   }
 

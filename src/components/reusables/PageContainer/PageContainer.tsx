@@ -19,18 +19,20 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   };
 
   return (
-    <div className={classes.pageContainer}>
-      <div className={classes.exitButton}>
-        <Button
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Inverted}
-          size={ButtonSize.Medium}
-          icon={<ExitIcon />}
-          aria-label={String(t('common.close'))}
-          onClick={redirectToProfile}
-        ></Button>
+    <div className={classes.pageMargin}>
+      <div className={classes.pageContainer}>
+        <div className={classes.exitButton}>
+          <Button
+            variant={ButtonVariant.Quiet}
+            color={ButtonColor.Inverted}
+            size={ButtonSize.Medium}
+            icon={<ExitIcon />}
+            aria-label={String(t('common.close'))}
+            onClick={redirectToProfile}
+          ></Button>
+        </div>
+        <div>{children}</div>
       </div>
-      <div>{children}</div>
     </div>
   );
 };

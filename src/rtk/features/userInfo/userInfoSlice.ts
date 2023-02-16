@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
 export interface InitialState {
   userLoading: boolean;
   reporteeLoading: boolean;
@@ -30,8 +32,9 @@ export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfoSlice', asy
 });
 
 export const fetchReportee = createAsyncThunk('userInfo/fetchReportee', async () => {
+  const altinnPartyId = getCookie('AltinnPartyId');
   return await axios
-    .get('/accessmanagement/api/v1/profile/user')
+    .get(`/accessmanagement/api/v1/lookup/reportee/${altinnPartyId}`)
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
@@ -55,7 +58,7 @@ const userInfoSlice = createSlice({
       })
       .addCase(fetchReportee.fulfilled, (state, action) => {
         const reporteeDataArray = action.payload;
-        state.name = reporteeDataArray.name;
+        state.reporteeName = reporteeDataArray.name;
         state.reporteeLoading = false;
       })
       .addCase(fetchReportee.rejected, (state, action) => {
