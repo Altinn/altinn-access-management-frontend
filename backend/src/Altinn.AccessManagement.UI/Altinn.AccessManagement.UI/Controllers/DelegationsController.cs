@@ -9,7 +9,6 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// Controller responsible for all operations for managing delegations
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
     public class DelegationsController : ControllerBase
     {
         private readonly ILogger<DelegationsController> _logger;
