@@ -48,7 +48,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors();
+
 app.UseStaticFiles();
+
 app.MapControllers();
 
 app.Run();
@@ -57,6 +59,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
     services.AddControllersWithViews();
     services.AddMvc();
+
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
