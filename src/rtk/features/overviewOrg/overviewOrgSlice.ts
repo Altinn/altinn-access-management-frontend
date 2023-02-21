@@ -151,7 +151,9 @@ const createCopyOrg = (org: OverviewOrg) => {
 export const fetchOverviewOrgsOffered = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOffered',
   async () => {
-    const altinnPartyId = getCookie('AltinnPartyId') ? getCookie('AltinnPartyId') : '50067798';
+    const altinnPartyId = getCookie('AltinnPartyId')
+      ? getCookie('AltinnPartyId')
+      : 'httpOnlyFlagIsSet';
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
       .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/offered`)
