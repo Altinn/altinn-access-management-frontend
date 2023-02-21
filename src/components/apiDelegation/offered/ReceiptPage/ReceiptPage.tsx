@@ -41,7 +41,7 @@ export const ReceiptPage = () => {
         failedDelegations={failedApiDelegations}
         successfulDelegations={successfulApiDelegations}
         restartProcessPath={
-          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+          '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
         }
         pageHeaderText={String(t('api_delegation.give_access_to_new_api'))}
         topListText={String(t('api_delegation.failed_delegations'))}
@@ -58,7 +58,9 @@ export const ReceiptPage = () => {
             variant={ButtonVariant.Filled}
             onClick={() => {
               dispatch(setOveviewToReload());
-              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview);
+              navigate(
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview,
+              );
             }}
           >
             {t('api_delegation.receipt_page_main_button')}

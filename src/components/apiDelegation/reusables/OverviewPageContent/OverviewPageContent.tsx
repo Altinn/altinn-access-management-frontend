@@ -44,7 +44,7 @@ export interface OverviewPageContentInterface {
 }
 
 export const OverviewPageContent = ({
-  layout = LayoutState.Given,
+  layout = LayoutState.Offered,
 }: OverviewPageContentInterface) => {
   const [disabled, setDisabled] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
@@ -61,7 +61,7 @@ export const OverviewPageContent = ({
   let accessesHeader: string;
 
   switch (layout) {
-    case LayoutState.Given:
+    case LayoutState.Offered:
       fetchData = () => dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
@@ -88,12 +88,12 @@ export const OverviewPageContent = ({
   const delegateToSpecificOrg = (org: OverviewOrg) => {
     transferDelegableOrgs();
     dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi);
+    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi);
   };
 
   const newDelegation = () => {
     transferDelegableOrgs();
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg);
+    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
   };
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export const OverviewPageContent = ({
         softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
         softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
         delegateToOrgCallback={
-          layout === LayoutState.Given ? () => delegateToSpecificOrg(org) : undefined
+          layout === LayoutState.Offered ? () => delegateToSpecificOrg(org) : undefined
         }
       ></OrgDelegationAccordion>
     ));
@@ -164,7 +164,7 @@ export const OverviewPageContent = ({
     <div className={classes.pageContent}>
       <div className={classes.overviewAccordionsContainer}>
         <h2 className={classes.pageContentText}>{overviewText}</h2>
-        {layout === LayoutState.Given && (
+        {layout === LayoutState.Offered && (
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}

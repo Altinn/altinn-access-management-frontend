@@ -205,11 +205,14 @@ export const ChooseApiPage = () => {
             <NavigationButtons
               previousText={t('api_delegation.previous')}
               previousPath={
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
               }
               nextText={t('api_delegation.next')}
               nextPath={
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation
+                '/' +
+                RouterPath.OfferedApiDelegations +
+                '/' +
+                RouterPath.OfferedApiExecuteDelegation
               }
               nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
             ></NavigationButtons>

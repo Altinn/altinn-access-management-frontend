@@ -165,7 +165,7 @@ export const ChooseOrgPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview,
+                      '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview,
                     )
                   }
                 >
@@ -180,7 +180,7 @@ export const ChooseOrgPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi,
+                      '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
                     )
                   }
                   disabled={chosenOrgs.length === 0}

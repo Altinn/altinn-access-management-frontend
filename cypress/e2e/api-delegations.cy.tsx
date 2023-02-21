@@ -1,8 +1,8 @@
 import { RouterPath } from '@/routes/Router';
 
-describe(RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview, () => {
+describe(RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview, () => {
   it('renders correctly', () => {
-    cy.visit(RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview);
+    cy.visit(RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview);
   });
 });
 

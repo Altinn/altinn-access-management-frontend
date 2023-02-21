@@ -92,7 +92,7 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
     let delegationOrg = '';
     let delegationOrgNumber = '';
     switch (layout) {
-      case LayoutState.Given:
+      case LayoutState.Offered:
         delegationOrg = delegation.coveredByName;
         delegationOrgNumber = delegation.coveredByOrganizationNumber;
         break;
@@ -122,7 +122,7 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
   return overviewOrgList;
 };
 
-const setAllItemsToGivenSoftDeleteState = (
+const setAllSoftDeleteState = (
   state: SliceState,
   softDeletedOrgId: string,
   isSoftDelete: boolean,
@@ -151,9 +151,11 @@ const createCopyOrg = (org: OverviewOrg) => {
 export const fetchOverviewOrgsOffered = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOffered',
   async () => {
-    const altinnPartyId = getCookie('AltinnPartyId')
-      ? getCookie('AltinnPartyId')
-      : 'httpOnlyFlagIsSet';
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
       .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/offered`)
@@ -165,12 +167,59 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
   },
 );
 
+export const deleteOfferedApiDelegations = createAsyncThunk(
+  'overviewOrg/deleteApiDelegations',
+  async () => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+
+    return await axios
+      .get(
+        `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered/revoke`,
+      )
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
+  },
+);
+
 export const fetchOverviewOrgsReceived = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsReceived',
   async () => {
-    const altinnPartyId = getCookie('AltinnPartyId') ? getCookie('AltinnPartyId') : '50067798';
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+
     return await axios
       .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/received`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
+  },
+);
+
+export const deleteReceivedApiDelegations = createAsyncThunk(
+  'overviewOrg/deleteApiDelegations',
+  async () => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+
+    return await axios
+      .get(
+        `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received/revoke`,
+      )
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -233,12 +282,12 @@ const overviewOrgSlice = createSlice({
     softRestoreAll: (state, action) => {
       const restoredOrgId = action.payload;
 
-      setAllItemsToGivenSoftDeleteState(state, restoredOrgId, false);
+      setAllSoftDeleteState(state, restoredOrgId, false);
     },
     softDeleteAll: (state, action) => {
       const selectedOrgId = action.payload;
 
-      setAllItemsToGivenSoftDeleteState(state, selectedOrgId, true);
+      setAllSoftDeleteState(state, selectedOrgId, true);
     },
     restoreAllSoftDeletedItems: (state) => {
       for (const org of state.overviewOrgs) {
@@ -265,12 +314,15 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
         const dataArray = action.payload;
-        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Given);
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
+      })
+      .addCase(deleteOfferedApiDelegations.fulfilled, (state, action) => {
+        console.log('Success');
       });
   },
 });

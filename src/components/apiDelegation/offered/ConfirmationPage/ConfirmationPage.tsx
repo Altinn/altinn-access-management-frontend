@@ -43,7 +43,7 @@ export const ConfirmationPage = () => {
 
   useEffect(() => {
     if (!loading) {
-      navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiReceipt);
+      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt);
     }
   }, [loading]);
 
@@ -53,7 +53,7 @@ export const ConfirmationPage = () => {
         delegableApis={chosenApis}
         delegableOrgs={chosenOrgs}
         restartProcessPath={
-          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+          '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
         }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
@@ -76,7 +76,9 @@ export const ConfirmationPage = () => {
             variant={ButtonVariant.Outline}
             size={ButtonSize.Small}
             onClick={() =>
-              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi)
+              navigate(
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
+              )
             }
           >
             {t('api_delegation.previous')}
