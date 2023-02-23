@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import i18next from 'i18next';
+import axios from 'axios';
 
 interface Props {
   children: React.ReactNode;
@@ -11,6 +12,31 @@ const LoadLocalizations = ({ children }: Props) => {
   const baseUrl = import.meta.env.BASE_URL;
   const localizationsFilePath = `${baseUrl}public/localizations/${i18n.language}.json`;
   const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url).href;
+
+  const initLanguage = (lang: string) => {
+    if (lang === 'en') {
+      return 'en';
+    } else if (lang === 'nn') {
+      return 'no_nn';
+    } else {
+      return 'no_nb';
+    }
+  };
+
+  const setLanguage = async () => {
+    await axios
+      .get('/accessmanagement/api/v1/profile/user')
+      .then((response) => {
+        const lang = response.data.profileSettingPreference.language.toString();
+        document.cookie = 'i18next=' + initLanguage(lang);
+      })
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
+  };
+
+  void setLanguage();
 
   useQuery(
     'Localizations',
