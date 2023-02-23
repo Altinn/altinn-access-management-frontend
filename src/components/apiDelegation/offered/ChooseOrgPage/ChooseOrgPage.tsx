@@ -45,18 +45,6 @@ export const ChooseOrgPage = () => {
 
   const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
-  const handleSoftRemove = (org: DelegableOrg) => {
-    dispatch(softRemoveOrg(org));
-    dispatch(searchInCurrentOrgs(searchString));
-  };
-
-  function handleSearch(searchText: string) {
-    if (IsOnlyNumbers(searchText) || searchText === '') {
-      setSearchString(searchText);
-      dispatch(searchInCurrentOrgs(searchText));
-    }
-  }
-
   useEffect(() => {
     // Clear search on mount
     dispatch(searchInCurrentOrgs(searchString));
@@ -71,6 +59,18 @@ export const ChooseOrgPage = () => {
       setPromptOrgNumber(true);
     }
   }, [delegableOrgs]);
+
+  const handleSoftRemove = (org: DelegableOrg) => {
+    dispatch(softRemoveOrg(org));
+    dispatch(searchInCurrentOrgs(searchString));
+  };
+
+  function handleSearch(searchText: string) {
+    if (IsOnlyNumbers(searchText) || searchText === '') {
+      setSearchString(searchText);
+      dispatch(searchInCurrentOrgs(searchText));
+    }
+  }
 
   const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
