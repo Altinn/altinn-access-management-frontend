@@ -3,7 +3,8 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
-    "status_code": "Statuskode"
+    "status_code": "Statuskode",
+    "maskinporten": "Maskinporten"
   },
   "profile": {
     "received": "Mottekne",
@@ -27,7 +28,7 @@
     "api_delegations_received": "Mottekne tilgangar til Programmeringsgrensesnitt - API",
     "you_have_delegated_accesses": "Du har tidlegare delegert desse tilgangane:",
     "you_have_received_accesses": "Du har motteke desse tilgangane:",
-    "api_panel_content": "API er eit grensesnitt som blir brukt for å utveksla data mellom to ulike system eller appar. Når APIet til to system er kopla saman, opnar det opp for ei straumlinjeforma deling av data og automatiserte prosessar.",
+    "api_panel_content": "Her kan du styra tilgang til APIer sikra gjennom",
     "org_nr": "Org.nr.",
     "edit_accesses": "Rediger tilgangar",
     "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder.",
@@ -62,7 +63,7 @@
     "search_for_buisness": "Søk på organisasjonsnummer",
     "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
-    "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn sida på ny.",
+    "data_retrieval_failed": "Noke feilet, prøv å laste inn sida på ny.",
     "loading": "Lastar",
     "error_message": "Statuskoden til feilmeldinga",
     "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valgte organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
