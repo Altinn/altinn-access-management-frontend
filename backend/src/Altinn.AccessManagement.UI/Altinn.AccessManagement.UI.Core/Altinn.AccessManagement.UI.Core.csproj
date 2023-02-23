@@ -1,16 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Altinn.Common.AccessTokenClient" Version="1.1.3" />
-    <PackageReference Include="Altinn.Platform.Models" Version="1.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Altinn.Common.AccessTokenClient" Version="1.1.3" />
+		<PackageReference Include="Altinn.Platform.Models" Version="1.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+		<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Debug'">
+		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
+			<Link>stylecop.json</Link>
+		</AdditionalFiles>
+	</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
+		<CodeAnalysisRuleSet>$(SolutionDir)Altinn3.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
 </Project>

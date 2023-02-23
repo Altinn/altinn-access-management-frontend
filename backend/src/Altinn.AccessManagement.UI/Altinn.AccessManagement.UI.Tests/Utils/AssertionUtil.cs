@@ -77,10 +77,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.ResourceId, actual.ResourceId);
             Assert.Equal(expected.ResourceTitle, actual.ResourceTitle);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
-            Assert.Equal(expected.languageCode, actual.languageCode);
-            Assert.Equal(expected.ResourceOwner, actual.ResourceOwner);
+            Assert.Equal(expected.LanguageCode, actual.LanguageCode);
             Assert.Equal(expected.ResourceOwnerOrgNumber, actual.ResourceOwnerOrgNumber);
             Assert.Equal(expected.ResourceOwnerOrgcode, actual.ResourceOwnerOrgcode);
+            Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
+            Assert.Equal(expected.ResourceDescription, actual.ResourceDescription);
+            Assert.Equal(expected.RightDescription, actual.RightDescription);
         }
 
         /// <summary>

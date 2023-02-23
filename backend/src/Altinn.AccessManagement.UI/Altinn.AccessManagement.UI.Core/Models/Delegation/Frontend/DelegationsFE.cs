@@ -1,15 +1,18 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+﻿using System.Text.Json.Serialization;
 using Altinn.AccessManagement.Core.UI.Enums;
 using System.Text.Json.Serialization;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
 {
+    /// <summary>
+    /// DelegationsFE carries all the data required to show a delegation information in the frontend
+    /// </summary>
     public class DelegationsFE
     {
         /// <summary>
         /// Gets or sets the languageCode selected by the user
         /// </summary>
-        public string languageCode { get; set; }
+        public string LanguageCode { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the delegation receiver
@@ -68,12 +71,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
-        /// Owner of resource
+        /// Resource description
         /// </summary>
-        public string ResourceOwner { get; set; }
+        public string ResourceDescription { get; set; }
 
         /// <summary>
-        /// ORganisation number of resource owner
+        /// The organization number
         /// </summary>
         public string ResourceOwnerOrgNumber { get; set; }
 
@@ -83,9 +86,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         public string ResourceOwnerOrgcode { get; set; }
 
         /// <summary>
-        /// Resource description
+        /// The organization name
         /// </summary>
-        public string ResourceDescription { get; set; }
+        public string ResourceOwnerName { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Description explaining the rights a recipient will receive if given access to the resource

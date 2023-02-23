@@ -12,6 +12,9 @@ using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
+    /// <summary>
+    /// client that integrates with profile api in access management
+    /// </summary>
     public class ProfileClient : IProfileClient
     {
         private readonly ILogger _logger;
@@ -19,7 +22,17 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IAccessTokenGenerator _accessTokenGenerator;
-        public ProfileClient(HttpClient httpClient,
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProfileClient"/> class
+        /// </summary>
+        /// <param name="httpClient">the handler for httpclient service</param>
+        /// <param name="logger">the handler for logger service</param>
+        /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
+        /// <param name="platformSettings"> platform settings configuration</param>
+        /// <param name="accessTokenGenerator">the handler for access token generator</param>
+        public ProfileClient(
+            HttpClient httpClient,
             ILogger<ProfileClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
@@ -33,10 +46,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _accessTokenGenerator = accessTokenGenerator;
         }
 
+        /// <inheritdoc/>
         public async Task<UserProfile> GetUserProfile()
         {
-            //try
-            //{
+            try
+            {
                 string endpointUrl = $"accessmanagement/api/v1/profile/user";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
@@ -58,12 +72,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     _logger.LogError("Getting user settings information from bridge failed with {StatusCode}", response.StatusCode);
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError(ex, "AccessManagement //UI // ProfileClient // GetUSerProfile // Exception");
-            //    throw;
-            //}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement //UI // ProfileClient // GetUSerProfile // Exception");
+                throw;
+            }
 
             return null;
 

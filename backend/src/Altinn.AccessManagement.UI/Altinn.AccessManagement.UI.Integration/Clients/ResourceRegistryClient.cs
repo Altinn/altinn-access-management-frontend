@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -17,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     [ExcludeFromCodeCoverage]
     public class ResourceRegistryClient : IResourceRegistryClient
     {
-        private readonly HttpClient _httpClient = new();
+        private readonly HttpClient _httpClient = new ();
         private readonly ILogger<IResourceRegistryClient> _logger;
 
         /// <summary>
@@ -25,7 +26,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
-        public ResourceRegistryClient(IOptions<ResourceRegistrySettings> settings, 
+        public ResourceRegistryClient(
+            IOptions<ResourceRegistrySettings> settings, 
             ILogger<IResourceRegistryClient> logger)
         {
             ResourceRegistrySettings resourceRegistrySettings = settings.Value;

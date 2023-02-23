@@ -15,19 +15,17 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface IDelegationsService
     {
         /// <summary>
-        /// Gets all delegated resources for a reportee
+        /// Gets all the resources delegated by the reportee
         /// </summary>
         /// <param name="party">reportee that delegated resources</param>
-        /// <param name="resourceType">the type of resource that was delegated</param>
-        /// <returns>list o delgations</returns>
+        /// <returns>list of delgations</returns>
         public Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party);
 
         /// <summary>
-        /// Gets all the rceived delegations for a reportee
+        /// Gets all the delegations received by a reportee
         /// </summary>
         /// <param name="party">reportee that delegated resources</param>
-        /// <param name="resourceType">the type of resource that was delegated</param>
-        /// <returns>list o delgations</returns>
+        /// <returns>list of delgations</returns>
         public Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party);
     }
 }

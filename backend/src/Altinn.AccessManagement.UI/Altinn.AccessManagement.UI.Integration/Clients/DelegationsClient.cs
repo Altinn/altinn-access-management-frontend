@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.Common.AccessTokenClient.Services;
@@ -17,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// <summary>
     /// Client that integrates with Delegations API
     /// </summary>
-    public  class DelegationsClient : IDelegationsClient
+    public class DelegationsClient : IDelegationsClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
@@ -28,7 +30,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationsClient"/> class
         /// </summary>
-        public DelegationsClient(HttpClient httpClient, 
+        public DelegationsClient(
+            HttpClient httpClient, 
             ILogger<DelegationsClient> logger, 
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings,
@@ -42,11 +45,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _accessTokenGenerator = accessTokenGenerator;
         }
 
+        /// <inheritdoc/>
         public async Task<List<Delegation>> GetInboundDelegations(string party)
         {
             try
             {
-                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/inbound";
+                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/received";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 
@@ -77,11 +81,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return null;
         }
 
+        /// <inheritdoc/>
         public async Task<List<Delegation>> GetOutboundDelegations(string party)
         {
             try
             {
-                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/outbound";
+                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 

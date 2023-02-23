@@ -1,4 +1,8 @@
+using Altinn.AccessManagement.Core.Constants;
+using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Integration.Clients;
@@ -6,6 +10,8 @@ using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.Common.AccessToken;
+using Altinn.Common.AccessToken.Services;
+using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.PEP.Authorization;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -22,6 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // setup frontend configuration
 string frontendProdFolder = AppEnvironment.GetVariable("FRONTEND_PROD_FOLDER", "wwwroot/AccessManagement/");
+
 builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", optional: true, reloadOnChange: true);
 
 ConfigureServices(builder.Services, builder.Configuration);
@@ -29,10 +36,12 @@ ConfigureServices(builder.Services, builder.Configuration);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddMemoryCache();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
@@ -49,15 +58,23 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseCors();
+
+app.UseStaticFiles();
+
 app.MapControllers();
 
 app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
+    services.AddControllersWithViews();
+    services.AddMvc();
+
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
+    services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
@@ -91,12 +108,14 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
             options.RequireHttpsMetadata = false;
         }
     });
+
     services.AddAuthorization(options =>
     {
         options.AddPolicy(AuthzConstants.POLICY_STUDIO_DESIGNER, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "studio.designer")));
         options.AddPolicy(AuthzConstants.ALTINNII_AUTHORIZATION, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "sbl.authorization")));
         options.AddPolicy("PlatformAccess", policy => policy.Requirements.Add(new AccessTokenRequirement()));
     });
+
     services.AddTransient<IAuthorizationHandler, ClaimAccessHandler>();
     services.AddTransient<IAuthorizationHandler, ScopeAccessHandler>();
     services.AddSwaggerGen(options =>

@@ -69,6 +69,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
+        /// Owner of resource
+        /// </summary>
+        public string ResourceOwner { get; set; }
+
+        /// <summary>
         /// Resource description
         /// </summary>
         public string ResourceDescription { get; set; }
