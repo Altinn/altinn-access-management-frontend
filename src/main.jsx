@@ -1,13 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { use } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import { Router, RouterPath } from '@/routes/Router';
+import { RefreshToken } from '@/resources/Token/RefreshToken';
+import { Router } from '@/routes/Router';
 
 import { getConfig } from '../config';
 
@@ -24,7 +25,6 @@ const queryClientDevDefaults = {
 };
 
 // Initialise i18next; start application when ready
-
 use(LanguageDetector)
   .use(initReactI18next)
   .init(
@@ -46,9 +46,8 @@ use(LanguageDetector)
           <Provider store={store}>
             <QueryClientProvider client={queryClient}>
               <LoadLocalizations>
-                <BrowserRouter basename={RouterPath.BasePath}>
-                  <Router />
-                </BrowserRouter>
+                <RefreshToken />
+                <RouterProvider router={Router}></RouterProvider>
               </LoadLocalizations>
             </QueryClientProvider>
           </Provider>

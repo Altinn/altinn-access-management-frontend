@@ -201,9 +201,9 @@ export const OverviewPageContent = ({
             {t('common.maskinporten')}
           </a>
         </Panel>
-        <div className={classes.pageContentContainer}>
+        <div>
           {overviewOrgs.length > 0 && (
-            <div>
+            <div className={classes.pageContentContainer}>
               <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
               <div className={classes.editButton}>
                 {!isEditable ? (
