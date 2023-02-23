@@ -1,19 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.Core.UI.Enums;
 using System.Text.Json.Serialization;
 
-namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
+namespace Altinn.AccessManagement.UI.Models
 {
-    /// <summary>
-    /// DelegationsFE carries all the data required to show a delegation information in the frontend
-    /// </summary>
-    public class DelegationsFE
+    public class DelegationsExternal
     {
-        /// <summary>
-        /// Gets or sets the languageCode selected by the user
-        /// </summary>
-        public string LanguageCode { get; set; }
-
         /// <summary>
         /// Gets or sets the name of the delegation receiver
         /// </summary>
@@ -71,34 +63,29 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
+        /// Owner of resource
+        /// </summary>
+        public string ResourceOwner { get; set; }
+
+        /// <summary>
         /// Resource description
         /// </summary>
         public string ResourceDescription { get; set; }
 
         /// <summary>
-        /// The organization number
+        /// HasCompetentAuthority
         /// </summary>
-        public string ResourceOwnerOrgNumber { get; set; }
-
-        /// <summary>
-        /// The organization code
-        /// </summary>
-        public string ResourceOwnerOrgcode { get; set; }
-
-        /// <summary>
-        /// The organization name
-        /// </summary>
-        public string ResourceOwnerName { get; set; }
+        public CompetentAuthority HasCompetentAuthority { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
-        public string Description { get; set; }
+        public Dictionary<string, string> Description { get; set; }
 
         /// <summary>
         /// Description explaining the rights a recipient will receive if given access to the resource
         /// </summary>
-        public string RightDescription { get; set; }
+        public Dictionary<string, string> RightDescription { get; set; }
 
     }
 }

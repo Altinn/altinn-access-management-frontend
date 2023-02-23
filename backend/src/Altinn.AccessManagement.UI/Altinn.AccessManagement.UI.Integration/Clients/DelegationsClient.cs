@@ -5,10 +5,14 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.Common.AccessTokenClient.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.Platform.Profile.Models;
+using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {

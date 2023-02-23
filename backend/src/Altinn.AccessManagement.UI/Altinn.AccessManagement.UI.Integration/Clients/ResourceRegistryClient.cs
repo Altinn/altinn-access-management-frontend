@@ -6,6 +6,7 @@ using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.Core.UI.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 

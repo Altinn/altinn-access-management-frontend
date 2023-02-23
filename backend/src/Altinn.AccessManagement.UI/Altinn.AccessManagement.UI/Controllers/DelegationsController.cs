@@ -1,7 +1,9 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+﻿using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.AccessControl;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -45,6 +47,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 List<DelegationsFE> delegations = await _delegation.GetAllInboundDelegationsAsync(party);                
+                //List<DelegationExternal> delegationsExternal = _mapper.Map<List<DelegationExternal>>(delegations);
 
                 return delegations;
             }
@@ -78,6 +81,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 List<DelegationsFE> delegations = await _delegation.GetAllOutboundDelegationsAsync(party);                
+                //List<DelegationExternal> delegationsExternal = _mapper.Map<List<DelegationExternal>>(delegations);
 
                 return delegations;
             }
