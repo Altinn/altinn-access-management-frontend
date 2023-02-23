@@ -4,25 +4,18 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.AccessManagement.Core.Constants;
-using Altinn.AccessManagement.Core.Helpers;
 using Altinn.Common.AccessToken;
 using Altinn.Common.AccessToken.Services;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.PEP.Authorization;
 using AltinnCore.Authentication.JwtCookie;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using Altinn.Common.AccessToken.Services;
-using Altinn.Common.AccessTokenClient.Services;
-using Altinn.AccessManagement.UI.Core.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +31,7 @@ ConfigureServices(builder.Services, builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();

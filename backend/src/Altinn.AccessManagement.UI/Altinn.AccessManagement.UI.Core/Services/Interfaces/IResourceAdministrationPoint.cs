@@ -1,5 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.Core.UI.Enums;
+﻿using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces

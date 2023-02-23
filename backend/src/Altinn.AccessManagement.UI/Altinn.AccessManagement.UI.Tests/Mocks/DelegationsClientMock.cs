@@ -93,27 +93,28 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
 
         public Task<List<Delegation>> GetOutboundDelegations(string party)
         {
-            List<Delegation> resources = new List<Delegation>();
+            List<Delegation> delegations = new List<Delegation>();
+            List<Delegation> filteredDelegations = new List<Delegation>();
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
             {
-                string[] files = Directory.GetFiles(path);
+                string file = "outbounddelegation.json";
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
-                foreach (string file in files)
+                string content = File.ReadAllText(Path.Combine(path, file));
+                delegations = JsonSerializer.Deserialize<List<Delegation>>(content, options);
+
+
+                if (!string.IsNullOrEmpty(party))
                 {
-                    if (file.Contains("outbound"))
-                    {
-                        string content = File.ReadAllText(Path.Combine(path, file));
-                        resources = JsonSerializer.Deserialize<List<Delegation>>(content, options);
-                    }
+                    filteredDelegations.AddRange(delegations.FindAll(od => od.OfferedByPartyId == Convert.ToInt32(party)));
                 }
             }
 
-            return Task.FromResult(resources);
+            return Task.FromResult(filteredDelegations);
         }
 
         private static string GetResourcePath(string resourceRegistryId)

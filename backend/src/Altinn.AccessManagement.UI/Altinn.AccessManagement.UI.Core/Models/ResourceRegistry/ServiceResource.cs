@@ -1,5 +1,4 @@
-﻿using Altinn.AccessManagement.Core.UI.Enums;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using Altinn.AccessManagement.Core.UI.Enums;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry

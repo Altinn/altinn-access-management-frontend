@@ -5,7 +5,6 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
 using Microsoft.Extensions.Logging;
-using System.IO;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
