@@ -3,8 +3,9 @@ import { mount } from 'cypress/react18';
 import * as React from 'react';
 
 import { OrgDelegationAccordion } from '@/components/apiDelegation/reusables/OverviewPageContent/OrgDelegationAccordion';
-import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
+
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/apiDelegation/overviewOrg/overviewOrgSlice';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
