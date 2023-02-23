@@ -15,18 +15,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import {
-  fetchDelegableApis,
-  softAddApi,
-  softRemoveApi,
-  search,
-  filter,
-} from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
@@ -38,6 +28,16 @@ import {
 import { useMediaQuery } from '@/resources/hooks';
 import { NavigationButtons } from '@/components/reusables';
 import main from '@/main.module.css';
+import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import {
+  fetchDelegableApis,
+  softAddApi,
+  softRemoveApi,
+  search,
+  filter,
+} from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import classes from './ChooseApiPage.module.css';
 

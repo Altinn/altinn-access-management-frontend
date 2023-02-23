@@ -1,5 +1,4 @@
 import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@altinn/altinn-design-system';
-import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 

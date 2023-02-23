@@ -9,11 +9,11 @@ import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { SummaryPage } from '@/components/reusables/SummaryPage';
-import type { DelegationRequest } from '@/rtk/features/delegationRequest/delegationRequestSlice';
+import type { DelegationRequest } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import {
   postApiDelegation,
   setBatchPostSize,
-} from '@/rtk/features/delegationRequest/delegationRequestSlice';
+} from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
@@ -23,6 +23,12 @@ export const ConfirmationPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!loading) {
+      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt);
+    }
+  }, [loading]);
 
   const handleConfirm = () => {
     setConfirmed(true);
@@ -40,12 +46,6 @@ export const ConfirmationPage = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (!loading) {
-      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt);
-    }
-  }, [loading]);
 
   return (
     <PageContainer>

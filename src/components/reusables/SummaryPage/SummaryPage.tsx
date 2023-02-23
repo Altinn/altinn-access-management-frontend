@@ -16,16 +16,16 @@ import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softRemoveApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import { CompactDeletableListItem } from '@/components/reusables';
-import type { ApiDelegation } from '@/rtk/features/delegationRequest/delegationRequestSlice';
 import main from '@/main.module.css';
+import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 

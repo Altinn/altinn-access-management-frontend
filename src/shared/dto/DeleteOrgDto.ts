@@ -1,4 +1,4 @@
-import type { ApiListItem } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import { DeleteOrgApiDto } from './DeleteOrgItemDto';
 

@@ -1,8 +1,9 @@
 import { Button, ButtonVariant, ListItem, ButtonColor } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
+import * as React from 'react';
 
-import type { ApiListItem } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 
