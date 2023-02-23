@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import { Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import * as React from 'react';
-import axios from 'axios';
-import { useEffect } from 'react';
 
 import { ErrorPage } from '@/resources/ErrorPage/ErrorPage';
 import { ChooseApiPage } from '@/components/apiDelegation/offered/ChooseApiPage';
@@ -25,78 +21,51 @@ export enum RouterPath {
   ReceivedApiDelegations = 'received-api-delegations',
   ReceivedApiOverview = 'overview',
   Profile = 'Profile',
-  BasePath = 'accessmanagement/ui',
+  BasePath = '/accessmanagement/ui',
 }
 
-export const Router = () => {
-  const lastRefreshTokenTimestamp = React.useRef(0);
-  const TEN_MINUTES_IN_MILLISECONDS = 600000;
-
-  async function refreshJwtToken() {
-    const timeNow = Date.now();
-    if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
-      lastRefreshTokenTimestamp.current = timeNow;
-      return await axios
-        // TODO: This may fail in AT if axios doesn't automatically change the base url
-        .get('accessmanagement/api/v1/authentication/refresh')
-        .then((response) => response.data)
-        .catch((error) => {
-          !import.meta.env.DEV && (window.location.pathname = '/');
-          console.error(error);
-        });
-    }
-  }
-
-  useEffect(() => {
-    const setUpEventListeners = () => {
-      window.addEventListener('mousemove', refreshJwtToken);
-      window.addEventListener('scroll', refreshJwtToken);
-      window.addEventListener('onfocus', refreshJwtToken);
-      window.addEventListener('keydown', refreshJwtToken);
-    };
-    refreshJwtToken();
-    setUpEventListeners();
-  });
-
-  return (
-    <Routes>
-      createRoutesFromElements(
+export const Router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      path='/'
+      errorElement={<ErrorPage />}
+    >
       <Route
-        path='/'
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview}
+        element={<OfferedOverviewPage />}
         errorElement={<ErrorPage />}
-      >
-        <Route
-          path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview}
-          element={<OfferedOverviewPage />}
-          errorElement={<ErrorPage />}
-        />
-        <Route
-          path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg}
-          element={<ChooseOrgPage />}
-          errorElement={<ErrorPage />}
-        />
-        <Route
-          path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi}
-          element={<ChooseApiPage />}
-          errorElement={<ErrorPage />}
-        />
-        <Route
-          path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiExecuteDelegation}
-          element={<ConfirmationPage />}
-          errorElement={<ErrorPage />}
-        />
-        <Route
-          path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt}
-          element={<ReceiptPage />}
-          errorElement={<ErrorPage />}
-        />
-        <Route
-          path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.OfferedApiOverview}
-          element={<ReceivedOverviewPage />}
-          errorElement={<ErrorPage />}
-        />
-      </Route>
-      , ),
-    </Routes>
-  );
-};
+      />
+      <Route
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview}
+        element={<OfferedOverviewPage />}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg}
+        element={<ChooseOrgPage />}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi}
+        element={<ChooseApiPage />}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiExecuteDelegation}
+        element={<ConfirmationPage />}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt}
+        element={<ReceiptPage />}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.OfferedApiOverview}
+        element={<ReceivedOverviewPage />}
+        errorElement={<ErrorPage />}
+      />
+    </Route>,
+  ),
+  { basename: RouterPath.BasePath },
+);
