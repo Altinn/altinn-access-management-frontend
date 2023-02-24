@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {} from '@altinn/altinn-design-system';
 import {
   Accordion,
   AccordionHeader,
@@ -7,9 +8,8 @@ import {
   ButtonColor,
   ButtonVariant,
   List,
-  BorderStyle,
   ButtonSize,
-} from '@altinn/altinn-design-system';
+} from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -125,7 +125,7 @@ export const OrgDelegationAccordion = ({
       </AccordionHeader>
       <AccordionContent>
         <div className={classes.accordionContent}>
-          <List borderStyle={BorderStyle.Dashed}>{listItems}</List>
+          <List borderStyle={'dashed'}>{listItems}</List>
         </div>
       </AccordionContent>
     </Accordion>
