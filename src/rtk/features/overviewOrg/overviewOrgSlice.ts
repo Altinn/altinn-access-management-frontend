@@ -29,7 +29,7 @@ interface DelegationDTO {
   coveredByOrganizationNumber: string;
   resourceId: string;
   resourceTitle: string;
-  hasCompetentAuthority: HasCompetentAuthorityDTO;
+  resourceOwnerName: string;
   rightDescription: string;
 }
 
@@ -37,12 +37,6 @@ export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
-}
-
-interface HasCompetentAuthorityDTO {
-  organization: string;
-  orgcode: string;
-  name: string;
 }
 
 const initialState: SliceState = {
@@ -58,7 +52,7 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
       id: delegation.resourceId,
       apiName: delegation.resourceTitle,
       isSoftDelete: false,
-      owner: delegation.hasCompetentAuthority.name,
+      owner: delegation.resourceOwnerName,
       description: delegation.rightDescription,
     };
 
@@ -128,7 +122,7 @@ export const fetchOverviewOrgsOutbound = createAsyncThunk(
       getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '500000';
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
-      .get(`/accessmanagement/api/v1/bff/r${altinnPartyId}/delegations/maskinportenschema/outbound`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -140,9 +134,9 @@ export const fetchOverviewOrgsOutbound = createAsyncThunk(
 export const fetchOverviewOrgsInbound = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsInbound',
   async () => {
-    // TODO: Replace r500000 with partyid of actual logged in org
+    const altinnPartyId = getCookie('AltinnPartyId');
     return await axios
-      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/inbound')
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received`)
       .then((response) => response.data)
       .catch((error) => console.log(error));
   },
