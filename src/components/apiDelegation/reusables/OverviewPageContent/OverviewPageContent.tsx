@@ -156,15 +156,17 @@ export const OverviewPageContent = ({
   const accordions = () => {
     if (error) {
       return (
-        <Panel
-          title={t('api_delegation.data_retrieval_failed')}
-          variant={PanelVariant.Error}
-          forceMobileLayout
-        >
-          <div>
-            {t('api_delegation.error_message')}: {error}
-          </div>
-        </Panel>
+        <div className={classes.errorPanel}>
+          <Panel
+            title={t('api_delegation.data_retrieval_failed')}
+            variant={PanelVariant.Error}
+            forceMobileLayout
+          >
+            <div>
+              {t('api_delegation.error_message')}: {error}
+            </div>
+          </Panel>
+        </div>
       );
     } else if (loading) {
       return t('api_delegation.loading') + '...';

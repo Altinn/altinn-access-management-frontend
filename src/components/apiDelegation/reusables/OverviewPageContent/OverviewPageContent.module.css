@@ -53,3 +53,7 @@
   display: inline-block;
   background: transparent;
 }
+
+.errorPanel{
+  margin-top: 2rem;
+}
