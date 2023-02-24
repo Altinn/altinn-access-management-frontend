@@ -1,15 +1,13 @@
-import type { MultiSelectOption } from '@altinn/altinn-design-system';
+import type { MultiSelectOption } from '@digdir/design-system-react';
 import {
   PanelVariant,
   Panel,
-  BorderStyle,
   Page,
   PageContent,
   PageHeader,
   SearchField,
-  Select,
-  List,
 } from '@altinn/altinn-design-system';
+import { Select, List } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -163,7 +161,7 @@ export const ChooseApiPage = () => {
             ) : (
               <div>
                 <h3>{t('api_delegation.chosen_orgs')}:</h3>
-                <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
+                <List borderStyle={'dashed'}>{chosenDelegableOrgs}</List>
               </div>
             )}
             <h3>{t('api_delegation.new_api_content_text2')}</h3>
