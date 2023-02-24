@@ -67,6 +67,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
+    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IDelegationsService, DelegationsService>();

@@ -10,8 +10,7 @@ namespace Altinn.AccessManagement
     /// <summary>
     /// HomeController
     /// </summary>
-    //[Route("accessmanagement/")]
-    //[Route("accessmanagement/ui")]
+    [Route("accessmanagement/")]    
     [Route("accessmanagement/ui/{*AnyValue}")]
 
     public class HomeController : Controller
@@ -63,15 +62,16 @@ namespace Altinn.AccessManagement
                 });
             }
 
-            if (ShouldShowAppView())
-            {
+            //if (ShouldShowAppView())
+            //{
                 return View();
-            }
+            
+            // }
 
-            string goToUrl = HttpUtility.UrlEncode($"{_platformSettings.AltinnPlatformBaseUrl}{Request.Path}");
-            string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
+            //string goToUrl = HttpUtility.UrlEncode($"{_platformSettings.AltinnPlatformBaseUrl}{Request.Path}");
+            //string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
 
-            return Redirect(redirectUrl);
+            //return Redirect(redirectUrl);
         }
 
         private bool ShouldShowAppView()
