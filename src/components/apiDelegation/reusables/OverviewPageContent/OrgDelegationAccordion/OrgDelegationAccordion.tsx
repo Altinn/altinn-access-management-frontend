@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import {} from '@altinn/altinn-design-system';
 import {
   Accordion,
   AccordionHeader,

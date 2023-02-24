@@ -2,15 +2,11 @@ import {
   Page,
   PageContent,
   PageHeader,
-  List,
-  BorderStyle,
   PageColor,
   Panel,
   PanelVariant,
-  Button,
-  ButtonVariant,
-  ButtonColor,
 } from '@altinn/altinn-design-system';
+import { List, Button, ButtonVariant, ButtonColor } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -169,10 +165,10 @@ export const SummaryPage = ({
                 <div>
                   <h2 className={classes.listText}>{topListText}</h2>
                   {delegableApiListItems !== undefined && (
-                    <List borderStyle={BorderStyle.Dashed}>{delegableApiListItems}</List>
+                    <List borderStyle={'dashed'}>{delegableApiListItems}</List>
                   )}
                   {failedDelegations !== undefined && (
-                    <List borderStyle={BorderStyle.Dashed}>{failedDelegatedListItems}</List>
+                    <List borderStyle={'dashed'}>{failedDelegatedListItems}</List>
                   )}
                 </div>
               )}
@@ -180,10 +176,10 @@ export const SummaryPage = ({
                 <div>
                   <h2 className={classes.listText}>{bottomListText}</h2>
                   {delegableOrgs !== undefined && (
-                    <List borderStyle={BorderStyle.Dashed}>{delegableOrgListItems}</List>
+                    <List borderStyle={'dashed'}>{delegableOrgListItems}</List>
                   )}
                   {successfulDelegations !== undefined && (
-                    <List borderStyle={BorderStyle.Dashed}>{successfulDelegatedItems}</List>
+                    <List borderStyle={'dashed'}>{successfulDelegatedItems}</List>
                   )}
                 </div>
               )}

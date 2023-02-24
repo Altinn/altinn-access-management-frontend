@@ -1,12 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import {
-  Button,
-  ButtonColor,
-  ButtonSize,
-  ButtonVariant,
-  PageColor,
-} from '@altinn/altinn-design-system';
+import { PageColor } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
 import { useEffect } from 'react';
 import * as React from 'react';
 

@@ -1,4 +1,4 @@
-import { Button, ButtonColor, ButtonVariant } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonVariant } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';

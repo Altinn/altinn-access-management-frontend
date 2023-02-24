@@ -1,4 +1,4 @@
-import { Button, ButtonVariant, ListItem, ButtonColor } from '@altinn/altinn-design-system';
+import { Button, ButtonVariant, ListItem, ButtonColor } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';

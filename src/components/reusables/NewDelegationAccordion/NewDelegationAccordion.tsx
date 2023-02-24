@@ -5,7 +5,7 @@ import {
   ButtonVariant,
   ButtonColor,
   Button,
-} from '@altinn/altinn-design-system';
+} from '@digdir/design-system-react';
 import { useState } from 'react';
 import { t } from 'i18next';
 import * as React from 'react';

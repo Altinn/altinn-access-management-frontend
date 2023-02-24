@@ -1,4 +1,4 @@
-import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
