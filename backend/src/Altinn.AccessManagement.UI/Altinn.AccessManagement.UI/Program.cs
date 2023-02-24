@@ -26,9 +26,13 @@ builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", optional
 
 ConfigureServices(builder.Services, builder.Configuration);
 
+// Add services to the container.
+
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 
