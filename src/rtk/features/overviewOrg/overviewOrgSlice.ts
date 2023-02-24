@@ -28,9 +28,9 @@ interface DelegationDTO {
   offeredByOrganizationNumber: string;
   coveredByOrganizationNumber: string;
   resourceId: string;
-  resourceTitle: languageDto;
+  resourceTitle: string;
   hasCompetentAuthority: HasCompetentAuthorityDTO;
-  rightDescription: languageDto;
+  rightDescription: string;
 }
 
 export interface SliceState {
@@ -42,13 +42,7 @@ export interface SliceState {
 interface HasCompetentAuthorityDTO {
   organization: string;
   orgcode: string;
-  name: languageDto;
-}
-
-interface languageDto {
-  en: string;
-  nb: string;
-  nn: string;
+  name: string;
 }
 
 const initialState: SliceState = {
@@ -60,33 +54,12 @@ const initialState: SliceState = {
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
   const overviewOrgList: OverviewOrg[] = [];
   for (const delegation of delegationArray) {
-    let apiName = '';
-    let description = '';
-    let owner = '';
-    switch (i18next.language) {
-      case 'no_nb':
-        apiName = delegation.resourceTitle.nb;
-        description = delegation.rightDescription.nb;
-        owner = delegation.hasCompetentAuthority.name.nb;
-        break;
-      case 'no_nn':
-        apiName = delegation.resourceTitle.nn;
-        description = delegation.rightDescription.nn;
-        owner = delegation.hasCompetentAuthority.name.nn;
-        break;
-      case 'en':
-        apiName = delegation.resourceTitle.en;
-        description = delegation.rightDescription.en;
-        owner = delegation.hasCompetentAuthority.name.en;
-        break;
-    }
-
     const api: ApiListItem = {
       id: delegation.resourceId,
-      apiName,
+      apiName: delegation.resourceTitle,
       isSoftDelete: false,
-      owner,
-      description,
+      owner: delegation.hasCompetentAuthority.name,
+      description: delegation.rightDescription,
     };
 
     let delegationOrg = '';

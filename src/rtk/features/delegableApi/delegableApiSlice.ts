@@ -14,16 +14,16 @@ export interface DelegableApi {
 }
 
 export interface DelegableApiDto {
-  title: languageDto;
+  title: string;
   identifier: string;
   hasCompetentAuthority: HasCompetentAuthority;
-  rightDescription: languageDto;
+  rightDescription: string;
   description?: string;
   resourceReferences: resourceReferenceDTO[];
 }
 
 export interface HasCompetentAuthority {
-  name: languageDto;
+  name: string;
 }
 
 export interface DelegableApiWithPriority {
@@ -46,24 +46,18 @@ export interface SliceState {
   error: string | undefined;
 }
 
-interface languageDto {
-  en: string;
-  nb: string;
-  nn: string;
-}
-
 interface resourceReferenceDTO {
   reference: string;
   referenceType: string;
   referenceSource: string;
 }
 
-const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
+const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
   const delegableApi: DelegableApi = {
     id: obj.identifier,
-    apiName: '',
-    orgName: '',
-    rightDescription: '',
+    apiName: obj.title,
+    orgName,
+    rightDescription: obj.rightDescription,
     description: obj.description,
     scopes: [],
   };
@@ -71,19 +65,6 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
     if (ref.referenceType === 'MaskinportenScope') {
       delegableApi.scopes.push(ref.reference);
     }
-  }
-  if (i18next.language === 'no_nb') {
-    delegableApi.rightDescription = obj.rightDescription?.nb;
-    delegableApi.orgName = orgName.nb;
-    delegableApi.apiName = obj.title.nb;
-  } else if (i18next.language === 'en') {
-    delegableApi.rightDescription = obj.rightDescription?.en;
-    delegableApi.orgName = orgName.en;
-    delegableApi.apiName = obj.title.en;
-  } else {
-    delegableApi.rightDescription = obj.rightDescription?.nn;
-    delegableApi.orgName = orgName.nn;
-    delegableApi.apiName = obj.title.nn;
   }
 
   return delegableApi;
