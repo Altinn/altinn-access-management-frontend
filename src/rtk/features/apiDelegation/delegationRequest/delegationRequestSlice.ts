@@ -42,9 +42,11 @@ export const postApiDelegation = createAsyncThunk(
       orgName,
     };
     const altinnPartyId = getCookie('AltinnPartyId');
+
     if (!altinnPartyId) {
-      throw new Error(String('AltinnPartyId not found in cookie'));
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
+
     return await axios
       .post(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema`, {
         to: [

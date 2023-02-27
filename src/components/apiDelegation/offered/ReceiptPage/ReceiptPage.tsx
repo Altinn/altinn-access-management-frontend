@@ -11,11 +11,11 @@ import { useEffect } from 'react';
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { resetDelegableOrgs } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
-import { setLoading as setOveviewToReload } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { SummaryPage, PageContainer } from '../../../reusables';
 
@@ -41,7 +41,7 @@ export const ReceiptPage = () => {
         failedDelegations={failedApiDelegations}
         successfulDelegations={successfulApiDelegations}
         restartProcessPath={
-          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+          '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
         }
         pageHeaderText={String(t('api_delegation.give_access_to_new_api'))}
         topListText={String(t('api_delegation.failed_delegations'))}
@@ -58,7 +58,7 @@ export const ReceiptPage = () => {
             variant={ButtonVariant.Filled}
             onClick={() => {
               dispatch(setOveviewToReload());
-              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.Overview);
+              navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview);
             }}
           >
             {t('api_delegation.receipt_page_main_button')}

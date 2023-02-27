@@ -9,11 +9,11 @@ import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { SummaryPage } from '@/components/reusables/SummaryPage';
-import type { DelegationRequest } from '@/rtk/features/delegationRequest/delegationRequestSlice';
+import type { DelegationRequest } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import {
   postApiDelegation,
   setBatchPostSize,
-} from '@/rtk/features/delegationRequest/delegationRequestSlice';
+} from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
@@ -23,6 +23,12 @@ export const ConfirmationPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!loading) {
+      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt);
+    }
+  }, [loading]);
 
   const handleConfirm = () => {
     setConfirmed(true);
@@ -41,19 +47,13 @@ export const ConfirmationPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!loading) {
-      navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiReceipt);
-    }
-  }, [loading]);
-
   return (
     <PageContainer>
       <SummaryPage
         delegableApis={chosenApis}
         delegableOrgs={chosenOrgs}
         restartProcessPath={
-          '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+          '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
         }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
@@ -76,7 +76,9 @@ export const ConfirmationPage = () => {
             variant={ButtonVariant.Outline}
             size={ButtonSize.Small}
             onClick={() =>
-              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi)
+              navigate(
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
+              )
             }
           >
             {t('api_delegation.previous')}

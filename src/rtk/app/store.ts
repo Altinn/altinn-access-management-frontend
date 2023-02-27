@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createLogger } from 'redux-logger';
 
-import delegableApiReducer from '../features/delegableApi/delegableApiSlice';
-import overviewOrgReducer from '../features/overviewOrg/overviewOrgSlice';
-import delegableOrgReducer from '../features/delegableOrg/delegableOrgSlice';
-import delegationRequestReducer from '../features/delegationRequest/delegationRequestSlice';
+import delegableApiReducer from '../features/apiDelegation/delegableApi/delegableApiSlice';
+import overviewOrgReducer from '../features/apiDelegation/overviewOrg/overviewOrgSlice';
+import delegableOrgReducer from '../features/apiDelegation/delegableOrg/delegableOrgSlice';
+import delegationRequestReducer from '../features/apiDelegation/delegationRequest/delegationRequestSlice';
 import userInfoReducer from '../features/userInfo/userInfoSlice';
 
 const logger = createLogger();

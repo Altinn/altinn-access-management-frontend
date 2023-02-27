@@ -23,24 +23,36 @@
   margin-bottom: 3rem; 
 }
 
-.apiSubheading{
-  margin-top: 4rem;
-  font-weight: normal;
-  align-self: flex-end;
-  margin-bottom: 10px;
+.pageContentContainer {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
 }
 
-.pageContentContainer {
+.apiSubheading{
+  font-weight: normal;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
 }
 
 .editButton {
-  align-self: flex-end;
+  justify-content: flex-end;
+  display: flex;
+  flex: 1;
 }
 
 .pageContentText {
   font-weight: normal;
   margin-top: -2rem;
+}
+
+.link {
+  color: black;
+  text-decoration-line: underline;
+  text-decoration-color: #1EADF7;
+  display: inline-block;
+  background: transparent;
+}
+
+.errorPanel{
+  margin-top: 2rem;
 }

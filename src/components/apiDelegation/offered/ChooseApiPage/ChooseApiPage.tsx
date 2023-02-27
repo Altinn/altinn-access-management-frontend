@@ -15,18 +15,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import {
-  fetchDelegableApis,
-  softAddApi,
-  softRemoveApi,
-  search,
-  filter,
-} from '@/rtk/features/delegableApi/delegableApiSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
@@ -38,6 +28,16 @@ import {
 import { useMediaQuery } from '@/resources/hooks';
 import { NavigationButtons } from '@/components/reusables';
 import main from '@/main.module.css';
+import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import {
+  fetchDelegableApis,
+  softAddApi,
+  softRemoveApi,
+  search,
+  filter,
+} from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -147,77 +147,78 @@ export const ChooseApiPage = () => {
   });
 
   return (
-    <div>
-      <PageContainer>
-        <Page>
-          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-          <PageContent>
-            <div className={main.pageContent}>
-              {chosenDelegableOrgs.length < 1 ? (
-                <Panel
-                  title={t('common.error')}
-                  variant={PanelVariant.Warning}
-                  forceMobileLayout={isSm}
-                >
-                  {t('api_delegation.orgs_not_chosen_subtitle')}
-                </Panel>
-              ) : (
-                <div>
-                  <h3>{t('api_delegation.chosen_orgs')}:</h3>
-                  <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
-                </div>
-              )}
-              <h3>{t('api_delegation.new_api_content_text2')}</h3>
-              {isSm && chosenApis.length > 0 && (
+    <PageContainer>
+      <Page>
+        <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
+        <PageContent>
+          <div className={main.pageContent}>
+            {chosenDelegableOrgs.length < 1 ? (
+              <Panel
+                title={t('common.error')}
+                variant={PanelVariant.Warning}
+                forceMobileLayout={isSm}
+              >
+                {t('api_delegation.orgs_not_chosen_subtitle')}
+              </Panel>
+            ) : (
+              <div>
+                <h3>{t('api_delegation.chosen_orgs')}:</h3>
+                <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
+              </div>
+            )}
+            <h3>{t('api_delegation.new_api_content_text2')}</h3>
+            {isSm && chosenApis.length > 0 && (
+              <div className={classes.apiAccordions}>
+                <h4>{t('api_delegation.chosen_apis')}</h4>
+                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+              </div>
+            )}
+            <div className={classes.searchSection}>
+              <SearchField
+                value={searchString}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  handleSearch(event.target.value)
+                }
+              ></SearchField>
+              <div className={classes.filter}>
+                <Select
+                  label={String(t('api_delegation.filter_label'))}
+                  deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
+                  multiple={true}
+                  onChange={handleFilterChange}
+                  options={filterOptions}
+                />
+              </div>
+            </div>
+            <div className={classes.pageContentAccordionsContainer}>
+              <div className={classes.apiAccordions}>
+                <h4>{t('api_delegation.delegable_apis')}:</h4>
+                <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
+              </div>
+              {!isSm && (
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               )}
-              <div className={classes.searchSection}>
-                <SearchField
-                  value={searchString}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                    handleSearch(event.target.value)
-                  }
-                ></SearchField>
-                <div className={classes.filter}>
-                  <Select
-                    label={String(t('api_delegation.filter_label'))}
-                    deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
-                    multiple={true}
-                    onChange={handleFilterChange}
-                    options={filterOptions}
-                  />
-                </div>
-              </div>
-              <div className={classes.pageContentAccordionsContainer}>
-                <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.delegable_apis')}:</h4>
-                  <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
-                </div>
-                {!isSm && (
-                  <div className={classes.apiAccordions}>
-                    <h4>{t('api_delegation.chosen_apis')}</h4>
-                    <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
-                  </div>
-                )}
-              </div>
-              <NavigationButtons
-                previousText={t('api_delegation.previous')}
-                previousPath={
-                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
-                }
-                nextText={t('api_delegation.next')}
-                nextPath={
-                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation
-                }
-                nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
-              ></NavigationButtons>
             </div>
-          </PageContent>
-        </Page>
-      </PageContainer>
-    </div>
+            <NavigationButtons
+              previousText={t('api_delegation.previous')}
+              previousPath={
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
+              }
+              nextText={t('api_delegation.next')}
+              nextPath={
+                '/' +
+                RouterPath.OfferedApiDelegations +
+                '/' +
+                RouterPath.OfferedApiExecuteDelegation
+              }
+              nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+            ></NavigationButtons>
+          </div>
+        </PageContent>
+      </Page>
+    </PageContainer>
   );
 };

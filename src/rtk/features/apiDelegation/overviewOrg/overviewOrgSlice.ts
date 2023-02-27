@@ -51,6 +51,11 @@ interface languageDto {
   nn: string;
 }
 
+export interface DeletionRequest {
+  orgNr: string;
+  apiId: string;
+}
+
 const initialState: SliceState = {
   loading: true,
   overviewOrgs: [],
@@ -92,7 +97,7 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
     let delegationOrg = '';
     let delegationOrgNumber = '';
     switch (layout) {
-      case LayoutState.Given:
+      case LayoutState.Offered:
         delegationOrg = delegation.coveredByName;
         delegationOrgNumber = delegation.coveredByOrganizationNumber;
         break;
@@ -122,7 +127,7 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
   return overviewOrgList;
 };
 
-const setAllItemsToGivenSoftDeleteState = (
+const setAllSoftDeleteState = (
   state: SliceState,
   softDeletedOrgId: string,
   isSoftDelete: boolean,
@@ -151,7 +156,11 @@ const createCopyOrg = (org: OverviewOrg) => {
 export const fetchOverviewOrgsOffered = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOffered',
   async () => {
-    const altinnPartyId = getCookie('AltinnPartyId') ? getCookie('AltinnPartyId') : '50067798';
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
       .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/offered`)
@@ -166,9 +175,92 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
 export const fetchOverviewOrgsReceived = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsReceived',
   async () => {
-    const altinnPartyId = getCookie('AltinnPartyId') ? getCookie('AltinnPartyId') : '50067798';
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+
     return await axios
       .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/received`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
+  },
+);
+
+export const deleteOfferedApiDelegation = createAsyncThunk(
+  'overviewOrg/deleteOfferedApiDelegation',
+  async (request: DeletionRequest) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+
+    return await axios
+      .post(
+        `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered/revoke`,
+        {
+          to: [
+            {
+              id: 'urn:altinn:organizationnumber',
+              value: String(request.orgNr),
+            },
+          ],
+          rights: [
+            {
+              resource: [
+                {
+                  id: 'urn:altinn:resourceregistry',
+                  value: request.apiId,
+                },
+              ],
+            },
+          ],
+        },
+      )
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
+  },
+);
+
+export const deleteReceivedApiDelegation = createAsyncThunk(
+  'overviewOrg/deleteReceivedApiDelegation',
+  async (request: DeletionRequest) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+
+    return await axios
+      .post(
+        `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received/revoke`,
+        {
+          to: [
+            {
+              id: 'urn:altinn:organizationnumber',
+              value: String(request.orgNr),
+            },
+          ],
+          rights: [
+            {
+              resource: [
+                {
+                  id: 'urn:altinn:resourceregistry',
+                  value: request.apiId,
+                },
+              ],
+            },
+          ],
+        },
+      )
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -225,18 +317,15 @@ const overviewOrgSlice = createSlice({
         }
       }
     },
-    save: (state) => {
-      console.log(state.overviewOrgs);
-    },
     softRestoreAll: (state, action) => {
       const restoredOrgId = action.payload;
 
-      setAllItemsToGivenSoftDeleteState(state, restoredOrgId, false);
+      setAllSoftDeleteState(state, restoredOrgId, false);
     },
     softDeleteAll: (state, action) => {
       const selectedOrgId = action.payload;
 
-      setAllItemsToGivenSoftDeleteState(state, selectedOrgId, true);
+      setAllSoftDeleteState(state, selectedOrgId, true);
     },
     restoreAllSoftDeletedItems: (state) => {
       for (const org of state.overviewOrgs) {
@@ -260,14 +349,40 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
+        state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
         const dataArray = action.payload;
-        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Given);
+        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+        state.loading = false;
+      })
+      .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {
+        const { overviewOrgs } = state;
+        for (const org of overviewOrgs) {
+          if (org.orgNr === action.meta.arg.orgNr) {
+            org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
+          }
+        }
+        state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
+      })
+      .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+      })
+      .addCase(deleteReceivedApiDelegation.fulfilled, (state, action) => {
+        const { overviewOrgs } = state;
+        for (const org of overviewOrgs) {
+          if (org.orgNr === action.meta.arg.orgNr) {
+            org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
+          }
+        }
+        state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
+      })
+      .addCase(deleteReceivedApiDelegation.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
       });
   },
@@ -279,7 +394,6 @@ export const {
   softRestore,
   softDeleteAll,
   softRestoreAll,
-  save,
   restoreAllSoftDeletedItems,
   setLoading,
 } = overviewOrgSlice.actions;

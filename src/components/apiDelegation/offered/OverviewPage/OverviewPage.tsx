@@ -12,15 +12,13 @@ export const OverviewPage = () => {
   const { t } = useTranslation('common');
 
   return (
-    <div>
-      <PageContainer>
-        <Page>
-          <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
-          <PageContent>
-            <OverviewPageContent layout={LayoutState.Given} />
-          </PageContent>
-        </Page>
-      </PageContainer>
-    </div>
+    <PageContainer>
+      <Page>
+        <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
+        <PageContent>
+          <OverviewPageContent layout={LayoutState.Offered} />
+        </PageContent>
+      </Page>
+    </PageContainer>
   );
 };
