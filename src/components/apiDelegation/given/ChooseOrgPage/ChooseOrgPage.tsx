@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { ActionBar, ActionIconVariant } from '@/components/reusables';
+import { ActionBar, ActionIconVariant, UserInfoBar } from '@/components/reusables';
 import {
   softAddOrg,
   softRemoveOrg,
@@ -126,72 +126,73 @@ export const ChooseOrgPage = () => {
   };
 
   return (
-    <PageContainer>
-      <Page>
-        <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-        <PageContent>
-          <div className={main.pageContent}>
-            <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
-            <div className={classes.searchSection}>
-              <SearchField
-                label={String(t('api_delegation.search_for_buisness'))}
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleSearch(event.target.value)
-                }
-              ></SearchField>
-            </div>
-            <div className={classes.pageContentAccordionsContainer}>
-              <div className={classes.apiAccordions}>
-                {searchString === '' ? (
-                  <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
-                ) : (
-                  <h4>{t('api_delegation.businesses_search_results')}</h4>
-                )}
-                {infoPanel()}
-                <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
-              </div>
-              <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
-              </div>
-            </div>
-            <div className={classes.navButtonContainer}>
-              <div className={classes.navButton}>
-                <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Outline}
-                  size={ButtonSize.Small}
-                  fullWidth={true}
-                  onClick={() =>
-                    navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview,
-                    )
+    <div>
+      <UserInfoBar />
+      <PageContainer>
+        <Page>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
+          <PageContent>
+            <div className={main.pageContent}>
+              <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
+              <div className={classes.searchSection}>
+                <SearchField
+                  label={String(t('api_delegation.search_for_buisness'))}
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    handleSearch(event.target.value)
                   }
-                >
-                  {t('api_delegation.cancel')}
-                </Button>
+                ></SearchField>
               </div>
-              <div className={classes.navButton}>
-                <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Filled}
-                  size={ButtonSize.Small}
-                  fullWidth={true}
-                  onClick={() =>
-                    navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi,
-                    )
-                  }
-                  disabled={chosenOrgs.length === 0}
-                >
-                  {t('api_delegation.next')}
-                </Button>
+              <div className={classes.pageContentAccordionsContainer}>
+                <div className={classes.apiAccordions}>
+                  {searchString === '' ? (
+                    <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                  ) : (
+                    <h4>{t('api_delegation.businesses_search_results')}</h4>
+                  )}
+                  {infoPanel()}
+                  <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+                </div>
+                <div className={classes.apiAccordions}>
+                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                  <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
+                </div>
+              </div>
+              <div className={classes.navButtonContainer}>
+                <div className={classes.navButton}>
+                  <Button
+                    color={ButtonColor.Primary}
+                    variant={ButtonVariant.Outline}
+                    size={ButtonSize.Small}
+                    fullWidth={true}
+                    onClick={() =>
+                      navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.Overview)
+                    }
+                  >
+                    {t('api_delegation.cancel')}
+                  </Button>
+                </div>
+                <div className={classes.navButton}>
+                  <Button
+                    color={ButtonColor.Primary}
+                    variant={ButtonVariant.Filled}
+                    size={ButtonSize.Small}
+                    fullWidth={true}
+                    onClick={() =>
+                      navigate(
+                        '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi,
+                      )
+                    }
+                    disabled={chosenOrgs.length === 0}
+                  >
+                    {t('api_delegation.next')}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </PageContent>
-      </Page>
-    </PageContainer>
+          </PageContent>
+        </Page>
+      </PageContainer>
+    </div>
   );
 };

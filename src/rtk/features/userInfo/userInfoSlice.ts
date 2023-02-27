@@ -3,19 +3,19 @@ import axios from 'axios';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-export interface InitialState {
+export interface SliceState {
   userLoading: boolean;
   reporteeLoading: boolean;
-  name: string;
+  personName: string;
   reporteeName: string;
   userInfoError: string;
   reporteeError: string;
 }
 
-const initialState: InitialState = {
+const initialState: SliceState = {
   userLoading: true,
   reporteeLoading: true,
-  name: '',
+  personName: '',
   reporteeName: '',
   userInfoError: '',
   reporteeError: '',
@@ -50,7 +50,7 @@ const userInfoSlice = createSlice({
     builder
       .addCase(fetchUserInfo.fulfilled, (state, action) => {
         const dataArray = action.payload;
-        state.name = dataArray.party.name;
+        state.personName = dataArray.party.name;
         state.userLoading = false;
       })
       .addCase(fetchUserInfo.rejected, (state, action) => {

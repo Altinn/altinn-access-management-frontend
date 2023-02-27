@@ -10,7 +10,7 @@ import { fetchUserInfo, fetchReportee } from '@/rtk/features/userInfo/userInfoSl
 import classes from './UserInfoBar.module.css';
 
 export const UserInfoBar = () => {
-  const userInfoName = useAppSelector((state) => state.userInfo.name);
+  const userInfoName = useAppSelector((state) => state.userInfo.personName);
   const reporteeName = useAppSelector((state) => state.userInfo.reporteeName);
   const userLoading = useAppSelector((state) => state.userInfo.userLoading);
   const reporteeLoading = useAppSelector((state) => state.userInfo.reporteeLoading);

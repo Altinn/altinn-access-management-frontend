@@ -36,7 +36,7 @@ import {
   NewDelegationAccordion,
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
-import { NavigationButtons } from '@/components/reusables';
+import { NavigationButtons, UserInfoBar } from '@/components/reusables';
 import main from '@/main.module.css';
 
 import classes from './ChooseApiPage.module.css';
@@ -147,75 +147,78 @@ export const ChooseApiPage = () => {
   });
 
   return (
-    <PageContainer>
-      <Page>
-        <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-        <PageContent>
-          <div className={main.pageContent}>
-            {chosenDelegableOrgs.length < 1 ? (
-              <Panel
-                title={t('common.error')}
-                variant={PanelVariant.Warning}
-                forceMobileLayout={isSm}
-              >
-                {t('api_delegation.orgs_not_chosen_subtitle')}
-              </Panel>
-            ) : (
-              <div>
-                <h3>{t('api_delegation.chosen_orgs')}:</h3>
-                <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
-              </div>
-            )}
-            <h3>{t('api_delegation.new_api_content_text2')}</h3>
-            {isSm && chosenApis.length > 0 && (
-              <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.chosen_apis')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
-              </div>
-            )}
-            <div className={classes.searchSection}>
-              <SearchField
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleSearch(event.target.value)
-                }
-              ></SearchField>
-              <div className={classes.filter}>
-                <Select
-                  label={String(t('api_delegation.filter_label'))}
-                  deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
-                  multiple={true}
-                  onChange={handleFilterChange}
-                  options={filterOptions}
-                />
-              </div>
-            </div>
-            <div className={classes.pageContentAccordionsContainer}>
-              <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.delegable_apis')}:</h4>
-                <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
-              </div>
-              {!isSm && (
+    <div>
+      <UserInfoBar />
+      <PageContainer>
+        <Page>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
+          <PageContent>
+            <div className={main.pageContent}>
+              {chosenDelegableOrgs.length < 1 ? (
+                <Panel
+                  title={t('common.error')}
+                  variant={PanelVariant.Warning}
+                  forceMobileLayout={isSm}
+                >
+                  {t('api_delegation.orgs_not_chosen_subtitle')}
+                </Panel>
+              ) : (
+                <div>
+                  <h3>{t('api_delegation.chosen_orgs')}:</h3>
+                  <List borderStyle={BorderStyle.Dashed}>{chosenDelegableOrgs}</List>
+                </div>
+              )}
+              <h3>{t('api_delegation.new_api_content_text2')}</h3>
+              {isSm && chosenApis.length > 0 && (
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               )}
+              <div className={classes.searchSection}>
+                <SearchField
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    handleSearch(event.target.value)
+                  }
+                ></SearchField>
+                <div className={classes.filter}>
+                  <Select
+                    label={String(t('api_delegation.filter_label'))}
+                    deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
+                    multiple={true}
+                    onChange={handleFilterChange}
+                    options={filterOptions}
+                  />
+                </div>
+              </div>
+              <div className={classes.pageContentAccordionsContainer}>
+                <div className={classes.apiAccordions}>
+                  <h4>{t('api_delegation.delegable_apis')}:</h4>
+                  <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
+                </div>
+                {!isSm && (
+                  <div className={classes.apiAccordions}>
+                    <h4>{t('api_delegation.chosen_apis')}</h4>
+                    <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+                  </div>
+                )}
+              </div>
+              <NavigationButtons
+                previousText={t('api_delegation.previous')}
+                previousPath={
+                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
+                }
+                nextText={t('api_delegation.next')}
+                nextPath={
+                  '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation
+                }
+                nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+              ></NavigationButtons>
             </div>
-            <NavigationButtons
-              previousText={t('api_delegation.previous')}
-              previousPath={
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
-              }
-              nextText={t('api_delegation.next')}
-              nextPath={
-                '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiExecuteDelegation
-              }
-              nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
-            ></NavigationButtons>
-          </div>
-        </PageContent>
-      </Page>
-    </PageContainer>
+          </PageContent>
+        </Page>
+      </PageContainer>
+    </div>
   );
 };

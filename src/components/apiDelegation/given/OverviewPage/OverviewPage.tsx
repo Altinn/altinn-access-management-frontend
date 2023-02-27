@@ -17,7 +17,7 @@ export const OverviewPage = () => {
       <UserInfoBar></UserInfoBar>
       <PageContainer>
         <Page>
-          <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')} test</PageHeader>
+          <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
           <PageContent>
             <OverviewPageContent layout={LayoutState.Given} />
           </PageContent>

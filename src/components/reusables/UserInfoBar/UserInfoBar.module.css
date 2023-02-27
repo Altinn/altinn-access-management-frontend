@@ -40,5 +40,6 @@
 .userText{ 
   font-weight: 500;
   margin: 0;
-  margin-right: 50px;
+  margin-right: 1rem;
+  text-align: right;
 }
