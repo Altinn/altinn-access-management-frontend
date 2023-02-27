@@ -204,7 +204,6 @@ const delegableApiSlice = createSlice({
           const apiName = dataArray[i].title?.nb;
           const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
           const rightDescription = dataArray[i].rightDescription?.nb;
-          const owner = dataArray[i].owner?.nb;
           if (rightDescription && apiName) {
             if (orgName) {
               responseList.push(
@@ -212,11 +211,6 @@ const delegableApiSlice = createSlice({
               );
               if (!providerList.includes(orgName)) {
                 providerList.push(orgName);
-              }
-            } else if (owner) {
-              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
-              if (!providerList.includes(owner)) {
-                providerList.push(owner);
               }
             }
           }
