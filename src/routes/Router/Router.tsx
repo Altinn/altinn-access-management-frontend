@@ -36,11 +36,6 @@ export const Router = createBrowserRouter(
         errorElement={<ErrorPage />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview}
-        element={<OfferedOverviewPage />}
-        errorElement={<ErrorPage />}
-      />
-      <Route
         path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg}
         element={<ChooseOrgPage />}
         errorElement={<ErrorPage />}
