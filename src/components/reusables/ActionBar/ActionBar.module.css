@@ -15,5 +15,11 @@
 }
 
 .actionButton {
-    margin: 0.5rem 0.5rem 0.5rem auto;
+  margin: 0.5rem 0.5rem 0.5rem auto;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
 }

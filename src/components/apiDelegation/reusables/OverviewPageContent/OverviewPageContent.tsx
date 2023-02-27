@@ -178,9 +178,6 @@ export const OverviewPageContent = ({
         isEditable={isEditable}
         softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
         softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-        delegateToOrgCallback={
-          layout === LayoutState.Offered ? () => delegateToSpecificOrg(org) : undefined
-        }
       ></OrgDelegationAccordion>
     ));
   };
