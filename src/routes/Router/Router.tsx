@@ -13,13 +13,12 @@ import { NotFoundSite } from '@/resources/NotFoundSite';
 // This is because typescript 5 will have support for computed enums for strings https://github.com/microsoft/TypeScript/issues/40793
 export enum RouterPath {
   GivenApiDelegations = 'given-api-delegations',
-  GivenApiOverview = 'overview',
+  Overview = 'overview',
   GivenApiChooseApi = 'choose-api',
   GivenApiChooseOrg = 'choose-org',
   GivenApiExecuteDelegation = 'execute-delegation',
   GivenApiReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
-  ReceivedApiOverview = 'overview',
   Profile = 'Profile',
   BasePath = '/accessmanagement/ui',
 }
@@ -31,7 +30,7 @@ export const Router = createBrowserRouter(
       errorElement={<NotFoundSite />}
     >
       <Route
-        path={RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview}
+        path={RouterPath.GivenApiDelegations + '/' + RouterPath.Overview}
         element={<GivenOverviewPage />}
         errorElement={<NotFoundSite />}
       />
@@ -56,7 +55,7 @@ export const Router = createBrowserRouter(
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.GivenApiOverview}
+        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.Overview}
         element={<ReceivedOverviewPage />}
         errorElement={<NotFoundSite />}
       />
