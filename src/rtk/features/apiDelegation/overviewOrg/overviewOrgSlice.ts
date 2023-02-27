@@ -364,23 +364,11 @@ const overviewOrgSlice = createSlice({
       .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {
         const { overviewOrgs } = state;
         for (const org of overviewOrgs) {
-          let i = 0;
           if (org.orgNr === action.meta.arg.orgNr) {
-            for (const item of org.apiList) {
-              if ((item.id = action.meta.arg.apiId)) {
-                overviewOrgs[i].apiList = state.overviewOrgs[i].apiList.filter(
-                  (api) => api.id !== action.meta.arg.apiId,
-                );
-                if (overviewOrgs[i].apiList.length === 0) {
-                  state.overviewOrgs = state.overviewOrgs.filter(
-                    (mockOrg) => mockOrg.orgNr !== action.meta.arg.orgNr,
-                  );
-                }
-              }
-            }
+            org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
           }
-          i++;
         }
+        state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
