@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import i18next from 'i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -16,14 +15,10 @@ export interface DelegableApi {
 export interface DelegableApiDto {
   title: string;
   identifier: string;
-  hasCompetentAuthority: HasCompetentAuthority;
+  resourceOwnername: string;
   rightDescription: string;
   description?: string;
   resourceReferences: resourceReferenceDTO[];
-}
-
-export interface HasCompetentAuthority {
-  name: string;
 }
 
 export interface DelegableApiWithPriority {
