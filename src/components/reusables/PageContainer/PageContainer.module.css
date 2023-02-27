@@ -1,32 +1,29 @@
-@media only screen and (min-width: 0px) {
-  .pageContainer{
-    width: 315px;
-  }
-}
-
 @media only screen and (min-width: 576px) {
-  .pageContainer{
-    width: 576px;
+  .pageMargin{
+    margin: 0 8px 0 8px;
   }
 }
 
 @media only screen and (min-width: 768px) {
-  .pageContainer{
-    width: 768px;
+  .pageMargin{
+    margin: 0 16px 0 16px;
   }
 }
 
 @media only screen and (min-width: 992px) {
-  .pageContainer{
-    width: 992px;
+  .pageMargin{
+    margin: 0 40px 0 40px;
   }
 }
 
 .pageContainer{
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1rem;;
+  margin-top: 1rem;
   background-color: #1EADF7;
+  min-width: 320px;
+  max-width: 1056px;
+  width: 100%;
 }
 
 .exitButton{
