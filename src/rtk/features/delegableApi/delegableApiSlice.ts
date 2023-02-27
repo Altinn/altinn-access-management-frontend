@@ -182,7 +182,7 @@ const delegableApiSlice = createSlice({
         const responseList: DelegableApi[] = [];
         const providerList: string[] = [];
         for (let i = 0; i < dataArray.length; i++) {
-          const apiName = dataArray[i].title?.nb;
+          const apiName = dataArray[i].title;
           const orgName = dataArray[i].resourceOwnerName;
           const rightDescription = dataArray[i].rightDescription;
           if (rightDescription && apiName) {
