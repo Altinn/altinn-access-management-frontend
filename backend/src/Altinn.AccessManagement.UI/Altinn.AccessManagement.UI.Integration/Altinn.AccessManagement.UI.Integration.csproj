@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Altinn.Platform.Models" Version="1.2.0" />
 		<PackageReference Include="JWTCookieAuthentication" Version="3.0.0" />
@@ -15,6 +17,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
 	</ItemGroup>

@@ -19,5 +19,15 @@
         /// Open Id Connect Well known endpoint
         /// </summary>
         public string? OpenIdWellKnownEndpoint { get; set; }
+
+        /// <summary>
+        /// Altinn platform base url
+        /// </summary>
+        public string? AltinnPlatformBaseUrl { get; set; }
+
+        /// <summary>
+        /// Endpoint for authentication
+        /// </summary>
+        public string? ApiAuthenticationEndpoint { get; set; }
     }
 }

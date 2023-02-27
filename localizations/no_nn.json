@@ -70,14 +70,15 @@
     "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt.",
     "failed_delegations": "Desse API-delegeringene gjekk gale og vart derfor ikkje tildelte",
     "succesful_delegations": "Desse API-delegeringene vart tildelte",
-    "receipt_page_bottom_text": "Tilgang er gitt og og gyldig til den aktivt vert sletta eller trekt tilbake. Mottakar får beskjed.",
-    "receipt_page_main_button": "Til totaloversikt",
     "not_found_site_error_type": "Feil 404",
     "not_found_site_header": "Oi! Du har freista å komme til ei side vi ikkje veit om",
     "not_found_site_upper_text": "Vi veit ikkje kvar du i røynda skulle, men kanskje du kan finne det du leitar etter på nokre av desse sidene:",
     "not_found_site_lower_text": "Om dette ikkje var til hjelp kan du ta kontakt med Altinn brukarstøtte på telefon 75 00 60 00",
     "go_to_inbox": "Gå til innboks",
     "go_to_profile": "Gå til profilsida",
-    "find_and_submit_scheme": "Finne og sende inn nytt skjema"
+    "find_and_submit_scheme": "Finne og sende inn nytt skjema",
+    "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slett eller blir trekte tilbake. Mottakar har fått beskjed.",
+    "receipt_page_bottom_text_failed": "Ojda, ser ut som dette ikkje gjekk heilt som planlagt. Vennlegst prøv igjen seinare. Kontakt Altinn Servicedesk om feilen vedvarer.",
+    "receipt_page_main_button": "Til totaloversikt"
   }
 }

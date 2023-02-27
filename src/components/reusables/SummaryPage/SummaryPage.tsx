@@ -98,11 +98,8 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          removeCallback={
-            failedDelegations.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
-          }
           contentColor={ListTextColor.error}
-          leftText={apiDelegation.orgName}
+          leftText={apiDelegation.apiName}
           middleText={apiDelegation.orgName}
         ></CompactDeletableListItem>
       );
@@ -114,31 +111,33 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          removeCallback={
-            successfulDelegations.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
-          }
-          leftText={apiDelegation.orgName}
+          leftText={apiDelegation.apiName}
           middleText={apiDelegation.orgName}
         ></CompactDeletableListItem>
       );
     },
   );
 
-  const showErrorPanel = () => {
+  const showTopSection = () => {
     return (
-      delegableApis !== null &&
-      delegableOrgs !== null &&
-      (delegableApis === undefined ||
-        delegableApis?.length < 1 ||
-        delegableOrgs === undefined ||
-        delegableOrgs?.length < 1) &&
-      failedDelegations !== null &&
-      successfulDelegations !== null &&
-      (failedDelegations === undefined ||
-        failedDelegations?.length < 1 ||
-        successfulDelegations === undefined ||
-        successfulDelegations?.length < 1)
+      (delegableApis !== null && delegableApis !== undefined && delegableApis?.length > 0) ||
+      (failedDelegations !== null &&
+        failedDelegations !== undefined &&
+        failedDelegations?.length > 0)
     );
+  };
+
+  const showBottomSection = () => {
+    return (
+      (delegableOrgs !== null && delegableOrgs !== undefined && delegableOrgs?.length > 0) ||
+      (successfulDelegations !== null &&
+        successfulDelegations !== undefined &&
+        successfulDelegations?.length > 0)
+    );
+  };
+
+  const showErrorPanel = () => {
+    return !showTopSection() && !showBottomSection();
   };
 
   return (
@@ -166,22 +165,28 @@ export const SummaryPage = ({
             </Panel>
           ) : (
             <div>
-              <div>
-                <h2 className={classes.listText}>{topListText}</h2>
-                {delegableApiListItems !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{delegableApiListItems}</List>
-                )}
-                {failedDelegations !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{failedDelegatedListItems}</List>
-                )}
-                <h2 className={classes.listText}>{bottomListText}</h2>
-                {delegableOrgs !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{delegableOrgListItems}</List>
-                )}
-                {successfulDelegations !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{successfulDelegatedItems}</List>
-                )}
-              </div>
+              {showTopSection() && (
+                <div>
+                  <h2 className={classes.listText}>{topListText}</h2>
+                  {delegableApiListItems !== undefined && (
+                    <List borderStyle={BorderStyle.Dashed}>{delegableApiListItems}</List>
+                  )}
+                  {failedDelegations !== undefined && (
+                    <List borderStyle={BorderStyle.Dashed}>{failedDelegatedListItems}</List>
+                  )}
+                </div>
+              )}
+              {showBottomSection() && (
+                <div>
+                  <h2 className={classes.listText}>{bottomListText}</h2>
+                  {delegableOrgs !== undefined && (
+                    <List borderStyle={BorderStyle.Dashed}>{delegableOrgListItems}</List>
+                  )}
+                  {successfulDelegations !== undefined && (
+                    <List borderStyle={BorderStyle.Dashed}>{successfulDelegatedItems}</List>
+                  )}
+                </div>
+              )}
               <h3 className={classes.bottomText}>{bottomText}</h3>
               <div className={classes.navButtonContainer}>
                 {complementaryButton && (

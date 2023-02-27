@@ -33,9 +33,6 @@
 			<Link>stylecop.json</Link>
 		</AdditionalFiles>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
 		<CodeAnalysisRuleSet>$(SolutionDir)Altinn3.ruleset</CodeAnalysisRuleSet>

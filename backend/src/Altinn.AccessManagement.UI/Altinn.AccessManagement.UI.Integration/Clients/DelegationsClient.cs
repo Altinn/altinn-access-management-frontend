@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/inbound";
+                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/received";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 
@@ -82,7 +82,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/outbound";
+                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 

@@ -26,9 +26,13 @@ builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", optional
 
 ConfigureServices(builder.Services, builder.Configuration);
 
+// Add services to the container.
+
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -47,15 +51,23 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseCors();
+
+app.UseStaticFiles();
+
 app.MapControllers();
 
 app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
+    services.AddControllersWithViews();
+    services.AddMvc();
+
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
+    services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
