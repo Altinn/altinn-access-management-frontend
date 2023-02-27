@@ -8,7 +8,6 @@ import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { SummaryPage } from '@/components/reusables/SummaryPage';
-import { UserInfoBar } from '@/components/reusables';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
@@ -18,7 +17,6 @@ export const ConfirmationPage = () => {
 
   return (
     <div>
-      <UserInfoBar />
       <PageContainer>
         <SummaryPage
           delegableApis={chosenApis}

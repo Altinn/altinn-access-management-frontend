@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { ActionBar, ActionIconVariant, UserInfoBar } from '@/components/reusables';
+import { ActionBar, ActionIconVariant } from '@/components/reusables';
 import {
   softAddOrg,
   softRemoveOrg,
@@ -127,7 +127,6 @@ export const ChooseOrgPage = () => {
 
   return (
     <div>
-      <UserInfoBar />
       <PageContainer>
         <Page>
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>

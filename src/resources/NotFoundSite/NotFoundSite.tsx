@@ -5,7 +5,6 @@ import * as React from 'react';
 
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { ReactComponent as SeagullIcon } from '@/assets/Seagull.svg';
-import { UserInfoBar } from '@/components/reusables';
 
 import classes from './NotFoundSite.module.css';
 
@@ -18,7 +17,6 @@ export const NotFoundSite = () => {
 
   return (
     <div>
-      <UserInfoBar />
       <PageContainer>
         <Page>
           <PageContent>

@@ -36,7 +36,7 @@ import {
   NewDelegationAccordion,
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
-import { NavigationButtons, UserInfoBar } from '@/components/reusables';
+import { NavigationButtons } from '@/components/reusables';
 import main from '@/main.module.css';
 
 import classes from './ChooseApiPage.module.css';
@@ -148,7 +148,6 @@ export const ChooseApiPage = () => {
 
   return (
     <div>
-      <UserInfoBar />
       <PageContainer>
         <Page>
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>

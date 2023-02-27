@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { ReactComponent as ExitIcon } from '@/assets/Error.svg';
 import { RouterPath } from '@/routes/Router';
 
+import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
+
 import classes from './PageContainer.module.css';
 
 export interface PageContainerProps {
@@ -21,6 +23,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   return (
     <div className={classes.pageMargin}>
       <div className={classes.pageContainer}>
+        <UserInfoBar />
         <div className={classes.exitButton}>
           <Button
             variant={ButtonVariant.Quiet}

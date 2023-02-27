@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { PageContainer } from '@/components/reusables/PageContainer';
-import { UserInfoBar } from '@/components/reusables';
 
 import { OverviewPageContent } from '../../reusables/OverviewPageContent';
 import { LayoutState } from '../../reusables/LayoutState';
@@ -14,7 +13,6 @@ export const OverviewPage = () => {
 
   return (
     <div>
-      <UserInfoBar />
       <PageContainer>
         <Page>
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations_received')}</PageHeader>
