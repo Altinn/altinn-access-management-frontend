@@ -71,6 +71,7 @@
     "receipt_page_main_button": "To API-overview",
     "failed_delegations": "These API delegations went wrong and were therefore not assigned",
     "succesful_delegations": "These API delegations were successful",
-    "receipt_page_bottom_text": "The access is granted and valid until it is actively deleted or withdrawn. Recipient has been notified."
+    "receipt_page_bottom_text_failed": "Oops, this didn't go quite as planned. Please try again later and contact Altinn Service desk if the error persists.",
+    "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn. Recipient has been notified."
   }
 }

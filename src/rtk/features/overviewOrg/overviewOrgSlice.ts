@@ -148,14 +148,13 @@ const createCopyOrg = (org: OverviewOrg) => {
   };
 };
 
-export const fetchOverviewOrgsOutbound = createAsyncThunk(
-  'overviewOrg/fetchOverviewOrgsOutbound',
+export const fetchOverviewOrgsOffered = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsOffered',
   async () => {
-    const altinnPartyId =
-      getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '500000';
+    const altinnPartyId = getCookie('AltinnPartyId') ? getCookie('AltinnPartyId') : '50067798';
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
-      .get(`/accessmanagement/api/v1/bff/r${altinnPartyId}/delegations/maskinportenschema/outbound`)
+      .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/offered`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -164,14 +163,17 @@ export const fetchOverviewOrgsOutbound = createAsyncThunk(
   },
 );
 
-export const fetchOverviewOrgsInbound = createAsyncThunk(
-  'overviewOrg/fetchOverviewOrgsInbound',
+export const fetchOverviewOrgsReceived = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsReceived',
   async () => {
-    // TODO: Replace r500000 with partyid of actual logged in org
+    const altinnPartyId = getCookie('AltinnPartyId') ? getCookie('AltinnPartyId') : '50067798';
     return await axios
-      .get('/accessmanagement/api/v1/bff/r500000/delegations/maskinportenschema/inbound')
+      .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/received`)
       .then((response) => response.data)
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        throw new Error(String(error.response.status));
+      });
   },
 );
 
@@ -244,25 +246,28 @@ const overviewOrgSlice = createSlice({
         org.isAllSoftDeleted = false;
       }
     },
+    setLoading: (state) => {
+      state.loading = true;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOverviewOrgsInbound.fulfilled, (state, action) => {
+      .addCase(fetchOverviewOrgsReceived.fulfilled, (state, action) => {
         const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Received);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
-      .addCase(fetchOverviewOrgsInbound.rejected, (state, action) => {
+      .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
       })
-      .addCase(fetchOverviewOrgsOutbound.fulfilled, (state, action) => {
+      .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
         const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Given);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
-      .addCase(fetchOverviewOrgsOutbound.rejected, (state, action) => {
+      .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
       });
   },
@@ -276,4 +281,5 @@ export const {
   softRestoreAll,
   save,
   restoreAllSoftDeletedItems,
+  setLoading,
 } = overviewOrgSlice.actions;

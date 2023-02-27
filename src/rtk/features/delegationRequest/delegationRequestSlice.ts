@@ -1,77 +1,74 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import type { DelegableApi } from '../delegableApi/delegableApiSlice';
-import type { DelegableOrg } from '../delegableOrg/delegableOrgSlice';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface ApiDelegation {
   orgName: string;
   apiName: string;
 }
 
-export interface InitialState {
+export interface SliceState {
   loading: boolean;
   error: string;
   succesfulApiDelegations: ApiDelegation[];
   failedApiDelegations: ApiDelegation[];
+  batchPostSize: number;
+  batchPostCounter: number;
 }
 
 export interface DelegationRequest {
   apiIdentifier: string;
+  apiName: string;
   orgNr: string;
+  orgName: string;
 }
 
-const initialState: InitialState = {
+const initialState: SliceState = {
   loading: true,
   error: '',
-  succesfulApiDelegations: [
-    {
-      orgName: 'Org blabla',
-      apiName: 'Api blabla',
-    },
-  ],
-  failedApiDelegations: [
-    {
-      orgName: 'Org blabla',
-      apiName: 'Api blabla',
-    },
-  ],
+  succesfulApiDelegations: [],
+  failedApiDelegations: [],
+  batchPostSize: 0,
+  batchPostCounter: 0,
 };
 
-export const delegateApi = async (
-  state: InitialState,
-  apiList: DelegableApi[],
-  orgList: DelegableOrg[],
-) => {
-  for (let i = 0; i < apiList.length; i++) {
-    for (let j = 0; j < orgList.length; j++) {
-      const delegationRequest = {
-        apiIdentifier: apiList[i].id,
-        orgNr: orgList[j].orgNr,
-      };
-
-      const apiDelegation = {
-        apiName: apiList[i].apiName,
-        orgName: orgList[j].orgName,
-      };
-      try {
-        await postApiDelegation(delegationRequest);
-        state.succesfulApiDelegations.push(apiDelegation);
-      } catch {
-        state.failedApiDelegations.push(apiDelegation);
-      }
+export const postApiDelegation = createAsyncThunk(
+  'delegationRequestSlice/postApiDelegation',
+  async (delegationInfo: DelegationRequest) => {
+    const { apiIdentifier, apiName, orgNr, orgName }: DelegationRequest = delegationInfo;
+    const delegation: ApiDelegation = {
+      apiName,
+      orgName,
+    };
+    const altinnPartyId = getCookie('AltinnPartyId');
+    if (!altinnPartyId) {
+      throw new Error(String('AltinnPartyId not found in cookie'));
     }
-  }
-};
-
-const postApiDelegation = createAsyncThunk(
-  'delegationRequestSlice/delegateApi',
-  async ({ apiIdentifier, orgNr }: DelegationRequest) => {
     return await axios
-      .get('/accessmanagement/api/v1/1337/resources/maskinportenschema')
-      .then((response) => response.data)
+      .post(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema`, {
+        to: [
+          {
+            id: 'urn:altinn:organizationnumber',
+            value: String(orgNr),
+          },
+        ],
+        rights: [
+          {
+            resource: [
+              {
+                id: 'urn:altinn:resourceregistry',
+                value: String(apiIdentifier),
+              },
+            ],
+          },
+        ],
+      })
+      .then((response) => {
+        return delegation;
+      })
       .catch((error) => {
-        console.log(error);
+        throw error;
       });
   },
 );
@@ -79,8 +76,38 @@ const postApiDelegation = createAsyncThunk(
 const delegationRequestSlice = createSlice({
   name: 'delegationRequest',
   initialState,
-  reducers: {},
+  reducers: {
+    resetDelegationRequests: () => initialState,
+    setBatchPostSize: (state, action) => {
+      state.batchPostSize = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(postApiDelegation.fulfilled, (state, action) => {
+        const delegation: ApiDelegation = {
+          apiName: action.payload.apiName,
+          orgName: action.payload.orgName,
+        };
+        state.succesfulApiDelegations.push(delegation);
+        state.batchPostCounter += 1;
+        if (state.batchPostCounter === state.batchPostSize) {
+          state.loading = false;
+        }
+      })
+      .addCase(postApiDelegation.rejected, (state, action) => {
+        const delegation: ApiDelegation = {
+          apiName: action.meta.arg.apiName,
+          orgName: action.meta.arg.orgName,
+        };
+        state.failedApiDelegations.push(delegation);
+        state.batchPostCounter += 1;
+        if (state.batchPostCounter === state.batchPostSize) {
+          state.loading = false;
+        }
+      });
+  },
 });
 
 export default delegationRequestSlice.reducer;
-// export const {} = delegationRequestSlice.actions;
+export const { resetDelegationRequests, setBatchPostSize } = delegationRequestSlice.actions;

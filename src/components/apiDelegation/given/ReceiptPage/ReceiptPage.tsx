@@ -15,6 +15,7 @@ import { resetDelegableOrgs } from '@/rtk/features/delegableOrg/delegableOrgSlic
 import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { setLoading as setOveviewToReload } from '@/rtk/features/overviewOrg/overviewOrgSlice';
 
 import { SummaryPage, PageContainer } from '../../../reusables';
 
@@ -22,7 +23,7 @@ export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
     (state) => state.delegationRequest.failedApiDelegations,
   );
-  const succesfulApiDelegations = useAppSelector(
+  const successfulApiDelegations = useAppSelector(
     (state) => state.delegationRequest.succesfulApiDelegations,
   );
   const { t } = useTranslation('common');
@@ -38,22 +39,27 @@ export const ReceiptPage = () => {
     <PageContainer>
       <SummaryPage
         failedDelegations={failedApiDelegations}
-        successfulDelegations={succesfulApiDelegations}
+        successfulDelegations={successfulApiDelegations}
         restartProcessPath={
           '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg
         }
         pageHeaderText={String(t('api_delegation.give_access_to_new_api'))}
         topListText={String(t('api_delegation.failed_delegations'))}
         bottomListText={String(t('api_delegation.succesful_delegations'))}
-        bottomText={String(t('api_delegation.receipt_page_bottom_text'))}
+        bottomText={
+          successfulApiDelegations.length > 0
+            ? String(t('api_delegation.receipt_page_bottom_text'))
+            : String(t('api_delegation.receipt_page_bottom_text_failed'))
+        }
         mainButton={
           <Button
             color={ButtonColor.Primary}
             size={ButtonSize.Small}
             variant={ButtonVariant.Filled}
-            onClick={() =>
-              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview)
-            }
+            onClick={() => {
+              dispatch(setOveviewToReload());
+              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview);
+            }}
           >
             {t('api_delegation.receipt_page_main_button')}
           </Button>
