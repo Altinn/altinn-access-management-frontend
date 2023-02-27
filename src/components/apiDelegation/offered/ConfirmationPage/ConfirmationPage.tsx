@@ -42,7 +42,7 @@ export const ConfirmationPage = () => {
           orgName: org.orgName,
           orgNr: org.orgNr,
         };
-        void (async () => await dispatch(postApiDelegation(request)))().then();
+        void dispatch(postApiDelegation(request));
       }
     }
   };
