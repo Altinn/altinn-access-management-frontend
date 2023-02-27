@@ -164,9 +164,7 @@ export const ChooseOrgPage = () => {
                   size={ButtonSize.Small}
                   fullWidth={true}
                   onClick={() =>
-                    navigate(
-                      '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiOverview,
-                    )
+                    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview)
                   }
                 >
                   {t('api_delegation.cancel')}
