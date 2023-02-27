@@ -1,11 +1,5 @@
-import {
-  Button,
-  ButtonColor,
-  ButtonSize,
-  ButtonVariant,
-  Panel,
-  PanelVariant,
-} from '@altinn/altinn-design-system';
+import { Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
