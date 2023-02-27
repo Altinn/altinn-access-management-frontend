@@ -3,7 +3,9 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
-    "status_code": "Statuskode"
+    "status_code": "Statuskode",
+    "error_message": "Feilmelding",
+    "error_status_code": "Feilmeldingens statuskode"
   },
   "profile": {
     "received": "Mottatte",
@@ -65,12 +67,18 @@
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Datauthenting feilet, prøv å laste inn siden på nytt.",
     "loading": "Laster",
-    "error_message": "Feilmeldingens statuskode",
     "orgs_not_chosen_subtitle": "Kunne ikke hente ut valgte organisasjoner. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre.",
     "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegeringsprosessen på nytt.",
     "failed_delegations": "Disse api-delegeringene gikk galt og ble derfor ikke tildelt",
     "succesful_delegations": "Disse api-delegeringene ble gitt",
-    "receipt_page_bottom_text": "Tilgangen(e) er gitt og er gyldig til den aktivt slettes eller trekkes tilbake. Mottaker har fått beskjed.",
+    "not_found_site_error_type": "Feil 404",
+    "not_found_site_header": "Oi! Du har prøvd å komme til en side vi ikke vet om",
+    "not_found_site_upper_text": "Vi vet ikke hvor du egentlig skulle, men kanskje du kan finne det du leter etter på noen av disse sidene:",
+    "not_found_site_lower_text": "Hvis dette ikke var til hjelp kan du ta kontakt med Altinn brukerstøtte på telefon 75 00 60 00",
+    "go_to_inbox": "Gå til innboks",
+    "go_to_profile": "Gå til profilsiden",
+    "find_and_submit_scheme": "Finne og sende inn nytt skjema",
+    "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slettes eller trekkes tilbake. Mottaker har fått beskjed.",
     "receipt_page_bottom_text_failed": "Ojda, ser ut som dette ikke gikk helt som planlagt. Vennligst prøv igjen senere. Kontakt Altinn Servicedesk om feilen vedvarer.",
     "receipt_page_main_button": "Til totaloversikt"
   }

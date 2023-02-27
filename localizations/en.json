@@ -3,7 +3,9 @@
     "error": "Error",
     "restart": "Restart",
     "close": "Close",
-    "status_code": "Status code"
+    "status_code": "Status code",
+    "error_message": "Error message",
+    "error_status_code": "Error status code"
   },
   "profile": {
     "received": "Received",
@@ -65,12 +67,18 @@
     "additional_description": "Additional description",
     "data_retrieval_failed": "Data retrieval failed, try refreshing the page.",
     "loading": "Loading",
-    "error_message": "Error message status code",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
     "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process.",
     "receipt_page_main_button": "To API-overview",
     "failed_delegations": "These API delegations went wrong and were therefore not assigned",
     "succesful_delegations": "These API delegations were successful",
+    "not_found_site_type": "Error 404",
+    "not_found_site_header": "Oops! You have tried to reach a page we do not know",
+    "not_found_site_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",
+    "not_found_site_lower_text": "If this was not helpful you are free to contact Altinn support on telephone 75 00 60 00",
+    "go_to_inbox": "Go to inbox",
+    "go_to_profile": "Go to profile page",
+    "find_and_submit_scheme": "Find and submit a new form",
     "receipt_page_bottom_text_failed": "Oops, this didn't go quite as planned. Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn. Recipient has been notified."
   }

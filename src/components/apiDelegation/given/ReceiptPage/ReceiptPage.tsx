@@ -58,7 +58,7 @@ export const ReceiptPage = () => {
             variant={ButtonVariant.Filled}
             onClick={() => {
               dispatch(setOveviewToReload());
-              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview);
+              navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.Overview);
             }}
           >
             {t('api_delegation.receipt_page_main_button')}

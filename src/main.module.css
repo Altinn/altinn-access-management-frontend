@@ -13,3 +13,7 @@
     margin-left: var(--component-page-margin-horizontal);
   }
 }
+
+.backgroundColor{
+  background-color: #1EADF7;
+}
