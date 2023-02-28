@@ -70,11 +70,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
-        /// Owner of resource
-        /// </summary>
-        public string ResourceOwner { get; set; }
-
-        /// <summary>
         /// Resource description
         /// </summary>
         public string ResourceDescription { get; set; }
@@ -82,17 +77,17 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         /// <summary>
         /// The organization number
         /// </summary>
-        public string Organization { get; set; }
+        public string ResourceOwnerOrgNumber { get; set; }
 
         /// <summary>
         /// The organization code
         /// </summary>
-        public string Orgcode { get; set; }
+        public string ResourceOwnerOrgcode { get; set; }
 
         /// <summary>
         /// The organization name
         /// </summary>
-        public string Name { get; set; }
+        public string ResourceOwnerName { get; set; }
 
         /// <summary>
         /// Description
@@ -103,5 +98,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         /// Description explaining the rights a recipient will receive if given access to the resource
         /// </summary>
         public string RightDescription { get; set; }
+
     }
 }

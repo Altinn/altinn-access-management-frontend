@@ -58,56 +58,7 @@ export interface DeletionRequest {
 
 const initialState: SliceState = {
   loading: true,
-  overviewOrgs: [
-    {
-      id: '1',
-      orgName: 'Skatteetaten',
-      orgNr: '123456789',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Brønnøysundregisterene',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          apiName: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-    {
-      id: '2',
-      orgName: 'Brønnøysundregistrene',
-      orgNr: '950124321',
-      isAllSoftDeleted: false,
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Avanade',
-          description:
-            'kan du registrere og endre opplysninger på bedrift, finne bedriftsinformasjon og kunngjøringer, sjekke heftelser i bil og stoppe telefonsalg.',
-        },
-        {
-          id: '2',
-          apiName: 'Delegert API B',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'Accenture er et forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    },
-  ],
+  overviewOrgs: [],
   error: '',
 };
 
@@ -398,6 +349,7 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
+        state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
         const dataArray = action.payload;
@@ -405,26 +357,18 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = responseList;
         state.loading = false;
       })
+      .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Unknown error';
+        state.loading = false;
+      })
       .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {
         const { overviewOrgs } = state;
         for (const org of overviewOrgs) {
-          let i = 0;
           if (org.orgNr === action.meta.arg.orgNr) {
-            for (const item of org.apiList) {
-              if ((item.id = action.meta.arg.apiId)) {
-                overviewOrgs[i].apiList = state.overviewOrgs[i].apiList.filter(
-                  (api) => api.id !== action.meta.arg.apiId,
-                );
-                if (overviewOrgs[i].apiList.length === 0) {
-                  state.overviewOrgs = state.overviewOrgs.filter(
-                    (mockOrg) => mockOrg.orgNr !== action.meta.arg.orgNr,
-                  );
-                }
-              }
-            }
+            org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
           }
-          i++;
         }
+        state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
@@ -432,23 +376,11 @@ const overviewOrgSlice = createSlice({
       .addCase(deleteReceivedApiDelegation.fulfilled, (state, action) => {
         const { overviewOrgs } = state;
         for (const org of overviewOrgs) {
-          let i = 0;
           if (org.orgNr === action.meta.arg.orgNr) {
-            for (const item of org.apiList) {
-              if ((item.id = action.meta.arg.apiId)) {
-                overviewOrgs[i].apiList = state.overviewOrgs[i].apiList.filter(
-                  (api) => api.id !== action.meta.arg.apiId,
-                );
-                if (overviewOrgs[i].apiList.length === 0) {
-                  state.overviewOrgs = state.overviewOrgs.filter(
-                    (mockOrg) => mockOrg.orgNr !== action.meta.arg.orgNr,
-                  );
-                }
-              }
-            }
+            org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
           }
-          i++;
         }
+        state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteReceivedApiDelegation.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';

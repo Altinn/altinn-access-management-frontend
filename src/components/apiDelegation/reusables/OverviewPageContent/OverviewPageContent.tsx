@@ -14,7 +14,6 @@ import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegation
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   resetDelegableOrgs,
-  softAddOrg,
   populateDelegableOrgs,
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -26,10 +25,7 @@ import {
   deleteOfferedApiDelegation,
   deleteReceivedApiDelegation,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import type {
-  DeletionRequest,
-  OverviewOrg,
-} from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { LayoutState } from '../LayoutState';
@@ -44,7 +40,7 @@ export interface OverviewPageContentInterface {
 export const OverviewPageContent = ({
   layout = LayoutState.Offered,
 }: OverviewPageContentInterface) => {
-  const [disabled, setDisabled] = useState(false);
+  const [saveDisabled, setSaveDisabled] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
@@ -62,7 +58,7 @@ export const OverviewPageContent = ({
     if (loading) {
       void fetchData();
     }
-    handleSetDisabled();
+    handleSaveDisabled();
     dispatch(resetDelegableApis());
     dispatch(resetDelegableOrgs());
     dispatch(resetDelegationRequests());
@@ -93,29 +89,23 @@ export const OverviewPageContent = ({
     dispatch(populateDelegableOrgs(delegableOrgList));
   };
 
-  const delegateToSpecificOrg = (org: OverviewOrg) => {
-    transferDelegableOrgs();
-    dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi);
-  };
-
   const newDelegation = () => {
     transferDelegableOrgs();
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
   };
 
-  const handleSetDisabled = () => {
+  const handleSaveDisabled = () => {
     for (const org of overviewOrgs) {
       if (org.isAllSoftDeleted) {
-        return setDisabled(false);
+        return setSaveDisabled(false);
       }
       for (const api of org.apiList) {
         if (api.isSoftDelete) {
-          return setDisabled(false);
+          return setSaveDisabled(false);
         }
       }
     }
-    return setDisabled(true);
+    return setSaveDisabled(true);
   };
 
   const handleSetIsEditable = () => {
@@ -150,15 +140,17 @@ export const OverviewPageContent = ({
   const accordions = () => {
     if (error) {
       return (
-        <Panel
-          title={t('api_delegation.data_retrieval_failed')}
-          variant={PanelVariant.Error}
-          forceMobileLayout
-        >
-          <div>
-            {t('api_delegation.error_message')}: {error}
-          </div>
-        </Panel>
+        <div className={classes.errorPanel}>
+          <Panel
+            title={t('api_delegation.data_retrieval_failed')}
+            variant={PanelVariant.Error}
+            forceMobileLayout
+          >
+            <div>
+              {t('common.error_message')}: {error}
+            </div>
+          </Panel>
+        </div>
       );
     } else if (loading) {
       return t('api_delegation.loading') + '...';
@@ -170,9 +162,6 @@ export const OverviewPageContent = ({
         isEditable={isEditable}
         softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
         softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-        delegateToOrgCallback={
-          layout === LayoutState.Offered ? () => delegateToSpecificOrg(org) : undefined
-        }
       ></OrgDelegationAccordion>
     ));
   };
@@ -233,7 +222,7 @@ export const OverviewPageContent = ({
         {isEditable && (
           <div className={classes.saveSection}>
             <Button
-              disabled={disabled}
+              disabled={saveDisabled}
               onClick={handleSave}
               color={ButtonColor.Success}
             >

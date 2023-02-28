@@ -57,7 +57,7 @@ export const ActionBar = ({
         <h4 className={classes.title}>{title}</h4>
         {subtitle && <div className={classes.subtitle}>{subtitle}</div>}
       </div>
-      {button}
+      <div className={classes.actionButtonContainer}>{button}</div>
     </div>
   );
 };

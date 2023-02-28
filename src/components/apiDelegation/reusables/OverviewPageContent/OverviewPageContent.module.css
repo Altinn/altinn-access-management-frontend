@@ -24,8 +24,7 @@
 }
 
 .pageContentContainer {
-  margin-top: 4rem;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
   display: flex;
   align-items: center;
 }
@@ -52,4 +51,8 @@
   text-decoration-color: #1EADF7;
   display: inline-block;
   background: transparent;
+}
+
+.errorPanel{
+  margin-top: 2rem;
 }
