@@ -19,6 +19,9 @@ export default defineConfig({
     rollupOptions: {
       // overwrite default .html entry
       input: './entrypoint.js',
+      output: {
+        entryFileNames: 'assets/accessmanagement.js'
+      }
     },
   },
 });
