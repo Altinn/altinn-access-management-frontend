@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,9 +36,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("accessmanagement/api/v1/{party}/resources/maskinportenschema")]
-        public async Task<ActionResult<List<ServiceResource>>> Get([FromRoute] int party)
+        public async Task<ActionResult<List<ServiceResourceFE>>> Get([FromRoute] int party)
         {
-            List<ServiceResource> resources = await _rap.GetResources(ResourceType.MaskinportenSchema);
+            List<ServiceResourceFE> resources = await _rap.GetResources(ResourceType.MaskinportenSchema);
             return resources;
         }
     }
