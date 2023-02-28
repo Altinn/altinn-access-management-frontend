@@ -1,11 +1,8 @@
+import { Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
 import {
   Page,
   PageContent,
   PageHeader,
-  Button,
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
   SearchField,
   Panel,
   PanelVariant,
