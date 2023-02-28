@@ -1,37 +1,32 @@
-import {
-  Button,
-  ButtonColor,
-  ButtonSize,
-  ButtonVariant,
-  Panel,
-  PanelVariant,
-} from '@altinn/altinn-design-system';
+import { Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import {
-  fetchOverviewOrgsOutbound,
-  fetchOverviewOrgsInbound,
-  restoreAllSoftDeletedItems,
-  save,
-  softDeleteAll,
-  softRestoreAll,
-} from '@/rtk/features/overviewOrg/overviewOrgSlice';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
+import { RouterPath } from '@/routes/Router';
+import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   resetDelegableOrgs,
-  softAddOrg,
   populateDelegableOrgs,
-} from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
-import { resetDelegableApis } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { RouterPath } from '@/routes/Router';
+} from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import {
+  fetchOverviewOrgsOffered,
+  fetchOverviewOrgsReceived,
+  restoreAllSoftDeletedItems,
+  softDeleteAll,
+  softRestoreAll,
+  deleteOfferedApiDelegation,
+  deleteReceivedApiDelegation,
+} from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { LayoutState } from '../LayoutState';
 
@@ -43,9 +38,9 @@ export interface OverviewPageContentInterface {
 }
 
 export const OverviewPageContent = ({
-  layout = LayoutState.Given,
+  layout = LayoutState.Offered,
 }: OverviewPageContentInterface) => {
-  const [disabled, setDisabled] = useState(true);
+  const [saveDisabled, setSaveDisabled] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
@@ -59,14 +54,24 @@ export const OverviewPageContent = ({
   let overviewText: string;
   let accessesHeader: string;
 
+  useEffect(() => {
+    if (loading) {
+      void fetchData();
+    }
+    handleSaveDisabled();
+    dispatch(resetDelegableApis());
+    dispatch(resetDelegableOrgs());
+    dispatch(resetDelegationRequests());
+  }, [overviewOrgs, error]);
+
   switch (layout) {
-    case LayoutState.Given:
-      fetchData = () => dispatch(fetchOverviewOrgsOutbound());
+    case LayoutState.Offered:
+      fetchData = () => dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
       break;
     case LayoutState.Received:
-      fetchData = () => dispatch(fetchOverviewOrgsInbound());
+      fetchData = () => dispatch(fetchOverviewOrgsReceived());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
       break;
@@ -84,55 +89,68 @@ export const OverviewPageContent = ({
     dispatch(populateDelegableOrgs(delegableOrgList));
   };
 
-  const delegateToSpecificOrg = (org: OverviewOrg) => {
-    transferDelegableOrgs();
-    dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi);
-  };
-
   const newDelegation = () => {
     transferDelegableOrgs();
-    navigate('/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseOrg);
+    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
   };
 
-  useEffect(() => {
-    handleSetDisabled();
-    dispatch(resetDelegableApis());
-    dispatch(resetDelegableOrgs());
-  });
-
-  const handleSetDisabled = () => {
+  const handleSaveDisabled = () => {
     for (const org of overviewOrgs) {
       if (org.isAllSoftDeleted) {
-        return setDisabled(false);
+        return setSaveDisabled(false);
       }
       for (const api of org.apiList) {
         if (api.isSoftDelete) {
-          return setDisabled(false);
+          return setSaveDisabled(false);
         }
       }
     }
-    setDisabled(true);
+    return setSaveDisabled(true);
   };
 
-  useEffect(() => {
-    if (loading) {
-      void fetchData();
+  const handleSetIsEditable = () => {
+    if (isEditable) {
+      dispatch(restoreAllSoftDeletedItems());
     }
-  }, []);
+    setIsEditable(!isEditable);
+  };
+
+  const mapToDeletionRequest = (orgNr: string, apiId: string) => {
+    const deletionRequest: DeletionRequest = {
+      orgNr,
+      apiId,
+    };
+    return deletionRequest;
+  };
+
+  const handleSave = () => {
+    for (const org of overviewOrgs) {
+      for (const item of org.apiList) {
+        if (item.isSoftDelete) {
+          if (layout === LayoutState.Offered) {
+            void dispatch(deleteOfferedApiDelegation(mapToDeletionRequest(org.orgNr, item.id)));
+          } else if (layout === LayoutState.Received) {
+            void dispatch(deleteReceivedApiDelegation(mapToDeletionRequest(org.orgNr, item.id)));
+          }
+        }
+      }
+    }
+  };
 
   const accordions = () => {
     if (error) {
       return (
-        <Panel
-          title={t('api_delegation.data_retrieval_failed')}
-          variant={PanelVariant.Error}
-          forceMobileLayout
-        >
-          <div>
-            {t('api_delegation.error_message')}: {error}
-          </div>
-        </Panel>
+        <div className={classes.errorPanel}>
+          <Panel
+            title={t('api_delegation.data_retrieval_failed')}
+            variant={PanelVariant.Error}
+            forceMobileLayout
+          >
+            <div>
+              {t('common.error_message')}: {error}
+            </div>
+          </Panel>
+        </div>
       );
     } else if (loading) {
       return t('api_delegation.loading') + '...';
@@ -144,25 +162,15 @@ export const OverviewPageContent = ({
         isEditable={isEditable}
         softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
         softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-        delegateToOrgCallback={
-          layout === LayoutState.Given ? () => delegateToSpecificOrg(org) : undefined
-        }
       ></OrgDelegationAccordion>
     ));
-  };
-
-  const handleSetIsEditable = () => {
-    if (isEditable) {
-      dispatch(restoreAllSoftDeletedItems());
-    }
-    setIsEditable(!isEditable);
   };
 
   return (
     <div className={classes.pageContent}>
       <div className={classes.overviewAccordionsContainer}>
         <h2 className={classes.pageContentText}>{overviewText}</h2>
-        {layout === LayoutState.Given && (
+        {layout === LayoutState.Offered && (
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
@@ -174,38 +182,48 @@ export const OverviewPageContent = ({
           </div>
         )}
         <Panel title={t('api_delegation.card_title')}>
-          {t('api_delegation.api_panel_content')}
+          {t('api_delegation.api_panel_content')}{' '}
+          <a
+            className={classes.link}
+            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+          >
+            {t('common.maskinporten')}
+          </a>
         </Panel>
-        <div className={classes.pageContentContainer}>
-          <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
-          <div className={classes.editButton}>
-            {!isEditable ? (
-              <Button
-                variant={ButtonVariant.Quiet}
-                icon={<Edit />}
-                onClick={handleSetIsEditable}
-                size={ButtonSize.Small}
-              >
-                {t('api_delegation.edit_accesses')}
-              </Button>
-            ) : (
-              <Button
-                variant={ButtonVariant.Quiet}
-                icon={<Error />}
-                onClick={handleSetIsEditable}
-                size={ButtonSize.Small}
-              >
-                {t('api_delegation.cancel')}
-              </Button>
-            )}
-          </div>
+        <div>
+          {overviewOrgs.length > 0 && (
+            <div className={classes.pageContentContainer}>
+              <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+              <div className={classes.editButton}>
+                {!isEditable ? (
+                  <Button
+                    variant={ButtonVariant.Quiet}
+                    icon={<Edit />}
+                    onClick={handleSetIsEditable}
+                    size={ButtonSize.Small}
+                  >
+                    {t('api_delegation.edit_accesses')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant={ButtonVariant.Quiet}
+                    icon={<Error />}
+                    onClick={handleSetIsEditable}
+                    size={ButtonSize.Small}
+                  >
+                    {t('api_delegation.cancel')}
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         <div className={classes.accordion}>{accordions()}</div>
         {isEditable && (
           <div className={classes.saveSection}>
             <Button
-              disabled={disabled}
-              onClick={() => dispatch(save())}
+              disabled={saveDisabled}
+              onClick={handleSave}
               color={ButtonColor.Success}
             >
               {t('api_delegation.save')}

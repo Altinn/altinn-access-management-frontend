@@ -2,30 +2,26 @@ import {
   Page,
   PageContent,
   PageHeader,
-  List,
-  BorderStyle,
   PageColor,
   Panel,
   PanelVariant,
-  Button,
-  ButtonVariant,
-  ButtonColor,
 } from '@altinn/altinn-design-system';
+import { List, Button, ButtonVariant, ButtonColor } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
-import type { DelegableApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softRemoveApi } from '@/rtk/features/delegableApi/delegableApiSlice';
-import { softRemoveOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import { CompactDeletableListItem } from '@/components/reusables';
-import type { ApiDelegation } from '@/rtk/features/delegationRequest/delegationRequestSlice';
 import main from '@/main.module.css';
+import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 
@@ -98,11 +94,8 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          removeCallback={
-            failedDelegations.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
-          }
           contentColor={ListTextColor.error}
-          leftText={apiDelegation.orgName}
+          leftText={apiDelegation.apiName}
           middleText={apiDelegation.orgName}
         ></CompactDeletableListItem>
       );
@@ -114,31 +107,33 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          removeCallback={
-            successfulDelegations.length > 1 ? () => dispatch(softRemoveOrg(apiDelegation)) : null
-          }
-          leftText={apiDelegation.orgName}
+          leftText={apiDelegation.apiName}
           middleText={apiDelegation.orgName}
         ></CompactDeletableListItem>
       );
     },
   );
 
-  const showErrorPanel = () => {
+  const showTopSection = () => {
     return (
-      delegableApis !== null &&
-      delegableOrgs !== null &&
-      (delegableApis === undefined ||
-        delegableApis?.length < 1 ||
-        delegableOrgs === undefined ||
-        delegableOrgs?.length < 1) &&
-      failedDelegations !== null &&
-      successfulDelegations !== null &&
-      (failedDelegations === undefined ||
-        failedDelegations?.length < 1 ||
-        successfulDelegations === undefined ||
-        successfulDelegations?.length < 1)
+      (delegableApis !== null && delegableApis !== undefined && delegableApis?.length > 0) ||
+      (failedDelegations !== null &&
+        failedDelegations !== undefined &&
+        failedDelegations?.length > 0)
     );
+  };
+
+  const showBottomSection = () => {
+    return (
+      (delegableOrgs !== null && delegableOrgs !== undefined && delegableOrgs?.length > 0) ||
+      (successfulDelegations !== null &&
+        successfulDelegations !== undefined &&
+        successfulDelegations?.length > 0)
+    );
+  };
+
+  const showErrorPanel = () => {
+    return !showTopSection() && !showBottomSection();
   };
 
   return (
@@ -166,22 +161,28 @@ export const SummaryPage = ({
             </Panel>
           ) : (
             <div>
-              <div>
-                <h2 className={classes.listText}>{topListText}</h2>
-                {delegableApiListItems !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{delegableApiListItems}</List>
-                )}
-                {failedDelegations !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{failedDelegatedListItems}</List>
-                )}
-                <h2 className={classes.listText}>{bottomListText}</h2>
-                {delegableOrgs !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{delegableOrgListItems}</List>
-                )}
-                {successfulDelegations !== undefined && (
-                  <List borderStyle={BorderStyle.Dashed}>{successfulDelegatedItems}</List>
-                )}
-              </div>
+              {showTopSection() && (
+                <div>
+                  <h2 className={classes.listText}>{topListText}</h2>
+                  {delegableApiListItems !== undefined && (
+                    <List borderStyle={'dashed'}>{delegableApiListItems}</List>
+                  )}
+                  {failedDelegations !== undefined && (
+                    <List borderStyle={'dashed'}>{failedDelegatedListItems}</List>
+                  )}
+                </div>
+              )}
+              {showBottomSection() && (
+                <div>
+                  <h2 className={classes.listText}>{bottomListText}</h2>
+                  {delegableOrgs !== undefined && (
+                    <List borderStyle={'dashed'}>{delegableOrgListItems}</List>
+                  )}
+                  {successfulDelegations !== undefined && (
+                    <List borderStyle={'dashed'}>{successfulDelegatedItems}</List>
+                  )}
+                </div>
+              )}
               <h3 className={classes.bottomText}>{bottomText}</h3>
               <div className={classes.navButtonContainer}>
                 {complementaryButton && (

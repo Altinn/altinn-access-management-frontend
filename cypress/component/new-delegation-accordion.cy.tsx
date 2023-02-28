@@ -3,8 +3,9 @@ import { mount } from 'cypress/react18';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
 import { NewDelegationAccordion, NewDelegationAccordionButtonType } from '@/components/reusables';
+
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/apiDelegation/delegableOrg/delegableOrgSlice';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +20,6 @@ const delegableOrg: DelegableOrg = {
   id: '1',
   orgName: 'Skatteetaten',
   orgNr: '930124123',
-  description: 'For å hente ut skatteklasser',
 };
 
 describe('NewDelegationAccordion', () => {

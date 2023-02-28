@@ -1,11 +1,8 @@
+import { Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
 import {
   Page,
   PageContent,
   PageHeader,
-  Button,
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
   SearchField,
   Panel,
   PanelVariant,
@@ -22,9 +19,9 @@ import {
   softRemoveOrg,
   searchInCurrentOrgs,
   lookupOrg,
-} from '@/rtk/features/delegableOrg/delegableOrgSlice';
+} from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/delegableOrg/delegableOrgSlice';
+import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
@@ -45,18 +42,6 @@ export const ChooseOrgPage = () => {
 
   const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
-  const handleSoftRemove = (org: DelegableOrg) => {
-    dispatch(softRemoveOrg(org));
-    dispatch(searchInCurrentOrgs(searchString));
-  };
-
-  function handleSearch(searchText: string) {
-    if (IsOnlyNumbers(searchText) || searchText === '') {
-      setSearchString(searchText);
-      dispatch(searchInCurrentOrgs(searchText));
-    }
-  }
-
   useEffect(() => {
     // Clear search on mount
     dispatch(searchInCurrentOrgs(searchString));
@@ -71,6 +56,18 @@ export const ChooseOrgPage = () => {
       setPromptOrgNumber(true);
     }
   }, [delegableOrgs]);
+
+  const handleSoftRemove = (org: DelegableOrg) => {
+    dispatch(softRemoveOrg(org));
+    dispatch(searchInCurrentOrgs(searchString));
+  };
+
+  function handleSearch(searchText: string) {
+    if (IsOnlyNumbers(searchText) || searchText === '') {
+      setSearchString(searchText);
+      dispatch(searchInCurrentOrgs(searchText));
+    }
+  }
 
   const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
@@ -164,9 +161,7 @@ export const ChooseOrgPage = () => {
                   size={ButtonSize.Small}
                   fullWidth={true}
                   onClick={() =>
-                    navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiOverview,
-                    )
+                    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview)
                   }
                 >
                   {t('api_delegation.cancel')}
@@ -180,7 +175,7 @@ export const ChooseOrgPage = () => {
                   fullWidth={true}
                   onClick={() =>
                     navigate(
-                      '/' + RouterPath.GivenApiDelegations + '/' + RouterPath.GivenApiChooseApi,
+                      '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
                     )
                   }
                   disabled={chosenOrgs.length === 0}

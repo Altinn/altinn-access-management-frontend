@@ -7,15 +7,14 @@ import {
   ButtonColor,
   ButtonVariant,
   List,
-  BorderStyle,
   ButtonSize,
-} from '@altinn/altinn-design-system';
+} from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import type { OverviewOrg } from '@/rtk/features/overviewOrg/overviewOrgSlice';
-import { softDelete, softRestore } from '@/rtk/features/overviewOrg/overviewOrgSlice';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
@@ -125,7 +124,7 @@ export const OrgDelegationAccordion = ({
       </AccordionHeader>
       <AccordionContent>
         <div className={classes.accordionContent}>
-          <List borderStyle={BorderStyle.Dashed}>{listItems}</List>
+          <List borderStyle={'dashed'}>{listItems}</List>
         </div>
       </AccordionContent>
     </Accordion>

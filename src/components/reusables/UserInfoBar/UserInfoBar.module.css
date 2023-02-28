@@ -1,0 +1,27 @@
+.altinnLogo{
+  flex: 1;
+}
+
+.userInfoBar{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  background-color: #1EADF7;
+  display: flex;
+  min-width: 320px;
+  max-width: 1056px;
+}
+
+.userInfoContent{
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 13px;
+}
+
+.userText{ 
+  font-weight: 500;
+  margin: 0;
+  margin-right: 1rem;
+  text-align: right;
+}

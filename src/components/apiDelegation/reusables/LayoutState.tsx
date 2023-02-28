@@ -1,4 +1,4 @@
 export enum LayoutState {
-  Given,
+  Offered,
   Received,
 }
