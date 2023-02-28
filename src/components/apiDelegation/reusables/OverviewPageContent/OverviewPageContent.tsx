@@ -14,7 +14,6 @@ import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegation
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   resetDelegableOrgs,
-  softAddOrg,
   populateDelegableOrgs,
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -26,10 +25,7 @@ import {
   deleteOfferedApiDelegation,
   deleteReceivedApiDelegation,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import type {
-  DeletionRequest,
-  OverviewOrg,
-} from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { LayoutState } from '../LayoutState';
@@ -91,12 +87,6 @@ export const OverviewPageContent = ({
       });
     }
     dispatch(populateDelegableOrgs(delegableOrgList));
-  };
-
-  const delegateToSpecificOrg = (org: OverviewOrg) => {
-    transferDelegableOrgs();
-    dispatch(softAddOrg(org));
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi);
   };
 
   const newDelegation = () => {
