@@ -76,6 +76,9 @@ const delegableOrgSlice = createSlice({
       state.presentedOrgList = orgList;
     },
     resetDelegableOrgs: () => initialState,
+    fetchDelegableOrgs: (state, action) => {
+      state.delegableOrgList = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -109,4 +112,5 @@ export const {
   resetDelegableOrgs,
   searchInCurrentOrgs,
   populateDelegableOrgs,
+  fetchDelegableOrgs,
 } = delegableOrgSlice.actions;
