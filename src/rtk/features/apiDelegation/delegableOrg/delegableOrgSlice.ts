@@ -7,7 +7,7 @@ export interface DelegableOrg {
 }
 
 export interface InitialState {
-  loading: boolean;
+  delegableOrgsLoading: boolean;
   delegableOrgList: DelegableOrg[];
   presentedOrgList: DelegableOrg[];
   chosenDelegableOrgList: DelegableOrg[];
@@ -22,7 +22,7 @@ interface OrgDTO {
 }
 
 const initialState: InitialState = {
-  loading: false,
+  delegableOrgsLoading: true,
   delegableOrgList: [],
   presentedOrgList: [],
   chosenDelegableOrgList: [],
@@ -74,11 +74,9 @@ const delegableOrgSlice = createSlice({
       const orgList: DelegableOrg[] = action.payload;
       state.delegableOrgList = orgList;
       state.presentedOrgList = orgList;
+      state.delegableOrgsLoading = false;
     },
     resetDelegableOrgs: () => initialState,
-    fetchDelegableOrgs: (state, action) => {
-      state.delegableOrgList = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -112,5 +110,4 @@ export const {
   resetDelegableOrgs,
   searchInCurrentOrgs,
   populateDelegableOrgs,
-  fetchDelegableOrgs,
 } = delegableOrgSlice.actions;

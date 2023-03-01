@@ -73,20 +73,7 @@ export const OverviewPageContent = ({
       break;
   }
 
-  /*   const transferDelegableOrgs = () => {
-    const delegableOrgList: DelegableOrg[] = [];
-    for (const org of overviewOrgs) {
-      delegableOrgList.push({
-        id: org.id,
-        orgName: org.orgName,
-        orgNr: org.orgNr,
-      });
-    }
-    dispatch(populateDelegableOrgs(delegableOrgList));
-  }; */
-
   const newDelegation = () => {
-    // transferDelegableOrgs();
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
   };
 

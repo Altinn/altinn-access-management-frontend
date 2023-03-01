@@ -19,6 +19,7 @@ import {
   softRemoveOrg,
   searchInCurrentOrgs,
   lookupOrg,
+  populateDelegableOrgs,
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -26,13 +27,17 @@ import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import main from '@/main.module.css';
+import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import classes from './ChooseOrgPage.module.css';
 
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
+  const delegableOrgsLoading = useAppSelector((state) => state.delegableOrg.delegableOrgsLoading);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
+  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
+  const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
@@ -43,9 +48,16 @@ export const ChooseOrgPage = () => {
   const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
   useEffect(() => {
-    // Clear search on mount
     dispatch(searchInCurrentOrgs(searchString));
-  }, []);
+
+    if (overviewOrgsLoading) {
+      void dispatch(fetchOverviewOrgsOffered());
+    }
+
+    if (delegableOrgsLoading && !overviewOrgsLoading) {
+      dispatch(transferDelegableOrgs);
+    }
+  }, [overviewOrgs, overviewOrgsLoading, delegableOrgsLoading]);
 
   useEffect(() => {
     if (delegableOrgs.length > 0) {
@@ -56,6 +68,18 @@ export const ChooseOrgPage = () => {
       setPromptOrgNumber(true);
     }
   }, [delegableOrgs]);
+
+  const transferDelegableOrgs = () => {
+    const delegableOrgList: DelegableOrg[] = [];
+    for (const org of overviewOrgs) {
+      delegableOrgList.push({
+        id: org.id,
+        orgName: org.orgName,
+        orgNr: org.orgNr,
+      });
+    }
+    dispatch(populateDelegableOrgs(delegableOrgList));
+  };
 
   const handleSoftRemove = (org: DelegableOrg) => {
     dispatch(softRemoveOrg(org));
