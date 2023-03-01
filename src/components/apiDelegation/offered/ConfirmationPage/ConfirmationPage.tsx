@@ -1,4 +1,10 @@
-import { Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
+import {
+  Button,
+  ButtonVariant,
+  ButtonColor,
+  ButtonSize,
+  Spinner,
+} from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -68,6 +74,13 @@ export const ConfirmationPage = () => {
             disabled={confirmed || chosenApis.length < 1 || chosenOrgs.length < 1}
           >
             {t('api_delegation.confirm_delegation')}
+            {confirmed && (
+              <Spinner
+                title={String(t('api_delegation.loading'))}
+                size='small'
+                variant='interaction'
+              />
+            )}
           </Button>
         }
         complementaryButton={
@@ -75,6 +88,7 @@ export const ConfirmationPage = () => {
             color={ButtonColor.Primary}
             variant={ButtonVariant.Outline}
             size={ButtonSize.Small}
+            disabled={confirmed}
             onClick={() =>
               navigate(
                 '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,

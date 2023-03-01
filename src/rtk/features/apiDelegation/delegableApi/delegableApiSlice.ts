@@ -18,7 +18,7 @@ export interface DelegableApiDto {
   identifier: string;
   hasCompetentAuthority: HasCompetentAuthority;
   rightDescription: languageDto;
-  description?: string;
+  description?: languageDto;
   resourceReferences: resourceReferenceDTO[];
 }
 
@@ -64,7 +64,7 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
     apiName: '',
     orgName: '',
     rightDescription: '',
-    description: obj.description,
+    description: '',
     scopes: [],
   };
   for (const ref of obj.resourceReferences) {
@@ -76,14 +76,17 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
     delegableApi.rightDescription = obj.rightDescription?.nb;
     delegableApi.orgName = orgName.nb;
     delegableApi.apiName = obj.title.nb;
+    delegableApi.description = obj.description?.nb;
   } else if (i18next.language === 'en') {
     delegableApi.rightDescription = obj.rightDescription?.en;
     delegableApi.orgName = orgName.en;
     delegableApi.apiName = obj.title.en;
+    delegableApi.description = obj.description?.en;
   } else {
     delegableApi.rightDescription = obj.rightDescription?.nn;
     delegableApi.orgName = orgName.nn;
     delegableApi.apiName = obj.title.nn;
+    delegableApi.description = obj.description?.nn;
   }
 
   return delegableApi;

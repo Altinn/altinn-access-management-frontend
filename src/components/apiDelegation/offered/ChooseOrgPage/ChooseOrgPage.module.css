@@ -22,6 +22,11 @@
     margin-right: 3rem;
 }
 
+.spinnerContainer{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
 
 .searchSection{
   width: var(--searchFieldWidth);
@@ -44,3 +49,10 @@
   overflow-y: auto;
 }
 
+.link {
+  color: black;
+  text-decoration-line: underline;
+  text-decoration-color: #1EADF7;
+  display: inline-block;
+  background: transparent;
+}
