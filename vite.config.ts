@@ -22,13 +22,13 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/accessmanagement.js',
         assetFileNames: (assetInfo) => {
-          let extType = assetInfo.name.split('.')[1];
+          const extType = assetInfo.name.split('.')[1];
           if (/css/i.test(extType)) {
             return `assets/accessmanagement.css`;
           }
           return `assets/[name]-[hash][extname]`;
         },
-      }
+      },
     },
   },
 });
