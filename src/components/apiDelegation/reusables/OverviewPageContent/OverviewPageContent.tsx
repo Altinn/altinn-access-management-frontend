@@ -11,11 +11,7 @@ import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
 import { RouterPath } from '@/routes/Router';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import {
-  resetDelegableOrgs,
-  populateDelegableOrgs,
-} from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   fetchOverviewOrgsOffered,
   fetchOverviewOrgsReceived,
@@ -40,7 +36,7 @@ export interface OverviewPageContentInterface {
 export const OverviewPageContent = ({
   layout = LayoutState.Offered,
 }: OverviewPageContentInterface) => {
-  const [disabled, setDisabled] = useState(false);
+  const [saveDisabled, setSaveDisabled] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
@@ -58,7 +54,7 @@ export const OverviewPageContent = ({
     if (loading) {
       void fetchData();
     }
-    handleSetDisabled();
+    handleSaveDisabled();
     dispatch(resetDelegableApis());
     dispatch(resetDelegableOrgs());
     dispatch(resetDelegationRequests());
@@ -77,7 +73,7 @@ export const OverviewPageContent = ({
       break;
   }
 
-/*   const transferDelegableOrgs = () => {
+  /*   const transferDelegableOrgs = () => {
     const delegableOrgList: DelegableOrg[] = [];
     for (const org of overviewOrgs) {
       delegableOrgList.push({
@@ -90,22 +86,22 @@ export const OverviewPageContent = ({
   }; */
 
   const newDelegation = () => {
-    //transferDelegableOrgs();
+    // transferDelegableOrgs();
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
   };
 
-  const handleSetDisabled = () => {
+  const handleSaveDisabled = () => {
     for (const org of overviewOrgs) {
       if (org.isAllSoftDeleted) {
-        return setDisabled(false);
+        return setSaveDisabled(false);
       }
       for (const api of org.apiList) {
         if (api.isSoftDelete) {
-          return setDisabled(false);
+          return setSaveDisabled(false);
         }
       }
     }
-    return setDisabled(true);
+    return setSaveDisabled(true);
   };
 
   const handleSetIsEditable = () => {
@@ -147,7 +143,7 @@ export const OverviewPageContent = ({
             forceMobileLayout
           >
             <div>
-              {t('api_delegation.error_message')}: {error}
+              {t('common.error_message')}: {error}
             </div>
           </Panel>
         </div>
@@ -222,7 +218,7 @@ export const OverviewPageContent = ({
         {isEditable && (
           <div className={classes.saveSection}>
             <Button
-              disabled={disabled}
+              disabled={saveDisabled}
               onClick={handleSave}
               color={ButtonColor.Success}
             >

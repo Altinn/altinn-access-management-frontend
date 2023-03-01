@@ -1,0 +1,45 @@
+{
+  "userId": 1337,
+  "userName": "SophieDDG",
+  "externalIdentity": null,
+  "phoneNumber": "90001337",
+  "email": "1337@altinnstudiotestusers.com",
+  "partyId": 501337,
+  "party": {
+    "partyId": 501337,
+    "partyTypeName": 1,
+    "orgNumber": null,
+    "ssn": "01039012345",
+    "unitType": null,
+    "name": "Sophie Salt",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "person": {
+      "ssn": "01039012345",
+      "name": "Sophie Salt",
+      "firstName": "Sophie",
+      "middleName": "",
+      "lastName": "Salt",
+      "telephoneNumber": "12345678",
+      "mobileNumber": "87654321",
+      "mailingAddress": "Grev Wedels Plass 9",
+      "mailingPostalCode": "0157",
+      "mailingPostalCity": "Oslo",
+      "addressMunicipalNumber": "0301",
+      "addressMunicipalName": "Oslo",
+      "addressStreetName": "Grev Wedels Plass",
+      "addressHouseNumber": "9",
+      "addressHouseLetter": null,
+      "addressPostalCode": "0151",
+      "addressCity": "Oslo"
+    },
+    "organization": null,
+    "childParties": null
+  },
+  "userType": 1,
+  "profileSettingPreference": {
+    "language": "nb",
+    "preSelectedPartyId": 0,
+    "doNotPromptForParty": false
+  }
+}

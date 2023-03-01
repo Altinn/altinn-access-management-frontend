@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/inbound")]
+        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/received")]
         public async Task<ActionResult<List<DelegationsFE>>> GetAllInboundDelegations([FromRoute] string party)
         {
             if (string.IsNullOrEmpty(party))
@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/outbound")]
+        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered")]
         public async Task<ActionResult<List<DelegationsFE>>> GetAllOutboundDelegations([FromRoute] string party)
         {
             if (string.IsNullOrEmpty(party))
