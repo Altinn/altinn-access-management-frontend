@@ -73,7 +73,6 @@ export const ConfirmationPage = () => {
             onClick={handleConfirm}
             disabled={confirmed || chosenApis.length < 1 || chosenOrgs.length < 1}
           >
-            {t('api_delegation.confirm_delegation')}
             {confirmed && (
               <Spinner
                 title={String(t('api_delegation.loading'))}
@@ -81,6 +80,7 @@ export const ConfirmationPage = () => {
                 variant='interaction'
               />
             )}
+            {t('api_delegation.confirm_delegation')}
           </Button>
         }
         complementaryButton={
