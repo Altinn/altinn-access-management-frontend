@@ -141,6 +141,7 @@ export const OverviewPageContent = ({
         }
       }
     }
+    setIsEditable(false);
   };
 
   const accordions = () => {
