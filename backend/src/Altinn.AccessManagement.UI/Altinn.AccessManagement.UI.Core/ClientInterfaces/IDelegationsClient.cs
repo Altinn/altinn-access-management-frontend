@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Delegation;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.Platform.Profile.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -19,5 +20,29 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>list of delegations</returns>
         Task<List<Delegation>> GetOutboundDelegations(string party);
+
+        /// <summary>
+        /// Revokes received delegation
+        /// </summary>
+        /// <param name="party">party</param>
+        /// <param name="delegation">delegation to be revoked</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation);
+
+        /// <summary>
+        /// Revokes Offered delegation
+        /// </summary>
+        /// <param name="party">party</param>
+        /// <param name="delegation">delegation to be revoked</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation);
+
+        /// <summary>
+        /// Creates a maskinporten delegation
+        /// </summary>
+        /// <param name="party">party</param>
+        /// <param name="delegation">delegation to be revoked</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation);
     }
 }

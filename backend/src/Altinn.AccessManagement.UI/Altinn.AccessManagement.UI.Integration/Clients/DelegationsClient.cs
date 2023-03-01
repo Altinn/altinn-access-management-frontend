@@ -1,12 +1,18 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Web.Http.ModelBinding;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -22,6 +28,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IAccessTokenGenerator _accessTokenGenerator;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationsClient"/> class
@@ -39,6 +46,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             _accessTokenGenerator = accessTokenGenerator;
+            _serializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
         /// <inheritdoc/>
@@ -87,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
-
+                    
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
@@ -111,6 +119,39 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return null;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        {
+            string endpointUrl = $"accessmanagement/api/v1/{{party}}/delegations/maskinportenschema/received/revoke";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+            return response;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        {
+            string endpointUrl = $"accessmanagement/api/v1/{{party}}/delegations/maskinportenschema/offered/revoke";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+            return response;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        {
+            string endpointUrl = $"accessmanagement/api/v1/{{party}}/delegations/maskinportenschema/offered/revoke";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+            return response;
         }
     }
 }
