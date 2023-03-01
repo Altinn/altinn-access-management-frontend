@@ -1,4 +1,4 @@
-import { Button, ButtonColor, ButtonVariant } from '@altinn/altinn-design-system';
+import { Button, ButtonColor, ButtonVariant } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
@@ -57,7 +57,7 @@ export const ActionBar = ({
         <h4 className={classes.title}>{title}</h4>
         {subtitle && <div className={classes.subtitle}>{subtitle}</div>}
       </div>
-      {button}
+      <div className={classes.actionButtonContainer}>{button}</div>
     </div>
   );
 };
