@@ -1,4 +1,10 @@
-import { Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
+import {
+  Button,
+  ButtonVariant,
+  ButtonColor,
+  ButtonSize,
+  Spinner,
+} from '@digdir/design-system-react';
 import {
   Page,
   PageContent,
@@ -42,6 +48,7 @@ export const ChooseOrgPage = () => {
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
+  const [viewLoading, setViewLoading] = useState(true);
 
   const { t } = useTranslation('common');
 
@@ -56,6 +63,7 @@ export const ChooseOrgPage = () => {
 
     if (delegableOrgsLoading && !overviewOrgsLoading) {
       dispatch(transferDelegableOrgs);
+      setViewLoading(false);
     }
   }, [overviewOrgs, overviewOrgsLoading, delegableOrgsLoading]);
 
@@ -162,21 +170,28 @@ export const ChooseOrgPage = () => {
                 }
               ></SearchField>
             </div>
-            <div className={classes.pageContentAccordionsContainer}>
-              <div className={classes.apiAccordions}>
-                {searchString === '' ? (
-                  <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
-                ) : (
-                  <h4>{t('api_delegation.businesses_search_results')}</h4>
-                )}
-                {infoPanel()}
-                <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+            {viewLoading ? (
+              <Spinner
+                size='large'
+                title={String(t('api_delegation.loading'))}
+              />
+            ) : (
+              <div className={classes.pageContentAccordionsContainer}>
+                <div className={classes.apiAccordions}>
+                  {searchString === '' ? (
+                    <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                  ) : (
+                    <h4>{t('api_delegation.businesses_search_results')}</h4>
+                  )}
+                  {infoPanel()}
+                  <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+                </div>
+                <div className={classes.apiAccordions}>
+                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                  <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
+                </div>
               </div>
-              <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
-              </div>
-            </div>
+            )}
             <div className={classes.navButtonContainer}>
               <div className={classes.navButton}>
                 <Button
