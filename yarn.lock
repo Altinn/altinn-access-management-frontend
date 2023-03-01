@@ -346,13 +346,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@digdir/design-system-react@npm:0.6.0"
+"@digdir/design-system-react@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@digdir/design-system-react@npm:0.7.0"
+  dependencies:
+    "@altinn/figma-design-tokens": ^6.0.1
+    "@navikt/ds-icons": ^2.3.0
+    react-number-format: ^5.1.3
   peerDependencies:
-    react: ^18.1.0
-    react-dom: ^18.0.0
-  checksum: b6e4a9b94cdc4fbb33f811a1b16028958872dc1059fbb2337f94bc858f1af2f9877950bc0bfc7efae1c021db9b8e50e43d19e049395fd099eb345fdccfafd570
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 668ab0ca344a1de2c64ac9a5388b8458ab5b8d9d14a3e00a06dc3a3d5265f0935aea5a7b4cd1b0dab7a9a6946da32622a9d2bb17eda5e088b5364bb28814de89
   languageName: node
   linkType: hard
 
@@ -650,6 +654,19 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 389085ca44ca498c5de8595a2750067e2f7f0aafb5950a681ac1a6cec708d43e6d464f3a3cfee2253d0c05e94d163e34906884dd8adaebff05c78c0937e35995
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-icons@npm:^2.3.0":
+  version: 2.4.3
+  resolution: "@navikt/ds-icons@npm:2.4.3"
+  peerDependencies:
+    "@types/react": ^17.0.30 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 72cebc5413ca3223b3b5b1b4165372a32eb84797afcfd7ae88a08ea9edb400eea61609e88dec13fbdb14eca289ec49a27f989fc10d556b2db6423f1155829409
   languageName: node
   linkType: hard
 
@@ -5435,7 +5452,7 @@ __metadata:
   resolution: "react-app@workspace:."
   dependencies:
     "@altinn/altinn-design-system": ^0.27.3
-    "@digdir/design-system-react": ^0.6.0
+    "@digdir/design-system-react": ^0.7.0
     "@reduxjs/toolkit": ^1.9.1
     "@testing-library/cypress": ^9.0.0
     "@types/react": ^18.0.21
@@ -5538,7 +5555,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-number-format@npm:^5.1.1":
+"react-number-format@npm:^5.1.1, react-number-format@npm:^5.1.3":
   version: 5.1.3
   resolution: "react-number-format@npm:5.1.3"
   dependencies:
