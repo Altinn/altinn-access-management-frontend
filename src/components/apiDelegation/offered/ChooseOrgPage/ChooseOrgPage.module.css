@@ -39,8 +39,9 @@
   margin-bottom: 70px;
 }
 
-.accordionScrollContainer {
-  height: 300px;
-  overflow-y: auto;
+@media only screen and (min-width: 768px) {
+  .accordionScrollContainer {
+    height: 300px;
+    overflow-y: auto;
+  }
 }
-

@@ -115,7 +115,7 @@ export const ChooseOrgPage = () => {
     );
   });
 
-  const chosenApiItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const chosenItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
       <ActionBar
         key={index}
@@ -190,7 +190,7 @@ export const ChooseOrgPage = () => {
                 </div>
                 <div className={classes.apiAccordions}>
                   <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                  <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
+                  <div className={classes.accordionScrollContainer}>{chosenItems}</div>
                 </div>
               </div>
             )}
