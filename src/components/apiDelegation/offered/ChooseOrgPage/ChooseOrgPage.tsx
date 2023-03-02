@@ -39,7 +39,6 @@ import classes from './ChooseOrgPage.module.css';
 
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
-  const delegableOrgsLoading = useAppSelector((state) => state.delegableOrg.delegableOrgsLoading);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
@@ -61,11 +60,11 @@ export const ChooseOrgPage = () => {
       void dispatch(fetchOverviewOrgsOffered());
     }
 
-    if (delegableOrgsLoading && !overviewOrgsLoading) {
+    if (!overviewOrgsLoading) {
       dispatch(transferDelegableOrgs);
       setViewLoading(false);
     }
-  }, [overviewOrgs, overviewOrgsLoading, delegableOrgsLoading]);
+  }, [overviewOrgs, overviewOrgsLoading]);
 
   useEffect(() => {
     if (delegableOrgs.length > 0) {
@@ -78,13 +77,16 @@ export const ChooseOrgPage = () => {
   }, [delegableOrgs]);
 
   const transferDelegableOrgs = () => {
-    const delegableOrgList: DelegableOrg[] = [];
+    let delegableOrgList: DelegableOrg[] = [];
     for (const org of overviewOrgs) {
       delegableOrgList.push({
         id: org.id,
         orgName: org.orgName,
         orgNr: org.orgNr,
       });
+    }
+    for (const chosen of chosenOrgs) {
+      delegableOrgList = delegableOrgList.filter((org) => org.id !== chosen.id);
     }
     dispatch(populateDelegableOrgs(delegableOrgList));
   };

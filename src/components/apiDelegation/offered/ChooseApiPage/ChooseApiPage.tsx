@@ -207,10 +207,7 @@ export const ChooseApiPage = () => {
               }
               nextText={t('api_delegation.next')}
               nextPath={
-                '/' +
-                RouterPath.OfferedApiDelegations +
-                '/' +
-                RouterPath.OfferedApiExecuteDelegation
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiConfirmation
               }
               nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
             ></NavigationButtons>

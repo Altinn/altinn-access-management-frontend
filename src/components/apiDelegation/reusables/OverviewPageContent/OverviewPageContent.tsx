@@ -201,7 +201,21 @@ export const OverviewPageContent = ({
             </div>
           )}
         </div>
-        <div className={classes.accordion}>{accordions()}</div>
+        <div className={classes.accordion}>
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+          {accordions()}
+        </div>
         {isEditable && (
           <div className={classes.saveSection}>
             <Button

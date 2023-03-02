@@ -342,22 +342,26 @@ const overviewOrgSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchOverviewOrgsReceived.fulfilled, (state, action) => {
+        state.loading = true;
         const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Received);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
+        state.loading = true;
         state.error = action.error.message ?? 'Unknown error';
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
+        state.loading = true;
         const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
+        state.loading = true;
         state.error = action.error.message ?? 'Unknown error';
         state.loading = false;
       })

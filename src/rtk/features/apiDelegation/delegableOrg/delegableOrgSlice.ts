@@ -71,6 +71,7 @@ const delegableOrgSlice = createSlice({
       );
     },
     populateDelegableOrgs: (state, action) => {
+      state.delegableOrgsLoading = true;
       const orgList: DelegableOrg[] = action.payload;
       state.delegableOrgList = orgList;
       state.presentedOrgList = orgList;
