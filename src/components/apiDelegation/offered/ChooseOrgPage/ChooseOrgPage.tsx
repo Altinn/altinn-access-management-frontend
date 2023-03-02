@@ -32,7 +32,7 @@ import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/del
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
-import common from '@/resources/css/common.module.css';
+import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import classes from './ChooseOrgPage.module.css';

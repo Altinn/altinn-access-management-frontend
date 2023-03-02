@@ -25,7 +25,7 @@ import {
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
 import { NavigationButtons } from '@/components/reusables';
-import common from '@/resources/css/common.module.css';
+import common from '@/resources/css/Common.module.css';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
