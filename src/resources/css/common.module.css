@@ -17,3 +17,9 @@
 .backgroundColor{
   background-color: #1EADF7;
 }
+
+.spinnerContainer{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}

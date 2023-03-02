@@ -25,7 +25,7 @@ import {
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
 import { NavigationButtons } from '@/components/reusables';
-import main from '@/main.module.css';
+import common from '@/resources/css/common.module.css';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -149,7 +149,7 @@ export const ChooseApiPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={main.pageContent}>
+          <div className={common.pageContent}>
             {chosenDelegableOrgs.length < 1 ? (
               <Panel
                 title={t('common.error')}

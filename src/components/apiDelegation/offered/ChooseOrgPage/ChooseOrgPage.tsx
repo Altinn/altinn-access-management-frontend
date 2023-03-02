@@ -32,7 +32,7 @@ import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/del
 import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
-import main from '@/main.module.css';
+import common from '@/resources/css/common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import classes from './ChooseOrgPage.module.css';
@@ -161,7 +161,7 @@ export const ChooseOrgPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={main.pageContent}>
+          <div className={common.pageContent}>
             <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
             <div className={classes.searchSection}>
               <SearchField
@@ -173,10 +173,12 @@ export const ChooseOrgPage = () => {
               ></SearchField>
             </div>
             {viewLoading ? (
-              <Spinner
-                size='large'
-                title={String(t('api_delegation.loading'))}
-              />
+              <div className={common.spinnerContainer}>
+                <Spinner
+                  size='large'
+                  title={String(t('api_delegation.loading'))}
+                />
+              </div>
             ) : (
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
