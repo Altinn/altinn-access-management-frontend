@@ -83,5 +83,15 @@ namespace Altinn.AccessManagement
 
             return false;
         }
+
+        private bool ShouldShowAppView2()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
