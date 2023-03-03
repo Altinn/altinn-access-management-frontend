@@ -93,5 +93,15 @@ namespace Altinn.AccessManagement
 
             return false;
         }
+
+        private bool ShouldShowAppView3()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
