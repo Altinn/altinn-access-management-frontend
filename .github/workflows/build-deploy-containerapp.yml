@@ -8,7 +8,7 @@ env:
   CONTAINER_APP_NAME: altinnaccessmanagementui-app-204
   CONTAINER_APP_RESOURCE_GROUP_NAME: altinn-accessmanagement-rg
   CONTAINER_REGISTRY_LOGIN_SERVER: altinnaccessmanagementui20230217122503.azurecr.io
-  DOCKER_FILE_PATH: backend/src/Altinn.AccessManagement.UI/Dockerfile
+  DOCKER_FILE_PATH: Dockerfile
   PROJECT_NAME_FOR_DOCKER: altinnaccessmanagementui
 jobs:
   build:
