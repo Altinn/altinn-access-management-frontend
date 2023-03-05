@@ -26,7 +26,7 @@ RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zli
 
 COPY --from=generate-accessmanagement-backend /app_output .
 COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/accessmanagement/assets
-COPY --from=generate-accessmanagement-frontend /build/localizations ./wwwroot/accessmanagement/localizations
+COPY --from=generate-accessmanagement-frontend /build/src/localizations ./wwwroot/accessmanagement/localizations
 COPY --from=generate-accessmanagement-frontend /build/dist/manifest.json ./wwwroot/accessmanagement
 
 ENTRYPOINT ["dotnet", "Altinn.AccessManagement.UI.dll"]
