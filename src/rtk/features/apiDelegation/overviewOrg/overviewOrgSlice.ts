@@ -222,7 +222,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
       .post(
         `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received/revoke`,
         {
-          to: [
+          from: [
             {
               id: 'urn:altinn:organizationnumber',
               value: String(request.orgNr),
