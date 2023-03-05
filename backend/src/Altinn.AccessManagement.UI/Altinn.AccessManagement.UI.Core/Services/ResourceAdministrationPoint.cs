@@ -3,7 +3,9 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Profile.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,6 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly CacheConfig _cacheConfig;
+        private readonly IProfileClient _profileClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAdministrationPoint"/> class.
@@ -29,21 +32,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
             ILogger<IResourceAdministrationPoint> logger, 
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig)
+            IOptions<CacheConfig> cacheConfig,
+            IProfileClient profileClient)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
+            _profileClient = profileClient;
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetResources(ResourceType resourceType)
+        public async Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType)
         {
             try
             {
                 List<ServiceResource> resources = await GetResources();
-                return resources.FindAll(r => r.ResourceType == resourceType);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType);
+                return MapResourceToFrontendModel(resourceList);
             }
             catch (Exception ex)
             {
@@ -151,6 +157,43 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resources;
+        }
+
+        private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources)
+        {
+            List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
+            string languageCode = GetLanguageCodeForUser();
+            foreach (var resource in resources)
+            {
+                ServiceResourceFE resourceFE = new ServiceResourceFE();
+                resourceFE.Title = resource?.Title?.GetValueOrDefault(languageCode) ?? resource?.Title?.GetValueOrDefault("nb");
+                resourceFE.ResourceType = resource.ResourceType;
+                resourceFE.Status = resource?.Status;
+                resourceFE.ResourceReferences = resource?.ResourceReferences;
+                resourceFE.Identifier = resource?.Identifier;
+                resourceFE.ResourceOwnerName = resource?.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource?.HasCompetentAuthority?.Name?.GetValueOrDefault("nb");
+                resourceFE.RightDescription = resource?.RightDescription?.GetValueOrDefault(languageCode) ?? resource?.RightDescription?.GetValueOrDefault("nb");
+                resourceFE.Description = resource?.Description?.GetValueOrDefault(languageCode) ?? resource?.Description?.GetValueOrDefault("nb");
+                resourceFE.ValidFrom = resource.ValidFrom;
+                resourceFE.ValidTo = resource.ValidTo;
+                resourceList.Add(resourceFE);
+            }
+
+            return resourceList;
+        }
+
+        private string GetLanguageCodeForUser()
+        {
+            UserProfile userProfile = _profileClient.GetUserProfile().Result;
+
+            if (userProfile != null)
+            {
+                return userProfile.ProfileSettingPreference.Language;
+            }
+            else
+            {
+                return "nb";
+            }
         }
     }
 }

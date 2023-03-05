@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -37,11 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             _profileClient = profileClient;
         }
 
-        /// <summary>
-        /// Gets all the delegations and maps to the frontend model
-        /// </summary>
-        /// <param name="party">reportee that delegates the resources</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party)
         {
             List<Delegation> outboundDelegations = await _delegationsClient.GetOutboundDelegations(party);
@@ -65,24 +62,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 delegationsFE.Created = delegation.Created;
                 delegationsFE.ResourceId = delegation.ResourceId;
                 ServiceResource resource = resources.Find(r => r.Identifier == delegation.ResourceId);
-                delegationsFE.ResourceTitle = resource?.Title.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
+                delegationsFE.ResourceTitle = resource?.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb");
                 delegationsFE.ResourceType = resource.ResourceType;
-                delegationsFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority.Orgcode;
-                delegationsFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority.Organization;
-                delegationsFE.ResourceOwnerName = resource.HasCompetentAuthority.Name.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
-                delegationsFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
-                delegationsFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
+                delegationsFE.ResourceOwnerOrgcode = resource?.HasCompetentAuthority?.Orgcode;
+                delegationsFE.ResourceOwnerOrgNumber = resource?.HasCompetentAuthority?.Organization;
+                delegationsFE.ResourceOwnerName = resource?.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource?.HasCompetentAuthority?.Name?.GetValueOrDefault("nb");
+                delegationsFE.ResourceDescription = resource?.Description?.GetValueOrDefault(languageCode) ?? resource?.Description?.GetValueOrDefault("nb");
+                delegationsFE.RightDescription = resource?.RightDescription?.GetValueOrDefault(languageCode) ?? resource?.RightDescription?.GetValueOrDefault("nb");
                 delegations.Add(delegationsFE);
             }
 
             return delegations;
         }
 
-        /// <summary>
-        /// Gets all the inbound delegations and maps to the frontend model
-        /// </summary>
-        /// <param name="party">reportee that receives the delegations</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public async Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party)
         {
             List<Delegation> inboundDelegations = await _delegationsClient.GetInboundDelegations(party);
@@ -106,17 +99,39 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 delegationsFE.Created = delegation.Created;
                 delegationsFE.ResourceId = delegation.ResourceId;
                 ServiceResource resource = resources.Find(r => r.Identifier == delegation.ResourceId);
-                delegationsFE.ResourceTitle = resource?.Title.GetValueOrDefault(languageCode) ?? resource?.Title.GetValueOrDefault("nb");
-                delegationsFE.ResourceType = resource.ResourceType;
-                delegationsFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority.Orgcode;
-                delegationsFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority.Organization;
-                delegationsFE.ResourceOwnerName = resource.HasCompetentAuthority.Name.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority.Name.GetValueOrDefault("nb");
-                delegationsFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode) ?? resource.Description.GetValueOrDefault("nb");
-                delegationsFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode) ?? resource.RightDescription.GetValueOrDefault("nb");
+                if (resource != null)
+                {
+                    delegationsFE.ResourceTitle = resource.Title.GetValueOrDefault(languageCode) ?? resource?.Title.GetValueOrDefault("nb");
+                    delegationsFE.ResourceType = resource.ResourceType;
+                    delegationsFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority?.Orgcode;
+                    delegationsFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority?.Organization;
+                    delegationsFE.ResourceOwnerName = resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource?.HasCompetentAuthority?.Name?.GetValueOrDefault("nb");
+                    delegationsFE.ResourceDescription = resource.Description?.GetValueOrDefault(languageCode) ?? resource?.Description?.GetValueOrDefault("nb");
+                    delegationsFE.RightDescription = resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource?.RightDescription?.GetValueOrDefault("nb");
+                }
+
                 delegations.Add(delegationsFE);
             }
 
             return delegations;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        {
+            return await _delegationsClient.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
+        {
+            return await _delegationsClient.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
+        {
+            return await _delegationsClient.CreateMaskinportenScopeDelegation(party, delegation);
         }
 
         private async Task<string> GetLanguageCodeForUser()

@@ -10,10 +10,9 @@ namespace Altinn.AccessManagement
     /// <summary>
     /// HomeController
     /// </summary>
-    //[Route("accessmanagement/")]
-    //[Route("accessmanagement/ui")]
+    [Route("accessmanagement/")]
+    [Route("accessmanagement/ui")]
     [Route("accessmanagement/ui/{*AnyValue}")]
-
     public class HomeController : Controller
     {
         private readonly IAntiforgery _antiforgery;
@@ -66,6 +65,7 @@ namespace Altinn.AccessManagement
             if (ShouldShowAppView())
             {
                 return View();
+            
             }
 
             string goToUrl = HttpUtility.UrlEncode($"{_platformSettings.AltinnPlatformBaseUrl}{Request.Path}");

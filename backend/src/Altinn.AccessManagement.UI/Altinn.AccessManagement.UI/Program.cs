@@ -13,6 +13,7 @@ using Altinn.Common.PEP.Authorization;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -45,7 +46,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 
@@ -71,9 +76,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
+    services.AddHttpClient<ILookupClient, LookupClient>();
+    services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IDelegationsService, DelegationsService>();
+    services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
     services.AddSingleton<IAuthorizationHandler, AccessTokenHandler>();
     services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
@@ -101,7 +109,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
             options.RequireHttpsMetadata = false;
         }
     });
-
+      
     services.AddAuthorization(options =>
     {
         options.AddPolicy(AuthzConstants.POLICY_STUDIO_DESIGNER, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "studio.designer")));

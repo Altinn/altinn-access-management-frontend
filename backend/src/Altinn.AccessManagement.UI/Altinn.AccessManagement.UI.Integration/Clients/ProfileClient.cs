@@ -80,7 +80,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return null;
-
         }
     }
 }
