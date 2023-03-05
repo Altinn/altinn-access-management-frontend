@@ -141,12 +141,12 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
             throw new NotImplementedException();
         }
 
-        public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
             throw new NotImplementedException();
         }

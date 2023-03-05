@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">party</param>
         /// <param name="delegation">delegation to be revoked</param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation);
+        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation);
 
         /// <summary>
         /// Creates a maskinporten delegation
@@ -44,6 +44,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">party</param>
         /// <param name="delegation">delegation to be revoked</param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation);
+        public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
     }
 }

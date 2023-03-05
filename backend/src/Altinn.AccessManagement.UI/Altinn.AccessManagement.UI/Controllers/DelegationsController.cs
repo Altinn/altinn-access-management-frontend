@@ -1,12 +1,15 @@
-﻿using Altinn.AccessManagement.UI.Core.Models;
+﻿using System.Net.Sockets;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -139,25 +142,32 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered/revoke")]
-        public async Task<ActionResult> RevokeOfferedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
+        public async Task<ActionResult> RevokeOfferedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegation delegation)
         {
             try
             {
-                HttpResponseMessage response = await _delegation.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+                HttpResponseMessage response = await _delegation.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                 {
                     return NoContent();
                 }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    ValidationProblemDetails problemDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(responseContent, _serializerOptions);
+                    return new ObjectResult(problemDetails);                                                      
+                }
                 else
                 {
-                    ModelState.AddModelError(response.StatusCode.ToString(), response.ReasonPhrase);
-                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    ProblemDetails problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseContent, _serializerOptions);
+                    return new ObjectResult(problemDetails);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Internal exception occurred during deletion of maskinportenschema delegation");
+                _logger.LogError(ex, "Exception occurred during deletion of maskinportenschema delegation");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -170,27 +180,34 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/")]
-        public async Task<ActionResult<DelegationOutput>> CreateMaskinportenDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
+        public async Task<ActionResult<DelegationOutput>> CreateMaskinportenDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
         {
             try
             {
                 HttpResponseMessage response = await _delegation.CreateMaskinportenScopeDelegation(party, delegation);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     DelegationOutput delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
                     return delegationOutput;
                 }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    ValidationProblemDetails problemDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(responseContent, _serializerOptions);
+                    return new ObjectResult(problemDetails);
+                }
                 else
                 {
-                    ModelState.AddModelError(response.StatusCode.ToString(), response.ReasonPhrase);
-                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    ProblemDetails problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseContent, _serializerOptions);
+                    return new ObjectResult(problemDetails);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Internal exception occurred during deletion of maskinportenschema delegation");
+                _logger.LogError(ex, "Internal exception occurred during delegation of maskinportenschema");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Sockets;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web.Http.ModelBinding;
@@ -124,29 +125,44 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
-            string endpointUrl = $"accessmanagement/api/v1/{{party}}/delegations/maskinportenschema/received/revoke";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
-            return response;
+            try
+            {
+                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/received/revoke";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+                return response;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
-            string endpointUrl = $"accessmanagement/api/v1/{{party}}/delegations/maskinportenschema/offered/revoke";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
-            return response;
+            try
+            {
+                string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered/revoke";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            string endpointUrl = $"accessmanagement/api/v1/{{party}}/delegations/maskinportenschema/offered/revoke";
+            string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
