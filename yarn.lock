@@ -658,15 +658,15 @@ __metadata:
   linkType: hard
 
 "@navikt/ds-icons@npm:^2.3.0":
-  version: 2.4.3
-  resolution: "@navikt/ds-icons@npm:2.4.3"
+  version: 2.4.2
+  resolution: "@navikt/ds-icons@npm:2.4.2"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 72cebc5413ca3223b3b5b1b4165372a32eb84797afcfd7ae88a08ea9edb400eea61609e88dec13fbdb14eca289ec49a27f989fc10d556b2db6423f1155829409
+  checksum: 1d095481126f0512c9e312473d2c2cf7e64d484f70e3fcba9cca011813a05c254416a78fbfb085813fcc5ea17f27e99d1d211659ac2ce2f0aebb5778a5e55439
   languageName: node
   linkType: hard
 

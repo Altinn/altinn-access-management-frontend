@@ -11,6 +11,12 @@
   margin-top: 3rem;
 }
 
+.spinnerContainer{
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
 .saveSection{
   margin-top: 3rem;
   margin-right: 0.5rem;

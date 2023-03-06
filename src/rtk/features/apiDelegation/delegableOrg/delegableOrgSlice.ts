@@ -8,6 +8,8 @@ export interface DelegableOrg {
 
 export interface InitialState {
   delegableOrgsLoading: boolean;
+  loading: boolean;
+  searchLoading: boolean;
   delegableOrgList: DelegableOrg[];
   presentedOrgList: DelegableOrg[];
   chosenDelegableOrgList: DelegableOrg[];
@@ -23,6 +25,8 @@ interface OrgDTO {
 
 const initialState: InitialState = {
   delegableOrgsLoading: true,
+  loading: false,
+  searchLoading: false,
   delegableOrgList: [],
   presentedOrgList: [],
   chosenDelegableOrgList: [],
@@ -76,6 +80,9 @@ const delegableOrgSlice = createSlice({
       state.presentedOrgList = orgList;
       state.delegableOrgsLoading = false;
     },
+    setSearchLoading: (state) => {
+      state.searchLoading = true;
+    },
     resetDelegableOrgs: () => initialState,
   },
   extraReducers: (builder) => {
@@ -91,6 +98,7 @@ const delegableOrgSlice = createSlice({
         if (state.chosenDelegableOrgList.filter((o) => o.id === org.id).length === 0) {
           state.presentedOrgList.push(org);
         }
+        state.searchLoading = false;
       })
       .addCase(lookupOrg.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';
@@ -99,6 +107,7 @@ const delegableOrgSlice = createSlice({
         } else {
           state.searchOrgNonexistant = false;
         }
+        state.searchLoading = false;
       });
   },
 });
@@ -110,4 +119,5 @@ export const {
   resetDelegableOrgs,
   searchInCurrentOrgs,
   populateDelegableOrgs,
+  setSearchLoading,
 } = delegableOrgSlice.actions;

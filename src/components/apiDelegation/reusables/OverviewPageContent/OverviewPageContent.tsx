@@ -1,5 +1,11 @@
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
+import {
+  Button,
+  ButtonColor,
+  ButtonSize,
+  ButtonVariant,
+  Spinner,
+} from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -119,6 +125,7 @@ export const OverviewPageContent = ({
         }
       }
     }
+    setIsEditable(false);
   };
 
   const accordions = () => {
@@ -137,7 +144,14 @@ export const OverviewPageContent = ({
         </div>
       );
     } else if (loading) {
-      return t('api_delegation.loading') + '...';
+      return (
+        <div className={classes.spinnerContainer}>
+          <Spinner
+            title={String(t('api_delegation.loading'))}
+            size='large'
+          />
+        </div>
+      );
     }
     return overviewOrgs.map((org) => (
       <OrgDelegationAccordion

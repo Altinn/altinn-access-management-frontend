@@ -26,6 +26,7 @@ import {
   searchInCurrentOrgs,
   lookupOrg,
   populateDelegableOrgs,
+  setSearchLoading,
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -43,6 +44,7 @@ export const ChooseOrgPage = () => {
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
+  const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
@@ -69,7 +71,8 @@ export const ChooseOrgPage = () => {
   useEffect(() => {
     if (delegableOrgs.length > 0) {
       setPromptOrgNumber(false);
-    } else if (searchString.length === 9) {
+    } else if (searchString.length === 9 && !chosenOrgs.some((org) => org.orgNr === searchString)) {
+      dispatch(setSearchLoading());
       void dispatch(lookupOrg(searchString));
     } else if (searchString.length !== 9) {
       setPromptOrgNumber(true);
@@ -128,7 +131,7 @@ export const ChooseOrgPage = () => {
   });
 
   const infoPanel = () => {
-    if (searchOrgNotExist) {
+    if (!searchLoading && searchOrgNotExist) {
       return (
         <Panel
           variant={PanelVariant.Error}
@@ -138,11 +141,16 @@ export const ChooseOrgPage = () => {
         >
           <div>
             {t('api_delegation.buisness_search_notfound_content')}{' '}
-            <a href='https://www.brreg.no/'>Brønnøysundregistrene.</a>
+            <a
+              className={classes.link}
+              href='https://www.brreg.no/'
+            >
+              {t('common.broennoeysund_register')}
+            </a>
           </div>
         </Panel>
       );
-    } else if (promptOrgNumber) {
+    } else if (!searchLoading && promptOrgNumber) {
       return (
         <Panel
           variant={PanelVariant.Info}
