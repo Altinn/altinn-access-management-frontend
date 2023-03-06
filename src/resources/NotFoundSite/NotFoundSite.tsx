@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTranslation } from 'react-i18next';
 import { Page, PageContent } from '@altinn/altinn-design-system';
 import { useRouteError } from 'react-router-dom';

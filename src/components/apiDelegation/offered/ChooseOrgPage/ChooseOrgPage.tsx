@@ -29,7 +29,7 @@ import {
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import common from '@/resources/css/Common.module.css';

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { RouterPath } from '@/routes/Router';
-import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { SummaryPage } from '@/components/reusables/SummaryPage';
 import type { DelegationRequest } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
