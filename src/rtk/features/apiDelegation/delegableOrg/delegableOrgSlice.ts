@@ -31,7 +31,6 @@ const initialState: InitialState = {
 
 export const lookupOrg = createAsyncThunk('delegableOrg/lookupOrg', async (orgNumber: string) => {
   return await axios
-    // TODO: This may fail in AT if axios doesn't automatically change the base url
     .get(`/accessmanagement/api/v1/lookup/org/${orgNumber}`)
     .then((response) => response.data)
     .catch((error) => {

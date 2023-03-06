@@ -66,9 +66,7 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
 };
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
-  // TODO: Change code below when AltinnPartyId cookie doesn't have httpOnly flag anymore
-  const altinnPartyId = getCookie('AltinnPartyId') === null ? getCookie('AltinnPartyId') : '1337';
-  // TODO: This may fail in AT if axios doesn't automatically change the base url
+  const altinnPartyId = '1337';
   return await axios
     .get(`/accessmanagement/api/v1/${altinnPartyId}/resources/maskinportenschema`)
     .then((response) => response.data)

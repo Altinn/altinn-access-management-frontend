@@ -140,7 +140,6 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
     if (!altinnPartyId) {
       throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
-    // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
       .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered`)
       .then((response) => response.data)
