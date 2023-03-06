@@ -100,7 +100,7 @@ export const ChooseApiPage = () => {
       );
     } else if (loading) {
       return (
-        <div className={classes.spinnerContainer}>
+        <div className={main.spinnerContainer}>
           <Spinner
             title={String(t('api_delegation.loading'))}
             size='large'

@@ -22,12 +22,6 @@
     margin-right: 3rem;
 }
 
-.spinnerContainer{
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-}
-
 .searchSection{
   width: var(--searchFieldWidth);
 }
