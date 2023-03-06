@@ -3,6 +3,7 @@ using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Tests.Controllers;
 using Altinn.Authorization.ABAC.Constants;
 using Altinn.Platform.Register.Models;
@@ -19,10 +20,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="resourceType">the resource type.</param>
         /// <returns>Returns thelist of service resources.</returns>
-        public static List<ServiceResource> GetResources(ResourceType resourceType)
+        public static List<ServiceResourceFE> GetResources(ResourceType resourceType)
         {
-            List<ServiceResource> resources = new List<ServiceResource>();
-            List<ServiceResource> filteredResources = null;
+            List<ServiceResourceFE> resources = new List<ServiceResourceFE>();
+            List<ServiceResourceFE> filteredResources = null;
 
             string path = GetResourcesPath();
             if (Directory.Exists(path))
@@ -38,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         {
                             PropertyNameCaseInsensitive = true,
                         };
-                        resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
+                        resources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
                     }
                 }
 

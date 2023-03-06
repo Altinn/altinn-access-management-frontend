@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import i18next from 'i18next';
 import axios from 'axios';
+import * as React from 'react';
 
 interface Props {
   children: React.ReactNode;
@@ -9,8 +10,9 @@ interface Props {
 
 const LoadLocalizations = ({ children }: Props) => {
   const { i18n } = useTranslation('common');
-  const baseUrl = import.meta.env.BASE_URL;
-  const localizationsFilePath = `${baseUrl}src/localizations/${i18n.language}.json`;
+  const envUrl = import.meta.env.DEV ? 'src/' : 'accessmanagement/';
+  const baseUrl = import.meta.env.BASE_URL + envUrl;
+  const localizationsFilePath = `${baseUrl}localizations/${i18n.language}.json`;
   const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url).href;
 
   const initLanguage = (lang: string) => {
