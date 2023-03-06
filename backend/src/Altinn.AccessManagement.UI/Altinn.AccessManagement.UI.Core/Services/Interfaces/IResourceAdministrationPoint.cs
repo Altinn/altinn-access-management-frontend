@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -13,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="resourceType">The type of resource to be filtered</param>
         /// <returns>resource list based on resource type</returns>
-        Task<List<ServiceResource>> GetResources(ResourceType resourceType);
+        Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType);
 
         /// <summary>
         /// Gets a list of Resources from ResourceRegister

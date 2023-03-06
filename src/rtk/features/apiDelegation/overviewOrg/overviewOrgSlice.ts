@@ -28,9 +28,9 @@ interface DelegationDTO {
   offeredByOrganizationNumber: string;
   coveredByOrganizationNumber: string;
   resourceId: string;
-  resourceTitle: languageDto;
-  hasCompetentAuthority: HasCompetentAuthorityDTO;
-  rightDescription: languageDto;
+  resourceTitle: string;
+  resourceOwnerName: string;
+  rightDescription: string;
 }
 
 export interface SliceState {
@@ -65,33 +65,12 @@ const initialState: SliceState = {
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
   const overviewOrgList: OverviewOrg[] = [];
   for (const delegation of delegationArray) {
-    let apiName = '';
-    let description = '';
-    let owner = '';
-    switch (i18next.language) {
-      case 'no_nb':
-        apiName = delegation.resourceTitle.nb;
-        description = delegation.rightDescription.nb;
-        owner = delegation.hasCompetentAuthority.name.nb;
-        break;
-      case 'no_nn':
-        apiName = delegation.resourceTitle.nn;
-        description = delegation.rightDescription.nn;
-        owner = delegation.hasCompetentAuthority.name.nn;
-        break;
-      case 'en':
-        apiName = delegation.resourceTitle.en;
-        description = delegation.rightDescription.en;
-        owner = delegation.hasCompetentAuthority.name.en;
-        break;
-    }
-
     const api: ApiListItem = {
       id: delegation.resourceId,
-      apiName,
+      apiName: delegation.resourceTitle,
       isSoftDelete: false,
-      owner,
-      description,
+      owner: delegation.resourceOwnerName,
+      description: delegation.rightDescription,
     };
 
     let delegationOrg = '';
@@ -163,7 +142,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
     }
     // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
-      .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/offered`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -182,7 +161,7 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
     }
 
     return await axios
-      .get(`/accessmanagement/api/v1/bff/${altinnPartyId}/delegations/maskinportenschema/received`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -243,7 +222,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
       .post(
         `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received/revoke`,
         {
-          to: [
+          from: [
             {
               id: 'urn:altinn:organizationnumber',
               value: String(request.orgNr),

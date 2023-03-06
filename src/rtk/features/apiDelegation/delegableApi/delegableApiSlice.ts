@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import i18next from 'i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -14,16 +13,12 @@ export interface DelegableApi {
 }
 
 export interface DelegableApiDto {
-  title: languageDto;
+  title: string;
   identifier: string;
-  hasCompetentAuthority: HasCompetentAuthority;
-  rightDescription: languageDto;
-  description?: languageDto;
+  resourceOwnername: string;
+  rightDescription: string;
+  description?: string;
   resourceReferences: resourceReferenceDTO[];
-}
-
-export interface HasCompetentAuthority {
-  name: languageDto;
 }
 
 export interface DelegableApiWithPriority {
@@ -46,47 +41,25 @@ export interface SliceState {
   error: string | undefined;
 }
 
-interface languageDto {
-  en: string;
-  nb: string;
-  nn: string;
-}
-
 interface resourceReferenceDTO {
   reference: string;
   referenceType: string;
   referenceSource: string;
 }
 
-const mapToDelegableApi = (obj: DelegableApiDto, orgName: languageDto) => {
+const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
   const delegableApi: DelegableApi = {
     id: obj.identifier,
-    apiName: '',
-    orgName: '',
-    rightDescription: '',
-    description: '',
+    apiName: obj.title,
+    orgName,
+    rightDescription: obj.rightDescription,
+    description: obj.description,
     scopes: [],
   };
   for (const ref of obj.resourceReferences) {
     if (ref.referenceType === 'MaskinportenScope') {
       delegableApi.scopes.push(ref.reference);
     }
-  }
-  if (i18next.language === 'no_nb') {
-    delegableApi.rightDescription = obj.rightDescription?.nb;
-    delegableApi.orgName = orgName.nb;
-    delegableApi.apiName = obj.title.nb;
-    delegableApi.description = obj.description?.nb;
-  } else if (i18next.language === 'en') {
-    delegableApi.rightDescription = obj.rightDescription?.en;
-    delegableApi.orgName = orgName.en;
-    delegableApi.apiName = obj.title.en;
-    delegableApi.description = obj.description?.en;
-  } else {
-    delegableApi.rightDescription = obj.rightDescription?.nn;
-    delegableApi.orgName = orgName.nn;
-    delegableApi.apiName = obj.title.nn;
-    delegableApi.description = obj.description?.nn;
   }
 
   return delegableApi;
@@ -204,22 +177,14 @@ const delegableApiSlice = createSlice({
         const responseList: DelegableApi[] = [];
         const providerList: string[] = [];
         for (let i = 0; i < dataArray.length; i++) {
-          const apiName = dataArray[i].title?.nb;
-          const orgName = dataArray[i].hasCompetentAuthority.name?.nb;
-          const rightDescription = dataArray[i].rightDescription?.nb;
-          const owner = dataArray[i].owner?.nb;
+          const apiName = dataArray[i].title;
+          const orgName = dataArray[i].resourceOwnerName;
+          const rightDescription = dataArray[i].rightDescription;
           if (rightDescription && apiName) {
             if (orgName) {
-              responseList.push(
-                mapToDelegableApi(dataArray[i], dataArray[i].hasCompetentAuthority.name),
-              );
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].resourceOwnerName));
               if (!providerList.includes(orgName)) {
                 providerList.push(orgName);
-              }
-            } else if (owner) {
-              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].owner));
-              if (!providerList.includes(owner)) {
-                providerList.push(owner);
               }
             }
           }
