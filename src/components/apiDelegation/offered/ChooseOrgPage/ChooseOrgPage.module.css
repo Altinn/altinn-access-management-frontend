@@ -22,7 +22,6 @@
     margin-right: 3rem;
 }
 
-
 .searchSection{
   width: var(--searchFieldWidth);
 }
@@ -44,3 +43,10 @@
   overflow-y: auto;
 }
 
+.link {
+  color: black;
+  text-decoration-line: underline;
+  text-decoration-color: #1EADF7;
+  display: inline-block;
+  background: transparent;
+}

@@ -7,7 +7,7 @@ import {
   PageHeader,
   SearchField,
 } from '@altinn/altinn-design-system';
-import { Select, List } from '@digdir/design-system-react';
+import { Select, List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -99,7 +99,14 @@ export const ChooseApiPage = () => {
         </Panel>
       );
     } else if (loading) {
-      return t('api_delegation.loading') + '...';
+      return (
+        <div className={main.spinnerContainer}>
+          <Spinner
+            title={String(t('api_delegation.loading'))}
+            size='large'
+          />
+        </div>
+      );
     }
     return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
       return (
