@@ -17,7 +17,14 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   const { t } = useTranslation('common');
 
   const redirectToProfile = () => {
-    window.location.pathname = '/ui/' + RouterPath.Profile;
+    const currentEnv = window.location.href;
+    if (currentEnv.includes('am.ui.at23')) {
+      window.location.href = RouterPath.ProfileAT23;
+    } else if (currentEnv.includes('altinn.no')) {
+      window.location.href = 'https://www.altinn.no/ui/Profile';
+    } else {
+      window.location.pathname = '/ui/' + RouterPath.Profile;
+    }
   };
 
   return (

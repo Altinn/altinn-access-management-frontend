@@ -21,6 +21,8 @@ export enum RouterPath {
   ReceivedApiDelegations = 'received-api-delegations',
   Profile = 'Profile',
   BasePath = '/accessmanagement/ui',
+  ProfileAT23 = 'https://at23.altinn.cloud/ui/Profile',
+  ProfileProd = 'https://www.altinn.no/ui/Profile',
 }
 
 export const Router = createBrowserRouter(
