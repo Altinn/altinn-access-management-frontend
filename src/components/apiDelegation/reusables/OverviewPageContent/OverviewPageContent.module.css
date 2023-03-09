@@ -1,14 +1,41 @@
-.pageContent{
-  --pageContentMargin: 1.5rem;
-  margin-left: var(--pageContentMargin);
-  margin-right: var(--pageContentMargin);
-  margin-bottom: var(--pageContentMargin);
-  padding: 0.5rem;
-  overflow: hidden;
+@media only screen and (max-width: 768px) {
+
+  .overviewAccordionsContainer{
+    margin-top: 0rem;
+  }
+
+  .delegateNewButton{
+    margin-bottom: 1.3rem;
+    margin: auto;
+  }
+
+  .pageContentContainer {
+    margin-top: 0.1rem;
+  }
+
+  .saveSection{
+    margin: auto;
+  }
 }
 
-.overviewAccordionsContainer{
-  margin-top: 3rem;
+@media only screen and (min-width: 768px) {
+  .overviewAccordionsContainer{
+    margin-top: 3rem;
+  }
+
+  .delegateNewButton{
+    margin-bottom: 3rem;
+  }
+
+  .pageContentContainer {
+    margin-top: 2rem;
+  }
+
+  .saveSection{
+    margin-top: 2rem;
+    margin-right: 0.5rem;
+    float: right;
+  }
 }
 
 .spinnerContainer{
@@ -18,25 +45,15 @@
 }
 
 .saveSection{
-  margin-top: 3rem;
-  margin-right: 0.5rem;
-  display: flex;
-  float: right;
-  justify-content: space-around;
-}
-
-.delegateNewButton{
-  margin-bottom: 3rem; 
+  margin-top: 2rem;
 }
 
 .pageContentContainer {
-  margin-top: 2rem;
   display: flex;
   align-items: center;
 }
 
 .apiSubheading{
-  font-weight: normal;
   display: flex;
 }
 

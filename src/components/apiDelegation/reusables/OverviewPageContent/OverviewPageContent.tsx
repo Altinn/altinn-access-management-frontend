@@ -33,6 +33,8 @@ import {
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import common from '@/main.module.css';
+import { useMediaQuery } from '@/resources/hooks';
 
 import { LayoutState } from '../LayoutState';
 
@@ -54,6 +56,7 @@ export const OverviewPageContent = ({
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let fetchData: () => any;
@@ -181,21 +184,26 @@ export const OverviewPageContent = ({
   };
 
   return (
-    <div className={classes.pageContent}>
+    <div className={common.pageContent}>
       <div className={classes.overviewAccordionsContainer}>
-        <h2 className={classes.pageContentText}>{overviewText}</h2>
+        {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
         {layout === LayoutState.Offered && (
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
               onClick={newDelegation}
               icon={<Add />}
+              fullWidth={isSm}
             >
               {t('api_delegation.delegate_new_org')}
             </Button>
           </div>
         )}
-        <Panel title={t('api_delegation.card_title')}>
+        <Panel
+          title={t('api_delegation.card_title')}
+          forceMobileLayout={isSm}
+          showIcon={!isSm}
+        >
           {t('api_delegation.api_panel_content')}{' '}
           <a
             className={classes.link}
@@ -207,7 +215,11 @@ export const OverviewPageContent = ({
         <div>
           {overviewOrgs.length > 0 && (
             <div className={classes.pageContentContainer}>
-              <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+              {isSm ? (
+                <h4 className={classes.apiSubheading}>{accessesHeader}</h4>
+              ) : (
+                <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+              )}
               <div className={classes.editButton}>
                 {!isEditable ? (
                   <Button
@@ -239,6 +251,7 @@ export const OverviewPageContent = ({
               disabled={saveDisabled}
               onClick={handleSave}
               color={ButtonColor.Success}
+              fullWidth={isSm}
             >
               {t('api_delegation.save')}
             </Button>

@@ -6,6 +6,7 @@ import * as React from 'react';
 import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
+import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './DeletableListItem.module.css';
 
@@ -23,6 +24,7 @@ export const DeletableListItem = ({
   isEditable,
 }: DeletableListItemProps) => {
   const { t } = useTranslation('common');
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   const isEditableActions = (
     <div className={cn(classes.deleteSection)}>
@@ -42,7 +44,7 @@ export const DeletableListItem = ({
           icon={<MinusCircle />}
           onClick={softDeleteCallback}
         >
-          {t('api_delegation.delete')}
+          {!isSm && t('api_delegation.delete')}
         </Button>
       )}
     </div>
