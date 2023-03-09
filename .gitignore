@@ -363,3 +363,11 @@ MigrationBackup/
 
 # Mac files
 .DS_Store
+backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/encodings.xml
+.gitignore
+backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/indexLayout.xml
+.gitignore
+backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/projectSettingsUpdater.xml
+backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/vcs.xml
+.gitignore
+backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/workspace.xml
