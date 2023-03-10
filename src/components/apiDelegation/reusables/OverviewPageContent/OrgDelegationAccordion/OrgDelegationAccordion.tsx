@@ -70,6 +70,7 @@ export const OrgDelegationAccordion = ({
           icon={<AddCircle />}
           size={ButtonSize.Small}
           onClick={delegateToOrgCallback}
+          aria-label={String(t('api_delegation.delegate_new_api'))}
         >
           {t('api_delegation.delegate_new_api')}
         </Button>
@@ -82,6 +83,7 @@ export const OrgDelegationAccordion = ({
             size={ButtonSize.Small}
             icon={<Cancel />}
             onClick={softRestoreAllCallback}
+            aria-label={String(t('api_delegation.undo'))}
           >
             {!isSm && t('api_delegation.undo')}
           </Button>
@@ -93,6 +95,7 @@ export const OrgDelegationAccordion = ({
               icon={<MinusCircle />}
               size={ButtonSize.Small}
               onClick={handleSoftDeleteAll}
+              aria-label={String(t('api_delegation.delete'))}
             >
               {!isSm && t('api_delegation.delete')}
             </Button>

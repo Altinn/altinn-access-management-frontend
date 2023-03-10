@@ -34,6 +34,7 @@ export const DeletableListItem = ({
           color={ButtonColor.Secondary}
           onClick={softRestoreCallback}
           icon={<Cancel />}
+          aria-label={String(t('api_delegation.undo'))}
         >
           {!isSm && t('api_delegation.undo')}
         </Button>
@@ -43,6 +44,7 @@ export const DeletableListItem = ({
           color={ButtonColor.Danger}
           icon={<MinusCircle />}
           onClick={softDeleteCallback}
+          aria-label={String(t('api_delegation.delete'))}
         >
           {!isSm && t('api_delegation.delete')}
         </Button>
