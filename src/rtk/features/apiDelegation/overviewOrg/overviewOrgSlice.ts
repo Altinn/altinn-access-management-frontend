@@ -57,7 +57,7 @@ export interface DeletionRequest {
 }
 
 const initialState: SliceState = {
-  loading: false,
+  loading: true,
   overviewOrgs: [
     {
       id: '1',
@@ -380,10 +380,10 @@ const overviewOrgSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
-        /* const dataArray = action.payload;
+        const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
         state.overviewOrgs = responseList;
-        state.loading = false; */
+        state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
         state.error = action.error.message ?? 'Unknown error';

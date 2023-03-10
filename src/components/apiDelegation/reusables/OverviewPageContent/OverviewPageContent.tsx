@@ -216,7 +216,7 @@ export const OverviewPageContent = ({
           {overviewOrgs.length > 0 && (
             <div className={classes.pageContentContainer}>
               {isSm ? (
-                <h4 className={classes.apiSubheading}>{accessesHeader}</h4>
+                <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
               ) : (
                 <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
               )}

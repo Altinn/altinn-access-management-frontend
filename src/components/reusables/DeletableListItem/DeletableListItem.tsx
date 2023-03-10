@@ -35,7 +35,7 @@ export const DeletableListItem = ({
           onClick={softRestoreCallback}
           icon={<Cancel />}
         >
-          {t('api_delegation.undo')}
+          {!isSm && t('api_delegation.undo')}
         </Button>
       ) : (
         <Button

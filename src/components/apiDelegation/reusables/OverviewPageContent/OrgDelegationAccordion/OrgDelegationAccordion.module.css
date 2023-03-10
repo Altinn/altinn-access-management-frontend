@@ -3,6 +3,10 @@
     padding-left: 0rem;
     padding-right: 0.3rem;
   }
+
+  .orgName{
+    font-size: 14px;
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -12,8 +16,6 @@
   }
 }
 
-
-
 .accordionHeader__softDelete{
     text-decoration: line-through;
     opacity: 70%;
@@ -22,4 +24,5 @@
 .accordionDeleteButtonContainer{
   margin-left: 7.2px;
 }
+
 

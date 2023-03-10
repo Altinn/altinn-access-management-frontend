@@ -83,7 +83,7 @@ export const OrgDelegationAccordion = ({
             icon={<Cancel />}
             onClick={softRestoreAllCallback}
           >
-            {t('api_delegation.undo')}
+            {!isSm && t('api_delegation.undo')}
           </Button>
         ) : (
           <div className={classes.accordionDeleteButtonContainer}>
@@ -121,7 +121,7 @@ export const OrgDelegationAccordion = ({
         subtitle={t('api_delegation.org_nr') + ' ' + organization.orgNr}
       >
         <div
-          className={cn({
+          className={cn(classes.orgName, {
             [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
           })}
         >

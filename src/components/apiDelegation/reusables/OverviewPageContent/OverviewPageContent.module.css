@@ -6,15 +6,15 @@
 
   .delegateNewButton{
     margin-bottom: 1.3rem;
-    margin: auto;
+    margin-top: 0rem;
   }
 
   .pageContentContainer {
     margin-top: 0.1rem;
   }
 
-  .saveSection{
-    margin: auto;
+  .editButton {
+    margin-bottom: 0.3rem;
   }
 }
 
@@ -36,6 +36,17 @@
     margin-right: 0.5rem;
     float: right;
   }
+
+  .editButton {
+    justify-content: flex-end;
+    display: flex;
+    flex: 1;
+  }
+
+  .pageContentContainer {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .spinnerContainer{
@@ -48,19 +59,8 @@
   margin-top: 2rem;
 }
 
-.pageContentContainer {
-  display: flex;
-  align-items: center;
-}
-
 .apiSubheading{
   display: flex;
-}
-
-.editButton {
-  justify-content: flex-end;
-  display: flex;
-  flex: 1;
 }
 
 .pageContentText {
