@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import i18next from 'i18next';
 
 import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -37,18 +36,6 @@ export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
-}
-
-interface HasCompetentAuthorityDTO {
-  organization: string;
-  orgcode: string;
-  name: languageDto;
-}
-
-interface languageDto {
-  en: string;
-  nb: string;
-  nn: string;
 }
 
 export interface DeletionRequest {
