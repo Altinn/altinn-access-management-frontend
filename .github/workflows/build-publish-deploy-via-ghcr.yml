@@ -1,4 +1,4 @@
-name: Accessmanagement UI Build, Push to ghcr and deploy
+name: Build Push to ghcr and deploy
 
 on:
   push:
