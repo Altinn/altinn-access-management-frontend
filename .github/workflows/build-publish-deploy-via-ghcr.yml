@@ -1,19 +1,15 @@
 name: Build Push to ghcr and deploy
-
 on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/build-publish-to-ghcr.yml'
-      - 'backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/**'
-
+      - '.github/workflows/build-publish-deploy-via-ghcr.yml'
 env:
   CONTAINER_REGISTRY_LOGIN_SERVER: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
   CONTAINER_APP_NAME: altinnaccessmanagementui-app-204
   CONTAINER_APP_RESOURCE_GROUP_NAME: altinn-accessmanagement-rg
-
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -49,6 +45,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      packages: read
     steps:
     - name: Azure Login
       uses: azure/login@v1
