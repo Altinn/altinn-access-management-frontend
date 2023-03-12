@@ -4,9 +4,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/build-publish-deploy-via-ghcr.yml'
-      - '.github/workflows/build-publish-deploy-via-ghcr.yml'
 env:
-  REGISTRY: ghcr.io
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
@@ -47,7 +45,6 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      packages: read
       packages: read
     steps:
     - name: Azure Login
