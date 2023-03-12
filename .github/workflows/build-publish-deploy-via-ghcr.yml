@@ -6,7 +6,7 @@ on:
       - '.github/workflows/build-publish-deploy-via-ghcr.yml'
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: altinn/altinn-access-management-frontend
   CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
   CONTAINER_APP_NAME: altinnaccessmanagementui-app-204
   CONTAINER_APP_RESOURCE_GROUP_NAME: altinn-accessmanagement-rg
