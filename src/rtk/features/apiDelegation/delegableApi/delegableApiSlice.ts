@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
 export interface DelegableApi {
   id: string;
   apiName: string;
@@ -64,7 +66,7 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
 };
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
-  const altinnPartyId = '1337';
+  const altinnPartyId = getCookie('AltinnPartyId');
   return await axios
     .get(`/accessmanagement/api/v1/${altinnPartyId}/resources/maskinportenschema`)
     .then((response) => response.data)
