@@ -4,6 +4,10 @@
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
   }
+
+  .pageContentAccordionsContainer{
+    width: 100%;
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -11,6 +15,15 @@
     --component-page-margin-horizontal: 3rem;
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
+  }
+  
+  .pageContentAccordionsContainer{
+    grid-template-columns: 1fr 1fr;
+    display: grid;
+  }
+
+  .apiAccordions{
+    margin-right: 3rem;
   }
 }
 

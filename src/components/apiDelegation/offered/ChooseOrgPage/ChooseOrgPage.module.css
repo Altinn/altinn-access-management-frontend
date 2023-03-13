@@ -1,25 +1,28 @@
 
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 768px) {
   .searchSection{
     --searchFieldWidth: 100%
   }
-}
 
-@media only screen and (min-width: 576px) {
+  .chosenOrgs{
+    margin-bottom: 1.5rem;
+  }
 
-  .searchSection{
-    --searchFieldWidth: 40%
+  .topText{
+    font-size: 20px;
   }
 }
 
+@media only screen and (min-width: 768px) {
 
-.pageContentAccordionsContainer{
-    grid-template-columns: 1fr 1fr;
-    display:grid;
-}
+  .searchSection{
+    --searchFieldWidth: 44%
+  }
 
-.apiAccordions{
-    margin-right: 3rem;
+  .accordionScrollContainer {
+    height: 300px;
+    overflow-y: auto;
+  }
 }
 
 .searchSection{
@@ -36,13 +39,6 @@
   margin-right: 3rem;
   width: 10rem;
   margin-bottom: 70px;
-}
-
-@media only screen and (min-width: 768px) {
-  .accordionScrollContainer {
-    height: 300px;
-    overflow-y: auto;
-  }
 }
 
 .link {

@@ -48,6 +48,7 @@ export const ChooseApiPage = () => {
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const loading = useAppSelector((state) => state.delegableApi.loading);
   const error = useAppSelector((state) => state.delegableApi.error);
+  const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
@@ -82,8 +83,6 @@ export const ChooseApiPage = () => {
     value: provider,
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
-
-  const isSm = useMediaQuery('(max-width: 768px)');
 
   const delegableApiAccordions = () => {
     if (error) {
