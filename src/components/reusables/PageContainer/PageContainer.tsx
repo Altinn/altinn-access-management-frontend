@@ -21,7 +21,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
     if (currentEnv.includes('am.ui.at23')) {
       window.location.href = RouterPath.ProfileAT23;
     } else if (currentEnv.includes('altinn.no')) {
-      window.location.href = 'https://www.altinn.no/ui/Profile';
+      window.location.href = RouterPath.ProfileProd;
     } else {
       window.location.pathname = '/ui/' + RouterPath.Profile;
     }
