@@ -171,7 +171,9 @@ export const ChooseOrgPage = () => {
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <div className={common.pageContent}>
-            <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
+            <h2 className={classes.chooseOrgText}>
+              {t('api_delegation.new_org_accordion_content_text')}
+            </h2>
             <div className={classes.searchSection}>
               <SearchField
                 label={String(t('api_delegation.search_for_buisness'))}

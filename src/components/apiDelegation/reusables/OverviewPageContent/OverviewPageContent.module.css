@@ -61,6 +61,7 @@
 
 .apiSubheading{
   display: flex;
+  margin-bottom: 2rem;
 }
 
 .pageContentText {
@@ -83,7 +84,7 @@
 @media only screen and (min-width: 768px) {
   .accordion{
     overflow-y: auto;
-    max-height: 300px;
+    max-height: 500px;
   }
 }
 

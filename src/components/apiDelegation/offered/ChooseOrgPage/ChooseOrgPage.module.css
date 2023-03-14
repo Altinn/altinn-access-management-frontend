@@ -12,6 +12,13 @@
   }
 }
 
+@media only screen and (min-width: 768px) {
+  .accordionScrollContainer {
+    height: 300px;
+    overflow-y: auto;
+  }
+}
+
 
 .pageContentAccordionsContainer{
     grid-template-columns: 1fr 1fr;
@@ -38,17 +45,14 @@
   margin-bottom: 70px;
 }
 
-@media only screen and (min-width: 768px) {
-  .accordionScrollContainer {
-    height: 300px;
-    overflow-y: auto;
-  }
-}
-
 .link {
   color: black;
   text-decoration-line: underline;
   text-decoration-color: #1EADF7;
   display: inline-block;
   background: transparent;
+}
+
+.chooseOrgText {
+  font-weight: normal;
 }
