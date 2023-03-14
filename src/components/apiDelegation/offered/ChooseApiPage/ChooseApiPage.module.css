@@ -11,16 +11,12 @@
 
 @media only screen and (min-width: 768px) {
   .searchSection{
-    width: 50%
+    width: 44%
   }
 
   .pageContentAccordionsContainer{
     grid-template-columns: 1fr 1fr;
     display: grid;
-  }
-
-  .apiAccordions{
-    margin-right: 3rem;
   }
 
   .accordionScrollContainer {
