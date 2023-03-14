@@ -16,7 +16,7 @@ import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { RouterPath } from '@/routes/Router';
-import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import {
@@ -25,7 +25,7 @@ import {
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
 import { NavigationButtons } from '@/components/reusables';
-import main from '@/main.module.css';
+import common from '@/resources/css/Common.module.css';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -100,7 +100,7 @@ export const ChooseApiPage = () => {
       );
     } else if (loading) {
       return (
-        <div className={main.spinnerContainer}>
+        <div className={common.spinnerContainer}>
           <Spinner
             title={String(t('api_delegation.loading'))}
             size='large'
@@ -156,7 +156,7 @@ export const ChooseApiPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={main.pageContent}>
+          <div className={common.pageContent}>
             {chosenDelegableOrgs.length < 1 ? (
               <Panel
                 title={t('common.error')}
@@ -214,10 +214,7 @@ export const ChooseApiPage = () => {
               }
               nextText={t('api_delegation.next')}
               nextPath={
-                '/' +
-                RouterPath.OfferedApiDelegations +
-                '/' +
-                RouterPath.OfferedApiExecuteDelegation
+                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiConfirmation
               }
               nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
             ></NavigationButtons>

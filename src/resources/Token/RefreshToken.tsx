@@ -13,7 +13,6 @@ export const RefreshToken = () => {
     if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
       lastRefreshTokenTimestamp.current = timeNow;
       return await axios
-        // TODO: This may fail in AT if axios doesn't automatically change the base url
         .get('accessmanagement/api/v1/authentication/refresh')
         .then((response) => response.data)
         .catch((error) => {

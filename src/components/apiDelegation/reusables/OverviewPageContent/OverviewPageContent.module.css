@@ -79,3 +79,11 @@
 .errorPanel{
   margin-top: 2rem;
 }
+
+@media only screen and (min-width: 768px) {
+  .accordion{
+    overflow-y: auto;
+    max-height: 300px;
+  }
+}
+

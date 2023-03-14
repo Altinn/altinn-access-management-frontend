@@ -16,11 +16,13 @@ export enum RouterPath {
   Overview = 'overview',
   OfferedApiChooseApi = 'choose-api',
   OfferedApiChooseOrg = 'choose-org',
-  OfferedApiExecuteDelegation = 'execute-delegation',
+  OfferedApiConfirmation = 'confirmation',
   OfferedApiReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
   Profile = 'Profile',
   BasePath = '/accessmanagement/ui',
+  ProfileAT23 = 'https://at23.altinn.cloud/ui/Profile',
+  ProfileProd = 'https://www.altinn.no/ui/Profile',
 }
 
 export const Router = createBrowserRouter(
@@ -45,7 +47,7 @@ export const Router = createBrowserRouter(
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiExecuteDelegation}
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiConfirmation}
         element={<ConfirmationPage />}
         errorElement={<NotFoundSite />}
       />

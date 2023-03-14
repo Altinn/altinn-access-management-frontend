@@ -70,7 +70,7 @@
     "data_retrieval_failed": "Noe feilet, prøv å laste inn siden på nytt.",
     "loading": "Laster",
     "orgs_not_chosen_subtitle": "Kunne ikke hente ut valgte organisasjoner. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre.",
-    "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegeringsprosessen på nytt.",
+    "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegerings\u00adprosessen på nytt.",
     "failed_delegations": "Disse api-delegeringene gikk galt og ble derfor ikke tildelt",
     "succesful_delegations": "Disse api-delegeringene ble gitt",
     "not_found_site_error_type": "Feil 404",

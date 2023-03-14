@@ -2,7 +2,7 @@ import { Page, PageHeader, PageContent, PageSize } from '@altinn/altinn-design-s
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { useMediaQuery } from '@/resources/hooks';
 

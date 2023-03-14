@@ -127,7 +127,6 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
     if (!altinnPartyId) {
       throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
-    // TODO: This may fail in AT if axios doesn't automatically change the base url
     return await axios
       .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered`)
       .then((response) => response.data)
@@ -308,22 +307,26 @@ const overviewOrgSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchOverviewOrgsReceived.fulfilled, (state, action) => {
+        state.loading = true;
         const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Received);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
+        state.loading = true;
         state.error = action.error.message ?? 'Unknown error';
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
+        state.loading = true;
         const dataArray = action.payload;
         const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
         state.overviewOrgs = responseList;
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
+        state.loading = true;
         state.error = action.error.message ?? 'Unknown error';
         state.loading = false;
       })

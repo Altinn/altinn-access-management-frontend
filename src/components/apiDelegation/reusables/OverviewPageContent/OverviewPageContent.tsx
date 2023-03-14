@@ -17,11 +17,7 @@ import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
 import { RouterPath } from '@/routes/Router';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import {
-  resetDelegableOrgs,
-  populateDelegableOrgs,
-} from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   fetchOverviewOrgsOffered,
   fetchOverviewOrgsReceived,
@@ -33,8 +29,8 @@ import {
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import common from '@/main.module.css';
 import { useMediaQuery } from '@/resources/hooks';
+import common from '@/resources/css/Common.module.css';
 
 import { LayoutState } from '../LayoutState';
 
@@ -86,20 +82,7 @@ export const OverviewPageContent = ({
       break;
   }
 
-  const transferDelegableOrgs = () => {
-    const delegableOrgList: DelegableOrg[] = [];
-    for (const org of overviewOrgs) {
-      delegableOrgList.push({
-        id: org.id,
-        orgName: org.orgName,
-        orgNr: org.orgNr,
-      });
-    }
-    dispatch(populateDelegableOrgs(delegableOrgList));
-  };
-
   const newDelegation = () => {
-    transferDelegableOrgs();
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
   };
 

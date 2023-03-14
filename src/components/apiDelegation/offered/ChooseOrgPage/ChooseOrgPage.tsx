@@ -25,14 +25,16 @@ import {
   softRemoveOrg,
   searchInCurrentOrgs,
   lookupOrg,
+  populateDelegableOrgs,
   setSearchLoading,
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
-import main from '@/main.module.css';
+import common from '@/resources/css/Common.module.css';
+import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import classes from './ChooseOrgPage.module.css';
 
@@ -40,20 +42,31 @@ export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
+  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
+  const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
   const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
+  const [viewLoading, setViewLoading] = useState(true);
 
   const { t } = useTranslation('common');
 
   const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
   useEffect(() => {
-    // Clear search on mount
     dispatch(searchInCurrentOrgs(searchString));
-  }, []);
+
+    if (overviewOrgsLoading) {
+      void dispatch(fetchOverviewOrgsOffered());
+    }
+
+    if (!overviewOrgsLoading) {
+      dispatch(transferDelegableOrgs);
+      setViewLoading(false);
+    }
+  }, [overviewOrgs, overviewOrgsLoading]);
 
   useEffect(() => {
     if (delegableOrgs.length > 0) {
@@ -65,6 +78,21 @@ export const ChooseOrgPage = () => {
       setPromptOrgNumber(true);
     }
   }, [delegableOrgs]);
+
+  const transferDelegableOrgs = () => {
+    let delegableOrgList: DelegableOrg[] = [];
+    for (const org of overviewOrgs) {
+      delegableOrgList.push({
+        id: org.id,
+        orgName: org.orgName,
+        orgNr: org.orgNr,
+      });
+    }
+    for (const chosen of chosenOrgs) {
+      delegableOrgList = delegableOrgList.filter((org) => org.id !== chosen.id);
+    }
+    dispatch(populateDelegableOrgs(delegableOrgList));
+  };
 
   const handleSoftRemove = (org: DelegableOrg) => {
     dispatch(softRemoveOrg(org));
@@ -91,7 +119,7 @@ export const ChooseOrgPage = () => {
     );
   });
 
-  const chosenApiItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const chosenItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
       <ActionBar
         key={index}
@@ -142,7 +170,7 @@ export const ChooseOrgPage = () => {
       <Page>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={main.pageContent}>
+          <div className={common.pageContent}>
             <h2>{t('api_delegation.new_org_accordion_content_text')}</h2>
             <div className={classes.searchSection}>
               <SearchField
@@ -153,29 +181,30 @@ export const ChooseOrgPage = () => {
                 }
               ></SearchField>
             </div>
-            <div className={classes.pageContentAccordionsContainer}>
-              <div className={classes.apiAccordions}>
-                {searchString === '' ? (
-                  <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
-                ) : (
-                  <h4>{t('api_delegation.businesses_search_results')}</h4>
-                )}
-                {infoPanel()}
-                {searchLoading && (
-                  <div className={main.spinnerContainer}>
-                    <Spinner
-                      title={String(t('api_delegation.loading'))}
-                      size='large'
-                    />
-                  </div>
-                )}
-                <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+            {viewLoading ? (
+              <div className={common.spinnerContainer}>
+                <Spinner
+                  size='large'
+                  title={String(t('api_delegation.loading'))}
+                />
               </div>
-              <div className={classes.apiAccordions}>
-                <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiItems}</div>
+            ) : (
+              <div className={classes.pageContentAccordionsContainer}>
+                <div className={classes.apiAccordions}>
+                  {searchString === '' ? (
+                    <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                  ) : (
+                    <h4>{t('api_delegation.businesses_search_results')}</h4>
+                  )}
+                  {infoPanel()}
+                  <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+                </div>
+                <div className={classes.apiAccordions}>
+                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                  <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+                </div>
               </div>
-            </div>
+            )}
             <div className={classes.navButtonContainer}>
               <div className={classes.navButton}>
                 <Button
