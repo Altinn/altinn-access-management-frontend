@@ -95,9 +95,10 @@ export const ChooseOrgPage = () => {
   };
 
   function handleSearch(searchText: string) {
-    if (IsOnlyNumbers(searchText) || searchText === '') {
-      setSearchString(searchText);
-      dispatch(searchInCurrentOrgs(searchText));
+    const cleanText = searchText.replace(/\s+/g, '');
+    if (IsOnlyNumbers(cleanText) || cleanText === '') {
+      setSearchString(cleanText);
+      dispatch(searchInCurrentOrgs(cleanText));
     }
   }
 

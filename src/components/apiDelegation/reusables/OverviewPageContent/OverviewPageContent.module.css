@@ -1,14 +1,52 @@
-.pageContent{
-  --pageContentMargin: 1.5rem;
-  margin-left: var(--pageContentMargin);
-  margin-right: var(--pageContentMargin);
-  margin-bottom: var(--pageContentMargin);
-  padding: 0.5rem;
-  overflow: hidden;
+@media only screen and (max-width: 768px) {
+
+  .overviewAccordionsContainer{
+    margin-top: 0rem;
+  }
+
+  .delegateNewButton{
+    margin-bottom: 1.3rem;
+    margin-top: 0rem;
+  }
+
+  .pageContentContainer {
+    margin-top: 0.1rem;
+  }
+
+  .editButton {
+    margin-bottom: 0.3rem;
+  }
 }
 
-.overviewAccordionsContainer{
-  margin-top: 3rem;
+@media only screen and (min-width: 768px) {
+  .overviewAccordionsContainer{
+    margin-top: 3rem;
+  }
+
+  .delegateNewButton{
+    margin-bottom: 3rem;
+  }
+
+  .pageContentContainer {
+    margin-top: 2rem;
+  }
+
+  .saveSection{
+    margin-top: 2rem;
+    margin-right: 0.5rem;
+    float: right;
+  }
+
+  .editButton {
+    justify-content: flex-end;
+    display: flex;
+    flex: 1;
+  }
+
+  .pageContentContainer {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .spinnerContainer{
@@ -18,32 +56,12 @@
 }
 
 .saveSection{
-  margin-top: 3rem;
-  margin-right: 0.5rem;
-  display: flex;
-  float: right;
-  justify-content: space-around;
-}
-
-.delegateNewButton{
-  margin-bottom: 3rem; 
-}
-
-.pageContentContainer {
   margin-top: 2rem;
-  display: flex;
-  align-items: center;
 }
 
 .apiSubheading{
-  font-weight: normal;
   display: flex;
-}
-
-.editButton {
-  justify-content: flex-end;
-  display: flex;
-  flex: 1;
+  margin-bottom: 2rem;
 }
 
 .pageContentText {
@@ -66,7 +84,7 @@
 @media only screen and (min-width: 768px) {
   .accordion{
     overflow-y: auto;
-    max-height: 300px;
+    max-height: 500px;
   }
 }
 

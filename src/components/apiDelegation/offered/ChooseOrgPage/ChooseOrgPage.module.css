@@ -48,3 +48,7 @@
   display: inline-block;
   background: transparent;
 }
+
+.chooseOrgText {
+  font-weight: normal;
+}

@@ -6,6 +6,7 @@ import {
   PageContent,
   PageHeader,
   SearchField,
+  PageSize,
 } from '@altinn/altinn-design-system';
 import { Select, List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
@@ -152,7 +153,7 @@ export const ChooseApiPage = () => {
 
   return (
     <PageContainer>
-      <Page>
+      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <div className={common.pageContent}>

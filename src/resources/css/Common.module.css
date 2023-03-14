@@ -3,6 +3,8 @@
     --component-page-margin-horizontal: 1rem;
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
+    padding: 0.5rem;
+    overflow: hidden;
   }
 
   .pageContentAccordionsContainer{
