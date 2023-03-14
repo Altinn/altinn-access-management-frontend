@@ -7,6 +7,7 @@ export interface DelegableOrg {
 }
 
 export interface InitialState {
+  delegableOrgsLoading: boolean;
   loading: boolean;
   searchLoading: boolean;
   delegableOrgList: DelegableOrg[];
@@ -23,6 +24,7 @@ interface OrgDTO {
 }
 
 const initialState: InitialState = {
+  delegableOrgsLoading: true,
   loading: false,
   searchLoading: false,
   delegableOrgList: [],
@@ -33,7 +35,6 @@ const initialState: InitialState = {
 
 export const lookupOrg = createAsyncThunk('delegableOrg/lookupOrg', async (orgNumber: string) => {
   return await axios
-    // TODO: This may fail in AT if axios doesn't automatically change the base url
     .get(`/accessmanagement/api/v1/lookup/org/${orgNumber}`)
     .then((response) => response.data)
     .catch((error) => {
@@ -73,9 +74,11 @@ const delegableOrgSlice = createSlice({
       );
     },
     populateDelegableOrgs: (state, action) => {
+      state.delegableOrgsLoading = true;
       const orgList: DelegableOrg[] = action.payload;
       state.delegableOrgList = orgList;
       state.presentedOrgList = orgList;
+      state.delegableOrgsLoading = false;
     },
     setSearchLoading: (state) => {
       state.searchLoading = true;

@@ -16,7 +16,7 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import { CompactDeletableListItem } from '@/components/reusables';
-import main from '@/main.module.css';
+import common from '@/resources/css/Common.module.css';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -140,7 +140,7 @@ export const SummaryPage = ({
     <Page color={headerColor}>
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
-        <div className={main.pageContent}>
+        <div className={common.pageContent}>
           {showErrorPanel() ? (
             <Panel
               title={t('common.error')}

@@ -16,7 +16,7 @@ export enum RouterPath {
   Overview = 'overview',
   OfferedApiChooseApi = 'choose-api',
   OfferedApiChooseOrg = 'choose-org',
-  OfferedApiExecuteDelegation = 'execute-delegation',
+  OfferedApiConfirmation = 'confirmation',
   OfferedApiReceipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
   Profile = 'Profile',
@@ -45,7 +45,7 @@ export const Router = createBrowserRouter(
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiExecuteDelegation}
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiConfirmation}
         element={<ConfirmationPage />}
         errorElement={<NotFoundSite />}
       />

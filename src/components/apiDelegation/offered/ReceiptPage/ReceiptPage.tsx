@@ -7,7 +7,7 @@ import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { RouterPath } from '@/routes/Router';
-import { ReactComponent as ApiIcon } from '@/assets/ShakeHands.svg';
+import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';

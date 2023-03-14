@@ -55,7 +55,9 @@ export const OrgDelegationAccordion = ({
           [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
         })}
       >
-        {numberOfAccesses} {t('api_delegation.api_accesses')}
+        <div className={classes.accordionHeaderRightText}>
+          {numberOfAccesses} {t('api_delegation.api_accesses')}
+        </div>
       </div>
       {delegateToOrgCallback && (
         <Button
