@@ -20,6 +20,7 @@ import {
   postApiDelegation,
   setBatchPostSize,
 } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
+import { useMediaQuery } from '@/resources/hooks';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
@@ -29,6 +30,7 @@ export const ConfirmationPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
     if (!loading) {
