@@ -1,3 +1,24 @@
+@media only screen and (max-width: 768px) {
+  .receiptMainButton{
+    width: 100%;
+  }
+
+  .listText {
+    font-size: 20px;
+  }
+
+  .bottomListText {
+    font-size: 20px;
+    margin-top: 2.5rem;
+  }
+}
+
+.receiptMainButton{
+  float: right;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .navButtonContainer{
   margin-top: 8rem;
   display: flex;
@@ -20,8 +41,12 @@
 }
 
 .listText {
-  margin-top: 40px;
   font-weight: normal;
+}
+
+.bottomListText {
+  font-weight: normal;
+  margin-top: 2.5rem;
 }
 
 .restartButton {
