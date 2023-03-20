@@ -194,15 +194,21 @@ export const ChooseOrgPage = () => {
               <div className={classes.pageContentAccordionsContainer}>
                 <div className={classes.apiAccordions}>
                   {searchString === '' ? (
-                    <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                    <h4 className={classes.accordionContainerText}>
+                      {t('api_delegation.businesses_previously_delegated_to')}
+                    </h4>
                   ) : (
-                    <h4>{t('api_delegation.businesses_search_results')}</h4>
+                    <h4 className={classes.accordionContainerText}>
+                      {t('api_delegation.businesses_search_results')}
+                    </h4>
                   )}
                   {infoPanel()}
                   <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
                 </div>
                 <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                  <h4 className={classes.accordionContainerText}>
+                    {t('api_delegation.businesses_going_to_get_access')}
+                  </h4>
                   <div className={classes.accordionScrollContainer}>{chosenItems}</div>
                 </div>
               </div>

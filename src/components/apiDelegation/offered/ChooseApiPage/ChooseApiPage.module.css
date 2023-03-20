@@ -40,16 +40,15 @@
   }
 }
 
-@media only screen and (min-width: 992px) {
-  .searchSection{
-    --searchFieldWidth: 50%
-  }
-}
-
 .searchSection{
   width: var(--searchFieldWidth);
 }
 
 .filter {
   padding-top: 1rem;
+}
+
+.apiContentText {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }

@@ -168,13 +168,13 @@ export const ChooseApiPage = () => {
               </Panel>
             ) : (
               <div>
-                <h3>{t('api_delegation.chosen_orgs')}:</h3>
+                <h3 className={classes.apiAccordions}>{t('api_delegation.chosen_orgs')}:</h3>
                 <List borderStyle={'dashed'}>{chosenDelegableOrgs}</List>
               </div>
             )}
-            <h3>{t('api_delegation.new_api_content_text2')}</h3>
+            <h3 className={classes.apiContentText}>{t('api_delegation.new_api_content_text2')}</h3>
             {isSm && chosenApis.length > 0 && (
-              <div className={classes.apiAccordions}>
+              <div>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
               </div>
