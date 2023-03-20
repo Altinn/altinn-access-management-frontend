@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace Altinn.AccessManagement.Controllers
     /// Exposes API endpoints related to authentication.
     /// </summary>
     [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationClient _authenticationClient;
@@ -39,6 +41,7 @@ namespace Altinn.AccessManagement.Controllers
         /// Refreshes the AltinnStudioRuntime JwtToken when not in AltinnStudio mode.
         /// </summary>
         /// <returns>Ok result with updated token.</returns>
+        [Authorize]
         [HttpGet("accessmanagement/api/v1/authentication/refresh")]
         public async Task<IActionResult> Refresh()
         {

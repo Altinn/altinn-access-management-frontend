@@ -21,10 +21,10 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
         public async Task<ServiceResource> GetResource(string resourceId)
         {
             ServiceResource resource = null;
-            string rolesPath = GetResourcePath(resourceId);
-            if (File.Exists(rolesPath))
+            string resourcesPath = GetResourcePath(resourceId);
+            if (File.Exists(resourcesPath))
             {
-                string content = File.ReadAllText(rolesPath);
+                string content = File.ReadAllText(resourcesPath);
                 resource = (ServiceResource)JsonSerializer.Deserialize(content, typeof(ServiceResource), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             }
 
@@ -37,23 +37,19 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
             List<ServiceResource> resources = new List<ServiceResource>();
 
             string path = GetDataPathForResources();
-            if (Directory.Exists(path))
+
+            if (File.Exists(path))
             {
-                string[] files = Directory.GetFiles(path);
+
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
-                foreach (string file in files)
-                {
-                    if (file.Contains("resources"))
-                    {
-                        string content = File.ReadAllText(Path.Combine(path, file));
-                        resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
-                    }
-                }
-            }
 
+                string content = File.ReadAllText(path);
+                resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
+
+            }
             return Task.FromResult(resources);
         }
 
@@ -66,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
         private static string GetDataPathForResources()
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
+            return Path.Combine(unitTestFolder, "Data", "ResourceRegistry", "resources.json");
         }
     }
 }

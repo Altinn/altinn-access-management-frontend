@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement // AuthenticationClient // Refresh // Exception");
+                _logger.LogError(ex, "AccessManagementUI // AuthenticationClient // Refresh // Exception");
                 throw;
             }
 

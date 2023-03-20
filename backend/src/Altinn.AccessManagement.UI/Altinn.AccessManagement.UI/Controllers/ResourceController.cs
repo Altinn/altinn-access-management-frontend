@@ -1,7 +1,8 @@
-﻿using Altinn.AccessManagement.Core.UI.Enums;
+﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -10,6 +11,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// Controller to update AccessManagement with resources existing i ResourceRegister.
     /// </summary>
     [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class ResourceController : ControllerBase
     {
         private readonly ILogger _logger;

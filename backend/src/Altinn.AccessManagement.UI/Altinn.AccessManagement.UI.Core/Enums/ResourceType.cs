@@ -1,4 +1,4 @@
-﻿namespace Altinn.AccessManagement.Core.UI.Enums
+﻿namespace Altinn.AccessManagement.UI.Core.Enums
 {
     /// <summary>
     /// Enum representation of the different types of resources supported by the resource registry

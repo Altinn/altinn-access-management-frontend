@@ -9,12 +9,12 @@ using Altinn.Platform.Profile.Models;
 namespace Altinn.AccessManagement.UI.Tests.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IDelegationsClient"></see> interface
+    /// Mock class for <see cref="IProfileClient"></see> interface
     /// </summary>
     public class ProfileClientMock : IProfileClient
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegationsClientMock"/> class
+        /// Initializes a new instance of the <see cref="ProfileClientMock"/> class
         /// </summary>
         public ProfileClientMock()
         {

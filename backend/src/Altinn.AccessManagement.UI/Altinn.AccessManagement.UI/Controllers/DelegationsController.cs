@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// Controller responsible for all operations for managing delegations
     /// </summary>
     [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class DelegationsController : ControllerBase
     {
         private readonly ILogger<DelegationsController> _logger;

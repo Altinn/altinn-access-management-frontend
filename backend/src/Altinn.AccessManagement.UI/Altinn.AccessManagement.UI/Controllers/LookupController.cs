@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Filters;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// Controller responsible for all operations for lookup
     /// </summary>
     [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class LookupController : ControllerBase
     {
         private readonly ILogger _logger;
