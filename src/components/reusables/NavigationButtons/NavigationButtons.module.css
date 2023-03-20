@@ -1,19 +1,43 @@
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 0px) {
   .navButtonContainer {
     justify-content: center;
   }
+
+  .navButtonLeft{
+    max-width: 50%;
+  }
+
+  .navButtonRight{
+    max-width: 50%;
+  }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 769px) {
   .navButtonContainer {
     justify-content: flex-end;
+  }
+
+  .navButtonLeft{
+    justify-content: flex-start;
+    display: flex;
+    flex:1;
+    margin-right: 10px;
+    max-width: 130px;
+  }
+
+  .navButtonRight{
+    justify-content: flex-end;
+    display: flex;
+    flex:1;
+    margin-left: 10px;
+    max-width: 130px;
   }
 }
 
 .navButtonContainer {
   margin-top: 2rem;
   display: flex;
-  margin-bottom: 70px;
+  margin-bottom: 2rem;
 }
 
 .navButtonLeft{
@@ -21,7 +45,6 @@
   display: flex;
   flex:1;
   margin-right: 10px;
-  max-width: 130px;
 }
 
 .navButtonRight{
@@ -29,5 +52,4 @@
   display: flex;
   flex:1;
   margin-left: 10px;
-  max-width: 130px;
 }

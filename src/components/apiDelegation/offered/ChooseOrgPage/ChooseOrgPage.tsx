@@ -234,9 +234,7 @@ export const ChooseOrgPage = () => {
                   size={ButtonSize.Small}
                   fullWidth={true}
                   onClick={() =>
-                    navigate(
-                      '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
-                    )
+                    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi)
                   }
                   disabled={chosenOrgs.length === 0}
                 >

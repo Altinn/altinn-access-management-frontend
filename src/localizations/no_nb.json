@@ -52,7 +52,7 @@
     "next": "Neste",
     "add_new_business": "Legg til ny virksomhet",
     "card_title": "Programmerings\u00adgrensesnitt - API",
-    "confirm_delegation": "Bekreft delegering",
+    "confirm_delegation": "Bekreft",
     "confirmation_page_content_top_text": "Du ønsker å gi rettigheter til følgende API:",
     "confirmation_page_content_second_text": "API-tilgangene blir gitt til:",
     "confirmation_page_content_bottom_text": "Tilgangene vil bli gitt og er gyldige til de aktivt slettes eller trekkes tilbake. Mottaker får beskjed.",
