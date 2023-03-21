@@ -30,7 +30,7 @@ const LoadLocalizations = ({ children }: Props) => {
       .get('/accessmanagement/api/v1/profile/user')
       .then((response) => {
         const lang = response.data.profileSettingPreference.language.toString();
-        document.cookie = 'i18next=' + initLanguage(lang);
+        // document.cookie = 'i18next=' + initLanguage(lang);
       })
       .catch((error) => {
         console.error(error);
