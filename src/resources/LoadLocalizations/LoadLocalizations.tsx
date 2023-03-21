@@ -21,7 +21,7 @@ const LoadLocalizations = ({ children }: Props) => {
     } else if (lang === 'nn') {
       return 'no_nn';
     } else {
-      return 'no_nb';
+      return 'no_nn';
     }
   };
 
