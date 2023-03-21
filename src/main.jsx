@@ -15,10 +15,6 @@ import { getConfig } from '../config';
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
 
-if (document.cookie === null) {
-  document.cookie = 'i18next=' + 'en';
-}
-
 /**
  * Special behaviour for react-query in dev environment
  */
