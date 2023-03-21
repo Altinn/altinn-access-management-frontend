@@ -36,7 +36,7 @@ const LoadLocalizations = ({ children }: Props) => {
 
   void setLanguage();
 
-  const backupLang = getCookie('i18next') ? getCookie('i18next') : 'no_nn';
+  const backupLang = getCookie('i18next') ? getCookie('i18next') : 'no_nb';
   const envUrl = import.meta.env.DEV ? 'src/' : 'accessmanagement/';
   const baseUrl = import.meta.env.BASE_URL + envUrl;
   const localizationsFilePath = `${baseUrl}localizations/${backupLang}.json`;
