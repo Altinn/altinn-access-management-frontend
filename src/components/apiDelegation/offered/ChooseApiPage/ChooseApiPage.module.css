@@ -1,6 +1,6 @@
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 768px) {
   .searchSection{
-    --searchFieldWidth: 100%
+    width: 100%
   }
 
   .accordionScrollContainer {
@@ -22,7 +22,7 @@
 
 @media only screen and (min-width: 768px) {
   .searchSection{
-    --searchFieldWidth: 50%
+    width: 44%
   }
 
   .pageContentAccordionsContainer{
@@ -30,24 +30,10 @@
     display: grid;
   }
 
-  .apiAccordions{
-    margin-right: 3rem;
-  }
-
   .accordionScrollContainer {
     height: 300px;
     overflow-y: auto;
   }
-}
-
-@media only screen and (min-width: 992px) {
-  .searchSection{
-    --searchFieldWidth: 50%
-  }
-}
-
-.searchSection{
-  width: var(--searchFieldWidth);
 }
 
 .filter {
