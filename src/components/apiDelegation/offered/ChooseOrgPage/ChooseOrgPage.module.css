@@ -1,7 +1,7 @@
 
 @media only screen and (max-width: 768px) {
   .searchSection{
-    --searchFieldWidth: 100%
+    width: 100%;
   }
 
   .chosenOrgs{
@@ -18,10 +18,10 @@
     height: 300px;
     overflow-y: auto;
   }
-}
 
-.searchSection{
-  width: var(--searchFieldWidth);
+  .searchSection{
+    width: 45%;
+  }
 }
 
 .navButtonContainer {
