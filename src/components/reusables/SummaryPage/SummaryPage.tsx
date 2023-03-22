@@ -43,9 +43,9 @@ export interface SummaryPageProps {
   topListText?: string;
   bottomListText?: string;
   bottomText?: string;
-  nextButtonClick?: () => void;
-  nextButtonDisabled?: boolean;
-  nextButtonLoading?: boolean;
+  confirmationButtonClick?: () => void;
+  confirmationButtonDisabled?: boolean;
+  confirmationButtonLoading?: boolean;
   showNavigationButtons?: boolean;
 }
 
@@ -60,9 +60,9 @@ export const SummaryPage = ({
   topListText,
   bottomListText,
   bottomText,
-  nextButtonClick,
-  nextButtonDisabled = false,
-  nextButtonLoading = false,
+  confirmationButtonClick,
+  confirmationButtonDisabled = false,
+  confirmationButtonLoading = false,
   restartProcessPath,
   showNavigationButtons = true,
 }: SummaryPageProps) => {
@@ -209,10 +209,10 @@ export const SummaryPage = ({
                   previousText={t('api_delegation.previous')}
                   nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt}
                   nextText={t('api_delegation.confirm_delegation')}
-                  nextDisabled={nextButtonDisabled}
-                  nextLoading={nextButtonLoading}
+                  nextDisabled={confirmationButtonDisabled}
+                  nextLoading={confirmationButtonLoading}
                   nextButtonColor={ButtonColor.Success}
-                  nextButtonClick={nextButtonClick}
+                  nextButtonClick={confirmationButtonClick}
                 ></NavigationButtons>
               ) : (
                 <div className={classes.receiptMainButton}>

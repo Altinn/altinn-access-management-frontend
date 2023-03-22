@@ -18,7 +18,7 @@ export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const loading = useAppSelector((state) => state.delegationRequest.loading);
-  const [beginDelegation, setBeginDelegation] = useState(false);
+  const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ export const ConfirmationPage = () => {
   }, [loading]);
 
   const handleConfirm = () => {
-    setBeginDelegation(true);
+    setIsProcessingDelegations(true);
     const batchSize = chosenOrgs.length * chosenApis.length;
     dispatch(setBatchPostSize(batchSize));
     for (const org of chosenOrgs) {
@@ -56,9 +56,11 @@ export const ConfirmationPage = () => {
         topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
         bottomListText={String(t('api_delegation.confirmation_page_content_second_text'))}
         bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
-        nextButtonDisabled={beginDelegation || chosenApis.length < 1 || chosenOrgs.length < 1}
-        nextButtonLoading={beginDelegation}
-        nextButtonClick={handleConfirm}
+        confirmationButtonDisabled={
+          isProcessingDelegations || chosenApis.length < 1 || chosenOrgs.length < 1
+        }
+        confirmationButtonLoading={isProcessingDelegations}
+        confirmationButtonClick={handleConfirm}
         headerIcon={<ApiIcon />}
       />
     </PageContainer>
