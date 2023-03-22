@@ -49,6 +49,7 @@ export const ChooseApiPage = () => {
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const loading = useAppSelector((state) => state.delegableApi.loading);
   const error = useAppSelector((state) => state.delegableApi.error);
+  const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
@@ -83,8 +84,6 @@ export const ChooseApiPage = () => {
     value: provider,
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
-
-  const isSm = useMediaQuery('(max-width: 768px)');
 
   const delegableApiAccordions = () => {
     if (error) {
@@ -174,7 +173,7 @@ export const ChooseApiPage = () => {
             )}
             <h3>{t('api_delegation.new_api_content_text2')}</h3>
             {isSm && chosenApis.length > 0 && (
-              <div className={classes.apiAccordions}>
+              <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
               </div>
@@ -197,12 +196,12 @@ export const ChooseApiPage = () => {
               </div>
             </div>
             <div className={classes.pageContentAccordionsContainer}>
-              <div className={classes.apiAccordions}>
+              <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
                 <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
               {!isSm && (
-                <div className={classes.apiAccordions}>
+                <div className={common.apiAccordions}>
                   <h4>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>

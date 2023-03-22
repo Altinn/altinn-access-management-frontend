@@ -19,10 +19,6 @@
     display: grid;
   }
 
-  .apiAccordions{
-    margin-right: 3rem;
-  }
-
   .accordionScrollContainer {
     height: 300px;
     overflow-y: auto;
