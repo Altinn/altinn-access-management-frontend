@@ -58,7 +58,7 @@
     "confirmation_page_content_bottom_text": "Tilgangene vil bli gitt og er gyldige til de aktivt slettes eller trekkes tilbake. Mottaker får beskjed.",
     "filter_label": "Filtrer på tilbyder",
     "filter_remove_all": "Fjern alle filtre",
-    "chosen_orgs": "Valgte bedrifter",
+    "chosen_orgs": "Valgte virksomheter",
     "new_api_content_text2": "Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet. Du kan også søke etter API eller tilbyder.",
     "delegable_apis": "Delegerbare API",
     "chosen_apis": "Valgte API:",
