@@ -1,4 +1,4 @@
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 0px) {
   .navButtonContainer {
     justify-content: center;
   }
@@ -12,7 +12,7 @@
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 769px) {
   .navButtonContainer {
     justify-content: flex-end;
   }
@@ -24,7 +24,6 @@
     margin-right: 10px;
     max-width: 130px;
   }
-  
   .navButtonRight{
     justify-content: flex-end;
     display: flex;
@@ -37,7 +36,7 @@
 .navButtonContainer {
   margin-top: 2rem;
   display: flex;
-  margin-bottom: 25px;
+  margin-bottom: 2rem;
 }
 
 .navButtonLeft{

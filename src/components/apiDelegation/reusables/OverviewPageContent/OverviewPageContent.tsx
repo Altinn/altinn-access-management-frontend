@@ -83,7 +83,7 @@ export const OverviewPageContent = ({
   }
 
   const newDelegation = () => {
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
+    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
   };
 
   const handleSaveDisabled = () => {

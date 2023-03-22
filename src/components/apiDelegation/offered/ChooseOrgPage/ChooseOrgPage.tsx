@@ -215,9 +215,7 @@ export const ChooseOrgPage = () => {
               previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview}
               nextText={t('api_delegation.next')}
               nextDisabled={chosenOrgs.length === 0}
-              nextPath={
-                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi
-              }
+              nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
             />
           </div>
         </PageContent>

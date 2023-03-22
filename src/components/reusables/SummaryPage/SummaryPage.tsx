@@ -5,8 +5,9 @@ import {
   PageColor,
   Panel,
   PanelVariant,
+  PageSize,
 } from '@altinn/altinn-design-system';
-import { List, Button, ButtonVariant, ButtonColor } from '@digdir/design-system-react';
+import { List, Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -15,13 +16,16 @@ import * as React from 'react';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
-import { CompactDeletableListItem } from '@/components/reusables';
+import { CompactDeletableListItem, NavigationButtons } from '@/components/reusables';
 import common from '@/resources/css/Common.module.css';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
+import { RouterPath } from '@/routes/Router';
+import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
 
@@ -34,13 +38,15 @@ export interface SummaryPageProps {
   successfulDelegations?: ApiDelegation[];
   restartProcessPath: string;
   pageHeaderText: string;
+  headerIcon: React.ReactNode;
+  headerColor?: PageColor;
   topListText?: string;
   bottomListText?: string;
   bottomText?: string;
-  mainButton?: React.ReactNode;
-  complementaryButton?: React.ReactNode;
-  headerIcon: React.ReactNode;
-  headerColor?: PageColor;
+  confirmationButtonClick?: () => void;
+  confirmationButtonDisabled?: boolean;
+  confirmationButtonLoading?: boolean;
+  showNavigationButtons?: boolean;
 }
 
 export const SummaryPage = ({
@@ -49,17 +55,20 @@ export const SummaryPage = ({
   failedDelegations,
   successfulDelegations,
   pageHeaderText,
+  headerColor = PageColor.Primary,
+  headerIcon,
   topListText,
   bottomListText,
   bottomText,
-  mainButton,
-  complementaryButton,
-  headerIcon,
+  confirmationButtonClick,
+  confirmationButtonDisabled = false,
+  confirmationButtonLoading = false,
   restartProcessPath,
-  headerColor = PageColor.Primary,
+  showNavigationButtons = true,
 }: SummaryPageProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   const delegableApiListItems = delegableApis?.map(
     (api: DelegableApi | ApiDelegation, index: Key) => {
@@ -136,8 +145,16 @@ export const SummaryPage = ({
     return !showTopSection() && !showBottomSection();
   };
 
+  const navigateToOverview = () => {
+    dispatch(setOveviewToReload());
+    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview);
+  };
+
   return (
-    <Page color={headerColor}>
+    <Page
+      color={headerColor}
+      size={isSm ? PageSize.Small : PageSize.Medium}
+    >
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
         <div className={common.pageContent}>
@@ -145,6 +162,8 @@ export const SummaryPage = ({
             <Panel
               title={t('common.error')}
               variant={PanelVariant.Error}
+              forceMobileLayout={isSm}
+              showIcon={!isSm}
             >
               <div>
                 <p>{t('api_delegation.delegations_not_registered')}</p>
@@ -174,7 +193,7 @@ export const SummaryPage = ({
               )}
               {showBottomSection() && (
                 <div>
-                  <h2 className={classes.listText}>{bottomListText}</h2>
+                  <h2 className={classes.bottomListText}>{bottomListText}</h2>
                   {delegableOrgs !== undefined && (
                     <List borderStyle={'dashed'}>{delegableOrgListItems}</List>
                   )}
@@ -184,12 +203,30 @@ export const SummaryPage = ({
                 </div>
               )}
               <h3 className={classes.bottomText}>{bottomText}</h3>
-              <div className={classes.navButtonContainer}>
-                {complementaryButton && (
-                  <div className={classes.previousButton}>{complementaryButton}</div>
-                )}
-                {mainButton && <div className={classes.confirmButton}>{mainButton}</div>}
-              </div>
+              {showNavigationButtons ? (
+                <NavigationButtons
+                  previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
+                  previousText={t('api_delegation.previous')}
+                  nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt}
+                  nextText={t('api_delegation.confirm_delegation')}
+                  nextDisabled={confirmationButtonDisabled}
+                  nextLoading={confirmationButtonLoading}
+                  nextButtonColor={ButtonColor.Success}
+                  nextButtonClick={confirmationButtonClick}
+                ></NavigationButtons>
+              ) : (
+                <div className={classes.receiptMainButton}>
+                  <Button
+                    color={ButtonColor.Primary}
+                    size={ButtonSize.Small}
+                    variant={ButtonVariant.Filled}
+                    onClick={navigateToOverview}
+                    fullWidth={isSm}
+                  >
+                    {t('api_delegation.receipt_page_main_button')}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>

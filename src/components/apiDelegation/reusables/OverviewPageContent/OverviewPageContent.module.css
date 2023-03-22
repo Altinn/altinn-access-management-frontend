@@ -18,7 +18,7 @@
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 769px) {
   .overviewAccordionsContainer{
     margin-top: 3rem;
   }
@@ -81,7 +81,7 @@
   margin-top: 2rem;
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 769px) {
   .accordion{
     overflow-y: auto;
     max-height: 500px;

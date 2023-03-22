@@ -9,20 +9,9 @@
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 769px) {
   .searchSection{
-    --searchFieldWidth: 100%
-  }
-
-  .accordionScrollContainer {
-    max-height: 300px;
-    overflow-y: auto;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  .searchSection{
-    width: 44%
+    width: 50%
   }
 
   .pageContentAccordionsContainer{
@@ -34,8 +23,9 @@
     height: 300px;
     overflow-y: auto;
   }
+
+  .filter {
+    padding-top: 1rem;
+  }
 }
 
-.filter {
-  padding-top: 1rem;
-}
