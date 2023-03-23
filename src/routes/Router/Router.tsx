@@ -9,8 +9,6 @@ import { ReceiptPage } from '@/components/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/components/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/resources/NotFoundSite';
 
-// when typescript 5 is released we can further improve the routing to use absolute paths.
-// This is because typescript 5 will have support for computed enums for strings https://github.com/microsoft/TypeScript/issues/40793
 export enum RouterPath {
   OfferedApiDelegations = 'offered-api-delegations',
   Overview = 'overview',
