@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import {
   Button,
@@ -97,7 +98,7 @@ export const OverviewPageContent = ({
         }
       }
     }
-    return setSaveDisabled(true);
+    setSaveDisabled(true);
   };
 
   const handleSetIsEditable = () => {
