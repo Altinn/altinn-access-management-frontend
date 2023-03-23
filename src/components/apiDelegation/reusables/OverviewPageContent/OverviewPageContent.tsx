@@ -71,12 +71,12 @@ export const OverviewPageContent = ({
 
   switch (layout) {
     case LayoutState.Offered:
-      fetchData = () => dispatch(fetchOverviewOrgsOffered());
+      fetchData = async () => await dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
       break;
     case LayoutState.Received:
-      fetchData = () => dispatch(fetchOverviewOrgsReceived());
+      fetchData = async () => await dispatch(fetchOverviewOrgsReceived());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
       break;
