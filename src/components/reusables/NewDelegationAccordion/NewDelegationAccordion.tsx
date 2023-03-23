@@ -69,7 +69,9 @@ export const NewDelegationAccordion = ({
   return (
     <Accordion
       open={open}
-      onClick={() => setOpen(!open)}
+      onClick={() => {
+        setOpen(!open);
+      }}
     >
       <AccordionHeader
         subtitle={subtitle}
