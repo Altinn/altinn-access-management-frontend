@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import { SvgIcon } from '../SvgIcon';
 
-import { PageSize, usePageContext } from './Context';
+import { usePageContext } from './Context';
 import classes from './PageHeader.module.css';
 
 export interface PageHeaderProps {
@@ -13,7 +13,6 @@ export interface PageHeaderProps {
 
 export const PageHeader = ({ children, icon }: PageHeaderProps) => {
   const { color, size } = usePageContext();
-  const iconSize = size === PageSize.Small ? 28 : 40;
 
   return (
     <header
@@ -24,8 +23,7 @@ export const PageHeader = ({ children, icon }: PageHeaderProps) => {
       )}
     >
       <SvgIcon
-        min-width={iconSize}
-        min-height={iconSize}
+        className={classes[`page-header__icon--${size}`]}
         svgIconComponent={icon}
       />
       <span>{children}</span>

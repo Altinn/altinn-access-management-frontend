@@ -32,3 +32,13 @@
   --page_header-title-font-size: 28px;
   --page-header-height: 96px;
 }
+
+.page-header__icon--small{
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.page-header__icon--medium{
+  min-width: 40px;
+  min-height: 40px;
+}
