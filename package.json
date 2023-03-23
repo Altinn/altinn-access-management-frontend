@@ -61,5 +61,5 @@
     "*.{js,jsx,ts,tsx,cjs,mjs}": "yarn lint --cache --fix",
     "*.{css,md,mdx,json}": "yarn prettier --write"
   },
-  "packageManager": "yarn@3.4.1"
+  "packageManager": "yarn@3.5.0"
 }
