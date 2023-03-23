@@ -1,0 +1,34 @@
+.page-header {
+  height: var(--page-header-height);
+  background-color: var(--component-page_header-background-color);
+  display: flex;
+  width: 100%;
+  color: var(--component-page_header-color);
+  gap: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  box-sizing: inherit;
+  align-items: center;
+  font-size: var(--page_header-title-font-size);
+  fill: var(--component-page_header-color);
+}
+
+.page-header--primary {
+  --component-page_header-background-color: #022f51;
+  --component-page_header-color: white;
+}
+
+.page-header--success {
+  --component-page_header-background-color: #17c96b;
+  --component-page_header-color: black;
+}
+
+.page-header--small {
+  --page_header-title-font-size: 18px;
+  --page-header-height: 72px;
+}
+
+.page-header--medium {
+  --page_header-title-font-size: 28px;
+  --page-header-height: 96px;
+}

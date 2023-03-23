@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTranslation } from 'react-i18next';
-import { Page, PageContent } from '@altinn/altinn-design-system';
 import { useRouteError } from 'react-router-dom';
 import * as React from 'react';
 
+import { Page, PageContent } from '@/components/reusables';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import { ReactComponent as SeagullIcon } from '@/assets/Seagull.svg';
 

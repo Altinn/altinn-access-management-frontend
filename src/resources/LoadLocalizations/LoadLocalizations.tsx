@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import i18next from 'i18next';
 import axios from 'axios';

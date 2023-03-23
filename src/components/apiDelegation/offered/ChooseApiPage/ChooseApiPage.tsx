@@ -1,19 +1,12 @@
 import type { MultiSelectOption } from '@digdir/design-system-react';
-import {
-  PanelVariant,
-  Panel,
-  Page,
-  PageContent,
-  PageHeader,
-  SearchField,
-  PageSize,
-} from '@altinn/altinn-design-system';
+import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
 import { Select, List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
+import { Page, PageHeader, PageContent, PageSize, NavigationButtons } from '@/components/reusables';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { RouterPath } from '@/routes/Router';
@@ -25,7 +18,6 @@ import {
   NewDelegationAccordion,
 } from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
-import { NavigationButtons } from '@/components/reusables';
 import common from '@/resources/css/Common.module.css';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
