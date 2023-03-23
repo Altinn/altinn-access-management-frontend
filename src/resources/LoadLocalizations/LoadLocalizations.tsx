@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
 import axios from 'axios';
 import * as React from 'react';
@@ -42,11 +42,11 @@ const LoadLocalizations = ({ children }: Props) => {
   const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url).href;
 
   useQuery(
-    'Localizations',
+    ['localizations'],
     async () => {
       const data = await fetch(localizationsFileUrl);
       const resource = await data.json();
-      i18next.addResourceBundle(backupLang, 'common', resource);
+      return i18next.addResourceBundle(backupLang, 'common', resource);
     },
     {
       staleTime: Infinity,
