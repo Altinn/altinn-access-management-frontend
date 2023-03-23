@@ -121,7 +121,9 @@ export const ChooseOrgPage = () => {
         title={org.orgName}
         subtitle={org.orgNr}
         icon={ActionIconVariant.Remove}
-        actionCallBack={() => handleSoftRemove(org)}
+        actionCallBack={() => {
+          handleSoftRemove(org);
+        }}
       />
     );
   });
@@ -179,9 +181,9 @@ export const ChooseOrgPage = () => {
               <SearchField
                 label={String(t('api_delegation.search_for_buisness'))}
                 value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleSearch(event.target.value)
-                }
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleSearch(event.target.value);
+                }}
               ></SearchField>
             </div>
             {viewLoading ? (

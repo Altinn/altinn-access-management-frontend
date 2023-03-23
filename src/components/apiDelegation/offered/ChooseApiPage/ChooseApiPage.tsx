@@ -134,7 +134,9 @@ export const ChooseApiPage = () => {
         textList={api.scopes}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={() => handleRemove(api)}
+        addRemoveClick={() => {
+          handleRemove(api);
+        }}
       ></NewDelegationAccordion>
     );
   });
@@ -181,9 +183,9 @@ export const ChooseApiPage = () => {
             <div className={classes.searchSection}>
               <SearchField
                 value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleSearch(event.target.value)
-                }
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleSearch(event.target.value);
+                }}
               ></SearchField>
               <div className={classes.filter}>
                 <Select
