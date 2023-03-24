@@ -54,7 +54,7 @@
     "confirm_delegation": "Stadfest",
     "confirmation_page_content_top_text": "Du ønskjer å gi rettar til følgjande API:",
     "confirmation_page_content_second_text": "API-tilgangane blir gitt til:",
-    "confirmation_page_content_bottom_text": "Tilgang vil bli gitt og er gyldig til den aktivt blir fjerna eller trekt tilbake. Mottakar får beskjed.",
+    "confirmation_page_content_bottom_text": "Tilgang vil bli gitt og er gyldig til den aktivt blir fjerna eller trekt tilbake.",
     "filter_label": "Filtrer på tilbydar",
     "filter_remove_all": "Fjern alle filtra",
     "chosen_orgs": "Valde organisasjonar",
@@ -79,7 +79,7 @@
     "go_to_inbox": "Gå til innboks",
     "go_to_profile": "Gå til profilsida",
     "find_and_submit_scheme": "Finne og sende inn nytt skjema",
-    "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slett eller blir trekte tilbake. Mottakar har fått beskjed.",
+    "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slett eller blir trekte tilbake.",
     "receipt_page_bottom_text_failed": "Ojda, ser ut som dette ikkje gjekk heilt som planlagt. Vennlegst prøv igjen seinare. Kontakt Altinn Servicedesk om feilen vedvarer.",
     "receipt_page_main_button": "Til totaloversikt"
   }

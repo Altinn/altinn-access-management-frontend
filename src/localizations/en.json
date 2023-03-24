@@ -55,7 +55,7 @@
     "confirm_delegation": "Confirm",
     "confirmation_page_content_top_text": "You wish to give access to the following APIs",
     "confirmation_page_content_second_text": "The API-accesses will be given to:",
-    "confirmation_page_content_bottom_text": "The accesses will be given and is valid until they're actively deleted. The receiver will be notified.",
+    "confirmation_page_content_bottom_text": "The accesses will be given and is valid until they're actively deleted.",
     "filter_label": "Filter by provider",
     "filter_remove_all": "Remove all filters",
     "chosen_orgs": "Chosen organisations",
@@ -82,6 +82,6 @@
     "go_to_profile": "Go to profile page",
     "find_and_submit_scheme": "Find and submit a new form",
     "receipt_page_bottom_text_failed": "Oops, this didn't go quite as planned. Please try again later and contact Altinn Service desk if the error persists.",
-    "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn. Recipient has been notified."
+    "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn."
   }
 }
