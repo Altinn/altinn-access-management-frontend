@@ -45,7 +45,7 @@ export const CompactDeletableListItem = ({
                 width={14}
                 height={14}
                 svgIconComponent={startIcon}
-                className={classes.listItemIcon__error}
+                className={classes.listItemIcon}
               ></SvgIcon>
             </div>
           )}
