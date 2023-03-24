@@ -170,7 +170,9 @@ export const SummaryPage = ({
                   <Button
                     variant={ButtonVariant.Outline}
                     color={ButtonColor.Danger}
-                    onClick={() => navigate(restartProcessPath)}
+                    onClick={() => {
+                      navigate(restartProcessPath);
+                    }}
                   >
                     {t('common.restart')}
                   </Button>
