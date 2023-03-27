@@ -33,8 +33,8 @@ export const PageContainer = ({ children }: PageContainerProps) => {
         <UserInfoBar />
         <div className={classes.exitButton}>
           <Button
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Inverted}
+            variant={ButtonVariant.Outline}
+            color={ButtonColor.Secondary}
             size={ButtonSize.Medium}
             icon={<ExitIcon />}
             aria-label={String(t('common.close'))}
