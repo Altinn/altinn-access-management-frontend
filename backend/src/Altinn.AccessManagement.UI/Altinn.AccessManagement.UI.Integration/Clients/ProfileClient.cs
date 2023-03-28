@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Platform.Profile.Models;
@@ -22,6 +23,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IAccessTokenGenerator _accessTokenGenerator;
+        private readonly IAccessTokenProvider _accessTokenProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProfileClient"/> class
@@ -36,7 +38,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             ILogger<ProfileClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
-            IAccessTokenGenerator accessTokenGenerator) 
+            IAccessTokenGenerator accessTokenGenerator,
+            IAccessTokenProvider accessTokenProvider) 
         {
             _logger = logger;
             httpClient.BaseAddress = new Uri(platformSettings.Value.PlatformApiBaseUrl);
@@ -44,6 +47,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             _accessTokenGenerator = accessTokenGenerator;
+            _accessTokenProvider = accessTokenProvider;
         }
 
         /// <inheritdoc/>
@@ -53,8 +57,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string endpointUrl = $"accessmanagement/api/v1/profile/user";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
-
+                ////var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+                _logger.LogInformation($"access token test logging : {accessToken}");
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
