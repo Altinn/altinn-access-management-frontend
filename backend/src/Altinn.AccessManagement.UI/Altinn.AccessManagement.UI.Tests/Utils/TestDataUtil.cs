@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Altinn.AccessManagement.Core.UI.Enums;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -20,31 +20,47 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="resourceType">the resource type.</param>
         /// <returns>Returns thelist of service resources.</returns>
-        public static List<ServiceResourceFE> GetResources(ResourceType resourceType)
+        public static List<ServiceResource> GetResources(ResourceType resourceType)
+        {
+            List<ServiceResource> resources = new List<ServiceResource>();
+            List<ServiceResource> filteredResources = null;
+
+            string path = GetResourcesPath("resources");
+            if (File.Exists(path))
+            {
+                string content = File.ReadAllText(path);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
+            }
+
+            filteredResources = resources.FindAll(r => r.ResourceType == resourceType);
+            
+
+            return filteredResources;
+        }
+
+        public static List<ServiceResourceFE> GetExpectedResources(ResourceType resourceType)
         {
             List<ServiceResourceFE> resources = new List<ServiceResourceFE>();
             List<ServiceResourceFE> filteredResources = null;
 
-            string path = GetResourcesPath();
-            if (Directory.Exists(path))
+            string path = GetResourcesPath("resourcesfe");
+
+            if (File.Exists(path))
             {
-                string[] files = Directory.GetFiles(path);
-
-                foreach (string file in files)
+                string content = File.ReadAllText(path);
+                var options = new JsonSerializerOptions
                 {
-                    if (file.Contains("resources"))
-                    {
-                        string content = File.ReadAllText(Path.Combine(path, file));
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        resources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
-                    }
-                }
-
-                filteredResources = resources.FindAll(r => r.ResourceType == resourceType);
+                    PropertyNameCaseInsensitive = true,
+                };
+                resources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
             }
+
+            filteredResources = resources.FindAll(r => r.ResourceType == resourceType);
+           
 
             return filteredResources;
         }
@@ -183,10 +199,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Delegation");
         }
 
-        private static string GetResourcesPath()
+        private static string GetResourcesPath(string fileName)
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(DelegationsControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Resources");
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourceRegistry", $"{ fileName}.json");
         }
     }
 }

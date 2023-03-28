@@ -49,6 +49,9 @@
     <None Update="Data\ResourceRegistry\nav_aa_distribution\resource.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Data\ResourceRegistry\resourcesfe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Data\ResourceRegistry\resources.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

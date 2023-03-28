@@ -74,12 +74,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
                 else
                 {
-                    _logger.LogError("Getting party information from register failed with {StatusCode}", response.StatusCode);
+                    _logger.LogError("Getting organisation information from accessmanagement failed with {StatusCode}", response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement // PartiesClient // LookupPartyBySSNOrOrgNo // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // LookupClient // GetOrganisation // Exception");
                 throw;
             }
 
@@ -106,12 +106,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
                 else
                 {
-                    _logger.LogError("Getting party info from accessmanagement failed with {StatusCode}", response.StatusCode);
+                    _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement //UI // Partiesclient // GetPartyFromReporteeListIfExists // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // LookupClient // GetPartyFromReporteeListIfExists // Exception");
                 throw;
             }
 

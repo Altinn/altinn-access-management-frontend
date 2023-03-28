@@ -2,8 +2,8 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using Altinn.AccessManagement.Core.UI.Enums;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.Extensions.Logging;
@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement // ResourceRegistryClient // SearchResources // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // SearchResources // Exception");
                 throw;
             }
 

@@ -50,5 +50,38 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 requestMessage.Headers.Add("X-XSRF-TOKEN", xsrfToken);
             }
         }
+
+        /// <summary>
+        /// Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for</param>
+        /// <param name="allowRedirect">allow redirect flag</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<HomeController> customFactory, bool allowRedirect = false)
+        {
+            try
+            {
+                WebApplicationFactory<HomeController> factory = customFactory.WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureTestServices(services =>
+                    {
+                        services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                        services.AddTransient<IAuthenticationClient, AuthenticationMock>();
+
+                        services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    });
+                });
+                var opts = new WebApplicationFactoryClientOptions
+                {
+                    AllowAutoRedirect = allowRedirect
+                };
+                factory.Server.AllowSynchronousIO = true;
+                return factory.CreateClient(opts);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
