@@ -33,7 +33,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
         <UserInfoBar />
         <div className={classes.exitButton}>
           <Button
-            variant={ButtonVariant.Outline}
+            variant={ButtonVariant.Quiet}
             color={ButtonColor.Secondary}
             size={ButtonSize.Medium}
             icon={<ExitIcon />}
