@@ -116,7 +116,9 @@ export const OrgDelegationAccordion = ({
 
   return (
     <Accordion
-      onClick={() => setOpen(!open)}
+      onClick={() => {
+        setOpen(!open);
+      }}
       open={open}
     >
       <AccordionHeader

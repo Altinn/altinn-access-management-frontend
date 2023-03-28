@@ -75,12 +75,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
                 else
                 {
-                    _logger.LogError("Getting user settings information from bridge failed with {StatusCode}", response.StatusCode);
+                    _logger.LogError($"Getting user settings information from accessmanagement failed with statuscode {response.StatusCode}");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement //UI // ProfileClient // GetUSerProfile // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // GetUSerProfile // Exception");
                 throw;
             }
 

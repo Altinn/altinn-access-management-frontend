@@ -53,11 +53,9 @@ export const CompactDeletableListItem = ({
             <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
               {leftText}
             </div>
-            {!isSm && (
-              <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
-                {middleText}
-              </div>
-            )}
+            <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
+              {middleText}
+            </div>
             <div className={classes.deleteSection}>
               {removeCallback && (
                 <Button

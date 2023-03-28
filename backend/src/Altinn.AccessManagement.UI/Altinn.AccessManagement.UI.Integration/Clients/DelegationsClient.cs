@@ -74,12 +74,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
                 else
                 {
-                    _logger.LogError("Getting party information from bridge failed with {StatusCode}", response.StatusCode);
+                    _logger.LogError("Getting received delegations from accessmanagement failed with {StatusCode}", response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement // PartiesClient // GetPartyAsync // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // GetInboundDelegations // Exception");
                 throw;
             }
 
@@ -110,12 +110,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
                 else
                 {
-                    _logger.LogError("Getting party information from bridge failed with {StatusCode}", response.StatusCode);
+                    _logger.LogError("Getting offered delegations from accessmanagement failed with {StatusCode}", response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement // PartiesClient // GetPartyAsync // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // GetOutboundDelegations // Exception");
                 throw;
             }
 
@@ -134,8 +134,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
                 return response;
             }
-            catch(Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // RevokeReceivedMaskinportenScopeDelegation // Exception");
                 throw;
             }
         }
@@ -156,7 +157,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 throw;
             }
-
         }
 
         /// <inheritdoc/>

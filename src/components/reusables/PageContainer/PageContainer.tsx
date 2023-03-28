@@ -34,7 +34,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
         <div className={classes.exitButton}>
           <Button
             variant={ButtonVariant.Quiet}
-            color={ButtonColor.Inverted}
+            color={ButtonColor.Secondary}
             size={ButtonSize.Medium}
             icon={<ExitIcon />}
             aria-label={String(t('common.close'))}

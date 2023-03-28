@@ -50,7 +50,9 @@ export const NavigationButtons = ({
           variant={ButtonVariant.Outline}
           size={ButtonSize.Small}
           fullWidth={true}
-          onClick={() => navigate(previousPath)}
+          onClick={() => {
+            navigate(previousPath);
+          }}
         >
           {previousText}
         </Button>

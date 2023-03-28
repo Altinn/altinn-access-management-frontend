@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Authorization.ABAC.Xacml.JsonProfile;
 using Microsoft.AspNetCore.Mvc;
@@ -104,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertResourceExternalEqual(ServiceResource expected, ServiceResource actual)
+        public static void AssertResourceExternalEqual(ServiceResourceFE expected, ServiceResourceFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Altinn.AccessManagement.Core.UI.Enums;
+using Altinn.AccessManagement.UI.Core.Enums;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
 {
