@@ -1,4 +1,4 @@
-import { PageColor, Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import { List, Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
@@ -10,6 +10,7 @@ import {
   PageHeader,
   PageContent,
   PageSize,
+  PageColor,
   CompactDeletableListItem,
   NavigationButtons,
 } from '@/components/reusables';
