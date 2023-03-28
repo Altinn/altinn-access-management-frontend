@@ -1,19 +1,19 @@
 import { Spinner } from '@digdir/design-system-react';
-import {
-  Page,
-  PageContent,
-  PageHeader,
-  SearchField,
-  Panel,
-  PanelVariant,
-  PageSize,
-} from '@altinn/altinn-design-system';
+import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { ActionBar, ActionIconVariant, NavigationButtons } from '@/components/reusables';
+import {
+  Page,
+  PageHeader,
+  PageContent,
+  PageSize,
+  ActionBar,
+  ActionIconVariant,
+  NavigationButtons,
+} from '@/components/reusables';
 import {
   softAddOrg,
   softRemoveOrg,

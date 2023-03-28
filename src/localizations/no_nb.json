@@ -55,7 +55,7 @@
     "confirm_delegation": "Bekreft",
     "confirmation_page_content_top_text": "Du ønsker å gi rettigheter til følgende API:",
     "confirmation_page_content_second_text": "API-tilgangene blir gitt til:",
-    "confirmation_page_content_bottom_text": "Tilgangene vil bli gitt og er gyldige til de aktivt slettes eller trekkes tilbake. Mottaker får beskjed.",
+    "confirmation_page_content_bottom_text": "Tilgangene vil bli gitt og er gyldige til de aktivt slettes eller trekkes tilbake.",
     "filter_label": "Filtrer på tilbyder",
     "filter_remove_all": "Fjern alle filtre",
     "chosen_orgs": "Valgte virksomheter",
@@ -80,7 +80,7 @@
     "go_to_inbox": "Gå til innboks",
     "go_to_profile": "Gå til profilsiden",
     "find_and_submit_scheme": "Finne og sende inn nytt skjema",
-    "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slettes eller trekkes tilbake. Mottaker har fått beskjed.",
+    "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slettes eller trekkes tilbake.",
     "receipt_page_bottom_text_failed": "Ojda, ser ut som dette ikke gikk helt som planlagt. Vennligst prøv igjen senere. Kontakt Altinn Servicedesk om feilen vedvarer.",
     "receipt_page_main_button": "Til totaloversikt"
   }

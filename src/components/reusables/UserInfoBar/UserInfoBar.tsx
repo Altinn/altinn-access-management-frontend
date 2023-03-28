@@ -24,9 +24,9 @@ export const UserInfoBar = () => {
   }, []);
 
   return (
-    <div className={classes.userInfoBarMargin}>
+    <div>
       <div className={classes.userInfoBar}>
-        <div className={classes.altinnLogo}>
+        <div>
           <AltinnLogo />
         </div>
         <div className={classes.userInfoContent}>

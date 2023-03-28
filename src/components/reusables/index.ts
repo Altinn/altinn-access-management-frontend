@@ -7,3 +7,4 @@ export { PageContainer } from './PageContainer';
 export { NavigationButtons } from './NavigationButtons/NavigationButtons';
 export { UserInfoBar } from './UserInfoBar/UserInfoBar';
 export { ActionBar, ActionIconVariant } from './ActionBar';
+export { Page, PageHeader, PageContent, PageColor, PageSize } from './Page';

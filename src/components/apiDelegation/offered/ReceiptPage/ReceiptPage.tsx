@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { PageColor } from '@altinn/altinn-design-system';
 import { useEffect } from 'react';
 import * as React from 'react';
 
@@ -8,8 +7,7 @@ import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-
-import { SummaryPage, PageContainer } from '../../../reusables';
+import { SummaryPage, PageContainer, PageColor } from '@/components/reusables';
 
 export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
