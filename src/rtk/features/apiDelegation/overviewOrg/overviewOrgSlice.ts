@@ -179,7 +179,7 @@ export const deleteOfferedApiDelegation = createAsyncThunk(
             {
               resource: [
                 {
-                  id: 'urn:altinn:resourceregistry',
+                  id: 'urn:altinn:resource',
                   value: request.apiId,
                 },
               ],
@@ -218,7 +218,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
             {
               resource: [
                 {
-                  id: 'urn:altinn:resourceregistry',
+                  id: 'urn:altinn:resource',
                   value: request.apiId,
                 },
               ],
