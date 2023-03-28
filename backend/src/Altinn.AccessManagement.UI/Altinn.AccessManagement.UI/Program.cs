@@ -157,20 +157,20 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
 
     KeyVaultSettings keyVaultSettings = new();
 
-    config.GetSection("kvSetting").Bind(keyVaultSettings);
+    config.GetSection("KeyVaultSettings").Bind(keyVaultSettings);
 
-    if (!string.IsNullOrEmpty(keyVaultSettings.ClientId) &&
-        !string.IsNullOrEmpty(keyVaultSettings.TenantId) &&
-        !string.IsNullOrEmpty(keyVaultSettings.ClientSecret) &&
-        !string.IsNullOrEmpty(keyVaultSettings.SecretUri))
-    {
-        Environment.SetEnvironmentVariable("AZURE_CLIENT_ID", keyVaultSettings.ClientId);
-        Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", keyVaultSettings.ClientSecret);
-        Environment.SetEnvironmentVariable("AZURE_TENANT_ID", keyVaultSettings.TenantId);
+    //if (!string.IsNullOrEmpty(keyVaultSettings.ClientId) &&
+    //    !string.IsNullOrEmpty(keyVaultSettings.TenantId) &&
+    //    !string.IsNullOrEmpty(keyVaultSettings.ClientSecret) &&
+    //    !string.IsNullOrEmpty(keyVaultSettings.SecretUri))
+    //{
+    //    Environment.SetEnvironmentVariable("AZURE_CLIENT_ID", keyVaultSettings.ClientId);
+    //    Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", keyVaultSettings.ClientSecret);
+    //    Environment.SetEnvironmentVariable("AZURE_TENANT_ID", keyVaultSettings.TenantId);
 
-        try
+    try
         {
-            SecretClient client = new SecretClient(new Uri(keyVaultSettings.SecretUri), new EnvironmentCredential());
+            SecretClient client = new SecretClient(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
             KeyVaultSecret secret = await client.GetSecretAsync(applicationInsightsKeySecretName);
             applicationInsightsConnectionString = string.Format("InstrumentationKey={0}", secret.Value);
         }
@@ -179,15 +179,15 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
             logger.LogError(vaultException, $"Unable to read application insights key.");
         }
 
-        try
-        {
-            config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), new EnvironmentCredential());
-        }
-        catch (Exception vaultException)
-        {
-            logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
-        }
-    }
+        //try
+        //{
+        //    config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
+        //}
+        //catch (Exception vaultException)
+        //{
+        //    logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
+        //}
+    //}
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
@@ -200,6 +200,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
+    services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();

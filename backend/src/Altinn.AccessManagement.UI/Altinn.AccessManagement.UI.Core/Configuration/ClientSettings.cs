@@ -1,4 +1,4 @@
-namespace Altinn.AccessManagement.UI.Integration.Configuration
+namespace Altinn.AccessManagement.UI.Core.Configuration
 {
     /// <summary>
     /// The key vault settings used to fetch certificate information from key vault
@@ -23,6 +23,6 @@ namespace Altinn.AccessManagement.UI.Integration.Configuration
         /// <summary>
         /// Name of the certificate secret
         /// </summary>
-        public string SecretId { get; set; }
+        public string CertificateName { get; set; }
     }
 }
