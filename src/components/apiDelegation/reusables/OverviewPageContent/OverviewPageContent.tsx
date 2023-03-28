@@ -71,33 +71,35 @@ export const OverviewPageContent = ({
 
   switch (layout) {
     case LayoutState.Offered:
-      fetchData = () => dispatch(fetchOverviewOrgsOffered());
+      fetchData = async () => await dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
       break;
     case LayoutState.Received:
-      fetchData = () => dispatch(fetchOverviewOrgsReceived());
+      fetchData = async () => await dispatch(fetchOverviewOrgsReceived());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
       break;
   }
 
   const newDelegation = () => {
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg);
+    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
   };
 
   const handleSaveDisabled = () => {
     for (const org of overviewOrgs) {
       if (org.isAllSoftDeleted) {
-        return setSaveDisabled(false);
+        setSaveDisabled(false);
+        return;
       }
       for (const api of org.apiList) {
         if (api.isSoftDelete) {
-          return setSaveDisabled(false);
+          setSaveDisabled(false);
+          return;
         }
       }
     }
-    return setSaveDisabled(true);
+    setSaveDisabled(true);
   };
 
   const handleSetIsEditable = () => {

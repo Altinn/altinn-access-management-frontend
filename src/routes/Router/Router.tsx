@@ -14,10 +14,10 @@ import { NotFoundSite } from '@/resources/NotFoundSite';
 export enum RouterPath {
   OfferedApiDelegations = 'offered-api-delegations',
   Overview = 'overview',
-  OfferedApiChooseApi = 'choose-api',
-  OfferedApiChooseOrg = 'choose-org',
-  OfferedApiConfirmation = 'confirmation',
-  OfferedApiReceipt = 'receipt',
+  ChooseApi = 'choose-api',
+  ChooseOrg = 'choose-org',
+  Confirmation = 'confirmation',
+  Receipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
   Profile = 'Profile',
   BasePath = '/accessmanagement/ui',
@@ -37,22 +37,22 @@ export const Router = createBrowserRouter(
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg}
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
         element={<ChooseOrgPage />}
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi}
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
         element={<ChooseApiPage />}
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiConfirmation}
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.Confirmation}
         element={<ConfirmationPage />}
         errorElement={<NotFoundSite />}
       />
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt}
+        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt}
         element={<ReceiptPage />}
         errorElement={<NotFoundSite />}
       />

@@ -1,5 +1,4 @@
 @media only screen and (max-width: 768px) {
-
   .overviewAccordionsContainer{
     margin-top: 0rem;
   }
@@ -18,7 +17,7 @@
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 769px) {
   .overviewAccordionsContainer{
     margin-top: 3rem;
   }
@@ -46,6 +45,11 @@
   .pageContentContainer {
     display: flex;
     align-items: center;
+  }
+
+  .accordion{
+    overflow-y: auto;
+    max-height: 500px;
   }
 }
 
@@ -81,10 +85,6 @@
   margin-top: 2rem;
 }
 
-@media only screen and (min-width: 768px) {
-  .accordion{
-    overflow-y: auto;
-    max-height: 500px;
-  }
+.accordion{
+  min-height: 100px;
 }
-

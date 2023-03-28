@@ -49,6 +49,7 @@ export const ChooseApiPage = () => {
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const loading = useAppSelector((state) => state.delegableApi.loading);
   const error = useAppSelector((state) => state.delegableApi.error);
+  const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
@@ -83,8 +84,6 @@ export const ChooseApiPage = () => {
     value: provider,
     deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
-
-  const isSm = useMediaQuery('(max-width: 768px)');
 
   const delegableApiAccordions = () => {
     if (error) {
@@ -135,7 +134,9 @@ export const ChooseApiPage = () => {
         textList={api.scopes}
         key={index}
         buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={() => handleRemove(api)}
+        addRemoveClick={() => {
+          handleRemove(api);
+        }}
       ></NewDelegationAccordion>
     );
   });
@@ -174,7 +175,7 @@ export const ChooseApiPage = () => {
             )}
             <h3>{t('api_delegation.new_api_content_text2')}</h3>
             {isSm && chosenApis.length > 0 && (
-              <div className={classes.apiAccordions}>
+              <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
               </div>
@@ -182,9 +183,9 @@ export const ChooseApiPage = () => {
             <div className={classes.searchSection}>
               <SearchField
                 value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleSearch(event.target.value)
-                }
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleSearch(event.target.value);
+                }}
               ></SearchField>
               <div className={classes.filter}>
                 <Select
@@ -197,12 +198,12 @@ export const ChooseApiPage = () => {
               </div>
             </div>
             <div className={classes.pageContentAccordionsContainer}>
-              <div className={classes.apiAccordions}>
+              <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.delegable_apis')}:</h4>
                 <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
               {!isSm && (
-                <div className={classes.apiAccordions}>
+                <div className={common.apiAccordions}>
                   <h4>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
@@ -210,13 +211,9 @@ export const ChooseApiPage = () => {
             </div>
             <NavigationButtons
               previousText={t('api_delegation.previous')}
-              previousPath={
-                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
-              }
+              previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
               nextText={t('api_delegation.next')}
-              nextPath={
-                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiConfirmation
-              }
+              nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Confirmation}
               nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
             ></NavigationButtons>
           </div>

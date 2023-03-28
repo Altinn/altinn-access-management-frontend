@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.Configuration;
 using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -5,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessToken;
@@ -12,14 +14,32 @@ using Altinn.Common.AccessToken.Services;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.PEP.Authorization;
 using AltinnCore.Authentication.JwtCookie;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using KeyVaultSettings = AltinnCore.Authentication.Constants.KeyVaultSettings;
+
+ILogger logger;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationKey";
+
+string applicationInsightsConnectionString = string.Empty;
+
+ConfigureSetupLogging();
+
+await SetConfigurationProviders(builder.Configuration);
+
+ConfigureLogging(builder.Logging);
 
 // setup frontend configuration
 string frontendProdFolder = AppEnvironment.GetVariable("FRONTEND_PROD_FOLDER", "wwwroot/AccessManagement/");
@@ -27,8 +47,6 @@ string frontendProdFolder = AppEnvironment.GetVariable("FRONTEND_PROD_FOLDER", "
 builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", optional: true, reloadOnChange: true);
 
 ConfigureServices(builder.Services, builder.Configuration);
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 
@@ -64,6 +82,112 @@ app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();
+
+void ConfigureSetupLogging()
+{
+    // Setup logging for the web host creation
+    var logFactory = LoggerFactory.Create(builder =>
+    {
+        builder
+            .AddFilter("Microsoft", LogLevel.Warning)
+            .AddFilter("System", LogLevel.Warning)
+            .AddFilter("Altinn.AccessManagement.UI.Program", LogLevel.Debug)
+            .AddConsole();
+    });
+
+    logger = logFactory.CreateLogger<Program>();
+}
+
+void ConfigureLogging(ILoggingBuilder logging)
+{
+    // Clear log providers
+    logging.ClearProviders();
+
+    // Setup up application insight if ApplicationInsightsConnectionString is available
+    if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+    {
+        // Add application insights https://docs.microsoft.com/en-us/azure/azure-monitor/app/ilogger
+        logging.AddApplicationInsights(
+             configureTelemetryConfiguration: (config) => config.ConnectionString = applicationInsightsConnectionString,
+             configureApplicationInsightsLoggerOptions: (options) => { });
+
+        // Optional: Apply filters to control what logs are sent to Application Insights.
+        // The following configures LogLevel Information or above to be sent to
+        // Application Insights for all categories.
+        logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Warning);
+
+        // Adding the filter below to ensure logs of all severity from Program.cs
+        // is sent to ApplicationInsights.
+        logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Trace);
+    }
+    else
+    {
+        // If not application insight is available log to console
+        logging.AddFilter("Microsoft", LogLevel.Warning);
+        logging.AddFilter("System", LogLevel.Warning);
+        logging.AddConsole();
+    }
+}
+
+async Task SetConfigurationProviders(ConfigurationManager config)
+{
+    string basePath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+
+    logger.LogInformation($"Program // Loading Configuration from basePath={basePath}");
+
+    config.SetBasePath(basePath);
+
+    string configJsonFile1 = $"{basePath}/altinn-appsettings/altinn-dbsettings-secret.json";
+
+    logger.LogInformation($"Loading configuration file: '{configJsonFile1}'");
+
+    config.AddJsonFile(configJsonFile1, optional: true, reloadOnChange: true);
+
+    config.AddEnvironmentVariables();
+
+    config.AddCommandLine(args);
+
+    await ConnectToKeyVaultAndSetApplicationInsights(config);
+}
+
+async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
+{
+    logger.LogInformation("Program // Connect to key vault and set up application insights");
+
+    KeyVaultSettings keyVaultSettings = new();
+
+    config.GetSection("kvSetting").Bind(keyVaultSettings);
+
+    if (!string.IsNullOrEmpty(keyVaultSettings.ClientId) &&
+        !string.IsNullOrEmpty(keyVaultSettings.TenantId) &&
+        !string.IsNullOrEmpty(keyVaultSettings.ClientSecret) &&
+        !string.IsNullOrEmpty(keyVaultSettings.SecretUri))
+    {
+        Environment.SetEnvironmentVariable("AZURE_CLIENT_ID", keyVaultSettings.ClientId);
+        Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", keyVaultSettings.ClientSecret);
+        Environment.SetEnvironmentVariable("AZURE_TENANT_ID", keyVaultSettings.TenantId);
+
+        try
+        {
+            SecretClient client = new SecretClient(new Uri(keyVaultSettings.SecretUri), new EnvironmentCredential());
+            KeyVaultSecret secret = await client.GetSecretAsync(applicationInsightsKeySecretName);
+            applicationInsightsConnectionString = string.Format("InstrumentationKey={0}", secret.Value);
+        }
+        catch (Exception vaultException)
+        {
+            logger.LogError(vaultException, $"Unable to read application insights key.");
+        }
+
+        try
+        {
+            config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), new EnvironmentCredential());
+        }
+        catch (Exception vaultException)
+        {
+            logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
+        }
+    }
+}
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
@@ -145,4 +269,19 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         });
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
+
+    if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+    {
+        services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/logtelemetry" });
+        services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+        {
+            ConnectionString = applicationInsightsConnectionString
+        });
+
+        services.AddApplicationInsightsTelemetryProcessor<HealthTelemetryFilter>();
+        services.AddApplicationInsightsTelemetryProcessor<IdentityTelemetryFilter>();
+        services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
+
+        logger.LogInformation("Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}", applicationInsightsConnectionString);
+    }
 }

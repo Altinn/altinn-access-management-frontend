@@ -1,5 +1,12 @@
-import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
+import {
+  Button,
+  ButtonColor,
+  ButtonSize,
+  ButtonVariant,
+  Spinner,
+} from '@digdir/design-system-react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import classes from './NavigationButtons.module.css';
@@ -10,16 +17,30 @@ export interface NavigationButtonsProps {
   nextText: string;
   nextPath: string;
   nextDisabled: boolean;
+  nextLoading?: boolean;
+  nextButtonColor?: ButtonColor;
+  nextButtonClick?: () => void;
 }
 
 export const NavigationButtons = ({
   previousText,
+  previousPath,
   nextText,
   nextDisabled,
-  previousPath,
   nextPath,
+  nextLoading,
+  nextButtonColor = ButtonColor.Primary,
+  nextButtonClick,
 }: NavigationButtonsProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('common');
+  const handleNextOnClick = () => {
+    if (nextButtonClick) {
+      nextButtonClick();
+    } else {
+      navigate(nextPath);
+    }
+  };
 
   return (
     <div className={classes.navButtonContainer}>
@@ -29,20 +50,29 @@ export const NavigationButtons = ({
           variant={ButtonVariant.Outline}
           size={ButtonSize.Small}
           fullWidth={true}
-          onClick={() => navigate(previousPath)}
+          onClick={() => {
+            navigate(previousPath);
+          }}
         >
           {previousText}
         </Button>
       </div>
       <div className={classes.navButtonRight}>
         <Button
-          color={ButtonColor.Primary}
+          color={nextButtonColor}
           variant={ButtonVariant.Filled}
           size={ButtonSize.Small}
           fullWidth={true}
-          onClick={() => navigate(nextPath)}
+          onClick={handleNextOnClick}
           disabled={nextDisabled}
         >
+          {nextLoading && (
+            <Spinner
+              title={String(t('api_delegation.loading'))}
+              size='small'
+              variant='interaction'
+            />
+          )}
           {nextText}
         </Button>
       </div>

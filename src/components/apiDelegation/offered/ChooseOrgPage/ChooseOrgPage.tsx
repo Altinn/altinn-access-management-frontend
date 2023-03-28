@@ -1,10 +1,4 @@
-import {
-  Button,
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
-  Spinner,
-} from '@digdir/design-system-react';
+import { Spinner } from '@digdir/design-system-react';
 import {
   Page,
   PageContent,
@@ -12,14 +6,14 @@ import {
   SearchField,
   Panel,
   PanelVariant,
+  PageSize,
 } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { ActionBar, ActionIconVariant } from '@/components/reusables';
+import { ActionBar, ActionIconVariant, NavigationButtons } from '@/components/reusables';
 import {
   softAddOrg,
   softRemoveOrg,
@@ -35,6 +29,7 @@ import { RouterPath } from '@/routes/Router';
 import { PageContainer } from '@/components/reusables/PageContainer';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './ChooseOrgPage.module.css';
 
@@ -46,10 +41,10 @@ export const ChooseOrgPage = () => {
   const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
   const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [searchString, setSearchString] = useState('');
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
   const [viewLoading, setViewLoading] = useState(true);
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   const { t } = useTranslation('common');
 
@@ -126,7 +121,9 @@ export const ChooseOrgPage = () => {
         title={org.orgName}
         subtitle={org.orgNr}
         icon={ActionIconVariant.Remove}
-        actionCallBack={() => handleSoftRemove(org)}
+        actionCallBack={() => {
+          handleSoftRemove(org);
+        }}
       />
     );
   });
@@ -167,20 +164,26 @@ export const ChooseOrgPage = () => {
 
   return (
     <PageContainer>
-      <Page>
+      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <div className={common.pageContent}>
-            <h2 className={classes.chooseOrgText}>
+            <h2 className={classes.topText}>
               {t('api_delegation.new_org_accordion_content_text')}
             </h2>
+            {isSm && chosenItems.length > 0 && (
+              <div className={classes.chosenOrgs}>
+                <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+              </div>
+            )}
             <div className={classes.searchSection}>
               <SearchField
                 label={String(t('api_delegation.search_for_buisness'))}
                 value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  handleSearch(event.target.value)
-                }
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleSearch(event.target.value);
+                }}
               ></SearchField>
             </div>
             {viewLoading ? (
@@ -191,53 +194,35 @@ export const ChooseOrgPage = () => {
                 />
               </div>
             ) : (
-              <div className={classes.pageContentAccordionsContainer}>
-                <div className={classes.apiAccordions}>
+              <div className={common.pageContentAccordionsContainer}>
+                <div className={common.apiAccordions}>
                   {searchString === '' ? (
-                    <h4>{t('api_delegation.businesses_previously_delegated_to')}</h4>
+                    <h4 className={classes.accordionContainerText}>
+                      {t('api_delegation.businesses_previously_delegated_to')}
+                    </h4>
                   ) : (
-                    <h4>{t('api_delegation.businesses_search_results')}</h4>
+                    <h4 className={classes.accordionContainerText}>
+                      {t('api_delegation.businesses_search_results')}
+                    </h4>
                   )}
                   {infoPanel()}
                   <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
                 </div>
-                <div className={classes.apiAccordions}>
-                  <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
-                  <div className={classes.accordionScrollContainer}>{chosenItems}</div>
-                </div>
+                {!isSm && (
+                  <div className={common.apiAccordions}>
+                    <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                    <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+                  </div>
+                )}
               </div>
             )}
-            <div className={classes.navButtonContainer}>
-              <div className={classes.navButton}>
-                <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Outline}
-                  size={ButtonSize.Small}
-                  fullWidth={true}
-                  onClick={() =>
-                    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview)
-                  }
-                >
-                  {t('api_delegation.cancel')}
-                </Button>
-              </div>
-              <div className={classes.navButton}>
-                <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Filled}
-                  size={ButtonSize.Small}
-                  fullWidth={true}
-                  onClick={() =>
-                    navigate(
-                      '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
-                    )
-                  }
-                  disabled={chosenOrgs.length === 0}
-                >
-                  {t('api_delegation.next')}
-                </Button>
-              </div>
-            </div>
+            <NavigationButtons
+              previousText={t('api_delegation.cancel')}
+              previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview}
+              nextText={t('api_delegation.next')}
+              nextDisabled={chosenOrgs.length === 0}
+              nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
+            />
           </div>
         </PageContent>
       </Page>

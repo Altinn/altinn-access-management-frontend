@@ -1,10 +1,3 @@
-import {
-  Button,
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
-  Spinner,
-} from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -25,19 +18,19 @@ export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const loading = useAppSelector((state) => state.delegationRequest.loading);
-  const [confirmed, setConfirmed] = useState(false);
+  const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!loading) {
-      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiReceipt);
+      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt);
     }
   }, [loading]);
 
   const handleConfirm = () => {
-    setConfirmed(true);
+    setIsProcessingDelegations(true);
     const batchSize = chosenOrgs.length * chosenApis.length;
     dispatch(setBatchPostSize(batchSize));
     for (const org of chosenOrgs) {
@@ -58,46 +51,16 @@ export const ConfirmationPage = () => {
       <SummaryPage
         delegableApis={chosenApis}
         delegableOrgs={chosenOrgs}
-        restartProcessPath={
-          '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseOrg
-        }
+        restartProcessPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
         bottomListText={String(t('api_delegation.confirmation_page_content_second_text'))}
         bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
-        mainButton={
-          <Button
-            color={ButtonColor.Success}
-            variant={ButtonVariant.Filled}
-            size={ButtonSize.Small}
-            onClick={handleConfirm}
-            disabled={confirmed || chosenApis.length < 1 || chosenOrgs.length < 1}
-          >
-            {confirmed && (
-              <Spinner
-                title={String(t('api_delegation.loading'))}
-                size='small'
-                variant='interaction'
-              />
-            )}
-            {t('api_delegation.confirm_delegation')}
-          </Button>
+        confirmationButtonDisabled={
+          isProcessingDelegations || chosenApis.length < 1 || chosenOrgs.length < 1
         }
-        complementaryButton={
-          <Button
-            color={ButtonColor.Primary}
-            variant={ButtonVariant.Outline}
-            size={ButtonSize.Small}
-            disabled={confirmed}
-            onClick={() =>
-              navigate(
-                '/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.OfferedApiChooseApi,
-              )
-            }
-          >
-            {t('api_delegation.previous')}
-          </Button>
-        }
+        confirmationButtonLoading={isProcessingDelegations}
+        confirmationButtonClick={handleConfirm}
         headerIcon={<ApiIcon />}
       />
     </PageContainer>
