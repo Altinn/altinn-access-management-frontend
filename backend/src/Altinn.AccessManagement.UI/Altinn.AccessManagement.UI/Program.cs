@@ -10,6 +10,7 @@ using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessToken;
+using Altinn.Common.AccessToken.Configuration;
 using Altinn.Common.AccessToken.Services;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.PEP.Authorization;
@@ -198,6 +199,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
+    services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
@@ -211,6 +213,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAuthorizationHandler, AccessTokenHandler>();
     services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
+    services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
+    services.AddSingleton<IKeyVaultService, KeyVaultService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
