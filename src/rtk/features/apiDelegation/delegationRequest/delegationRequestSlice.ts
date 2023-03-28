@@ -59,7 +59,7 @@ export const postApiDelegation = createAsyncThunk(
           {
             resource: [
               {
-                id: 'urn:altinn:resourceregistry',
+                id: 'urn:altinn:resource',
                 value: String(apiIdentifier),
               },
             ],
