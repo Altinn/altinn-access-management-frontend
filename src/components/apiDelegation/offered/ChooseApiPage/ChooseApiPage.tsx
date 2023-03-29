@@ -6,13 +6,19 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import { Page, PageHeader, PageContent, PageSize, NavigationButtons } from '@/components/reusables';
+import {
+  Page,
+  PageHeader,
+  PageContent,
+  PageSize,
+  NavigationButtons,
+  PageContainer,
+} from '@/components/reusables';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
-import { PageContainer } from '@/components/reusables/PageContainer';
 import {
   NewDelegationAccordionButtonType,
   NewDelegationAccordion,

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
-import axios from 'axios';
 import * as React from 'react';
 
 import { getCookie } from '../Cookie/CookieMethods';

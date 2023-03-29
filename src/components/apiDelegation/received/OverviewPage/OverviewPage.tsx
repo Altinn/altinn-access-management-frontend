@@ -1,9 +1,8 @@
-import { Page, PageHeader, PageContent, PageSize } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
+import { Page, PageHeader, PageContent, PageSize, PageContainer } from '@/components/reusables';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
-import { PageContainer } from '@/components/reusables/PageContainer';
 import { useMediaQuery } from '@/resources/hooks';
 
 import { OverviewPageContent } from '../../reusables/OverviewPageContent';
