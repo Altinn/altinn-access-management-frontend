@@ -172,36 +172,5 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
             return response;
         }
-        
-        /*
-        /// <inheritdoc/>
-        public async Task<HttpResponseMessage> CreateMaskinportenApiDelegation(string organizationNumber, string apiIdentifier)
-        {
-            var dummyDelegationInput = new DelegationInput
-            {
-                To = new List<AttributeMatch>
-                {
-                    new AttributeMatch
-                    {
-                        Id = "urn:altinn:organizationnumber",
-                        Value = organizationNumber
-                    },
-                },
-                Rights = new List<BaseRight>
-                {
-                    new BaseRight
-                    {
-                        Id = "urn:altinn:resource",
-                        Value = "orgApp1"
-                    },
-                }
-            };
-            string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
-            return response;
-        }*/
     }
 }

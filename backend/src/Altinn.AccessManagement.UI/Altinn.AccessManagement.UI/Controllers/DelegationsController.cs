@@ -213,46 +213,5 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
-        
-        /*
-        /// <summary>
-        /// Endpoint for retrieving delegated resources between parties
-        /// </summary>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server Error</response>
-        [HttpPost]
-        [Authorize]
-        [Route("accessmanagement/api/v1/delegations/delegateapi")]
-        public async Task<ActionResult<DelegationOutput>> DelegateApi([FromBody] DelegationRequest delegation)
-        {
-            try
-            {
-                HttpResponseMessage response = await _delegation.CreateMaskinportenScopeDelegation(delegation.OrganizationNumber, delegation.ApiIdentifier);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    DelegationOutput delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
-                    return delegationOutput;
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    ValidationProblemDetails problemDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(responseContent, _serializerOptions);
-                    return new ObjectResult(problemDetails);
-                }
-                else
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    ProblemDetails problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseContent, _serializerOptions);
-                    return new ObjectResult(problemDetails);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Internal exception occurred during delegation of maskinportenschema");
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
-            }
-        }*/
     }
 }
