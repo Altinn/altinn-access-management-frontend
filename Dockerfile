@@ -29,11 +29,5 @@ COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/acce
 COPY --from=generate-accessmanagement-frontend /build/src/localizations ./wwwroot/accessmanagement/localizations
 COPY --from=generate-accessmanagement-frontend /build/dist/manifest.json ./wwwroot/accessmanagement
 
-# setup the user and group
-# the user will have no password, using shell /bin/false and using the group dotnet
-RUN addgroup -g 3000 dotnet && adduser -u 1000 -G dotnet -D -s /bin/false dotnet
-# update permissions of files if neccessary before becoming dotnet user
-USER dotnet
-RUN mkdir /tmp/logtelemetry
 
 ENTRYPOINT ["dotnet", "Altinn.AccessManagement.UI.dll"]
