@@ -93,9 +93,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                
+                // var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl /*, accessToken*/);
                     
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
@@ -148,9 +149,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string endpointUrl = $"accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered/revoke";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                
+                // var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody/*, accessToken*/);
                 return response;
             }
             catch (Exception)
