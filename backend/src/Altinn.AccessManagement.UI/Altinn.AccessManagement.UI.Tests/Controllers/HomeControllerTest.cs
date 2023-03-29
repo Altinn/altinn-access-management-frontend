@@ -37,12 +37,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage response = await client.GetAsync($"accessmanagement/");
             IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
+            IEnumerable<string> xframeHeaders = response.Headers.GetValues("X-Frame-Options");
+            IEnumerable<string> contentTypeHeaders = response.Headers.GetValues("X-Content-Type-Options");
+            IEnumerable<string> xxxProtectionHeaders = response.Headers.GetValues("X-XSS-Protection");
+            IEnumerable<string> refererpolicyHeaders = response.Headers.GetValues("Referer-Policy");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(2, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
+            Assert.StartsWith("deny", xframeHeaders.ElementAt(0));
+            Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
+            Assert.StartsWith("0", xxxProtectionHeaders.ElementAt(0));
+            Assert.StartsWith("no-referer", refererpolicyHeaders.ElementAt(0));
         }
 
         /// <summary>
