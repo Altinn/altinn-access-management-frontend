@@ -83,7 +83,7 @@ export const ChooseApiPage = () => {
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
-          forceMobileLayout={isSm}
+          forceMobileLayout={true}
         >
           <div>
             {t('common.error_status_code')}: {error}
