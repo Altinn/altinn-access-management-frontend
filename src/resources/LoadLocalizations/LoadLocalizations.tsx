@@ -10,31 +10,6 @@ interface Props {
 }
 
 const LoadLocalizations = ({ children }: Props) => {
-  const initLanguage = (lang: string) => {
-    if (lang === 'en') {
-      return 'en';
-    } else if (lang === 'nn') {
-      return 'no_nn';
-    } else {
-      return 'no_nb';
-    }
-  };
-
-  const setLanguage = async () => {
-    await axios
-      .get('/accessmanagement/api/v1/profile/user')
-      .then((response) => {
-        const lang = response.data.profileSettingPreference.language.toString();
-        document.cookie = 'i18next=' + initLanguage(lang);
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error(String(error.response.status));
-      });
-  };
-
-  void setLanguage();
-
   const backupLang = getCookie('i18next') ? getCookie('i18next') : 'no_nb';
   const envUrl = import.meta.env.DEV ? 'src/' : 'accessmanagement/';
   const baseUrl = import.meta.env.BASE_URL + envUrl;
