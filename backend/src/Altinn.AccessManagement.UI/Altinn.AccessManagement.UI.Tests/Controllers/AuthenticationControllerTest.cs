@@ -59,6 +59,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IAuthenticationClient, AuthenticationMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddSingleton<IPDP, PdpPermitMock>();
                 });
@@ -74,6 +75,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IAuthenticationClient, AuthenticationNullRefreshMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddSingleton<IPDP, PdpPermitMock>();
                 });

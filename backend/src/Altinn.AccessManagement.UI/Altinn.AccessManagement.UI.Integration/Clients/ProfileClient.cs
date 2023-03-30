@@ -58,8 +58,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string endpointUrl = $"users/{userId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                ////var accessToken = await _accessTokenProvider.GetAccessToken();
-                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
+                var accessToken = await _accessTokenProvider.GetAccessToken();
                 _logger.LogInformation($"access token test logging : {accessToken}");
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
 
