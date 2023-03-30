@@ -84,12 +84,12 @@ export const ChooseApiPage = () => {
   }));
 
   const delegableApiAccordions = () => {
-    if (error) {
+    if (!error) {
       return (
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
           variant={PanelVariant.Error}
-          forceMobileLayout={true}
+          forceMobileLayout
         >
           <div>
             {t('common.error_status_code')}: {error}
