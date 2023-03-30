@@ -16,7 +16,7 @@ export enum ListTextColor {
 export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
   leftText: string;
-  middleText?: string;
+  middleText?: string | boolean;
   startIcon?: React.ReactNode;
   contentColor?: ListTextColor;
 }
