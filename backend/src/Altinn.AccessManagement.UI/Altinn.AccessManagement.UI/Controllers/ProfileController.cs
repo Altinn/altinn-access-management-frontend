@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,9 +33,15 @@ namespace Altinn.AccessManagement.Controllers
         [HttpGet("user")]
         public async Task<ActionResult> GetUser()
         {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            if (userId == 0)
+            {
+                return BadRequest("The userId is not provided in the context.");
+            }
+
             try
             {
-                var user = await _profileClient.GetUserProfile();
+                var user = await _profileClient.GetUserProfile(userId);
 
                 if (user == null)
                 {

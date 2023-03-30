@@ -182,6 +182,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IDelegationsService, DelegationsService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
+    services.AddSingleton<IProfileService, ProfileService>();
     services.AddSingleton<IAuthorizationHandler, AccessTokenHandler>();
     services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();

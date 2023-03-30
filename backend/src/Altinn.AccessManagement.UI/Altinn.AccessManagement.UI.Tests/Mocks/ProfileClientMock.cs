@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
         }
 
         /// <inheritdoc/>
-        public async Task<UserProfile> GetUserProfile()
+        public async Task<UserProfile> GetUserProfile(int userId)
         {
             UserProfile profile = null;
             string path = GetDataPathForProfile();

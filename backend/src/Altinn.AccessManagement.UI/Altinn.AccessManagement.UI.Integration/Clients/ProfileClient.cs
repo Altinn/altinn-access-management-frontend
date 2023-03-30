@@ -42,7 +42,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             IAccessTokenProvider accessTokenProvider) 
         {
             _logger = logger;
-            httpClient.BaseAddress = new Uri(platformSettings.Value.PlatformApiBaseUrl);
+            httpClient.BaseAddress = new Uri(platformSettings.Value.ApiProfileEndpoint);            
+            httpClient.DefaultRequestHeaders.Add(platformSettings.Value.SubscriptionKeyHeaderName, platformSettings.Value.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
@@ -51,13 +52,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<UserProfile> GetUserProfile()
+        public async Task<UserProfile> GetUserProfile(int userId)
         {
             try
             {
-                string endpointUrl = $"accessmanagement/api/v1/profile/user";
+                string endpointUrl = $"users/{userId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = await _accessTokenProvider.GetAccessToken();
+                ////var accessToken = await _accessTokenProvider.GetAccessToken();
+                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
                 _logger.LogInformation($"access token test logging : {accessToken}");
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
 
