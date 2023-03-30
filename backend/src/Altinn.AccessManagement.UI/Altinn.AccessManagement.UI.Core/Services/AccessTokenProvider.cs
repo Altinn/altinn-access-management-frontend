@@ -36,19 +36,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             _clientSettings = clientSettings.Value;
         }
 
-        ///// <inheritdoc />
-        //public async Task<string> GetAccessToken()
-        //{
-        //    ClientSettings clientSettings = new ClientSettings();
-        //    clientSettings.KeyVaultUri = _keyVaultSettings.KeyVaultUri;
-        //    clientSettings.SecretId = _keyVaultSettings.PlatformCertSecretId;
-        //    clientSettings.App = "access-management-ui";
-        //    clientSettings.Issuer = "amui";
-
-        //    _accessToken = _accessTokenGenerator.GenerateAccessToken(clientSettings);                
-        //    return _accessToken;
-        //}
-
         /// <inheritdoc />
         public async Task<string> GetAccessToken()
         {
