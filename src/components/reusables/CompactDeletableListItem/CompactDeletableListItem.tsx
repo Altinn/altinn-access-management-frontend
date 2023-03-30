@@ -16,7 +16,7 @@ export enum ListTextColor {
 export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
   leftText: string;
-  middleText: string;
+  middleText?: string;
   startIcon?: React.ReactNode;
   contentColor?: ListTextColor;
 }
@@ -53,9 +53,11 @@ export const CompactDeletableListItem = ({
             <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
               {leftText}
             </div>
-            <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
-              {middleText}
-            </div>
+            {middleText && (
+              <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
+                {middleText}
+              </div>
+            )}
             <div className={classes.deleteSection}>
               {removeCallback && (
                 <Button

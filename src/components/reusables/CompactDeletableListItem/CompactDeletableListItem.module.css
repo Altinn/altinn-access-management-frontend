@@ -1,7 +1,50 @@
 @media only screen and (max-width: 768px) {
-  .middleText {
-    justify-content: flex-end;
+
+  .leftText {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
   }
+
+  .listItemTexts{
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .baseListItemContent{
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .leftText {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .listItemTexts{
+    flex: 1;
+    display: flex;
+    font-size: 16px;
+    --list-text-color-error: #E02E49;
+    align-items: center;
+  }
+
+  .baseListItemContent{
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
+}
+
+.leftText{
+  word-break: break-word;
 }
 
 .compactListItem {
@@ -10,29 +53,8 @@
   min-height: 40px;
 }
 
-.baseListItemContent{
-  display: flex;
-  flex: 1;
-  align-items: center;
-}
-
 .listItemIcon {
   margin-right: 10px;
-}
-
-.listItemTexts{
-  flex: 1;
-  display: flex;
-  font-size: 16px;
-  --list-text-color-error: #E02E49;
-  align-items: center;
-}
-
-.leftText {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-  word-break: break-word;
 }
 
 .middleText {

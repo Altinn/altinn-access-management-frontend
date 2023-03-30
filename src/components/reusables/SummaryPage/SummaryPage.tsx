@@ -78,7 +78,6 @@ export const SummaryPage = ({
           startIcon={<SettingsIcon />}
           removeCallback={delegableApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
           leftText={api.apiName}
-          middleText={api.orgName}
         ></CompactDeletableListItem>
       );
     },
@@ -92,7 +91,6 @@ export const SummaryPage = ({
           startIcon={<OfficeIcon />}
           removeCallback={delegableOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
           leftText={org.orgName}
-          middleText={org.orgNr}
         ></CompactDeletableListItem>
       );
     },
