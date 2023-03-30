@@ -34,46 +34,88 @@ export const CompactDeletableListItem = ({
 
   return (
     <ListItem>
-      <div
-        className={classes.compactListItem}
-        data-testid='compact-list-item'
-      >
-        <div className={classes.baseListItemContent}>
-          {startIcon && (
-            <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
-              <SvgIcon
-                width={14}
-                height={14}
-                svgIconComponent={startIcon}
-                className={classes.listItemIcon}
-              ></SvgIcon>
-            </div>
-          )}
-          <div className={classes.listItemTexts}>
-            <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
-              {leftText}
-            </div>
-            {middleText && (
+      {isSm ? (
+        <div
+          className={classes.compactListItem}
+          data-testid='compact-list-item'
+        >
+          <div className={classes.baseListItemContent}>
+            {startIcon && (
+              <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
+                <SvgIcon
+                  width={14}
+                  height={14}
+                  svgIconComponent={startIcon}
+                  className={classes.listItemIcon}
+                ></SvgIcon>
+              </div>
+            )}
+            <div className={classes.listItemTexts}>
+              <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
+                {leftText}
+              </div>
               <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
                 {middleText}
               </div>
+            </div>
+          </div>
+
+          <div className={classes.deleteSection}>
+            {removeCallback && (
+              <Button
+                variant={ButtonVariant.Quiet}
+                color={ButtonColor.Danger}
+                icon={<MinusCircle />}
+                onClick={removeCallback}
+                aria-label={String(t('api_delegation.delete'))}
+              >
+                {!isSm && t('api_delegation.delete')}
+              </Button>
             )}
-            <div className={classes.deleteSection}>
-              {removeCallback && (
-                <Button
-                  variant={ButtonVariant.Quiet}
-                  color={ButtonColor.Danger}
-                  icon={<MinusCircle />}
-                  onClick={removeCallback}
-                  aria-label={String(t('api_delegation.delete'))}
-                >
-                  {!isSm && t('api_delegation.delete')}
-                </Button>
+          </div>
+        </div>
+      ) : (
+        <div
+          className={classes.compactListItem}
+          data-testid='compact-list-item'
+        >
+          <div className={classes.baseListItemContent}>
+            {startIcon && (
+              <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
+                <SvgIcon
+                  width={14}
+                  height={14}
+                  svgIconComponent={startIcon}
+                  className={classes.listItemIcon}
+                ></SvgIcon>
+              </div>
+            )}
+            <div className={classes.listItemTexts}>
+              <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
+                {leftText}
+              </div>
+              {middleText && (
+                <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
+                  {middleText}
+                </div>
               )}
+              <div className={classes.deleteSection}>
+                {removeCallback && (
+                  <Button
+                    variant={ButtonVariant.Quiet}
+                    color={ButtonColor.Danger}
+                    icon={<MinusCircle />}
+                    onClick={removeCallback}
+                    aria-label={String(t('api_delegation.delete'))}
+                  >
+                    {!isSm && t('api_delegation.delete')}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </ListItem>
   );
 };
