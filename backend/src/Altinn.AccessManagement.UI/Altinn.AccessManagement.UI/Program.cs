@@ -74,6 +74,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseDefaultSecurityHeaders();
+
 app.UseAuthentication();
 
 app.UseAuthorization();

@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
             IEnumerable<string> xframeHeaders = response.Headers.GetValues("X-Frame-Options");
             IEnumerable<string> contentTypeHeaders = response.Headers.GetValues("X-Content-Type-Options");
-            IEnumerable<string> xxxProtectionHeaders = response.Headers.GetValues("X-XSS-Protection");
+            IEnumerable<string> xxsProtectionHeaders = response.Headers.GetValues("X-XSS-Protection");
             IEnumerable<string> refererpolicyHeaders = response.Headers.GetValues("Referer-Policy");
 
             // Assert
@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
             Assert.StartsWith("deny", xframeHeaders.ElementAt(0));
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
-            Assert.StartsWith("0", xxxProtectionHeaders.ElementAt(0));
+            Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
             Assert.StartsWith("no-referer", refererpolicyHeaders.ElementAt(0));
         }
 
