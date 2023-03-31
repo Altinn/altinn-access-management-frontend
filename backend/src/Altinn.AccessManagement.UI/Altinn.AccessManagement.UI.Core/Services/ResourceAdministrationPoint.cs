@@ -42,13 +42,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType)
+        public async Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType, string languageCode)
         {
             try
             {
                 List<ServiceResource> resources = await GetResources();
                 List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType);
-                return MapResourceToFrontendModel(resourceList);
+                return MapResourceToFrontendModel(resourceList, languageCode);
             }
             catch (Exception ex)
             {
@@ -158,10 +158,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources;
         }
 
-        private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources)
+        private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
         {
             List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
-            string languageCode = GetLanguageCodeForUser();
             foreach (var resource in resources)
             {
                 ServiceResourceFE resourceFE = new ServiceResourceFE();
@@ -179,20 +178,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resourceList;
-        }
-
-        private string GetLanguageCodeForUser()
-        {
-            UserProfile userProfile = _profileClient.GetUserProfile().Result;
-
-            if (userProfile != null)
-            {
-                return userProfile.ProfileSettingPreference.Language;
-            }
-            else
-            {
-                return "nb";
-            }
         }
     }
 }

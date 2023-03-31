@@ -1,12 +1,15 @@
 ﻿using System.Net.Sockets;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.Authorization.ABAC.Xacml;
+using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +27,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<DelegationsController> _logger;
         private readonly IDelegationsService _delegation;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IProfileService _profileService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationsController"/> class.
@@ -32,11 +37,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="delegationsService">the handler for delegations service</param>
         public DelegationsController(
             ILogger<DelegationsController> logger,
-            IDelegationsService delegationsService)
+            IDelegationsService delegationsService,
+            IProfileService profileService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _delegation = delegationsService;
+            _profileService = profileService;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -56,7 +65,10 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<DelegationsFE> delegations = await _delegation.GetAllInboundDelegationsAsync(party);                
+                int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+                UserProfile userProfile = await _profileService.GetUserProfile(userId);
+                string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+                List<DelegationsFE> delegations = await _delegation.GetAllInboundDelegationsAsync(party, languageCode);                
 
                 return delegations;
             }
@@ -89,7 +101,10 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                List<DelegationsFE> delegations = await _delegation.GetAllOutboundDelegationsAsync(party);                
+                int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+                UserProfile userProfile = await _profileService.GetUserProfile(userId);
+                string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+                List<DelegationsFE> delegations = await _delegation.GetAllOutboundDelegationsAsync(party, languageCode);                
 
                 return delegations;
             }

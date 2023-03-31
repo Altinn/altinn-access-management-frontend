@@ -13,8 +13,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Gets a list of Resources from ResourceRegister
         /// </summary>
         /// <param name="resourceType">The type of resource to be filtered</param>
+        /// <param name="languageCode">logged in user's preferred language</param>
         /// <returns>resource list based on resource type</returns>
-        Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType);
+        Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType, string languageCode);
 
         /// <summary>
         /// Gets a list of Resources from ResourceRegister

@@ -13,6 +13,7 @@ import {
   ActionBar,
   ActionIconVariant,
   NavigationButtons,
+  PageContainer,
 } from '@/components/reusables';
 import {
   softAddOrg,
@@ -26,7 +27,6 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { RouterPath } from '@/routes/Router';
-import { PageContainer } from '@/components/reusables/PageContainer';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';

@@ -135,23 +135,14 @@ void ConfigureLogging(ILoggingBuilder logging)
 
 async Task SetConfigurationProviders(ConfigurationManager config)
 {
-    string basePath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-
-    logger.LogInformation($"Program // Loading Configuration from basePath={basePath}");
-
-    config.SetBasePath(basePath);
-
-    string configJsonFile1 = $"{basePath}/altinn-appsettings/altinn-dbsettings-secret.json";
-
-    logger.LogInformation($"Loading configuration file: '{configJsonFile1}'");
-
-    config.AddJsonFile(configJsonFile1, optional: true, reloadOnChange: true);
-
     config.AddEnvironmentVariables();
 
     config.AddCommandLine(args);
 
-    await ConnectToKeyVaultAndSetApplicationInsights(config);
+    if (!builder.Environment.IsDevelopment())
+    {
+        await ConnectToKeyVaultAndSetApplicationInsights(config);
+    }    
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
@@ -161,36 +152,16 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
     KeyVaultSettings keyVaultSettings = new();
 
     config.GetSection("KeyVaultSettings").Bind(keyVaultSettings);
-
-    //if (!string.IsNullOrEmpty(keyVaultSettings.ClientId) &&
-    //    !string.IsNullOrEmpty(keyVaultSettings.TenantId) &&
-    //    !string.IsNullOrEmpty(keyVaultSettings.ClientSecret) &&
-    //    !string.IsNullOrEmpty(keyVaultSettings.SecretUri))
-    //{
-    //    Environment.SetEnvironmentVariable("AZURE_CLIENT_ID", keyVaultSettings.ClientId);
-    //    Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", keyVaultSettings.ClientSecret);
-    //    Environment.SetEnvironmentVariable("AZURE_TENANT_ID", keyVaultSettings.TenantId);
-
     try
-        {
-            SecretClient client = new SecretClient(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
-            KeyVaultSecret secret = await client.GetSecretAsync(applicationInsightsKeySecretName);
-            applicationInsightsConnectionString = string.Format("InstrumentationKey={0}", secret.Value);
-        }
-        catch (Exception vaultException)
-        {
-            logger.LogError(vaultException, $"Unable to read application insights key.");
-        }
-
-        //try
-        //{
-        //    config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
-        //}
-        //catch (Exception vaultException)
-        //{
-        //    logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
-        //}
-    //}
+    {
+        SecretClient client = new SecretClient(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
+        KeyVaultSecret secret = await client.GetSecretAsync(applicationInsightsKeySecretName);
+        applicationInsightsConnectionString = string.Format("InstrumentationKey={0}", secret.Value);
+    }
+    catch (Exception vaultException)
+    {
+        logger.LogError(vaultException, $"Unable to read application insights key.");
+    }
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
@@ -214,11 +185,21 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IDelegationsService, DelegationsService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
+    services.AddSingleton<IProfileService, ProfileService>();
     services.AddSingleton<IAuthorizationHandler, AccessTokenHandler>();
     services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
-    services.AddSingleton<IKeyVaultService, KeyVaultService>();
+
+    if (builder.Environment.IsDevelopment())
+    {
+        services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
+    }
+    else
+    {
+        services.AddSingleton<IKeyVaultService, KeyVaultService>();
+    }
+    
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();

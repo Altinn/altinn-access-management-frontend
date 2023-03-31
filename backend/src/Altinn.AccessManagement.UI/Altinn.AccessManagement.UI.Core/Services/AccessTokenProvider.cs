@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Common.AccessTokenClient.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -17,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
         private static DateTime _cacheTokenUntil = DateTime.MinValue;
         private string _accessToken;
+        private readonly ILogger<IAccessTokenProvider> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessTokenProvider"/> class.
@@ -28,26 +30,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IKeyVaultService keyVaultService,
             IAccessTokenGenerator accessTokenGenerator,
             IOptions<AccessTokenSettings> accessTokenSettings,
-            IOptions<ClientSettings> clientSettings)
+            IOptions<ClientSettings> clientSettings,
+            ILogger<IAccessTokenProvider> logger)
         {
             _keyVaultService = keyVaultService;
             _accessTokenGenerator = accessTokenGenerator;
             _accessTokenSettings = accessTokenSettings.Value;
             _clientSettings = clientSettings.Value;
+            _logger = logger;
         }
-
-        ///// <inheritdoc />
-        //public async Task<string> GetAccessToken()
-        //{
-        //    ClientSettings clientSettings = new ClientSettings();
-        //    clientSettings.KeyVaultUri = _keyVaultSettings.KeyVaultUri;
-        //    clientSettings.SecretId = _keyVaultSettings.PlatformCertSecretId;
-        //    clientSettings.App = "access-management-ui";
-        //    clientSettings.Issuer = "amui";
-
-        //    _accessToken = _accessTokenGenerator.GenerateAccessToken(clientSettings);                
-        //    return _accessToken;
-        //}
 
         /// <inheritdoc />
         public async Task<string> GetAccessToken()
@@ -68,6 +59,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
 
                 return _accessToken;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Failed to generate access token");
+                return null;
             }
             finally
             {

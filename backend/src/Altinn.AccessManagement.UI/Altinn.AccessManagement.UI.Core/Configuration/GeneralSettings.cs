@@ -14,5 +14,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Option to disable csrf check
         /// </summary>
         public bool DisableCsrfCheck { get; set; }
+
+        /// <summary>
+        /// Language cookie name
+        /// </summary>
+        public string LanguageCookie { get; set; }
     }
 }

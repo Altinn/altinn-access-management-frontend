@@ -18,6 +18,10 @@ using Microsoft.Extensions.Options;
 using Xunit;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.Common.AccessTokenClient.Services;
+using Microsoft.AspNetCore.Http;
+using Moq;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Core.Services;
 
 namespace Altinn.AccessManagement.Tests.Controllers
 {
@@ -28,7 +32,7 @@ namespace Altinn.AccessManagement.Tests.Controllers
     public class ResourceControllerTest : IClassFixture<CustomWebApplicationFactory<ResourceController>>
     {
         private readonly CustomWebApplicationFactory<ResourceController> _factory;
-        private readonly HttpClient _client;
+        private HttpClient _client;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -55,7 +59,8 @@ namespace Altinn.AccessManagement.Tests.Controllers
         {
             // Arrange
             List<ServiceResourceFE> expectedResources = GetExpectedResources(ResourceType.MaskinportenSchema);
-
+            var httpContextAccessorMock = GetHttpContextAccessorMock("party", "50004223");
+            _client = GetTestClient(httpContextAccessor: httpContextAccessorMock);
             string token = PrincipalUtil.GetAccessToken("platform", "resourceregistry");
             _client.DefaultRequestHeaders.Add("PlatformAccessToken", token);
 
@@ -80,17 +85,29 @@ namespace Altinn.AccessManagement.Tests.Controllers
             return resources;
         }
 
-        private HttpClient GetTestClient()
+        private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)
         {
+            HttpContext httpContext = new DefaultHttpContext();
+            httpContext.Request.RouteValues.Add(partytype, id);
+
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            httpContextAccessorMock.Setup(h => h.HttpContext).Returns(httpContext);
+            return httpContextAccessorMock.Object;
+        }
+
+        private HttpClient GetTestClient(IHttpContextAccessor httpContextAccessor = null)
+        {
+            httpContextAccessor ??= new HttpContextAccessor();
             HttpClient client = _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
-                    services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
-                    services.AddSingleton<IPDP, PdpPermitMock>();
+                    services.AddSingleton(httpContextAccessor);
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.AddSingleton<ISigningKeysResolver, SigningKeyResolverMock>();
+                    services.AddSingleton<IPDP, PdpPermitMock>();                    
                 });
             }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 

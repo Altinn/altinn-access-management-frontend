@@ -11,7 +11,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Gets the user's preferences from altinn profile
         /// </summary>
+        /// <param name="userId">Id of user</param>
         /// <returns>users preferred settings</returns>
-        Task<UserProfile> GetUserProfile();
+        Task<UserProfile> GetUserProfile(int userId);
     }
 }
