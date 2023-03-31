@@ -1,8 +1,10 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -16,19 +18,26 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly ILogger _logger;
         private readonly IResourceAdministrationPoint _rap;
+        private readonly IProfileService _profileService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> class.
         /// </summary>
         /// <param name="logger">the logger.</param>
         /// <param name="resourceAdministrationPoint">The resource administration point</param>
-        /// <param name="mapper">mapper handler</param>
+        /// <param name="profileService">handler for profile service</param>
+        /// <param name="httpContextAccessor">handler for httpcontext</param>
         public ResourceController(
             ILogger<ResourceController> logger,
-            IResourceAdministrationPoint resourceAdministrationPoint)
+            IResourceAdministrationPoint resourceAdministrationPoint,
+            IProfileService profileService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _rap = resourceAdministrationPoint;
+            _profileService = profileService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -40,7 +49,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("accessmanagement/api/v1/{party}/resources/maskinportenschema")]
         public async Task<ActionResult<List<ServiceResourceFE>>> Get([FromRoute] int party)
         {
-            List<ServiceResourceFE> resources = await _rap.GetResources(ResourceType.MaskinportenSchema);
+            string languageCode = "nb";
+
+            //int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            //UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            //string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+            List<ServiceResourceFE> resources = await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
             return resources;
         }
     }

@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party)
+        public async Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party, string languageCode)
         {
             List<Delegation> outboundDelegations = await _delegationsClient.GetOutboundDelegations(party);
 
@@ -48,7 +48,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             resourceIds = outboundDelegations.Select(d => Tuple.Create(d.ResourceId, d.ResourceType.ToString())).ToList();
 
             resources = await _resourceAdministrationPoint.GetResources(resourceIds);
-            string languageCode = await GetLanguageCodeForUser();
             List<DelegationsFE> delegations = new List<DelegationsFE>();
             foreach (Delegation delegation in outboundDelegations)
             {
@@ -76,10 +75,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party)
+        public async Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party, string languageCode)
         {
             List<Delegation> inboundDelegations = await _delegationsClient.GetInboundDelegations(party);
-            string languageCode = await GetLanguageCodeForUser();
             List<ServiceResource> resources = new List<ServiceResource>();
             List<Tuple<string, string>> resourceIds;
             resourceIds = inboundDelegations.Select(d => Tuple.Create(d.ResourceId, d.ResourceType.ToString())).ToList();
@@ -132,20 +130,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
             return await _delegationsClient.CreateMaskinportenScopeDelegation(party, delegation);
-        }
-
-        private async Task<string> GetLanguageCodeForUser()
-        {
-            UserProfile userProfile = await _profileClient.GetUserProfile();
-            
-            if (userProfile != null)
-            {
-                return userProfile.ProfileSettingPreference.Language;
-            }
-            else
-            {
-                return "nb";
-            }
         }
     }
 }

@@ -29,4 +29,5 @@ COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/acce
 COPY --from=generate-accessmanagement-frontend /build/src/localizations ./wwwroot/accessmanagement/localizations
 COPY --from=generate-accessmanagement-frontend /build/dist/manifest.json ./wwwroot/accessmanagement
 
+
 ENTRYPOINT ["dotnet", "Altinn.AccessManagement.UI.dll"]

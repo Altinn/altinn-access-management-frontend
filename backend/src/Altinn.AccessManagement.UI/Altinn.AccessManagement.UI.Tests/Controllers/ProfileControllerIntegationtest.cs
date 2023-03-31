@@ -8,6 +8,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Altinn.AccessManagement.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Tests.Mocks;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -54,6 +55,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
+                    services.AddSingleton<IKeyVaultService, KeyVaultServiceMock>();
                     services.AddSingleton(typeof(ILogger<ProfileClient>),  _logger.Object);
                     services.AddHttpClient<IProfileClient, ProfileClient>().AddHttpMessageHandler<MessageHandlerMock>();
                     services.AddSingleton<MessageHandlerMock>(handler);
