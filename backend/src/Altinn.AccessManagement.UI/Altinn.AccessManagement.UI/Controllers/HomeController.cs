@@ -66,8 +66,6 @@ namespace Altinn.AccessManagement
                 });
             }
 
-            await SetLanguageCookie();
-
             if (ShouldShowAppView())
             {
                 return View();
@@ -83,7 +81,6 @@ namespace Altinn.AccessManagement
         private async Task SetLanguageCookie()
         {
             var user = await _profileClient.GetUserProfile();
-            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             
             if(user.ProfileSettingPreference.Language.Equals("en"))
             {
@@ -112,6 +109,7 @@ namespace Altinn.AccessManagement
         {
             if (User.Identity.IsAuthenticated)
             {
+                await SetLanguageCookie();
                 return true;
             }
 
