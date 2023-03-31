@@ -29,5 +29,20 @@
         /// Endpoint for authentication
         /// </summary>
         public string? ApiAuthenticationEndpoint { get; set; }
+
+        /// <summary>
+        /// Endpoint for profile
+        /// </summary>
+        public string? ApiProfileEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subscriptionkey.
+        /// </summary>
+        public string? SubscriptionKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SubscriptionKeyHeaderName
+        /// </summary>
+        public string? SubscriptionKeyHeaderName { get; set; }
     }
 }

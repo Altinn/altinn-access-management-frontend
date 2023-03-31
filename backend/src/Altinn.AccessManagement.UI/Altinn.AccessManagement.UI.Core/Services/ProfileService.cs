@@ -34,9 +34,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<UserProfile> GetUserProfile()
+        public async Task<UserProfile> GetUserProfile(int userId)
         {
-            UserProfile userProfile = await _profileClient.GetUserProfile();
+            UserProfile userProfile = await _profileClient.GetUserProfile(userId);
             return userProfile;           
         }
     }

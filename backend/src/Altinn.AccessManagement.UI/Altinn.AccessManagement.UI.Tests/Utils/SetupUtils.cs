@@ -67,6 +67,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     {
                         services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                         services.AddTransient<IAuthenticationClient, AuthenticationMock>();
+                        services.AddTransient<IProfileClient, ProfileClientMock>();
 
                         services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     });

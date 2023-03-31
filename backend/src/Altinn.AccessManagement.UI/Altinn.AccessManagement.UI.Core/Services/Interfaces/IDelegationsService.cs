@@ -13,14 +13,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="party">reportee that delegated resources</param>
         /// <returns>list of delgations</returns>
-        public Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party);
+        public Task<List<DelegationsFE>> GetAllOutboundDelegationsAsync(string party, string languageCode);
 
         /// <summary>
         /// Gets all the delegations received by a reportee
         /// </summary>
         /// <param name="party">reportee that delegated resources</param>
         /// <returns>list of delgations</returns>
-        public Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party);
+        public Task<List<DelegationsFE>> GetAllInboundDelegationsAsync(string party, string languageCode);
 
         /// <summary>
         /// Revokes a specific delegation
