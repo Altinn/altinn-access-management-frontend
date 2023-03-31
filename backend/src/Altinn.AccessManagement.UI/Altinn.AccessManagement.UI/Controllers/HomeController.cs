@@ -94,11 +94,11 @@ namespace Altinn.AccessManagement
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             var user = await _profileService.GetUserProfile(userId);
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = ProfileHelper.GetLanguageCodeForUser(user);
+            string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
 
             HttpContext.Response.Cookies.Append(_generalSettings.LanguageCookie, languageCode, new CookieOptions
             {
-                HttpOnly = false // Make this cookie readable by Javascript.
+                HttpOnly = false // Make this cookie readable by Javascript.                
             });
         }
 

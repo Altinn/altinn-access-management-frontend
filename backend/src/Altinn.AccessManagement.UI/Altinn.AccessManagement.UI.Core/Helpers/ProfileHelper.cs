@@ -26,5 +26,32 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 return "nb";
             }
         }
+
+        /// <summary>
+        /// Gets the standard language code
+        /// </summary>
+        /// <param name="userProfile">the logged in user profile</param>
+        /// <returns>the logged in users language preference</returns>
+        public static string GetStandardLanguageCodeForUser(UserProfile userProfile)
+        {
+            if (userProfile != null)
+            {
+                switch (userProfile.ProfileSettingPreference?.Language)
+                {
+                    case "nn":
+                        return "no_nn";
+                    case "nb":
+                        return "no_nb";
+                    case "en":
+                        return "en_us";
+                    default:
+                        return "no_nb";
+                }
+            }
+            else
+            {
+                return "no_nb";
+            }
+        }
     }
 }
