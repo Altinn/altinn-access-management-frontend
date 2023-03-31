@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement
         {
             if (User.Identity.IsAuthenticated)
             {
-                await SetLanguageCookie();
+                SetLanguageCookie();
                 return true;
             }
 
