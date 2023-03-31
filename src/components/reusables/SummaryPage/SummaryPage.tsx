@@ -1,12 +1,4 @@
-import {
-  Page,
-  PageContent,
-  PageHeader,
-  PageColor,
-  Panel,
-  PanelVariant,
-  PageSize,
-} from '@altinn/altinn-design-system';
+import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import { List, Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
@@ -16,7 +8,15 @@ import * as React from 'react';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
-import { CompactDeletableListItem, NavigationButtons } from '@/components/reusables';
+import {
+  CompactDeletableListItem,
+  NavigationButtons,
+  Page,
+  PageContent,
+  PageHeader,
+  PageColor,
+  PageSize,
+} from '@/components/reusables';
 import common from '@/resources/css/Common.module.css';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
