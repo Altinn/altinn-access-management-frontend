@@ -4,7 +4,7 @@ on:
     branches: [main]
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: dhana/altinn-access-management-frontend
+  IMAGE_NAME: acn-dgopa/altinn-access-management-frontend
   CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
   CONTAINER_APP_NAME: altinnaccessmanagementui-app-204
   CONTAINER_APP_RESOURCE_GROUP_NAME: altinn-accessmanagement-rg
