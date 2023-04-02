@@ -9,13 +9,21 @@ on:
       boolean:
         type: boolean
         description: True or False
-      choice:
+      package:
         type: choice
-        description: Make a choice
+        description: Select the package
         options:
         - foo
         - bar
         - baz
+      version:
+        type: choice
+        description: Select the package version
+        options:
+        - foo
+        - bar
+        - baz  
+      
 jobs:
   build:
     runs-on: ubuntu-latest
