@@ -72,7 +72,7 @@ export const OrgDelegationAccordion = ({
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
-          {t('api_delegation.delegate_new_api')} sdasa
+          {t('api_delegation.delegate_new_api')}
         </Button>
       )}
       {isEditable &&
