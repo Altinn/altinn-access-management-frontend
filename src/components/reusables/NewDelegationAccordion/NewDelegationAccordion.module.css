@@ -23,3 +23,9 @@
 .bottomContentTexts{
   margin-bottom: 20px;
 }
+
+.accordionHeaderTitle{
+  font-weight: 500;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}

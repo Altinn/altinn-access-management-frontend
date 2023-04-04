@@ -171,7 +171,9 @@ export const ChooseApiPage = () => {
                 <List borderStyle={'dashed'}>{chosenDelegableOrgs}</List>
               </div>
             )}
-            <h3>{t('api_delegation.new_api_content_text2')}</h3>
+            <h3 className={classes.chooseApiSecondHeader}>
+              {t('api_delegation.new_api_content_text2')}
+            </h3>
             {isSm && chosenApis.length > 0 && (
               <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
@@ -197,12 +199,14 @@ export const ChooseApiPage = () => {
             </div>
             <div className={classes.pageContentAccordionsContainer}>
               <div className={common.apiAccordions}>
-                <h4>{t('api_delegation.delegable_apis')}:</h4>
+                <h4 className={classes.delegableApisHeader}>
+                  {t('api_delegation.delegable_apis')}:
+                </h4>
                 <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
               </div>
               {!isSm && (
                 <div className={common.apiAccordions}>
-                  <h4>{t('api_delegation.chosen_apis')}</h4>
+                  <h4 className={classes.delegableApisHeader}>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
                 </div>
               )}
