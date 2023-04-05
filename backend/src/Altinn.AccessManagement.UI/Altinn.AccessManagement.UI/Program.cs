@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Extensions;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
@@ -71,6 +72,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
     app.UseHttpsRedirection();
 }
+
+app.UseDefaultSecurityHeaders();
 
 app.UseAuthentication();
 
