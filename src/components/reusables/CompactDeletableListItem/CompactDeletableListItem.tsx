@@ -16,7 +16,7 @@ export enum ListTextColor {
 export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
   leftText: string;
-  middleText?: string | boolean;
+  middleText?: string;
   startIcon?: React.ReactNode;
   contentColor?: ListTextColor;
 }
@@ -30,36 +30,33 @@ export const CompactDeletableListItem = ({
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
 
-  const isSm = useMediaQuery(`(max-width: 768px)`);
-
   return (
     <ListItem>
-      {isSm ? (
-        <div
-          className={classes.compactListItem}
-          data-testid='compact-list-item'
-        >
-          <div className={classes.baseListItemContent}>
-            {startIcon && (
-              <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
-                <SvgIcon
-                  width={14}
-                  height={14}
-                  svgIconComponent={startIcon}
-                  className={classes.listItemIcon}
-                ></SvgIcon>
-              </div>
-            )}
-            <div className={classes.listItemTexts}>
-              <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
-                {leftText}
-              </div>
+      <div
+        className={classes.compactListItem}
+        data-testid='compact-list-item'
+      >
+        <div className={classes.baseListItemContent}>
+          {startIcon && (
+            <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
+              <SvgIcon
+                width={14}
+                height={14}
+                svgIconComponent={startIcon}
+                className={classes.listItemIcon}
+              />
+            </div>
+          )}
+          <div className={classes.listItemTexts}>
+            <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
+              {leftText}
+            </div>
+            {middleText && (
               <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
                 {middleText}
               </div>
-            </div>
+            )}
           </div>
-
           <div className={classes.deleteSection}>
             {removeCallback && (
               <Button
@@ -69,53 +66,12 @@ export const CompactDeletableListItem = ({
                 onClick={removeCallback}
                 aria-label={String(t('api_delegation.delete'))}
               >
-                {!isSm && t('api_delegation.delete')}
+                {t('api_delegation.delete')}
               </Button>
             )}
           </div>
         </div>
-      ) : (
-        <div
-          className={classes.compactListItem}
-          data-testid='compact-list-item'
-        >
-          <div className={classes.baseListItemContent}>
-            {startIcon && (
-              <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
-                <SvgIcon
-                  width={14}
-                  height={14}
-                  svgIconComponent={startIcon}
-                  className={classes.listItemIcon}
-                ></SvgIcon>
-              </div>
-            )}
-            <div className={classes.listItemTexts}>
-              <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
-                {leftText}
-              </div>
-              {middleText && (
-                <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
-                  {middleText}
-                </div>
-              )}
-              <div className={classes.deleteSection}>
-                {removeCallback && (
-                  <Button
-                    variant={ButtonVariant.Quiet}
-                    color={ButtonColor.Danger}
-                    icon={<MinusCircle />}
-                    onClick={removeCallback}
-                    aria-label={String(t('api_delegation.delete'))}
-                  >
-                    {!isSm && t('api_delegation.delete')}
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </ListItem>
   );
 };

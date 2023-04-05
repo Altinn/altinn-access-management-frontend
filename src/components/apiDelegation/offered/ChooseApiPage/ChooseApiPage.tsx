@@ -84,7 +84,7 @@ export const ChooseApiPage = () => {
   }));
 
   const delegableApiAccordions = () => {
-    if (!error) {
+    if (error) {
       return (
         <Panel
           title={t('api_delegation.data_retrieval_failed')}
@@ -146,7 +146,7 @@ export const ChooseApiPage = () => {
         startIcon={<OfficeIcon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
-        middleText={!isSm && t('api_delegation.org_nr') + ' ' + org.orgNr}
+        middleText={!isSm ? t('api_delegation.org_nr') + ' ' + org.orgNr : undefined}
       ></CompactDeletableListItem>
     );
   });
