@@ -100,7 +100,7 @@ export const ChooseApiPage = () => {
       return (
         <div className={common.spinnerContainer}>
           <Spinner
-            title={String(t('api_delegation.loading'))}
+            title={String(t('common.loading'))}
             size='large'
           />
         </div>
