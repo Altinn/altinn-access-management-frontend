@@ -190,7 +190,7 @@ export const ChooseOrgPage = () => {
               <div className={common.spinnerContainer}>
                 <Spinner
                   size='large'
-                  title={String(t('api_delegation.loading'))}
+                  title={String(t('common.loading'))}
                 />
               </div>
             ) : (
@@ -206,7 +206,18 @@ export const ChooseOrgPage = () => {
                     </h4>
                   )}
                   {infoPanel()}
-                  <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+                  <div className={classes.accordionScrollContainer}>
+                    {searchLoading ? (
+                      <div className={common.spinnerContainer}>
+                        <Spinner
+                          size='large'
+                          title={String(t('common.loading'))}
+                        />
+                      </div>
+                    ) : (
+                      delegableOrgItems
+                    )}
+                  </div>
                 </div>
                 {!isSm && (
                   <div className={common.apiAccordions}>
