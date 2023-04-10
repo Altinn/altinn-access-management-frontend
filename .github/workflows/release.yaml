@@ -56,7 +56,7 @@ jobs:
           gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /user/packages/container/altinn-access-management-frontend
+          /user/packages/container/altinn-access-management-frontend/versions
   
       - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
           
