@@ -41,8 +41,6 @@ jobs:
         id: get_packages
         with:
           route: GET /user/packages?package_type=container
-          owner: acn-dgopa
-          repo: altinn-access-management-frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
