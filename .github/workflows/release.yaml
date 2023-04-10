@@ -45,6 +45,6 @@ jobs:
             format: raw
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          INPUT_Q: package_type=container
+          INPUT_Q: package_type:'container'
       - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
           
