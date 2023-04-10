@@ -5,10 +5,10 @@ on:
       environment:
         type: environment
         description: Select the environment
-      version:
-        type: choice
-        description: Select the package version
-        options: ${{ fromJson(steps.get_package_versions.outputs.data).name }}      
+      #version:
+        #type: choice
+        #description: Select the package version
+        #options: ${{ fromJson(steps.get_package_versions.outputs.data).name }}      
 jobs:
   build:
     runs-on: ubuntu-latest
