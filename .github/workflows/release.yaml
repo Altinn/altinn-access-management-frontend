@@ -41,8 +41,9 @@ jobs:
         id: get_packages
         with:
           route: GET /user/packages
-          owner: octokit
-          repo: request-action
+          owner: acn-dgopa
+          repo: altinn-access-management-frontend
+          package_type: container
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
