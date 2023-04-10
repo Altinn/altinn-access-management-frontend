@@ -47,11 +47,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           #INPUT_Q: package_type:'container'
+        #run: |
+          #gh api \
+          #-H "Accept: application/vnd.github+json" \
+          #-H "X-GitHub-Api-Version: 2022-11-28" \
+          #/user/packages?package_type=container
         run: |
           gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /user/packages?package_type=container
+          /user/packages/container/altinn-access-management-frontend
   
       - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
           
