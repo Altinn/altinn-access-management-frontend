@@ -29,3 +29,5 @@ jobs:
             format: raw
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - run: "echo packages: '${{ steps.get_package_versions.outputs.data }}'"
