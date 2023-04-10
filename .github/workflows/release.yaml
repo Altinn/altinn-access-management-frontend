@@ -1,5 +1,14 @@
 name: CI
-      
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: Select the environment
+      version:
+        type: choice
+        description: Select the package version
+        options: ${{ fromJson(steps.get_package_versions.outputs.data).name }}      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,14 +29,3 @@ jobs:
             format: raw
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        type: environment
-        description: Select the environment
-      version:
-        type: choice
-        description: Select the package version
-        options: ${{ fromJson(steps.get_package_versions.outputs.data).name }}
