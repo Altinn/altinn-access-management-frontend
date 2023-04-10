@@ -36,4 +36,14 @@ jobs:
           echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
           echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
           echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+      
+      - uses: octokit/request-action@v2.x
+        id: get_packages
+        with:
+          route: GET /orgs/{org}/packages
+          owner: octokit
+          repo: request-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
           
