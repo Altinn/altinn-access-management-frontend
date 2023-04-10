@@ -1,4 +1,25 @@
 name: CI
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: greet
+        run: | 
+          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
+          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
+          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+      
+      - uses: octokit/request-action@v2.x
+      #- name: apirun
+        id: get_package_versions
+        with:
+          route: GET /user/packages/container/altinn-access-management-frontend/versions
+          mediaType: | # The | is significant!
+            format: raw
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   workflow_dispatch:
@@ -6,57 +27,7 @@ on:
       environment:
         type: environment
         description: Select the environment
-      boolean:
-        type: boolean
-        description: True or False
-      package:
-        type: choice
-        description: Select the package
-        options:
-        - foo
-        - bar
-        - baz
       version:
         type: choice
         description: Select the package version
-        options:
-        - foo
-        - bar
-        - baz  
-      
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: greet
-        run: | 
-          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
-          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
-          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
-      
-      #- uses: octokit/request-action@v2.x
-      - name: apirun
-        id: get_packages
-        #with:
-          #route: GET /user/packages:q
-          #mediaType: | # The | is significant!
-            #format: raw
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          #INPUT_Q: package_type:'container'
-        #run: |
-          #gh api \
-          #-H "Accept: application/vnd.github+json" \
-          #-H "X-GitHub-Api-Version: 2022-11-28" \
-          #/user/packages?package_type=container
-        run: |
-          gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          /user/packages/container/altinn-access-management-frontend/versions
-  
-      - run: "echo packages: '${{ steps.get_packages.outputs.data }}'"
-          
+        options: ${{ fromJson(steps.get_package_versions.outputs.data).name }}
