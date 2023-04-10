@@ -40,7 +40,7 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: get_packages
         with:
-          route: GET /orgs/{org}/packages
+          route: GET /user/packages
           owner: octokit
           repo: request-action
         env:
