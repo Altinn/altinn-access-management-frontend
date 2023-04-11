@@ -1,1 +1,61 @@
-
+name: CI
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: Select the environment
+      version:
+        type: choice
+        description: Select the package version
+        options:
+          - "sha256:bf1c5f35e331ae88104cd589be0652a37ce52fe328c9d03c84e0111ea9c70535"
+          - "sha256:88a994731f2ae260d2a1fae559917dec06e059266133bd9db747207f6222a39f"
+          - "sha256:c90620b0e8fe4ce071c45dbd027fd49a2ddfe76c566d4e47b958f1c9718b9a2f"
+          - "sha256:72b6db64c569c27fbb3557751c4f30a6128fa6de104bfb93e30e3d4b2fd55f67"
+          - "sha256:467d2f3c88f8f189a31694617c73c34ba8ff3e0a23e4f6c4efcc110f587fc3fa"
+          - "sha256:9e02ae0f54c11b742c8387a4996335f758e1ac7d2ec826e7cde3566cd9f47051"
+          - "sha256:3bd50058049186505e0942836525b1f44dff5a0c77138472dcb0f2c976a26698"
+          - "sha256:372bf1cb5f4bb012d5eb9e9b2e438b0be6a5706a40b40cfd95e4da99d7daf7bb"
+          - "sha256:139e5549ca848526e15f3789ce69cf939e13acb02a4d8cfec52822e86017657c"
+          - "sha256:828187aa4fdcb485785b2f648aeb24bcad297df9b69b9c30ec2cd35e9ac0c082"
+          - "sha256:4cfb0634a2b23e43040b048c876652e970274df71ea6a6a60e6f1d6bbb6a4e2d"
+          - "sha256:31d2a973cdd37c410c89b00c46897c62bef527687011dfb2f900beeef9c64329"
+          - "sha256:6b0c71127e11c8ac57ae41d28f0380837662c84a956f371c6278ad47e2246390"
+          - "sha256:70b887712138adb1898385e1c0b449b0d3b522deeb24f14e681860203301cc9e"
+          - "sha256:62f4f45dea6f91f6ce73ae1cb76072988fa969c833d0b69048222f8fe07d9ff2"
+          - "sha256:2321623369fd9dd9292419f6d9c276c299aa8e377aeb0da6414e47528ed12bee"
+          - "sha256:ef1b2c3b976ce85828934716af6067932437ef91548f90b04419551fee449b58"
+          - "sha256:f46298d1d834073d8ffbbf81d1b9f7a6e2d98db150b02500680f19cdb8089f7f"
+          - "sha256:773e0c2d2e260b2b0463e9f733d2a0a1e4b9816d3699a45f3e4098c69a3a3ac0"
+          - "sha256:bb43c55891177e9c4e1722f19ad03bbbc5749bc25e40628f9dd3229d8da6067b"
+          - "sha256:e329c4a4915eea372cc395bf6ccd941358769054a568d62a213796ec431a1412"
+          - "sha256:e2dea59a447f3990482714b845ab233f4f5921803a6ffd930e878113827759b5"
+          - "sha256:edf312a34165b93ab7a52e2594290fd4151efc08aab1c9f201113bb86262a4e0"
+          - "sha256:51edc473f6da348485e3077dcc1c21725c581a76db6c3419b37eafcb696ca24b"
+          - "sha256:4e031d78f13f92cc379a6f589e62ba4f2ab262055f41a224c09693a778e88262"
+          - "sha256:79d7c4c6f870a9aaf7e87180261f1600147bd51b7a79cc67c1f2c2b4dd7b0435"
+          - "sha256:1b2f59c196a9c75528dd3f1f153104d3358fe2f6017877f83299b096f6bb6b31"
+          
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: greet
+        run: | 
+          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
+          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
+          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+      
+      - uses: octokit/request-action@v2.x
+      #- name: apirun
+        id: get_package_versions
+        with:
+          route: GET /user/packages/container/altinn-access-management-frontend/versions
+          mediaType: | # The | is significant!
+            format: raw
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - run: "echo packages: '${{ steps.get_package_versions.outputs.data }}'"
