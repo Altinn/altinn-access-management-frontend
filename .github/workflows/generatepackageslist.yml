@@ -28,7 +28,7 @@ jobs:
              output+="- $release\n          "
           done
           echo $output
-          sed "s/\$IMAGES_OPTIONS/$output/g" release.template.yaml > release.yml
+          sed "s/\$IMAGES_OPTIONS/$output/g" release.template.yml > release.yml
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Generated package versions
