@@ -28,7 +28,7 @@ jobs:
              output+="- $release\n          "
           done
           echo $output
-          sed "s/\$IMAGES_OPTIONS/$output/g" $GITHUB_WORKSPACE/.github/workflows/release.template.yml > $GITHUB_WORKSPACE/.github/workflows/release.yml
+          sed "s/\$IMAGES_OPTIONS/$output/g" $GITHUB_WORKSPACE/.github/workflows/release.template.yml > release.yml
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Generated package versions
