@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.COMMIT_ACCESS_TOKEN }}
         
       - uses: octokit/request-action@v2.x
         id: get_package_versions
@@ -45,15 +45,15 @@ jobs:
       #    git config user.name "dhanasneham@gmail.com"
       #    git config user.email "dhanasneham@gmail.com"
       
-      #- name: commit release
+      - name: commit release
           # Stage the file, commit and push
-       # run: |
-       #   git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
-       #   git config -l | grep url
-       #   git add ${{ github.workspace }}/.github/workflows/release.yml
-       #   git commit -m "updated package versions"
-       #   git push
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Generated images
-          commit_user_name: acn-dgopa
+        run: |
+          git remote set-url origin https://${{ secrets.COMMIT_ACCESS_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
+          git config -l | grep url
+          git add ${{ github.workspace }}/.github/workflows/release.yml
+          git commit -m "updated package versions"
+          git push
+      #- uses: stefanzweifel/git-auto-commit-action@v4
+      #  with:
+       #   commit_message: Generated images
+        #  commit_user_name: acn-dgopa
