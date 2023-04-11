@@ -19,7 +19,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         #id: list_package_versions
-      #- name: Generates release.yml with package version
+      - name: Generates release.yml with package version
         run: |  
           responses=$('${{ steps.get_package_versions.outputs.data }}' | (jq '.name'))
           output=""
