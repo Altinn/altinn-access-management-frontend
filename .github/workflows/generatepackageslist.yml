@@ -46,7 +46,7 @@ jobs:
       - name: commit release
           # Stage the file, commit and push
         run: |
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
+          git remote set-url origin https://${{ secrets.ACCESS_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
           git config -l | grep url
           git add ${{ github.workspace }}/.github/workflows/release.yml
           git commit -m "updated package versions"
