@@ -37,11 +37,11 @@ jobs:
           done
           echo $output
           sed 's/\$IMAGES_OPTIONS/$output/g' ${{ github.workspace }}/.github/workflows/release.template.yml > ${{ github.workspace }}/.github/workflows/release.yml
-      #- name: setup git config
-      #  run: |
+      - name: setup git config
+        run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-      #    git config --global user.name "acn-dgopa"
-      #    git config --global user.email "<test@noreply.github.com>"
+          git config user.name "acn-dgopa"
+          git config user.email "<test@noreply.github.com>"
       
       - name: commit release
           # Stage the file, commit and push
