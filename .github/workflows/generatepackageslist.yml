@@ -9,9 +9,7 @@ on:
 jobs:
   get-images-list:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
+    permissions: read-all|write-all
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
