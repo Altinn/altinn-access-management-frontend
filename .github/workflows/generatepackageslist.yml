@@ -38,8 +38,8 @@ jobs:
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "acn-dgopa"
-          git config user.email "<>"
+          git config --global user.name "acn-dgopa"
+          git config --global user.email "<test@noreply.github.com>"
       
       - name: commit release
           # Stage the file, commit and push
