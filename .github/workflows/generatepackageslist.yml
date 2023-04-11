@@ -39,17 +39,21 @@ jobs:
           echo $output
           sed 's/\$IMAGES_OPTIONS/$output/g' ${{ github.workspace }}/.github/workflows/release.template.yml > ${{ github.workspace }}/.github/workflows/release.yml
       
-      - name: setup git config
-        run: |
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "dhanasneham@gmail.com"
-          git config user.email "dhanasneham@gmail.com"
+      #- name: setup git config
+      #  run: |
+      #    # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+      #    git config user.name "dhanasneham@gmail.com"
+      #    git config user.email "dhanasneham@gmail.com"
       
-      - name: commit release
+      #- name: commit release
           # Stage the file, commit and push
-        run: |
-          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
-          git config -l | grep url
-          git add ${{ github.workspace }}/.github/workflows/release.yml
-          git commit -m "updated package versions"
-          git push
+       # run: |
+       #   git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
+       #   git config -l | grep url
+       #   git add ${{ github.workspace }}/.github/workflows/release.yml
+       #   git commit -m "updated package versions"
+       #   git push
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Generated images
+          token: ${{ secrets.ACCESS_TOKEN }}
