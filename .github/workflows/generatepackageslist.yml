@@ -21,8 +21,13 @@ jobs:
         #id: list_package_versions
       - name: Generates release.yml with package version
         run: |  
-         echo "${{fromJson(steps.get_package_versions.outputs.data).name}}"
-
+         responses='${{ steps.get_package_versions.outputs.data }}'
+          output=""
+          for release in $(echo $responses | jq '.[] | .name')
+          do
+             output+="- $release\n          "
+          done
+          echo $output
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Generated package versions
