@@ -34,6 +34,9 @@ jobs:
           done
           echo $output
           sed 's/\$IMAGES_OPTIONS/$output/g' ${{ github.workspace }}/.github/workflows/release.template.yml > ${{ github.workspace }}/.github/workflows/release.yml
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Generated package versions
+      - name: commit release
+          # Stage the file, commit and push
+        run: |
+          git add ${{ github.workspace }}/.github/workflows/release.yml
+          git commit -m "updated package versions"
+          git push origin master
