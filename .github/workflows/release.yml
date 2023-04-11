@@ -9,7 +9,7 @@ on:
         type: choice
         description: Select the package version
         options:
-          $IMAGES_OPTIONS
+          $output
 jobs:
   build:
     runs-on: ubuntu-latest
