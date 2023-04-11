@@ -1,15 +1,16 @@
-name: Generate ECR Image
+name: Generate packages release
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+      inputs:
+        environment:
+          type: environment
+          description: Select the environment
 jobs:
   get-images-list:
     runs-on: ubuntu-latest
-    
-      - name: Get All Images On Github container registry
-        run: |
-         - uses: octokit/request-action@v2.x
-      #- name: apirun
+    steps:
+      - uses: octokit/request-action@v2.x
         id: get_package_versions
         with:
           route: GET /user/packages/container/altinn-access-management-frontend/versions
@@ -17,9 +18,10 @@ jobs:
             format: raw
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-      - name: Generates release.yml with package version
-        responses=$('${{ steps.get_package_versions.outputs.data }}' | (jq '.name'))
+        #id: list_package_versions
+      #- name: Generates release.yml with package version
+        run: |  
+          responses=$('${{ steps.get_package_versions.outputs.data }}' | (jq '.name'))
           output=""
           for release in $(echo $responses | jq '.[] | .name')
           do
