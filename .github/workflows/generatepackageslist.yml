@@ -27,7 +27,7 @@ jobs:
           do
              output+="- $release\n          "
           done
-          sed "s/\$IMAGES_OPTIONS/$output/g" $GITHUB_WORKSPACE/.github/workflows/release.template.yml > $GITHUB_WORKSPACE/.github/workflows/release.yml
+          sed "s/\$IMAGES_OPTIONS/$output/g" ${{ github.workspace }}/.github/workflows/release.template.yml > ${{ github.workspace }}/.github/workflows/release.yml
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
