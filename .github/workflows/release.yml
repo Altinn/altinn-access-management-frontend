@@ -1,1 +1,34 @@
-
+name: CI
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: Select the environment
+      version:
+        type: choice
+        description: Select the package version
+        options:
+          $IMAGES_OPTIONS
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: greet
+        run: | 
+          echo "environment is ${{ github.event.inputs.environment }} / ${{ inputs.environment }}"
+          echo "boolean is ${{ github.event.inputs.boolean }}" / ${{ inputs.boolean }} 
+          echo "choice is ${{ github.event.inputs.choice }}" / ${{ inputs.choice }}
+      
+      - uses: octokit/request-action@v2.x
+      #- name: apirun
+        id: get_package_versions
+        with:
+          route: GET /user/packages/container/altinn-access-management-frontend/versions
+          mediaType: | # The | is significant!
+            format: raw
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - run: "echo packages: '${{ steps.get_package_versions.outputs.data }}'"
