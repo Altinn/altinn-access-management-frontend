@@ -34,7 +34,8 @@ jobs:
           output=""
           for release in $(echo $responses | jq '.[] | .metadata.container.tags[0]')
           do
-             output+="- $release\n          "
+            if : ($release != null && $release != "")
+              output+="- $release\n          "
           done
           echo $output
           sed "s/\$IMAGES_OPTIONS/$output/g" ${{ github.workspace }}/.github/workflows/release.template.yml > ${{ github.workspace }}/.github/workflows/release.yml
