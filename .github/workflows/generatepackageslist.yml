@@ -21,13 +21,13 @@ jobs:
         #id: list_package_versions
       - name: Generates release.yml with package version
         run: |  
-          responses=$('${{ steps.get_package_versions.outputs.data }}' | (jq '.name'))
+          #responses=$('${{ steps.get_package_versions.outputs.data }}' | (jq '.name'))
           output=""
-          for release in $(echo $responses | jq '.[] | .name')
-          do
-             output+="- $release\n          "
-          done
-          echo $output
+          #for release in $(echo $responses | jq '.[] | .name')
+          #do
+             #output+="- $release\n          "
+          #done
+          #echo $output
           echo "${{fromJson(steps.get_package_versions.outputs.data).name}}"
           sed "s/\$IMAGES_OPTIONS/$output/g" ${{ github.workspace }}/.github/workflows/release.template.yml > ${{ github.workspace }}/.github/workflows/release.yml
 
