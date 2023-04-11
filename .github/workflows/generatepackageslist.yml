@@ -10,6 +10,9 @@ jobs:
   get-images-list:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
       - uses: octokit/request-action@v2.x
         id: get_package_versions
         with:
