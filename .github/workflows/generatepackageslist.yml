@@ -50,4 +50,4 @@ jobs:
           git config -l | grep url
           git add ${{ github.workspace }}/.github/workflows/release.yml
           git commit -m "updated package versions"
-          git push origin main
+          git push
