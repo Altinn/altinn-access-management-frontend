@@ -32,7 +32,7 @@ jobs:
         run: |  
          responses='${{ steps.get_package_versions.outputs.data }}'
           output=""
-          for release in $(echo $responses | jq '.[] | .name')
+          for release in $(echo $responses | jq '.[] | .metadata.container.tags[0]')
           do
              output+="- $release\n          "
           done
