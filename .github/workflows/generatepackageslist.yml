@@ -34,7 +34,7 @@ jobs:
           output=""
           for release in $(echo $responses | jq '.[] | .metadata.container.tags[0]')
           do
-            if: $($release != null && $release != "")
+            #if: $($release != null && $release != "")
               output+="- $release\n          "
           done
           echo $output
