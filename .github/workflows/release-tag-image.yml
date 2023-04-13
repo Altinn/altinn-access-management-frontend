@@ -61,5 +61,5 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           repository: '${{ env.IMAGE_NAME }}'
-          target: 'sha-${{ inputs.commit_sha }}'
+          target: '${{ inputs.commit_sha }}'
           tags: '${{ inputs.release_version }}'
