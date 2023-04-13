@@ -35,8 +35,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
+
       - name: Tag a commit
         run: |
           git tag -a ${{ inputs.release_version }} ${{ inputs.commit_sha }} -m '${{ inputs.commit_message }}'
