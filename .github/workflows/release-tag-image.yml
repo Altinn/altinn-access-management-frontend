@@ -10,9 +10,9 @@ on:
         type: string
         description: 'full commit sha of the image'
         required: true
-      short_commit_sha:
+      commit_message:
         type: string
-        description: 'short commit sha to be tagged'
+        description: 'tag message'
         required: true
 
 env:
@@ -39,7 +39,7 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Tag a commit
         run: |
-          git tag -a ${{ inputs.release_version }} ${{ inputs.commit_sha }}
+          git tag -a ${{ inputs.release_version }} ${{ inputs.commit_sha }} -m ${{ inputs.commit_message }}
           git push origin tag ${{ inputs.release_version }}
       - name: Login to GHCR
         uses: docker/login-action@v2.0.0
