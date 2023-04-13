@@ -1,0 +1,44 @@
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        type: string
+        description: 'version to release. Ex: v4.3.2'
+        required: true
+        default: 'v'
+      commit_sha:
+        type: string
+        description: 'commit sha to be tagged'
+        required: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: acn-dgopa/altinn-access-management-frontend
+  CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
+  CONTAINER_APP_NAME: altinnaccessmanagementui-app
+  CONTAINER_APP_RESOURCE_GROUP_NAME: am-ui-rg
+
+jobs:
+  tag_release:
+    name: Tag  a commit as Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      issues: write
+      packages: write
+    
+    steps:
+      - name: Tag a commit
+        run: |
+          git tag -a ${{ inputs.release_version }} ${{ inputs.commit_sha }}
+          git push origin ${{ inputs.release_version }}
+      - id: version
+        uses: battila7/get-version-action@v2
+      - name: Add Semantic Version tag to Docker Image
+        uses: shrink/actions-docker-registry-tag@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          repository: '${{ env.IMAGE_NAME }}'
+          target: 'sha-${{ inputs.commit_sha }}'
+          tags: '${{ inputs.release_version }}'
