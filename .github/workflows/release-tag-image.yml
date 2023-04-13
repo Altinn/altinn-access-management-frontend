@@ -39,7 +39,7 @@ jobs:
           ref: ${{ github.head_ref }}
       - name: Tag a commit
         run: |
-          git tag -a ${{ inputs.release_version }} ${{ inputs.short_commit_sha }}
+          git tag -a ${{ inputs.release_version }} ${{ inputs.commit_sha }}
           git push origin ${{ inputs.release_version }}
       - name: Login to GHCR
         uses: docker/login-action@v2.0.0
