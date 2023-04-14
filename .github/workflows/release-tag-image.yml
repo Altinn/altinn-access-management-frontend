@@ -47,7 +47,7 @@ jobs:
 
       - name: Tag a commit
         run: |
-          git tag -a ${{ inputs.release_version }} -m '${{ inputs.commit_message }}'
+          git tag -a ${{ inputs.release_version }} -m '${{ inputs.commit_message }}' ${{ inputs.commit_sha }}
           git push origin tag ${{ inputs.release_version }}
       
       - name: Create GitHub release
