@@ -6,36 +6,9 @@ on:
         type: environment
         description: Select the environment
       version:
-        type: choice
-        description: Select the package version
-        options:
-          - "755bbb9b73cb1422403745ecd6bfba6a0d365e37"
-          - null
-          - null
-          - "b3dc679ef6b728b9952b27b5b0132e021491325c"
-          - null
-          - null
-          - "ea60f3b6a2769194131ebce2e5f67623c4dfce56"
-          - null
-          - null
-          - "b6ef6ef2a6390f218a95d3047f9fe9411ab62774"
-          - null
-          - null
-          - "833b6dd987042ec3cf86ef74e7be2f2eddf87157"
-          - null
-          - null
-          - "075a75f17a7d0ec6647bae5e0686f94f5d06589e"
-          - null
-          - null
-          - "5949c9491846914e3e5c9731eeae6deeaeec6210"
-          - null
-          - null
-          - "c13c56bacbcd7dc3e98f1b66e788beb0985507f6"
-          - null
-          - null
-          - "1ee92ba907e540674a9df351613a2414b5658cea"
-          - null
-          - null
+        type: string
+        description: Enter the package version
+        required: true
           
 env:
   REGISTRY: ghcr.io
