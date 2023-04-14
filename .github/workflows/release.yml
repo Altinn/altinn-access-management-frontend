@@ -1,4 +1,4 @@
-name: CI
+name: Deploy to a specific environment
 on:
   workflow_dispatch:
     inputs:
