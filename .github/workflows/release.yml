@@ -26,6 +26,12 @@ jobs:
       contents: read
       packages: read
     steps:
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     - name: Azure Login
       uses: azure/login@v1
       with:
