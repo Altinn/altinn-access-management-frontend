@@ -51,6 +51,7 @@ jobs:
 
       - name: Tag a commit
         run: |
+          git remote set-url origin https://${{ secrets.COMMIT_ACCESS_TOKEN }}@github.com/acn-dgopa/altinn-access-management-frontend.git
           git tag -a ${{ inputs.release_version }} -m '${{ inputs.commit_message }}' ${{ inputs.short_commit_sha }}
           git push origin tag ${{ inputs.release_version }}
       
