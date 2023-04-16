@@ -58,7 +58,7 @@ Use [PascalCase](https://techterms.com/definition/pascalcase) for both component
 ### Code style
 
 We use [eslint](https://eslint.org/), [prettier](https://prettier.io/), typescript, and automatically set up git hooks to enforce
-these on commits. To avoid confusion, it is recommended to set this up your IDE.
+these on commits. To avoid confusion, it is recommended to set this up your IDE..
 
 ### Visual Studio Code
 
