@@ -175,4 +175,4 @@ To run the code together with access-management backend to the following
 
 - You should now see localtest intro with access management as only application
 
-- Choose an account and click on button to proceed to react-app
+- Choose an account and click on button to proceed to react-app.
