@@ -9,7 +9,18 @@ interface Props {
 }
 
 const LoadLocalizations = ({ children }: Props) => {
-  const backupLang = getCookie('i18next') ? getCookie('i18next') : 'no_nb';
+  const getBackupLanguage = () => {
+    const value = getCookie('i18next');
+    if (value === 'no_nn') {
+      return 'no_nn';
+    } else if (value === 'en') {
+      return 'en';
+    } else {
+      return 'no_nb';
+    }
+  };
+
+  const backupLang = getBackupLanguage();
   const envUrl = import.meta.env.DEV ? 'src/' : 'accessmanagement/';
   const baseUrl = import.meta.env.BASE_URL + envUrl;
   const localizationsFilePath = `${baseUrl}localizations/${backupLang}.json`;
