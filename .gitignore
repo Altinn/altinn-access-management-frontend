@@ -371,3 +371,5 @@ backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.i
 backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/vcs.xml
 .gitignore
 backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/workspace.xml
+backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Views/Home/Index.cshtml
+backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Views/Home/Index.cshtml
