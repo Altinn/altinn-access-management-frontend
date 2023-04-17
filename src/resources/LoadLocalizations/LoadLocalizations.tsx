@@ -11,10 +11,8 @@ interface Props {
 const LoadLocalizations = ({ children }: Props) => {
   const getBackupLanguage = () => {
     const value = getCookie('i18next');
-    if (value === 'no_nn') {
-      return 'no_nn';
-    } else if (value === 'en') {
-      return 'en';
+    if (value === 'no_nn' || value === 'no_nb' || value === 'en') {
+      return value;
     } else {
       return 'no_nb';
     }
