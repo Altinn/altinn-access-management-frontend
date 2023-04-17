@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
 
-            HttpContext.Response.Cookies.Append(_generalSettings.LanguageCookie, languageCode, new CookieOptions
+            HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {
                 HttpOnly = false // Make this cookie readable by Javascript.                
             });
