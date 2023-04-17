@@ -100,7 +100,7 @@ export const ChooseApiPage = () => {
       return (
         <div className={common.spinnerContainer}>
           <Spinner
-            title={String(t('api_delegation.loading'))}
+            title={String(t('common.loading'))}
             size='large'
           />
         </div>
@@ -146,7 +146,7 @@ export const ChooseApiPage = () => {
         startIcon={<OfficeIcon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
-        middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
+        middleText={!isSm ? t('api_delegation.org_nr') + ' ' + org.orgNr : undefined}
       ></CompactDeletableListItem>
     );
   });

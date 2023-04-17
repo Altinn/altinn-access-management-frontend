@@ -151,7 +151,7 @@ export const OverviewPageContent = ({
       return (
         <div className={classes.spinnerContainer}>
           <Spinner
-            title={String(t('api_delegation.loading'))}
+            title={String(t('common.loading'))}
             size='large'
           />
         </div>

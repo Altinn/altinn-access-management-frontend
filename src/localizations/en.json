@@ -7,6 +7,7 @@
     "maskinporten": "Maskinporten",
     "broennoeysund_register": "The Brønnøysund Register Center",
     "error_message": "Error message",
+    "loading": "Loading",
     "error_status_code": "Error status code"
   },
   "profile": {
@@ -68,7 +69,6 @@
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Something crashed, try refreshing the page.",
-    "loading": "Loading",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
     "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process.",
     "receipt_page_main_button": "To API-overview",

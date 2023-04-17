@@ -68,7 +68,7 @@ export const NavigationButtons = ({
         >
           {nextLoading && (
             <Spinner
-              title={String(t('api_delegation.loading'))}
+              title={String(t('common.loading'))}
               size='small'
               variant='interaction'
             />

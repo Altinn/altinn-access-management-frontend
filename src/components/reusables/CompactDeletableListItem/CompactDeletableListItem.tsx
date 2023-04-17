@@ -16,7 +16,7 @@ export enum ListTextColor {
 export interface CompactDeletableListItemProps {
   removeCallback?: (() => void) | null;
   leftText: string;
-  middleText: string;
+  middleText?: string;
   startIcon?: React.ReactNode;
   contentColor?: ListTextColor;
 }
@@ -29,8 +29,6 @@ export const CompactDeletableListItem = ({
   contentColor = ListTextColor.primary,
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
-
-  const isSm = useMediaQuery(`(max-width: 768px)`);
 
   return (
     <ListItem>
@@ -46,29 +44,31 @@ export const CompactDeletableListItem = ({
                 height={14}
                 svgIconComponent={startIcon}
                 className={classes.listItemIcon}
-              ></SvgIcon>
+              />
             </div>
           )}
           <div className={classes.listItemTexts}>
             <div className={cn(classes.leftText, classes[`leftText__${contentColor}`])}>
               {leftText}
             </div>
-            <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
-              {middleText}
-            </div>
-            <div className={classes.deleteSection}>
-              {removeCallback && (
-                <Button
-                  variant={ButtonVariant.Quiet}
-                  color={ButtonColor.Danger}
-                  icon={<MinusCircle />}
-                  onClick={removeCallback}
-                  aria-label={String(t('api_delegation.delete'))}
-                >
-                  {!isSm && t('api_delegation.delete')}
-                </Button>
-              )}
-            </div>
+            {middleText && (
+              <div className={cn(classes.middleText, classes[`middleText__${contentColor}`])}>
+                {middleText}
+              </div>
+            )}
+          </div>
+          <div className={classes.deleteSection}>
+            {removeCallback && (
+              <Button
+                variant={ButtonVariant.Quiet}
+                color={ButtonColor.Danger}
+                icon={<MinusCircle />}
+                onClick={removeCallback}
+                aria-label={String(t('api_delegation.delete'))}
+              >
+                {t('api_delegation.delete')}
+              </Button>
+            )}
           </div>
         </div>
       </div>
