@@ -5,18 +5,18 @@ import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
-import {
-  Page,
-  PageHeader,
-  PageContent,
-  PageSize,
-  PageColor,
-  CompactDeletableListItem,
-  NavigationButtons,
-} from '@/components/reusables';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
+import {
+  CompactDeletableListItem,
+  NavigationButtons,
+  Page,
+  PageContent,
+  PageHeader,
+  PageColor,
+  PageSize,
+} from '@/components/reusables';
 import common from '@/resources/css/Common.module.css';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -92,7 +92,6 @@ export const SummaryPage = ({
           startIcon={<OfficeIcon />}
           removeCallback={delegableOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
           leftText={org.orgName}
-          middleText={org.orgNr}
         ></CompactDeletableListItem>
       );
     },
