@@ -8,7 +8,7 @@
     margin-top: 0rem;
   }
 
-  .pageContentContainer {
+  .activeDelegationsHeader {
     margin-top: 0.1rem;
   }
 
@@ -26,8 +26,10 @@
     margin-bottom: 3rem;
   }
 
-  .pageContentContainer {
+  .activeDelegationsHeader {
     margin-top: 2rem;
+    display: flex;
+    align-items: center;
   }
 
   .saveSection{
@@ -42,15 +44,15 @@
     flex: 1;
   }
 
-  .pageContentContainer {
-    display: flex;
-    align-items: center;
-  }
 
-  .accordion{
+  .activeDelegations{
     overflow-y: auto;
     max-height: 500px;
   }
+}
+
+.noActiveDelegations {
+  margin-top: 1.5rem;
 }
 
 .spinnerContainer{
@@ -86,6 +88,6 @@
   margin-top: 2rem;
 }
 
-.accordion{
+.activeDelegations{
   min-height: 100px;
 }
