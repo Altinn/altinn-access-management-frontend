@@ -77,7 +77,7 @@ export const NewDelegationAccordion = ({
         subtitle={subtitle}
         actions={actions}
       >
-        {title}
+        <p className={classes.accordionHeaderTitle}>{title}</p>
       </AccordionHeader>
       <AccordionContent>
         <div className={classes.newApiAccordionContent}>

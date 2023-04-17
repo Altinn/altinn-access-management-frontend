@@ -14,6 +14,7 @@ import { getConfig } from '../config';
 
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
+import '@/resources/css/Common.module.css';
 
 /**
  * Special behaviour for react-query in dev environment

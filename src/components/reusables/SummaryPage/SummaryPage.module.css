@@ -37,15 +37,15 @@
 
 .bottomText{
   margin-top: 40px;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .listText {
-  font-weight: normal;
+  font-weight: 500;
 }
 
 .bottomListText {
-  font-weight: normal;
+  font-weight: 500;
   margin-top: 2.5rem;
 }
 

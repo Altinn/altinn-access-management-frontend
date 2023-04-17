@@ -173,7 +173,9 @@ export const ChooseOrgPage = () => {
             </h2>
             {isSm && chosenItems.length > 0 && (
               <div className={classes.chosenOrgs}>
-                <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                <h4 className={classes.chosenOrgsHeader}>
+                  {t('api_delegation.businesses_going_to_get_access')}
+                </h4>
                 <div className={classes.accordionScrollContainer}>{chosenItems}</div>
               </div>
             )}
@@ -221,7 +223,9 @@ export const ChooseOrgPage = () => {
                 </div>
                 {!isSm && (
                   <div className={common.apiAccordions}>
-                    <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                    <h4 className={classes.chosenOrgsHeader}>
+                      {t('api_delegation.businesses_going_to_get_access')}
+                    </h4>
                     <div className={classes.accordionScrollContainer}>{chosenItems}</div>
                   </div>
                 )}

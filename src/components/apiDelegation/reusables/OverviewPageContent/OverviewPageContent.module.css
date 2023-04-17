@@ -66,11 +66,12 @@
 .apiSubheading{
   display: flex;
   margin-bottom: 2rem;
+  font-weight: 500;
 }
 
 .pageContentText {
-  font-weight: normal;
   margin-top: -2rem;
+  font-weight: 500;
 }
 
 .link {
