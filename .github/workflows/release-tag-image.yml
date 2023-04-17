@@ -55,17 +55,7 @@ jobs:
         run: |
           git tag -a ${{ inputs.release_version }} -m '${{ inputs.commit_message }}' ${{ inputs.short_commit_sha }}
           git push origin tag ${{ inputs.release_version }}
-      
-      - name: Create GitHub release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.COMMIT_ACCESS_TOKEN }}
-        with:
-          tag_name: ${{ inputs.release_version }}
-          release_name: Release ${{ inputs.release_version }}
-          draft: false
-          prerelease: false
-          
+               
       - name: Login to GHCR
         uses: docker/login-action@v2.0.0
         with:
