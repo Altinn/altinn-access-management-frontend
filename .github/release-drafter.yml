@@ -1,5 +1,6 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+version-template: "$MAJOR.$MINOR"
 template: |
   # Changelog
   $CHANGES
@@ -28,13 +29,8 @@ change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 version-resolver:
   major:
     labels:
-      - 'type: breaking'
+      - 'major'
   minor:
     labels:
-      - 'type: enhancement'
-  patch:
-    labels:
-      - 'type: bug'
-      - 'type: maintenance'
-      - 'type: documentation'
-  default: patch
+      - 'minor'
+  default: major
