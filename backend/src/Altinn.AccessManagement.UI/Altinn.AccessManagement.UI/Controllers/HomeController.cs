@@ -76,8 +76,6 @@ namespace Altinn.AccessManagement
                 });
             }
 
-            await SetLanguageCookie();
-
             if (ShouldShowAppView())
             {
                 return View();
