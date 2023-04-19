@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import * as React from 'react';
 
