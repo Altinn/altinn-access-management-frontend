@@ -1,3 +1,13 @@
+:root { 
+  font-family: 'Inter', sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+  :root {  
+    font-family: 'Inter', sans-serif;
+  }
+}
+
 @media only screen and (min-width: 0px) {
   .pageContent{
     --component-page-margin-horizontal: 0.5rem;

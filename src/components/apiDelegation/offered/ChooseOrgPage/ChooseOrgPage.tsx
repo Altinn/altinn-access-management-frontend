@@ -173,7 +173,9 @@ export const ChooseOrgPage = () => {
             </h2>
             {isSm && chosenItems.length > 0 && (
               <div className={classes.chosenOrgs}>
-                <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                <h4 className={classes.chosenOrgsHeader}>
+                  {t('api_delegation.businesses_going_to_get_access')}
+                </h4>
                 <div className={classes.accordionScrollContainer}>{chosenItems}</div>
               </div>
             )}
@@ -190,7 +192,7 @@ export const ChooseOrgPage = () => {
               <div className={common.spinnerContainer}>
                 <Spinner
                   size='large'
-                  title={String(t('api_delegation.loading'))}
+                  title={String(t('common.loading'))}
                 />
               </div>
             ) : (
@@ -206,11 +208,24 @@ export const ChooseOrgPage = () => {
                     </h4>
                   )}
                   {infoPanel()}
-                  <div className={classes.accordionScrollContainer}>{delegableOrgItems}</div>
+                  <div className={classes.accordionScrollContainer}>
+                    {searchLoading ? (
+                      <div className={common.spinnerContainer}>
+                        <Spinner
+                          size='large'
+                          title={String(t('common.loading'))}
+                        />
+                      </div>
+                    ) : (
+                      delegableOrgItems
+                    )}
+                  </div>
                 </div>
                 {!isSm && (
                   <div className={common.apiAccordions}>
-                    <h4>{t('api_delegation.businesses_going_to_get_access')}</h4>
+                    <h4 className={classes.chosenOrgsHeader}>
+                      {t('api_delegation.businesses_going_to_get_access')}
+                    </h4>
                     <div className={classes.accordionScrollContainer}>{chosenItems}</div>
                   </div>
                 )}

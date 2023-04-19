@@ -7,6 +7,7 @@
     "maskinporten": "Maskinporten",
     "broennoeysund_register": "Brønnøysundregistrene",
     "error_message": "Feilmelding",
+    "loading": "Laster",
     "error_status_code": "Feilmeldingens statuskode"
   },
   "profile": {
@@ -68,11 +69,12 @@
     "description": "Beskrivelse",
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Noe feilet, prøv å laste inn siden på nytt.",
-    "loading": "Laster",
     "orgs_not_chosen_subtitle": "Kunne ikke hente ut valgte organisasjoner. Gå tilbake til forrige side for å velge organisasjoner ved å klikke på forrige-knappen nederst til høyre.",
     "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegerings\u00adprosessen på nytt.",
     "failed_delegations": "Disse api-delegeringene gikk galt og ble derfor ikke tildelt",
     "succesful_delegations": "Disse api-delegeringene ble gitt",
+    "no_offered_delegations": "Din virksomhet har ikke delegert noen API-tilganger",
+    "no_received_delegations": "Din virksomhet har ikke blitt tildelt noen API-tilganger",
     "not_found_site_error_type": "Feil 404",
     "not_found_site_header": "Oi! Du har prøvd å komme til en side vi ikke vet om",
     "not_found_site_upper_text": "Vi vet ikke hvor du egentlig skulle, men kanskje du kan finne det du leter etter på noen av disse sidene:",

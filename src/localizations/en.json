@@ -7,6 +7,7 @@
     "maskinporten": "Maskinporten",
     "broennoeysund_register": "The Brønnøysund Register Center",
     "error_message": "Error message",
+    "loading": "Loading",
     "error_status_code": "Error status code"
   },
   "profile": {
@@ -68,12 +69,13 @@
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Something crashed, try refreshing the page.",
-    "loading": "Loading",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
     "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process.",
     "receipt_page_main_button": "To API-overview",
     "failed_delegations": "These API delegations went wrong and were therefore not assigned",
     "succesful_delegations": "These API delegations were successful",
+    "no_offered_delegations": "Your organisation hasn't delegated any APIs",
+    "no_received_delegations": "Your organisation hasn't received any API delegations",
     "not_found_site_type": "Error 404",
     "not_found_site_header": "Oops! You have tried to reach a page we do not know",
     "not_found_site_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",

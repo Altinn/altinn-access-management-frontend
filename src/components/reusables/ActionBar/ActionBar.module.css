@@ -7,11 +7,14 @@
 .title {
     margin-top: 0.5rem;
     margin-bottom: 0;
+    font-weight: 500;
+    word-break: break-word;
 }
 
 .subtitle {
     opacity: 60%;
-    font-weight: bold;
+    font-weight: 500;
+    word-break: break-word;
 }
 
 .actionButton {

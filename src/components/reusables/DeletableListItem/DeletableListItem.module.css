@@ -26,12 +26,13 @@
 }
 
 .apiListItem {
-  font-weight: bold;
   margin-bottom: 1.2rem;
   word-break: break-word;
+  font-weight: 500;
 }
 
 .ownerListItem {
   margin-bottom: 0.7rem;
   word-break: break-word;
+  font-weight: 400;
 }

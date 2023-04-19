@@ -1,13 +1,26 @@
 @media only screen and (max-width: 768px) {
-  .middleText {
-    justify-content: flex-end;
+  .listItemTexts{
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .middleText{
+    margin-top: 5px;
+    opacity: 60%;
   }
 }
 
-.compactListItem {
-  display: flex;
-  margin-left: 10px;
-  min-height: 40px;
+@media only screen and (min-width: 769px) {  
+  .listItemTexts{
+    display: flex;
+  }
+
+  .middleText {
+    flex: 1;
+    display: flex;
+    margin-right: auto;
+    margin-left: 30px;
+  }
 }
 
 .baseListItemContent{
@@ -16,15 +29,22 @@
   align-items: center;
 }
 
-.listItemIcon {
-  margin-right: 10px;
+.compactListItem {
+    display: flex;
+    margin-left: 10px;
+    min-height: 40px;
+}
+
+.deleteSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .listItemTexts{
-  flex: 1;
-  display: flex;
-  font-size: 16px;
   --list-text-color-error: #E02E49;
+  font-size: 16px;
+  flex: 1;
   align-items: center;
 }
 
@@ -35,11 +55,11 @@
   word-break: break-word;
 }
 
+.listItemIcon {
+  margin-right: 10px;
+}
+
 .middleText {
-  flex: 1;
-  display: flex;
-  margin-right: auto;
-  margin-left: 30px;
   word-break: break-word;
 }
 
@@ -51,7 +71,4 @@
   color: var(--list-text-color-error);
 }
 
-.deleteSection {
-  display: flex;
-  justify-content: flex-end;
-}
+

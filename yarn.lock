@@ -262,7 +262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.19.4, @babel/runtime@npm:^7.20.6, @babel/runtime@npm:^7.20.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.6, @babel/runtime@npm:^7.20.6, @babel/runtime@npm:^7.20.7, @babel/runtime@npm:^7.9.2":
   version: 7.21.0
   resolution: "@babel/runtime@npm:7.21.0"
   dependencies:
@@ -355,18 +355,18 @@ __metadata:
   linkType: hard
 
 "@dependents/detective-less@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@dependents/detective-less@npm:3.0.1"
+  version: 3.0.2
+  resolution: "@dependents/detective-less@npm:3.0.2"
   dependencies:
     gonzales-pe: ^4.3.0
-    node-source-walk: ^5.0.0
-  checksum: c4a6b32d23f8edeb0a9eae378996808ed86313ce9d7245d82c9573f34c8824a43b4a9ae90bc3b7f56fbe5a3491cd0334b73d9c3b46d6f8f8be2b50a91e12767a
+    node-source-walk: ^5.0.1
+  checksum: 2c263ab64fcd1f76117bc35f2b29a150c64bd2b105c96a909a63ce2f2baf07efd93d9ae80e612161d003fb71fbe46598292375f5cc3f447a1b83cfb545dc8f8f
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.10.0":
-  version: 0.10.2
-  resolution: "@digdir/design-system-react@npm:0.10.2"
+"@digdir/design-system-react@npm:^0.11.0":
+  version: 0.11.1
+  resolution: "@digdir/design-system-react@npm:0.11.1"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@floating-ui/react": 0.17.0
@@ -375,7 +375,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 7c37ccdfcb58109683ad640b79c8c83453e600e2fe62f209f127f2b36e659c38e1c7c0ff42b07e573720d8d78656c869594c97b3c975a756f4b9c9dfbf4e368f
+  checksum: 28d55db5ca7fc769c1ae8cabc4a560923cf171ca5f1c2a673156fc81c84d04aac371415e10a342b7776185f108adbb974bb2781f8abf9aafea63987feff0dd82
   languageName: node
   linkType: hard
 
@@ -728,15 +728,15 @@ __metadata:
   linkType: hard
 
 "@navikt/ds-icons@npm:^2.0.0, @navikt/ds-icons@npm:^2.3.0":
-  version: 2.8.12
-  resolution: "@navikt/ds-icons@npm:2.8.12"
+  version: 2.8.13
+  resolution: "@navikt/ds-icons@npm:2.8.13"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 346e30eeda7fa2cdd1b35296f16628605d4390bd4c5cd0fc9cd16173bf1f055dfff4fa32da51c9d7ec42f189f6fe95d0661d048349d837ddbb09dadb83ed622c
+  checksum: 5c6b3f0b5b163a79c9d87814b308d1c1de388beec8d473c069e96710951296756099e985c8b98ba88073c58ea413cff4fcceaf21f2674da58b95c24e70ee9185
   languageName: node
   linkType: hard
 
@@ -1330,9 +1330,9 @@ __metadata:
   linkType: hard
 
 "@types/estree@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@types/estree@npm:1.0.0"
-  checksum: 910d97fb7092c6738d30a7430ae4786a38542023c6302b95d46f49420b797f21619cdde11fa92b338366268795884111c2eb10356e4bd2c8ad5b92941e9e6443
+  version: 1.0.1
+  resolution: "@types/estree@npm:1.0.1"
+  checksum: e9aa175eacb797216fafce4d41e8202c7a75555bc55232dee0f9903d7171f8f19f0ae7d5191bb1a88cb90e65468be508c0df850a9fb81b4433b293a5a749899d
   languageName: node
   linkType: hard
 
@@ -1656,6 +1656,51 @@ __metadata:
   checksum: a4a97ec07d7ea112c517036882b2ac22f3109b7b19077dc656316d07d308438aac28e4d9746dc4d84bf6b1e75b4a7b0a5f3cb30592419f128ca9a8cee3bcfa17
   languageName: node
   linkType: hard
+
+"access-management@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "access-management@workspace:."
+  dependencies:
+    "@altinn/altinn-design-system": ^0.27.6
+    "@digdir/design-system-react": ^0.11.0
+    "@reduxjs/toolkit": ^1.9.3
+    "@tanstack/react-query": ^4.0.5
+    "@testing-library/cypress": ^9.0.0
+    "@types/react": ^18.0.28
+    "@types/react-dom": ^18.0.11
+    "@types/redux-logger": ^3.0.9
+    "@typescript-eslint/eslint-plugin": ^5.56.0
+    "@vitejs/plugin-react": ^3.1.0
+    axios: ^1.3.4
+    classnames: ^2.3.2
+    cypress: ^12.8.1
+    eslint: ^8.36.0
+    eslint-config-prettier: ^8.8.0
+    eslint-config-standard-with-typescript: ^34.0.1
+    eslint-import-resolver-typescript: ^3.5.3
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-jsx-a11y: ^6.6.1
+    eslint-plugin-n: ^15.6.1
+    eslint-plugin-prettier: ^4.2.1
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.32.2
+    husky: ^8.0.3
+    i18next: ^22.4.13
+    lint-staged: ^13.0.3
+    madge: ^6.0.0
+    prettier: ^2.8.6
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-i18next: ^12.2.0
+    react-redux: ^8.0.5
+    react-router-dom: ^6.10.0
+    redux-logger: ^3.0.6
+    typescript: 5.0.4
+    typescript-plugin-css-modules: ^5.0.0
+    vite: ^4.2.2
+    vite-plugin-svgr: ^2.4.0
+  languageName: unknown
+  linkType: soft
 
 "acorn-jsx@npm:^5.3.2":
   version: 5.3.2
@@ -2712,7 +2757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"define-properties@npm:^1.1.3, define-properties@npm:^1.1.4":
+"define-properties@npm:^1.1.3, define-properties@npm:^1.1.4, define-properties@npm:^1.2.0":
   version: 1.2.0
   resolution: "define-properties@npm:1.2.0"
   dependencies:
@@ -2876,12 +2921,12 @@ __metadata:
   linkType: hard
 
 "detective-sass@npm:^4.0.1, detective-sass@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "detective-sass@npm:4.1.1"
+  version: 4.1.2
+  resolution: "detective-sass@npm:4.1.2"
   dependencies:
     gonzales-pe: ^4.3.0
-    node-source-walk: ^5.0.0
-  checksum: 873f1264f72cd6951f1e69477879f73935d1458454a7f85848b93d3c806e915c218ed5ee0accbdd26f35973b5914a2a24a61db857e89f42ce2f5de777abcf864
+    node-source-walk: ^5.0.1
+  checksum: 7f7355357a2994e6bc97006ad4a580013f99e3a7604636701abf7f9a69982e148a27d1c76bfd0382c71eb515ee62798e95aaec714fcfd13a16da5feb3a69da3c
   languageName: node
   linkType: hard
 
@@ -2896,12 +2941,12 @@ __metadata:
   linkType: hard
 
 "detective-scss@npm:^3.0.0, detective-scss@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "detective-scss@npm:3.0.1"
+  version: 3.0.2
+  resolution: "detective-scss@npm:3.0.2"
   dependencies:
     gonzales-pe: ^4.3.0
-    node-source-walk: ^5.0.0
-  checksum: f3d0ab154796424b1b3b80a514a86cd6810b51b6927face64cf91e451b3574aca78e3f03d19a8fe8d7d61be04d3a646e65333edcb6ad9b08f2061e16b6566a39
+    node-source-walk: ^5.0.1
+  checksum: 3c96892596120fef1b81484a72c0cfbf86774624101090f58d759b3ae4d75a4e35cb2e3629b7a54ca043bd80c1b6832b4bdca7c6af94e41323936e0fd6723c13
   languageName: node
   linkType: hard
 
@@ -3009,9 +3054,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.284":
-  version: 1.4.367
-  resolution: "electron-to-chromium@npm:1.4.367"
-  checksum: 721e4958945a16ff21a63896d4e112da7b8f3fd5540a27280d5777c196fe4e1f1b51359f86c6fe83a267e81f127e4753ec9171547f094f86481a421c809473b0
+  version: 1.4.368
+  resolution: "electron-to-chromium@npm:1.4.368"
+  checksum: b8ec4128a81c86c287cb2d677504c64d50f30c3c1d6dd9700a93797c6311f9f94b1c49a3e5112f5cfb3987a9bbade0133f9ec9898dae592db981059d5c2abdbb
   languageName: node
   linkType: hard
 
@@ -4049,7 +4094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"functions-have-names@npm:^1.2.2":
+"functions-have-names@npm:^1.2.2, functions-have-names@npm:^1.2.3":
   version: 1.2.3
   resolution: "functions-have-names@npm:1.2.3"
   checksum: c3f1f5ba20f4e962efb71344ce0a40722163e85bee2101ce25f88214e78182d2d2476aa85ef37950c579eb6cf6ee811c17b3101bb84004bb75655f3e33f3fdb5
@@ -4484,15 +4529,6 @@ __metadata:
   bin:
     husky: lib/bin.js
   checksum: 837bc7e4413e58c1f2946d38fb050f5d7324c6f16b0fd66411ffce5703b294bd21429e8ba58711cd331951ee86ed529c5be4f76805959ff668a337dbfa82a1b0
-  languageName: node
-  linkType: hard
-
-"i18next-browser-languagedetector@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "i18next-browser-languagedetector@npm:7.0.1"
-  dependencies:
-    "@babel/runtime": ^7.19.4
-  checksum: 03129614be8761988df59b630359ded4f7c989eec4553781b5968139fd898de1eb09128c4c69c1365b547649ad829ff9abe1f60161658f8789668bcc623adcf0
   languageName: node
   linkType: hard
 
@@ -6524,52 +6560,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-app@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "react-app@workspace:."
-  dependencies:
-    "@altinn/altinn-design-system": ^0.27.6
-    "@digdir/design-system-react": ^0.10.0
-    "@reduxjs/toolkit": ^1.9.3
-    "@tanstack/react-query": ^4.0.5
-    "@testing-library/cypress": ^9.0.0
-    "@types/react": ^18.0.28
-    "@types/react-dom": ^18.0.11
-    "@types/redux-logger": ^3.0.9
-    "@typescript-eslint/eslint-plugin": ^5.56.0
-    "@vitejs/plugin-react": ^3.1.0
-    axios: ^1.3.4
-    classnames: ^2.3.2
-    cypress: ^12.8.1
-    eslint: ^8.36.0
-    eslint-config-prettier: ^8.8.0
-    eslint-config-standard-with-typescript: ^34.0.1
-    eslint-import-resolver-typescript: ^3.5.3
-    eslint-plugin-import: ^2.27.5
-    eslint-plugin-jsx-a11y: ^6.6.1
-    eslint-plugin-n: ^15.6.1
-    eslint-plugin-prettier: ^4.2.1
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.32.2
-    husky: ^8.0.3
-    i18next: ^22.4.13
-    i18next-browser-languagedetector: ^7.0.1
-    lint-staged: ^13.0.3
-    madge: ^6.0.0
-    prettier: ^2.8.6
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-i18next: ^12.2.0
-    react-redux: ^8.0.5
-    react-router-dom: ^6.10.0
-    redux-logger: ^3.0.6
-    typescript: 5.0.2
-    typescript-plugin-css-modules: ^5.0.0
-    vite: ^4.2.2
-    vite-plugin-svgr: ^2.4.0
-  languageName: unknown
-  linkType: soft
-
 "react-dom@npm:^18.2.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
@@ -6825,13 +6815,13 @@ __metadata:
   linkType: hard
 
 "regexp.prototype.flags@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "regexp.prototype.flags@npm:1.4.3"
+  version: 1.5.0
+  resolution: "regexp.prototype.flags@npm:1.5.0"
   dependencies:
     call-bind: ^1.0.2
-    define-properties: ^1.1.3
-    functions-have-names: ^1.2.2
-  checksum: 51228bae732592adb3ededd5e15426be25f289e9c4ef15212f4da73f4ec3919b6140806374b8894036a86020d054a8d2657d3fee6bb9b4d35d8939c20030b7a6
+    define-properties: ^1.2.0
+    functions-have-names: ^1.2.3
+  checksum: c541687cdbdfff1b9a07f6e44879f82c66bbf07665f9a7544c5fd16acdb3ec8d1436caab01662d2fbcad403f3499d49ab0b77fbc7ef29ef961d98cc4bc9755b4
   languageName: node
   linkType: hard
 
@@ -6994,8 +6984,8 @@ __metadata:
   linkType: hard
 
 "rollup@npm:^3.18.0":
-  version: 3.20.5
-  resolution: "rollup@npm:3.20.5"
+  version: 3.20.6
+  resolution: "rollup@npm:3.20.6"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -7003,7 +6993,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 5f154ea6835bd3700478d399f152237d190eb0ea48d75983f87da5e01f5f624a7264e163e0f2a5d84079d6a5d116c620f0d2bef34f757723406606b7d04fb6a9
+  checksum: fa30f1e1d214b8c62e631d3c181a75d61bc9c20fca38220d6f938bb3bf734a874e407cd641c90f550dc2b127df5029dfb3108be08934a654f1f40b50f368b0c2
   languageName: node
   linkType: hard
 
@@ -7766,13 +7756,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.0.2":
-  version: 5.0.2
-  resolution: "typescript@npm:5.0.2"
+"typescript@npm:5.0.4":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: bef1dcd166acfc6934b2ec4d72f93edb8961a5fab36b8dd2aaf6f4f4cd5c0210f2e0850aef4724f3b4913d5aef203a94a28ded731b370880c8bcff7e4ff91fc1
+  checksum: 82b94da3f4604a8946da585f7d6c3025fff8410779e5bde2855ab130d05e4fd08938b9e593b6ebed165bda6ad9292b230984f10952cf82f0a0ca07bbeaa08172
   languageName: node
   linkType: hard
 
@@ -7796,13 +7786,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@5.0.2#~builtin<compat/typescript>":
-  version: 5.0.2
-  resolution: "typescript@patch:typescript@npm%3A5.0.2#~builtin<compat/typescript>::version=5.0.2&hash=85af82"
+"typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: b63cb742fbb9aeb3085e002ad8f10d5fd963606aa4d6b3b65b4e76c396ff09739f03b5dbae08e1698c3bce9d5619d3f67aeb7ee470ed4016bd345b3cfe37b54a
+  checksum: bb309d320c59a26565fb3793dba550576ab861018ff3fd1b7fccabbe46ae4a35546bc45f342c0a0b6f265c801ccdf64ffd68f548f117ceb7f0eac4b805cd52a9
   languageName: node
   linkType: hard
 

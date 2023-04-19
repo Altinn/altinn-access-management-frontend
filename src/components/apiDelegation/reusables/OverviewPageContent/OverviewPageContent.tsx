@@ -58,6 +58,7 @@ export const OverviewPageContent = ({
   let fetchData: () => any;
   let overviewText: string;
   let accessesHeader: string;
+  let noDelegationsInfoText: string;
 
   useEffect(() => {
     if (loading) {
@@ -74,11 +75,13 @@ export const OverviewPageContent = ({
       fetchData = async () => await dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
+      noDelegationsInfoText = t('api_delegation.no_offered_delegations');
       break;
     case LayoutState.Received:
       fetchData = async () => await dispatch(fetchOverviewOrgsReceived());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
+      noDelegationsInfoText = t('api_delegation.no_received_delegations');
       break;
   }
 
@@ -132,7 +135,7 @@ export const OverviewPageContent = ({
     setIsEditable(false);
   };
 
-  const accordions = () => {
+  const activeDelegations = () => {
     if (error) {
       return (
         <div className={classes.errorPanel}>
@@ -151,11 +154,13 @@ export const OverviewPageContent = ({
       return (
         <div className={classes.spinnerContainer}>
           <Spinner
-            title={String(t('api_delegation.loading'))}
+            title={String(t('common.loading'))}
             size='large'
           />
         </div>
       );
+    } else if (overviewOrgs.length < 1) {
+      return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
     }
     return overviewOrgs.map((org) => (
       <OrgDelegationAccordion
@@ -199,7 +204,7 @@ export const OverviewPageContent = ({
         </Panel>
         <div>
           {overviewOrgs.length > 0 && (
-            <div className={classes.pageContentContainer}>
+            <div className={classes.activeDelegationsHeader}>
               {isSm ? (
                 <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
               ) : (
@@ -229,7 +234,7 @@ export const OverviewPageContent = ({
             </div>
           )}
         </div>
-        <div className={classes.accordion}>{accordions()}</div>
+        <div className={classes.activeDelegations}>{activeDelegations()}</div>
         {isEditable && (
           <div className={classes.saveSection}>
             <Button

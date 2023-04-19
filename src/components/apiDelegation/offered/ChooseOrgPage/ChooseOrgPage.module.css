@@ -50,4 +50,13 @@
 
 .accordionContainerText {
   margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.topText{
+  font-weight: 500;
+}
+
+.chosenOrgsHeader{
+  font-weight: 500;
 }
