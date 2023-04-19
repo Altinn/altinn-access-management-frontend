@@ -12,7 +12,11 @@ export const RefreshToken = () => {
 
     if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
       lastRefreshTokenTimestamp.current = timeNow;
-      return await axios
+      const instance = axios.create({
+        baseURL: '../../../',
+      });
+
+      return await instance
         .get('accessmanagement/api/v1/authentication/refresh')
         .then((response) => response.data)
         .catch((refreshError) => {
