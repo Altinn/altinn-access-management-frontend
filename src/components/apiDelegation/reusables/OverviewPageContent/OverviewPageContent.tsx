@@ -198,6 +198,8 @@ export const OverviewPageContent = ({
           <a
             className={classes.link}
             href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+            target='_blank'
+            rel='noreferrer'
           >
             {t('common.maskinporten')}
           </a>
