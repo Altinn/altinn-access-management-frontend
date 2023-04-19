@@ -76,6 +76,8 @@ namespace Altinn.AccessManagement
                 });
             }
 
+            await SetLanguageCookie();
+            
             if (ShouldShowAppView())
             {
                 return View();
@@ -104,7 +106,6 @@ namespace Altinn.AccessManagement
         {
             if (User.Identity.IsAuthenticated)
             {
-                SetLanguageCookie();
                 return true;
             }
 
