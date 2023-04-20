@@ -12,7 +12,7 @@ on:
           
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: acn-dgopa/altinn-access-management-frontend
+  IMAGE_NAME: altinn/altinn-access-management-frontend
   CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
   CONTAINER_APP_NAME: altinnaccessmanagementui-app
   CONTAINER_APP_RESOURCE_GROUP_NAME: am-ui-rg
