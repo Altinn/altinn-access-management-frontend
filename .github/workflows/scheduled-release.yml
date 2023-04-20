@@ -86,7 +86,7 @@ jobs:
       RELEASEVERSION: ${{ steps.releaseversion.outputs.RELEASE }}
     
   tag:
-    name: Tag image and commit with release version
+    name: Tag image with release version
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -100,22 +100,18 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "github-actions[bot]"
           git config user.email ""
           git config -l | grep url
+          
       - name: Get last commit id
         id: get_commit_sha
         run: echo "commitid=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           
-      - name: Tag a commit with release version
-        run: |
-          echo "${{ needs.getlatestrelease.outputs.RELEASEVERSION }}"
-          git tag -a ${{ needs.getlatestrelease.outputs.RELEASEVERSION }} -m '${{ inputs.commit_message }}' ${{ steps.get_commit_sha.outputs.commitid }}
-          git push origin tag ${{ needs.getlatestrelease.outputs.RELEASEVERSION }}
-      
       - name: Login to GHCR
         uses: docker/login-action@v2.0.0
         with:
