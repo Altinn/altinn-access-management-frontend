@@ -2,30 +2,30 @@ import * as React from 'react';
 import { useId } from 'react';
 
 import type { ClickHandler } from './Context';
-import { AccordionIconVariant, AccordionContext } from './Context';
-import classes from './Accordion.module.css';
+import { ActionBarIconVariant, ActionBarContext } from './Context';
+import classes from './ActionBar.module.css';
 
-export interface AccordionProps {
+export interface ActionBarProps {
   children?: React.ReactNode;
   onClick: ClickHandler;
   open: boolean;
-  iconVariant?: AccordionIconVariant;
+  iconVariant?: ActionBarIconVariant;
 }
 
 /**
- * @deprecated Use Accordion from @digdir/design-system-react instead.
+ * @deprecated Use ActionBar from @digdir/design-system-react instead.
  */
-export const Accordion = ({
+export const ActionBar = ({
   children,
   open,
   onClick,
-  iconVariant = AccordionIconVariant.Primary,
-}: AccordionProps) => {
+  iconVariant = ActionBarIconVariant.Primary,
+}: ActionBarProps) => {
   const headerId = useId();
   const contentId = useId();
   return (
     <div className={classes.accordion}>
-      <AccordionContext.Provider
+      <ActionBarContext.Provider
         value={{
           onClick,
           open,
@@ -35,9 +35,9 @@ export const Accordion = ({
         }}
       >
         {children}
-      </AccordionContext.Provider>
+      </ActionBarContext.Provider>
     </div>
   );
 };
 
-export default Accordion;
+export default ActionBar;

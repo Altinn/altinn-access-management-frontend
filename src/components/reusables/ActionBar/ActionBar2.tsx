@@ -4,7 +4,7 @@ import * as React from 'react';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
-import classes from './ActionBar.module.css';
+import classes from './ActionBar2.module.css';
 
 export interface ActionBarProps {
   title: string;

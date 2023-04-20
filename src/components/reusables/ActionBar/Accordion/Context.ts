@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-export enum AccordionIconVariant {
+export enum ActionBarIconVariant {
   Primary = 'primary',
   Secondary = 'secondary',
 }
 
-export enum AccordionColor {
+export enum ActionBarColor {
   Light = 'light',
   Neutral = 'neutral',
   Warning = 'warning',
@@ -15,21 +15,21 @@ export enum AccordionColor {
 
 export type ClickHandler = () => void;
 
-export const AccordionContext = createContext<
+export const ActionBarContext = createContext<
   | {
       open: boolean;
       onClick: ClickHandler;
       headerId: string;
       contentId: string;
-      iconVariant: AccordionIconVariant;
+      iconVariant: ActionBarIconVariant;
     }
   | undefined
 >(undefined);
 
-export const useAccordionContext = () => {
-  const context = useContext(AccordionContext);
+export const useActionBarContext = () => {
+  const context = useContext(ActionBarContext);
   if (context === undefined) {
-    throw new Error('useAccordionContext must be used within an AccordionContext');
+    throw new Error('useActionBarContext must be used within an ActionBarContext');
   }
 
   return context;

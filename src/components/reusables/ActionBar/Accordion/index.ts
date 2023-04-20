@@ -1,5 +1,5 @@
-export { Accordion } from './Accordion';
-export { AccordionHeader } from './AccordionHeader';
-export { AccordionContent } from './AccordionContent';
-export { AccordionIconVariant, AccordionColor } from './Context';
-export { AccordionIcon } from './AccordionIcon';
+export { ActionBar } from './ActionBar';
+export { ActionBarHeader } from './ActionBarHeader';
+export { ActionBarContent } from './ActionBarContent';
+export { ActionBarIconVariant, ActionBarColor } from './Context';
+export { ActionBarIcon } from './ActionBarIcon';

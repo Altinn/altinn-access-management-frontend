@@ -1,1 +1,1 @@
-export { ActionBar, ActionIconVariant } from './ActionBar';
+export { ActionBar, ActionIconVariant } from './ActionBar2';

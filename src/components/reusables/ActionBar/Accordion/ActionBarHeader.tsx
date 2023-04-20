@@ -1,22 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import cn from 'classnames';
 
-import classes from './AccordionHeader.module.css';
-import { useAccordionContext } from './Context';
-import { AccordionIcon } from './AccordionIcon';
+import classes from './ActionBarHeader.module.css';
+import { useActionBarContext } from './Context';
+import { ActionBarIcon } from './ActionBarIcon';
 
-export interface AccordionHeaderProps {
+export interface ActionBarHeaderProps {
   children?: React.ReactNode;
   actions?: React.ReactNode;
   subtitle?: string;
 }
 
-export const AccordionHeader = ({
-  children,
-  actions,
-  subtitle,
-}: AccordionHeaderProps) => {
-  const { onClick, open, headerId, contentId } = useAccordionContext();
+export const ActionBarHeader = ({ children, actions, subtitle }: ActionBarHeaderProps) => {
+  const { onClick, open, headerId, contentId } = useActionBarContext();
 
   return (
     <div
@@ -24,7 +20,7 @@ export const AccordionHeader = ({
         [classes['accordion-header--subtitle']]: subtitle,
       })}
     >
-      <AccordionIcon />
+      <ActionBarIcon />
       <button
         className={cn(classes['accordion-header__title'])}
         aria-expanded={open}
