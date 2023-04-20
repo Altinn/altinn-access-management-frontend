@@ -36,7 +36,7 @@ jobs:
       - name: print status
         run: "echo Release could not be found. Request failed with status '${{ steps.get_latest_release_version.outputs.status }}'"
       
-      - name: split release version f.ex v2023.1 will be split into output0: v2023 and output1: 1
+      - name: split release version f.ex v2023.1 will be split into output0 v2023 and output1 1
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         uses: jungwinter/split@v2
         id: split
@@ -44,7 +44,7 @@ jobs:
           msg: "${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
           separator: '.'
           
-      - name: split 'v' and year f.ex v2023 will be split into output0: v and output1: 2023
+      - name: split 'v' and year f.ex v2023 will be split into output0 v and output1 2023
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         uses: jungwinter/split@v2
         id: splitv
@@ -103,7 +103,7 @@ jobs:
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "GitHub Actions Bot"
+          git config user.name "github-actions[bot]"
           git config user.email ""
           git config -l | grep url
       - name: Get last commit id
