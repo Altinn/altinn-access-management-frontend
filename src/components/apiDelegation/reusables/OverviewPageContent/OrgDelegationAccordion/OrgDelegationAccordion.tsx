@@ -53,7 +53,7 @@ export const OrgDelegationAccordion = ({
   const actions = (
     <>
       <div
-        className={cn(classes.accordionHeaderAction__isEditable, {
+        className={cn({
           [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
         })}
       >
