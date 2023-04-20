@@ -6,8 +6,6 @@ export enum RouterPath {
   Confirmation = 'confirmation',
   Receipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
-  Profile = 'Profile',
+  Profile = 'ui/Profile',
   BasePath = '/accessmanagement/ui',
-  ProfileAT23 = 'https://at23.altinn.cloud/ui/Profile',
-  ProfileProd = 'https://www.altinn.no/ui/Profile',
 }

@@ -10,7 +10,7 @@ import { ReceiptPage } from '@/components/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/components/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/resources/NotFoundSite';
 
-import { RouterPath } from './';
+import { RouterPath } from './RouterPath';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
