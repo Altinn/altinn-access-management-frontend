@@ -4,3 +4,4 @@ infrastructure: infrastructure/*
 automation: automation/*
 documentation: documentation/*
 enhancement: enhancement/*
+dependencies: ['renovate/*']
