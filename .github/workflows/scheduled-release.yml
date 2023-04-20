@@ -6,10 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: acn-dgopa/altinn-access-management-frontend
-  CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
-  CONTAINER_APP_NAME: altinnaccessmanagementui-app
-  CONTAINER_APP_RESOURCE_GROUP_NAME: am-ui-rg
+  IMAGE_NAME: altinn/altinn-access-management-frontend
 
 jobs:     
   getlatestrelease:
@@ -26,12 +23,12 @@ jobs:
         run: |
           echo "currentyear=$(date +%Y)" >> $GITHUB_ENV
 
-      - name: Get Latest Release
+      - name: Get Latest Release using github api
         uses: octokit/request-action@v2.x
         continue-on-error: true
         id: get_latest_release_version
         with:
-          route: GET /repos/acn-dgopa/altinn-access-management-frontend/releases/latest
+          route: GET /repos/altinn/altinn-access-management-frontend/releases/latest
           mediaType: | # The | is significant!
             format: raw
         env:
@@ -39,7 +36,7 @@ jobs:
       - name: print status
         run: "echo Release could not be found. Request failed with status '${{ steps.get_latest_release_version.outputs.status }}'"
       
-      - name: split release version
+      - name: split release version f.ex v2023.1 will be split into output0: v2023 and output1: 1
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         uses: jungwinter/split@v2
         id: split
@@ -47,7 +44,7 @@ jobs:
           msg: "${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
           separator: '.'
           
-      - name: split 'v' and year
+      - name: split 'v' and year f.ex v2023 will be split into output0: v and output1: 2023
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         uses: jungwinter/split@v2
         id: splitv
@@ -55,7 +52,7 @@ jobs:
           msg: "${{steps.split.outputs._0}}"
           separator: 'v'
           
-      - name: Increment release version
+      - name: Increment release version f.ex the release version for the year is incremented
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         id: update_version
         env:
@@ -63,7 +60,7 @@ jobs:
         run: |
           echo "VERSION=$(($NUM + 1))" >> $GITHUB_ENV
           
-      - name: Format new release version
+      - name: Format new release version when there is atleast 1 previous release. If the release is created in the new year, the current year is set and the identity is reset to 1.
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         id: format_version
         env:
@@ -76,7 +73,7 @@ jobs:
              echo "RELEASEVERSION=v${{env.RELEASE_YEAR}}.${{env.VERSION}}" >> $GITHUB_OUTPUT
           fi
     
-      - name: print release version
+      - name: Set release version if 0 releases. The initial version is set to the v{currentyear}.{identity} f.ex v2023.1
         id: releaseversion
         run: |
           if [ ${{ steps.get_latest_release_version.outputs.status }} = '200' ]
@@ -89,7 +86,7 @@ jobs:
       RELEASEVERSION: ${{ steps.releaseversion.outputs.RELEASE }}
     
   tag:
-    name: Tag image and commit
+    name: Tag image and commit with release version
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -106,14 +103,14 @@ jobs:
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "dhanasneham@gmail.com"
+          git config user.name "GitHub Actions Bot"
           git config user.email ""
           git config -l | grep url
       - name: Get last commit id
         id: get_commit_sha
         run: echo "commitid=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           
-      - name: Tag a commit
+      - name: Tag a commit with release version
         run: |
           echo "${{ needs.getlatestrelease.outputs.RELEASEVERSION }}"
           git tag -a ${{ needs.getlatestrelease.outputs.RELEASEVERSION }} -m '${{ inputs.commit_message }}' ${{ steps.get_commit_sha.outputs.commitid }}
@@ -137,7 +134,7 @@ jobs:
           tags: ${{ needs.getlatestrelease.outputs.RELEASEVERSION }}
 
   update_release_draft:
-    name: Release Drafter
+    name: Release Drafter with releaseversion that was formatted
     needs: [getlatestrelease,tag]
     permissions:
       contents: write  # for release-drafter/release-drafter to create a github release
