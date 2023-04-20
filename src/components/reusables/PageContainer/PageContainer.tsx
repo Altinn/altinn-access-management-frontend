@@ -17,7 +17,8 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   const { t } = useTranslation('common');
 
   const redirectToProfile = () => {
-    window.location.pathname = RouterPath.Profile;
+    const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    window.location.href = 'https://' + cleanHostname + '/' + RouterPath.Profile;
   };
 
   return (
