@@ -1,3 +1,4 @@
+# this workflow will be removed and a generic deploy workflow will be introduced when other environments are established
 name: Build Push to ghcr and deploy
 on:
   workflow_dispatch:
