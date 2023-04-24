@@ -1,11 +1,9 @@
 ﻿using System.Web;
 using Altinn.AccessManagement.Models;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -34,6 +32,9 @@ namespace Altinn.AccessManagement
         /// <param name="antiforgery">the anti forgery service</param>
         /// <param name="platformSettings">settings related to the platform</param>
         /// <param name="env">the current environment</param>
+        /// <param name="profileService">service implementation for user profile</param>
+        /// <param name="httpContextAccessor">http context</param>
+        /// <param name="generalSettings">general settings</param>
         public HomeController(
             IOptions<FrontEndEntryPointOptions> frontEndEntrypoints,
             IAntiforgery antiforgery,
@@ -77,13 +78,13 @@ namespace Altinn.AccessManagement
             }
 
             await SetLanguageCookie();
-            
+
             if (ShouldShowAppView())
             {
                 return View();
             }
 
-            string goToUrl = HttpUtility.UrlEncode($"{_platformSettings.AltinnPlatformBaseUrl}{Request.Path}");
+            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
 
             return Redirect(redirectUrl);
@@ -98,7 +99,7 @@ namespace Altinn.AccessManagement
 
             HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {
-                HttpOnly = false // Make this cookie readable by Javascript.                
+                HttpOnly = false // Make this cookie readable by Javascript.
             });
         }
 

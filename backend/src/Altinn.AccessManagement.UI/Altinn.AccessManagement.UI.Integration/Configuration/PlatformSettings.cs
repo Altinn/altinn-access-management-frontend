@@ -6,9 +6,29 @@
     public class PlatformSettings
     {
         /// <summary>
-        /// Gets or sets the base url for the platform api.
+        /// Gets or sets the access management api endpoint
         /// </summary>
-        public string? PlatformApiBaseUrl { get; set; }
+        public string? ApiAccessManagementEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the authentication api endpoint
+        /// </summary>
+        public string? ApiAuthenticationEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the profile api endpoint.
+        /// </summary>
+        public string? ApiProfileEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the register api endpoint.
+        /// </summary>
+        public string? ApiRegisterEndpoint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resource registry api endpoint.
+        /// </summary>
+        public string? ApiResourceRegistryEndpoint { get; set; }
 
         /// <summary>
         /// Name of the cookie for where JWT is stored
@@ -19,21 +39,6 @@
         /// Open Id Connect Well known endpoint
         /// </summary>
         public string? OpenIdWellKnownEndpoint { get; set; }
-
-        /// <summary>
-        /// Altinn platform base url
-        /// </summary>
-        public string? AltinnPlatformBaseUrl { get; set; }
-
-        /// <summary>
-        /// Endpoint for authentication
-        /// </summary>
-        public string? ApiAuthenticationEndpoint { get; set; }
-
-        /// <summary>
-        /// Endpoint for profile
-        /// </summary>
-        public string? ApiProfileEndpoint { get; set; }
 
         /// <summary>
         /// Gets or sets the subscriptionkey.
