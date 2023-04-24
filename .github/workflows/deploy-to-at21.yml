@@ -67,7 +67,7 @@ jobs:
             --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
             --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} \
             --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.commit_sha }} \
-            --environment-variables 'ASPNETCORE_ENVIRONMENT'='${{ env.ASPNETCORE_ENVIRONMENT }}'
+            --set-env-vars 'ASPNETCORE_ENVIRONMENT'='${{ env.ASPNETCORE_ENVIRONMENT }}'
     - name: logout
       run: >
         az logout
