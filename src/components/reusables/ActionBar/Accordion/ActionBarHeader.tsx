@@ -1,45 +1,47 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import cn from 'classnames';
+
+import { middleText } from '../../CompactDeletableListItem/CompactDeletableListItem.module.css';
 
 import classes from './ActionBarHeader.module.css';
 import { useActionBarContext } from './Context';
 import { ActionBarIcon } from './ActionBarIcon';
 
 export interface ActionBarHeaderProps {
-  children?: React.ReactNode;
+  title?: React.ReactNode;
   actions?: React.ReactNode;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
+  centerText?: React.ReactNode;
 }
 
-export const ActionBarHeader = ({ children, actions, subtitle }: ActionBarHeaderProps) => {
-  const { onClick, open, headerId, contentId } = useActionBarContext();
+export const ActionBarHeader = ({ title, actions, subtitle, centerText }: ActionBarHeaderProps) => {
+  const { onClick, open, headerId, contentId, color } = useActionBarContext();
 
   return (
     <div
-      className={cn(classes['accordion-header'], {
-        [classes['accordion-header--subtitle']]: subtitle,
+      className={cn(classes.actionBarHeader, classes[`actionBarHeader__${color}`], {
+        [classes.actionBarHeader__subtitle]: subtitle,
+        [classes.actionBarHeader__onlyTitle]: !subtitle,
+        [classes.actionBarHeader__open]: open,
       })}
     >
-      <ActionBarIcon />
+      <div className={cn(classes.actionBarHeaderIcon)}>
+        <ActionBarIcon />
+      </div>
       <button
-        className={cn(classes['accordion-header__title'])}
+        className={cn(classes.actionBarHeaderTexts)}
         aria-expanded={open}
         type='button'
         onClick={onClick}
         id={headerId}
         aria-controls={contentId}
       >
-        {children}
-        {subtitle?.length && (
-          <div
-            data-testid='accordion-header-subtitle'
-            className={cn(classes['accordion-header__subtitle'])}
-          >
-            {subtitle}
-          </div>
-        )}
+        {title}
+        {subtitle}
       </button>
-      <div className={cn(classes['accordion-header__actions'])}>{actions}</div>
+      <div className={classes.actionBarHeaderCenterText}>{centerText}</div>
+      <div className={cn(classes.actionBarHeaderActions)}>{actions}</div>
     </div>
   );
 };

@@ -5,14 +5,6 @@ export enum ActionBarIconVariant {
   Secondary = 'secondary',
 }
 
-export enum ActionBarColor {
-  Light = 'light',
-  Neutral = 'neutral',
-  Warning = 'warning',
-  Success = 'success',
-  Danger = 'danger',
-}
-
 export type ClickHandler = () => void;
 
 export const ActionBarContext = createContext<
@@ -22,6 +14,7 @@ export const ActionBarContext = createContext<
       headerId: string;
       contentId: string;
       iconVariant: ActionBarIconVariant;
+      color: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
     }
   | undefined
 >(undefined);

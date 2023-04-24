@@ -1,0 +1,35 @@
+.actionBarContent {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+}
+
+.actionBarContent__light {
+  border-color: #D2D5D8;
+  background-color: #FFFFFF;
+  border-top-color: #FFFFFF;
+}
+
+.actionBarContent__neutral {
+  border-color: #D2D5D8;
+  background-color: #F4F5F6;
+  border-top-color: #F4F5F6;
+}
+
+.actionBarContent__warning {
+  border-color: #CC7005;
+  background-color: #FFFBE6;
+  border-top-color: #FFFBE6;
+}
+
+.actionBarContent__success {
+  border-color: #118849;
+  background-color: #D1F4E1;
+  border-top-color: #D1F4E1;
+}
+
+.actionBarContent__danger {
+  border-color: #E02E49;
+  background-color: #F9D5DB;
+  border-top-color: #F9D5DB;
+}

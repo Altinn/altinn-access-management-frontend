@@ -4,21 +4,27 @@
     padding-right: 0.3rem;
   }
 
-  .orgName{
+  .actionBarTitle{
     font-size: 14px;
   }
 }
 
 @media only screen and (min-width: 769px) {
   .accordionContent{
-    padding-left: 4rem;
-    padding-right: 0.3rem;
+    padding-left: 50px;
+    padding-right: 3px;
   }
 }
 
+
 .accordionHeader__softDelete{
-    text-decoration: line-through;
-    opacity: 70%;
+  text-decoration: line-through;
+  opacity: 70%;
+}
+
+.actionBarSubtitle__softDelete{
+  text-decoration: line-through;
+  opacity: 70%;
 }
 
 .accordionDeleteButtonContainer{
@@ -29,6 +35,13 @@
   margin-right: 15px;
 }
 
-.orgName{
+.actionBarTitle{
   font-weight: 500;
+  margin-top: 5px;
+}
+
+.actionBarSubtitle{
+  font-weight: 400;
+  margin-top: 8px;
+  margin-bottom: 5px;
 }

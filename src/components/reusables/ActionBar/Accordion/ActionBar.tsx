@@ -10,16 +10,15 @@ export interface ActionBarProps {
   onClick: ClickHandler;
   open: boolean;
   iconVariant?: ActionBarIconVariant;
+  color?: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
 }
 
-/**
- * @deprecated Use ActionBar from @digdir/design-system-react instead.
- */
 export const ActionBar = ({
   children,
   open,
   onClick,
   iconVariant = ActionBarIconVariant.Primary,
+  color = 'light',
 }: ActionBarProps) => {
   const headerId = useId();
   const contentId = useId();
@@ -32,6 +31,7 @@ export const ActionBar = ({
           headerId,
           contentId,
           iconVariant,
+          color,
         }}
       >
         {children}
