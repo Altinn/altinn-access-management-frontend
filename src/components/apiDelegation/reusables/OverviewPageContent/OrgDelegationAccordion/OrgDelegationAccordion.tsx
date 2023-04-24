@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-  Accordion,
-  AccordionHeader,
-  AccordionContent,
-  Button,
-  ButtonColor,
-  ButtonVariant,
-  List,
-  ButtonSize,
-} from '@digdir/design-system-react';
+import { Button, ButtonColor, ButtonVariant, List, ButtonSize } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -25,6 +16,7 @@ import {
   ActionBar,
   ActionBarContent,
   ActionBarHeader,
+  ActionBarHeaderTitles,
 } from '@/components/reusables/ActionBar/Accordion';
 
 import classes from './OrgDelegationAccordion.module.css';
@@ -57,17 +49,6 @@ export const OrgDelegationAccordion = ({
 
   const actions = (
     <>
-      <div
-        className={cn(classes.accordionHeaderAction__isEditable, {
-          [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
-        })}
-      >
-        {!isSm && (
-          <span>
-            {numberOfAccesses} {t('api_delegation.api_accesses')}
-          </span>
-        )}
-      </div>
       {delegateToOrgCallback && (
         <Button
           variant={ButtonVariant.Quiet}
@@ -121,49 +102,43 @@ export const OrgDelegationAccordion = ({
 
   return (
     <div>
-      <Accordion
-        onClick={() => {
-          setOpen(!open);
-        }}
-        open={open}
-      >
-        <AccordionHeader
-          actions={actions}
-          subtitle={t('api_delegation.org_nr') + ' ' + organization.orgNr}
-        >
-          <div
-            className={cn(classes.orgName, {
-              [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
-            })}
-          >
-            {organization.orgName}
-          </div>
-        </AccordionHeader>
-        <AccordionContent>
-          <div className={classes.accordionContent}>
-            <List borderStyle={'dashed'}>{listItems}</List>
-          </div>
-        </AccordionContent>
-      </Accordion>
-
       <ActionBar
         onClick={() => {
           setOpen(!open);
         }}
         open={open}
+        color={'neutral'}
       >
         <ActionBarHeader
           actions={actions}
-          subtitle={t('api_delegation.org_nr') + ' ' + organization.orgNr}
-        >
-          <div
-            className={cn(classes.orgName, {
-              [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
-            })}
-          >
-            {organization.orgName}
-          </div>
-        </ActionBarHeader>
+          title={
+            <div
+              className={cn(classes.actionBarTitle, {
+                [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
+              })}
+            >
+              {organization.orgName}
+            </div>
+          }
+          subtitle={
+            <div className={classes.actionBarSubtitle}>
+              {t('api_delegation.org_nr') + ' ' + organization.orgNr}
+            </div>
+          }
+          centerText={
+            <div
+              className={cn({
+                [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
+              })}
+            >
+              {!isSm && (
+                <span>
+                  {numberOfAccesses} {t('api_delegation.api_accesses')}
+                </span>
+              )}
+            </div>
+          }
+        ></ActionBarHeader>
         <ActionBarContent>
           <div className={classes.accordionContent}>
             <List borderStyle={'dashed'}>{listItems}</List>
