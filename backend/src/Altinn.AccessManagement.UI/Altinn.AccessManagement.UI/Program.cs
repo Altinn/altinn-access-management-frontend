@@ -23,6 +23,7 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -161,6 +162,15 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
     catch (Exception vaultException)
     {
         logger.LogError(vaultException, $"Unable to read application insights key.");
+    }
+
+    try
+    {
+        config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
+    }
+    catch (Exception vaultException)
+    {
+        logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
     }
 }
 
