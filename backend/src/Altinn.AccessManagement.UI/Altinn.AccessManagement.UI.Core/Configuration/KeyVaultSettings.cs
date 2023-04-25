@@ -9,4 +9,5 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Gets or sets the secret uri
         /// </summary>
         public string SecretUri { get; set; }
+    }
 }
