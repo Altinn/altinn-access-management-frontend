@@ -177,15 +177,14 @@ To run the code together with access-management backend to the following
 
 - Choose an account and click on button to proceed to react-app
 
-### Name convention on branches
+### Naming convention on branches
+Start with these names for your branch depending on what your branch includes.
 
-categories:
-    labels:
-      - 'automation'
-      - 'bugfix'
-      - 'dependencies'
-      - 'documentation'
-      - 'enhancement'
-      - 'feature'
-      - 'infrastructure'
-      - 'performance'
+  - 'automation/'
+  - 'bugfix/'
+  - 'dependencies/'
+  - 'documentation/'
+  - 'enhancement/'
+  - 'feature/'
+  - 'infrastructure/'
+  - 'performance/'
