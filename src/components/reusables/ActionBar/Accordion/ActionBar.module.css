@@ -4,3 +4,120 @@
   background-color: var(--component-accordion-color-background);
   width: var(--component-panel-size-width);
 }
+
+.actionBarHeader {
+  --component-actionbar_header-border_top_style: solid;
+  display: flex;
+  border-width: 1px;
+  border-style: var(--component-actionbar_header-border_top_style);
+  border-radius: 4px;
+}
+
+.actionBarHeader__open{
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-style: none;
+}
+
+.actionBarHeader__open:hover{
+  border-bottom-style: none;
+}
+
+.actionBarHeader__light {
+  border-color: #D2D5D8;
+  background-color: #FFFFFF;
+}
+
+.actionBarHeader__light:hover {
+  background-color: #E9EAEC;
+}
+
+.actionBarHeader__neutral {
+  border-color: #D2D5D8;
+  background-color: #F4F5F6;
+}
+
+.actionBarHeader__neutral:hover {
+  background-color: #E9EAEC;
+}
+
+.actionBarHeader__warning {
+  border-color: #CC7005;
+  background-color: #FFFBE6;
+}
+
+.actionBarHeader__warning:hover {
+  background-color: #FFF4B4;
+}
+
+.actionBarHeader__success {
+  border-color: #118849;
+  background-color: #D1F4E1;
+}
+
+.actionBarHeader__success:hover {
+  background-color: #8BE4B5;
+}
+
+.actionBarHeader__danger {
+  border-color: #E02E49;
+  background-color: #F9D5DB;
+}
+
+.actionBarHeader__danger:hover {
+  background-color: #F3ABB6;
+}
+
+.actionBarHeaderTexts {
+  --component-actionbar_header_title-color-background: none;
+  font-family: inherit;
+  flex: 1 1 auto;
+  border-style: none;
+  text-align: var(--component-actionbar_header_title-text-align);
+  background-color: var(--component-actionbar_header_title-color-background);
+  font-size: var(--font_size-300);
+  margin-left: 5px;
+  line-height: 16px;
+  word-break: break-word;
+}
+
+.actionBarHeaderActions {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 0.3rem;
+  align-items: center;
+  padding: 0;
+  margin-right: 10px;
+}
+
+.actionBarSubtitle{
+  font-weight: 400;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.actionBarHeader__subtitle{
+  height: 68px;
+}
+
+.actionBarHeader__onlyTitle{
+  height: 48px;
+}
+
+.actionBarHeaderIcon{
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.actionBarHeaderCenterText{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-style: none;
+  background-color: inherit;
+  padding: 0;
+  word-break: break-word;
+  font-size: 16px;
+  font-weight: 400;
+}

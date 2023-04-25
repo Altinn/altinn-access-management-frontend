@@ -12,12 +12,7 @@ import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import { DeletableListItem } from '@/components/reusables';
 import { useMediaQuery } from '@/resources/hooks';
-import {
-  ActionBar,
-  ActionBarContent,
-  ActionBarHeader,
-  ActionBarHeaderTitles,
-} from '@/components/reusables/ActionBar/Accordion';
+import { ActionBar, ActionBarHeader } from '@/components/reusables/ActionBar/Accordion';
 
 import classes from './OrgDelegationAccordion.module.css';
 
@@ -74,7 +69,7 @@ export const OrgDelegationAccordion = ({
             {!isSm && t('api_delegation.undo')}
           </Button>
         ) : (
-          <div className={classes.accordionDeleteButtonContainer}>
+          <div>
             <Button
               variant={ButtonVariant.Quiet}
               color={ButtonColor.Danger}
@@ -101,54 +96,48 @@ export const OrgDelegationAccordion = ({
   ));
 
   return (
-    <div>
-      <ActionBar
-        onClick={() => {
-          setOpen(!open);
-        }}
-        open={open}
-        color={'neutral'}
-      >
-        <ActionBarHeader
-          actions={actions}
-          title={
-            <div
-              className={cn(classes.actionBarTitle, {
-                [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
-              })}
-            >
-              {organization.orgName}
-            </div>
-          }
-          subtitle={
-            <div
-              className={cn(classes.actionBarSubtitle, {
-                [classes.actionBarSubtitle__softDelete]: organization.isAllSoftDeleted,
-              })}
-            >
-              {t('api_delegation.org_nr') + ' ' + organization.orgNr}
-            </div>
-          }
-          centerText={
-            <div
-              className={cn({
-                [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
-              })}
-            >
-              {!isSm && (
-                <span>
-                  {numberOfAccesses} {t('api_delegation.api_accesses')}
-                </span>
-              )}
-            </div>
-          }
-        ></ActionBarHeader>
-        <ActionBarContent>
-          <div className={classes.accordionContent}>
-            <List borderStyle={'dashed'}>{listItems}</List>
-          </div>
-        </ActionBarContent>
-      </ActionBar>
-    </div>
+    <ActionBar
+      onClick={() => {
+        setOpen(!open);
+      }}
+      open={open}
+      color={'warning'}
+      actions={actions}
+      title={
+        <div
+          className={cn(classes.actionBarTitle, {
+            [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
+          })}
+        >
+          {organization.orgName}
+        </div>
+      }
+      subtitle={
+        <div
+          className={cn(classes.actionBarSubtitle, {
+            [classes.actionBarSubtitle__softDelete]: organization.isAllSoftDeleted,
+          })}
+        >
+          {t('api_delegation.org_nr') + ' ' + organization.orgNr}
+        </div>
+      }
+      additionalText={
+        <div
+          className={cn({
+            [classes.accordionHeader__softDelete]: organization.isAllSoftDeleted,
+          })}
+        >
+          {!isSm && (
+            <span>
+              {numberOfAccesses} {t('api_delegation.api_accesses')}
+            </span>
+          )}
+        </div>
+      }
+    >
+      <div className={classes.accordionContent}>
+        <List borderStyle={'dashed'}>{listItems}</List>
+      </div>
+    </ActionBar>
   );
 };

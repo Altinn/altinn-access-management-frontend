@@ -16,8 +16,8 @@ export const ActionBarIcon = () => {
     },
   ];
   const props = {
-    height: 23.53,
-    width: 26.35,
+    height: 30,
+    width: 30,
     className: cn(iconClassnames),
     'data-testid': iconVariant,
     onClick,

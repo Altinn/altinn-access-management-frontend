@@ -1,7 +1,6 @@
 @media only screen and (max-width: 768px) { 
   .accordionContent{
     padding-left: 0.7rem;
-    padding-right: 0.3rem;
   }
 
   .actionBarTitle{
@@ -12,8 +11,11 @@
 @media only screen and (min-width: 769px) {
   .accordionContent{
     padding-left: 50px;
-    padding-right: 3px;
   }
+}
+
+.accordionContent{
+  padding-right: 10px;
 }
 
 
@@ -27,9 +29,6 @@
   opacity: 70%;
 }
 
-.accordionDeleteButtonContainer{
-  margin-left: 7.2px;
-}
 
 .accordionHeaderRightText{
   margin-right: 15px;
