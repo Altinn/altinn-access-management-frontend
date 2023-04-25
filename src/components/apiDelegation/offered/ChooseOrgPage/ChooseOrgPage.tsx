@@ -107,7 +107,7 @@ export const ChooseOrgPage = () => {
       <ActionBar
         key={index}
         title={org.orgName}
-        subtitle={org.orgNr}
+        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
         icon={ActionIconVariant.Add}
         actionCallBack={() => dispatch(softAddOrg(org))}
       />
@@ -119,7 +119,7 @@ export const ChooseOrgPage = () => {
       <ActionBar
         key={index}
         title={org.orgName}
-        subtitle={org.orgNr}
+        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
         icon={ActionIconVariant.Remove}
         actionCallBack={() => {
           handleSoftRemove(org);
