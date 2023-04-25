@@ -16,11 +16,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public string App { get; set; }
 
         /// <summary>
-        /// Uri to keyvault
-        /// </summary>
-        public string KeyVaultUri { get; set; }
-
-        /// <summary>
         /// Name of the certificate secret
         /// </summary>
         public string CertificateName { get; set; }
