@@ -1,0 +1,31 @@
+.filterContent {
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.optionList {
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    border-top: 1px solid var(--semantic-border-neutral-divider);
+    border-left: 1px solid var(--semantic-border-neutral-divider);
+    border-right: 1px solid var(--semantic-border-neutral-divider);
+}
+
+.option {
+    border-bottom: 1px solid var(--semantic-border-neutral-divider);
+    padding: 6px 10px 6px 10px;
+}
+
+.scrollContainer {
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    
+
+}
+
+.searchField {
+    padding: 12px 0px 12px 0px;
+}

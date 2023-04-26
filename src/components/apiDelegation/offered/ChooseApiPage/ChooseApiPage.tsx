@@ -1,11 +1,12 @@
 import type { MultiSelectOption } from '@digdir/design-system-react';
 import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
-import { Select, List, Spinner } from '@digdir/design-system-react';
+import { List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
+import { ReactComponent as FilterIcon } from '@/assets/Filter.svg';
 import {
   Page,
   PageHeader,
@@ -35,6 +36,7 @@ import {
   filter,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { Filter, type FilterOption } from '@/components/reusables/Filter';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -77,10 +79,9 @@ export const ChooseApiPage = () => {
     dispatch(search(searchString));
   };
 
-  const filterOptions: MultiSelectOption[] = apiProviders.map((provider: string) => ({
-    label: provider,
+  const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
+    label: provider.toLowerCase(),
     value: provider,
-    deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
   const delegableApiAccordions = () => {
@@ -181,19 +182,27 @@ export const ChooseApiPage = () => {
               </div>
             )}
             <div className={classes.searchSection}>
-              <SearchField
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleSearch(event.target.value);
-                }}
-              ></SearchField>
+              <div className={classes.searchField}>
+                <SearchField
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    handleSearch(event.target.value);
+                  }}
+                ></SearchField>
+              </div>
               <div className={classes.filter}>
-                <Select
-                  label={String(t('api_delegation.filter_label'))}
-                  deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
-                  multiple={true}
-                  onChange={handleFilterChange}
-                  options={filterOptions}
+                <Filter
+                  options={[
+                    ...filterOptions,
+                    { label: 'Hey', value: 'hey' },
+                    { label: 'Ney', value: 'ney' },
+                    { label: 'Bey', value: 'bey' },
+                    { label: 'Crey', value: 'crey' },
+                    { label: 'I have no idea anymore', value: 'no idea' },
+                  ]}
+                  icon={<FilterIcon />}
+                  label='Filtrer på etat'
+                  onApply={handleFilterChange}
                 />
               </div>
             </div>
