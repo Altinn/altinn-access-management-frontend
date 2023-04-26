@@ -32,7 +32,7 @@
   background-color: #FFFFFF;
 }
 
-.actionBarHeader__light:hover {
+.actionBarHeader__light__expandable:hover {
   background-color: #E9EAEC;
 }
 
@@ -41,7 +41,7 @@
   background-color: #F4F5F6;
 }
 
-.actionBarHeader__neutral:hover {
+.actionBarHeader__neutral__expandable:hover {
   background-color: #E9EAEC;
 }
 
@@ -50,7 +50,7 @@
   background-color: #FFFBE6;
 }
 
-.actionBarHeader__warning:hover {
+.actionBarHeader__warning__expandable:hover {
   background-color: #FFF4B4;
 }
 
@@ -59,7 +59,7 @@
   background-color: #D1F4E1;
 }
 
-.actionBarHeader__success:hover {
+.actionBarHeader__success__expandable:hover {
   background-color: #8BE4B5;
 }
 
@@ -68,11 +68,11 @@
   background-color: #F9D5DB;
 }
 
-.actionBarHeader__danger:hover {
+.actionBarHeader__danger__expandable:hover {
   background-color: #F3ABB6;
 }
 
-.actionBarHeaderTexts {
+.actionBarHeaderButton {
   --component-actionbar_header_title-color-background: none;
   font-family: inherit;
   flex: 1 1 auto;
@@ -85,8 +85,12 @@
   word-break: break-word;
 }
 
+.actionBarHeaderButton__expandable {
+  cursor: pointer;
+}
+
 .actionBarHeaderActions {
-  display: grid;
+  display: flex;
   grid-auto-flow: column;
   column-gap: 0.3rem;
   align-items: center;
@@ -94,16 +98,16 @@
   margin-right: 10px;
 }
 
+.actionBarHeaderActions__expandable {
+  cursor:pointer;
+}
+
 .actionBarSubtitle{
   font-weight: 400;
   margin-top: 5px;
   margin-bottom: 5px;
-  display: block;
 }
 
-.actionBarTitle{
-  display: block;
-}
 
 .actionBarHeader__subtitle{
   height: 68px;
@@ -129,4 +133,8 @@
   word-break: break-word;
   font-size: 16px;
   font-weight: 400;
+}
+
+.actionBarHeaderCenterText__expandable{
+  cursor: pointer;
 }

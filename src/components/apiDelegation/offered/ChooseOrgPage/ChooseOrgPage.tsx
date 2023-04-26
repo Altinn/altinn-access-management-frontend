@@ -134,7 +134,9 @@ export const ChooseOrgPage = () => {
             icon={<MinusCircle />}
             variant={ButtonVariant.Quiet}
             color={ButtonColor.Danger}
-            onClick={() => dispatch(softRemoveOrg(org))}
+            onClick={() => {
+              handleSoftRemove(org);
+            }}
             aria-label={'remove'}
           ></Button>
         }

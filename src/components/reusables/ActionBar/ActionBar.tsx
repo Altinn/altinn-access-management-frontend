@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
 import { useId } from 'react';
 import cn from 'classnames';
@@ -51,7 +53,10 @@ export const ActionBar = ({
             [classes.actionBarHeader__onlyTitle]: !subtitle,
             [classes.actionBarHeader__open]: open,
             [classes.actionBarHeader__expandable]: children,
+            [classes[`actionBarHeader__${color}__expandable`]]: children,
           })}
+          onClick={onClick}
+          tabIndex={-1}
         >
           {children && (
             <div className={cn(classes.actionBarHeaderIcon)}>
@@ -60,35 +65,48 @@ export const ActionBar = ({
           )}
           {children ? (
             <button
-              className={cn(classes.actionBarHeaderTexts)}
+              className={cn(
+                classes.actionBarHeaderButton,
+                classes.actionBarHeaderButton__expandable,
+              )}
               aria-expanded={open}
               type='button'
               onClick={onClick}
               id={headerId}
               aria-controls={contentId}
             >
-              <div className={classes.actionBarTitle}>{title}</div>
+              <div>{title}</div>
               <div className={classes.actionBarSubtitle}>{subtitle}</div>
             </button>
           ) : (
             <button
-              className={cn(classes.actionBarHeaderTexts)}
+              className={cn(classes.actionBarHeaderButton)}
               type='button'
               onClick={onClick}
               id={headerId}
             >
-              {title}
-              {subtitle}
+              <div>{title}</div>
+              <div className={classes.actionBarSubtitle}>{subtitle}</div>
             </button>
           )}
           <button
-            className={classes.actionBarHeaderCenterText}
+            className={cn(classes.actionBarHeaderCenterText, {
+              [classes.actionBarHeaderCenterText__expandable]: children,
+            })}
             onClick={onClick}
             tabIndex={-1}
           >
             {additionalText}
           </button>
-          {actions && <div className={cn(classes.actionBarHeaderActions)}>{actions}</div>}
+          {actions && (
+            <div
+              className={cn(classes.actionBarHeaderActions, {
+                [classes.actionBarHeaderActions__expandable]: children,
+              })}
+            >
+              {actions}
+            </div>
+          )}
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
