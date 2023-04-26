@@ -51,9 +51,21 @@ components/
 
 ## Coding conventions 👮‍♀️
 
+### Naming convention on branches
+Start with these names for your branch depending on what your branch includes.
+
+  - 'automation/'
+  - 'bugfix/'
+  - 'dependencies/'
+  - 'documentation/'
+  - 'enhancement/'
+  - 'feature/'
+  - 'infrastructure/'
+  - 'performance/'
+
 ### ClassNames
 
-Use [PascalCase](https://techterms.com/definition/pascalcase) for both component and file names.
+Use [PascalCase](https://techterms.com/definition/pascalcase) for component file names.
 
 ### Code style
 
@@ -176,3 +188,4 @@ To run the code together with access-management backend to the following
 - You should now see localtest intro with access management as only application
 
 - Choose an account and click on button to proceed to react-app
+
