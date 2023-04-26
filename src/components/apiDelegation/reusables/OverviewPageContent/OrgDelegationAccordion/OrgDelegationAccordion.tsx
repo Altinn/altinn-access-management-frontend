@@ -100,7 +100,7 @@ export const OrgDelegationAccordion = ({
         setOpen(!open);
       }}
       open={open}
-      color={'warning'}
+      color={'neutral'}
       actions={actions}
       title={
         <div
