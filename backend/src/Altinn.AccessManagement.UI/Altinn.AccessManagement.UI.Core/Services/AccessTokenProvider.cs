@@ -56,6 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (_accessToken == null || _cacheTokenUntil < DateTime.UtcNow)
                 {
                     string certBase64 = await _keyVaultService.GetCertificateAsync(_keyVaultSettings.SecretUri, _clientSettings.CertificateName);
+                    _logger.LogInformation("keyVaultUri: {_keyVaultSettings.SecretUri} certName: {_clientSettings.CertificateName} certBase64: {certBase64}", _keyVaultSettings.SecretUri, _clientSettings.CertificateName, certBase64);
                     _accessToken = _accessTokenGenerator.GenerateAccessToken(
                         _clientSettings.Issuer,
                         _clientSettings.App,
@@ -68,8 +69,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Failed to generate access token");
-                return null;
+                _logger.LogError(ex, "Failed to generate access token.");
+                throw;
             }
             finally
             {
