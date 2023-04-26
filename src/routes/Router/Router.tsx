@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import * as React from 'react';
 
@@ -9,21 +10,7 @@ import { ReceiptPage } from '@/components/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/components/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/resources/NotFoundSite';
 
-// when typescript 5 is released we can further improve the routing to use absolute paths.
-// This is because typescript 5 will have support for computed enums for strings https://github.com/microsoft/TypeScript/issues/40793
-export enum RouterPath {
-  OfferedApiDelegations = 'offered-api-delegations',
-  Overview = 'overview',
-  ChooseApi = 'choose-api',
-  ChooseOrg = 'choose-org',
-  Confirmation = 'confirmation',
-  Receipt = 'receipt',
-  ReceivedApiDelegations = 'received-api-delegations',
-  Profile = 'Profile',
-  BasePath = '/accessmanagement/ui',
-  ProfileAT23 = 'https://at23.altinn.cloud/ui/Profile',
-  ProfileProd = 'https://www.altinn.no/ui/Profile',
-}
+import { RouterPath } from './RouterPath';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
