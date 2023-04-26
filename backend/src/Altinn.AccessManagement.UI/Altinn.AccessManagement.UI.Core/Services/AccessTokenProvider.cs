@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to generate access token.");
-                throw;
+                return null;
             }
             finally
             {

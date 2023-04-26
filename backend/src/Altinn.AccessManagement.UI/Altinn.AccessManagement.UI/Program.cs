@@ -20,12 +20,10 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using KeyVaultSettings = AltinnCore.Authentication.Constants.KeyVaultSettings;
 
 ILogger logger;
 

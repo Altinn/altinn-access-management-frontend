@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Platform.Profile.Models;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +21,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IAccessTokenGenerator _accessTokenGenerator;
         private readonly IAccessTokenProvider _accessTokenProvider;
 
         /// <summary>
@@ -32,22 +30,20 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="logger">the handler for logger service</param>
         /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
         /// <param name="platformSettings"> platform settings configuration</param>
-        /// <param name="accessTokenGenerator">the handler for access token generator</param>
+        /// <param name="accessTokenProvider">the handler for access token generator</param>
         public ProfileClient(
             HttpClient httpClient,
             ILogger<ProfileClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
-            IAccessTokenGenerator accessTokenGenerator,
             IAccessTokenProvider accessTokenProvider) 
         {
             _logger = logger;
-            httpClient.BaseAddress = new Uri(platformSettings.Value.ApiProfileEndpoint);            
-            httpClient.DefaultRequestHeaders.Add(platformSettings.Value.SubscriptionKeyHeaderName, platformSettings.Value.SubscriptionKey);
+            _platformSettings = platformSettings.Value;
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiProfileEndpoint);            
+            httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
-            _platformSettings = platformSettings.Value;
-            _accessTokenGenerator = accessTokenGenerator;
             _accessTokenProvider = accessTokenProvider;
         }
 
