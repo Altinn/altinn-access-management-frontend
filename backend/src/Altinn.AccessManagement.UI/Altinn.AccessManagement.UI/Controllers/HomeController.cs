@@ -76,8 +76,7 @@ namespace Altinn.AccessManagement
                     HttpOnly = false // Make this cookie readable by Javascript.
                 });
             }
-
-
+            
             if (await ShouldShowAppView())
             {
                 return View();
