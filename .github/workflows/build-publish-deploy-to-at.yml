@@ -60,7 +60,7 @@ jobs:
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
             --resource-group ${{ vars.CONTAINER_APP_RESOURCE_GROUP_NAME }} \
-            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.commit_sha }}
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
     - name: logout
       run: >
         az logout
@@ -89,7 +89,7 @@ jobs:
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
             --resource-group ${{ vars.CONTAINER_APP_RESOURCE_GROUP_NAME }} \
-            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.commit_sha }}
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
     - name: logout
       run: >
         az logout
