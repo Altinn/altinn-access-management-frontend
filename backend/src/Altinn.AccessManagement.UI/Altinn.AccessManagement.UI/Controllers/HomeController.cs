@@ -76,10 +76,8 @@ namespace Altinn.AccessManagement
                     HttpOnly = false // Make this cookie readable by Javascript.
                 });
             }
-
-            await SetLanguageCookie();
-
-            if (ShouldShowAppView())
+            
+            if (await ShouldShowAppView())
             {
                 return View();
             }
@@ -103,10 +101,11 @@ namespace Altinn.AccessManagement
             });
         }
 
-        private bool ShouldShowAppView()
+        private async Task<bool> ShouldShowAppView()
         {
             if (User.Identity.IsAuthenticated)
             {
+                await SetLanguageCookie();
                 return true;
             }
 
