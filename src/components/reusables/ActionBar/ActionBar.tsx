@@ -50,6 +50,7 @@ export const ActionBar = ({
             [classes.actionBarHeader__subtitle]: subtitle,
             [classes.actionBarHeader__onlyTitle]: !subtitle,
             [classes.actionBarHeader__open]: open,
+            [classes.actionBarHeader__expandable]: children,
           })}
         >
           {children && (

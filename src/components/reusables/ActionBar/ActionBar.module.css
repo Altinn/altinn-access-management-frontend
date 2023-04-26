@@ -19,6 +19,10 @@
   border-bottom-style: none;
 }
 
+.actionBarHeader__expandable{
+  cursor:pointer;
+}
+
 .actionBarHeader__open:hover{
   border-bottom-style: none;
 }
