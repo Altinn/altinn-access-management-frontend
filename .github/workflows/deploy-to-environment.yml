@@ -14,8 +14,6 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: altinn/altinn-access-management-frontend
   CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
-  CONTAINER_APP_NAME: altinnaccessmanagementui-app
-  CONTAINER_APP_RESOURCE_GROUP_NAME: am-ui-rg
   
 jobs:
   deploy:
@@ -43,7 +41,11 @@ jobs:
       with:
         inlineScript: >
           az config set extension.use_dynamic_install=yes_without_prompt
-          az containerapp update --name ${{ env.CONTAINER_APP_NAME }} --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}
+          az containerapp update \
+            --name ${{ vars.CONTAINER_APP_NAME }} \
+            --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
+            --resource-group ${{ vars.CONTAINER_APP_RESOURCE_GROUP_NAME }} \
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}
     - name: logout
       run: >
         az logout
