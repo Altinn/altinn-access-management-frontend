@@ -15,10 +15,11 @@
   margin-right: 13px;
 }
 
-.userText{ 
+.userInfoText{ 
   font-weight: 500;
   margin: 0;
   margin-right: 1rem;
   margin-left: 1rem;
   text-align: right;
+  word-break: break-word;
 }

@@ -5,7 +5,7 @@ import { ChevronDownIcon as Chevron } from '@navikt/aksel-icons';
 import { ReactComponent as CircleArrow } from '@/assets/CircleArrow.svg';
 
 import classes from './ActionBarIcon.module.css';
-import { useActionBarContext, ActionBarIconVariant } from './Context';
+import { useActionBarContext } from './Context';
 
 export const ActionBarIcon = () => {
   const { onClick, open, iconVariant } = useActionBarContext();
@@ -24,9 +24,9 @@ export const ActionBarIcon = () => {
   };
 
   switch (iconVariant) {
-    case ActionBarIconVariant.Primary:
+    case 'primary':
       return <Chevron {...props} />;
-    case ActionBarIconVariant.Secondary:
+    case 'secondary':
       return <CircleArrow {...props} />;
   }
 };

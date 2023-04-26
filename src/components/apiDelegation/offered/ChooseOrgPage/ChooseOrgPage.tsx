@@ -1,17 +1,18 @@
-import { Spinner } from '@digdir/design-system-react';
+import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
 import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
+import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import {
   Page,
   PageHeader,
   PageContent,
   PageSize,
   ActionBar,
-  ActionIconVariant,
   NavigationButtons,
   PageContainer,
 } from '@/components/reusables';
@@ -108,8 +109,16 @@ export const ChooseOrgPage = () => {
         key={index}
         title={org.orgName}
         subtitle={org.orgNr}
-        icon={ActionIconVariant.Add}
-        actionCallBack={() => dispatch(softAddOrg(org))}
+        actions={
+          <Button
+            icon={<AddCircle />}
+            variant={ButtonVariant.Quiet}
+            color={ButtonColor.Success}
+            onClick={() => dispatch(softAddOrg(org))}
+            aria-label={'add'}
+          ></Button>
+        }
+        color={'neutral'}
       />
     );
   });
@@ -120,10 +129,16 @@ export const ChooseOrgPage = () => {
         key={index}
         title={org.orgName}
         subtitle={org.orgNr}
-        icon={ActionIconVariant.Remove}
-        actionCallBack={() => {
-          handleSoftRemove(org);
-        }}
+        actions={
+          <Button
+            icon={<MinusCircle />}
+            variant={ButtonVariant.Quiet}
+            color={ButtonColor.Danger}
+            onClick={() => dispatch(softRemoveOrg(org))}
+            aria-label={'remove'}
+          ></Button>
+        }
+        color={'success'}
       />
     );
   });

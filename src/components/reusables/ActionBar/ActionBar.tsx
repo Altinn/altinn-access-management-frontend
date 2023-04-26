@@ -3,7 +3,7 @@ import { useId } from 'react';
 import cn from 'classnames';
 
 import type { ClickHandler } from './Context';
-import { ActionBarIconVariant, ActionBarContext } from './Context';
+import { ActionBarContext } from './Context';
 import classes from './ActionBar.module.css';
 import { ActionBarIcon } from './ActionBarIcon';
 import { ActionBarContent } from './ActionBarContent';
@@ -13,18 +13,18 @@ export interface ActionBarProps {
   additionalText?: React.ReactNode;
   children?: React.ReactNode;
   color?: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
-  iconVariant?: ActionBarIconVariant;
-  onClick: ClickHandler;
-  open: boolean;
+  iconVariant?: 'primary' | 'secondary';
+  onClick?: ClickHandler;
+  open?: boolean;
   subtitle?: React.ReactNode;
   title?: React.ReactNode;
 }
 
 export const ActionBar = ({
   children,
-  open,
+  open = false,
   onClick,
-  iconVariant = ActionBarIconVariant.Primary,
+  iconVariant = 'primary',
   color = 'light',
   title,
   actions,
@@ -34,7 +34,7 @@ export const ActionBar = ({
   const headerId = useId();
   const contentId = useId();
   return (
-    <div>
+    <>
       <ActionBarContext.Provider
         value={{
           onClick,
@@ -57,17 +57,29 @@ export const ActionBar = ({
               <ActionBarIcon />
             </div>
           )}
-          <button
-            className={cn(classes.actionBarHeaderTexts)}
-            aria-expanded={open}
-            type='button'
-            onClick={onClick}
-            id={headerId}
-            aria-controls={contentId}
-          >
-            {title}
-            {subtitle}
-          </button>
+          {children ? (
+            <button
+              className={cn(classes.actionBarHeaderTexts)}
+              aria-expanded={open}
+              type='button'
+              onClick={onClick}
+              id={headerId}
+              aria-controls={contentId}
+            >
+              <div className={classes.actionBarTitle}>{title}</div>
+              <div className={classes.actionBarSubtitle}>{subtitle}</div>
+            </button>
+          ) : (
+            <button
+              className={cn(classes.actionBarHeaderTexts)}
+              type='button'
+              onClick={onClick}
+              id={headerId}
+            >
+              {title}
+              {subtitle}
+            </button>
+          )}
           <button
             className={classes.actionBarHeaderCenterText}
             onClick={onClick}
@@ -79,7 +91,7 @@ export const ActionBar = ({
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
-    </div>
+    </>
   );
 };
 

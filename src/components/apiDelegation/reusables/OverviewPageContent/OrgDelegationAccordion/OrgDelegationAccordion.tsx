@@ -10,9 +10,8 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
-import { DeletableListItem } from '@/components/reusables';
+import { DeletableListItem, ActionBar } from '@/components/reusables';
 import { useMediaQuery } from '@/resources/hooks';
-import { ActionBar, ActionBarHeader } from '@/components/reusables/ActionBar/Accordion';
 
 import classes from './OrgDelegationAccordion.module.css';
 

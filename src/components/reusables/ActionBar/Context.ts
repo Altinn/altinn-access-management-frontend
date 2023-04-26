@@ -1,19 +1,14 @@
 import { createContext, useContext } from 'react';
 
-export enum ActionBarIconVariant {
-  Primary = 'primary',
-  Secondary = 'secondary',
-}
-
 export type ClickHandler = () => void;
 
 export const ActionBarContext = createContext<
   | {
       open: boolean;
-      onClick: ClickHandler;
+      onClick: ClickHandler | undefined;
       headerId: string;
       contentId: string;
-      iconVariant: ActionBarIconVariant;
+      iconVariant: 'primary' | 'secondary';
       color: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
     }
   | undefined

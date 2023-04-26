@@ -94,6 +94,11 @@
   font-weight: 400;
   margin-top: 5px;
   margin-bottom: 5px;
+  display: block;
+}
+
+.actionBarTitle{
+  display: block;
 }
 
 .actionBarHeader__subtitle{

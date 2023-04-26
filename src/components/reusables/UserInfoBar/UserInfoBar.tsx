@@ -31,8 +31,8 @@ export const UserInfoBar = () => {
         </div>
         <div className={classes.userInfoContent}>
           <div>
-            {userInfoName && <h5 className={classes.userText}>{userInfoName}</h5>}
-            {reporteeName && <h5 className={classes.userText}>for {reporteeName}</h5>}
+            {userInfoName && <h5 className={classes.userInfoText}>{userInfoName}</h5>}
+            {reporteeName && <h5 className={classes.userInfoText}>for {reporteeName}</h5>}
           </div>
           <div>
             <SvgIcon

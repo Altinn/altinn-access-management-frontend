@@ -6,5 +6,5 @@ export { NewDelegationAccordion, NewDelegationAccordionButtonType } from './NewD
 export { PageContainer } from './PageContainer';
 export { NavigationButtons } from './NavigationButtons/NavigationButtons';
 export { UserInfoBar } from './UserInfoBar/UserInfoBar';
-export { ActionBar, ActionIconVariant } from './ActionBar';
+export { ActionBar } from './ActionBar';
 export { Page, PageHeader, PageContent, PageColor, PageSize } from './Page';

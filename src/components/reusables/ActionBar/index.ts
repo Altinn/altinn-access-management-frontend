@@ -1,1 +1,3 @@
-export { ActionBar, ActionIconVariant } from './ActionBar2';
+export { ActionBar } from './ActionBar';
+export { ActionBarContent } from './ActionBarContent';
+export { ActionBarIcon } from './ActionBarIcon';
