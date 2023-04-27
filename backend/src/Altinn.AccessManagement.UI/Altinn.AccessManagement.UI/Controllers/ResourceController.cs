@@ -1,10 +1,10 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.Platform.Profile.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -43,19 +43,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Get list of maskinprotenschema resources
         /// </summary>
-        /// <param name="party">the partyid</param>
-        /// <returns></returns>
+        /// <returns>List of API service resources</returns>
         [HttpGet]
-        [Route("accessmanagement/api/v1/{party}/resources/maskinportenschema")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> Get([FromRoute] int party)
+        [Authorize]
+        [Route("accessmanagement/api/v1/resources/maskinportenschema")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> Get()
         {
-            string languageCode = "nb";
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
-            //int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            //UserProfile userProfile = await _profileService.GetUserProfile(userId);
-            //string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
-            List<ServiceResourceFE> resources = await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
-            return resources;
+            return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
     }
 }

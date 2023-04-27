@@ -66,9 +66,8 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
 };
 
 export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
-  const altinnPartyId = getCookie('AltinnPartyId');
   return await axios
-    .get(`/accessmanagement/api/v1/${altinnPartyId}/resources/maskinportenschema`)
+    .get(`/accessmanagement/api/v1/resources/maskinportenschema`)
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
