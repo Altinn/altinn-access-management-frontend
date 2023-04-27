@@ -15,7 +15,7 @@
     <meta name="keywords" content="Altinn Profil API Delegering">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link rel="icon" href="https://altinncdn.no/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="/accessmanagement/assets/accessmanagement.css" />
+    <link rel="stylesheet" type="text/css" href="/accessmanagement/assets/@(options.EntrypointCssFile)" />
     <!-- Font Inter support -->
     <link rel="preconnect" href='https://rsms.me/'>
     <link rel="stylesheet" href='https://rsms.me/inter/inter.css'>
@@ -23,6 +23,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/accessmanagement/assets/accessmanagement.js"></script>
+    <script type="module" src="/accessmanagement/assets/@(options.EntrypointJsFile)"></script>
 </body>
 </html>

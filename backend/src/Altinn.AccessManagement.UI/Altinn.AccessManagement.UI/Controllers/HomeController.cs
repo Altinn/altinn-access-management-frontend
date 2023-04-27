@@ -79,6 +79,7 @@ namespace Altinn.AccessManagement
             
             if (await ShouldShowAppView())
             {
+                SetFrontEndFileNames();                
                 return View();
             }
 
@@ -110,6 +111,18 @@ namespace Altinn.AccessManagement
             }
 
             return false;
+        }
+
+        private void SetFrontEndFileNames()
+        {
+            string dierctoryPath = Path.Combine(_env.WebRootPath, "accessmanagement", "assets");
+            if (Directory.Exists(dierctoryPath))
+            {
+                string? jsFileName = Directory.EnumerateFiles(dierctoryPath, "entrypoint-*.js")?.FirstOrDefault();
+                string? cssFileName = Directory.EnumerateFiles(dierctoryPath, "entrypoint-*.css")?.FirstOrDefault();
+                _generalSettings.EntrypointJsFile = jsFileName != null ? Path.GetFileName(jsFileName) : string.Empty;
+                _generalSettings.EntrypointCssFile = cssFileName != null ? Path.GetFileName(cssFileName) : string.Empty;
+            }
         }
     }
 }

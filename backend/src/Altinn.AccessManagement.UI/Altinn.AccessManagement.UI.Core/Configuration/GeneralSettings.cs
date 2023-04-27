@@ -24,5 +24,15 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Language cookie name
         /// </summary>
         public string LanguageCookie { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entrypoint javascript file name
+        /// </summary>
+        public string EntrypointJsFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the entrypoint css file name.
+        /// </summary>
+        public string EntrypointCssFile { get; set; }
     }
 }
