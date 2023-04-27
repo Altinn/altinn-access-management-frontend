@@ -23,15 +23,15 @@ export interface ActionBarProps {
 }
 
 export const ActionBar = ({
-  children,
-  open = false,
-  onClick,
-  iconVariant = 'primary',
-  color = 'light',
-  title,
   actions,
-  subtitle,
   additionalText,
+  children,
+  color = 'light',
+  iconVariant = 'primary',
+  onClick,
+  open = false,
+  subtitle,
+  title,
 }: ActionBarProps) => {
   const headerId = useId();
   const contentId = useId();
@@ -48,27 +48,25 @@ export const ActionBar = ({
         }}
       >
         <div
-          className={cn(classes.actionBarHeader, classes[`actionBarHeader__${color}`], {
-            [classes.actionBarHeader__subtitle]: subtitle,
-            [classes.actionBarHeader__onlyTitle]: !subtitle,
-            [classes.actionBarHeader__open]: open,
-            [classes.actionBarHeader__expandable]: children,
-            [classes[`actionBarHeader__${color}__expandable`]]: children,
+          className={cn(classes.actionBar, classes[`actionBar__${color}`], {
+            [classes.actionBar__subtitle]: subtitle,
+            [classes.actionBar__onlyTitle]: !subtitle,
+            [classes.actionBar__open]: open,
+            [classes.actionBar__expandable]: children,
+            [classes[`actionBar__${color}__expandable`]]: children,
           })}
           onClick={onClick}
           tabIndex={-1}
+          data-testid='action-bar'
         >
           {children && (
-            <div className={cn(classes.actionBarHeaderIcon)}>
+            <div className={cn(classes.actionBarIcon)}>
               <ActionBarIcon />
             </div>
           )}
           {children ? (
             <button
-              className={cn(
-                classes.actionBarHeaderButton,
-                classes.actionBarHeaderButton__expandable,
-              )}
+              className={cn(classes.actionBarButton, classes.actionBarButton__expandable)}
               aria-expanded={open}
               type='button'
               onClick={onClick}
@@ -80,7 +78,7 @@ export const ActionBar = ({
             </button>
           ) : (
             <button
-              className={cn(classes.actionBarHeaderButton)}
+              className={cn(classes.actionBarButton)}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -90,8 +88,8 @@ export const ActionBar = ({
             </button>
           )}
           <button
-            className={cn(classes.actionBarHeaderCenterText, {
-              [classes.actionBarHeaderCenterText__expandable]: children,
+            className={cn(classes.actionBarCenterText, {
+              [classes.actionBarCenterText__expandable]: children,
             })}
             onClick={onClick}
             tabIndex={-1}
@@ -100,8 +98,8 @@ export const ActionBar = ({
           </button>
           {actions && (
             <div
-              className={cn(classes.actionBarHeaderActions, {
-                [classes.actionBarHeaderActions__expandable]: children,
+              className={cn(classes.actionBarActions, {
+                [classes.actionBarActions__expandable]: children,
               })}
             >
               {actions}
