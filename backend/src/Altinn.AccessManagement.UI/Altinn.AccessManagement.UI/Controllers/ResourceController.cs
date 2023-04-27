@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
-            string languageCode = userProfile?.ProfileSettingPreference?.Language ?? "nb";
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
             return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
