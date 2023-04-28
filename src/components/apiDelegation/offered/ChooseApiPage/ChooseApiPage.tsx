@@ -80,7 +80,7 @@ export const ChooseApiPage = () => {
   };
 
   const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
-    label: provider.toLowerCase(),
+    label: provider,
     value: provider,
   }));
 
@@ -203,6 +203,7 @@ export const ChooseApiPage = () => {
                   icon={<FilterIcon />}
                   label='Filtrer på etat'
                   onApply={handleFilterChange}
+                  searchable={false}
                 />
               </div>
             </div>

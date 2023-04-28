@@ -1,12 +1,17 @@
 @media only screen and (max-width: 768px) {
   .searchField{
-    width: 100%
+    width: 45%
   }
 
   .accordionScrollContainer {
     margin-bottom: 30px;
     width: 100%;
   }
+  .searchSection{
+    display: flex;
+    align-items: center;
+  }
+
 
   .filter {
     padding-top: 0.5rem;

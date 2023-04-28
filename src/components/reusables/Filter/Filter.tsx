@@ -4,6 +4,16 @@ import { Button } from '@digdir/design-system-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  useFloating,
+  offset,
+  useClick,
+  useDismiss,
+  useInteractions,
+  computePosition,
+  shift,
+  autoUpdate,
+} from '@floating-ui/react';
 
 import { ReactComponent as ChevronDown } from '@/assets/ChevronDown.svg';
 import { arraysEqual } from '@/resources/utils';
@@ -15,39 +25,33 @@ import classes from './Filter.module.css';
 export interface FilterProps {
   options: FilterOption[];
   label: string;
+  searchable?: boolean;
   icon?: ReactNode;
   value?: string[];
   onApply?: (value: string[]) => void;
 }
 
-export const Filter = ({ options, label, icon, value, onApply }: FilterProps) => {
+export const Filter = ({ options, label, icon, value, searchable, onApply }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(value ?? []);
   const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
   const [hasChanges, setHasChanges] = useState(false);
-  const [dropdownId] = useState('filter-dropdown-' + uuidv4());
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const filterButtonRef = useRef<HTMLButtonElement>(null);
+  const [popoverId] = useState('filter-popover-' + uuidv4());
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const isDropdownClick = dropdownRef.current?.contains(event.target);
-      const isFilterButtonClick = filterButtonRef.current?.contains(event.target);
-      if (!isDropdownClick && !isFilterButtonClick) {
-        setIsOpen(false);
-      }
-    };
+  const popover = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(1), shift()],
+  });
 
-    document.addEventListener('mousedown', handleClickOutside); // desktop
-    document.addEventListener('touchstart', handleClickOutside); // touch devices
-    // document.addEventListener('focus', handleClickOutside); // tab navigation
+  const context = popover.context;
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-      document.removeEventListener('focus', handleClickOutside);
-    };
-  }, [dropdownRef, filterButtonRef]);
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
   useEffect(() => {
     if (!arraysEqual(activeFilters, checkedFilters)) {
@@ -82,11 +86,12 @@ export const Filter = ({ options, label, icon, value, onApply }: FilterProps) =>
   return (
     <div className={classes.filter}>
       <button
-        ref={filterButtonRef}
+        ref={popover.refs.setReference}
+        {...getReferenceProps()}
         className={classes.filterButton}
         onClick={handleOpenOrClose}
         aria-expanded={isOpen}
-        aria-controls={dropdownId}
+        aria-controls={popoverId}
       >
         {icon && (
           <SvgIcon
@@ -102,18 +107,25 @@ export const Filter = ({ options, label, icon, value, onApply }: FilterProps) =>
       </button>
       {isOpen && (
         <div
-          id={dropdownId}
-          ref={dropdownRef}
-          className={classes.dropdown}
+          id={popoverId}
+          ref={popover.refs.setFloating}
+          className={classes.popover}
+          style={{
+            position: popover.strategy,
+            top: popover.y ?? 0,
+            left: popover.x ?? 0,
+          }}
+          {...getFloatingProps()}
         >
           <div className={classes.content}>
             <FilterContent
               options={options}
               onValueChange={setCheckedFilters}
               value={checkedFilters}
+              searchable={searchable}
             />
           </div>
-          <div className={classes.dropdownActions}>
+          <div className={classes.popoverActions}>
             <Button
               size='small'
               variant='quiet'

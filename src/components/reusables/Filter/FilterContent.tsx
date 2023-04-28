@@ -13,9 +13,15 @@ export interface FilterContentProps {
   options: FilterOption[];
   value: string[];
   onValueChange: (value: string[]) => void;
+  searchable?: boolean;
 }
 
-export const FilterContent = ({ options, value, onValueChange }: FilterContentProps) => {
+export const FilterContent = ({
+  options,
+  value,
+  searchable = true,
+  onValueChange,
+}: FilterContentProps) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(value);
 
   // Update selected values when there are external changes
@@ -60,10 +66,11 @@ export const FilterContent = ({ options, value, onValueChange }: FilterContentPr
 
   return (
     <div className={classes.filterContent}>
-      <div className={classes.searchField}>
-        <SearchField />
-      </div>
-
+      {searchable && (
+        <div className={classes.searchField}>
+          <SearchField />
+        </div>
+      )}
       <div className={classes.scrollContainer}>
         <div className={classes.optionList}>{checkboxes}</div>
       </div>
