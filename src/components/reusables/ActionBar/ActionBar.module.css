@@ -142,3 +142,14 @@
 .actionBarTitle{
   font-weight: 500;
 }
+
+.actionBarTitle{
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+.actionBarSubtitle{
+  font-weight: 400;
+  margin-top: 8px;
+  margin-bottom: 5px;
+}

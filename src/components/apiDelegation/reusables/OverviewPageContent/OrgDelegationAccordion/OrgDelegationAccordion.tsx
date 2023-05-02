@@ -113,7 +113,7 @@ export const OrgDelegationAccordion = ({
       }
       subtitle={
         <div
-          className={cn(classes.actionBarSubtitle, {
+          className={cn({
             [classes.actionBarSubtitle__softDelete]: organization.isAllSoftDeleted,
           })}
         >

@@ -73,7 +73,7 @@ export const ActionBar = ({
               aria-expanded={open}
               aria-controls={contentId}
             >
-              <div>{title}</div>
+              <div className={classes.actionBarTitle}>{title}</div>
               <div className={classes.actionBarSubtitle}>{subtitle}</div>
             </button>
           ) : (
