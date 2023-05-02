@@ -10,18 +10,14 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Common.AccessToken.Services;
 using Altinn.Common.PEP.Interfaces;
 using AltinnCore.Authentication.JwtCookie;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Xunit;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.Common.AccessTokenClient.Services;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.UI.Core.Services;
+using Altinn.Platform.Profile.Models;
 
 namespace Altinn.AccessManagement.Tests.Controllers
 {
@@ -34,10 +30,7 @@ namespace Altinn.AccessManagement.Tests.Controllers
         private readonly CustomWebApplicationFactory<ResourceController> _factory;
         private HttpClient _client;
 
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Constructor setting up factory, test client and dependencies
@@ -52,29 +45,24 @@ namespace Altinn.AccessManagement.Tests.Controllers
 
         /// <summary>
         /// Test case: GetResources returns a list of resources 
-        /// Expected: GetResources returns a list of resources filtered by resourcetype
+        /// Expected: GetResources returns a list of resources with language filtered for the authenticated users selected language
         /// </summary>
         [Fact]
-        public async Task GetResources_valid_resourcetype()
+        public async Task GetMaskinportenResources_valid()
         {
             // Arrange
             List<ServiceResourceFE> expectedResources = GetExpectedResources(ResourceType.MaskinportenSchema);
-            var httpContextAccessorMock = GetHttpContextAccessorMock("party", "50004223");
-            _client = GetTestClient(httpContextAccessor: httpContextAccessorMock);
-            string token = PrincipalUtil.GetAccessToken("platform", "resourceregistry");
-            _client.DefaultRequestHeaders.Add("PlatformAccessToken", token);
+
+            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/52004219/resources/maskinportenschema");
-            string responseContent = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(responseContent, options);
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertResourceExternalEqual);
         }
 
@@ -102,7 +90,7 @@ namespace Altinn.AccessManagement.Tests.Controllers
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddSingleton<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddSingleton(httpContextAccessor);
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();

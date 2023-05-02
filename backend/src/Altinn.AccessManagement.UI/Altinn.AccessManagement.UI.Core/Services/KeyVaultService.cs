@@ -15,10 +15,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class KeyVaultService : IKeyVaultService
     {
         /// <inheritdoc/>
-        public async Task<string> GetCertificateAsync(string vaultUri, string certificateName)
+        public async Task<string> GetCertificateAsync(string vaultUri, string secretId)
         {
             CertificateClient certificateClient = new CertificateClient(new Uri(vaultUri), new DefaultAzureCredential());
-            AsyncPageable<CertificateProperties> certificatePropertiesPage = certificateClient.GetPropertiesOfCertificateVersionsAsync(certificateName);
+            AsyncPageable<CertificateProperties> certificatePropertiesPage = certificateClient.GetPropertiesOfCertificateVersionsAsync(secretId);
             await foreach (CertificateProperties certificateProperties in certificatePropertiesPage)
             {
                 if (certificateProperties.Enabled == true &&
