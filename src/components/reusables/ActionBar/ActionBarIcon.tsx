@@ -10,9 +10,9 @@ import { useActionBarContext } from './Context';
 export const ActionBarIcon = () => {
   const { onClick, open, iconVariant } = useActionBarContext();
   const iconClassnames = [
-    classes[`actionBar-icon`],
+    classes.actionBarIcon,
     {
-      [classes['actionBarIcon--opened']]: open,
+      [classes.actionBarIcon__open]: open,
     },
   ];
   const props = {

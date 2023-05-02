@@ -1,8 +1,8 @@
-.actionBar-icon {
+.actionBarIcon {
   box-sizing: border-box;
   flex-shrink: 0;
 }
 
-.actionBarIcon--opened {
+.actionBarIcon__open {
   transform: rotate(180deg);
 }

@@ -1,16 +1,10 @@
-.accordion {
-  --component-accordion-color-background: var(--colors-white);
-  --component-panel-size-width: 100%;
-  background-color: var(--component-accordion-color-background);
-  width: var(--component-panel-size-width);
-}
-
 .actionBar {
   --component-actionbar_header-border_top_style: solid;
   display: flex;
   border-width: 1px;
   border-style: var(--component-actionbar_header-border_top_style);
   border-radius: 4px;
+  height: 48px;
 }
 
 .actionBar__open{
@@ -108,13 +102,8 @@
   margin-bottom: 5px;
 }
 
-
 .actionBar__subtitle{
   height: 68px;
-}
-
-.actionBar__onlyTitle{
-  height: 48px;
 }
 
 .actionBarIcon{
@@ -123,7 +112,7 @@
   align-items: center;
 }
 
-.actionBarCenterText{
+.actionBarAdditionalText{
   display: flex;
   align-items: center;
   justify-content: start;
@@ -135,20 +124,16 @@
   font-weight: 400;
 }
 
-.actionBarCenterText__expandable{
+.actionBarAdditionalText__expandable{
   cursor: pointer;
 }
 
-.actionBarTitle{
-  font-weight: 500;
-}
-
-.actionBarTitle{
+.title{
   font-weight: 500;
   margin-top: 5px;
 }
 
-.actionBarSubtitle{
+.subtitle{
   font-weight: 400;
   margin-top: 8px;
   margin-bottom: 5px;
