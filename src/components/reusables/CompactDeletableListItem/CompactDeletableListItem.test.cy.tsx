@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
-import { List } from '@altinn/altinn-design-system';
+import { List } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
