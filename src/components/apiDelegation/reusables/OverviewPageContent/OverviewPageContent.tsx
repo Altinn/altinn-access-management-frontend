@@ -163,13 +163,18 @@ export const OverviewPageContent = ({
       return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
     }
     return overviewOrgs.map((org) => (
-      <OrgDelegationAccordion
+      <div
         key={org.id}
-        organization={org}
-        isEditable={isEditable}
-        softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
-        softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-      ></OrgDelegationAccordion>
+        className={classes.actionBarWrapper}
+      >
+        <OrgDelegationAccordion
+          organization={org}
+          isEditable={isEditable}
+          softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+          softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+          key={org.id}
+        ></OrgDelegationAccordion>
+      </div>
     ));
   };
 

@@ -85,3 +85,8 @@
 .activeDelegations{
   min-height: 100px;
 }
+
+.actionBarWrapper{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

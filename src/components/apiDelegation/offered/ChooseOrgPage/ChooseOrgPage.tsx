@@ -105,43 +105,53 @@ export const ChooseOrgPage = () => {
 
   const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
-      <ActionBar
+      <div
+        className={classes.actionBarWrapper}
         key={index}
-        title={org.orgName}
-        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
-        actions={
-          <Button
-            icon={<AddCircle />}
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Success}
-            onClick={() => dispatch(softAddOrg(org))}
-            aria-label={'add'}
-          ></Button>
-        }
-        color={'neutral'}
-      />
+      >
+        <ActionBar
+          key={index}
+          title={org.orgName}
+          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          actions={
+            <Button
+              icon={<AddCircle />}
+              variant={ButtonVariant.Quiet}
+              color={ButtonColor.Success}
+              onClick={() => dispatch(softAddOrg(org))}
+              aria-label={'add'}
+            ></Button>
+          }
+          color={'neutral'}
+        />
+      </div>
     );
   });
 
   const chosenItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
-      <ActionBar
+      <div
+        className={classes.actionBarWrapper}
         key={index}
-        title={org.orgName}
-        subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
-        actions={
-          <Button
-            icon={<MinusCircle />}
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Danger}
-            onClick={() => {
-              handleSoftRemove(org);
-            }}
-            aria-label={'remove'}
-          ></Button>
-        }
-        color={'success'}
-      />
+      >
+        <ActionBar
+          key={index}
+          title={org.orgName}
+          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          actions={
+            <Button
+              icon={<MinusCircle />}
+              variant={ButtonVariant.Quiet}
+              color={ButtonColor.Danger}
+              onClick={() => {
+                handleSoftRemove(org);
+              }}
+              aria-label={'remove'}
+            ></Button>
+          }
+          color={'success'}
+        />
+      </div>
     );
   });
 

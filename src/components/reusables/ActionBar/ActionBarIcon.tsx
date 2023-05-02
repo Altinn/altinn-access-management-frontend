@@ -19,7 +19,7 @@ export const ActionBarIcon = () => {
     height: 30,
     width: 30,
     className: cn(iconClassnames),
-    'data-testid': iconVariant,
+    'data-testid': 'action-bar-icon',
     onClick,
   };
 

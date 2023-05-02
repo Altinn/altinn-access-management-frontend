@@ -1,1 +1,1 @@
-export { ActionBar } from './ActionBar';
+export { ActionBar, type ActionBarProps } from './ActionBar';

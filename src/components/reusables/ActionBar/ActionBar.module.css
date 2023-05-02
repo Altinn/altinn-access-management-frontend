@@ -138,3 +138,7 @@
 .actionBarCenterText__expandable{
   cursor: pointer;
 }
+
+.actionBarTitle{
+  font-weight: 500;
+}
