@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
-import { Button, ButtonColor, ButtonVariant } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
@@ -123,7 +123,7 @@ describe('ActionBar', () => {
       cy.stub();
     };
 
-    const handleClickSpy = cy.spy(handleClick).as('handleClickSpy');
+    cy.spy(handleClick).as('handleClickSpy');
 
     const handleActionClick = () => {
       cy.stub();
