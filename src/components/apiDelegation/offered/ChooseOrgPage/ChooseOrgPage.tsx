@@ -195,15 +195,13 @@ export const ChooseOrgPage = () => {
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <div className={common.pageContent}>
-            <h2 className={classes.topText}>
-              {t('api_delegation.new_org_accordion_content_text')}
-            </h2>
+            <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
             {isSm && chosenItems.length > 0 && (
               <div className={classes.chosenOrgs}>
                 <h4 className={classes.chosenOrgsHeader}>
                   {t('api_delegation.businesses_going_to_get_access')}
                 </h4>
-                <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+                <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
               </div>
             )}
             <div className={classes.searchSection}>
@@ -223,19 +221,19 @@ export const ChooseOrgPage = () => {
                 />
               </div>
             ) : (
-              <div className={common.pageContentAccordionsContainer}>
-                <div className={common.apiAccordions}>
+              <div className={common.pageContentActionBarContainer}>
+                <div className={common.actionBars}>
                   {searchString === '' ? (
-                    <h4 className={classes.accordionContainerText}>
+                    <h4 className={classes.actionBarContainerText}>
                       {t('api_delegation.businesses_previously_delegated_to')}
                     </h4>
                   ) : (
-                    <h4 className={classes.accordionContainerText}>
+                    <h4 className={classes.actionBarContainerText}>
                       {t('api_delegation.businesses_search_results')}
                     </h4>
                   )}
                   {infoPanel()}
-                  <div className={classes.accordionScrollContainer}>
+                  <div className={classes.actionBarScrollContainer}>
                     {searchLoading ? (
                       <div className={common.spinnerContainer}>
                         <Spinner
@@ -249,11 +247,11 @@ export const ChooseOrgPage = () => {
                   </div>
                 </div>
                 {!isSm && (
-                  <div className={common.apiAccordions}>
+                  <div className={common.actionBars}>
                     <h4 className={classes.chosenOrgsHeader}>
                       {t('api_delegation.businesses_going_to_get_access')}
                     </h4>
-                    <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+                    <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
                   </div>
                 )}
               </div>

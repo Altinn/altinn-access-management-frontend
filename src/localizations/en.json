@@ -42,7 +42,7 @@
     "cancel": "Cancel",
     "card_title": "Application programming interface - API",
     "give_access_to_new_api": "Give access to new API",
-    "new_org_accordion_content_text": "Select which users will have access by clicking the plus sign. You can also add a new organization by using the search field.",
+    "new_org_content_text": "Select which users will have access by clicking the plus sign. You can also add a new organization by using the search field.",
     "businesses_previously_delegated_to": "Businesses previously delegated to:",
     "businesses_search_results": "Businesses resulting from your search:",
     "buisness_search_notfound_title": "We can't find what you're looking for. Are you sure this is the right organization number?",

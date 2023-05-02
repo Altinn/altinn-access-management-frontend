@@ -16,11 +16,11 @@
     overflow: hidden;
   }
 
-  .pageContentAccordionsContainer{
+  .pageContentActionBarContainer{
     width: 100%;
   }
 
-  .apiAccordions{
+  .actionBars{
     margin-bottom: 2rem;
   }
 }
@@ -32,12 +32,12 @@
     margin-left: var(--component-page-margin-horizontal);
   }
   
-  .pageContentAccordionsContainer{
+  .pageContentActionBarContainer{
     grid-template-columns: 1fr 1fr;
     display: grid;
   }
 
-  .apiAccordions{
+  .actionBars{
     margin-right: 3rem;
   }
 }

@@ -34,7 +34,7 @@ import common from '@/resources/css/Common.module.css';
 
 import { LayoutState } from '../LayoutState';
 
-import { OrgDelegationAccordion } from './OrgDelegationAccordion';
+import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
 
 export interface OverviewPageContentInterface {
@@ -167,20 +167,20 @@ export const OverviewPageContent = ({
         key={org.id}
         className={classes.actionBarWrapper}
       >
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           organization={org}
           isEditable={isEditable}
           softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
           softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
           key={org.id}
-        ></OrgDelegationAccordion>
+        ></OrgDelegationActionBar>
       </div>
     ));
   };
 
   return (
     <div className={common.pageContent}>
-      <div className={classes.overviewAccordionsContainer}>
+      <div className={classes.overviewActionBarContainer}>
         {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
         {layout === LayoutState.Offered && (
           <div className={classes.delegateNewButton}>

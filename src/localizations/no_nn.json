@@ -39,7 +39,7 @@
     "api_received_overview_text": "Her finner du oversikt over dei API-tilgangane verksemda di har fått av andre verksemder.",
     "cancel": "Avbryt",
     "give_access_to_new_api": "Gje tilgang til nytt API",
-    "new_org_accordion_content_text": "Vel kva brukarar som skal få tilgang ved å klikka pluss-teiknet. Du kan også leggja til ny ved å bruke søkefeltet.",
+    "new_org_content_text": "Vel kva brukarar som skal få tilgang ved å klikka pluss-teiknet. Du kan også leggja til ny ved å bruke søkefeltet.",
     "businesses_previously_delegated_to": "Verksemder det tidlegare er delegert til:",
     "businesses_search_results": "Verksemder basert på ditt søk:",
     "buisness_search_notfound_title": "Vi finner ikkje det du søker etter. Har du skrevet inn riktig organisasjonsnummer?",

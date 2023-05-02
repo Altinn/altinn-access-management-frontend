@@ -14,7 +14,7 @@
 }
 
 @media only screen and (min-width: 769px) {
-  .accordionScrollContainer {
+  .actionBarScrollContainer {
     height: 300px;
     overflow-y: auto;
   }
@@ -48,7 +48,7 @@
   font-weight: normal;
 }
 
-.accordionContainerText {
+.actionBarContainerText {
   margin-bottom: 5px;
   font-weight: 500;
 }

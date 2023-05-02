@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 import * as React from 'react';
 
-import { OrgDelegationAccordion } from '@/components/apiDelegation/reusables/OverviewPageContent/OrgDelegationAccordion';
+import { OrgDelegationActionBar } from '@/components/apiDelegation/reusables/OverviewPageContent/OrgDelegationActionBar';
 import store from '@/rtk/app/store';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/apiDelegation/overviewOrg/overviewOrgSlice';
@@ -16,7 +16,7 @@ Cypress.Commands.add('mount', (component, options = {}) => {
   return mount(wrapped, mountOptions);
 });
 
-describe('OrgDelegationAccordion', () => {
+describe('OrgDelegationActionBar', () => {
   describe('AccordionHeader', () => {
     it('should show delegateNewApi-button on render when delegateToOrgCallback is set', () => {
       const overviewOrgs: OverviewOrg = {
@@ -45,7 +45,7 @@ describe('OrgDelegationAccordion', () => {
       };
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
@@ -83,7 +83,7 @@ describe('OrgDelegationAccordion', () => {
       };
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
@@ -103,7 +103,7 @@ describe('OrgDelegationAccordion', () => {
       };
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
@@ -123,7 +123,7 @@ describe('OrgDelegationAccordion', () => {
       };
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
@@ -160,7 +160,7 @@ describe('OrgDelegationAccordion', () => {
       };
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
@@ -207,7 +207,7 @@ describe('OrgDelegationAccordion', () => {
       const softDeleteAllSpy = cy.spy(softDeleteAll).as('softDeleteAllSpy');
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           organization={overviewOrgs}
           softDeleteAllCallback={softDeleteAllSpy}
           softRestoreAllCallback={() => null}
@@ -252,7 +252,7 @@ describe('OrgDelegationAccordion', () => {
       const softRestoreAllSpy = cy.spy(softRestoreAll).as('softRestoreAllSpy');
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           organization={overviewOrgs}
           softDeleteAllCallback={() => null}
           softRestoreAllCallback={softRestoreAllSpy}
@@ -297,7 +297,7 @@ describe('OrgDelegationAccordion', () => {
       const delegateToNewOrgSpy = cy.spy(delegateToNewOrg).as('delegateToNewOrgSpy');
 
       cy.mount(
-        <OrgDelegationAccordion
+        <OrgDelegationActionBar
           organization={overviewOrgs}
           softDeleteAllCallback={() => null}
           softRestoreAllCallback={() => null}
