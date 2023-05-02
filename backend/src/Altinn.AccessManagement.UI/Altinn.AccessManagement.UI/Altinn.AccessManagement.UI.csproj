@@ -17,6 +17,7 @@
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
     <PackageReference Include="JWTCookieAuthentication" Version="3.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
@@ -36,6 +37,9 @@
 		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
 			<Link>stylecop.json</Link>
 		</AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\accessmanagement\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
