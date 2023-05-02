@@ -99,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             const int userId = 1234;
             const HttpStatusCode expectedStatusCode = HttpStatusCode.NotFound;
             var expectedErrorMessage =
-                $"Getting user settings information from accessmanagement failed with statuscode {expectedStatusCode}";
+                $"Getting user profile information from platform failed with statuscode {expectedStatusCode}";
             var userProfile = new UserProfile { UserId = userId };
             var handler = new MessageHandlerMock(expectedStatusCode, JsonContent.Create(userProfile));
             

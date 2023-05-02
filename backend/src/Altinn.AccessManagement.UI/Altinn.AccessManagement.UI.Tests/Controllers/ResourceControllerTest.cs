@@ -4,7 +4,6 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Tests;
 using Altinn.AccessManagement.UI.Tests.Mocks;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Common.AccessToken.Services;
@@ -17,9 +16,8 @@ using Microsoft.Extensions.Options;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Altinn.Platform.Profile.Models;
 
-namespace Altinn.AccessManagement.Tests.Controllers
+namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
     /// Tests for AccessManagmet Resource metadata

@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Platform.Register.Models;
@@ -23,7 +24,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IAccessTokenGenerator _accessTokenGenerator;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
@@ -33,53 +33,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="logger">the logger</param>
         /// <param name="httpContextAccessor">handler for http context</param>
         /// <param name="platformSettings">the platform setttings</param>
-        /// <param name="accessTokenGenerator">An instance of the AccessTokenGenerator service.</param>
         public LookupClient(
             HttpClient httpClient,
             ILogger<LookupClient> logger,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<PlatformSettings> platformSettings,
-            IAccessTokenGenerator accessTokenGenerator)
+            IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
-            _accessTokenGenerator = accessTokenGenerator;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
             _client = httpClient;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
-        }
-
-        /// <inheritdoc/>
-        public async Task<Party> GetOrganisation(string organisationNumber)
-        {
-            Party party = null;
-            try
-            {
-                string endpointUrl = $"lookup/org/{organisationNumber}";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
-
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    party = JsonSerializer.Deserialize<Party>(responseContent, _serializerOptions);
-                    return party;
-                }
-                else
-                {
-                    _logger.LogError("Getting organisation information from accessmanagement failed with {StatusCode}", response.StatusCode);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // LookupClient // GetOrganisation // Exception");
-                throw;
-            }
-
-            return party;
         }
 
         /// <inheritdoc/>
@@ -89,29 +54,23 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string endpointUrl = $"lookup/reportee/{partyId}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = _accessTokenGenerator.GenerateAccessToken("platform", "access-management");
 
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<Party>(responseContent, _serializerOptions);
+                }
 
-                    Party partyInfo = JsonSerializer.Deserialize<Party>(responseContent, _serializerOptions);
-                    return partyInfo;
-                }
-                else
-                {
-                    _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
-                }
+                _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
+                return null;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // LookupClient // GetPartyFromReporteeListIfExists // Exception");
                 throw;
-            }
-
-            return null;
+            }            
         }
     }
 }
