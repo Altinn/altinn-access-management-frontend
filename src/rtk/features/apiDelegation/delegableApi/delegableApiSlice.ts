@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-
 export interface DelegableApi {
   id: string;
   apiName: string;
