@@ -3,7 +3,7 @@
     display: inline-block;
 }
 
-.popover {
+.popup {
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
     padding: 20px 0px 6px 0px;
     display: block;
@@ -18,8 +18,8 @@
     left: 0;
 }
 
-@media (max-width: 767px) {
-    .popover {
+@media (max-width: 768px) {
+    .popup {
         display: none
     }
 }
@@ -29,7 +29,7 @@
     justify-content: center;
 }
 
-.popoverActions {
+.popupActions {
     display: flex;
     justify-content: center;
     padding-bottom: 15px;

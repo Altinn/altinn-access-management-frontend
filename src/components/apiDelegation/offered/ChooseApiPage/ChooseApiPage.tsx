@@ -1,4 +1,3 @@
-import type { MultiSelectOption } from '@digdir/design-system-react';
 import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
 import { List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
@@ -202,6 +201,8 @@ export const ChooseApiPage = () => {
                   ]}
                   icon={<FilterIcon />}
                   label='Filtrer på etat'
+                  applyButtonLabel='Bruk'
+                  resetButtonLabel='Nullstil valg'
                   onApply={handleFilterChange}
                   searchable={false}
                 />

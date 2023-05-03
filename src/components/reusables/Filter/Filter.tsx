@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { Button } from '@digdir/design-system-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import cn from 'classnames';
@@ -10,7 +10,6 @@ import {
   useClick,
   useDismiss,
   useInteractions,
-  computePosition,
   shift,
   autoUpdate,
 } from '@floating-ui/react';
@@ -25,20 +24,31 @@ import classes from './Filter.module.css';
 export interface FilterProps {
   options: FilterOption[];
   label: string;
+  applyButtonLabel: string;
+  resetButtonLabel: string;
   searchable?: boolean;
   icon?: ReactNode;
   value?: string[];
   onApply?: (value: string[]) => void;
 }
 
-export const Filter = ({ options, label, icon, value, searchable, onApply }: FilterProps) => {
+export const Filter = ({
+  options,
+  label,
+  applyButtonLabel,
+  resetButtonLabel,
+  icon,
+  value,
+  searchable,
+  onApply,
+}: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(value ?? []);
   const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
   const [hasChanges, setHasChanges] = useState(false);
-  const [popoverId] = useState('filter-popover-' + uuidv4());
+  const [popupId] = useState('filter-popup-' + String(uuidv4()));
 
-  const popover = useFloating({
+  const popup = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
     placement: 'bottom-start',
@@ -46,7 +56,7 @@ export const Filter = ({ options, label, icon, value, searchable, onApply }: Fil
     middleware: [offset(1), shift()],
   });
 
-  const context = popover.context;
+  const context = popup.context;
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
@@ -86,12 +96,13 @@ export const Filter = ({ options, label, icon, value, searchable, onApply }: Fil
   return (
     <div className={classes.filter}>
       <button
-        ref={popover.refs.setReference}
+        ref={popup.refs.setReference}
         {...getReferenceProps()}
         className={classes.filterButton}
         onClick={handleOpenOrClose}
         aria-expanded={isOpen}
-        aria-controls={popoverId}
+        aria-controls={popupId}
+        aria-haspopup='dialog'
       >
         {icon && (
           <SvgIcon
@@ -107,14 +118,15 @@ export const Filter = ({ options, label, icon, value, searchable, onApply }: Fil
       </button>
       {isOpen && (
         <div
-          id={popoverId}
-          ref={popover.refs.setFloating}
-          className={classes.popover}
+          id={popupId}
+          ref={popup.refs.setFloating}
+          className={classes.popup}
           style={{
-            position: popover.strategy,
-            top: popover.y ?? 0,
-            left: popover.x ?? 0,
+            position: popup.strategy,
+            top: popup.y ?? 0,
+            left: popup.x ?? 0,
           }}
+          role='dialog'
           {...getFloatingProps()}
         >
           <div className={classes.content}>
@@ -125,21 +137,21 @@ export const Filter = ({ options, label, icon, value, searchable, onApply }: Fil
               searchable={searchable}
             />
           </div>
-          <div className={classes.popoverActions}>
+          <div className={classes.popupActions}>
             <Button
               size='small'
               variant='quiet'
               aria-disabled={checkedFilters.length === 0}
               onClick={checkedFilters.length === 0 ? undefined : handleReset}
             >
-              Nullstill valg
+              {resetButtonLabel}
             </Button>
             <Button
               size='small'
               onClick={hasChanges ? handleApply : undefined}
               aria-disabled={!hasChanges}
             >
-              Bruk
+              {applyButtonLabel}
             </Button>
           </div>
         </div>
