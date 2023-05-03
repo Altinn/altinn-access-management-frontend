@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -17,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// <summary>
     /// client that integrates with the platform register api
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class RegisterClient : IRegisterClient
     {
         private readonly ILogger _logger;
