@@ -8,15 +8,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     public interface ILookupClient
     {
         /// <summary>
-        /// Looks up a party based on OrgNumber.
-        /// </summary>
-        /// <param name="organisationNumber">organisation number</param>
-        /// <returns>
-        /// The party that represents the given OrgNumber.
-        /// </returns>
-        Task<Party> GetOrganisation(string organisationNumber);
-
-        /// <summary>
         /// Retreive party if party exists in the authenticated users reporteelist
         /// </summary>
         /// <param name="partyId">party id</param>

@@ -182,6 +182,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton(config);
     services.AddHttpClient<IDelegationsClient, DelegationsClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
+    services.AddHttpClient<IRegisterClient, RegisterClient>();
     services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
