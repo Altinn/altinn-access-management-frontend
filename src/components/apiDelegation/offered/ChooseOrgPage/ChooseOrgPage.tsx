@@ -222,7 +222,7 @@ export const ChooseOrgPage = () => {
               </div>
             ) : (
               <div className={common.pageContentActionBarContainer}>
-                <div className={common.actionBars}>
+                <div className={classes.delegableOrgsContainer}>
                   {searchString === '' ? (
                     <h4 className={classes.actionBarContainerText}>
                       {t('api_delegation.businesses_previously_delegated_to')}
@@ -247,7 +247,7 @@ export const ChooseOrgPage = () => {
                   </div>
                 </div>
                 {!isSm && (
-                  <div className={common.actionBars}>
+                  <div className={common.chosenOrgsContainer}>
                     <h4 className={classes.chosenOrgsHeader}>
                       {t('api_delegation.businesses_going_to_get_access')}
                     </h4>

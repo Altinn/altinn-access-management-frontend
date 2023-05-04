@@ -3,7 +3,12 @@
     width: 100%
   }
 
-  .accordionScrollContainer {
+  .delegableApisContainer {
+    margin-bottom: 30px;
+    width: 100%;
+  }
+
+  .chosenApisContainer {
     margin-bottom: 30px;
     width: 100%;
   }
@@ -11,15 +16,22 @@
 
 @media only screen and (min-width: 769px) {
   .searchSection{
-    width: 45%
+    width: 47%;
   }
 
-  .pageContentAccordionsContainer{
+  .pageContentActionBarsContainer{
     grid-template-columns: 1fr 1fr;
     display: grid;
   }
 
-  .accordionScrollContainer {
+  .delegableApisContainer {
+    margin-right: 15px;
+    height: 300px;
+    overflow-y: auto;
+  }
+
+  .chosenApisContainer {
+    margin-left: 15px;
     height: 300px;
     overflow-y: auto;
   }
@@ -37,6 +49,6 @@
   font-weight: 500;
 }
 
-.delegableApisHeader{
+.explanationTexts{
   font-weight: 500;
 }

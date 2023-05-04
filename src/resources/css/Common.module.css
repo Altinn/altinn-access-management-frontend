@@ -8,7 +8,7 @@
   }
 }
 
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 768px) {
   .pageContent{
     --component-page-margin-horizontal: 0.5rem;
     margin-right: var(--component-page-margin-horizontal);

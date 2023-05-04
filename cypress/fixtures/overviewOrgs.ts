@@ -48,6 +48,13 @@
       ],
     },
   ], 
+
+  .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
+        state.loading = true;
+        const dataArray = action.payload;
+        // const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
+         //state.overviewOrgs = responseList;
+        state.loading = false;
   */
 
 export {};

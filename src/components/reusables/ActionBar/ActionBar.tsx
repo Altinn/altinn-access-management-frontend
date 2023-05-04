@@ -54,7 +54,6 @@ export const ActionBar = ({
             [classes.actionBar__expandable]: children,
             [classes[`actionBar__${color}__expandable`]]: children,
           })}
-          onClick={onClick}
           tabIndex={-1}
         >
           {children && (

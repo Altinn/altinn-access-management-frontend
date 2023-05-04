@@ -19,10 +19,6 @@ import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
-import {
-  NewDelegationAccordionButtonType,
-  NewDelegationAccordion,
-} from '@/components/reusables/NewDelegationAccordion';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -35,6 +31,7 @@ import {
   filter,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { DelegationActionBar } from '@/components/reusables/DelegationActionBar';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -108,34 +105,36 @@ export const ChooseApiPage = () => {
     }
     return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
       return (
-        <NewDelegationAccordion
+        <DelegationActionBar
           title={api.apiName}
           subtitle={api.orgName}
           key={index}
           topContentText={api.rightDescription}
           bottomContentText={api.description}
           textList={api.scopes}
-          buttonType={NewDelegationAccordionButtonType.Add}
-          addRemoveClick={() => dispatch(softAddApi(api))}
-        ></NewDelegationAccordion>
+          buttonType={'add'}
+          onActionButtonClick={() => dispatch(softAddApi(api))}
+          color={'neutral'}
+        ></DelegationActionBar>
       );
     });
   };
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
-      <NewDelegationAccordion
+      <DelegationActionBar
         title={api.apiName}
         subtitle={api.orgName}
         topContentText={api.rightDescription}
         bottomContentText={api.description}
         textList={api.scopes}
         key={index}
-        buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={() => {
+        buttonType={'remove'}
+        onActionButtonClick={() => {
           handleRemove(api);
         }}
-      ></NewDelegationAccordion>
+        color={'success'}
+      ></DelegationActionBar>
     );
   });
 
@@ -177,7 +176,7 @@ export const ChooseApiPage = () => {
             {isSm && chosenApis.length > 0 && (
               <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
-                <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+                <div className={classes.chosenApisContainer}>{chosenApiAccordions}</div>
               </div>
             )}
             <div className={classes.searchSection}>
@@ -197,17 +196,15 @@ export const ChooseApiPage = () => {
                 />
               </div>
             </div>
-            <div className={classes.pageContentAccordionsContainer}>
+            <div className={classes.pageContentActionBarsContainer}>
               <div className={common.apiAccordions}>
-                <h4 className={classes.delegableApisHeader}>
-                  {t('api_delegation.delegable_apis')}:
-                </h4>
-                <div className={classes.accordionScrollContainer}>{delegableApiAccordions()}</div>
+                <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
+                <div className={classes.delegableApisContainer}>{delegableApiAccordions()}</div>
               </div>
               {!isSm && (
                 <div className={common.apiAccordions}>
-                  <h4 className={classes.delegableApisHeader}>{t('api_delegation.chosen_apis')}</h4>
-                  <div className={classes.accordionScrollContainer}>{chosenApiAccordions}</div>
+                  <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
+                  <div className={classes.delegableApisContainer}>{chosenApiAccordions}</div>
                 </div>
               )}
             </div>

@@ -11,6 +11,14 @@
   .topText{
     font-size: 20px;
   }
+
+  .delegableOrgsContainer{
+    margin-bottom: 2rem;
+  }
+
+  .chosenOrgsContainer {
+    margin-bottom: 2rem;
+  }
 }
 
 @media only screen and (min-width: 769px) {
@@ -20,7 +28,15 @@
   }
 
   .searchSection{
-    width: 45%;
+    width: 48.5%;
+  }
+
+  .delegableOrgsContainer{
+    margin-right: 15px;
+  }
+
+  .chosenOrgsContainer {
+    margin-left: 15px;
   }
 }
 

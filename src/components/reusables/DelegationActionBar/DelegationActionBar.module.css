@@ -1,0 +1,31 @@
+.newApiAccordionContent{
+  margin-left: 2rem;
+}
+
+.scopeText{
+  font-weight: 500;
+}
+
+.scopeItems {
+  margin-top: 10px;
+}
+
+.line{
+  margin-top: 25px;
+  margin-right: 5px;
+}
+
+.contentTexts{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.bottomContentTexts{
+  margin-bottom: 20px;
+}
+
+.accordionHeaderTitle{
+  font-weight: 500;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}

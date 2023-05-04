@@ -36,7 +36,7 @@ const nonExpandableActionBar = (props: Partial<ActionBarProps> = {}) => (
 );
 
 describe('ActionBar', () => {
-  it('expandable ActionBar should render corretly when all props are set', () => {
+  it('Should render corretly when all props are set and it is expandable', () => {
     const actionButton = <Button>Action</Button>;
     cy.mount(expandableActionBar({ actions: actionButton, open: true }));
     cy.get('[data-testid="action-bar-icon"]').should('exist');
@@ -47,7 +47,7 @@ describe('ActionBar', () => {
     cy.get('div').should('contain', 'Content');
   });
 
-  it('non expandable ActionBar should render correctly when all props are set', () => {
+  it('should render correctly when all props are it is non expandable', () => {
     const actionButton = <Button>Action</Button>;
     cy.mount(nonExpandableActionBar({ actions: actionButton }));
     cy.get('[data-testid="action-bar-icon"]').should('not.exist');
@@ -58,12 +58,12 @@ describe('ActionBar', () => {
     cy.get('div').should('not.contain', 'Content');
   });
 
-  it('non expandable ActionBar not render chevron when non expandable ActionBar is rendered ', () => {
+  it('non expandable version should not render chevron when it is rendered ', () => {
     cy.mount(nonExpandableActionBar());
     cy.get('[data-testid="action-bar-icon"]').should('not.exist');
   });
 
-  it('should not render chevron when non expandable ActionBar is rendered ', () => {
+  it('should not render chevron when non expandable versjon is rendered ', () => {
     cy.mount(nonExpandableActionBar());
     cy.get('[data-testid="action-bar-icon"]').should('not.exist');
   });
@@ -123,15 +123,16 @@ describe('ActionBar', () => {
       cy.stub();
     };
 
-    cy.spy(handleClick).as('handleClickSpy');
+    const handleClickSpy = cy.spy(handleClick).as('handleClickSpy');
 
     const handleActionClick = () => {
       cy.stub();
     };
 
     const handleActionClickSpy = cy.spy(handleActionClick).as('handleActionClickSpy');
+
     const actionButton = <Button onClick={handleActionClickSpy}>Action</Button>;
-    cy.mount(nonExpandableActionBar({ actions: actionButton }));
+    cy.mount(nonExpandableActionBar({ actions: actionButton, onClick: handleClickSpy }));
 
     cy.findByRole('button', { name: /Action/i }).click();
     cy.get('@handleActionClickSpy').should('have.been.called');

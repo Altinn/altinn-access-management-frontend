@@ -4,7 +4,7 @@
   border-width: 1px;
   border-style: var(--component-actionbar_header-border_top_style);
   border-radius: 4px;
-  height: 48px;
+  min-height: 48px;
 }
 
 .actionBar__open{
@@ -89,7 +89,6 @@
   column-gap: 0.3rem;
   align-items: center;
   padding: 0;
-  margin-right: 10px;
 }
 
 .actionBarActions__expandable {
@@ -103,7 +102,7 @@
 }
 
 .actionBar__subtitle{
-  height: 68px;
+  min-height: 68px;
 }
 
 .actionBarIcon{
