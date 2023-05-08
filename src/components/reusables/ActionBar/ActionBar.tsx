@@ -88,24 +88,18 @@ export const ActionBar = ({
               <div className={classes.subtitle}>{subtitle}</div>
             </button>
           )}
-          <button
-            className={cn(classes.actionBarAdditionalText, {
-              [classes.actionBarAdditionalText__expandable]: children,
-            })}
-            onClick={onClick}
-            tabIndex={-1}
-          >
-            {additionalText}
-          </button>
-          {actions && (
-            <div
-              className={cn(classes.actionBarActions, {
-                [classes.actionBarActions__expandable]: children,
+          {additionalText && (
+            <button
+              className={cn(classes.actionBarAdditionalText, {
+                [classes.actionBarAdditionalText__expandable]: children,
               })}
+              onClick={onClick}
+              tabIndex={-1}
             >
-              {actions}
-            </div>
+              {additionalText}
+            </button>
           )}
+          {actions && <div className={classes.actionBarActions}>{actions}</div>}
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>

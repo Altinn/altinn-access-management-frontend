@@ -1,5 +1,5 @@
 @media only screen and (max-width: 768px) { 
-  .accordionContent{
+  .actionBarContent{
     padding-left: 0.7rem;
   }
 
@@ -9,7 +9,7 @@
 }
 
 @media only screen and (min-width: 769px) {
-  .accordionContent{
+  .actionBarContent{
     padding-left: 50px;
   }
 }
@@ -32,4 +32,8 @@
 
 .accordionHeaderRightText{
   margin-right: 15px;
+}
+
+.additionalText {
+  margin-right: 10px;
 }

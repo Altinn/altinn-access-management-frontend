@@ -122,7 +122,7 @@ export const OrgDelegationActionBar = ({
       }
       additionalText={
         <div
-          className={cn({
+          className={cn(classes.additionalText, {
             [classes.actionBarText__softDelete]: organization.isAllSoftDeleted,
           })}
         >

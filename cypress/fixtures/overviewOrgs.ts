@@ -49,12 +49,32 @@
     },
   ], 
 
+
+    export const fetchOverviewOrgsOffered = createAsyncThunk(
+  'overviewOrg/fetchOverviewOrgsOffered',
+  async () => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    if (!altinnPartyId) {
+      throw new Error(String('Could not get AltinnPartyId cookie value'));
+    }
+    return await axios
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        // throw new Error(String(error.response.status));
+      });
+  },
+
   .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
         state.loading = true;
         const dataArray = action.payload;
         // const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
          //state.overviewOrgs = responseList;
         state.loading = false;
+
+);
   */
 
 export {};

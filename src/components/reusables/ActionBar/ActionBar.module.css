@@ -85,14 +85,13 @@
 
 .actionBarActions {
   display: flex;
-  grid-auto-flow: column;
+  flex-direction: column;
   column-gap: 0.3rem;
+  justify-content: center;
   align-items: center;
   padding: 0;
-}
-
-.actionBarActions__expandable {
-  cursor:pointer;
+  height: auto;
+  cursor: default;
 }
 
 .actionBarSubtitle{

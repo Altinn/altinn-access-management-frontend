@@ -105,36 +105,45 @@ export const ChooseApiPage = () => {
     }
     return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
       return (
-        <DelegationActionBar
-          title={api.apiName}
-          subtitle={api.orgName}
+        <div
+          className={classes.actionBarWrapper}
           key={index}
-          topContentText={api.rightDescription}
-          bottomContentText={api.description}
-          textList={api.scopes}
-          buttonType={'add'}
-          onActionButtonClick={() => dispatch(softAddApi(api))}
-          color={'neutral'}
-        ></DelegationActionBar>
+        >
+          <DelegationActionBar
+            title={api.apiName}
+            subtitle={api.orgName}
+            topContentText={api.rightDescription}
+            bottomContentText={api.description}
+            textList={api.scopes}
+            buttonType={'add'}
+            onActionButtonClick={() => dispatch(softAddApi(api))}
+            color={'neutral'}
+          ></DelegationActionBar>
+        </div>
       );
     });
   };
 
   const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
     return (
-      <DelegationActionBar
-        title={api.apiName}
-        subtitle={api.orgName}
-        topContentText={api.rightDescription}
-        bottomContentText={api.description}
-        textList={api.scopes}
+      <div
+        className={classes.actionBarWrapper}
         key={index}
-        buttonType={'remove'}
-        onActionButtonClick={() => {
-          handleRemove(api);
-        }}
-        color={'success'}
-      ></DelegationActionBar>
+      >
+        <DelegationActionBar
+          title={api.apiName}
+          subtitle={api.orgName}
+          topContentText={api.rightDescription}
+          bottomContentText={api.description}
+          textList={api.scopes}
+          key={index}
+          buttonType={'remove'}
+          onActionButtonClick={() => {
+            handleRemove(api);
+          }}
+          color={'success'}
+        ></DelegationActionBar>
+      </div>
     );
   });
 

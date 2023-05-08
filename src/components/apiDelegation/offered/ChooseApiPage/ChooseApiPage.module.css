@@ -16,7 +16,7 @@
 
 @media only screen and (min-width: 769px) {
   .searchSection{
-    width: 47%;
+    width: 46%;
   }
 
   .pageContentActionBarsContainer{
@@ -51,4 +51,9 @@
 
 .explanationTexts{
   font-weight: 500;
+}
+
+.actionBarWrapper{
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
