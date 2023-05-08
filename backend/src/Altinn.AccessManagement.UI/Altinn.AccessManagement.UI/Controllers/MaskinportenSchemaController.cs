@@ -1,19 +1,13 @@
-﻿using System.Net.Sockets;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
-using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -22,22 +16,24 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
-    public class DelegationsController : ControllerBase
+    public class MaskinportenSchemaController : ControllerBase
     {
-        private readonly ILogger<DelegationsController> _logger;
-        private readonly IDelegationsService _delegation;
+        private readonly ILogger<MaskinportenSchemaController> _logger;
+        private readonly IMaskinportenSchemaService _delegation;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IProfileService _profileService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegationsController"/> class.
+        /// Initializes a new instance of the <see cref="MaskinportenSchemaController"/> class.
         /// </summary>
         /// <param name="logger">the handler for logger service</param>
-        /// <param name="delegationsService">the handler for delegations service</param>
-        public DelegationsController(
-            ILogger<DelegationsController> logger,
-            IDelegationsService delegationsService,
+        /// <param name="delegationsService">The service implementation for handling maskinporten schema delegations</param>
+        /// <param name="profileService">The service implementation for user profile operations</param>
+        /// <param name="httpContextAccessor">Accessor for httpcontext</param>
+        public MaskinportenSchemaController(
+            ILogger<MaskinportenSchemaController> logger,
+            IMaskinportenSchemaService delegationsService,
             IProfileService profileService,
             IHttpContextAccessor httpContextAccessor)
         {
@@ -49,14 +45,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving delegated resources between parties
+        /// Endpoint for retrieving received Maskinporten resource delegation to the reportee party from others
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/received")]
-        public async Task<ActionResult<List<DelegationsFE>>> GetAllInboundDelegations([FromRoute] string party)
+        [Route("accessmanagement/api/v1/{party}/maskinportenschema/received")]
+        public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetReceivedMaskinportenSchemaDelegations([FromRoute] string party)
         {
             if (string.IsNullOrEmpty(party))
             {
@@ -68,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
                 string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
-                List<DelegationsFE> delegations = await _delegation.GetAllInboundDelegationsAsync(party, languageCode);                
+                List<MaskinportenSchemaDelegationFE> delegations = await _delegation.GetReceivedMaskinportenSchemaDelegations(party, languageCode);                
 
                 return delegations;
             }
@@ -85,14 +81,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving delegated resources between parties
+        /// Endpoint for retrieving delegated MaskinportenSchema resources offered by the reportee party to others
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered")]
-        public async Task<ActionResult<List<DelegationsFE>>> GetAllOutboundDelegations([FromRoute] string party)
+        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
+        public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetOfferedMaskinportenSchemaDelegations([FromRoute] string party)
         {
             if (string.IsNullOrEmpty(party))
             {
@@ -104,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
                 string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
-                List<DelegationsFE> delegations = await _delegation.GetAllOutboundDelegationsAsync(party, languageCode);                
+                List<MaskinportenSchemaDelegationFE> delegations = await _delegation.GetOfferedMaskinportenSchemaDelegations(party, languageCode);                
 
                 return delegations;
             }
@@ -121,13 +117,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving delegated resources between parties
+        /// Endpoint for revoking a maskinporten scope delegation on behalf of the party having received the delegation
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/received/revoke")]
+        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
         public async Task<ActionResult> RevokeReceivedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
         {
             try
@@ -152,13 +148,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving delegated resources between parties
+        /// Endpoint for revoking a maskinporten scope delegation on behalf of the party having offered the delegation
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/offered/revoke")]
+        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered/revoke")]
         public async Task<ActionResult> RevokeOfferedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegation delegation)
         {
             try
@@ -190,13 +186,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving delegated resources between parties
+        /// Endpoint for delegating a maskinporten schema resource from the reportee party to a third party organization
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/delegations/maskinportenschema/")]
+        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
         public async Task<ActionResult<DelegationOutput>> CreateMaskinportenDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
         {
             try

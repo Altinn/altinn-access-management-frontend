@@ -14,9 +14,9 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// Client that integrates with Delegations API
+    /// Client that integrates with MaskinportenSchema API
     /// </summary>
-    public class DelegationsClient : IDelegationsClient
+    public class MaskinportenSchemaClient : IMaskinportenSchemaClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
@@ -25,13 +25,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegationsClient"/> class
+        /// Initializes a new instance of the <see cref="MaskinportenSchemaClient"/> class
         /// </summary>
-        public DelegationsClient(
+        public MaskinportenSchemaClient(
             HttpClient httpClient, 
-            ILogger<DelegationsClient> logger, 
+            ILogger<MaskinportenSchemaClient> logger, 
             IHttpContextAccessor httpContextAccessor, 
-            IOptions<PlatformSettings> platformSettings) 
+            IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
@@ -42,11 +42,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<Delegation>> GetInboundDelegations(string party)
+        public async Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
         {
             try
             {
-                string endpointUrl = $"{party}/delegations/maskinportenschema/received";
+                string endpointUrl = $"{party}/maskinportenschema/received";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    List<Delegation> inboundDelegations = JsonSerializer.Deserialize<List<Delegation>>(responseContent, _serializerOptions);
+                    List<MaskinportenSchemaDelegation> inboundDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(responseContent, _serializerOptions);
                     return inboundDelegations;
                 }
                 else
@@ -72,11 +72,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<Delegation>> GetOutboundDelegations(string party)
+        public async Task<List<MaskinportenSchemaDelegation>> GetOfferedMaskinportenSchemaDelegations(string party)
         {
             try
             {
-                string endpointUrl = $"{party}/delegations/maskinportenschema/offered";
+                string endpointUrl = $"{party}/maskinportenschema/offered";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    List<Delegation> outboundDelegations = JsonSerializer.Deserialize<List<Delegation>>(responseContent, _serializerOptions);
+                    List<MaskinportenSchemaDelegation> outboundDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(responseContent, _serializerOptions);
                     return outboundDelegations;
                 }
                 else
@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"{party}/delegations/maskinportenschema/received/revoke";
+                string endpointUrl = $"{party}/maskinportenschema/received/revoke";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
@@ -124,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"{party}/delegations/maskinportenschema/offered/revoke";
+                string endpointUrl = $"{party}/maskinportenschema/offered/revoke";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
@@ -139,7 +139,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            string endpointUrl = $"{party}/delegations/maskinportenschema/";
+            string endpointUrl = $"{party}/maskinportenschema/offered";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);

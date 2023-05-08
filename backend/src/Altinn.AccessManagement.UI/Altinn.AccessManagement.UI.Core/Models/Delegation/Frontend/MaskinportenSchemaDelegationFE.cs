@@ -4,9 +4,9 @@ using Altinn.AccessManagement.UI.Core.Enums;
 namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
 {
     /// <summary>
-    /// DelegationsFE carries all the data required to show a delegation information in the frontend
+    /// MaskinportenSchemaDelegationFE carries all the data required to show a maskinporten delegation in the frontend
     /// </summary>
-    public class DelegationsFE
+    public class MaskinportenSchemaDelegationFE
     {
         /// <summary>
         /// Gets or sets the languageCode selected by the user
@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         /// <summary>
         /// Gets or sets the reportee that received the delegation
         /// </summary>
-        public int? CoveredByPartyId { get; set; }
+        public int CoveredByPartyId { get; set; }
 
         /// <summary>
         /// Gets or sets the user id of the user that performed the delegation change (either added or removed rules to the policy, or deleted it entirely).
@@ -46,12 +46,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         /// <summary>
         /// Gets or sets the organization number that offered the delegation
         /// </summary>
-        public int OfferedByOrganizationNumber { get; set; }
+        public string OfferedByOrganizationNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the organization number that received the delegation
         /// </summary>
-        public int CoveredByOrganizationNumber { get; set; }
+        public string CoveredByOrganizationNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the organization number that received the delegation
@@ -98,6 +98,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         /// Description explaining the rights a recipient will receive if given access to the resource
         /// </summary>
         public string RightDescription { get; set; }
-
     }
 }

@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertDelegationEqual(DelegationsFE expected, DelegationsFE actual)
+        public static void AssertDelegationEqual(MaskinportenSchemaDelegationFE expected, MaskinportenSchemaDelegationFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
