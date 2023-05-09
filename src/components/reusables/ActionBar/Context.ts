@@ -8,7 +8,6 @@ export const ActionBarContext = createContext<
       onClick: ClickHandler | undefined;
       headerId: string;
       contentId: string;
-      iconVariant: 'primary' | 'secondary';
       color: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
     }
   | undefined

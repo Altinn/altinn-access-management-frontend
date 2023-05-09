@@ -16,7 +16,6 @@ export interface ActionBarProps {
   additionalText?: React.ReactNode;
   children?: React.ReactNode;
   color?: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
-  iconVariant?: 'primary' | 'secondary';
   onClick?: ClickHandler;
   open?: boolean;
   subtitle?: React.ReactNode;
@@ -28,7 +27,6 @@ export const ActionBar = ({
   additionalText,
   children,
   color = 'neutral',
-  iconVariant = 'primary',
   onClick,
   open = false,
   subtitle,
@@ -45,7 +43,6 @@ export const ActionBar = ({
           open,
           headerId,
           contentId,
-          iconVariant,
           color,
         }}
       >

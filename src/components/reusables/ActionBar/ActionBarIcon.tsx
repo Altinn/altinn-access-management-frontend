@@ -2,13 +2,11 @@ import * as React from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon as Chevron } from '@navikt/aksel-icons';
 
-import { ReactComponent as CircleArrow } from '@/assets/CircleArrow.svg';
-
 import classes from './ActionBarIcon.module.css';
 import { useActionBarContext } from './Context';
 
 export const ActionBarIcon = () => {
-  const { onClick, open, iconVariant } = useActionBarContext();
+  const { onClick, open } = useActionBarContext();
   const iconClassnames = [
     classes.actionBarIcon,
     {
@@ -23,10 +21,5 @@ export const ActionBarIcon = () => {
     onClick,
   };
 
-  switch (iconVariant) {
-    case 'primary':
-      return <Chevron {...props} />;
-    case 'secondary':
-      return <CircleArrow {...props} />;
-  }
+  return <Chevron {...props} />;
 };
