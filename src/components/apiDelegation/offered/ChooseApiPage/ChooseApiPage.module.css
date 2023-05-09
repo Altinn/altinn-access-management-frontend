@@ -26,13 +26,13 @@
 
   .delegableApisContainer {
     margin-right: 25px;
-    height: 300px;
+    height: 400px;
     overflow-y: auto;
   }
 
   .chosenApisContainer {
     margin-left: 25px;
-    height: 300px;
+    height: 400px;
     overflow-y: auto;
   }
 
