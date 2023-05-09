@@ -123,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
+        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered/revoke")]
         public async Task<ActionResult> RevokeReceivedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
         {
             try

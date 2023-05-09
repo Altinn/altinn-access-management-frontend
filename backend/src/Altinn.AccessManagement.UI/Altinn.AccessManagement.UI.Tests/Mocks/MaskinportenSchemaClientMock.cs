@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 
 namespace Altinn.AccessManagement.UI.Tests.Mocks
 {
@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
             {
-                string file = "inbounddelegation.json";
+                string file = "backendReceived.json";
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
             {
-                string file = "outbounddelegation.json";
+                string file = "backendOffered.json";
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
@@ -71,12 +71,6 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
             return Task.FromResult(filteredDelegations);
         }
 
-        private static string GetDataPathForDelegations()
-        {
-            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "Data", "Delegation");
-        }
-
         public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
             throw new NotImplementedException();
@@ -89,7 +83,27 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
 
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            throw new NotImplementedException();
+            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
+            AttributeMatch toMatch = delegation.To.First();
+            string path = GetDataPathForDelegationOutput(resourceMatch.Value, party, toMatch.Value);
+            if (File.Exists(path))
+            {
+                string content = File.ReadAllText(path);
+                return Task.FromResult(new HttpResponseMessage() { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+        }
+
+        private static string GetDataPathForDelegations()
+        {
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return Path.Combine(unitTestFolder, "Data", "MaskinportenSchema");
+        }       
+
+        private static string GetDataPathForDelegationOutput(string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
+        {
+            return $"Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";            
         }
     }
 }

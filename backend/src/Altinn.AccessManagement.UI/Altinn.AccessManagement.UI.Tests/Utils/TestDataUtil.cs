@@ -146,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
             else
             {
-                fileName = offeredByPartyId != 0 ? "outbounddelegationfe" : "inbounddelegationfe";
+                fileName = offeredByPartyId != 0 ? "frontendOffered" : "frontendReceived";
             }
 
             string path = GetDelegationPath();
@@ -188,7 +188,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         private static string GetDelegationPath()
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Delegation");
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "MaskinportenSchema");
         }
 
         private static string GetResourcesPath(string fileName)
