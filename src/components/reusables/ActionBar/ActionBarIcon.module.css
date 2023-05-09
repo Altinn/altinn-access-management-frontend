@@ -3,6 +3,6 @@
   flex-shrink: 0;
 }
 
-.actionBarIcon__open {
+.actionBarIcon.open {
   transform: rotate(180deg);
 }

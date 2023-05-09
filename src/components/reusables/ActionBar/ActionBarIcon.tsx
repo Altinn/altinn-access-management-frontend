@@ -10,7 +10,7 @@ export const ActionBarIcon = () => {
   const iconClassnames = [
     classes.actionBarIcon,
     {
-      [classes.actionBarIcon__open]: open,
+      [classes.open]: open,
     },
   ];
   const props = {

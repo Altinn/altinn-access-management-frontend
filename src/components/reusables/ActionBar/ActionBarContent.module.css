@@ -8,27 +8,27 @@
   background-color: #FFFFFF;
 }
 
-.actionBarContent__light {
+.actionBarContent.light {
   border-color: #D2D5D8;
   border-top-color: #FFFFFF;
 }
 
-.actionBarContent__neutral {
+.actionBarContent.neutral {
   border-color: #D2D5D8;
   border-top-color: #FFFFFF;
 }
 
-.actionBarContent__warning {
+.actionBarContent.warning {
   border-color: #CC7005;
   border-top-color: #FFFFFF;
 }
 
-.actionBarContent__success {
+.actionBarContent.success {
   border-color: #118849;
   border-top-color: #FFFFFF;
 }
 
-.actionBarContent__danger {
+.actionBarContent.danger {
   border-color: #E02E49;
   border-top-color: #FFFFFF;
 }

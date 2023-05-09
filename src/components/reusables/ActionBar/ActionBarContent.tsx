@@ -18,7 +18,7 @@ export const ActionBarContent = ({ children }: ActionBarContentProps) => {
           aria-expanded={open}
           id={contentId}
           aria-labelledby={headerId}
-          className={cn(classes[`actionBarContent__${color}`], classes.actionBarContent)}
+          className={(cn(classes.actionBarContent), classes[color])}
         >
           {children}
         </div>

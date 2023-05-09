@@ -47,11 +47,10 @@ export const ActionBar = ({
         }}
       >
         <div
-          className={cn(classes.actionBar, classes[`actionBar__${color}`], {
-            [classes.actionBar__subtitle]: subtitle,
-            [classes.actionBar__open]: open,
-            [classes.actionBar__expandable]: children,
-            [classes[`actionBar__${color}__expandable`]]: children,
+          className={cn(classes.actionBar, classes[color], {
+            [classes.subtitle]: subtitle,
+            [classes.open]: open,
+            [classes.expandable]: children,
           })}
           tabIndex={-1}
           onClick={onClick}
@@ -63,7 +62,7 @@ export const ActionBar = ({
           )}
           {children ? (
             <button
-              className={cn(classes.actionBarButton, classes.actionBarButton__expandable)}
+              className={cn(classes.actionBarButton, classes.expandable)}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -91,7 +90,7 @@ export const ActionBar = ({
           {additionalText && (
             <button
               className={cn(classes.actionBarAdditionalText, {
-                [classes.actionBarAdditionalText__expandable]: children,
+                [classes.expandable]: children,
               })}
               onClick={onClick}
               tabIndex={-1}

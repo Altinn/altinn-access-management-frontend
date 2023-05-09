@@ -7,58 +7,58 @@
   min-height: 48px;
 }
 
-.actionBar__open{
+.actionBar.open{
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-style: none;
 }
 
-.actionBar__expandable{
+.actionBar.expandable{
   cursor:pointer;
 }
 
-.actionBar__light {
+.actionBar.light {
   border-color: #D2D5D8;
   background-color: #FFFFFF;
 }
 
-.actionBar__light__expandable:hover {
+.actionBar.light.expandable:hover {
   background-color: #E9EAEC;
 }
 
-.actionBar__neutral {
+.actionBar.neutral {
   border-color: #D2D5D8;
   background-color: #F4F5F6;
 }
 
-.actionBar__neutral__expandable:hover {
+.actionBar.neutral.expandable:hover {
   background-color: #E9EAEC;
 }
 
-.actionBar__warning {
+.actionBar.warning {
   border-color: #CC7005;
   background-color: #FFFBE6;
 }
 
-.actionBar__warning__expandable:hover {
+.actionBar.warning.expandable:hover {
   background-color: #FFF4B4;
 }
 
-.actionBar__success {
+.actionBar.success {
   border-color: #118849;
   background-color: #D1F4E1;
 }
 
-.actionBar__success__expandable:hover {
+.actionBar.success.expandable:hover {
   background-color: #8BE4B5;
 }
 
-.actionBar__danger {
+.actionBar.danger {
   border-color: #E02E49;
   background-color: #F9D5DB;
 }
 
-.actionBar__danger__expandable:hover {
+.actionBar.danger.expandable:hover {
   background-color: #F3ABB6;
 }
 
@@ -75,7 +75,7 @@
   word-break: break-word;
 }
 
-.actionBarButton__expandable {
+.actionBarButton.expandable {
   cursor: pointer;
 }
 
@@ -96,7 +96,7 @@
   margin-bottom: 5px;
 }
 
-.actionBar__subtitle{
+.actionBar.subtitle{
   min-height: 68px;
 }
 
@@ -118,7 +118,7 @@
   font-weight: 400;
 }
 
-.actionBarAdditionalText__expandable{
+.actionBarAdditionalText.expandable{
   cursor: pointer;
 }
 
