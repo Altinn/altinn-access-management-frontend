@@ -17,10 +17,6 @@
   cursor:pointer;
 }
 
-.actionBar__open:hover{
-  border-bottom-style: none;
-}
-
 .actionBar__light {
   border-color: #D2D5D8;
   background-color: #FFFFFF;
