@@ -30,5 +30,3 @@ export const ActionBarIcon = () => {
       return <CircleArrow {...props} />;
   }
 };
-
-export default ActionBarIcon;

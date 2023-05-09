@@ -86,12 +86,12 @@
 .actionBarActions {
   display: flex;
   flex-direction: column;
-  column-gap: 0.3rem;
   justify-content: center;
   align-items: center;
+  column-gap: 0.3rem;
   padding: 0;
   height: auto;
-  cursor: default;
+  cursor: pointer;
 }
 
 .actionBarSubtitle{

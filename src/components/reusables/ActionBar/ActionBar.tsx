@@ -8,6 +8,7 @@ import type { ClickHandler } from './Context';
 import { ActionBarContext } from './Context';
 import classes from './ActionBar.module.css';
 import { ActionBarIcon } from './ActionBarIcon';
+import { ActionBarActions } from './ActionBarActions';
 import { ActionBarContent } from './ActionBarContent';
 
 export interface ActionBarProps {
@@ -35,6 +36,7 @@ export const ActionBar = ({
 }: ActionBarProps) => {
   const headerId = useId();
   const contentId = useId();
+
   return (
     <>
       <ActionBarContext.Provider
@@ -55,6 +57,7 @@ export const ActionBar = ({
             [classes[`actionBar__${color}__expandable`]]: children,
           })}
           tabIndex={-1}
+          onClick={onClick}
         >
           {children && (
             <div className={cn(classes.actionBarIcon)}>
@@ -99,7 +102,11 @@ export const ActionBar = ({
               {additionalText}
             </button>
           )}
-          {actions && <div className={classes.actionBarActions}>{actions}</div>}
+          {actions && (
+            <div className={classes.actionBarActions}>
+              <ActionBarActions>{actions}</ActionBarActions>
+            </div>
+          )}
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
