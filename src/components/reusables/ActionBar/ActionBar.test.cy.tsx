@@ -47,7 +47,7 @@ describe('ActionBar', () => {
     cy.get('div').should('contain', 'Content');
   });
 
-  it('should render correctly when all props are it is non expandable', () => {
+  it('should render correctly when all props are it is not expandible', () => {
     const actionButton = <Button>Action</Button>;
     cy.mount(nonExpandableActionBar({ actions: actionButton }));
     cy.get('[data-testid="action-bar-icon"]').should('not.exist');
@@ -105,7 +105,7 @@ describe('ActionBar', () => {
     cy.get('@handleClickSpy').should('have.been.called');
   });
 
-  it('should not call handleClick when non expandable ActionBar is clicked', () => {
+  it('should call handleClick when non expandable ActionBar is clicked', () => {
     const handleClick = () => {
       cy.stub();
     };
