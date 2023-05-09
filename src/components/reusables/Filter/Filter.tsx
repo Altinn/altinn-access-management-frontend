@@ -3,16 +3,6 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { Button } from '@digdir/design-system-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import cn from 'classnames';
-import { v4 as uuidv4 } from 'uuid';
-import {
-  useFloating,
-  offset,
-  useClick,
-  useDismiss,
-  useInteractions,
-  shift,
-  autoUpdate,
-} from '@floating-ui/react';
 
 import { ReactComponent as ChevronDown } from '@/assets/ChevronDown.svg';
 import { arraysEqual } from '@/resources/utils';
@@ -20,6 +10,7 @@ import { arraysEqual } from '@/resources/utils';
 import type { FilterOption } from './utils';
 import { FilterContent } from './FilterContent';
 import classes from './Filter.module.css';
+import { Popover } from './Popover';
 
 export interface FilterProps {
   options: FilterOption[];
@@ -30,6 +21,7 @@ export interface FilterProps {
   icon?: ReactNode;
   value?: string[];
   onApply?: (value: string[]) => void;
+  modalView?: boolean;
 }
 
 export const Filter = ({
@@ -40,28 +32,13 @@ export const Filter = ({
   icon,
   value,
   searchable,
+  modalView = false,
   onApply,
 }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(value ?? []);
   const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
   const [hasChanges, setHasChanges] = useState(false);
-  const [popupId] = useState('filter-popup-' + String(uuidv4()));
-
-  const popup = useFloating({
-    open: isOpen,
-    onOpenChange: setIsOpen,
-    placement: 'bottom-start',
-    whileElementsMounted: autoUpdate,
-    middleware: [offset(1), shift()],
-  });
-
-  const context = popup.context;
-
-  const click = useClick(context);
-  const dismiss = useDismiss(context);
-
-  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
   useEffect(() => {
     if (!arraysEqual(activeFilters, checkedFilters)) {
@@ -93,69 +70,82 @@ export const Filter = ({
     }
   };
 
-  return (
-    <div className={classes.filter}>
-      <button
-        ref={popup.refs.setReference}
-        {...getReferenceProps()}
-        className={classes.filterButton}
-        onClick={handleOpenOrClose}
-        aria-expanded={isOpen}
-        aria-controls={popupId}
-        aria-haspopup='dialog'
-      >
-        {icon && (
-          <SvgIcon
-            svgIconComponent={icon}
-            className={classes.icon}
-          />
-        )}
-        {label}
+  const filterButton = (
+    <button
+      id='filterButton'
+      className={classes.filterButton}
+      onClick={handleOpenOrClose}
+    >
+      {icon && (
         <SvgIcon
-          svgIconComponent={<ChevronDown />}
-          className={cn(classes.icon, { [classes['icon--open']]: isOpen })}
+          svgIconComponent={icon}
+          className={classes.icon}
         />
-      </button>
-      {isOpen && (
-        <div
-          id={popupId}
-          ref={popup.refs.setFloating}
-          className={classes.popup}
-          style={{
-            position: popup.strategy,
-            top: popup.y ?? 0,
-            left: popup.x ?? 0,
-          }}
-          role='dialog'
-          {...getFloatingProps()}
-        >
-          <div className={classes.content}>
-            <FilterContent
-              options={options}
-              onValueChange={setCheckedFilters}
-              value={checkedFilters}
-              searchable={searchable}
-            />
-          </div>
-          <div className={classes.popupActions}>
-            <Button
-              size='small'
-              variant='quiet'
-              aria-disabled={checkedFilters.length === 0}
-              onClick={checkedFilters.length === 0 ? undefined : handleReset}
-            >
-              {resetButtonLabel}
-            </Button>
-            <Button
-              size='small'
-              onClick={hasChanges ? handleApply : undefined}
-              aria-disabled={!hasChanges}
-            >
-              {applyButtonLabel}
-            </Button>
-          </div>
-        </div>
       )}
-    </div>
+      {label}
+      <SvgIcon
+        svgIconComponent={<ChevronDown />}
+        className={cn(classes.icon, { [classes.open]: isOpen })}
+      />
+    </button>
+  );
+
+  const modalHeader = () => {
+    return (
+      <div className={classes.modalHeader}>
+        <h3>{label}</h3>
+        <Button
+          variant='quiet'
+          onClick={handleOpenOrClose}
+        >
+          X
+        </Button>
+      </div>
+    );
+  };
+
+  return (
+    <Popover
+      trigger={filterButton}
+      isOpen={isOpen}
+      setIsOpen={handleOpenOrClose}
+      isModal={modalView}
+    >
+      <div
+        aria-labelledby='filterButton'
+        className={classes.popoverContent}
+      >
+        {modalView && modalHeader()}
+        <div className={cn(classes.optionSection, { [classes.modal]: modalView })}>
+          <FilterContent
+            options={options}
+            onValueChange={setCheckedFilters}
+            value={checkedFilters}
+            searchable={searchable}
+            compact={!modalView}
+          />
+        </div>
+        <div className={cn(classes.popoverActions, { [classes.modal]: modalView })}>
+          <Button
+            className={classes.resetButton}
+            size={modalView ? 'medium' : 'small'}
+            variant='quiet'
+            fullWidth={false}
+            aria-disabled={checkedFilters.length === 0}
+            onClick={checkedFilters.length === 0 ? undefined : handleReset}
+          >
+            {resetButtonLabel}
+          </Button>
+          <Button
+            size={modalView ? 'medium' : 'small'}
+            onClick={hasChanges ? handleApply : undefined}
+            aria-disabled={!hasChanges}
+            fullWidth={modalView}
+          >
+            {applyButtonLabel}
+          </Button>
+        </div>
+      </div>
+    </Popover>
   );
 };

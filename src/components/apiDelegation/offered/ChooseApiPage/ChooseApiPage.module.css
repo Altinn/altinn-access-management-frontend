@@ -1,6 +1,6 @@
 @media only screen and (max-width: 768px) {
   .searchField{
-    width: 45%
+    width: 80%
   }
 
   .accordionScrollContainer {
@@ -9,7 +9,8 @@
   }
   .searchSection{
     display: flex;
-    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
 
 

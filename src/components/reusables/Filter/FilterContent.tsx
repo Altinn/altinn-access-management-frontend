@@ -14,12 +14,14 @@ export interface FilterContentProps {
   value: string[];
   onValueChange: (value: string[]) => void;
   searchable?: boolean;
+  compact?: boolean;
 }
 
 export const FilterContent = ({
   options,
   value,
   searchable = true,
+  compact = true,
   onValueChange,
 }: FilterContentProps) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(value);
@@ -58,7 +60,7 @@ export const FilterContent = ({
           }}
           checked={isSelected}
           label={option.label}
-          compact={true}
+          compact={compact}
         />
       </div>
     );

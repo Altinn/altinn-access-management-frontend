@@ -1,39 +1,42 @@
-.filter {
-    position: relative;
-    display: inline-block;
+.popoverContent{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-.popup {
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
-    padding: 20px 0px 6px 0px;
-    display: block;
-    width: 280px;
-    z-index: 50;
-    left: 0;
-    position: absolute;
-    margin-top: 10px;
-    background-color: var(--semantic-surface-neutral-subtle);
-    border-radius: 20px;
-    top: 0;
-    left: 0;
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
 }
 
-@media (max-width: 768px) {
-    .popup {
-        display: none
-    }
+.optionSection{
+    max-height: 300px;
 }
 
-.content{
+.optionSection.modal{
+    max-height: 100%;
+    min-height: 0;
+    flex: 1;
+}
+
+.popoverActions {
+    --actionsFlexDirections: row;
     display: flex;
     justify-content: center;
+    flex-direction: var(--actionsFlexDirections);
+    padding: 15px 0 15px 0;
 }
 
-.popupActions {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 15px;
-    padding-top: 15px;
+.popoverActions.modal {
+    --actionsFlexDirections: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.resetButton {
+    width: fit-content
 }
 
 .icon {
@@ -42,7 +45,7 @@
     width: var(--component-button-size-icon-small);
 }
 
-.icon--open {
+.icon.open {
     transform: rotate(180deg);
 }
 
