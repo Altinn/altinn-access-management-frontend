@@ -19,14 +19,14 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<DelegationsController> customFactory)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<MaskinportenSchemaController> customFactory)
         {
-            WebApplicationFactory<DelegationsController> factory = customFactory.WithWebHostBuilder(builder =>
+            WebApplicationFactory<MaskinportenSchemaController> factory = customFactory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
-                    services.AddTransient<IDelegationsClient, DelegationsClientMock>();
+                    services.AddTransient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

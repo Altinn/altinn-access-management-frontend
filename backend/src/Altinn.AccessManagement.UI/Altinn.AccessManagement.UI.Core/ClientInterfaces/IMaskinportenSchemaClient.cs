@@ -1,25 +1,24 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.Platform.Profile.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
-    /// Interface for delgation client to integrate with delegations API in platform
+    /// Interface for client to integrate with maskinporten schema delegations API in platform
     /// </summary>
-    public interface IDelegationsClient
+    public interface IMaskinportenSchemaClient
     {
         /// <summary>
         /// Gets the delegations received by the party
         /// </summary>
         /// <returns>list of delegations</returns>
-        Task<List<Delegation>> GetInboundDelegations(string party);
+        Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party);
 
         /// <summary>
-        /// Gets the delegations given by the party
+        /// Gets the delegations offered by the party
         /// </summary>
         /// <returns>list of delegations</returns>
-        Task<List<Delegation>> GetOutboundDelegations(string party);
+        Task<List<MaskinportenSchemaDelegation>> GetOfferedMaskinportenSchemaDelegations(string party);
 
         /// <summary>
         /// Revokes received delegation

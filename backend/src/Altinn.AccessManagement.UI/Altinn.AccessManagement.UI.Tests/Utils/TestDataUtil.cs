@@ -5,8 +5,6 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Tests.Controllers;
-using Altinn.Authorization.ABAC.Constants;
-using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Tests.Utils
 {
@@ -72,10 +70,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="coveredByPartyId">partyid of the reportee that received the delegation</param>
         /// <param name="resourceIds">resource id</param>
         /// <returns>Received delegations</returns>
-        public static List<Delegation> GetDelegations(int offeredByPartyId, int coveredByPartyId, List<string> resourceIds = null)
+        public static List<MaskinportenSchemaDelegation> GetDelegations(int offeredByPartyId, int coveredByPartyId, List<string> resourceIds = null)
         {
-            List<Delegation> delegations = null;
-            List<Delegation> filteredDelegations = new List<Delegation>();
+            List<MaskinportenSchemaDelegation> delegations = null;
+            List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
             string fileName;
 
             if (resourceIds != null)
@@ -103,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                         };
                         try
                         {
-                            delegations = JsonSerializer.Deserialize<List<Delegation>>(content, options);
+                            delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
                         }
                         catch (Exception ex)
                         { 
@@ -136,10 +134,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="coveredByPartyId">partyid of the reportee that received the delegation</param>
         /// <param name="resourceIds">resource id</param>
         /// <returns>Received delegations</returns>
-        public static List<DelegationsFE> GetDelegationsFE(int offeredByPartyId, int coveredByPartyId, List<string> resourceIds = null)
+        public static List<MaskinportenSchemaDelegationFE> GetDelegationsFE(int offeredByPartyId, int coveredByPartyId, List<string> resourceIds = null)
         {
-            List<DelegationsFE> delegations = null;
-            List<DelegationsFE> filteredDelegations = new List<DelegationsFE>();
+            List<MaskinportenSchemaDelegationFE> delegations = null;
+            List<MaskinportenSchemaDelegationFE> filteredDelegations = new List<MaskinportenSchemaDelegationFE>();
             string fileName;
 
             if (resourceIds != null)
@@ -148,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
             else
             {
-                fileName = offeredByPartyId != 0 ? "outbounddelegationfe" : "inbounddelegationfe";
+                fileName = offeredByPartyId != 0 ? "frontendOffered" : "frontendReceived";
             }
 
             string path = GetDelegationPath();
@@ -156,25 +154,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 string file = $"{fileName}.json";
 
-                //foreach (string file in files)
-                //{
-                //    if (file.Contains(fileName))
-                //    {
-                        string content = File.ReadAllText(Path.Combine(path, file));
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                        };
-                        try
-                        {
-                            delegations = JsonSerializer.Deserialize<List<DelegationsFE>>(content, options);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                //    }
-                //}
+                string content = File.ReadAllText(Path.Combine(path, file));
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                try
+                {
+                    delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegationFE>>(content, options);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
 
                 if (offeredByPartyId != 0 && coveredByPartyId != 0)
                 {
@@ -195,13 +187,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         private static string GetDelegationPath()
         {
-            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(DelegationsControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Delegation");
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "MaskinportenSchema");
         }
 
         private static string GetResourcesPath(string fileName)
         {
-            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(DelegationsControllerTest).Assembly.Location).LocalPath);
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourceRegistry", $"{ fileName}.json");
         }
     }

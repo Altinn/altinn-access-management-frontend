@@ -14,18 +14,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class ProfileService : IProfileService
     {
         private readonly ILogger _logger;
-        private readonly IDelegationsClient _delegationsClient;
+        private readonly IMaskinportenSchemaClient _delegationsClient;
         private readonly IProfileClient _profileClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegationsService"/> class.
+        /// Initializes a new instance of the <see cref="MaskinportenSchemaService"/> class.
         /// </summary>
         /// <param name="logger">handler for logger</param>
         /// <param name="delegationsClient">handler for delegations client</param>
         /// <param name="profileClient">handler for profile client</param>
         public ProfileService(
-            ILogger<IDelegationsService> logger,
-            IDelegationsClient delegationsClient,           
+            ILogger<IMaskinportenSchemaService> logger,
+            IMaskinportenSchemaClient delegationsClient,           
             IProfileClient profileClient)
         {
             _logger = logger;

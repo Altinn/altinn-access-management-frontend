@@ -59,11 +59,40 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="DelegationExternal"/> have the same property in the same positions.
+        /// Assert that two <see cref="BaseRightExternal"/> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertDelegationEqual(DelegationsFE expected, DelegationsFE actual)
+        public static void AssertBaseRightExternalEqual(BaseRight expected, BaseRight actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertCollections(expected.Resource, actual.Resource, AssertAttributeMatchEqual);
+            AssertAttributeMatchEqual(expected.Action, actual.Action);
+        }
+
+        /// <summary>
+        /// Assert that two <see cref="CompetentAuthorityExternal"/> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertCompetentAuthorityEqual(CompetentAuthority expected, CompetentAuthority actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected?.Orgcode, actual.Orgcode);
+            Assert.Equal(expected?.Organization, actual.Organization);
+            Assert.Equal(expected?.Name, actual.Name);
+        }
+
+        /// <summary>
+        /// Assert that two <see cref="MaskinportenSchemaDelegationFE"/> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertMaskinportenSchemaDelegationFEEqual(MaskinportenSchemaDelegationFE expected, MaskinportenSchemaDelegationFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -86,18 +115,17 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="CompetentAuthorityExternal"/> have the same property in the same positions.
+        /// Assert that two <see cref="DelegationOutput"/> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertCompetentAuthorityEqual(CompetentAuthority expected, CompetentAuthority actual)
+        public static void AssertDelegationOutputEqual(DelegationOutput expected, DelegationOutput actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected?.Orgcode, actual.Orgcode);
-            Assert.Equal(expected?.Organization, actual.Organization);
-            Assert.Equal(expected?.Name, actual.Name);
+            AssertCollections(expected.To, actual.To, AssertAttributeMatchEqual);
+            AssertCollections(expected.RightDelegationResults, actual.RightDelegationResults, AssertBaseRightExternalEqual);
         }
 
         /// <summary>
@@ -139,6 +167,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 Assert.Equal(actual.Errors[expectedKey], actual.Errors[expectedKey]);
             }
+        }
+
+        private static void AssertAttributeMatchEqual(AttributeMatch expected, AttributeMatch actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Value, actual.Value);
         }
     }
 }
