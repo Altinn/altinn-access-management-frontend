@@ -128,7 +128,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
     return await axios
-      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -147,7 +147,7 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
     }
 
     return await axios
-      .get(`/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/received`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -167,7 +167,7 @@ export const deleteOfferedApiDelegation = createAsyncThunk(
 
     return await axios
       .post(
-        `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/offered/revoke`,
+        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered/revoke`,
         {
           to: [
             {
@@ -206,7 +206,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
 
     return await axios
       .post(
-        `/accessmanagement/api/v1/${altinnPartyId}/delegations/maskinportenschema/received/revoke`,
+        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/received/revoke`,
         {
           from: [
             {

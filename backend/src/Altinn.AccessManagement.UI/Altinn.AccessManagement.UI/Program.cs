@@ -180,14 +180,14 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<IDelegationsClient, DelegationsClient>();
+    services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
     services.AddHttpClient<IRegisterClient, RegisterClient>();
     services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IDelegationsService, DelegationsService>();
+    services.AddSingleton<IMaskinportenSchemaService, MaskinportenSchemaService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
     services.AddSingleton<IProfileService, ProfileService>();

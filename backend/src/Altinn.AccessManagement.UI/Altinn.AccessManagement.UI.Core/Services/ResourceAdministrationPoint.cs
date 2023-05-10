@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Profile.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,7 +17,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly CacheConfig _cacheConfig;
-        private readonly IProfileClient _profileClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAdministrationPoint"/> class.
@@ -31,14 +29,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             ILogger<IResourceAdministrationPoint> logger, 
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig,
-            IProfileClient profileClient)
+            IOptions<CacheConfig> cacheConfig)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
-            _profileClient = profileClient;
         }
 
         /// <inheritdoc />
@@ -79,30 +75,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetResources(List<Tuple<string, string>> resourceIds)
+        public async Task<List<ServiceResource>> GetResources(List<string> resourceIds)
         {
             List<ServiceResource> filteredResources = new List<ServiceResource>();
 
             try
             {
-                foreach (Tuple<string, string> id in resourceIds)
+                foreach (string id in resourceIds)
                 {
                     ServiceResource resource = null;
 
-                    resource = await GetResource(id.Item1);
+                    resource = await GetResource(id);
 
                     if (resource == null)
                     {
                         ServiceResource unavailableResource = new ServiceResource
                         {
-                            Identifier = id.Item1,
+                            Identifier = id,
                             Title = new Dictionary<string, string>
                         {
                             { "en", "Not Available" },
-                            { "nb-no", "ikke tilgjengelig" },
-                            { "nn-no", "ikkje tilgjengelig" }
+                            { "nb", "ikke tilgjengelig" },
+                            { "nn", "ikkje tilgjengelig" }
                         },
-                            ResourceType = Enum.TryParse<ResourceType>(id.Item2, out ResourceType resourceType) ? resourceType : ResourceType.Default
+                            ResourceType = ResourceType.Default
                         };
                         filteredResources.Add(unavailableResource);
                     }

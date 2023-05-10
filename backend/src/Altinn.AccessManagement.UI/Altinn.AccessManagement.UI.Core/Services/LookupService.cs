@@ -1,11 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -18,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegationsService"/> class.
+        /// Initializes a new instance of the <see cref="LookupService"/> class.
         /// </summary>
         /// <param name="lookupClient">handler for profile client</param>
         /// <param name="registerClient">Client wrapper for platform register</param>
