@@ -15,14 +15,6 @@
     margin-left: var(--component-page-margin-horizontal);
     overflow: hidden;
   }
-
-  .pageContentActionBarContainer{
-    width: 100%;
-  }
-
-  .actionBars{
-    margin-bottom: 2rem;
-  }
 }
 
 @media only screen and (min-width: 769px) {
@@ -30,15 +22,6 @@
     --component-page-margin-horizontal: 3rem;
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
-  }
-  
-  .pageContentActionBarContainer{
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-  }
-
-  .actionBars{
-    margin-right: 3rem;
   }
 }
 

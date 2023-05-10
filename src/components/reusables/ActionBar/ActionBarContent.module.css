@@ -1,3 +1,5 @@
+@import "@digdir/design-system-tokens/dist/digdir/tokens.css";
+
 .actionBarContent {
   border-width: 1px;
   border-style: solid;
@@ -9,26 +11,26 @@
 }
 
 .actionBarContent.light {
-  border-color: #D2D5D8;
+  border-color: var(--fds-semantic-border-neutral-subtle);
   border-top-color: #FFFFFF;
 }
 
 .actionBarContent.neutral {
-  border-color: #D2D5D8;
+  border-color: var(--fds-semantic-border-neutral-subtle);
   border-top-color: #FFFFFF;
 }
 
 .actionBarContent.warning {
-  border-color: #CC7005;
+  border-color: var(--fds-semantic-border-warning-default);
   border-top-color: #FFFFFF;
 }
 
 .actionBarContent.success {
-  border-color: #118849;
+  border-color: var(--fds-semantic-surface-success-default);
   border-top-color: #FFFFFF;
 }
 
 .actionBarContent.danger {
-  border-color: #E02E49;
+  border-color: var(--fds-semantic-surface-danger-default);
   border-top-color: #FFFFFF;
 }

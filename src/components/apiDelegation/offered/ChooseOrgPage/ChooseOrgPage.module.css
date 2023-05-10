@@ -19,6 +19,10 @@
   .chosenOrgsContainer {
     margin-bottom: 2rem;
   }
+
+  .pageContentActionBarContainer{
+    width: 100%;
+  }
 }
 
 @media only screen and (min-width: 769px) {
@@ -37,6 +41,11 @@
 
   .chosenOrgsContainer {
     margin-left: 25px;
+  }
+  
+  .pageContentActionBarContainer{
+    grid-template-columns: 1fr 1fr;
+    display: grid;
   }
 }
 

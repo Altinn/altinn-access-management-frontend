@@ -1,3 +1,5 @@
+@import "@digdir/design-system-tokens/dist/digdir/tokens.css";
+
 .actionBar {
   --component-actionbar_header-border_top_style: solid;
   display: flex;
@@ -18,51 +20,51 @@
 }
 
 .actionBar.light {
-  border-color: #D2D5D8;
-  background-color: #FFFFFF;
+  border-color: var(--fds-semantic-border-neutral-subtle);
+  background-color: var(--fds-semantic-surface-neutral-default);
 }
 
 .actionBar.light.expandable:hover {
-  background-color: #E9EAEC;
+  background-color: var(--fds-semantic-surface-neutral-subtle-hover);
 }
 
 .actionBar.neutral {
-  border-color: #D2D5D8;
-  background-color: #F4F5F6;
+  border-color: var(--fds-semantic-border-neutral-subtle);
+  background-color: var(--fds-semantic-surface-neutral-subtle);
 }
 
 .actionBar.neutral.expandable:hover {
-  background-color: #E9EAEC;
+  background-color: var(--fds-semantic-surface-neutral-subtle-hover);
 }
 
 .actionBar.warning {
-  border-color: #CC7005;
-  background-color: #FFFBE6;
+  border-color: var(--fds-semantic-border-warning-default);
+  background-color: var(--fds-semantic-surface-warning-subtle);
 }
 
 .actionBar.warning.expandable:hover {
-  background-color: #FFF4B4;
+  background-color: var(--fds-semantic-surface-warning-subtle-hover);
 }
 
 .actionBar.success {
-  border-color: #118849;
-  background-color: #D1F4E1;
+  border-color: var(--fds-semantic-surface-success-default);
+  background-color: var(--fds-semantic-surface-success-subtle);
 }
 
 .actionBar.success.expandable:hover {
-  background-color: #8BE4B5;
+  background-color: var(--fds-semantic-surface-success-subtle-hover);
 }
 
 .actionBar.danger {
-  border-color: #E02E49;
-  background-color: #F9D5DB;
+  border-color: var(--fds-semantic-surface-danger-default);
+  background-color: var(--fds-semantic-surface-danger-subtle);
 }
 
 .actionBar.danger.expandable:hover {
-  background-color: #F3ABB6;
+  background-color: var(--colors-red-200);
 }
 
-.actionBarButton {
+.actionBarHeader {
   --component-actionbar_header_title-color-background: none;
   font-family: inherit;
   flex: 1 1 auto;
@@ -75,7 +77,7 @@
   word-break: break-word;
 }
 
-.actionBarButton.expandable {
+.actionBarHeader.expandable {
   cursor: pointer;
 }
 
@@ -88,6 +90,7 @@
   padding: 0;
   height: auto;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .actionBarSubtitle{
@@ -116,6 +119,7 @@
   word-break: break-word;
   font-size: 16px;
   font-weight: 400;
+  margin-right: 10px;
 }
 
 .actionBarAdditionalText.expandable{
@@ -124,11 +128,14 @@
 
 .title{
   font-weight: 500;
-  margin-top: 5px;
 }
 
 .subtitle{
   font-weight: 400;
   margin-top: 8px;
+}
+
+.actionBarTexts{
+  margin-top: 5px;
   margin-bottom: 5px;
 }

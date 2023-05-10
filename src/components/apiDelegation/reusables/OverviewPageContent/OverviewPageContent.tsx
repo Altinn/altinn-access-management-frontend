@@ -209,9 +209,9 @@ export const OverviewPageContent = ({
             {t('common.maskinporten')}
           </a>
         </Panel>
-        <div>
+        <div className={classes.explanatoryContainer}>
           {overviewOrgs.length > 0 && (
-            <div className={classes.activeDelegationsHeader}>
+            <>
               {isSm ? (
                 <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
               ) : (
@@ -238,10 +238,10 @@ export const OverviewPageContent = ({
                   </Button>
                 )}
               </div>
-            </div>
+            </>
           )}
         </div>
-        <div className={classes.activeDelegations}>{activeDelegations()}</div>
+        <>{activeDelegations()}</>
         {isEditable && (
           <div className={classes.saveSection}>
             <Button

@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "naumovs.color-highlight",
+    "clinyong.vscode-css-modules",
+    "pranaygp.vscode-css-peek",
+    "joy-yu.css-snippets",
+    "dbaeumer.vscode-eslint",
+    "GitHub.vscode-pull-request-github",
+    "GitHub.github-vscode-theme",
+    "eamodio.gitlens",
+    "ecmel.vscode-html-css",
+    "christian-kohler.npm-intellisense",
+    "ionutvmi.path-autocomplete",
+    "christian-kohler.path-intellisense",
+    "esbenp.prettier-vscode",
+    "pflannery.vscode-versionlens",
+  ]
+}

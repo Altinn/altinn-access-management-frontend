@@ -221,7 +221,7 @@ export const ChooseOrgPage = () => {
                 />
               </div>
             ) : (
-              <div className={common.pageContentActionBarContainer}>
+              <div className={classes.pageContentActionBarContainer}>
                 <div className={classes.delegableOrgsContainer}>
                   {searchString === '' ? (
                     <h4 className={classes.actionBarContainerText}>

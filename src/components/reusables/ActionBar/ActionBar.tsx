@@ -62,7 +62,7 @@ export const ActionBar = ({
           )}
           {children ? (
             <button
-              className={cn(classes.actionBarButton, classes.expandable)}
+              className={cn(classes.actionBarHeader, classes.expandable)}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -70,12 +70,14 @@ export const ActionBar = ({
               aria-expanded={open}
               aria-controls={contentId}
             >
-              <div className={classes.title}>{title}</div>
-              <div className={classes.subtitle}>{subtitle}</div>
+              <div className={classes.actionBarTexts}>
+                <div className={classes.title}>{title}</div>
+                <div className={classes.subtitle}>{subtitle}</div>
+              </div>
             </button>
           ) : (
             <button
-              className={cn(classes.actionBarButton)}
+              className={cn(classes.actionBarHeader)}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -83,8 +85,10 @@ export const ActionBar = ({
               aria-expanded={open}
               aria-controls={contentId}
             >
-              <div className={classes.title}>{title}</div>
-              <div className={classes.subtitle}>{subtitle}</div>
+              <div className={classes.actionBarTexts}>
+                <div className={classes.title}>{title}</div>
+                <div className={classes.subtitle}>{subtitle}</div>
+              </div>
             </button>
           )}
           {additionalText && (
