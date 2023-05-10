@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -16,6 +17,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// <summary>
     /// Client that integrates with MaskinportenSchema API
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class MaskinportenSchemaClient : IMaskinportenSchemaClient
     {
         private readonly ILogger _logger;
