@@ -95,8 +95,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             Title = new Dictionary<string, string>
                         {
                             { "en", "Not Available" },
-                            { "nb-no", "ikke tilgjengelig" },
-                            { "nn-no", "ikkje tilgjengelig" }
+                            { "nb", "ikke tilgjengelig" },
+                            { "nn", "ikkje tilgjengelig" }
                         },
                             ResourceType = ResourceType.Default
                         };

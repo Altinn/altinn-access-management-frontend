@@ -11,6 +11,8 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
     /// </summary>
     public class MaskinportenSchemaClientMock : IMaskinportenSchemaClient
     {
+        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenSchemaClientMock"/> class
         /// </summary>
@@ -25,16 +27,9 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
-            {
-                string file = "backendReceived.json";
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-                
-                string content = File.ReadAllText(Path.Combine(path, file));
+            {      
+                string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
                 delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
-
                 
                 if (!string.IsNullOrEmpty(party))
                 {
@@ -53,14 +48,8 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
             {
-                string file = "backendOffered.json";
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-                string content = File.ReadAllText(Path.Combine(path, file));
+                string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
                 delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
-
 
                 if (!string.IsNullOrEmpty(party))
                 {
@@ -73,12 +62,52 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
 
         public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
-            throw new NotImplementedException();
+            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
+            AttributeMatch fromMatch = delegation.From.First();
+
+            string path = GetDataPathForDelegations();
+            if (Directory.Exists(path))
+            {
+                string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
+                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
+
+                foreach (MaskinportenSchemaDelegation d in delegations)
+                {
+                    if (d.CoveredByPartyId.ToString() == party &&
+                        d.OfferedByOrganizationNumber == fromMatch.Value &&
+                        d.ResourceId == resourceMatch.Value)
+                    {
+                        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NoContent));
+                    }
+                }
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
         }
 
         public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
-            throw new NotImplementedException();
+            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
+            AttributeMatch toMatch = delegation.To.First();
+
+            string path = GetDataPathForDelegations();
+            if (Directory.Exists(path))
+            {
+                string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
+                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
+
+                foreach(MaskinportenSchemaDelegation d in delegations)
+                {
+                    if (d.OfferedByPartyId.ToString() == party &&
+                        d.CoveredByOrganizationNumber == toMatch.Value &&
+                        d.ResourceId == resourceMatch.Value)
+                    {
+                        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NoContent));
+                    }
+                }
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
         }
 
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)

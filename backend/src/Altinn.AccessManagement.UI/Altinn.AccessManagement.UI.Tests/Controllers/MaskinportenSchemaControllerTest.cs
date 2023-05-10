@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// <summary>
     /// Test class for <see cref="MaskinportenSchemaController"></see>
     /// </summary>
-    [Collection("DelegationController Tests")]
+    [Collection("MaskinportenSchemaController Tests")]
     public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaController>>
     {
         private readonly CustomWebApplicationFactory<MaskinportenSchemaController> _factory;
@@ -121,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: MaskinportenDelegation performed by authenticated user 20000490 for the reportee party 50005545 of the jks_audi_etron_gt maskinporten schema resource from the resource registry, to the organization 810418672
+        /// Test case: MaskinportenDelegation performed by authenticated user 20000490 for the reportee party 50005545 of the nav_aa_distribution maskinporten schema resource from the resource registry, to the organization 810418672
         ///            In this case:
         ///            - The user 20000490 is DAGL for the From unit 50005545
         /// Expected: MaskinportenDelegation returns 200 OK with response body containing the expected delegated rights
@@ -145,6 +145,44 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             DelegationOutput actualResponse = JsonSerializer.Deserialize<DelegationOutput>(responseContent, options);
             AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Test case: RevokeOfferedMaskinportenScopeDelegation for the reportee party 50004222 of the nav_aa_distribution maskinporten schema resource from the resource registry,
+        ///            delegated to the organization 810418192
+        /// Expected: RevokeOfferedMaskinportenScopeDelegation returns 204 No Content
+        /// </summary>
+        [Fact]
+        public async Task RevokeOfferedMaskinportenScopeDelegation_Success()
+        {
+            // Arrange
+            string fromParty = "50004223";
+            StreamContent requestContent = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: RevokeReceivedMaskinportenScopeDelegation for the reportee party 50004221 of the nav_aa_distribution maskinporten schema resource from the resource registry,
+        ///            which have received delegation from the organization 50004222
+        /// Expected: RevokeReceivedMaskinportenScopeDelegation returns 204 No Content
+        /// </summary>
+        [Fact]
+        public async Task RevokeReceivedMaskinportenScopeDelegation_Success()
+        {
+            // Arrange
+            string toParty = "50004219";
+            StreamContent requestContent = GetRequestContent("RevokeReceived", "nav_aa_distribution", $"810418672", $"p{toParty}");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{toParty}/maskinportenschema/received/revoke", requestContent);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         private static List<MaskinportenSchemaDelegationFE> GetExpectedOutboundDelegationsForParty(int offeredByPartyId)
