@@ -36,7 +36,7 @@ const nonExpandableActionBar = (props: Partial<ActionBarProps> = {}) => (
 );
 
 describe('ActionBar', () => {
-  it('Should render corretly when all props are set and it is expandable', () => {
+  it('Should render correctly when all props are set and it is expandable', () => {
     const actionButton = <Button>Action</Button>;
     cy.mount(expandableActionBar({ actions: actionButton, open: true }));
     cy.get('[data-testid="action-bar-icon"]').should('exist');
@@ -47,7 +47,7 @@ describe('ActionBar', () => {
     cy.get('div').should('contain', 'Content');
   });
 
-  it('should render correctly when all props are it is not expandible', () => {
+  it('should render correctly when all props are set and it is not expandable', () => {
     const actionButton = <Button>Action</Button>;
     cy.mount(nonExpandableActionBar({ actions: actionButton }));
     cy.get('[data-testid="action-bar-icon"]').should('not.exist');

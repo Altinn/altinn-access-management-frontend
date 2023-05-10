@@ -85,7 +85,8 @@ export const OverviewPageContent = ({
       break;
   }
 
-  const newDelegation = () => {
+  const goToStartDelegation = () => {
+    dispatch(restoreAllSoftDeletedItems());
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
   };
 
@@ -186,7 +187,7 @@ export const OverviewPageContent = ({
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
-              onClick={newDelegation}
+              onClick={goToStartDelegation}
               icon={<Add />}
               fullWidth={isSm}
             >

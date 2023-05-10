@@ -50,7 +50,7 @@ export const ActionBar = ({
           className={cn(classes.actionBar, classes[color], {
             [classes.subtitle]: subtitle,
             [classes.open]: open,
-            [classes.expandable]: children,
+            [classes.onClick]: onClick,
           })}
           tabIndex={-1}
           onClick={onClick}
@@ -62,7 +62,7 @@ export const ActionBar = ({
           )}
           {children ? (
             <button
-              className={cn(classes.actionBarHeader, classes.expandable)}
+              className={cn(classes.actionBarHeader, classes.onClick)}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -82,7 +82,6 @@ export const ActionBar = ({
               onClick={onClick}
               id={headerId}
               data-testid='action-bar'
-              aria-expanded={open}
               aria-controls={contentId}
             >
               <div className={classes.actionBarTexts}>
@@ -94,7 +93,7 @@ export const ActionBar = ({
           {additionalText && (
             <button
               className={cn(classes.actionBarAdditionalText, {
-                [classes.expandable]: children,
+                [classes.onClick]: onClick,
               })}
               onClick={onClick}
               tabIndex={-1}
