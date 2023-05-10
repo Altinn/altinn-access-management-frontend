@@ -166,27 +166,24 @@ export const deleteOfferedApiDelegation = createAsyncThunk(
     }
 
     return await axios
-      .post(
-        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered/revoke`,
-        {
-          to: [
-            {
-              id: 'urn:altinn:organizationnumber',
-              value: String(request.orgNr),
-            },
-          ],
-          rights: [
-            {
-              resource: [
-                {
-                  id: 'urn:altinn:resource',
-                  value: request.apiId,
-                },
-              ],
-            },
-          ],
-        },
-      )
+      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered/revoke`, {
+        to: [
+          {
+            id: 'urn:altinn:organizationnumber',
+            value: String(request.orgNr),
+          },
+        ],
+        rights: [
+          {
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: request.apiId,
+              },
+            ],
+          },
+        ],
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -205,27 +202,24 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
     }
 
     return await axios
-      .post(
-        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/received/revoke`,
-        {
-          from: [
-            {
-              id: 'urn:altinn:organizationnumber',
-              value: String(request.orgNr),
-            },
-          ],
-          rights: [
-            {
-              resource: [
-                {
-                  id: 'urn:altinn:resource',
-                  value: request.apiId,
-                },
-              ],
-            },
-          ],
-        },
-      )
+      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/received/revoke`, {
+        from: [
+          {
+            id: 'urn:altinn:organizationnumber',
+            value: String(request.orgNr),
+          },
+        ],
+        rights: [
+          {
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: request.apiId,
+              },
+            ],
+          },
+        ],
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
