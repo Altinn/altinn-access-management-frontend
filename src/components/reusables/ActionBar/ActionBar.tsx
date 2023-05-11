@@ -62,7 +62,9 @@ export const ActionBar = ({
           )}
           {children ? (
             <button
-              className={cn(classes.actionBarHeader, classes.clickable)}
+              className={cn(classes.actionBarHeader, {
+                [classes.clickable]: onClick,
+              })}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -77,7 +79,9 @@ export const ActionBar = ({
             </button>
           ) : (
             <button
-              className={cn(classes.actionBarHeader, classes.clickable)}
+              className={cn(classes.actionBarHeader, {
+                [classes.clickable]: onClick,
+              })}
               type='button'
               onClick={onClick}
               id={headerId}
