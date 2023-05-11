@@ -7,7 +7,7 @@ import { XMarkIcon } from '@navikt/aksel-icons';
 import { arraysEqual } from '@/resources/utils';
 
 import type { FilterOption } from './utils';
-import { FilterContent } from './FilterContent';
+import { OptionDisplay } from './OptionDisplay';
 import classes from './Filter.module.css';
 import { Floatover } from './Floatover';
 import { FilterButton } from './FilterButton';
@@ -105,7 +105,7 @@ export const Filter = ({
       >
         {modalView && modalHeader()}
         <div className={cn(classes.optionSection, { [classes.modal]: modalView })}>
-          <FilterContent
+          <OptionDisplay
             options={options}
             onValueChange={setCheckedFilters}
             value={checkedFilters}
@@ -113,7 +113,7 @@ export const Filter = ({
             compact={!modalView}
           />
         </div>
-        <div className={cn(classes.popoverActions, { [classes.modal]: modalView })}>
+        <div className={cn(classes.filterActions, { [classes.modal]: modalView })}>
           <Button
             className={classes.resetButton}
             size={modalView ? 'medium' : 'small'}

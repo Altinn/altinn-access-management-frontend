@@ -213,7 +213,7 @@ export const ChooseApiPage = () => {
                   applyButtonLabel='Bruk'
                   resetButtonLabel='Nullstill valg'
                   onApply={handleFilterChange}
-                  searchable={false}
+                  searchable={true}
                   modalView={isSm}
                 />
               </div>

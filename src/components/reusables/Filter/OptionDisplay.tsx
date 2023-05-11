@@ -6,10 +6,11 @@ import { SearchField } from '@altinn/altinn-design-system';
 import { arraysEqual } from '@/resources/utils';
 import { usePrevious } from '@/resources/hooks';
 
+import { optionSearch } from './utils';
 import type { FilterOption } from './utils';
-import classes from './FilterContent.module.css';
+import classes from './OptionDisplay.module.css';
 
-export interface FilterContentProps {
+export interface OptionDisplayProps {
   options: FilterOption[];
   value: string[];
   onValueChange: (value: string[]) => void;
@@ -17,14 +18,15 @@ export interface FilterContentProps {
   compact?: boolean;
 }
 
-export const FilterContent = ({
+export const OptionDisplay = ({
   options,
   value,
   searchable = true,
   compact = true,
   onValueChange,
-}: FilterContentProps) => {
+}: OptionDisplayProps) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(value);
+  const [sortedOptions, setSortedOptions] = useState<FilterOption[]>(options);
 
   // Update selected values when there are external changes
   const prevValue = usePrevious(value);
@@ -34,12 +36,20 @@ export const FilterContent = ({
     }
   }, [value]);
 
+  // Update sorted options when there are external changes
+  const prevOptions = usePrevious(options);
+  useEffect(() => {
+    if (!arraysEqual(options, prevOptions)) {
+      setSortedOptions(options);
+    }
+  }, [options]);
+
   const changeHandler = (newValues: string[], addedValue?: string) => {
     setSelectedValues(newValues);
     onValueChange(newValues);
   };
 
-  const HandleSelection = (selectedValue: string) => {
+  const handleSelection = (selectedValue: string) => {
     if (selectedValues?.includes(selectedValue)) {
       changeHandler(selectedValues.filter((value) => value !== selectedValue));
     } else {
@@ -47,7 +57,11 @@ export const FilterContent = ({
     }
   };
 
-  const checkboxes = options.map((option, index) => {
+  const handleSearch = (searchString: string) => {
+    setSortedOptions(optionSearch(options, searchString));
+  };
+
+  const checkboxes = sortedOptions.map((option, index) => {
     const isSelected = selectedValues?.includes(option.value);
     return (
       <div
@@ -56,7 +70,7 @@ export const FilterContent = ({
       >
         <Checkbox
           onChange={() => {
-            HandleSelection(option.value);
+            handleSelection(option.value);
           }}
           checked={isSelected}
           label={option.label}
@@ -67,10 +81,14 @@ export const FilterContent = ({
   });
 
   return (
-    <div className={classes.filterContent}>
+    <div className={classes.optionDisplay}>
       {searchable && (
         <div className={classes.searchField}>
-          <SearchField />
+          <SearchField
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              handleSearch(event.target.value);
+            }}
+          />
         </div>
       )}
       <div className={classes.scrollContainer}>

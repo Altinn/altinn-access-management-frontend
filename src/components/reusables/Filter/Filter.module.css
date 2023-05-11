@@ -23,7 +23,7 @@
     flex: 1;
 }
 
-.popoverActions {
+.filterActions {
     --actionsFlexDirections: row;
     display: flex;
     justify-content: center;
@@ -31,7 +31,7 @@
     padding: 15px 0 15px 0;
 }
 
-.popoverActions.modal {
+.filterActions.modal {
     --actionsFlexDirections: column;
     gap: 4px;
     align-items: center;
