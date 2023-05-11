@@ -1,4 +1,5 @@
-/*   overviewOrgs: [
+/*   
+overviewOrgs: [
     {
       id: '1',
       orgName: 'Skatteetaten',
@@ -50,7 +51,7 @@
   ], 
 
 
-    export const fetchOverviewOrgsOffered = createAsyncThunk(
+export const fetchOverviewOrgsOffered = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOffered',
   async () => {
     const altinnPartyId = getCookie('AltinnPartyId');
@@ -66,13 +67,14 @@
         // throw new Error(String(error.response.status));
       });
   },
+);
 
-  .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
-        state.loading = true;
-        const dataArray = action.payload;
-        // const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
-         //state.overviewOrgs = responseList;
-        state.loading = false;
+.addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
+      state.loading = true;
+      const dataArray = action.payload;
+      // const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
+        //state.overviewOrgs = responseList;
+      state.loading = false;
 
 );
   */

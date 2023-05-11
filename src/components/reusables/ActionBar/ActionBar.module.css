@@ -15,7 +15,7 @@
   border-bottom-style: none;
 }
 
-.actionBar.onClick{
+.actionBar.clickable{
   cursor:pointer;
 }
 
@@ -24,7 +24,7 @@
   background-color: var(--fds-semantic-surface-neutral-default);
 }
 
-.actionBar.light.onClick:hover {
+.actionBar.light.clickable:hover {
   background-color: var(--fds-semantic-surface-neutral-subtle-hover);
 }
 
@@ -33,7 +33,7 @@
   background-color: var(--fds-semantic-surface-neutral-subtle);
 }
 
-.actionBar.neutral.onClick:hover {
+.actionBar.neutral.clickable:hover {
   background-color: var(--fds-semantic-surface-neutral-subtle-hover);
 }
 
@@ -42,7 +42,7 @@
   background-color: var(--fds-semantic-surface-warning-subtle);
 }
 
-.actionBar.warning.onClick:hover {
+.actionBar.warning.clickable:hover {
   background-color: var(--fds-semantic-surface-warning-subtle-hover);
 }
 
@@ -51,7 +51,7 @@
   background-color: var(--fds-semantic-surface-success-subtle);
 }
 
-.actionBar.success.onClick:hover {
+.actionBar.success.clickable:hover {
   background-color: var(--fds-semantic-surface-success-subtle-hover);
 }
 
@@ -60,7 +60,7 @@
   background-color: var(--fds-semantic-surface-danger-subtle);
 }
 
-.actionBar.danger.onClick:hover {
+.actionBar.danger.clickable:hover {
   background-color: var(--fds-semantic-surface-danger-subtle-hover);
 }
 
@@ -77,7 +77,7 @@
   word-break: break-word;
 }
 
-.actionBarHeader.onClick {
+.actionBarHeader.clickable {
   cursor: pointer;
 }
 
@@ -122,7 +122,7 @@
   margin-right: 10px;
 }
 
-.actionBarAdditionalText.onClick{
+.actionBarAdditionalText.clickable{
   cursor: pointer;
 }
 

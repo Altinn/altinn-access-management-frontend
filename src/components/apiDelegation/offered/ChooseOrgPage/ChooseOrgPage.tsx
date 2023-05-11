@@ -1,4 +1,4 @@
-import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/design-system-react';
 import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -116,8 +116,8 @@ export const ChooseOrgPage = () => {
           actions={
             <Button
               icon={<AddCircle />}
-              variant={ButtonVariant.Quiet}
-              color={ButtonColor.Success}
+              variant={'quiet'}
+              color={'success'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={'add'}
             ></Button>
@@ -141,8 +141,8 @@ export const ChooseOrgPage = () => {
           actions={
             <Button
               icon={<MinusCircle />}
-              variant={ButtonVariant.Quiet}
-              color={ButtonColor.Danger}
+              variant={'quiet'}
+              color={'danger'}
               onClick={() => {
                 handleSoftRemove(org);
               }}

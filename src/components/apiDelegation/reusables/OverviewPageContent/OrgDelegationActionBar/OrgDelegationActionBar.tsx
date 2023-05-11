@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, ButtonColor, ButtonVariant, List, ButtonSize } from '@digdir/design-system-react';
+import { Button, List } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -45,10 +45,10 @@ export const OrgDelegationActionBar = ({
     <>
       {delegateToOrgCallback && (
         <Button
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Primary}
+          variant={'quiet'}
+          color={'primary'}
           icon={<AddCircle />}
-          size={ButtonSize.Small}
+          size={'small'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
@@ -58,9 +58,9 @@ export const OrgDelegationActionBar = ({
       {isEditable &&
         (organization.isAllSoftDeleted ? (
           <Button
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Secondary}
-            size={ButtonSize.Small}
+            variant={'quiet'}
+            color={'secondary'}
+            size={'small'}
             icon={<Cancel />}
             onClick={softRestoreAllCallback}
             aria-label={String(t('api_delegation.undo'))}
@@ -70,10 +70,10 @@ export const OrgDelegationActionBar = ({
         ) : (
           <div>
             <Button
-              variant={ButtonVariant.Quiet}
-              color={ButtonColor.Danger}
+              variant={'quiet'}
+              color={'danger'}
               icon={<MinusCircle />}
-              size={ButtonSize.Small}
+              size={'small'}
               onClick={handleSoftDeleteAll}
               aria-label={String(t('api_delegation.delete'))}
             >

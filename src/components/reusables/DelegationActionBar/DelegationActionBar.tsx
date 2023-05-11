@@ -1,4 +1,4 @@
-import { ButtonVariant, ButtonColor, Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import { useState } from 'react';
 import { t } from 'i18next';
 import * as React from 'react';
@@ -38,8 +38,8 @@ export const DelegationActionBar = ({
       {buttonType === 'add' && (
         <Button
           icon={<AddCircle />}
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Success}
+          variant={'quiet'}
+          color={'success'}
           onClick={onActionButtonClick}
           aria-label={'soft-add'}
         ></Button>
@@ -47,8 +47,8 @@ export const DelegationActionBar = ({
       {buttonType === 'remove' && (
         <Button
           icon={<MinusCircle />}
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Danger}
+          variant={'quiet'}
+          color={'danger'}
           onClick={onActionButtonClick}
           aria-label={'soft-remove'}
         ></Button>
