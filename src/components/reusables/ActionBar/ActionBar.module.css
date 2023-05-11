@@ -61,7 +61,7 @@
 }
 
 .actionBar.danger.onClick:hover {
-  background-color: var(--colors-red-200);
+  background-color: var(--fds-semantic-surface-danger-subtle-hover);
 }
 
 .actionBarHeader {
