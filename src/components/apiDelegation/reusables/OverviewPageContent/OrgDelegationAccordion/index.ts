@@ -1,1 +1,0 @@
-export { OrgDelegationAccordion } from './OrgDelegationAccordion';

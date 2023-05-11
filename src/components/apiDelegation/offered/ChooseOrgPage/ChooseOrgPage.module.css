@@ -11,16 +11,41 @@
   .topText{
     font-size: 20px;
   }
+
+  .delegableOrgsContainer{
+    margin-bottom: 2rem;
+  }
+
+  .chosenOrgsContainer {
+    margin-bottom: 2rem;
+  }
+
+  .pageContentActionBarContainer{
+    width: 100%;
+  }
 }
 
 @media only screen and (min-width: 769px) {
-  .accordionScrollContainer {
+  .actionBarScrollContainer {
     height: 300px;
     overflow-y: auto;
   }
 
   .searchSection{
-    width: 45%;
+    width: 47.5%;
+  }
+
+  .delegableOrgsContainer{
+    margin-right: 25px;
+  }
+
+  .chosenOrgsContainer {
+    margin-left: 25px;
+  }
+  
+  .pageContentActionBarContainer{
+    grid-template-columns: 1fr 1fr;
+    display: grid;
   }
 }
 
@@ -48,7 +73,7 @@
   font-weight: normal;
 }
 
-.accordionContainerText {
+.actionBarContainerText {
   margin-bottom: 5px;
   font-weight: 500;
 }
@@ -59,5 +84,10 @@
 
 .chosenOrgsHeader{
   font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.actionBarWrapper{
+  margin-top: 5px;
   margin-bottom: 5px;
 }

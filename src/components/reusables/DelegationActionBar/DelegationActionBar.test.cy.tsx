@@ -3,7 +3,7 @@ import { mount } from 'cypress/react18';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
-import { NewDelegationAccordion, NewDelegationAccordionButtonType } from '@/components/reusables';
+import { DelegationActionBar } from '@/components/reusables';
 
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/apiDelegation/delegableOrg/delegableOrgSlice';
 
@@ -22,7 +22,7 @@ const delegableOrg: DelegableOrg = {
   orgNr: '930124123',
 };
 
-describe('NewDelegationAccordion', () => {
+describe('DelegationActionBar', () => {
   it('should do callback when button with aria-label "soft-add" is clicked', () => {
     const callback = () => {
       cy.stub();
@@ -31,12 +31,12 @@ describe('NewDelegationAccordion', () => {
     const callbackSpy = cy.spy(callback).as('callbackSpy');
 
     cy.mount(
-      <NewDelegationAccordion
+      <DelegationActionBar
         title={delegableOrg.orgName}
         subtitle={delegableOrg.orgNr}
-        buttonType={NewDelegationAccordionButtonType.Add}
-        addRemoveClick={callbackSpy}
-      ></NewDelegationAccordion>,
+        buttonType={'add'}
+        onActionButtonClick={callbackSpy}
+      ></DelegationActionBar>,
     );
 
     cy.findByLabelText(/soft-add/i).click();
@@ -51,12 +51,12 @@ describe('NewDelegationAccordion', () => {
     const callbackSpy = cy.spy(callback).as('callbackSpy');
 
     cy.mount(
-      <NewDelegationAccordion
+      <DelegationActionBar
         title={delegableOrg.orgName}
         subtitle={delegableOrg.orgNr}
-        buttonType={NewDelegationAccordionButtonType.Remove}
-        addRemoveClick={callbackSpy}
-      ></NewDelegationAccordion>,
+        buttonType={'remove'}
+        onActionButtonClick={callbackSpy}
+      ></DelegationActionBar>,
     );
 
     cy.findByLabelText(/soft-remove/i).click();

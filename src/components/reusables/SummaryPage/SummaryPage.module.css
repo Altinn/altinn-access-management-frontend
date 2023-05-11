@@ -14,7 +14,6 @@
 }
 
 .receiptMainButton{
-  float: right;
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
@@ -53,3 +52,9 @@
   display: flex;
   justify-content: center;
 }
+
+.receiptMainButton{
+  display: flex;
+  justify-content: flex-end;
+}
+

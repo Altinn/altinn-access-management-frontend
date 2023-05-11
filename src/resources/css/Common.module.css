@@ -8,20 +8,12 @@
   }
 }
 
-@media only screen and (min-width: 0px) {
+@media only screen and (max-width: 768px) {
   .pageContent{
     --component-page-margin-horizontal: 0.5rem;
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
     overflow: hidden;
-  }
-
-  .pageContentAccordionsContainer{
-    width: 100%;
-  }
-
-  .apiAccordions{
-    margin-bottom: 2rem;
   }
 }
 
@@ -30,15 +22,6 @@
     --component-page-margin-horizontal: 3rem;
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
-  }
-  
-  .pageContentAccordionsContainer{
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-  }
-
-  .apiAccordions{
-    margin-right: 3rem;
   }
 }
 

@@ -34,7 +34,7 @@ import common from '@/resources/css/Common.module.css';
 
 import { LayoutState } from '../LayoutState';
 
-import { OrgDelegationAccordion } from './OrgDelegationAccordion';
+import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
 
 export interface OverviewPageContentInterface {
@@ -85,7 +85,8 @@ export const OverviewPageContent = ({
       break;
   }
 
-  const newDelegation = () => {
+  const goToStartDelegation = () => {
+    dispatch(restoreAllSoftDeletedItems());
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
   };
 
@@ -163,25 +164,30 @@ export const OverviewPageContent = ({
       return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
     }
     return overviewOrgs.map((org) => (
-      <OrgDelegationAccordion
+      <div
         key={org.id}
-        organization={org}
-        isEditable={isEditable}
-        softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
-        softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-      ></OrgDelegationAccordion>
+        className={classes.actionBarWrapper}
+      >
+        <OrgDelegationActionBar
+          organization={org}
+          isEditable={isEditable}
+          softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+          softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+          key={org.id}
+        ></OrgDelegationActionBar>
+      </div>
     ));
   };
 
   return (
     <div className={common.pageContent}>
-      <div className={classes.overviewAccordionsContainer}>
+      <div className={classes.overviewActionBarContainer}>
         {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
         {layout === LayoutState.Offered && (
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
-              onClick={newDelegation}
+              onClick={goToStartDelegation}
               icon={<Add />}
               fullWidth={isSm}
             >
@@ -204,9 +210,9 @@ export const OverviewPageContent = ({
             {t('common.maskinporten')}
           </a>
         </Panel>
-        <div>
+        <div className={classes.explanatoryContainer}>
           {overviewOrgs.length > 0 && (
-            <div className={classes.activeDelegationsHeader}>
+            <>
               {isSm ? (
                 <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
               ) : (
@@ -233,10 +239,10 @@ export const OverviewPageContent = ({
                   </Button>
                 )}
               </div>
-            </div>
+            </>
           )}
         </div>
-        <div className={classes.activeDelegations}>{activeDelegations()}</div>
+        <>{activeDelegations()}</>
         {isEditable && (
           <div className={classes.saveSection}>
             <Button

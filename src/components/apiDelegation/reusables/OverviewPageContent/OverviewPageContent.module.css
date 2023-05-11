@@ -13,12 +13,14 @@
   }
 
   .editButton {
+    align-items: center;
+    justify-content: end;
     margin-bottom: 0.3rem;
   }
 }
 
 @media only screen and (min-width: 769px) {
-  .overviewAccordionsContainer{
+  .overviewActionBarContainer{
     margin-top: 3rem;
   }
 
@@ -33,15 +35,21 @@
   }
 
   .saveSection{
-    margin-top: 2rem;
     margin-right: 0.5rem;
-    float: right;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .editButton {
     justify-content: flex-end;
+    align-items: center;
     display: flex;
     flex: 1;
+  }
+
+  .explanatoryContainer{
+    margin-top: 30px;
+    display: flex;
   }
 }
 
@@ -82,6 +90,7 @@
   margin-top: 2rem;
 }
 
-.activeDelegations{
-  min-height: 100px;
+.actionBarWrapper{
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

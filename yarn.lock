@@ -524,6 +524,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@digdir/design-system-tokens@npm:*":
+  version: 0.0.3
+  resolution: "@digdir/design-system-tokens@npm:0.0.3"
+  checksum: 70e914f0926993dfb2d0ff67f27e29f5a670f83deccf00c72f9469d595d708aec6a589b7d9d8404fd3a6d183444c3fb5a2f5ddac019dd617eba3c3f058e8e8a8
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm64@npm:0.17.17":
   version: 0.17.17
   resolution: "@esbuild/android-arm64@npm:0.17.17"
@@ -869,6 +876,13 @@ __metadata:
     "@jridgewell/resolve-uri": 3.1.0
     "@jridgewell/sourcemap-codec": 1.4.14
   checksum: 0572669f855260808c16fe8f78f5f1b4356463b11d3f2c7c0b5580c8ba1cbf4ae53efe9f627595830856e57dbac2325ac17eb0c3dd0ec42102e6f227cc289c02
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^2.8.14":
+  version: 2.8.14
+  resolution: "@navikt/aksel-icons@npm:2.8.14"
+  checksum: f6f9e20aa3d532649b6adcdc7fddba65f758ba2584f1f2aea6a57cf6f8cb3556a0bb1b6b86ead97690be5d8731ba3360aaeded1bc36719d3690ba00e10dc28e6
   languageName: node
   linkType: hard
 
@@ -1852,6 +1866,8 @@ __metadata:
   dependencies:
     "@altinn/altinn-design-system": ^0.27.6
     "@digdir/design-system-react": ^0.11.0
+    "@digdir/design-system-tokens": "*"
+    "@navikt/aksel-icons": ^2.8.14
     "@reduxjs/toolkit": ^1.9.3
     "@tanstack/react-query": ^4.0.5
     "@testing-library/cypress": ^9.0.0
