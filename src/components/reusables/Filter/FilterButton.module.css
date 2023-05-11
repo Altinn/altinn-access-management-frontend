@@ -1,0 +1,41 @@
+@import "@digdir/design-system-tokens/dist/digdir/tokens.css";
+
+.icon {
+    display: inline-block;
+    height: var(--component-button-size-icon-small);
+    width: var(--component-button-size-icon-small);
+}
+
+.chevron.open {
+    transform: rotate(180deg);
+}
+
+.filterButton {
+    background-color: var(--fds-semantic-surface-neutral-subtle);
+    align-items: center;
+    border-radius: 50px;
+    border: solid transparent;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    gap: 2px;
+    font-family: inherit;
+    font-weight: 500;
+    height: var(--component-button-size-height-small);
+    justify-content: center;
+    padding: 0 var(--component-button-space-padding-x-small);
+    text-align: center;
+    max-width: 300px;
+}
+
+.filterButton:hover {
+    background-color: var(--fds-semantic-surface-neutral-subtle-hover);
+}
+.filterButton:focus-visible {
+    outline: var(--semantic-tab_focus-outline-color) solid
+    var(--semantic-tab_focus-outline-width);
+    outline-offset: var(--semantic-tab_focus-outline-offset);
+}
+.filterButton:focus:not(:focus-visible) {
+    outline: none;
+}

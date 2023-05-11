@@ -3,9 +3,9 @@ import { List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 
-import { ReactComponent as FilterIcon } from '@/assets/Filter.svg';
 import {
   Page,
   PageHeader,

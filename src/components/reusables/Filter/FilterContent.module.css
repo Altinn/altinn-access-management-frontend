@@ -1,3 +1,5 @@
+@import "@digdir/design-system-tokens/dist/digdir/tokens.css";
+
 .filterContent {
     display: flex;
     justify-content: center;
@@ -8,13 +10,12 @@
     display: flex;
     align-items: left;
     flex-direction: column;
-    border-top: 1px solid var(--semantic-border-neutral-divider);
-    border-left: 1px solid var(--semantic-border-neutral-divider);
-    border-right: 1px solid var(--semantic-border-neutral-divider);
+    border: 1px solid var(--fds-semantic-border-neutral-divider);
+    border-bottom: none;
 }
 
 .option {
-    border-bottom: 1px solid var(--semantic-border-neutral-divider);
+    border-bottom: 1px solid var(--fds-semantic-border-neutral-divider);
     padding: 6px 10px 6px 10px;
 }
 
