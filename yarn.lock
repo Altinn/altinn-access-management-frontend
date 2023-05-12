@@ -510,8 +510,8 @@ __metadata:
   linkType: hard
 
 "@digdir/design-system-react@npm:^0.11.0":
-  version: 0.11.1
-  resolution: "@digdir/design-system-react@npm:0.11.1"
+  version: 0.11.3
+  resolution: "@digdir/design-system-react@npm:0.11.3"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@floating-ui/react": 0.17.0
@@ -520,7 +520,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 28d55db5ca7fc769c1ae8cabc4a560923cf171ca5f1c2a673156fc81c84d04aac371415e10a342b7776185f108adbb974bb2781f8abf9aafea63987feff0dd82
+  checksum: 302c2a9b51d599247f34dfba35d85ad988ab2a30a1161c766f24ea555651099495ae6a110b5ea0bd20e367ca2ca0d410fb382427faf2679d8afb6b416b67e275
   languageName: node
   linkType: hard
 
