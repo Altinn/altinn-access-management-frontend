@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
-import { DeletableListItem } from '@/components/reusables';
+import { DeletableListItem } from '@/components';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

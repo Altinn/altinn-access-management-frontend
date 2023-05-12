@@ -4,7 +4,7 @@ import { Button } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
-import { ActionBar, type ActionBarProps } from '@/components/reusables';
+import { ActionBar, type ActionBarProps } from '@/components';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

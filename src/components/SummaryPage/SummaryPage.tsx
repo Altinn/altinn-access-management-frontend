@@ -16,7 +16,7 @@ import {
   PageHeader,
   PageColor,
   PageSize,
-} from '@/components/reusables';
+} from '@/components';
 import common from '@/resources/css/Common.module.css';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';

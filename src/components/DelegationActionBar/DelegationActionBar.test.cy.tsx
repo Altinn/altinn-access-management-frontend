@@ -3,7 +3,7 @@ import { mount } from 'cypress/react18';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
-import { DelegationActionBar } from '@/components/reusables';
+import { DelegationActionBar } from '@/components';
 
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/apiDelegation/delegableOrg/delegableOrgSlice';
 

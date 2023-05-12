@@ -7,7 +7,7 @@ import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import { SummaryPage, PageContainer, PageColor } from '@/components/reusables';
+import { SummaryPage, PageContainer, PageColor } from '@/components';
 
 export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(

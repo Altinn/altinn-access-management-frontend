@@ -10,7 +10,7 @@ import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
-import { DeletableListItem, ActionBar } from '@/components/reusables';
+import { DeletableListItem, ActionBar } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './OrgDelegationActionBar.module.css';

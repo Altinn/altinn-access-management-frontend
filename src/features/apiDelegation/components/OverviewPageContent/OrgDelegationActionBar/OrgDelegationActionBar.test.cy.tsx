@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 import * as React from 'react';
 
-import { OrgDelegationActionBar } from '@/components/apiDelegation/reusables/OverviewPageContent/OrgDelegationActionBar';
+import { OrgDelegationActionBar } from '@/features/apiDelegation/components/OverviewPageContent/OrgDelegationActionBar';
 import store from '@/rtk/app/store';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/apiDelegation/overviewOrg/overviewOrgSlice';

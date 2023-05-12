@@ -13,12 +13,12 @@ import {
   PageSize,
   NavigationButtons,
   PageContainer,
-} from '@/components/reusables';
+} from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
-import { CompactDeletableListItem } from '@/components/reusables/CompactDeletableListItem';
+import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -31,7 +31,7 @@ import {
   filter,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import { DelegationActionBar } from '@/components/reusables/DelegationActionBar';
+import { DelegationActionBar } from '@/components/DelegationActionBar';
 
 import classes from './ChooseApiPage.module.css';
 

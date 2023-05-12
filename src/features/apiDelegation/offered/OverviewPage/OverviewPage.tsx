@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import { Page, PageHeader, PageContent, PageSize, PageContainer } from '@/components/reusables';
+import { Page, PageHeader, PageContent, PageSize, PageContainer } from '@/components';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { useMediaQuery } from '@/resources/hooks';
 
-import { OverviewPageContent } from '../../reusables/OverviewPageContent';
-import { LayoutState } from '../../reusables/LayoutState';
+import { OverviewPageContent } from '../../components/OverviewPageContent';
+import { LayoutState } from '../../components/LayoutState';
 
 export const OverviewPage = () => {
   const { t } = useTranslation('common');

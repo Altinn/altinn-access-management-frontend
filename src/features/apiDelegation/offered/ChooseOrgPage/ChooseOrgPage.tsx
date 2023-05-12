@@ -15,7 +15,7 @@ import {
   ActionBar,
   NavigationButtons,
   PageContainer,
-} from '@/components/reusables';
+} from '@/components';
 import {
   softAddOrg,
   softRemoveOrg,
