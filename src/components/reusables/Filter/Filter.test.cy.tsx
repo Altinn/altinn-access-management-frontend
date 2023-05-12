@@ -15,7 +15,6 @@ const defaultProps: FilterProps = {
   options: filterOptions,
   applyButtonLabel: 'Apply',
   resetButtonLabel: 'Reset',
-  searchable: false,
 };
 
 describe(
@@ -130,7 +129,6 @@ describe(
       cy.get('[role="dialog"]').should('be.visible');
 
       // Use Tab to navigate through the filter options
-      cy.focused().realPress('Tab');
       for (let i = 0; i < filterOptions.length; i++) {
         if (i === 1) {
           cy.focused().realPress('Space');
@@ -159,9 +157,15 @@ describe(
       cy.get('button').contains('Filter').click();
 
       cy.get('button').contains('Reset').click();
-      cy.contains(filterOptions[0].label).get('[type="checkbox"]').should('not.be.checked');
-      cy.contains(filterOptions[1].label).get('[type="checkbox"]').should('not.be.checked');
-      cy.contains(filterOptions[2].label).get('[type="checkbox"]').should('not.be.checked');
+      cy.contains('label', `${filterOptions[0].label}`)
+        .find('[type=checkbox]')
+        .should('not.be.checked');
+      cy.contains('label', `${filterOptions[1].label}`)
+        .find('[type=checkbox]')
+        .should('not.be.checked');
+      cy.contains('label', `${filterOptions[2].label}`)
+        .find('[type=checkbox]')
+        .should('not.be.checked');
 
       cy.get('button').contains('Apply').click();
 
@@ -178,8 +182,12 @@ describe(
 
       // Check that they are still applied when reopening
       cy.get('button').contains('Filter').click();
-      cy.contains(filterOptions[0].label).get('[type="checkbox"]').should('be.checked');
-      cy.contains(filterOptions[2].label).get('[type="checkbox"]').should('be.checked');
+      cy.contains('label', `${filterOptions[0].label}`)
+        .find('[type=checkbox]')
+        .should('be.checked');
+      cy.contains('label', `${filterOptions[2].label}`)
+        .find('[type=checkbox]')
+        .should('be.checked');
     });
     it('does not call onApply if closed without clicking apply', () => {
       const onApply = (value: string[]) => cy.stub();
@@ -218,8 +226,68 @@ describe(
 
       // Check that previously checed options are not checked
       cy.get('button').contains('Filter').click();
-      cy.contains(filterOptions[0].label).get('[type="checkbox"]').should('not.be.checked');
-      cy.contains(filterOptions[2].label).get('[type="checkbox"]').should('not.be.checked');
+      cy.contains('label', `${filterOptions[0].label}`)
+        .find('[type=checkbox]')
+        .should('not.be.checked');
+      cy.contains('label', `${filterOptions[2].label}`)
+        .find('[type=checkbox]')
+        .should('not.be.checked');
+    });
+    it('displays search field when search is enabled', () => {
+      mount(
+        <Filter
+          searchable={true}
+          {...defaultProps}
+        />,
+      );
+      cy.get('button').contains('Filter').click();
+      cy.get('input').should('be.visible');
+    });
+    it('does not display search field when search is disabled', () => {
+      mount(
+        <Filter
+          searchable={false}
+          {...defaultProps}
+        />,
+      );
+      cy.get('button').contains('Filter').click();
+      cy.get('input').should('not.be.visible');
+    });
+    it('adjusts options when they are changed externally', () => {
+      const changableOption = [
+        { label: 'Option 1', value: '1' },
+        { label: 'Option 2', value: '2' },
+        { label: 'Option 3', value: '3' },
+      ];
+      mount(
+        <Filter
+          {...defaultProps}
+          options={changableOption}
+        />,
+      );
+
+      changableOption.push({ label: 'Option 4', value: '4' });
+      cy.get('button').contains('Filter').click();
+      cy.contains('Option 4');
+    });
+    it('accepts active choices provided externally', () => {
+      const activeValues = [filterOptions[0].value];
+      mount(
+        <Filter
+          {...defaultProps}
+          value={activeValues}
+        />,
+      );
+      cy.get('button').contains('Filter').click();
+      cy.contains('label', `${filterOptions[0].label}`)
+        .find('[type=checkbox]')
+        .should('be.checked');
+      cy.contains('label', `${filterOptions[1].label}`)
+        .find('[type=checkbox]')
+        .should('not.be.checked');
+
+      // There are no 'changes' so the Apply button should be disabled
+      cy.get('button').contains('Apply').should('have.attr', 'aria-disabled', 'true');
     });
   },
 );

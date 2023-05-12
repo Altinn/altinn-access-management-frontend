@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 
 import { arraysEqual } from '@/resources/utils';
+import { usePrevious } from '@/resources/hooks';
 
 import type { FilterOption } from './utils';
 import { OptionDisplay } from './OptionDisplay';
@@ -39,6 +40,14 @@ export const Filter = ({
   const [activeFilters, setActiveFilters] = useState<string[]>(value ?? []);
   const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
   const [hasChanges, setHasChanges] = useState(false);
+
+  // Update selected values when there are external changes
+  const prevValue = usePrevious(value);
+  useEffect(() => {
+    if (value !== undefined && !arraysEqual(value, prevValue)) {
+      setActiveFilters(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     if (!arraysEqual(activeFilters, checkedFilters)) {

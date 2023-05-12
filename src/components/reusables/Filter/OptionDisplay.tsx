@@ -21,7 +21,7 @@ export interface OptionDisplayProps {
 export const OptionDisplay = ({
   options,
   value,
-  searchable = true,
+  searchable,
   compact = true,
   onValueChange,
 }: OptionDisplayProps) => {
