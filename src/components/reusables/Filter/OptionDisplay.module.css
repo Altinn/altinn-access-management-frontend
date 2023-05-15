@@ -17,8 +17,26 @@
 }
 
 .option {
+    border: none;
     border-bottom: 1px solid var(--fds-semantic-border-neutral-divider);
     padding: 6px 10px 6px 10px;
+    background-color: var(--fds-semantic-background-default);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.option:hover {
+    background-color: var(--fds-semantic-surface-action-subtle);
+}
+
+.option:active {
+    background-color: var(--fds-semantic-surface-action-subtle-hover);
+}
+
+.propagationStopper{
+    width: fit-content;
+    height: fit-content;
 }
 
 .scrollContainer {

@@ -64,19 +64,35 @@ export const OptionDisplay = ({
   const checkboxes = sortedOptions.map((option, index) => {
     const isSelected = selectedValues?.includes(option.value);
     return (
-      <div
+      <button
         className={classes.option}
         key={option.value}
+        onClick={() => {
+          handleSelection(option.value);
+        }}
+        tabIndex={-1}
       >
-        <Checkbox
-          onChange={() => {
-            handleSelection(option.value);
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className={classes.propagationStopper}
+          tabIndex={-1}
+          onClick={(event) => {
+            event.stopPropagation();
           }}
-          checked={isSelected}
-          label={option.label}
-          compact={compact}
-        />
-      </div>
+          onKeyDown={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          <Checkbox
+            onChange={() => {
+              handleSelection(option.value);
+            }}
+            checked={isSelected}
+            label={option.label}
+            compact={compact}
+          />
+        </div>
+      </button>
     );
   });
 
@@ -91,7 +107,10 @@ export const OptionDisplay = ({
           />
         </div>
       )}
-      <div className={classes.scrollContainer}>
+      <div
+        className={classes.scrollContainer}
+        tabIndex={-1}
+      >
         <div className={classes.optionList}>{checkboxes}</div>
       </div>
     </div>

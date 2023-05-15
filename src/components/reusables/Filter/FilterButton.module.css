@@ -11,6 +11,7 @@
 }
 
 .filterButton {
+    composes: focusable from '@/resources/utils/utility.module.css';
     background-color: var(--fds-semantic-surface-neutral-subtle);
     align-items: center;
     border-radius: 50px;
@@ -28,14 +29,14 @@
     max-width: 300px;
 }
 
-.filterButton:hover {
+.filterButton:not([aria-disabled='true'], :disabled):hover {
     background-color: var(--fds-semantic-surface-neutral-subtle-hover);
 }
-.filterButton:focus-visible {
-    outline: var(--semantic-tab_focus-outline-color) solid
-    var(--semantic-tab_focus-outline-width);
-    outline-offset: var(--semantic-tab_focus-outline-offset);
+
+.filterButton:not([aria-disabled='true'], :disabled):active {
+    background-color: #b6b6b6;
 }
+
 .filterButton:focus:not(:focus-visible) {
     outline: none;
 }

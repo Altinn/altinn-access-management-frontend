@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, isValidElement, cloneElement } from 'react';
+import { useState, useEffect, isValidElement, cloneElement } from 'react';
 import cn from 'classnames';
 import {
   useFloating,
@@ -37,6 +37,7 @@ export const Floatover = ({
   const [automatedOpen, setAutomatedOpen] = useState(isOpen ?? false);
   const open = isAutomatedOpen ? automatedOpen : isOpen;
   const onOpenChange = setIsOpen ?? setAutomatedOpen;
+  const [renderFloatover, setRenderFloatover] = useState(open);
 
   const floatingData = useFloating({
     open,
@@ -77,7 +78,10 @@ export const Floatover = ({
       >
         <div
           ref={floatingData.refs.setFloating}
-          className={cn(classes.popover, className)}
+          className={cn(classes.popover, className, {
+            [classes.open]: open,
+            [classes.closed]: !open,
+          })}
           style={{
             position: context.strategy,
             top: context.y ?? 0,
@@ -94,7 +98,7 @@ export const Floatover = ({
   const floatingModal = () => (
     <FloatingOverlay
       lockScroll
-      className={cn(classes.floatingOverlay, className)}
+      className={classes.floatingOverlay}
     >
       <FloatingFocusManager
         context={context}
@@ -102,10 +106,12 @@ export const Floatover = ({
       >
         <div
           ref={floatingData.refs.setFloating}
-          className={classes.modal}
+          className={cn(classes.modal, className, {
+            [classes.open]: open,
+            [classes.closed]: !open,
+          })}
           style={{
             position: 'fixed',
-            top: '5%',
             left: 0,
           }}
           {...getFloatingProps()}
@@ -116,10 +122,21 @@ export const Floatover = ({
     </FloatingOverlay>
   );
 
+  useEffect(() => {
+    if (!open) {
+      // Delay removal until closing animation is done
+      setTimeout(() => {
+        setRenderFloatover(false);
+      }, 300);
+    } else {
+      setRenderFloatover(true);
+    }
+  }, [open]);
+
   return (
     <>
       {openTrigger()}
-      {open && (isModal ? floatingModal() : floatingPopover())}
+      {renderFloatover && (isModal ? floatingModal() : floatingPopover())}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect, useId, type ReactNode } from 'react';
 import { Button } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
@@ -40,6 +40,7 @@ export const Filter = ({
   const [activeFilters, setActiveFilters] = useState<string[]>(value ?? []);
   const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
   const [hasChanges, setHasChanges] = useState(false);
+  const filterButtonID = useId();
 
   // Update selected values when there are external changes
   const prevValue = usePrevious(value);
@@ -96,7 +97,7 @@ export const Filter = ({
     <Floatover
       trigger={
         <FilterButton
-          id='filterbutton'
+          id={filterButtonID}
           onClick={handleOpenOrClose}
           iconLeft={icon}
           isOpen={isOpen}
@@ -109,7 +110,7 @@ export const Filter = ({
       isModal={modalView}
     >
       <div
-        aria-labelledby='filterButton'
+        aria-labelledby={filterButtonID}
         className={classes.popoverContent}
       >
         {modalView && modalHeader()}
