@@ -4,6 +4,21 @@ import 'cypress-real-events';
 
 import { Floatover, type FloatoverProps } from './Floatover';
 
+before(() => {
+  // turn off animations
+  cy.get('body').invoke(
+    'append',
+    Cypress.$(`
+      <style id="__cypress-animation-disabler">
+        *, *:before, *:after {
+          transition-property: none !important;
+          animation: none !important;
+        }
+      </style>
+    `),
+  );
+});
+
 const renderFloatover = (props: Partial<FloatoverProps> = {}) => {
   const allProps: FloatoverProps = {
     trigger: <button>Open</button>,
@@ -85,7 +100,7 @@ describe('Floatover', () => {
       cy.get('button').contains('Open').click();
       // Click at coordinates (200, 200) which is inside of the popup
       cy.get('body').click(200, 200);
-      cy.get('[role="dialog"]').should('exist');
+      cy.get('[role="dialog"]').should('be.visible');
     });
   });
 });

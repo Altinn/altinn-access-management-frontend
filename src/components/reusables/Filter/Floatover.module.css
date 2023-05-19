@@ -5,9 +5,8 @@
 }
 
 .popover {
-    max-height: 0;
     overflow: hidden;
-    padding: 0;
+    padding: 16px 0px 6px 0px;
     z-index: 2;
     box-shadow: var(--fds-shadow-medium);
     width: 280px;
@@ -29,7 +28,7 @@
     margin: 0;
     padding-top: 20px;
     width: 100%;
-    top: 100%;
+    top: 0%;
     bottom: 0;
     background-color: var(--fds-semantic-surface-neutral-subtle);
 }

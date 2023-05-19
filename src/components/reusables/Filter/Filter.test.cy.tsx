@@ -69,7 +69,7 @@ describe(
       cy.get('@onApplySpy').should('not.have.been.called');
 
       // Select an option
-      cy.contains(filterOptions[0].label).click();
+      cy.get('button').contains(filterOptions[0].label).click();
 
       // Button is no longer aria-disabled and is clickable
       cy.get('button').contains('Apply').should('not.have.attr', 'aria-disabled', 'true');

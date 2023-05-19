@@ -36,7 +36,3 @@
 .filterButton:not([aria-disabled='true'], :disabled):active {
     background-color: #b6b6b6;
 }
-
-.filterButton:focus:not(:focus-visible) {
-    outline: none;
-}

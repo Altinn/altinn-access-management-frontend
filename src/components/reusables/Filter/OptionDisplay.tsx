@@ -12,8 +12,8 @@ import classes from './OptionDisplay.module.css';
 
 export interface OptionDisplayProps {
   options: FilterOption[];
-  value: string[];
-  onValueChange: (value: string[]) => void;
+  value?: string[];
+  onValueChange?: (value: string[]) => void;
   searchable?: boolean;
   compact?: boolean;
 }
@@ -25,14 +25,14 @@ export const OptionDisplay = ({
   compact = true,
   onValueChange,
 }: OptionDisplayProps) => {
-  const [selectedValues, setSelectedValues] = useState<string[]>(value);
+  const [selectedValues, setSelectedValues] = useState<string[]>(value ?? []);
   const [sortedOptions, setSortedOptions] = useState<FilterOption[]>(options);
 
   // Update selected values when there are external changes
   const prevValue = usePrevious(value);
   useEffect(() => {
     if (!arraysEqual(value, prevValue)) {
-      setSelectedValues(value);
+      setSelectedValues(value ?? []);
     }
   }, [value]);
 
@@ -46,7 +46,7 @@ export const OptionDisplay = ({
 
   const changeHandler = (newValues: string[], addedValue?: string) => {
     setSelectedValues(newValues);
-    onValueChange(newValues);
+    onValueChange?.(newValues);
   };
 
   const handleSelection = (selectedValue: string) => {
@@ -80,7 +80,9 @@ export const OptionDisplay = ({
             event.stopPropagation();
           }}
           onKeyDown={(event) => {
-            event.stopPropagation();
+            if (event.key !== 'Escape') {
+              event.stopPropagation();
+            }
           }}
         >
           <Checkbox

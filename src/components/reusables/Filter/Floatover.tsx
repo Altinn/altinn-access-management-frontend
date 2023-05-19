@@ -28,7 +28,7 @@ export interface FloatoverProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Floatover = ({
   children,
   trigger,
-  isOpen,
+  isOpen = false,
   setIsOpen,
   isModal = false,
   className,
@@ -123,13 +123,15 @@ export const Floatover = ({
   );
 
   useEffect(() => {
-    if (!open) {
+    if (open === renderFloatover) {
+      // Do nothing
+    } else if (!open) {
       // Delay removal until closing animation is done
       setTimeout(() => {
         setRenderFloatover(false);
       }, 300);
     } else {
-      setRenderFloatover(true);
+      setRenderFloatover(open);
     }
   }, [open]);
 
