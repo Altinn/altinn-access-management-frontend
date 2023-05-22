@@ -20,9 +20,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Initializes a new instance of the <see cref="LookupController"/> class.
         /// </summary>
         /// <param name="logger">the logger.</param>
-        /// <param name="mapper">mapper handler</param>
-        /// <param name="register">handler for register</param>
-        /// <param name="contextRetrieval">handler for context retrieval</param>
+        /// <param name="lookupService">service implementation for lookups</param>
         public LookupController(
             ILogger<LookupController> logger,
             ILookupService lookupService)
@@ -43,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                Party party = await _lookupService.GetOrganisation(orgNummer);
+                Party party = await _lookupService.GetPartyForOrganization(orgNummer);
 
                 if (party == null)
                 {

@@ -1,5 +1,4 @@
 using Altinn.AccessManagement.Configuration;
-using Altinn.AccessManagement.Core.Constants;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
@@ -11,10 +10,8 @@ using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessToken;
-using Altinn.Common.AccessToken.Configuration;
 using Altinn.Common.AccessToken.Services;
 using Altinn.Common.AccessTokenClient.Services;
-using Altinn.Common.PEP.Authorization;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -27,7 +24,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using KeyVaultSettings = AltinnCore.Authentication.Constants.KeyVaultSettings;
 
 ILogger logger;
 
@@ -162,6 +158,15 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
     {
         logger.LogError(vaultException, $"Unable to read application insights key.");
     }
+
+    try
+    {
+        config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), new DefaultAzureCredential());
+    }
+    catch (Exception vaultException)
+    {
+        logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
+    }
 }
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
@@ -171,18 +176,18 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
-    services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<IDelegationsClient, DelegationsClient>();
+    services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
+    services.AddHttpClient<IRegisterClient, RegisterClient>();
     services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IDelegationsService, DelegationsService>();
+    services.AddSingleton<IMaskinportenSchemaService, MaskinportenSchemaService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
     services.AddSingleton<IProfileService, ProfileService>();
@@ -223,13 +228,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
             options.RequireHttpsMetadata = false;
         }
     });
-      
-    services.AddAuthorization(options =>
-    {
-        options.AddPolicy(AuthzConstants.POLICY_STUDIO_DESIGNER, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "studio.designer")));
-        options.AddPolicy(AuthzConstants.ALTINNII_AUTHORIZATION, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "sbl.authorization")));
-        options.AddPolicy("PlatformAccess", policy => policy.Requirements.Add(new AccessTokenRequirement()));
-    });
 
     services.AddAntiforgery(options =>
     {
@@ -240,16 +238,14 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         // https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-6.0
         // https://github.com/axios/axios/blob/master/lib/defaults.js
         options.Cookie.Name = "AS-XSRF-TOKEN";
-        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+        options.Cookie.SameSite = SameSiteMode.Lax;
         options.HeaderName = "X-XSRF-TOKEN";
     });
     services.TryAddSingleton<ValidateAntiforgeryTokenIfAuthCookieAuthorizationFilter>();
 
-    services.AddTransient<IAuthorizationHandler, ClaimAccessHandler>();
-    services.AddTransient<IAuthorizationHandler, ScopeAccessHandler>();
     services.AddSwaggerGen(options =>
     {
-        options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
         {
             Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
             In = ParameterLocation.Header,

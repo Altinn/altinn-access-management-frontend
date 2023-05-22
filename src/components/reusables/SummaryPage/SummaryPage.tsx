@@ -92,6 +92,7 @@ export const SummaryPage = ({
           startIcon={<OfficeIcon />}
           removeCallback={delegableOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
           leftText={org.orgName}
+          middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
         ></CompactDeletableListItem>
       );
     },

@@ -1,17 +1,18 @@
-import { Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/design-system-react';
 import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
+import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import {
   Page,
   PageHeader,
   PageContent,
   PageSize,
   ActionBar,
-  ActionIconVariant,
   NavigationButtons,
   PageContainer,
 } from '@/components/reusables';
@@ -104,27 +105,53 @@ export const ChooseOrgPage = () => {
 
   const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
     return (
-      <ActionBar
+      <div
+        className={classes.actionBarWrapper}
         key={index}
-        title={org.orgName}
-        subtitle={org.orgNr}
-        icon={ActionIconVariant.Add}
-        actionCallBack={() => dispatch(softAddOrg(org))}
-      />
+      >
+        <ActionBar
+          key={index}
+          title={org.orgName}
+          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          actions={
+            <Button
+              icon={<AddCircle />}
+              variant={'quiet'}
+              color={'success'}
+              onClick={() => dispatch(softAddOrg(org))}
+              aria-label={'add'}
+            ></Button>
+          }
+          color={'neutral'}
+        />
+      </div>
     );
   });
 
   const chosenItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
     return (
-      <ActionBar
+      <div
+        className={classes.actionBarWrapper}
         key={index}
-        title={org.orgName}
-        subtitle={org.orgNr}
-        icon={ActionIconVariant.Remove}
-        actionCallBack={() => {
-          handleSoftRemove(org);
-        }}
-      />
+      >
+        <ActionBar
+          key={index}
+          title={org.orgName}
+          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          actions={
+            <Button
+              icon={<MinusCircle />}
+              variant={'quiet'}
+              color={'danger'}
+              onClick={() => {
+                handleSoftRemove(org);
+              }}
+              aria-label={'remove'}
+            ></Button>
+          }
+          color={'success'}
+        />
+      </div>
     );
   });
 
@@ -168,15 +195,13 @@ export const ChooseOrgPage = () => {
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <div className={common.pageContent}>
-            <h2 className={classes.topText}>
-              {t('api_delegation.new_org_accordion_content_text')}
-            </h2>
+            <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
             {isSm && chosenItems.length > 0 && (
               <div className={classes.chosenOrgs}>
                 <h4 className={classes.chosenOrgsHeader}>
                   {t('api_delegation.businesses_going_to_get_access')}
                 </h4>
-                <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+                <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
               </div>
             )}
             <div className={classes.searchSection}>
@@ -196,19 +221,19 @@ export const ChooseOrgPage = () => {
                 />
               </div>
             ) : (
-              <div className={common.pageContentAccordionsContainer}>
-                <div className={common.apiAccordions}>
+              <div className={classes.pageContentActionBarContainer}>
+                <div className={classes.delegableOrgsContainer}>
                   {searchString === '' ? (
-                    <h4 className={classes.accordionContainerText}>
+                    <h4 className={classes.actionBarContainerText}>
                       {t('api_delegation.businesses_previously_delegated_to')}
                     </h4>
                   ) : (
-                    <h4 className={classes.accordionContainerText}>
+                    <h4 className={classes.actionBarContainerText}>
                       {t('api_delegation.businesses_search_results')}
                     </h4>
                   )}
                   {infoPanel()}
-                  <div className={classes.accordionScrollContainer}>
+                  <div className={classes.actionBarScrollContainer}>
                     {searchLoading ? (
                       <div className={common.spinnerContainer}>
                         <Spinner
@@ -222,11 +247,11 @@ export const ChooseOrgPage = () => {
                   </div>
                 </div>
                 {!isSm && (
-                  <div className={common.apiAccordions}>
+                  <div className={common.chosenOrgsContainer}>
                     <h4 className={classes.chosenOrgsHeader}>
                       {t('api_delegation.businesses_going_to_get_access')}
                     </h4>
-                    <div className={classes.accordionScrollContainer}>{chosenItems}</div>
+                    <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
                   </div>
                 )}
               </div>

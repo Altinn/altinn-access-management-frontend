@@ -15,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessTokenGenerator _accessTokenGenerator;
         private readonly AccessTokenSettings _accessTokenSettings;
         private readonly ClientSettings _clientSettings;
+        private readonly KeyVaultSettings _keyVaultSettings;
         private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
         private static DateTime _cacheTokenUntil = DateTime.MinValue;
         private string _accessToken;
@@ -25,17 +26,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="keyVaultService">The key vault service.</param>
         /// <param name="accessTokenGenerator">The access token generator.</param>
+        /// <param name="accessTokenSettings">Then access token settings</param>
         /// <param name="keyVaultSettings">The key vault settings.</param>
+        /// <param name="clientSettings">The client settings for access token generation</param>
+        /// <param name="logger">the logger handler</param>
         public AccessTokenProvider(
             IKeyVaultService keyVaultService,
             IAccessTokenGenerator accessTokenGenerator,
             IOptions<AccessTokenSettings> accessTokenSettings,
+            IOptions<KeyVaultSettings> keyVaultSettings,
             IOptions<ClientSettings> clientSettings,
             ILogger<IAccessTokenProvider> logger)
         {
             _keyVaultService = keyVaultService;
             _accessTokenGenerator = accessTokenGenerator;
             _accessTokenSettings = accessTokenSettings.Value;
+            _keyVaultSettings = keyVaultSettings.Value;
             _clientSettings = clientSettings.Value;
             _logger = logger;
         }
@@ -49,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 if (_accessToken == null || _cacheTokenUntil < DateTime.UtcNow)
                 {
-                    string certBase64 = await _keyVaultService.GetCertificateAsync(_clientSettings.KeyVaultUri, _clientSettings.CertificateName);
+                    string certBase64 = await _keyVaultService.GetCertificateAsync(_keyVaultSettings.SecretUri, _clientSettings.CertificateName);
                     _accessToken = _accessTokenGenerator.GenerateAccessToken(
                         _clientSettings.Issuer,
                         _clientSettings.App,
@@ -62,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Failed to generate access token");
+                _logger.LogError(ex, "Failed to generate access token.");
                 return null;
             }
             finally

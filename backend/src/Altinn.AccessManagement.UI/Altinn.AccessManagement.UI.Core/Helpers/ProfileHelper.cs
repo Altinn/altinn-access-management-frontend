@@ -43,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     case "nb":
                         return "no_nb";
                     case "en":
-                        return "en_us";
+                        return "en";
                     default:
                         return "no_nb";
                 }

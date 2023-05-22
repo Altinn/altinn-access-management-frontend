@@ -3,7 +3,12 @@
     width: 80%
   }
 
-  .accordionScrollContainer {
+  .delegableApisContainer {
+    margin-bottom: 30px;
+    width: 100%;
+  }
+
+  .chosenApisContainer {
     margin-bottom: 30px;
     width: 100%;
   }
@@ -26,16 +31,23 @@
   }
 
   .searchField{
-    width: 45%
+    width: 47.5%;
   }
 
-  .pageContentAccordionsContainer{
+  .pageContentActionBarsContainer{
     grid-template-columns: 1fr 1fr;
     display: grid;
   }
 
-  .accordionScrollContainer {
-    height: 300px;
+  .delegableApisContainer {
+    margin-right: 25px;
+    height: 400px;
+    overflow-y: auto;
+  }
+
+  .chosenApisContainer {
+    margin-left: 25px;
+    height: 400px;
     overflow-y: auto;
   }
 
@@ -52,6 +64,11 @@
   font-weight: 500;
 }
 
-.delegableApisHeader{
+.explanationTexts{
   font-weight: 500;
+}
+
+.actionBarWrapper{
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

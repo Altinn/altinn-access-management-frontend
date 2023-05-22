@@ -29,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="resourceIds">The list of resource ids</param>
         /// <returns>resource list based on given resource ids</returns>
-        Task<List<ServiceResource>> GetResources(List<Tuple<string, string>> resourceIds);
+        Task<List<ServiceResource>> GetResources(List<string> resourceIds);
 
         /// <summary>
         /// Integration point for retrieving a single resoure by it's resource id

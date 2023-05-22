@@ -6,6 +6,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
     public class GeneralSettings
     {
         /// <summary>
+        /// Gets or sets the access management ui base url.
+        /// </summary>
+        public string FrontendBaseUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the host name.
         /// </summary>
         public string Hostname { get; set; }

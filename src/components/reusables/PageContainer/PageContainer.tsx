@@ -17,14 +17,8 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   const { t } = useTranslation('common');
 
   const redirectToProfile = () => {
-    const currentEnv = window.location.href;
-    if (currentEnv.includes('am.ui.at23')) {
-      window.location.href = RouterPath.ProfileAT23;
-    } else if (currentEnv.includes('altinn.no')) {
-      window.location.href = RouterPath.ProfileProd;
-    } else {
-      window.location.pathname = '/ui/' + RouterPath.Profile;
-    }
+    const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    window.location.href = 'https://' + cleanHostname + '/' + RouterPath.Profile;
   };
 
   return (

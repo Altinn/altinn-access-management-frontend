@@ -1,1 +1,2 @@
-export { Router, RouterPath } from './Router';
+export { Router } from './Router';
+export { RouterPath } from './RouterPath';

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
 
-import { useMediaQuery } from '@/resources/hooks';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 
 import classes from './CompactDeletableListItem.module.css';

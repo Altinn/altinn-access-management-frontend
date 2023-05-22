@@ -1,0 +1,7 @@
+feature: ['feature/*', 'feat/*']
+bugfix: fix/*
+infrastructure: infrastructure/*
+automation: automation/*
+documentation: documentation/*
+enhancement: enhancement/*
+dependencies: ['renovate/*']

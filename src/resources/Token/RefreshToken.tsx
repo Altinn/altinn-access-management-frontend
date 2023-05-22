@@ -12,15 +12,48 @@ export const RefreshToken = () => {
 
     if (timeNow - lastRefreshTokenTimestamp.current > TEN_MINUTES_IN_MILLISECONDS) {
       lastRefreshTokenTimestamp.current = timeNow;
-      return await axios
+      const instance = axios.create({
+        baseURL: '../../../',
+      });
+
+      return await instance
         .get('accessmanagement/api/v1/authentication/refresh')
         .then((response) => response.data)
-        .catch((error) => {
-          !import.meta.env.DEV && (window.location.pathname = '/');
-          console.error(error);
+        .catch((refreshError) => {
+          // Most likely due to expired token so we redirect to login
+          try {
+            window.location.href = getEnvironmentLoginUrl();
+          } catch (error) {
+            console.error(refreshError, error);
+          }
         });
     }
   }
+
+  const getEnvironmentLoginUrl = () => {
+    // Split on dots. We expect the format to be https://am.ui.{env}.altinn{.cloud?}/etc/etc
+    const domainSplitted: string[] = window.location.host.split('.');
+    let encodedGoToUrl = '';
+    if (domainSplitted.length === 5) {
+      encodedGoToUrl = encodeURIComponent(
+        `https://${domainSplitted[2]}.${domainSplitted[3]}.${domainSplitted[4]}/ui/Profile`,
+      ); // Return user to Profile after login
+      return (
+        `https://platform.${domainSplitted[2]}.${domainSplitted[3]}.${domainSplitted[4]}` +
+        `/authentication/api/v1/authentication?goto=${encodedGoToUrl}`
+      );
+    }
+    if (domainSplitted.length === 4) {
+      encodedGoToUrl = encodeURIComponent(
+        `https://${domainSplitted[2]}.${domainSplitted[3]}/ui/Profile`,
+      ); // Return user to Profile after login
+      return (
+        `https://platform.${domainSplitted[2]}.${domainSplitted[3]}` +
+        `/authentication/api/v1/authentication?goto=${encodedGoToUrl}`
+      );
+    }
+    throw new Error('Unknown domain');
+  };
 
   React.useEffect(() => {
     const setUpEventListeners = () => {

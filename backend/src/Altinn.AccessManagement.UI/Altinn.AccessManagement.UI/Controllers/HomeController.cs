@@ -1,11 +1,9 @@
 ﻿using System.Web;
 using Altinn.AccessManagement.Models;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -34,6 +32,9 @@ namespace Altinn.AccessManagement
         /// <param name="antiforgery">the anti forgery service</param>
         /// <param name="platformSettings">settings related to the platform</param>
         /// <param name="env">the current environment</param>
+        /// <param name="profileService">service implementation for user profile</param>
+        /// <param name="httpContextAccessor">http context</param>
+        /// <param name="generalSettings">general settings</param>
         public HomeController(
             IOptions<FrontEndEntryPointOptions> frontEndEntrypoints,
             IAntiforgery antiforgery,
@@ -75,15 +76,13 @@ namespace Altinn.AccessManagement
                     HttpOnly = false // Make this cookie readable by Javascript.
                 });
             }
-
-            await SetLanguageCookie();
-
-            if (ShouldShowAppView())
+            
+            if (await ShouldShowAppView())
             {
                 return View();
             }
 
-            string goToUrl = HttpUtility.UrlEncode($"{_platformSettings.AltinnPlatformBaseUrl}{Request.Path}");
+            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
 
             return Redirect(redirectUrl);
@@ -96,17 +95,17 @@ namespace Altinn.AccessManagement
             var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
 
-            HttpContext.Response.Cookies.Append(_generalSettings.LanguageCookie, languageCode, new CookieOptions
+            HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {
-                HttpOnly = false // Make this cookie readable by Javascript.                
+                HttpOnly = false // Make this cookie readable by Javascript.
             });
         }
 
-        private bool ShouldShowAppView()
+        private async Task<bool> ShouldShowAppView()
         {
             if (User.Identity.IsAuthenticated)
             {
-                SetLanguageCookie();
+                await SetLanguageCookie();
                 return true;
             }
 

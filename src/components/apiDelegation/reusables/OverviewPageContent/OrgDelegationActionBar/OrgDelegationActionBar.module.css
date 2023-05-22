@@ -1,0 +1,39 @@
+@media only screen and (max-width: 768px) { 
+  .actionBarContent{
+    padding-left: 0.7rem;
+  }
+
+  .orgDelegationActionBarTitle{
+    font-size: 14px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .actionBarContent{
+    padding-left: 50px;
+  }
+}
+
+.actionBarContent{
+  padding-right: 10px;
+}
+
+
+.actionBarText__softDelete{
+  text-decoration: line-through;
+  opacity: 70%;
+}
+
+.actionBarSubtitle__softDelete{
+  text-decoration: line-through;
+  opacity: 70%;
+}
+
+
+.accordionHeaderRightText{
+  margin-right: 15px;
+}
+
+.additionalText {
+  margin-right: 10px;
+}

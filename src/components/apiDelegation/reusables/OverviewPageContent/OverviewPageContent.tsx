@@ -34,7 +34,7 @@ import common from '@/resources/css/Common.module.css';
 
 import { LayoutState } from '../LayoutState';
 
-import { OrgDelegationAccordion } from './OrgDelegationAccordion';
+import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
 
 export interface OverviewPageContentInterface {
@@ -58,6 +58,7 @@ export const OverviewPageContent = ({
   let fetchData: () => any;
   let overviewText: string;
   let accessesHeader: string;
+  let noDelegationsInfoText: string;
 
   useEffect(() => {
     if (loading) {
@@ -74,15 +75,18 @@ export const OverviewPageContent = ({
       fetchData = async () => await dispatch(fetchOverviewOrgsOffered());
       overviewText = t('api_delegation.api_overview_text');
       accessesHeader = t('api_delegation.you_have_delegated_accesses');
+      noDelegationsInfoText = t('api_delegation.no_offered_delegations');
       break;
     case LayoutState.Received:
       fetchData = async () => await dispatch(fetchOverviewOrgsReceived());
       overviewText = t('api_delegation.api_received_overview_text');
       accessesHeader = t('api_delegation.you_have_received_accesses');
+      noDelegationsInfoText = t('api_delegation.no_received_delegations');
       break;
   }
 
-  const newDelegation = () => {
+  const goToStartDelegation = () => {
+    dispatch(restoreAllSoftDeletedItems());
     navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
   };
 
@@ -132,7 +136,7 @@ export const OverviewPageContent = ({
     setIsEditable(false);
   };
 
-  const accordions = () => {
+  const activeDelegations = () => {
     if (error) {
       return (
         <div className={classes.errorPanel}>
@@ -156,27 +160,34 @@ export const OverviewPageContent = ({
           />
         </div>
       );
+    } else if (overviewOrgs.length < 1) {
+      return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
     }
     return overviewOrgs.map((org) => (
-      <OrgDelegationAccordion
+      <div
         key={org.id}
-        organization={org}
-        isEditable={isEditable}
-        softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
-        softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-      ></OrgDelegationAccordion>
+        className={classes.actionBarWrapper}
+      >
+        <OrgDelegationActionBar
+          organization={org}
+          isEditable={isEditable}
+          softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+          softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+          key={org.id}
+        ></OrgDelegationActionBar>
+      </div>
     ));
   };
 
   return (
     <div className={common.pageContent}>
-      <div className={classes.overviewAccordionsContainer}>
+      <div className={classes.overviewActionBarContainer}>
         {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
         {layout === LayoutState.Offered && (
           <div className={classes.delegateNewButton}>
             <Button
               variant={ButtonVariant.Outline}
-              onClick={newDelegation}
+              onClick={goToStartDelegation}
               icon={<Add />}
               fullWidth={isSm}
             >
@@ -193,13 +204,15 @@ export const OverviewPageContent = ({
           <a
             className={classes.link}
             href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+            target='_blank'
+            rel='noreferrer'
           >
             {t('common.maskinporten')}
           </a>
         </Panel>
-        <div>
+        <div className={classes.explanatoryContainer}>
           {overviewOrgs.length > 0 && (
-            <div className={classes.pageContentContainer}>
+            <>
               {isSm ? (
                 <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
               ) : (
@@ -226,10 +239,10 @@ export const OverviewPageContent = ({
                   </Button>
                 )}
               </div>
-            </div>
+            </>
           )}
         </div>
-        <div className={classes.accordion}>{accordions()}</div>
+        <>{activeDelegations()}</>
         {isEditable && (
           <div className={classes.saveSection}>
             <Button

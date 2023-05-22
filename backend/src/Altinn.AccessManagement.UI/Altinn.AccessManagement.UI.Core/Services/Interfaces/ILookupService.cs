@@ -8,17 +8,19 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface ILookupService
     {
         /// <summary>
-        /// Gets an organization for an organization number
+        /// Looks up party information for an organization based on the organization number
         /// </summary>
-        /// <param name="organisationNumber">the organisation number</param>
-        /// <returns>organisation information</returns>
-        public Task<Party> GetOrganisation(string organisationNumber);
+        /// <param name="organizationNumber">The organization number</param>
+        /// <returns>
+        /// Party information
+        /// </returns>
+        Task<Party> GetPartyForOrganization(string organizationNumber);
 
         /// <summary>
         /// Gets a Party based on partyId if the party is in the users reporteelist
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <returns>Party that corresponds to partyId parameter if it's in the users reporteelist</returns>
-        public Task<Party> GetPartyFromReporteeListIfExists(int partyId);
+        Task<Party> GetPartyFromReporteeListIfExists(int partyId);
     }
 }
