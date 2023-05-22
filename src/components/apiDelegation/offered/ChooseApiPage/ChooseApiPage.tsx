@@ -199,27 +199,12 @@ export const ChooseApiPage = () => {
               </div>
               <div className={classes.filter}>
                 <Filter
-                  options={[
-                    ...filterOptions,
-                    { label: 'Hey', value: 'hey' },
-                    { label: 'Ney', value: 'ney' },
-                    { label: 'Bey', value: 'bey' },
-                    { label: 'Crey', value: 'crey' },
-                    { label: 'I have no idea anymore', value: 'no idea' },
-                    { label: 'No', value: 'no' },
-                    { label: 'Nop', value: 'nop' },
-                    { label: 'Nope', value: 'nope' },
-                    { label: 'Nopee', value: 'nopee' },
-                    { label: 'Nopeee', value: 'nopeee' },
-                    { label: 'Nopeeee', value: 'nopeeee' },
-                    { label: 'Nopeeeee', value: 'nopeeeee' },
-                    { label: 'Nopeeeeee', value: 'nopeeeeee' },
-                    { label: 'Nopeeeeeee', value: 'nopeeeeeee' },
-                  ]}
+                  options={filterOptions}
                   icon={<FilterIcon />}
-                  label='Filtrer på etat'
-                  applyButtonLabel='Bruk'
-                  resetButtonLabel='Nullstill valg'
+                  label={String(t('api_delegation.filter_label'))}
+                  applyButtonLabel={String(t('common.apply'))}
+                  resetButtonLabel={String(t('common.reset_choices'))}
+                  closeButtonAriaLabel={String(t('common.close'))}
                   onApply={handleFilterChange}
                   searchable={true}
                   modalView={isSm}

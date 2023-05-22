@@ -23,6 +23,7 @@ export interface FilterProps {
   value?: string[];
   onApply?: (value: string[]) => void;
   modalView?: boolean;
+  closeButtonAriaLabel?: string;
 }
 
 export const Filter = ({
@@ -34,6 +35,7 @@ export const Filter = ({
   value,
   searchable,
   modalView = false,
+  closeButtonAriaLabel = 'Close ' + label,
   onApply,
 }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,10 +73,8 @@ export const Filter = ({
 
   const handleOpenOrClose = () => {
     if (isOpen) {
-      console.log('setting false');
       setIsOpen(false);
     } else {
-      console.log('setting true');
       setCheckedFilters([...activeFilters]); // reset to active choices
       setIsOpen(true);
     }
@@ -88,7 +88,7 @@ export const Filter = ({
         color='secondary'
         onClick={handleOpenOrClose}
         icon={<XMarkIcon />}
-        aria-label={'Lukk ' + label}
+        aria-label={closeButtonAriaLabel}
       />
     </div>
   );
