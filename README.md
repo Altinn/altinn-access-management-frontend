@@ -154,7 +154,22 @@ To run the code together with access-management backend to the following
 
 - Add below text in your hosts file on your pc/mac. Path to file on mac: /private/etc/hosts. Path to file on Windows: c:\Windows\System32\Drivers\etc\hosts.
 ```#Subdomain for accessmanagement
-127.0.0.1 am.ui.local.altinn.cloud##
+127.0.0.1 am.ui.local.altinn.cloud #ipv4
+0000:0000:0000:0000:0000:0000:0000:0001 am.ui.local.altinn.cloud #ipv6
+#
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1    localhost #ipv4
+0000:0000:0000:0000:0000:0000:0000:0001 localhost #ipv6
+255.255.255.255    broadcasthost
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+127.0.0.1 kubernetes.docker.internal #ipv4
+0000:0000:0000:0000:0000:0000:0000:0001 kubernetes.docker.internal #ipv6
+# End of section
    ```
 
 ## Set up database: 
