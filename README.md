@@ -152,6 +152,11 @@ To run the code together with access-management backend to the following
    dotnet run
    ```
 
+- Add below text in your hosts file on your pc/mac. Path to file on mac: /private/etc/hosts. Path to file on Windows: c:\Windows\System32\Drivers\etc\hosts.
+```#Subdomain for accessmanagement
+127.0.0.1 am.ui.local.altinn.cloud##
+   ```
+
 ## Set up database: 
   Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
 - Install database server (choose your own admin password and save it some place you can find it again)
