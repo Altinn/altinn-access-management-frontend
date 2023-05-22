@@ -28,6 +28,7 @@
     margin-right: 25px;
     height: 400px;
     overflow-y: auto;
+    margin-right: 20px;
   }
 
   .chosenApisContainer {

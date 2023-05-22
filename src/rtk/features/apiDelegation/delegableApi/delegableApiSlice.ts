@@ -184,6 +184,72 @@ const delegableApiSlice = createSlice({
             }
           }
         }
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title;
+          const orgName = dataArray[i].resourceOwnerName;
+          const rightDescription = dataArray[i].rightDescription;
+          if (rightDescription && apiName) {
+            if (orgName) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].resourceOwnerName));
+              if (!providerList.includes(orgName)) {
+                providerList.push(orgName);
+              }
+            }
+          }
+        }
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title;
+          const orgName = dataArray[i].resourceOwnerName;
+          const rightDescription = dataArray[i].rightDescription;
+          if (rightDescription && apiName) {
+            if (orgName) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].resourceOwnerName));
+              if (!providerList.includes(orgName)) {
+                providerList.push(orgName);
+              }
+            }
+          }
+        }
+
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title;
+          const orgName = dataArray[i].resourceOwnerName;
+          const rightDescription = dataArray[i].rightDescription;
+          if (rightDescription && apiName) {
+            if (orgName) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].resourceOwnerName));
+              if (!providerList.includes(orgName)) {
+                providerList.push(orgName);
+              }
+            }
+          }
+        }
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title;
+          const orgName = dataArray[i].resourceOwnerName;
+          const rightDescription = dataArray[i].rightDescription;
+          if (rightDescription && apiName) {
+            if (orgName) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].resourceOwnerName));
+              if (!providerList.includes(orgName)) {
+                providerList.push(orgName);
+              }
+            }
+          }
+        }
+        for (let i = 0; i < dataArray.length; i++) {
+          const apiName = dataArray[i].title;
+          const orgName = dataArray[i].resourceOwnerName;
+          const rightDescription = dataArray[i].rightDescription;
+          if (rightDescription && apiName) {
+            if (orgName) {
+              responseList.push(mapToDelegableApi(dataArray[i], dataArray[i].resourceOwnerName));
+              if (!providerList.includes(orgName)) {
+                providerList.push(orgName);
+              }
+            }
+          }
+        }
         state.delegableApiList = responseList;
         state.delegableApiSearchPool = responseList;
         state.presentedApiList = responseList;

@@ -1,4 +1,4 @@
-import { Button } from '@digdir/design-system-react';
+import { Button, List, ListItem } from '@digdir/design-system-react';
 import { useState } from 'react';
 import { t } from 'i18next';
 import * as React from 'react';
@@ -57,58 +57,59 @@ export const DelegationActionBar = ({
   );
 
   return (
-    <ActionBar
-      title={<p className={classes.accordionHeaderTitle}>{title}</p>}
-      subtitle={subtitle}
-      actions={actions}
-      color={color}
-      open={open}
-      onClick={() => {
-        setOpen(!open);
-      }}
-    >
-      {' '}
-      <div className={classes.newApiAccordionContent}>
-        {textList.length > 0 && (
-          <div>
-            <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
-            {textList.map((scope, i) => {
-              return (
-                <div
-                  key={i}
-                  className={classes.scopeItems}
-                >
-                  {scope}
-                </div>
-              );
-            })}
-          </div>
-        )}
-        {topContentText && (
-          <div>
-            <div className={classes.line}>
-              <Line />
+    <div className={classes.delegationActionBar}>
+      <ActionBar
+        title={<p className={classes.actionBarHeaderTitle}>{title}</p>}
+        subtitle={subtitle}
+        actions={actions}
+        color={color}
+        open={open}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        {' '}
+        <div className={classes.newApiAccordionContent}>
+          {textList.length > 0 && (
+            <div>
+              <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
+              <List borderStyle='dashed'>
+                {textList.map((scope, i) => {
+                  return (
+                    <ListItem key={i}>
+                      <div className={classes.scopeItems}>{scope}</div>
+                    </ListItem>
+                  );
+                })}
+              </List>
             </div>
-            <p className={classes.scopeText}>{t('api_delegation.description')}</p>
-            <div className={classes.contentTexts}>{topContentText}</div>
-          </div>
-        )}
-        {topContentText === undefined && (
-          <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
-        )}
-        {bottomContentText && (
-          <div>
-            <div className={classes.line}>
-              <Line />
+          )}
+          {topContentText && (
+            <div>
+              <div className={classes.line}>
+                <Line />
+              </div>
+              <p className={classes.scopeText}>{t('api_delegation.description')}</p>
+              <div className={classes.contentTexts}>{topContentText}</div>
             </div>
-            <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
-            <div className={classes.bottomContentTexts}>{bottomContentText}</div>
-          </div>
-        )}
-        {bottomContentText === undefined && (
-          <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
-        )}
-      </div>
-    </ActionBar>
+          )}
+          {topContentText === undefined && (
+            <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
+          )}
+          {bottomContentText && (
+            <div>
+              <div className={classes.line}>
+                <Line />
+              </div>
+              <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
+              <div className={classes.bottomContentTexts}>{bottomContentText}</div>
+            </div>
+          )}
+          {bottomContentText === undefined && (
+            <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
+          )}
+        </div>
+      </ActionBar>
+    </div>
   );
 };

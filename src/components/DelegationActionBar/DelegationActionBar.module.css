@@ -1,5 +1,6 @@
 .newApiAccordionContent{
-  margin-left: 2rem;
+  margin-left: 50px;
+  margin-right: 20px;
 }
 
 .scopeText{
@@ -7,7 +8,8 @@
 }
 
 .scopeItems {
-  margin-top: 10px;
+  word-break: break-word;
+  margin: 10px;
 }
 
 .line{
@@ -24,8 +26,12 @@
   margin-bottom: 20px;
 }
 
-.accordionHeaderTitle{
+.actionBarHeaderTitle{
   font-weight: 500;
   margin-top: 2px;
   margin-bottom: 5px;
+}
+
+.delegationActionBar{
+  margin-right: 10px;
 }
