@@ -27,6 +27,7 @@
     padding: 0 var(--component-button-space-padding-x-small);
     text-align: center;
     max-width: 300px;
+    position: auto;
 }
 
 .filterButton:not([aria-disabled='true'], :disabled):hover {
@@ -35,4 +36,25 @@
 
 .filterButton:not([aria-disabled='true'], :disabled):active {
     background-color: #b6b6b6;
+}
+
+.activeBadge {
+    background-color: var(--fds-semantic-surface-action-default);
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -5px;
+    top: -5Px;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: small;
+}
+
+.buttonContainer {
+    position: relative;
 }

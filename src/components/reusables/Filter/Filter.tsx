@@ -101,6 +101,7 @@ export const Filter = ({
           onClick={handleOpenOrClose}
           iconLeft={icon}
           isOpen={isOpen}
+          numActiveFilters={activeFilters.length}
         >
           {label}
         </FilterButton>
