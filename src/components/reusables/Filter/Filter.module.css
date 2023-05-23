@@ -3,9 +3,7 @@
 .popoverContent{
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 16px 15px 6px 15px;
 }
 
 .modalHeader {

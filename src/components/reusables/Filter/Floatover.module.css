@@ -5,8 +5,7 @@
 }
 
 .popover {
-    overflow: hidden;
-    padding: 16px 0px 6px 0px;
+    overflow: clip;
     z-index: 2;
     box-shadow: var(--fds-shadow-medium);
     width: 280px;
@@ -16,11 +15,11 @@
 }
 
 .popover.open {
-    animation: popover-in 0.3s ease-out forwards;
+    animation: popover-in 0.2s ease-out forwards;
 }
 
 .popover.closed {
-    animation: popover-out 0.3s ease-in forwards;
+    animation: popover-out 0.2s ease-in forwards;
 }
 
 .modal{
@@ -38,28 +37,24 @@
 }
 
 .modal.closed {
-    animation: modal-out 0.3s ease-out forwards;
+    animation: modal-out 0.2s ease-out forwards;
 }
 
 @keyframes popover-in {
     0% {
         max-height: 0;
-        padding: 0;
     }
     100% {
         max-height: 450px;
-        padding: 16px 0px 6px 0px;
     }
 }
 
 @keyframes popover-out {
     0% {
         max-height: 450px;
-        padding: 16px 0px 6px 0px;
     }
     100% {
         max-height: 0;
-        padding: 0;
     }
 }
 

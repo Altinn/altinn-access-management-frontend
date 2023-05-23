@@ -129,7 +129,7 @@ export const Floatover = ({
       // Delay removal until closing animation is done
       setTimeout(() => {
         setRenderFloatover(false);
-      }, 300);
+      }, 200);
     } else {
       setRenderFloatover(open);
     }
