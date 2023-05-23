@@ -114,7 +114,7 @@ export const ChooseApiPage = () => {
             subtitle={api.orgName}
             topContentText={api.rightDescription}
             bottomContentText={api.description}
-            textList={api.scopes}
+            scopeList={api.scopes}
             buttonType={'add'}
             onActionButtonClick={() => dispatch(softAddApi(api))}
             color={'neutral'}
@@ -135,7 +135,7 @@ export const ChooseApiPage = () => {
           subtitle={api.orgName}
           topContentText={api.rightDescription}
           bottomContentText={api.description}
-          textList={api.scopes}
+          scopeList={api.scopes}
           key={index}
           buttonType={'remove'}
           onActionButtonClick={() => {
