@@ -439,9 +439,9 @@ __metadata:
   linkType: hard
 
 "@digdir/design-system-tokens@npm:*":
-  version: 0.0.3
-  resolution: "@digdir/design-system-tokens@npm:0.0.3"
-  checksum: 70e914f0926993dfb2d0ff67f27e29f5a670f83deccf00c72f9469d595d708aec6a589b7d9d8404fd3a6d183444c3fb5a2f5ddac019dd617eba3c3f058e8e8a8
+  version: 0.1.1
+  resolution: "@digdir/design-system-tokens@npm:0.1.1"
+  checksum: b5f6a1b69958b85520e9b01620b355615ece2ec9fd67b0720e76cfdcfe5fbe421803386986b1c19777922aa0de91e7322a38aff69766bacbfbe692cdf7d48f0b
   languageName: node
   linkType: hard
 
