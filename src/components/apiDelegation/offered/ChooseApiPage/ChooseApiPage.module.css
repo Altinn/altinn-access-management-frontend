@@ -1,6 +1,6 @@
 @media only screen and (max-width: 768px) {
   .searchField{
-    width: 80%
+    width: 100%
   }
 
   .delegableApisContainer {
@@ -18,9 +18,8 @@
     flex-direction: column;
   }
 
-
   .filter {
-    padding-top: 0.5rem;
+    padding-top: 1rem;
   }
 }
 

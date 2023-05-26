@@ -23,7 +23,14 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
   ) => {
     const activeNotification = () => {
       return (
-        numActiveFilters !== 0 && <div className={classes.activeBadge}>{numActiveFilters}</div>
+        numActiveFilters !== 0 && (
+          <div
+            className={classes.activeBadge}
+            role='status'
+          >
+            {numActiveFilters}
+          </div>
+        )
       );
     };
     return (

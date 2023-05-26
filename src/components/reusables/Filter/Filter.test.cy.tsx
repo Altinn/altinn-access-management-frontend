@@ -189,7 +189,7 @@ describe(
         .find('[type=checkbox]')
         .should('be.checked');
     });
-    it('does not call onApply if closed without clicking apply', () => {
+    it('calls onApply if closed without clicking apply', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
       mount(
@@ -205,33 +205,7 @@ describe(
 
       // Close without applying
       cy.get('button').contains('Filter').click();
-      cy.get('@onApplySpy').should('not.have.been.called');
-    });
-    it('forgets changes that are not applied between closing and opening', () => {
-      const onApply = (value: string[]) => cy.stub();
-      const onApplySpy = cy.spy(onApply).as('onApplySpy');
-      mount(
-        <Filter
-          onApply={onApplySpy}
-          {...defaultProps}
-        />,
-      );
-      // Choose some values
-      cy.get('button').contains('Filter').click();
-      cy.contains(filterOptions[0].label).click();
-      cy.contains(filterOptions[2].label).click();
-
-      // Close without applying
-      cy.get('button').contains('Filter').click();
-
-      // Check that previously checed options are not checked
-      cy.get('button').contains('Filter').click();
-      cy.contains('label', `${filterOptions[0].label}`)
-        .find('[type=checkbox]')
-        .should('not.be.checked');
-      cy.contains('label', `${filterOptions[2].label}`)
-        .find('[type=checkbox]')
-        .should('not.be.checked');
+      cy.get('@onApplySpy').should('have.been.called');
     });
     it('displays search field when search is enabled', () => {
       mount(

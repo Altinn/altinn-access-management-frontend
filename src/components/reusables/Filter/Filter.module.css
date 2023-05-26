@@ -1,6 +1,8 @@
 @import "@digdir/design-system-tokens/dist/digdir/tokens.css";
 
 .popoverContent{
+    box-sizing: border-box;
+    height: 100%;
     display: flex;
     flex-direction: column;
     padding: 16px 15px 6px 15px;
@@ -31,7 +33,7 @@
 
 .filterActions.modal {
     --actionsFlexDirections: column;
-    gap: 4px;
+    gap: 10px;
     align-items: center;
 }
 

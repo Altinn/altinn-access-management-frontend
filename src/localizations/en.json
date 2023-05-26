@@ -10,7 +10,8 @@
     "loading": "Loading",
     "error_status_code": "Error status code",
     "reset_choices": "Reset",
-    "apply": "Apply"
+    "apply": "Apply",
+    "search": "Search"
   },
   "profile": {
     "received": "Received",

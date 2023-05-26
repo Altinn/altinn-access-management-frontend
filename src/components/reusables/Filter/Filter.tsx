@@ -3,6 +3,7 @@ import { useState, useEffect, useId, type ReactNode } from 'react';
 import { Button } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
+import { useTranslation } from 'react-i18next';
 
 import { arraysEqual } from '@/resources/utils';
 import { usePrevious } from '@/resources/hooks';
@@ -35,7 +36,7 @@ export const Filter = ({
   value,
   searchable,
   modalView = false,
-  closeButtonAriaLabel = 'Close ' + label,
+  closeButtonAriaLabel,
   onApply,
 }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,7 @@ export const Filter = ({
   const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
   const [hasChanges, setHasChanges] = useState(false);
   const filterButtonID = useId();
+  const { t } = useTranslation('common');
 
   // Update selected values when there are external changes
   const prevValue = usePrevious(value);
@@ -53,17 +55,12 @@ export const Filter = ({
   }, [value]);
 
   useEffect(() => {
-    if (!arraysEqual(activeFilters, checkedFilters)) {
-      setHasChanges(true);
-    } else {
-      setHasChanges(false);
-    }
+    setHasChanges(!arraysEqual(activeFilters, checkedFilters));
   }, [checkedFilters]);
 
   const handleApply = () => {
     onApply?.(checkedFilters);
     setActiveFilters([...checkedFilters]);
-    handleOpenOrClose();
     setHasChanges(false);
   };
 
@@ -73,9 +70,9 @@ export const Filter = ({
 
   const handleOpenOrClose = () => {
     if (isOpen) {
+      handleApply();
       setIsOpen(false);
     } else {
-      setCheckedFilters([...activeFilters]); // reset to active choices
       setIsOpen(true);
     }
   };
@@ -88,7 +85,7 @@ export const Filter = ({
         color='secondary'
         onClick={handleOpenOrClose}
         icon={<XMarkIcon />}
-        aria-label={closeButtonAriaLabel}
+        aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
       />
     </div>
   );
@@ -137,7 +134,7 @@ export const Filter = ({
           </Button>
           <Button
             size={modalView ? 'medium' : 'small'}
-            onClick={hasChanges ? handleApply : undefined}
+            onClick={hasChanges ? handleOpenOrClose : undefined}
             aria-disabled={!hasChanges}
             fullWidth={modalView}
           >

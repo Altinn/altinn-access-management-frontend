@@ -10,7 +10,8 @@
     "loading": "Lastar",
     "error_status_code": "Feilmeldingens statuskode",
     "reset_choices": "Nulstill valg",
-    "apply": "Bruk"
+    "apply": "Bruk",
+    "search": "Søk"
   },
   "profile": {
     "received": "Mottekne",

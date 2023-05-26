@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Checkbox } from '@digdir/design-system-react';
 import { SearchField } from '@altinn/altinn-design-system';
+import { useTranslation } from 'react-i18next';
 
 import { arraysEqual } from '@/resources/utils';
 import { usePrevious } from '@/resources/hooks';
@@ -27,6 +28,7 @@ export const OptionDisplay = ({
 }: OptionDisplayProps) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(value ?? []);
   const [sortedOptions, setSortedOptions] = useState<FilterOption[]>(options);
+  const { t } = useTranslation('common');
 
   // Update selected values when there are external changes
   const prevValue = usePrevious(value);
@@ -103,6 +105,7 @@ export const OptionDisplay = ({
       {searchable && (
         <div className={classes.searchField}>
           <SearchField
+            aria-label={String(t('common.search'))}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleSearch(event.target.value);
             }}
