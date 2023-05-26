@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
@@ -54,29 +55,23 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("accessmanagement/api/v1/{party}/maskinportenschema/received")]
         public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetReceivedMaskinportenSchemaDelegations([FromRoute] string party)
         {
-            if (string.IsNullOrEmpty(party))
-            {
-                return BadRequest("Missing reportee party");
-            }
-
             try
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
                 string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
-                List<MaskinportenSchemaDelegationFE> delegations = await _delegation.GetReceivedMaskinportenSchemaDelegations(party, languageCode);                
-
-                return delegations;
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest("Either the reportee is not found or the supplied value for who is not in a valid format");
+                return await _delegation.GetReceivedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)
             {
-                string errorMessage = ex.Message;
-                _logger.LogError("Failed to fetch outbound delegations, See the error message for more details {errorMessage}", errorMessage);
-                return StatusCode(500);
+                if (ex is ValidationException || ex is ArgumentException)
+                {
+                    ModelState.AddModelError("Validation Error", ex.Message);
+                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
+                }
+
+                _logger.LogError(ex, "Unexpected exception occurred during retrieval of received maskinportenschema");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
 
@@ -90,29 +85,23 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
         public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetOfferedMaskinportenSchemaDelegations([FromRoute] string party)
         {
-            if (string.IsNullOrEmpty(party))
-            {
-                return BadRequest("Missing reportee party");
-            }
-
             try
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
                 string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
-                List<MaskinportenSchemaDelegationFE> delegations = await _delegation.GetOfferedMaskinportenSchemaDelegations(party, languageCode);                
-
-                return delegations;
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest("Either the reportee is not found or the supplied value for who is not in a valid format");
+                return await _delegation.GetOfferedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)
             {
-                string errorMessage = ex.Message;
-                _logger.LogError("Failed to fetch outbound delegations, See the error message for more details {errorMessage}", errorMessage);
-                return StatusCode(500);
+                if (ex is ValidationException || ex is ArgumentException)
+                {
+                    ModelState.AddModelError("Validation Error", ex.Message);
+                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
+                }
+
+                _logger.LogError(ex, "Unexpected exception occurred during retrieval of offered maskinportenschema");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
 
@@ -136,13 +125,13 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(response.StatusCode.ToString(), response.ReasonPhrase);                   
-                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Internal exception occurred during deletion of maskinportenschema delegation");
+                _logger.LogError(ex, "Unexpected exception occurred during revoke of received maskinportenschema");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -174,13 +163,12 @@ namespace Altinn.AccessManagement.UI.Controllers
                 else
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    ProblemDetails problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseContent, _serializerOptions);
-                    return new ObjectResult(problemDetails);
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred during deletion of maskinportenschema delegation");
+                _logger.LogError(ex, "Unexpected exception occurred during revoke of offered maskinportenschema");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -202,8 +190,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    DelegationOutput delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
-                    return delegationOutput;
+                    return JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
@@ -214,12 +201,12 @@ namespace Altinn.AccessManagement.UI.Controllers
                 else
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Internal exception occurred during delegation of maskinportenschema");
+                _logger.LogError(ex, "Unexpected exception occurred during delegation of maskinportenschema");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
