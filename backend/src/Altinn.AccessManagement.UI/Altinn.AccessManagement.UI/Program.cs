@@ -80,6 +80,7 @@ app.UseCors();
 app.UseStaticFiles();
 
 app.MapControllers();
+
 app.MapHealthChecks("/health");
 
 app.Run();
