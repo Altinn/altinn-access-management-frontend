@@ -81,6 +81,8 @@ app.UseStaticFiles();
 
 app.MapControllers();
 
+app.MapHealthChecks("/health");
+
 app.Run();
 
 void ConfigureSetupLogging()
