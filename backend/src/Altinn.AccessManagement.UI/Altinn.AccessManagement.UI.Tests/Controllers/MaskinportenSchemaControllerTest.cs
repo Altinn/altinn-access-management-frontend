@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Azure;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -153,17 +154,58 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// Expected: RevokeOfferedMaskinportenScopeDelegation returns 204 No Content
         /// </summary>
         [Fact]
-        public async Task RevokeOfferedMaskinportenScopeDelegation_Success()
+        public void RevokeOfferedMaskinportenScopeDelegation_Success()
         {
             // Arrange
             string fromParty = "50004223";
-            StreamContent requestContent = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent0 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent1 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent2 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent3 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent4 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent5 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent6 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent7 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent8 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent9 = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+
+            HttpResponseMessage response0 = null, response1 = null, response2 = null, response3 = null, response4 = null, response5 = null, response6 = null, response7 = null, response8 = null, response9 = null;
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent);
+            Task.Run(() => response0 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent0).Result);
+            Task.Run(() => response1 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent1).Result);
+            Task.Run(() => response2 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent2).Result);
+            Task.Run(() => response3 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent3).Result);
+            Task.Run(() => response4 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent4).Result);
+            Task.Run(() => response5 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent5).Result);
+            Task.Run(() => response6 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent6).Result);
+            Task.Run(() => response7 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent7).Result);
+            Task.Run(() => response8 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent8).Result);
+            Task.Run(() => response9 = _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent9).Result);
 
             // Assert
-            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            int count = 0;
+            while (response0 == null || response1 == null || response2 == null || response3 == null || response4 == null || response5 == null || response6 == null || response7 == null || response8 == null || response9 == null)
+            {
+                Thread.Sleep(10);
+                count++;
+
+                if (count == 1000)
+                {
+                    Assert.Fail("Waited for a total of 10s and all requests still not complete");
+                }
+            }
+
+            Assert.True(response0.StatusCode == HttpStatusCode.NoContent, $"response0 failed: {response0.StatusCode} | {response0.Content.ReadAsStringAsync().Result}");
+            Assert.True(response1.StatusCode == HttpStatusCode.NoContent, $"response1 failed: {response1.StatusCode} | {response1.Content.ReadAsStringAsync().Result}");
+            Assert.True(response2.StatusCode == HttpStatusCode.NoContent, $"response2 failed: {response2.StatusCode} | {response2.Content.ReadAsStringAsync().Result}");
+            Assert.True(response3.StatusCode == HttpStatusCode.NoContent, $"response3 failed: {response3.StatusCode} | {response3.Content.ReadAsStringAsync().Result}");
+            Assert.True(response4.StatusCode == HttpStatusCode.NoContent, $"response4 failed: {response4.StatusCode} | {response4.Content.ReadAsStringAsync().Result}");
+            Assert.True(response5.StatusCode == HttpStatusCode.NoContent, $"response5 failed: {response5.StatusCode} | {response5.Content.ReadAsStringAsync().Result}");
+            Assert.True(response6.StatusCode == HttpStatusCode.NoContent, $"response6 failed: {response6.StatusCode} | {response6.Content.ReadAsStringAsync().Result}");
+            Assert.True(response7.StatusCode == HttpStatusCode.NoContent, $"response7 failed: {response7.StatusCode} | {response7.Content.ReadAsStringAsync().Result}");
+            Assert.True(response8.StatusCode == HttpStatusCode.NoContent, $"response8 failed: {response8.StatusCode} | {response8.Content.ReadAsStringAsync().Result}");
+            Assert.True(response9.StatusCode == HttpStatusCode.NoContent, $"response9 failed: {response9.StatusCode} | {response9.Content.ReadAsStringAsync().Result}");
         }
 
         /// <summary>

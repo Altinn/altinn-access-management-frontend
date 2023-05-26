@@ -214,8 +214,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 else
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    ProblemDetails problemDetails = JsonSerializer.Deserialize<ProblemDetails>(responseContent, _serializerOptions);
-                    return new ObjectResult(problemDetails);
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
                 }
             }
             catch (Exception ex)
