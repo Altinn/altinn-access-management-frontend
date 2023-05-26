@@ -129,7 +129,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
     return await axios
-      .get(`/accessmanagement/api/v1/${altinnPartyId}dsada/maskinportenschema/offered`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
