@@ -3,7 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Altinn.AccessManagement.Controllers
+namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
     /// The <see cref="ProfileController"/> provides the API endpoints related to persons.

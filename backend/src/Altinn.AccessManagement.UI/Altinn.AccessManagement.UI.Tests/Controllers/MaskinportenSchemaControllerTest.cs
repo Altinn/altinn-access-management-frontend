@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Azure;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
