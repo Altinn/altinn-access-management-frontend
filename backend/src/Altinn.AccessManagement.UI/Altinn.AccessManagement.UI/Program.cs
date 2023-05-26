@@ -80,6 +80,7 @@ app.UseCors();
 app.UseStaticFiles();
 
 app.MapControllers();
+
 app.MapHealthChecks("/health");
 
 app.Run();
@@ -175,7 +176,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddControllersWithViews();
     services.AddMvc();
     services.AddHealthChecks().AddCheck<HealthCheck>("accessmanagement_ui_health_check");
-
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
