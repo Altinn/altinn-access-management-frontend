@@ -81,6 +81,7 @@ app.UseCors();
 app.UseStaticFiles();
 
 app.MapControllers();
+
 app.MapHealthChecks("/health");
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
