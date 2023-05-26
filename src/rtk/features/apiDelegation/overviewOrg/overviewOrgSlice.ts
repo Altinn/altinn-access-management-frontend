@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
+import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface ApiListItem {

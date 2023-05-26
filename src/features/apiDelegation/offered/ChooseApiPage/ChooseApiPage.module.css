@@ -1,0 +1,61 @@
+@media only screen and (max-width: 768px) {
+  .searchSection{
+    width: 100%
+  }
+
+  .delegableApisContainer {
+    margin-bottom: 30px;
+    width: 100%;
+  }
+
+  .chosenApisContainer {
+    margin-bottom: 30px;
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .searchSection{
+    width: 47.5%;
+  }
+
+  .pageContentActionBarsContainer{
+    grid-template-columns: 1fr 1fr;
+    display: grid;
+  }
+
+  .delegableApisContainer {
+    margin-right: 25px;
+    height: 400px;
+    overflow-y: auto;
+    margin-right: 20px;
+  }
+
+  .chosenApisContainer {
+    margin-left: 25px;
+    height: 400px;
+    overflow-y: auto;
+  }
+
+  .filter {
+    padding-top: 1rem;
+  }
+}
+
+.chosenOrgsListHeader{
+  font-weight: 500;
+}
+
+.chooseApiSecondHeader{
+  font-weight: 500;
+}
+
+.explanationTexts{
+  font-weight: 500;
+}
+
+.actionBarWrapper{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+}

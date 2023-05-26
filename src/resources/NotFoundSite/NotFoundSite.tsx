@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouteError } from 'react-router-dom';
 import * as React from 'react';
 
-import { Page, PageContent } from '@/components/reusables';
-import { PageContainer } from '@/components/reusables/PageContainer';
+import { Page, PageContent, PageContainer } from '@/components';
 import { ReactComponent as SeagullIcon } from '@/assets/Seagull.svg';
 
 import classes from './NotFoundSite.module.css';
@@ -13,8 +12,6 @@ export const NotFoundSite = () => {
   const error: any = useRouteError(); // fixme: error har ikke Type ennå
 
   const { t } = useTranslation('common'); // "t" is the (ugly) convention of "translate"
-
-  console.log(error);
 
   return (
     <div>
