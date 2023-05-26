@@ -27,7 +27,7 @@ export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfoSlice', asy
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
-      throw new Error(String(error.response.status));
+      throw new Error(String(error.response.data));
     });
 });
 
@@ -38,7 +38,7 @@ export const fetchReportee = createAsyncThunk('userInfo/fetchReportee', async ()
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
-      throw new Error(String(error.response.status));
+      throw new Error(String(error.response.data));
     });
 });
 

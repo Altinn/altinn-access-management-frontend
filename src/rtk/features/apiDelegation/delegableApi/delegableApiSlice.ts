@@ -69,7 +69,7 @@ export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableA
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
-      throw new Error(String(error.response.status));
+      throw new Error(String(error.response.data));
     });
 });
 
