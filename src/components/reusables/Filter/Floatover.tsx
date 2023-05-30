@@ -25,6 +25,31 @@ export interface FloatoverProps extends React.HTMLAttributes<HTMLDivElement> {
   trigger: React.ReactNode;
 }
 
+/**
+ * Floatover Component
+ *
+ * This component renders a local popover or fullscreen modal
+ *
+ * @component
+ * @example
+ * <Floatover
+ *   isOpen={true}
+ *   setIsOpen={handleOpenChange}
+ *   isModal={false}
+ *   className="my-floatover"
+ *   trigger={<button>Open Floatover</button>}
+ * >
+ *   <div>Floatover Content</div>
+ * </Floatover>
+ *
+ * @param {boolean} [props.isOpen=false] - Indicates whether the Floatover is open or closed, use this to control its open-state externally
+ * @param {function} [props.setIsOpen] - Callback function to handle the open state change, this should set the isOpen state
+ * @param {boolean} [props.isModal=false] - When true, the floatover will appear as a full-screen modal. Otherwise, it will appear as a popover
+ * @param {string} [props.className] - Additional CSS class for the Floatover container
+ * @param {React.ReactNode} props.children - Content to be displayed inside the Floatover
+ * @param {React.ReactNode} props.trigger - The trigger element that opens the Floatover
+ * @returns {React.ReactNode} Rendered component
+ */
 export const Floatover = ({
   children,
   trigger,

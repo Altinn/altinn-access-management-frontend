@@ -27,6 +27,37 @@ export interface FilterProps {
   closeButtonAriaLabel?: string;
 }
 
+/**
+ * Filter Component
+ *
+ * This component renders a button and corresponding popover with functionality for option selection.
+ *
+ * @component
+ * @example
+ * <Filter
+ *   options={filterOptions}
+ *   label="Filter"
+ *   applyButtonLabel="Apply"
+ *   resetButtonLabel="Reset"
+ *   icon={<FilterIcon />}
+ *   value={selectedFilters}
+ *   onApply={handleFilterApply}
+ *   modalView={true}
+ *   closeButtonAriaLabel="Close Filter"
+ * />
+ *
+ * @param {FilterOption[]} props.options - The provided filter options
+ * @param {string} props.label - The label that will be displayed on the filter button
+ * @param {string} props.applyButtonLabel - The label for the apply button inside the popover
+ * @param {string} props.resetButtonLabel - The label for the reset button inside the popover
+ * @param {React.ReactNode} [props.icon] - The icon element to display with the filter label
+ * @param {string[]} [props.value] - The selected filter values
+ * @param {boolean} [props.searchable=false] - Indicates whether the options are searchable
+ * @param {boolean} [props.modalView=false] - Indicates whether to use a modal view for the filter
+ * @param {string} [props.closeButtonAriaLabel] - The ARIA label for the close button in modal view
+ * @param {function} [props.onApply] - Callback function that will be called when filters are applied
+ * @returns {React.ReactNode} Rendered component
+ */
 export const Filter = ({
   options,
   label,

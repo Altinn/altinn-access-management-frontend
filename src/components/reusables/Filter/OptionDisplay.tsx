@@ -19,6 +19,28 @@ export interface OptionDisplayProps {
   compact?: boolean;
 }
 
+/**
+ * OptionDisplay Component
+ *
+ * This component displays a list of options with checkboxes for selection. It supports searching and compact mode.
+ *
+ * @component
+ * @example
+ * <OptionDisplay
+ *   options={filterOptions}
+ *   value={selectedValues}
+ *   onValueChange={handleValueChange}
+ *   searchable={true}
+ *   compact={false}
+ * />
+ *
+ * @param {FilterOption[]} props.options - The available filter options
+ * @param {string[]} [props.value] - The selected values
+ * @param {function} [props.onValueChange] - Callback function to handle the value change
+ * @param {boolean} [props.searchable=false] - When true displays a search field that enables search within the options
+ * @param {boolean} [props.compact=true] - Indicates whether to use compact mode for checkboxes
+ * @returns {React.ReactNode} Rendered component
+ */
 export const OptionDisplay = ({
   options,
   value,
