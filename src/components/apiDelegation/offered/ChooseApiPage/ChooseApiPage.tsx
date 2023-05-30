@@ -207,7 +207,7 @@ export const ChooseApiPage = () => {
                   closeButtonAriaLabel={String(t('common.close'))}
                   onApply={handleFilterChange}
                   searchable={true}
-                  modalView={isSm}
+                  fullScreenModal={isSm}
                 />
               </div>
             </div>

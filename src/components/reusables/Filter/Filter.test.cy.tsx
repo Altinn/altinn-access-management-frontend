@@ -28,17 +28,20 @@ describe(
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter');
     });
+
     it('opens a popup when the filter button is clicked', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
       cy.get('[role="dialog"]').should('be.visible');
     });
+
     it('closes the popup when the filter button is clicked a second time', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
       cy.get('button').contains('Filter').click();
       cy.get('[role="dialog"]').should('not.exist');
     });
+
     it('closes the popup when user clicks outside of the popup', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
@@ -46,6 +49,7 @@ describe(
       cy.get('body').click(200, 0);
       cy.get('[role="dialog"]').should('not.exist');
     });
+
     it('closes the popup when user presses the Esc key', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
@@ -53,6 +57,7 @@ describe(
       cy.get('body').type('{esc}');
       cy.get('[role="dialog"]').should('not.exist');
     });
+
     it('displays apply button as disabled and unclickable until user has made a change', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
@@ -76,16 +81,18 @@ describe(
       cy.get('button').contains('Apply').click();
       cy.get('@onApplySpy').should('have.been.called');
     });
+
     it('displays reset button as aria-disabled when there are no options checked', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
       // Button is aria-disabled
       cy.get('button').contains('Reset').should('have.attr', 'aria-disabled', 'true');
     });
+
     it('displays reset button as aria-disabled when all active options have been unchecked manually', () => {
       mount(
         <Filter
-          value={[filterOptions[0].value]}
+          values={[filterOptions[0].value]}
           {...defaultProps}
         />,
       );
@@ -94,6 +101,7 @@ describe(
       // Button is aria-disabled
       cy.get('button').contains('Reset').should('have.attr', 'aria-disabled', 'true');
     });
+
     it('applies the chosen options by calling onApply with the chosen values', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
@@ -113,6 +121,7 @@ describe(
         filterOptions[2].value,
       ]);
     });
+
     it('can be opened, navigated, applied with changes by using keybord', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
@@ -144,13 +153,14 @@ describe(
       cy.get('@onApplySpy').should('have.been.calledWith', [filterOptions[1].value]);
       cy.get('[role="dialog"]').should('not.exist');
     });
+
     it('resets the chosen values when user clicks reset', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
       mount(
         <Filter
           onApply={onApplySpy}
-          value={[filterOptions[0].value, filterOptions[1].value, filterOptions[2].value]}
+          values={[filterOptions[0].value, filterOptions[1].value, filterOptions[2].value]}
           {...defaultProps}
         />,
       );
@@ -172,6 +182,7 @@ describe(
       cy.get('@onApplySpy').should('have.been.called');
       cy.get('@onApplySpy').should('have.been.calledWith', []);
     });
+
     it('preserves the chosen options after closing and opening', () => {
       mount(<Filter {...defaultProps} />);
       // Choose some values and apply them
@@ -189,6 +200,7 @@ describe(
         .find('[type=checkbox]')
         .should('be.checked');
     });
+
     it('calls onApply if closed without clicking apply', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
@@ -207,6 +219,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.get('@onApplySpy').should('have.been.called');
     });
+
     it('displays search field when search is enabled', () => {
       mount(
         <Filter
@@ -217,6 +230,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.get('input').should('be.visible');
     });
+
     it('does not display search field when search is disabled', () => {
       mount(
         <Filter
@@ -227,6 +241,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.get('input').should('not.be.visible');
     });
+
     it('adjusts options when they are changed externally', () => {
       const changableOption = [
         { label: 'Option 1', value: '1' },
@@ -244,12 +259,13 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains('Option 4');
     });
+
     it('accepts active choices provided externally', () => {
       const activeValues = [filterOptions[0].value];
       mount(
         <Filter
           {...defaultProps}
-          value={activeValues}
+          values={activeValues}
         />,
       );
       cy.get('button').contains('Filter').click();

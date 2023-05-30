@@ -13,7 +13,7 @@ import classes from './OptionDisplay.module.css';
 
 export interface OptionDisplayProps {
   options: FilterOption[];
-  value?: string[];
+  values?: string[];
   onValueChange?: (value: string[]) => void;
   searchable?: boolean;
   compact?: boolean;
@@ -28,37 +28,37 @@ export interface OptionDisplayProps {
  * @example
  * <OptionDisplay
  *   options={filterOptions}
- *   value={selectedValues}
+ *   values={selectedValues}
  *   onValueChange={handleValueChange}
  *   searchable={true}
  *   compact={false}
  * />
  *
  * @param {FilterOption[]} props.options - The available filter options
- * @param {string[]} [props.value] - The selected values
- * @param {function} [props.onValueChange] - Callback function to handle the value change
+ * @param {string[]} [props.values] - A list of the selected values. Can be used to set selected values externally
+ * @param {function} [props.onValueChange] - Callback function to handle changes in selected values
  * @param {boolean} [props.searchable=false] - When true displays a search field that enables search within the options
  * @param {boolean} [props.compact=true] - Indicates whether to use compact mode for checkboxes
  * @returns {React.ReactNode} Rendered component
  */
 export const OptionDisplay = ({
   options,
-  value,
+  values,
   searchable,
   compact = true,
   onValueChange,
 }: OptionDisplayProps) => {
-  const [selectedValues, setSelectedValues] = useState<string[]>(value ?? []);
+  const [selectedValues, setSelectedValues] = useState<string[]>(values ?? []);
   const [sortedOptions, setSortedOptions] = useState<FilterOption[]>(options);
   const { t } = useTranslation('common');
 
   // Update selected values when there are external changes
-  const prevValue = usePrevious(value);
+  const prevvalues = usePrevious(values);
   useEffect(() => {
-    if (!arraysEqual(value, prevValue)) {
-      setSelectedValues(value ?? []);
+    if (!arraysEqual(values, prevvalues)) {
+      setSelectedValues(values ?? []);
     }
-  }, [value]);
+  }, [values]);
 
   // Update sorted options when there are external changes
   const prevOptions = usePrevious(options);
@@ -75,7 +75,7 @@ export const OptionDisplay = ({
 
   const handleSelection = (selectedValue: string) => {
     if (selectedValues?.includes(selectedValue)) {
-      changeHandler(selectedValues.filter((value) => value !== selectedValue));
+      changeHandler(selectedValues.filter((v) => v !== selectedValue));
     } else {
       changeHandler([...selectedValues, selectedValue], selectedValue);
     }

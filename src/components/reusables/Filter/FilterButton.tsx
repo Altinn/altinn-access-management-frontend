@@ -34,7 +34,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
       );
     };
     return (
-      <div className={cn(classes.buttonContainer, className)}>
+      <div className={cn(classes.filterButtonContainer, className)}>
         {activeNotification()}
         <button
           {...restHTMLProps}

@@ -28,9 +28,10 @@ describe('OptionDisplay', () => {
       cy.contains(options[i].label);
     }
   });
+
   it('should follow externally set values if set', () => {
     const checked = [options[0].value, options[2].value];
-    renderOptionDisplay({ value: checked });
+    renderOptionDisplay({ values: checked });
     for (let i = 0; i < options.length; i++) {
       if (checked.includes(options[i].value)) {
         cy.contains('label', `${options[i].label}`).find('[type=checkbox]').should('be.checked');
@@ -41,14 +42,17 @@ describe('OptionDisplay', () => {
       }
     }
   });
+
   it('displays search field when search is enabled', () => {
     renderOptionDisplay({ searchable: true });
     cy.get('input').should('be.visible');
   });
+
   it('does not display search field when search is disabled', () => {
     renderOptionDisplay({ searchable: false });
     cy.get('input').should('not.be.visible');
   });
+
   it('only displays options that match the search string when one is entered', () => {
     renderOptionDisplay({ searchable: true });
     cy.get('input:visible').type('breakfast');

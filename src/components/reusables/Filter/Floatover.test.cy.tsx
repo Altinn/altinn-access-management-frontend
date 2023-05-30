@@ -38,6 +38,7 @@ describe('Floatover', () => {
     renderFloatover();
     cy.get('button').contains('Open');
   });
+
   describe(
     'Popover',
     {
@@ -51,12 +52,14 @@ describe('Floatover', () => {
           cy.get('button').contains('Open').click();
           cy.get('[role="dialog"]').should('exist');
         });
+
         it('closes the popup when the filter button is clicked a second time', () => {
           renderFloatover();
           cy.get('button').contains('Open').click();
           cy.get('button').contains('Open').click();
           cy.get('[role="dialog"]').should('not.exist');
         });
+
         it('closes the popup when user clicks outside of the popup', () => {
           renderFloatover();
           cy.get('button').contains('Open').click();
@@ -64,6 +67,7 @@ describe('Floatover', () => {
           cy.get('body').click(200, 0);
           cy.get('[role="dialog"]').should('not.exist');
         });
+
         it('closes the popup when user presses the Esc key', () => {
           renderFloatover();
           cy.get('button').contains('Open').click();
@@ -72,6 +76,7 @@ describe('Floatover', () => {
           cy.get('[role="dialog"]').should('not.exist');
         });
       });
+
       describe('Controlled mode', () => {
         it('should be open when set isOpen is true', () => {
           renderFloatover({
@@ -79,6 +84,7 @@ describe('Floatover', () => {
           });
           cy.get('[role="dialog"]').should('exist');
         });
+
         it('should not be open when set isOpen is false', () => {
           renderFloatover({
             isOpen: false,
@@ -88,6 +94,7 @@ describe('Floatover', () => {
       });
     },
   );
+
   describe('Modal', { viewportHeight: 750, viewportWidth: 300 }, () => {
     it('opens a modal spanning the entire screen when the filter button is clicked', () => {
       renderFloatover({ isModal: true });
@@ -95,6 +102,7 @@ describe('Floatover', () => {
       cy.get('[role="dialog"]').should('exist');
       cy.get('[role="dialog"]').invoke('outerWidth').should('be.gt', 299);
     });
+
     it('does not close the modal when user clicks inside of the modal', () => {
       renderFloatover({ isModal: true });
       cy.get('button').contains('Open').click();

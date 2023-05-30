@@ -21,9 +21,9 @@ export interface FilterProps {
   resetButtonLabel: string;
   searchable?: boolean;
   icon?: ReactNode;
-  value?: string[];
+  values?: string[];
   onApply?: (value: string[]) => void;
-  modalView?: boolean;
+  fullScreenModal?: boolean;
   closeButtonAriaLabel?: string;
 }
 
@@ -40,9 +40,9 @@ export interface FilterProps {
  *   applyButtonLabel="Apply"
  *   resetButtonLabel="Reset"
  *   icon={<FilterIcon />}
- *   value={selectedFilters}
+ *   values={selectedFilters}
  *   onApply={handleFilterApply}
- *   modalView={true}
+ *   fullScreenModal={true}
  *   closeButtonAriaLabel="Close Filter"
  * />
  *
@@ -51,9 +51,9 @@ export interface FilterProps {
  * @param {string} props.applyButtonLabel - The label for the apply button inside the popover
  * @param {string} props.resetButtonLabel - The label for the reset button inside the popover
  * @param {React.ReactNode} [props.icon] - The icon element to display with the filter label
- * @param {string[]} [props.value] - The selected filter values
+ * @param {string[]} [props.values] - The active filter values. Can be used for setting active filters externally.
  * @param {boolean} [props.searchable=false] - Indicates whether the options are searchable
- * @param {boolean} [props.modalView=false] - Indicates whether to use a modal view for the filter
+ * @param {boolean} [props.fullScreenModal=false] - When true, displays a full screen modal when selecting filters. Othewise, displays as local popover
  * @param {string} [props.closeButtonAriaLabel] - The ARIA label for the close button in modal view
  * @param {function} [props.onApply] - Callback function that will be called when filters are applied
  * @returns {React.ReactNode} Rendered component
@@ -64,26 +64,26 @@ export const Filter = ({
   applyButtonLabel,
   resetButtonLabel,
   icon,
-  value,
+  values,
   searchable,
-  modalView = false,
+  fullScreenModal = false,
   closeButtonAriaLabel,
   onApply,
 }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeFilters, setActiveFilters] = useState<string[]>(value ?? []);
-  const [checkedFilters, setCheckedFilters] = useState<string[]>(value ?? []);
+  const [activeFilters, setActiveFilters] = useState<string[]>(values ?? []);
+  const [checkedFilters, setCheckedFilters] = useState<string[]>(values ?? []);
   const [hasChanges, setHasChanges] = useState(false);
   const filterButtonID = useId();
   const { t } = useTranslation('common');
 
   // Update selected values when there are external changes
-  const prevValue = usePrevious(value);
+  const prevvalues = usePrevious(values);
   useEffect(() => {
-    if (value !== undefined && !arraysEqual(value, prevValue)) {
-      setActiveFilters(value);
+    if (values !== undefined && !arraysEqual(values, prevvalues)) {
+      setActiveFilters(values);
     }
-  }, [value]);
+  }, [values]);
 
   useEffect(() => {
     setHasChanges(!arraysEqual(activeFilters, checkedFilters));
@@ -137,23 +137,23 @@ export const Filter = ({
       }
       isOpen={isOpen}
       setIsOpen={handleOpenOrClose}
-      isModal={modalView}
+      isModal={fullScreenModal}
     >
       <div className={classes.popoverContent}>
-        {modalView && modalHeader()}
-        <div className={cn(classes.optionSection, { [classes.modal]: modalView })}>
+        {fullScreenModal && modalHeader()}
+        <div className={cn(classes.optionSection, { [classes.modal]: fullScreenModal })}>
           <OptionDisplay
             options={options}
             onValueChange={setCheckedFilters}
-            value={checkedFilters}
+            values={checkedFilters}
             searchable={searchable}
-            compact={!modalView}
+            compact={!fullScreenModal}
           />
         </div>
-        <div className={cn(classes.filterActions, { [classes.modal]: modalView })}>
+        <div className={cn(classes.filterActions, { [classes.modal]: fullScreenModal })}>
           <Button
             className={classes.resetButton}
-            size={modalView ? 'medium' : 'small'}
+            size={fullScreenModal ? 'medium' : 'small'}
             variant='quiet'
             fullWidth={false}
             aria-disabled={checkedFilters.length === 0}
@@ -162,10 +162,10 @@ export const Filter = ({
             {resetButtonLabel}
           </Button>
           <Button
-            size={modalView ? 'medium' : 'small'}
+            size={fullScreenModal ? 'medium' : 'small'}
             onClick={hasChanges ? handleOpenOrClose : undefined}
             aria-disabled={!hasChanges}
-            fullWidth={modalView}
+            fullWidth={fullScreenModal}
           >
             {applyButtonLabel}
           </Button>
