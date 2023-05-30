@@ -32,6 +32,7 @@ export const Floatover = ({
   setIsOpen,
   isModal = false,
   className,
+  ...restProps
 }: FloatoverProps) => {
   const isAutomatedOpen = !setIsOpen;
   const [automatedOpen, setAutomatedOpen] = useState(isOpen ?? false);
@@ -88,6 +89,7 @@ export const Floatover = ({
             left: context.x ?? 0,
           }}
           {...getFloatingProps()}
+          {...restProps}
         >
           {children}
         </div>
@@ -115,6 +117,7 @@ export const Floatover = ({
             left: 0,
           }}
           {...getFloatingProps()}
+          {...restProps}
         >
           {children}
         </div>

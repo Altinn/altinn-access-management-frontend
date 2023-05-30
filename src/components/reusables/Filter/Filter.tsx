@@ -92,6 +92,7 @@ export const Filter = ({
 
   return (
     <Floatover
+      aria-labelledby={filterButtonID}
       trigger={
         <FilterButton
           id={filterButtonID}
@@ -107,10 +108,7 @@ export const Filter = ({
       setIsOpen={handleOpenOrClose}
       isModal={modalView}
     >
-      <div
-        aria-labelledby={filterButtonID}
-        className={classes.popoverContent}
-      >
+      <div className={classes.popoverContent}>
         {modalView && modalHeader()}
         <div className={cn(classes.optionSection, { [classes.modal]: modalView })}>
           <OptionDisplay
