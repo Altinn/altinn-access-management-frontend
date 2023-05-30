@@ -1,5 +1,3 @@
-@import "@digdir/design-system-tokens/dist/digdir/tokens.css";
-
 .icon {
     display: inline-block;
     height: var(--component-button-size-icon-small);

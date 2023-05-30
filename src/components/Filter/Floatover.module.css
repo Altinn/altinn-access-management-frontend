@@ -1,5 +1,3 @@
-@import "@digdir/design-system-tokens/dist/digdir/tokens.css";
-
 .floatingOverlay {
     z-index: 2;
 }

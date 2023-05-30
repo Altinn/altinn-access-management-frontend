@@ -31,7 +31,7 @@ import {
   filter,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import { Filter, type FilterOption } from '@/components/reusables/Filter';
+import { Filter, type FilterOption } from '@/components/Filter';
 import { DelegationActionBar } from '@/components/DelegationActionBar';
 
 import classes from './ChooseApiPage.module.css';
