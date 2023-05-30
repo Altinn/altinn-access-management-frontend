@@ -187,6 +187,7 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
     services.AddControllersWithViews();
+    services.ConfigureDataProtection();
     services.AddMvc();
     services.AddHealthChecks().AddCheck<HealthCheck>("accessmanagement_ui_health_check");
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
