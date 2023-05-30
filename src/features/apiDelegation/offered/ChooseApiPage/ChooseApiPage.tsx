@@ -13,6 +13,7 @@ import {
   PageSize,
   NavigationButtons,
   PageContainer,
+  ErrorPanel,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
@@ -83,15 +84,12 @@ export const ChooseApiPage = () => {
   const delegableApiAccordions = () => {
     if (error) {
       return (
-        <Panel
+        <ErrorPanel
           title={t('api_delegation.data_retrieval_failed')}
-          variant={PanelVariant.Error}
-          forceMobileLayout
-        >
-          <div>
-            {t('common.error_status_code')}: {error}
-          </div>
-        </Panel>
+          message={error.message}
+          statusCode={error.statusCode}
+          timeStamp={'test'}
+        ></ErrorPanel>
       );
     } else if (loading) {
       return (

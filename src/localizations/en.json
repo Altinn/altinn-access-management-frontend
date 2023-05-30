@@ -8,7 +8,8 @@
     "broennoeysund_register": "The Brønnøysund Register Center",
     "error_message": "Error message",
     "loading": "Loading",
-    "error_status_code": "Error status code"
+    "error_status_code": "Error status code",
+    "error_time_stamp": "Time stamp"
   },
   "profile": {
     "received": "Received",

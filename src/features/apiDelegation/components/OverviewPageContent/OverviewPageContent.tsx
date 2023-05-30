@@ -31,6 +31,7 @@ import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/o
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
+import { ErrorPanel } from '@/components';
 
 import { LayoutState } from '../LayoutState';
 
@@ -137,18 +138,10 @@ export const OverviewPageContent = ({
   };
 
   const activeDelegations = () => {
-    if (error) {
+    if (!error) {
       return (
         <div className={classes.errorPanel}>
-          <Panel
-            title={t('api_delegation.data_retrieval_failed')}
-            variant={PanelVariant.Error}
-            forceMobileLayout
-          >
-            <div>
-              {t('common.error_message')}: {error}
-            </div>
-          </Panel>
+          <ErrorPanel title={t('api_delegation.data_retrieval_failed')}></ErrorPanel>
         </div>
       );
     } else if (loading) {
