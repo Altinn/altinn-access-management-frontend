@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { LayoutState } from '@/components/apiDelegation/reusables/LayoutState';
+import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 export interface ApiListItem {
@@ -36,6 +36,7 @@ export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
   error: string;
+  errorStatusCode: string;
 }
 
 export interface DeletionRequest {
@@ -132,7 +133,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.status));
+        throw new Error(String(error.response.data));
       });
   },
 );
@@ -151,7 +152,7 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.status));
+        throw new Error(String(error.response.data));
       });
   },
 );
@@ -187,7 +188,7 @@ export const deleteOfferedApiDelegation = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.status));
+        throw new Error(String(error.response.data));
       });
   },
 );
@@ -223,7 +224,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.status));
+        throw new Error(String(error.response.data));
       });
   },
 );

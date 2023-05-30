@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@altinn/altinn-design-system": "^0.27.6",
-    "@digdir/design-system-react": "^0.11.0",
-    "@navikt/aksel-icons": "^2.8.14",
+    "@digdir/design-system-react": "^0.12.0",
+    "@navikt/aksel-icons": "^3.0.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@tanstack/react-query": "^4.0.5",
     "axios": "^1.3.4",
@@ -37,7 +37,7 @@
     "react-router-dom": "^6.10.0",
     "redux-logger": "^3.0.6",
     "typescript-plugin-css-modules": "^5.0.0",
-    "vite-plugin-svgr": "^2.4.0"
+    "vite-plugin-svgr": "^3.0.0"
   },
   "devDependencies": {
     "@digdir/design-system-tokens": "*",
@@ -52,7 +52,7 @@
     "eslint-config-standard-with-typescript": "^34.0.1",
     "eslint-import-resolver-typescript": "^3.5.3",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-n": "^16.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",

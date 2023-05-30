@@ -1,7 +1,8 @@
-﻿using Altinn.AccessManagement.UI.Tests.Utils;
-using Microsoft.AspNetCore.TestHost;
+﻿using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Tests.Utils;
 using System.Net;
 using System.Net.Http.Headers;
+
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>

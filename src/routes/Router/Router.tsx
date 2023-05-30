@@ -2,12 +2,12 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import * as React from 'react';
 
-import { ChooseApiPage } from '@/components/apiDelegation/offered/ChooseApiPage';
-import { OverviewPage as OfferedOverviewPage } from '@/components/apiDelegation/offered/OverviewPage';
-import { OverviewPage as ReceivedOverviewPage } from '@/components/apiDelegation/received/OverviewPage';
-import { ChooseOrgPage } from '@/components/apiDelegation/offered/ChooseOrgPage';
-import { ReceiptPage } from '@/components/apiDelegation/offered/ReceiptPage';
-import { ConfirmationPage } from '@/components/apiDelegation/offered/ConfirmationPage';
+import { ChooseApiPage } from '@/features/apiDelegation/offered/ChooseApiPage';
+import { OverviewPage as OfferedOverviewPage } from '@/features/apiDelegation/offered/OverviewPage';
+import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/received/OverviewPage';
+import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
+import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
+import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/resources/NotFoundSite';
 
 import { RouterPath } from './RouterPath';

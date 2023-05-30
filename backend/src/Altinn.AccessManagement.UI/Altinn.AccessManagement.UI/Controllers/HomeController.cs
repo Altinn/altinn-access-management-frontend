@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace Altinn.AccessManagement
+namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
     /// HomeController

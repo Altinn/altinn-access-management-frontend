@@ -21,6 +21,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -80,6 +81,20 @@ app.UseCors();
 app.UseStaticFiles();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
+
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+{
+    app.UseDeveloperExceptionPage();
+
+    // Enable higher level of detail in exceptions related to JWT validation
+    IdentityModelEventSource.ShowPII = true;
+}
+else
+{
+    app.UseExceptionHandler("/accessmanagement/api/v1/error");
+}
 
 app.Run();
 
@@ -172,8 +187,9 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
     services.AddControllersWithViews();
+    services.ConfigureDataProtection();
     services.AddMvc();
-
+    services.AddHealthChecks().AddCheck<HealthCheck>("accessmanagement_ui_health_check");
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
