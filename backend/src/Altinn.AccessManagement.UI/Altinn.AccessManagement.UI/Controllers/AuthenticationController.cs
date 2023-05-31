@@ -3,11 +3,10 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace Altinn.AccessManagement.Controllers
+namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
     /// Exposes API endpoints related to authentication.

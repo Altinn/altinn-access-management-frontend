@@ -25,7 +25,7 @@ export const PageHeader = ({ children, icon }: PageHeaderProps) => {
         className={classes[`page-header__icon--${size}`]}
         svgIconComponent={icon}
       />
-      <span>{children}</span>
+      <h1 className={classes.headerText}>{children}</h1>
     </header>
   );
 };

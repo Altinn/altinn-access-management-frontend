@@ -1,0 +1,48 @@
+.optionDisplay {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-height: inherit;
+}
+
+.optionList {
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    border-left: 1px solid var(--fds-semantic-border-neutral-divider);
+    border-right: 1px solid var(--fds-semantic-border-neutral-divider);
+    border-top: 1px solid var(--fds-semantic-border-neutral-divider);
+}
+
+.option {
+    border: none;
+    border-bottom: 1px solid var(--fds-semantic-border-neutral-divider);
+    padding: 8px 10px 8px 10px;
+    background-color: var(--fds-semantic-background-default);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.option:hover {
+    background-color: var(--fds-semantic-surface-action-subtle);
+}
+
+.option:active {
+    background-color: var(--fds-semantic-surface-action-subtle-hover);
+}
+
+.propagationStopper{
+    width: fit-content;
+    height: fit-content;
+}
+
+.scrollContainer {
+    overflow-y: auto;
+    background-color: white;
+    width: 100%
+}
+
+.searchField {
+    padding: 12px 0px 12px 0px;
+}

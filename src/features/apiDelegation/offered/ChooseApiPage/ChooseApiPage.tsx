@@ -1,9 +1,9 @@
-import type { MultiSelectOption } from '@digdir/design-system-react';
 import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
-import { Select, List, Spinner } from '@digdir/design-system-react';
+import { List, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 
 import {
@@ -32,6 +32,7 @@ import {
   filter,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { Filter, type FilterOption } from '@/components/Filter';
 import { DelegationActionBar } from '@/components/DelegationActionBar';
 
 import classes from './ChooseApiPage.module.css';
@@ -75,10 +76,9 @@ export const ChooseApiPage = () => {
     dispatch(search(searchString));
   };
 
-  const filterOptions: MultiSelectOption[] = apiProviders.map((provider: string) => ({
+  const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
     label: provider,
     value: provider,
-    deleteButtonLabel: t('api_delegation.delete') + ' ' + provider,
   }));
 
   const delegableApiAccordions = () => {
@@ -104,7 +104,7 @@ export const ChooseApiPage = () => {
       return (
         <div
           className={classes.actionBarWrapper}
-          key={index}
+          key={api.id}
         >
           <DelegationActionBar
             title={api.apiName}
@@ -186,19 +186,25 @@ export const ChooseApiPage = () => {
               </div>
             )}
             <div className={classes.searchSection}>
-              <SearchField
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleSearch(event.target.value);
-                }}
-              ></SearchField>
+              <div className={classes.searchField}>
+                <SearchField
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    handleSearch(event.target.value);
+                  }}
+                ></SearchField>
+              </div>
               <div className={classes.filter}>
-                <Select
-                  label={String(t('api_delegation.filter_label'))}
-                  deleteButtonLabel={String(t('api_delegation.filter_remove_all'))}
-                  multiple={true}
-                  onChange={handleFilterChange}
+                <Filter
                   options={filterOptions}
+                  icon={<FilterIcon />}
+                  label={String(t('api_delegation.filter_label'))}
+                  applyButtonLabel={String(t('common.apply'))}
+                  resetButtonLabel={String(t('common.reset_choices'))}
+                  closeButtonAriaLabel={String(t('common.close'))}
+                  onApply={handleFilterChange}
+                  searchable={true}
+                  fullScreenModal={isSm}
                 />
               </div>
             </div>

@@ -11,7 +11,10 @@
     "error_status_code": "Feilmeldingens statuskode",
     "error_time_stamp": "Tidsstempel",
     "date": "Dato",
-    "time":"Tidspunkt"
+    "time":"Tidspunkt",
+    "reset_choices": "Nullstill valg",
+    "apply": "Bruk",
+    "search": "Søk"
   },
   "profile": {
     "received": "Mottatte",
@@ -60,8 +63,7 @@
     "confirmation_page_content_top_text": "Du ønsker å gi rettigheter til følgende API:",
     "confirmation_page_content_second_text": "API-tilgangene blir gitt til:",
     "confirmation_page_content_bottom_text": "Tilgangene vil bli gitt og er gyldige til de aktivt slettes eller trekkes tilbake.",
-    "filter_label": "Filtrer på tilbyder",
-    "filter_remove_all": "Fjern alle filtre",
+    "filter_label": "Filtrer på etat",
     "chosen_orgs": "Valgte virksomheter",
     "new_api_content_text2": "Velg hvilke API du vil gi tilgang til ved å klikke på pluss-tegnet. Du kan også søke etter API eller tilbyder.",
     "delegable_apis": "Delegerbare API",

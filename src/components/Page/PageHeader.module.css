@@ -36,12 +36,12 @@
 }
 
 .page-header--small {
-  --page_header-title-font-size: 18px;
+  --page_header-title-font-size: 9px;
   --page-header-height: 72px;
 }
 
 .page-header--medium {
-  --page_header-title-font-size: 28px;
+  --page_header-title-font-size: 13px;
   --page-header-height: 96px;
 }
 
@@ -53,4 +53,8 @@
 .page-header__icon--medium{
   min-width: 40px;
   min-height: 40px;
+}
+
+.headerText {
+  font-weight: 400;
 }
