@@ -107,10 +107,10 @@ export const ChooseOrgPage = () => {
     return (
       <div
         className={classes.actionBarWrapper}
-        key={index}
+        key={org.orgNr}
       >
         <ActionBar
-          key={index}
+          key={org.orgNr}
           title={org.orgName}
           subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
           actions={

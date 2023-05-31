@@ -107,7 +107,7 @@ export const ChooseApiPage = () => {
       return (
         <div
           className={classes.actionBarWrapper}
-          key={index}
+          key={api.id}
         >
           <DelegationActionBar
             title={api.apiName}
