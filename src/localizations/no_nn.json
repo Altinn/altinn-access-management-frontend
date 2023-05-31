@@ -9,7 +9,9 @@
     "error_message": "Feilmelding",
     "loading": "Lastar",
     "error_status_code": "Feilmeldingens statuskode",
-    "error_time_stamp": "Tidsstempel"
+    "error_time_stamp": "Tidsstempel",
+    "date": "Dato",
+    "time":"Tidspunkt"
   },
   "profile": {
     "received": "Mottekne",

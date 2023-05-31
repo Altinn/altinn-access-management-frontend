@@ -138,7 +138,15 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.data), String(error.response.code));
+
+        const relevantError = {
+          message: error.response.data,
+          code: error.response.status,
+        };
+
+        console.log('relevantError', relevantError);
+        throw new Error(String(relevantError));
+        //return error;
       });
   },
 );
@@ -330,6 +338,7 @@ const overviewOrgSlice = createSlice({
         state.error.message = action.error.message ?? 'Unknown error';
         console.log('action.error', action.error);
         // String(error.response.data)
+        console.log('action.payload', action.payload);
         state.loading = false;
       })
       .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {

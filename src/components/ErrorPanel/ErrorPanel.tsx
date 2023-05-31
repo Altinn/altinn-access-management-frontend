@@ -9,11 +9,22 @@ export interface ErrorPanelProps {
   title: string;
   message?: string;
   statusCode?: string;
-  timeStamp?: string;
 }
 
-export const ErrorPanel = ({ title, message, statusCode, timeStamp }: ErrorPanelProps) => {
+export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
   const { t } = useTranslation('common');
+
+  const currentDate = new Date();
+
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based, so we add 1
+  const currentDay = currentDate.getDate();
+
+  const currentHour = currentDate.getHours();
+  const currentMinute = currentDate.getMinutes();
+  const currentSecond = currentDate.getSeconds();
+
+  console.log(`Current Date: ${currentDay}/${currentMonth}/${currentYear}`);
 
   return (
     <Panel
@@ -24,19 +35,20 @@ export const ErrorPanel = ({ title, message, statusCode, timeStamp }: ErrorPanel
       <div>
         <List borderStyle='dashed'>
           <ListItem>
-            <div className={classes.errorListItem}>
+            <p className={classes.errorListItem}>
               {t('common.error_status_code')}: {statusCode}
-            </div>
+            </p>
           </ListItem>
           <ListItem>
-            <div className={classes.errorListItem}>
+            <p className={classes.errorListItem}>
               {t('common.error_message')}: {message}
-            </div>
+            </p>
           </ListItem>
           <ListItem>
-            <div className={classes.errorListItem}>
-              {t('common.error_time_stamp')}: {timeStamp}
-            </div>
+            <p className={classes.errorListItem}>{t('common.date')}</p>
+          </ListItem>
+          <ListItem>
+            <p className={classes.errorListItem}>{t('common.time')}:</p>
           </ListItem>
         </List>
       </div>

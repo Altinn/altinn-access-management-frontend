@@ -88,7 +88,6 @@ export const ChooseApiPage = () => {
           title={t('api_delegation.data_retrieval_failed')}
           message={error.message}
           statusCode={error.statusCode}
-          timeStamp={'test'}
         ></ErrorPanel>
       );
     } else if (loading) {
