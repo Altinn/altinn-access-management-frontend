@@ -1,5 +1,5 @@
 @media only screen and (max-width: 768px) {
-  .searchSection{
+  .searchField{
     width: 100%
   }
 
@@ -12,10 +12,25 @@
     margin-bottom: 30px;
     width: 100%;
   }
+  .searchSection{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .filter {
+    padding-top: 1rem;
+  }
 }
 
 @media only screen and (min-width: 769px) {
   .searchSection{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .searchField{
     width: 47.5%;
   }
 
@@ -38,7 +53,7 @@
   }
 
   .filter {
-    padding-top: 1rem;
+    padding-left: 1rem;
   }
 }
 

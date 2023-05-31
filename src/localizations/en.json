@@ -8,7 +8,10 @@
     "broennoeysund_register": "The Brønnøysund Register Center",
     "error_message": "Error message",
     "loading": "Loading",
-    "error_status_code": "Error status code"
+    "error_status_code": "Error status code",
+    "reset_choices": "Reset",
+    "apply": "Apply",
+    "search": "Search"
   },
   "profile": {
     "received": "Received",
@@ -58,7 +61,6 @@
     "confirmation_page_content_second_text": "The API-accesses will be given to:",
     "confirmation_page_content_bottom_text": "The accesses will be given and is valid until they're actively deleted.",
     "filter_label": "Filter by provider",
-    "filter_remove_all": "Remove all filters",
     "chosen_orgs": "Chosen organisations",
     "new_api_content_text2": "Select which APIs you want to grant access to by clicking the plus sign. You can also search for APIs by name and filter by provider.",
     "delegable_apis": "Delegable apis",

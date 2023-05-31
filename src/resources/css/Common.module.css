@@ -13,7 +13,6 @@
     --component-page-margin-horizontal: 0.5rem;
     margin-right: var(--component-page-margin-horizontal);
     margin-left: var(--component-page-margin-horizontal);
-    overflow: hidden;
   }
 }
 
