@@ -53,7 +53,6 @@ export const ActionBar = ({
             [classes.clickable]: onClick,
           })}
           tabIndex={-1}
-          onClick={onClick}
         >
           {children && (
             <div className={cn(classes.actionBarIcon)}>
