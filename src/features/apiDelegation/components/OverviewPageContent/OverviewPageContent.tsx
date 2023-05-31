@@ -1,4 +1,4 @@
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Panel } from '@altinn/altinn-design-system';
 import {
   Button,
   ButtonColor,
@@ -138,12 +138,13 @@ export const OverviewPageContent = ({
   };
 
   const activeDelegations = () => {
-    if (error) {
+    if (error.message) {
       return (
         <div className={classes.errorPanel}>
           <ErrorPanel
             title={t('api_delegation.data_retrieval_failed')}
             message={error.message}
+            statusCode={error.statusCode}
           ></ErrorPanel>
         </div>
       );

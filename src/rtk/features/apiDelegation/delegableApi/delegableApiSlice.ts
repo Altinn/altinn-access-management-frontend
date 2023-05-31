@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { type CustomError } from '@/dataObjects';
+
 export interface DelegableApi {
   id: string;
   apiName: string;
@@ -36,7 +38,7 @@ export interface SliceState {
   chosenDelegableApiList: DelegableApi[];
   delegableApiSearchPool: DelegableApi[];
   apiProviders: string[];
-  error: string | undefined;
+  error: CustomError;
 }
 
 interface resourceReferenceDTO {
@@ -63,15 +65,18 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
   return delegableApi;
 };
 
-export const fetchDelegableApis = createAsyncThunk('delegableApi/fetchDelegableApis', async () => {
-  return await axios
-    .get(`/accessmanagement/api/v1/resources/maskinportenschema`)
-    .then((response) => response.data)
-    .catch((error) => {
+export const fetchDelegableApis = createAsyncThunk(
+  'delegableApi/fetchDelegableApis',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/accessmanagement/api/v1/resources/maskinportenschema`);
+      return response.data;
+    } catch (error) {
       console.error(error);
-      throw new Error(String(error.response.data));
-    });
-});
+      return rejectWithValue(error);
+    }
+  },
+);
 
 const initialState: SliceState = {
   loading: true,
@@ -80,7 +85,10 @@ const initialState: SliceState = {
   delegableApiSearchPool: [],
   apiProviders: [''],
   chosenDelegableApiList: [],
-  error: '',
+  error: {
+    message: '',
+    statusCode: '',
+  },
 };
 
 const delegableApiSlice = createSlice({
@@ -191,7 +199,13 @@ const delegableApiSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchDelegableApis.rejected, (state, action) => {
-        state.error = action.error.message;
+        if (state.error?.code === '400') {
+          state.error.message = action.payload?.response?.data ?? 'Unknown error';
+        } else if (state.error?.code === '500') {
+          state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
+        } else {
+          state.error.message = 'Unknown error';
+        }
       });
   },
 });

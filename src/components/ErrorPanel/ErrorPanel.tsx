@@ -15,16 +15,8 @@ export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
   const { t } = useTranslation('common');
 
   const currentDate = new Date();
-
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1; // Note: Months are zero-based, so we add 1
-  const currentDay = currentDate.getDate();
-
-  const currentHour = currentDate.getHours();
-  const currentMinute = currentDate.getMinutes();
-  const currentSecond = currentDate.getSeconds();
-
-  console.log(`Current Date: ${currentDay}/${currentMonth}/${currentYear}`);
+  const date = `${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
+  const time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
   return (
     <Panel
@@ -45,10 +37,14 @@ export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
             </p>
           </ListItem>
           <ListItem>
-            <p className={classes.errorListItem}>{t('common.date')}</p>
+            <p className={classes.errorListItem}>
+              {t('common.date')}: {date}
+            </p>
           </ListItem>
           <ListItem>
-            <p className={classes.errorListItem}>{t('common.time')}:</p>
+            <p className={classes.errorListItem}>
+              {t('common.time')}: {time}
+            </p>
           </ListItem>
         </List>
       </div>
