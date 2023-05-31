@@ -138,7 +138,7 @@ export const OverviewPageContent = ({
   };
 
   const activeDelegations = () => {
-    if (!error) {
+    if (error) {
       return (
         <div className={classes.errorPanel}>
           <ErrorPanel title={t('api_delegation.data_retrieval_failed')}></ErrorPanel>

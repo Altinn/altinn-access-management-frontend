@@ -5,6 +5,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import { type errorDao } from '@/dataObjects/errorDao/errorDao';
+
 export interface ApiListItem {
   id: string;
   apiName: string;
@@ -35,8 +37,7 @@ interface DelegationDTO {
 export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
-  error: string;
-  errorStatusCode: string;
+  error: errorDao;
 }
 
 export interface DeletionRequest {
@@ -47,7 +48,11 @@ export interface DeletionRequest {
 const initialState: SliceState = {
   loading: true,
   overviewOrgs: [],
-  error: '',
+  error: {
+    message: '',
+    statusCode: '',
+    timeStamp: '',
+  },
 };
 
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
@@ -129,11 +134,11 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
     return await axios
-      .get(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`)
+      .get(`/accessmanagement/api/v1/${altinnPartyId}jbjkhbhjkb/maskinportenschema/offered`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.data));
+        throw new Error(String(error.response.data), String(error.response.code));
       });
   },
 );
@@ -152,7 +157,7 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.data));
+        throw new Error(error);
       });
   },
 );
@@ -310,7 +315,7 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
         state.loading = true;
-        state.error = action.error.message ?? 'Unknown error';
+        state.error.message = action.error.message ?? 'Unknown error';
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
@@ -322,7 +327,9 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
         state.loading = true;
-        state.error = action.error.message ?? 'Unknown error';
+        state.error.message = action.error.message ?? 'Unknown error';
+        console.log('action.error', action.error);
+        // String(error.response.data)
         state.loading = false;
       })
       .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {
