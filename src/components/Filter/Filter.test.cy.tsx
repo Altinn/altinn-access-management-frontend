@@ -35,6 +35,21 @@ describe(
       cy.get('[role="dialog"]').should('be.visible');
     });
 
+    it('opens a popup labelled by the button', () => {
+      mount(<Filter {...defaultProps} />);
+      cy.get('button').contains('Filter').click();
+      cy.get('button')
+        .contains('Filter')
+        .invoke('attr', 'id')
+        .then((buttonId) => {
+          cy.get('[role="dialog"]')
+            .invoke('attr', 'aria-labelledby')
+            .then((dialogId) => {
+              expect(buttonId).to.eq(dialogId);
+            });
+        });
+    });
+
     it('closes the popup when the filter button is clicked a second time', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
