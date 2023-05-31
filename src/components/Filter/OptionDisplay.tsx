@@ -34,11 +34,11 @@ export interface OptionDisplayProps {
  *   compact={false}
  * />
  *
- * @param {FilterOption[]} props.options - The available filter options
- * @param {string[]} [props.values] - A list of the selected values. Can be used to set selected values externally
- * @param {function} [props.onValueChange] - Callback function to handle changes in selected values
- * @param {boolean} [props.searchable=false] - When true displays a search field that enables search within the options
- * @param {boolean} [props.compact=true] - Indicates whether to use compact mode for checkboxes
+ * @param {FilterOption[]} options - The available filter options
+ * @param {string[]} [values] - A list of the selected values. Can be used to set selected values externally
+ * @param {function} [onValueChange] - Callback function to handle changes in selected values
+ * @param {boolean} [searchable=false] - When true displays a search field that enables search within the options
+ * @param {boolean} [compact=true] - Indicates whether to use compact mode for checkboxes
  * @returns {React.ReactNode} Rendered component
  */
 export const OptionDisplay = ({

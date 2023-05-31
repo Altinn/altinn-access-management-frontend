@@ -25,13 +25,13 @@ export interface FilterButtonProps {
  *   Filter
  * </FilterButton>
  *
- * @param {Function} props.onClick - The click event handler for the button.
- * @param {ReactNode} props.iconLeft - The icon to be displayed on the left side of the button.
- * @param {string} props.id - The ID attribute of the button.
- * @param {string} props.className - Additional CSS class(es) for the component.
- * @param {ReactNode} props.children - The content of the button.
- * @param {boolean} props.isOpen - Indicates whether the filter is open or closed and thus controls the orientation of the chevron icon.
- * @param {number} props.numActiveFilters - The count of active filters to be displayed as a notification badge.
+ * @param {Function} onClick - The click event handler for the button.
+ * @param {ReactNode} iconLeft - The icon to be displayed on the left side of the button.
+ * @param {string} id - The ID attribute of the button.
+ * @param {string} className - Additional CSS class(es) for the component.
+ * @param {ReactNode} children - The content of the button.
+ * @param {boolean} isOpen - Indicates whether the filter is open or closed and thus controls the orientation of the chevron icon.
+ * @param {number} numActiveFilters - The count of active filters to be displayed as a notification badge.
  * @returns {JSX.Element} The rendered FilterButton component.
  */
 export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(

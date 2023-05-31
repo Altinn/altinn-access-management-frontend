@@ -43,19 +43,19 @@ export interface FilterProps {
  *   values={selectedFilters}
  *   onApply={handleFilterApply}
  *   fullScreenModal={true}
- *   closeButtonAriaLabel="Close Filter"
+ *   closeButtonAriaLabel="Close filter"
  * />
  *
- * @param {FilterOption[]} props.options - The provided filter options
- * @param {string} props.label - The label that will be displayed on the filter button
- * @param {string} props.applyButtonLabel - The label for the apply button inside the popover
- * @param {string} props.resetButtonLabel - The label for the reset button inside the popover
- * @param {React.ReactNode} [props.icon] - The icon element to display with the filter label
- * @param {string[]} [props.values] - The active filter values. Can be used for setting active filters externally.
- * @param {boolean} [props.searchable=false] - Indicates whether the options are searchable
- * @param {boolean} [props.fullScreenModal=false] - When true, displays a full screen modal when selecting filters. Othewise, displays as local popover
- * @param {string} [props.closeButtonAriaLabel] - The ARIA label for the close button in modal view
- * @param {function} [props.onApply] - Callback function that will be called when filters are applied
+ * @param {FilterOption[]} options - The provided filter options, defined in values and labels
+ * @param {string} label - The label that will be displayed on the filter button
+ * @param {string} applyButtonLabel - The label for the apply button inside the popover
+ * @param {string} resetButtonLabel - The label for the reset button inside the popover
+ * @param {React.ReactNode} [icon] - The icon element to display with the filter label
+ * @param {string[]} [values] - The active filter values. Can be used for setting active filters externally.
+ * @param {boolean} [searchable=false] - Indicates whether the options are searchable
+ * @param {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters. Othewise, displays as local popover
+ * @param {string} [closeButtonAriaLabel] - The ARIA label for the close button in modal view
+ * @param {function} [onApply] - Callback function that will be called when filters are applied
  * @returns {React.ReactNode} Rendered component
  */
 export const Filter = ({
