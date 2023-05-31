@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { SvgIcon } from '@altinn/altinn-design-system';
+import { Heading } from '@digdir/design-system-react';
 
 import { usePageContext } from './Context';
 import classes from './PageHeader.module.css';
@@ -25,7 +26,7 @@ export const PageHeader = ({ children, icon }: PageHeaderProps) => {
         className={classes[`page-header__icon--${size}`]}
         svgIconComponent={icon}
       />
-      <span>{children}</span>
+      <h1 className={classes.headerText}>{children}</h1>
     </header>
   );
 };
