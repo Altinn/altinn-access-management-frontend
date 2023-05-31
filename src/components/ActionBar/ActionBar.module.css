@@ -66,13 +66,15 @@
 
 .actionBarHeader {
   --component-actionbar_header_title-color-background: none;
-  font-family: inherit;
+  display: flex;
+  align-items: center;
+  padding: 1px 4px 1px 9px;
   flex: 1 1 auto;
   border-style: none;
   text-align: var(--component-actionbar_header_title-text-align);
   background-color: var(--component-actionbar_header_title-color-background);
+  font-family: inherit;
   font-size: var(--font_size-300);
-  margin-left: 5px;
   line-height: 16px;
   word-break: break-word;
 }
