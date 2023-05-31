@@ -16,6 +16,24 @@ export interface FilterButtonProps {
   numActiveFilters?: number;
 }
 
+/**
+ * FilterButton component displays a filter button with an optional icon and active filter count.
+ *
+ * @component
+ * @example
+ * <FilterButton onClick={handleClick} iconLeft={<FilterIcon />} isOpen={true} numActiveFilters={3}>
+ *   Filter
+ * </FilterButton>
+ *
+ * @param {Function} props.onClick - The click event handler for the button.
+ * @param {ReactNode} props.iconLeft - The icon to be displayed on the left side of the button.
+ * @param {string} props.id - The ID attribute of the button.
+ * @param {string} props.className - Additional CSS class(es) for the component.
+ * @param {ReactNode} props.children - The content of the button.
+ * @param {boolean} props.isOpen - Indicates whether the filter is open or closed and thus controls the orientation of the chevron icon.
+ * @param {number} props.numActiveFilters - The count of active filters to be displayed as a notification badge.
+ * @returns {JSX.Element} The rendered FilterButton component.
+ */
 export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
   (
     { onClick, iconLeft, id, className, children, isOpen, numActiveFilters = 0, ...restHTMLProps },
