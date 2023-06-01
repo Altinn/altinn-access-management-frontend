@@ -320,9 +320,10 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
         state.loading = true;
-        if (state.error.code === '400') {
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error.statusCode === '400') {
           state.error.message = action.payload?.response?.data ?? 'Unknown error';
-        } else if (state.error.code === '500') {
+        } else if (state.error.statusCode === '500') {
           state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
@@ -338,10 +339,10 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
         state.loading = true;
-        state.error.code = String(action.payload?.response?.status) ?? 'Unknown code';
-        if (state.error?.code === '400') {
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
           state.error.message = action.payload?.response?.data ?? 'Unknown error';
-        } else if (state.error?.code === '500') {
+        } else if (state.error?.statusCode === '500') {
           state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
@@ -358,9 +359,10 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
-        if (state.error?.code === '400') {
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
           state.error.message = action.payload?.response?.data ?? 'Unknown error';
-        } else if (state.error?.code === '500') {
+        } else if (state.error?.statusCode === '500') {
           state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
@@ -376,9 +378,10 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteReceivedApiDelegation.rejected, (state, action) => {
-        if (state.error?.code === '400') {
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
           state.error.message = action.payload?.response?.data ?? 'Unknown error';
-        } else if (state.error?.code === '500') {
+        } else if (state.error?.statusCode === '500') {
           state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';

@@ -199,9 +199,10 @@ const delegableApiSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchDelegableApis.rejected, (state, action) => {
-        if (state.error?.code === '400') {
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
           state.error.message = action.payload?.response?.data ?? 'Unknown error';
-        } else if (state.error?.code === '500') {
+        } else if (state.error?.statusCode === '500') {
           state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
