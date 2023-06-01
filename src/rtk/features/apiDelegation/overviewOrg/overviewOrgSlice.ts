@@ -134,7 +134,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       }
 
       const response = await axios.get(
-        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`,
+        `/accessmanagement/api/v1/${altinnPartyId}2133/maskinportenschema/offered`,
       );
       return response.data;
     } catch (error) {
@@ -322,9 +322,9 @@ const overviewOrgSlice = createSlice({
         state.loading = true;
         state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
         if (state.error.statusCode === '400') {
-          state.error.message = action.payload?.response?.data ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error.statusCode === '500') {
-          state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }
@@ -341,9 +341,9 @@ const overviewOrgSlice = createSlice({
         state.loading = true;
         state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
         if (state.error?.statusCode === '400') {
-          state.error.message = action.payload?.response?.data ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error?.statusCode === '500') {
-          state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }
@@ -361,9 +361,9 @@ const overviewOrgSlice = createSlice({
       .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
         state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
         if (state.error?.statusCode === '400') {
-          state.error.message = action.payload?.response?.data ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error?.statusCode === '500') {
-          state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }
@@ -380,9 +380,9 @@ const overviewOrgSlice = createSlice({
       .addCase(deleteReceivedApiDelegation.rejected, (state, action) => {
         state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
         if (state.error?.statusCode === '400') {
-          state.error.message = action.payload?.response?.data ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error?.statusCode === '500') {
-          state.error.message = action.payload?.response?.data.title ?? 'Unknown error';
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }

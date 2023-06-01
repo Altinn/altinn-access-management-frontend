@@ -25,28 +25,21 @@ export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
       forceMobileLayout
     >
       <div>
-        <List borderStyle='dashed'>
-          <ListItem>
-            <p className={classes.errorListItem}>
-              {t('common.error_status_code')}: {statusCode}
-            </p>
-          </ListItem>
-          <ListItem>
-            <p className={classes.errorListItem}>
-              {t('common.error_message')}: {message}
-            </p>
-          </ListItem>
-          <ListItem>
-            <p className={classes.errorListItem}>
-              {t('common.date')}: {date}
-            </p>
-          </ListItem>
-          <ListItem>
-            <p className={classes.errorListItem}>
-              {t('common.time')}: {time}
-            </p>
-          </ListItem>
-        </List>
+        <p className={classes.errorListItem}>
+          {t('common.error_status_code')}: {statusCode}
+        </p>
+
+        <p className={classes.errorListItem}>
+          {t('common.error_message')}: {message}
+        </p>
+
+        <p className={classes.errorListItem}>
+          {t('common.date')}: {date}
+        </p>
+
+        <p className={classes.errorListItem}>
+          {t('common.time')}: {time}
+        </p>
       </div>
     </Panel>
   );
