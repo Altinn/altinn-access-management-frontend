@@ -38,7 +38,7 @@ const nonExpandableActionBar = (props: Partial<ActionBarProps> = {}) => (
 describe('ActionBar', () => {
   it('Should render correctly when all props are set and it is expandable', () => {
     const actionButton = <Button>Action</Button>;
-    cy.mount(expandableActionBar({ actions: actionButton, open: true }));
+    cy.mount(expandableActionBar({ actions: actionButton, open: true, onClick: cy.stub }));
     cy.get('[data-testid="action-bar-icon"]').should('exist');
     cy.get('button').should('contain', 'Title');
     cy.get('button').should('contain', 'Subtitle');
@@ -51,9 +51,9 @@ describe('ActionBar', () => {
     const actionButton = <Button>Action</Button>;
     cy.mount(nonExpandableActionBar({ actions: actionButton }));
     cy.get('[data-testid="action-bar-icon"]').should('not.exist');
-    cy.get('button').should('contain', 'Title');
-    cy.get('button').should('contain', 'Subtitle');
-    cy.get('div').should('contain', 'AdditionalText');
+    cy.contains('Title');
+    cy.contains('Subtitle');
+    cy.contains('AdditionalText');
     cy.get('button').should('contain', 'Action');
     cy.get('div').should('not.contain', 'Content');
   });
@@ -139,14 +139,14 @@ describe('ActionBar', () => {
     cy.get('@handleClickSpy').should('not.have.been.called');
   });
 
-  it('should have aria-expanded=false when open=false and not show content', () => {
-    cy.mount(expandableActionBar({ open: false }));
+  it('should have aria-expanded=false and not show content when expandable and open=false', () => {
+    cy.mount(expandableActionBar({ open: false, onClick: cy.stub }));
     cy.get('div').should('not.contain', 'Content');
     cy.get('[data-testid="action-bar"]').should('have.attr', 'aria-expanded', 'false');
   });
 
-  it('should have aria-expanded=true when open=true and show content', () => {
-    cy.mount(expandableActionBar({ open: true }));
+  it('should have aria-expanded=true and not show content when expandable and open=true', () => {
+    cy.mount(expandableActionBar({ open: true, onClick: cy.stub }));
     cy.get('div').should('contain', 'Content');
     cy.get('[data-testid="action-bar"]').should('have.attr', 'aria-expanded', 'true');
   });
