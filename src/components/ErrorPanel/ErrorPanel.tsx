@@ -1,7 +1,6 @@
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { List, ListItem } from '@digdir/design-system-react';
 
 import classes from './ErrorPanel.module.css';
 

@@ -134,7 +134,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       }
 
       const response = await axios.get(
-        `/accessmanagement/api/v1/${altinnPartyId}2133/maskinportenschema/offered`,
+        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`,
       );
       return response.data;
     } catch (error) {
