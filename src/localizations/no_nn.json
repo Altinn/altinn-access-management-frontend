@@ -67,6 +67,7 @@
     "no_chosen_orgs": "Du har ingen valde organisasjonar å gi API-tilgang til. Vennlegast klikk på førreknappen nedst til høgre.",
     "scopes": "Scopes",
     "search_for_buisness": "Søk på organisasjonsnummer",
+    "search_for_api": "Søk etter API",
     "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Noke feilet, prøv å laste inn sida på ny.",
