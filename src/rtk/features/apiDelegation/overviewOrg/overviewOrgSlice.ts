@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { type CustomError } from '@/dataObjects';
 
 export interface ApiListItem {
   id: string;
@@ -35,8 +36,7 @@ interface DelegationDTO {
 export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
-  error: string;
-  errorStatusCode: string;
+  error: CustomError;
 }
 
 export interface DeletionRequest {
@@ -47,7 +47,10 @@ export interface DeletionRequest {
 const initialState: SliceState = {
   loading: true,
   overviewOrgs: [],
-  error: '',
+  error: {
+    message: '',
+    statusCode: '',
+  },
 };
 
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
@@ -122,25 +125,28 @@ const createCopyOrg = (org: OverviewOrg) => {
 
 export const fetchOverviewOrgsOffered = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsOffered',
-  async () => {
-    const altinnPartyId = getCookie('AltinnPartyId');
+  async (_, { rejectWithValue }) => {
+    try {
+      const altinnPartyId = getCookie('AltinnPartyId');
 
-    if (!altinnPartyId) {
-      throw new Error(String('Could not get AltinnPartyId cookie value'));
+      if (!altinnPartyId) {
+        throw new Error(String('Could not get AltinnPartyId cookie value'));
+      }
+
+      const response = await axios.get(
+        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
     }
-    return await axios
-      .get(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`)
-      .then((response) => response.data)
-      .catch((error) => {
-        console.error(error);
-        throw new Error(String(error.response.data));
-      });
   },
 );
 
 export const fetchOverviewOrgsReceived = createAsyncThunk(
   'overviewOrg/fetchOverviewOrgsReceived',
-  async () => {
+  async (_, { rejectWithValue }) => {
     const altinnPartyId = getCookie('AltinnPartyId');
 
     if (!altinnPartyId) {
@@ -152,50 +158,54 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.data));
+        return rejectWithValue(error);
       });
   },
 );
 
 export const deleteOfferedApiDelegation = createAsyncThunk(
   'overviewOrg/deleteOfferedApiDelegation',
-  async (request: DeletionRequest) => {
+  async (request: DeletionRequest, { rejectWithValue }) => {
     const altinnPartyId = getCookie('AltinnPartyId');
 
     if (!altinnPartyId) {
       throw new Error(String('Could not get AltinnPartyId cookie value'));
     }
 
-    return await axios
-      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered/revoke`, {
-        to: [
-          {
-            id: 'urn:altinn:organizationnumber',
-            value: String(request.orgNr),
-          },
-        ],
-        rights: [
-          {
-            resource: [
-              {
-                id: 'urn:altinn:resource',
-                value: request.apiId,
-              },
-            ],
-          },
-        ],
-      })
-      .then((response) => response.data)
-      .catch((error) => {
-        console.error(error);
-        throw new Error(String(error.response.data));
-      });
+    try {
+      const response = await axios.post(
+        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered/revoke`,
+        {
+          to: [
+            {
+              id: 'urn:altinn:organizationnumber',
+              value: String(request.orgNr),
+            },
+          ],
+          rights: [
+            {
+              resource: [
+                {
+                  id: 'urn:altinn:resource',
+                  value: request.apiId,
+                },
+              ],
+            },
+          ],
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
   },
 );
 
 export const deleteReceivedApiDelegation = createAsyncThunk(
   'overviewOrg/deleteReceivedApiDelegation',
-  async (request: DeletionRequest) => {
+  async (request: DeletionRequest, { rejectWithValue }) => {
     const altinnPartyId = getCookie('AltinnPartyId');
 
     if (!altinnPartyId) {
@@ -224,7 +234,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
-        throw new Error(String(error.response.data));
+        return rejectWithValue(error);
       });
   },
 );
@@ -310,7 +320,14 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
         state.loading = true;
-        state.error = action.error.message ?? 'Unknown error';
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error.statusCode === '400') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else if (state.error.statusCode === '500') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else {
+          state.error.message = 'Unknown error';
+        }
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
@@ -322,7 +339,14 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
         state.loading = true;
-        state.error = action.error.message ?? 'Unknown error';
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else if (state.error?.statusCode === '500') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else {
+          state.error.message = 'Unknown error';
+        }
         state.loading = false;
       })
       .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {
@@ -335,7 +359,14 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
-        state.error = action.error.message ?? 'Unknown error';
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else if (state.error?.statusCode === '500') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else {
+          state.error.message = 'Unknown error';
+        }
       })
       .addCase(deleteReceivedApiDelegation.fulfilled, (state, action) => {
         const { overviewOrgs } = state;
@@ -347,7 +378,14 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteReceivedApiDelegation.rejected, (state, action) => {
-        state.error = action.error.message ?? 'Unknown error';
+        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        if (state.error?.statusCode === '400') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else if (state.error?.statusCode === '500') {
+          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+        } else {
+          state.error.message = 'Unknown error';
+        }
       });
   },
 });

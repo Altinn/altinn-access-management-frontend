@@ -1,4 +1,4 @@
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Panel } from '@altinn/altinn-design-system';
 import {
   Button,
   ButtonColor,
@@ -31,6 +31,7 @@ import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/o
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
+import { ErrorPanel } from '@/components';
 
 import { LayoutState } from '../LayoutState';
 
@@ -137,18 +138,14 @@ export const OverviewPageContent = ({
   };
 
   const activeDelegations = () => {
-    if (error) {
+    if (error.message) {
       return (
         <div className={classes.errorPanel}>
-          <Panel
+          <ErrorPanel
             title={t('api_delegation.data_retrieval_failed')}
-            variant={PanelVariant.Error}
-            forceMobileLayout
-          >
-            <div>
-              {t('common.error_message')}: {error}
-            </div>
-          </Panel>
+            message={error.message}
+            statusCode={error.statusCode}
+          ></ErrorPanel>
         </div>
       );
     } else if (loading) {

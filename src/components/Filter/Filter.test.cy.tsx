@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { mount } from 'cypress/react18';
+// eslint-disable-next-line import/no-unresolved
 import 'cypress-real-events';
 
 import { Filter, type FilterProps } from './Filter';

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { SvgIcon } from '@altinn/altinn-design-system';
-import { Heading } from '@digdir/design-system-react';
 
 import { usePageContext } from './Context';
 import classes from './PageHeader.module.css';

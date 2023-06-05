@@ -9,6 +9,9 @@
     "error_message": "Error message",
     "loading": "Loading",
     "error_status_code": "Error status code",
+    "error_time_stamp": "Time stamp",
+    "date": "Date",
+    "time": "Time",
     "reset_choices": "Reset",
     "apply": "Apply",
     "search": "Search"

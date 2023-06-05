@@ -8,3 +8,4 @@ export { UserInfoBar } from './UserInfoBar/UserInfoBar';
 export { ActionBar, type ActionBarProps } from './ActionBar';
 export { Page, PageHeader, PageContent, PageColor, PageSize } from './Page';
 export { DelegationActionBar } from './DelegationActionBar';
+export { ErrorPanel } from './ErrorPanel';
