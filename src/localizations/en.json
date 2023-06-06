@@ -71,6 +71,7 @@
     "no_chosen_orgs": "You have no selected organizations to provide API access to. Please click the previous button at the bottom right.",
     "scopes": "Scopes",
     "search_for_buisness": "Search by organisation number",
+    "search_for_api": "Search for API",
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Something crashed, try refreshing the page.",

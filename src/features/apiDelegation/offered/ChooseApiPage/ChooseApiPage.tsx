@@ -192,6 +192,7 @@ export const ChooseApiPage = () => {
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     handleSearch(event.target.value);
                   }}
+                  aria-label={String(t('api_delegation.search_for_api'))}
                 ></SearchField>
               </div>
               <div className={classes.filter}>

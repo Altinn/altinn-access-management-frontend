@@ -63,7 +63,7 @@ export const OrgDelegationActionBar = ({
             size={'small'}
             icon={<Cancel />}
             onClick={softRestoreAllCallback}
-            aria-label={String(t('api_delegation.undo'))}
+            aria-label={String(t('api_delegation.undo')) + ' ' + organization.orgName}
           >
             {!isSm && t('api_delegation.undo')}
           </Button>
@@ -75,7 +75,7 @@ export const OrgDelegationActionBar = ({
               icon={<MinusCircle />}
               size={'small'}
               onClick={handleSoftDeleteAll}
-              aria-label={String(t('api_delegation.delete'))}
+              aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
             >
               {!isSm && t('api_delegation.delete')}
             </Button>
