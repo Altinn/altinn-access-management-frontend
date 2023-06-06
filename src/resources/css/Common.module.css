@@ -1,3 +1,5 @@
+@import "@digdir/design-system-tokens/brand/digdir/tokens.css";
+
 :root { 
   font-family: 'Inter', sans-serif;
 }
