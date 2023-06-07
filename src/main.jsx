@@ -43,8 +43,6 @@ use(LanguageDetector)
       });
 
       ReactDOM.createRoot(document.getElementById('root')).render(
-        // if you ever wonder why the components render twice it's because of React.StrictMode
-        // comment it out if it causes trouble: https://react.dev/reference/react/StrictMode
         <React.StrictMode>
           <Provider store={store}>
             <QueryClientProvider client={queryClient}>
