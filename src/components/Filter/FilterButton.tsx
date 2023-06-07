@@ -71,7 +71,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
           <SvgIcon
             svgIconComponent={<ChevronDownIcon />}
             className={cn(classes.icon, classes.chevron, { [classes.open]: isOpen })}
-            aria-label={isOpen ? 'Close' : 'Open'}
+            aria-hidden
           />
         </button>
       </div>
