@@ -1,6 +1,5 @@
 import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
 import { List, Spinner } from '@digdir/design-system-react';
-import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -100,10 +99,10 @@ export const ChooseApiPage = () => {
         </div>
       );
     }
-    return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
+    return delegableApis.map((api: DelegableApi) => {
       return (
         <DelegationActionBar
-          key={index}
+          key={api.id}
           title={api.apiName}
           subtitle={api.orgName}
           topContentText={api.rightDescription}
@@ -117,33 +116,28 @@ export const ChooseApiPage = () => {
     });
   };
 
-  const chosenApiAccordions = chosenApis.map((api: DelegableApi, index: Key | null | undefined) => {
+  const chosenApiActionBars = chosenApis.map((api: DelegableApi) => {
     return (
-      <div
-        className={classes.actionBarWrapper}
-        key={index}
-      >
-        <DelegationActionBar
-          key={index}
-          title={api.apiName}
-          subtitle={api.orgName}
-          topContentText={api.rightDescription}
-          bottomContentText={api.description}
-          scopeList={api.scopes}
-          buttonType={'remove'}
-          onActionButtonClick={() => {
-            handleRemove(api);
-          }}
-          color={'success'}
-        ></DelegationActionBar>
-      </div>
+      <DelegationActionBar
+        key={api.id}
+        title={api.apiName}
+        subtitle={api.orgName}
+        topContentText={api.rightDescription}
+        bottomContentText={api.description}
+        scopeList={api.scopes}
+        buttonType={'remove'}
+        onActionButtonClick={() => {
+          handleRemove(api);
+        }}
+        color={'success'}
+      ></DelegationActionBar>
     );
   });
 
-  const chosenDelegableOrgs = chosenOrgs.map((org: DelegableOrg, index: Key) => {
+  const chosenDelegableOrgs = chosenOrgs.map((org: DelegableOrg) => {
     return (
       <CompactDeletableListItem
-        key={index}
+        key={org.orgNr}
         startIcon={<OfficeIcon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
@@ -178,7 +172,9 @@ export const ChooseApiPage = () => {
             {isSm && chosenApis.length > 0 && (
               <div className={common.apiAccordions}>
                 <h4>{t('api_delegation.chosen_apis')}</h4>
-                <div className={classes.chosenApisContainer}>{chosenApiAccordions}</div>
+                <div className={classes.chosenApisContainer}>
+                  <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
+                </div>
               </div>
             )}
             <div className={classes.searchSection}>
@@ -216,7 +212,7 @@ export const ChooseApiPage = () => {
                 <div className={common.apiAccordions}>
                   <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
                   <div className={classes.delegableApisContainer}>
-                    <div className={classes.actionBarWrapper}>{chosenApiAccordions}</div>
+                    <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
                   </div>
                 </div>
               )}
