@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as React from 'react';
@@ -52,7 +53,7 @@ export const ActionBar = ({
             [classes.open]: open,
             [classes.clickable]: onClick,
           })}
-          tabIndex={-1}
+          tabIndex={children ? 0 : -1}
         >
           {children && (
             <div className={cn(classes.actionBarIcon)}>
@@ -68,6 +69,7 @@ export const ActionBar = ({
               data-testid='action-bar'
               aria-expanded={open ?? undefined}
               aria-controls={children ? contentId : undefined}
+              tabIndex={-1}
             >
               <div className={classes.actionBarTexts}>
                 <div className={classes.title}>{title}</div>

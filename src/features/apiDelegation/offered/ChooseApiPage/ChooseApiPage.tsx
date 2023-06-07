@@ -81,7 +81,7 @@ export const ChooseApiPage = () => {
     value: provider,
   }));
 
-  const delegableApiAccordions = () => {
+  const delegableApiActionBars = () => {
     if (error.message) {
       return (
         <ErrorPanel
@@ -102,21 +102,17 @@ export const ChooseApiPage = () => {
     }
     return delegableApis.map((api: DelegableApi, index: Key | null | undefined) => {
       return (
-        <div
-          className={classes.actionBarWrapper}
-          key={api.id}
-        >
-          <DelegationActionBar
-            title={api.apiName}
-            subtitle={api.orgName}
-            topContentText={api.rightDescription}
-            bottomContentText={api.description}
-            scopeList={api.scopes}
-            buttonType={'add'}
-            onActionButtonClick={() => dispatch(softAddApi(api))}
-            color={'neutral'}
-          ></DelegationActionBar>
-        </div>
+        <DelegationActionBar
+          key={index}
+          title={api.apiName}
+          subtitle={api.orgName}
+          topContentText={api.rightDescription}
+          bottomContentText={api.description}
+          scopeList={api.scopes}
+          buttonType={'add'}
+          onActionButtonClick={() => dispatch(softAddApi(api))}
+          color={'neutral'}
+        ></DelegationActionBar>
       );
     });
   };
@@ -128,12 +124,12 @@ export const ChooseApiPage = () => {
         key={index}
       >
         <DelegationActionBar
+          key={index}
           title={api.apiName}
           subtitle={api.orgName}
           topContentText={api.rightDescription}
           bottomContentText={api.description}
           scopeList={api.scopes}
-          key={index}
           buttonType={'remove'}
           onActionButtonClick={() => {
             handleRemove(api);
@@ -212,12 +208,16 @@ export const ChooseApiPage = () => {
             <div className={classes.pageContentActionBarsContainer}>
               <div className={common.apiAccordions}>
                 <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
-                <div className={classes.delegableApisContainer}>{delegableApiAccordions()}</div>
+                <div className={classes.delegableApisContainer}>
+                  <div className={classes.actionBarWrapper}>{delegableApiActionBars()}</div>
+                </div>
               </div>
               {!isSm && (
                 <div className={common.apiAccordions}>
                   <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
-                  <div className={classes.delegableApisContainer}>{chosenApiAccordions}</div>
+                  <div className={classes.delegableApisContainer}>
+                    <div className={classes.actionBarWrapper}>{chosenApiAccordions}</div>
+                  </div>
                 </div>
               )}
             </div>
