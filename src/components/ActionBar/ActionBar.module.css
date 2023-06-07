@@ -18,15 +18,6 @@
   cursor:pointer;
 }
 
-.actionBar.clickable:focus{
-  --fds-inner-focus-border-color: #1e2b3c;
-  --fds-outer-focus-border-color: #fadf4b;
-  --fds-focus-border-width: 3px;
-  outline: var(--fds-focus-border-width) solid var(--fds-outer-focus-border-color);
-  outline-offset: var(--fds-focus-border-width);
-  box-shadow: 0 0 0 var(--fds-focus-border-width) var(--fds-inner-focus-border-color);
-}
-
 .actionBar.light {
   border-color: var(--fds-semantic-border-neutral-subtle);
   background-color: var(--fds-semantic-surface-neutral-default);
@@ -85,10 +76,7 @@
   font-size: var(--font_size-300);
   line-height: 16px;
   word-break: break-word;
-}
-
-.actionBarHeader:focus {
-  outline: none;
+  composes: focusable from '@/resources/utils/utility.module.css';
 }
 
 .actionBarHeader.clickable {
@@ -118,7 +106,7 @@
 }
 
 .actionBarIcon{
-  margin-left: 10px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
 }
@@ -152,4 +140,8 @@
 .actionBarTexts{
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.actionBarButtonContainer{
+  display: flex;
 }
