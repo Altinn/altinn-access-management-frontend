@@ -1,26 +1,41 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var isDev = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.OrdinalIgnoreCase);
+}
+
 <!DOCTYPE html>
-<html lang="no" style="background-color: #1EADF7;">
-<head>
-    <base href="~/accessmanagement/ui/" />
-    <meta charset="utf-8">
+  <html lang="no" style="background-color: #1EADF7;">
+  <head>
+    <base href="~/accessmanagement/ui/"/>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Altinn API Delegering">
     <meta name="keywords" content="Altinn Profil API Delegering">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <link rel="icon" href="https://altinncdn.no/favicon.ico">    
+    <link rel="icon" href="https://altinncdn.no/favicon.ico">
     <!-- Font Inter support -->
     <link rel="preconnect" href='https://github.com/Altinn/altinn-cdn'>
     <link
       rel="stylesheet"
-      href="https://altinncdn.no/fonts/inter/inter.css"
-    />
+      href="https://altinncdn.no/fonts/inter/inter.css"/>
     <title>Altinn</title>
-</head>
-<body>
-    <div id="root"></div>
-    <link rel="stylesheet" type="text/css" href="/accessmanagement/assets/accessmanagement.css" asp-append-version="true"/>
-    <script type="module" src="/accessmanagement/assets/accessmanagement.js" asp-append-version="true"></script>
-</body>
-</html>
+  </head>
+    <body>
+      <div id="root"></div>
+      @if (isDev){
+        <script type="module">
+      import RefreshRuntime from "http://localhost:5173/@@react-refresh"
+      RefreshRuntime.injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => (type) => type
+      window.__vite_plugin_react_preamble_installed__ = true
+      </script>
+        <script type="module" src="http://localhost:5173/@@vite/client"></script>
+        <script type="module" src="http://localhost:5173/src/main.jsx"></script>
+      }else{
+        <link rel="stylesheet" type="text/css" href="/accessmanagement/assets/accessmanagement.css" asp-append-version="true"/>
+        <script type="module" src="/accessmanagement/assets/accessmanagement.js" asp-append-version="true"></script>
+      }
+    </body>
+  </html>
