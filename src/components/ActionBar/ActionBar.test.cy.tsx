@@ -131,10 +131,16 @@ describe('ActionBar', () => {
 
     const handleActionClickSpy = cy.spy(handleActionClick).as('handleActionClickSpy');
 
-    const actionButton = <Button onClick={handleActionClickSpy}>Action</Button>;
+    const actionButton = (
+      <Button
+        onClick={handleActionClickSpy}
+        aria-label='soft-add'
+      >
+        Placeholder
+      </Button>
+    );
     cy.mount(nonExpandableActionBar({ actions: actionButton, onClick: handleClickSpy }));
-
-    cy.findByRole('button', { name: /Action/i }).click();
+    cy.get('button[aria-label*="add"]').click();
     cy.get('@handleActionClickSpy').should('have.been.called');
     cy.get('@handleClickSpy').should('not.have.been.called');
   });
