@@ -21,5 +21,10 @@ export const ActionBarIcon = () => {
     onClick,
   };
 
-  return <Chevron {...props} />;
+  return (
+    <Chevron
+      {...props}
+      aria-hidden
+    />
+  );
 };

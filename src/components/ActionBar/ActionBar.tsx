@@ -52,13 +52,8 @@ export const ActionBar = ({
             [classes.open]: open,
             [classes.clickable]: onClick,
           })}
-          tabIndex={-1}
+          onClick={onClick}
         >
-          {children && (
-            <div className={cn(classes.actionBarIcon)}>
-              <ActionBarIcon />
-            </div>
-          )}
           {onClick ? (
             <button
               className={cn(classes.actionBarHeader, classes.clickable)}
@@ -69,9 +64,16 @@ export const ActionBar = ({
               aria-expanded={open ?? undefined}
               aria-controls={children ? contentId : undefined}
             >
-              <div className={classes.actionBarTexts}>
-                <div className={classes.title}>{title}</div>
-                <div className={classes.subtitle}>{subtitle}</div>
+              <div className={classes.actionBarButtonContainer}>
+                {children && (
+                  <div className={cn(classes.actionBarIcon)}>
+                    <ActionBarIcon />
+                  </div>
+                )}
+                <div className={classes.actionBarTexts}>
+                  <div className={classes.title}>{title}</div>
+                  <div className={classes.subtitle}>{subtitle}</div>
+                </div>
               </div>
             </button>
           ) : (
