@@ -19,8 +19,12 @@ export const ActionBarIcon = () => {
     className: cn(iconClassnames),
     'data-testid': 'action-bar-icon',
     onClick,
-    altText: 'chevron',
   };
 
-  return <Chevron {...props} />;
+  return (
+    <Chevron
+      {...props}
+      aria-hidden
+    />
+  );
 };
