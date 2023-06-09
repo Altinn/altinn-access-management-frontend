@@ -16,6 +16,10 @@
   }
 }
 
+.pageMargin{
+  margin-top: 20px;
+}
+
 .pageContainer{
   margin-left: auto;
   margin-right: auto;
@@ -26,7 +30,24 @@
   width: 100%;
 }
 
-.exitButton{
+.closeButtonContainer{
+  margin-top: 30px;
   display: flex;
   justify-content: flex-end;
+}
+
+.closeButton{
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  border: none;
+  padding: 0px;
+  height: 36px;
+  padding-top: 3px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-right: 6px;
+}
+
+.closeButton:hover{
+  background-color: #d6eefd;
 }

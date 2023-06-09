@@ -23,3 +23,7 @@
   text-align: right;
   word-break: break-word;
 }
+
+.companyIconContainer{
+  align-self: center;
+}
