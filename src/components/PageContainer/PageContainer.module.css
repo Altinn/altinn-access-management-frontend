@@ -16,6 +16,10 @@
   }
 }
 
+.pageMargin{
+  margin-top: 30px;
+}
+
 .pageContainer{
   margin-left: auto;
   margin-right: auto;
@@ -26,7 +30,8 @@
   width: 100%;
 }
 
-.exitButton{
+.closeButtonContainer{
+  margin-top: 30px;
   display: flex;
   justify-content: flex-end;
 }

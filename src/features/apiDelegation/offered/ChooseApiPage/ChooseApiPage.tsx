@@ -1,5 +1,5 @@
 import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
-import { List, Spinner } from '@digdir/design-system-react';
+import { List, Spinner, Alert } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,4 +1,3 @@
-import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +24,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
     <div className={classes.pageMargin}>
       <div className={classes.pageContainer}>
         <UserInfoBar />
-        <div className={classes.exitButton}>
+        <div className={classes.closeButtonContainer}>
           <button
             className={classes.closeButton}
             aria-label={String(t('common.close'))}

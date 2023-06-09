@@ -34,7 +34,7 @@ export const UserInfoBar = () => {
             {userInfoName && <h5 className={classes.userInfoText}>{userInfoName}</h5>}
             {reporteeName && <h5 className={classes.userInfoText}>for {reporteeName}</h5>}
           </div>
-          <div>
+          <div className={classes.companyIconContainer}>
             <SvgIcon
               width={24}
               height={24}
