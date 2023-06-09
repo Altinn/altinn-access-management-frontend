@@ -114,8 +114,7 @@ export const SummaryPage = ({
     },
   );
 
-  const del = successfulDelegations;
-  const successfulDelegatedItems = del?.map(
+  const successfulDelegatedItems = successfulDelegations?.map(
     (apiDelegation: ApiDelegation, index: Key | null | undefined) => {
       return (
         <CompactDeletableListItem
