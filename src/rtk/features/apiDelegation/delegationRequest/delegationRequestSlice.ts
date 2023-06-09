@@ -87,22 +87,31 @@ const delegationRequestSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(postApiDelegation.fulfilled, (state, action) => {
+        const sucessfulDelegations = state.succesfulApiDelegations;
         const delegation: ApiDelegation = {
           apiName: action.payload.apiName,
           orgName: action.payload.orgName,
         };
-        state.succesfulApiDelegations.push(delegation);
+
+        sucessfulDelegations.push(delegation);
+        state.succesfulApiDelegations = sucessfulDelegations.sort((a, b) =>
+          a.orgName.localeCompare(b.orgName),
+        );
         state.batchPostCounter += 1;
         if (state.batchPostCounter === state.batchPostSize) {
           state.loading = false;
         }
       })
       .addCase(postApiDelegation.rejected, (state, action) => {
+        const failedDelegations = state.failedApiDelegations;
         const delegation: ApiDelegation = {
           apiName: action.meta.arg.apiName,
           orgName: action.meta.arg.orgName,
         };
-        state.failedApiDelegations.push(delegation);
+        failedDelegations.push(delegation);
+        state.failedApiDelegations = failedDelegations.sort((a, b) =>
+          a.orgName.localeCompare(b.orgName),
+        );
         state.batchPostCounter += 1;
         if (state.batchPostCounter === state.batchPostSize) {
           state.loading = false;

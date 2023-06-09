@@ -89,7 +89,7 @@
     "go_to_inbox": "Go to inbox",
     "go_to_profile": "Go to profile page",
     "find_and_submit_scheme": "Find and submit a new form",
-    "receipt_page_bottom_text_failed": "Oops, this didn't go quite as planned. Please try again later and contact Altinn Service desk if the error persists.",
+    "receipt_page_bottom_text_failed": "Oops, looks like something didn't go quite as planned. Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn."
   }
 }

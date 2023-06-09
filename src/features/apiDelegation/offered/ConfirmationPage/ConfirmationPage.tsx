@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { RouterPath } from '@/routes/Router';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { PageContainer } from '@/components';
-import { SummaryPage } from '@/components/SummaryPage';
+import { SummaryPage } from '@/features/apiDelegation/components/SummaryPage';
 import type { DelegationRequest } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import {
   postApiDelegation,
