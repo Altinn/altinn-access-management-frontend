@@ -65,7 +65,15 @@ export const CompactDeletableListItem = ({
                 icon={<MinusCircle />}
                 onClick={removeCallback}
                 aria-label={
-                  t('common.remove') + ' ' + leftText + ' ' + t('common.to') + ' ' + middleText
+                  t('common.remove') +
+                  ' ' +
+                  t('api_delegation.api_delegation_choice') +
+                  ' ' +
+                  leftText +
+                  ' ' +
+                  t('common.to') +
+                  ' ' +
+                  middleText
                 }
               >
                 {t('common.remove')}
