@@ -1,7 +1,7 @@
 import { Button, List, ListItem } from '@digdir/design-system-react';
 import { useState } from 'react';
-import { t } from 'i18next';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
@@ -32,6 +32,7 @@ export const DelegationActionBar = ({
   color = 'neutral',
 }: DelegationActionBarProps) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation('common');
 
   const actions = (
     <>
@@ -41,7 +42,7 @@ export const DelegationActionBar = ({
           variant={'quiet'}
           color={'success'}
           onClick={onActionButtonClick}
-          aria-label={'soft-add'}
+          aria-label={t('common.add') + ' ' + title}
         ></Button>
       )}
       {buttonType === 'remove' && (
@@ -50,7 +51,7 @@ export const DelegationActionBar = ({
           variant={'quiet'}
           color={'danger'}
           onClick={onActionButtonClick}
-          aria-label={'soft-remove'}
+          aria-label={t('common.remove') + ' ' + title}
         ></Button>
       )}
     </>

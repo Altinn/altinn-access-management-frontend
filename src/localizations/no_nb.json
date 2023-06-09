@@ -14,7 +14,10 @@
     "time":"Tidspunkt",
     "reset_choices": "Nullstill valg",
     "apply": "Bruk",
-    "search": "Søk"
+    "search": "Søk",
+    "add": "Legg til",
+    "remove": "Fjern",
+    "to": "Til"
   },
   "profile": {
     "received": "Mottatte",

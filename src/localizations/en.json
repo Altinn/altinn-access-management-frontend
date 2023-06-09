@@ -14,7 +14,10 @@
     "time": "Time",
     "reset_choices": "Reset",
     "apply": "Apply",
-    "search": "Search"
+    "search": "Search",
+    "add": "Add",
+    "remove": "Remove",
+    "to": "To"
   },
   "profile": {
     "received": "Received",

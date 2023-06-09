@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { Button, ButtonVariant, ListItem, ButtonColor } from '@digdir/design-system-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
@@ -63,9 +64,11 @@ export const CompactDeletableListItem = ({
                 color={ButtonColor.Danger}
                 icon={<MinusCircle />}
                 onClick={removeCallback}
-                aria-label={String(t('api_delegation.delete'))}
+                aria-label={
+                  t('common.remove') + ' ' + leftText + ' ' + t('common.to') + ' ' + middleText
+                }
               >
-                {t('api_delegation.delete')}
+                {t('common.remove')}
               </Button>
             )}
           </div>
