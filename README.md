@@ -6,46 +6,27 @@ To run or build the frontend, you'll need [Node](https://nodejs.org/) and [Yarn]
 
 ## Project organisation 🧩
 
-The main entry point is `/src/main.tsx`. You'll find React components under `/src/components/`.
+The main entry point is `/src/main.jsx`. You'll find React components under `/src/components/`.
 
-The basic file structure for components should be:
+The components can be placed 2 ways, either:
 
 ```
-If the subcomponent's not reusable
-components\
-  ComponentName\
-    - ComponentName.tsx
+If the component's only reusable within a specific feature
+features\
+  fetureName\
+    components\
     - ComponentName.test.tsx (unit tests)
     - index.ts (public interface for the component)
     - style.css (if needed)
-      SubComponent1\
-        - SubComponent1.tsx (if the subcomponent is not reusable)
-        - index.ts (public interface for the component)
-        - style.css (if needed)
-        SubComponent2\
-          - SubComponent2.tsx (if the subcomponent is not reusable)
-          - index.ts (public interface for the component)
-          - style.css (if needed)
 
+Or:
 
-If the subcomponents are reusable and being used by other classes
+If the components are reusable and being used by other classes
 components/
   ComponentName/
     - ComponentName.tsx
     - ComponentName.test.tsx (unit tests)
-    - index.ts (public interface for the component)
     - style.css (if needed)
-  Reusables/
-    SubComponent1/
-      - SubComponent1.tsx (if the subcomponent is not reusable)
-      - SubComponent1.test.tsx (unit tests)
-      - index.ts (public interface for the component)
-      - style.css (if needed)
-    SubComponent2/
-      - SubComponent2.tsx (if the subcomponent is not reusable)
-      - SubComponent2.test.tsx (unit tests)
-      - index.ts (public interface for the component)
-      - style.css (if needed)
 
 ```
 
