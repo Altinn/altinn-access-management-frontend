@@ -56,16 +56,16 @@ export interface FilterProps {
  *   closeButtonAriaLabel="Close filter"
  * />
  *
- * @param {FilterOption[]} options - The provided filter options, defined in values and labels
- * @param {string} label - The label that will be displayed on the filter button
- * @param {string} applyButtonLabel - The label for the apply button inside the popover
- * @param {string} resetButtonLabel - The label for the reset button inside the popover
- * @param {React.ReactNode} [icon] - The icon element to display with the filter label
- * @param {string[]} [values] - The active filter values. Can be used for setting active filters externally.
- * @param {boolean} [searchable=false] - Indicates whether the options are searchable
- * @param {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters
- * @param {string} [closeButtonAriaLabel] - The ARIA label for the close button in modal view
- * @param {function} [onApply] - Callback function that will be called when filters are applied
+ * @property {FilterOption[]} options - The provided filter options, defined in values and labels
+ * @property {string} label - The label that will be displayed on the filter button
+ * @property {string} applyButtonLabel - The label for the apply button inside the popover
+ * @property {string} resetButtonLabel - The label for the reset button inside the popover
+ * @property {React.ReactNode} [icon] - The icon element to display with the filter label
+ * @property {string[]} [values] - The active filter values. Can be used for setting active filters externally.
+ * @property {boolean} [searchable=false] - Indicates whether the options are searchable
+ * @property {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters
+ * @property {string} [closeButtonAriaLabel] - The ARIA label for the close button in modal view
+ * @property {function} [onApply] - Callback function that will be called when filters are applied
  * @returns {React.ReactNode} Rendered component
  */
 

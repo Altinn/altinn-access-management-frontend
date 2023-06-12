@@ -31,6 +31,23 @@ export interface ActionBarProps {
 }
 
 /**
+ * @component
+ * @example
+ * <ActionBar
+ *    actions={
+ *      <><button onClick={handleActionBarClick}>Action 1</button>
+ *      <button onClick={handleActionBarClick}>Action 1</button></>
+ *    }
+ *    additionalText=<div>"Additional Text"</div>
+ *    color="neutral"
+ *    onClick={handleActionBarClick}
+ *    open={openState}
+ *    subtitle={<div>"Subtitle"</div>}
+ *    title={<div>"Title"</div>}
+ *   >
+ *      <div>Content goes here</div>
+ * </ActionBar>
+ *
  * @property {React.ReactNode} [actions] - Additional actions to be displayed on the right side of the header of the ActionBar.
  * @property {React.ReactNode} [additionalText] - Additional text to be displayed in the header of the ActionBar.
  * @property {React.ReactNode} [children] - The content to be displayed as expandable content inside the ActionBar.
