@@ -39,11 +39,11 @@ describe('DelegationActionBar', () => {
       ></DelegationActionBar>,
     );
 
-    cy.findByLabelText(/soft-add/i).click();
+    cy.get('button[aria-label*="add"]').click();
     cy.get('@callbackSpy').should('have.been.called');
   });
 
-  it('should do callback when button with aria-label "soft-remove" is clicked', () => {
+  it('should do callback when button when aria-label "remove" is clicked', () => {
     const callback = () => {
       cy.stub();
     };
@@ -59,7 +59,7 @@ describe('DelegationActionBar', () => {
       ></DelegationActionBar>,
     );
 
-    cy.findByLabelText(/soft-remove/i).click();
+    cy.get('button[aria-label*="remove"]').click();
     cy.get('@callbackSpy').should('have.been.called');
   });
 });

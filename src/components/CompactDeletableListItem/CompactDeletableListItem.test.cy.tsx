@@ -38,7 +38,7 @@ describe('CompactDeletableListItem', () => {
         />
       </List>,
     );
-    cy.findByRole('button', { name: /delete/i }).should('exist');
+    cy.findByRole('button', { name: /remove/i }).should('exist');
   });
 
   it('should do removeCallback on button click', () => {
