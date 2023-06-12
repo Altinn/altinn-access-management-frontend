@@ -15,15 +15,25 @@ import { Floatover } from './Floatover';
 import { FilterButton } from './FilterButton';
 
 export interface FilterProps {
+  /** The provided filter options, defined in values and labels */
   options: FilterOption[];
+  /**  The label that will be displayed on the filter button */
   label: string;
+  /** The label for the apply button inside the popover */
   applyButtonLabel: string;
+  /** The label for the reset button inside the popover */
   resetButtonLabel: string;
+  /** The label for the reset button inside the popover */
   searchable?: boolean;
+  /** The icon element to display with the filter label */
   icon?: ReactNode;
+  /** The active filter values. Can be used for setting active filters externally. */
   values?: string[];
+  /** Callback function that will be called when filters are applied */
   onApply?: (value: string[]) => void;
+  /**  When true, displays a full screen modal when selecting filters */
   fullScreenModal?: boolean;
+  /** The ARIA label for the close button in modal view */
   closeButtonAriaLabel?: string;
 }
 
@@ -53,11 +63,12 @@ export interface FilterProps {
  * @param {React.ReactNode} [icon] - The icon element to display with the filter label
  * @param {string[]} [values] - The active filter values. Can be used for setting active filters externally.
  * @param {boolean} [searchable=false] - Indicates whether the options are searchable
- * @param {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters. Othewise, displays as local popover
+ * @param {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters
  * @param {string} [closeButtonAriaLabel] - The ARIA label for the close button in modal view
  * @param {function} [onApply] - Callback function that will be called when filters are applied
  * @returns {React.ReactNode} Rendered component
  */
+
 export const Filter = ({
   options,
   label,
