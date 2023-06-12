@@ -134,7 +134,7 @@ describe('ActionBar', () => {
     const actionButton = (
       <Button
         onClick={handleActionClickSpy}
-        aria-label='soft-add'
+        aria-label='add'
       >
         Placeholder
       </Button>
