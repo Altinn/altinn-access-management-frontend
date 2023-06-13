@@ -36,3 +36,12 @@
   word-break: break-word;
   font-weight: 400;
 }
+
+.scopeText{
+  font-weight: 300;
+}
+
+.scopeListContainer{
+  margin-top: 30px;
+  margin-bottom: 30px;
+}

@@ -8,6 +8,8 @@ import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { useMediaQuery } from '@/resources/hooks';
 
+import ScopeList from '../ScopeList/ScopeList';
+
 import classes from './DeletableListItem.module.css';
 
 export interface DeletableListItemProps {
@@ -15,6 +17,7 @@ export interface DeletableListItemProps {
   softRestoreCallback: () => void;
   item: ApiListItem;
   isEditable: boolean;
+  scopes?: string[];
 }
 
 export const DeletableListItem = ({
@@ -22,6 +25,7 @@ export const DeletableListItem = ({
   softRestoreCallback,
   item,
   isEditable,
+  scopes,
 }: DeletableListItemProps) => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
@@ -64,6 +68,12 @@ export const DeletableListItem = ({
           <div className={classes.listItemTexts}>
             <div className={classes.apiListItem}>{item.apiName}</div>
             <div className={classes.ownerListItem}>{item.owner}</div>
+            {scopes && (
+              <div className={classes.scopeListContainer}>
+                <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
+                <ScopeList scopeList={scopes} />
+              </div>
+            )}
             <div>{item.description}</div>
           </div>
         </div>
