@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import { RouterPath } from '@/routes/Router';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -26,12 +25,14 @@ import {
   softRestoreAll,
   deleteOfferedApiDelegation,
   deleteReceivedApiDelegation,
+  OverviewOrg,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import { ErrorPanel } from '@/components';
+import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
 
 import { LayoutState } from '../LayoutState';
 
@@ -88,7 +89,8 @@ export const OverviewPageContent = ({
 
   const goToStartDelegation = () => {
     dispatch(restoreAllSoftDeletedItems());
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
   };
 
   const handleSaveDisabled = () => {
@@ -160,7 +162,7 @@ export const OverviewPageContent = ({
     } else if (overviewOrgs.length < 1) {
       return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
     }
-    return overviewOrgs.map((org) => (
+    return overviewOrgs.map((org: OverviewOrg) => (
       <div
         key={org.id}
         className={classes.actionBarWrapper}

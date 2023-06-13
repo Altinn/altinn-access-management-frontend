@@ -16,7 +16,7 @@ import {
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { RouterPath } from '@/routes/Router';
+import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';
@@ -219,9 +219,13 @@ export const ChooseApiPage = () => {
             </div>
             <NavigationButtons
               previousText={t('api_delegation.previous')}
-              previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
+              previousPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+              }
               nextText={t('api_delegation.next')}
-              nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Confirmation}
+              nextPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Confirmation
+              }
               nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
             ></NavigationButtons>
           </div>

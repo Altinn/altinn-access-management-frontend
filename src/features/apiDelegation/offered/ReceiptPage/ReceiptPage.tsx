@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { RouterPath } from '@/routes/Router';
+import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
@@ -29,7 +29,9 @@ export const ReceiptPage = () => {
       <SummaryPage
         failedDelegations={failedApiDelegations}
         successfulDelegations={successfulApiDelegations}
-        restartProcessPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
+        restartProcessPath={
+          '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+        }
         pageHeaderText={String(t('api_delegation.give_access_to_new_api'))}
         topListText={String(t('api_delegation.failed_delegations'))}
         bottomListText={String(t('api_delegation.succesful_delegations'))}

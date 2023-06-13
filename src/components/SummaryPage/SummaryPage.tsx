@@ -24,7 +24,7 @@ import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegab
 import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
-import { RouterPath } from '@/routes/Router';
+import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
 import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
@@ -147,7 +147,7 @@ export const SummaryPage = ({
 
   const navigateToOverview = () => {
     dispatch(setOveviewToReload());
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview);
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
   };
 
   return (
@@ -207,9 +207,16 @@ export const SummaryPage = ({
               <h3 className={classes.bottomText}>{bottomText}</h3>
               {showNavigationButtons ? (
                 <NavigationButtons
-                  previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
+                  previousPath={
+                    '/' +
+                    ApiDelegationPath.OfferedApiDelegations +
+                    '/' +
+                    ApiDelegationPath.ChooseApi
+                  }
                   previousText={t('api_delegation.previous')}
-                  nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt}
+                  nextPath={
+                    '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt
+                  }
                   nextText={t('api_delegation.confirm_delegation')}
                   nextDisabled={confirmationButtonDisabled}
                   nextLoading={confirmationButtonLoading}
