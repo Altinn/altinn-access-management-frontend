@@ -56,6 +56,7 @@ const initialState: SliceState = {
 const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
   const overviewOrgList: OverviewOrg[] = [];
   for (const delegation of delegationArray) {
+    console.log('delegationblabla', delegation);
     const api: ApiListItem = {
       id: delegation.resourceId,
       apiName: delegation.resourceTitle,
