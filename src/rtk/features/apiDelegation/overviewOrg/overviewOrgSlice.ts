@@ -12,6 +12,7 @@ export interface ApiListItem {
   isSoftDelete: boolean;
   owner: string;
   description: string;
+  scopes: string[];
 }
 
 export interface OverviewOrg {
@@ -22,6 +23,11 @@ export interface OverviewOrg {
   apiList: ApiListItem[];
 }
 
+interface ResourceReference {
+  reference: string;
+  referenceSource: string;
+  referenceType: string;
+}
 interface DelegationDTO {
   coveredByName: string;
   offeredByName: string;
@@ -31,6 +37,7 @@ interface DelegationDTO {
   resourceTitle: string;
   resourceOwnerName: string;
   rightDescription: string;
+  resourceReferences: ResourceReference[];
 }
 
 export interface SliceState {
@@ -62,7 +69,13 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
       isSoftDelete: false,
       owner: delegation.resourceOwnerName,
       description: delegation.rightDescription,
+      scopes: [],
     };
+    for (const ref of delegation.resourceReferences) {
+      if (ref.referenceType === 'MaskinportenScope') {
+        api.scopes.push(ref.reference);
+      }
+    }
 
     let delegationOrg = '';
     let delegationOrgNumber = '';
