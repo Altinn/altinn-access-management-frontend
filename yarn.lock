@@ -1193,10 +1193,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remix-run/router@npm:1.6.2":
-  version: 1.6.2
-  resolution: "@remix-run/router@npm:1.6.2"
-  checksum: 5969d313bff6ba5c75917910090cebafda84b9d3b4b453fae6b3d60fea9f938078578ffca769c532ab7ce252cd4a207b78d1024d7c727ab80dd572e62fd3b3f2
+"@remix-run/router@npm:1.6.3":
+  version: 1.6.3
+  resolution: "@remix-run/router@npm:1.6.3"
+  checksum: f6968b1626af930b42f8cb5a044f05e4fbce05af6c7947beb1704e45c9570944e3be16ee008b185e5e13baac97948299eb55341b2a359c3e2e54b9d6646ae167
   languageName: node
   linkType: hard
 
@@ -1488,13 +1488,13 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^18.0.28":
-  version: 18.2.9
-  resolution: "@types/react@npm:18.2.9"
+  version: 18.2.12
+  resolution: "@types/react@npm:18.2.12"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: f155256171a2d701eb962a1d3aa2a1c9ee36d9dd4a4aecb911d29e50717aab1a76914aef25242665147c455b9e8d081d1a60275d13ca81075c148ebd6607414a
+  checksum: ad85a7eadaf1b35cfeee9f715b39311420ff46d46e0650377d918b3f888c2e47416037da4a765e1dccd3d1916abd54c105a3bee803c971ba56c955a7768ce976
   languageName: node
   linkType: hard
 
@@ -2728,8 +2728,8 @@ __metadata:
   linkType: hard
 
 "cypress@npm:^12.8.1":
-  version: 12.13.0
-  resolution: "cypress@npm:12.13.0"
+  version: 12.14.0
+  resolution: "cypress@npm:12.14.0"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -2775,7 +2775,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 8e73c7033dadc15caf17b106cd88665107c8bbf3ba66fc266de1f14a2c1401edfa99c222f2ae6070e1ffb8123eb255fb559dc3e5e24460fadf8e05ce74afa41b
+  checksum: c98d33dc50f5e48a215f41e3a5139514816d2320e433d143a352a460f74941d3106a1f7485f61172f544cf125176c1225ac8edec31645d5a89cd394f72f93588
   languageName: node
   linkType: hard
 
@@ -4656,11 +4656,11 @@ __metadata:
   linkType: hard
 
 "i18next@npm:^22.4.13":
-  version: 22.5.0
-  resolution: "i18next@npm:22.5.0"
+  version: 22.5.1
+  resolution: "i18next@npm:22.5.1"
   dependencies:
     "@babel/runtime": ^7.20.6
-  checksum: 291c0e02fda20bd1827b6529dad74c01867892c7ac000befe0f69e10ad97ab074a2ae5b4ce1e0638c28ae1a6f59d1ed8503ea05bd1c324d731a44dd94c43a49a
+  checksum: 175f8ab7fac2abcee147b00cc2d8e7d4fa9b05cdc227f02cac841fc2fd9545ed4a6d88774f594f8ad12dc944e4d34cc8e88aa00c8b9947baef9e859d93abd305
   languageName: node
   linkType: hard
 
@@ -6848,26 +6848,26 @@ __metadata:
   linkType: hard
 
 "react-router-dom@npm:^6.10.0":
-  version: 6.11.2
-  resolution: "react-router-dom@npm:6.11.2"
+  version: 6.13.0
+  resolution: "react-router-dom@npm:6.13.0"
   dependencies:
-    "@remix-run/router": 1.6.2
-    react-router: 6.11.2
+    "@remix-run/router": 1.6.3
+    react-router: 6.13.0
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: ba44ff37f2956bc18991f2eedb32a3fa46d35832f61ded6c5d167e853ca289868fca6635467866280c73bc3da00dce8437dbbec57da100c0a3e3e3850af00b83
+  checksum: f51131063c2d5e127b6b3f3f813c6d4988d0f37694a06697dc9d4a4d9d3825e2a4487ec9b81a1d356eb269018814d884ffc2e3d9ff056a46ae59c99c9e7e1086
   languageName: node
   linkType: hard
 
-"react-router@npm:6.11.2":
-  version: 6.11.2
-  resolution: "react-router@npm:6.11.2"
+"react-router@npm:6.13.0":
+  version: 6.13.0
+  resolution: "react-router@npm:6.13.0"
   dependencies:
-    "@remix-run/router": 1.6.2
+    "@remix-run/router": 1.6.3
   peerDependencies:
     react: ">=16.8"
-  checksum: e47f875dca70033a3b42704cb5ec076b60f9629a5cdc3be613707f3d5a5706123fb80301037455c285c6d5a1011b443e1784e0103969ebfac7071648d360c413
+  checksum: 31a187005d05e063c59324564a283cd28052eaf848ad446c87658f4fc48fa9543329fe8a14d7be14d9bbf62410d383f8cf1cf13898a838bf9c1e3201fe93384c
   languageName: node
   linkType: hard
 
