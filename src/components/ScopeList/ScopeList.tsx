@@ -9,13 +9,13 @@ export interface ScopeListProps {
 
 const ScopeList = ({ scopeList }: ScopeListProps) => {
   return (
-    <List borderStyle='dashed'>
+    <ul>
       {scopeList.map((scope, i) => (
-        <ListItem key={i}>
+        <li key={i}>
           <div className={classes.scopeItems}>{scope}</div>
-        </ListItem>
+        </li>
       ))}
-    </List>
+    </ul>
   );
 };
 

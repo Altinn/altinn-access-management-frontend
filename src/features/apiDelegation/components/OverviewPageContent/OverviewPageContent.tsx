@@ -26,6 +26,7 @@ import {
   softRestoreAll,
   deleteOfferedApiDelegation,
   deleteReceivedApiDelegation,
+  OverviewOrg,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
@@ -160,7 +161,7 @@ export const OverviewPageContent = ({
     } else if (overviewOrgs.length < 1) {
       return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
     }
-    return overviewOrgs.map((org) => (
+    return overviewOrgs.map((org: OverviewOrg) => (
       <div
         key={org.id}
         className={classes.actionBarWrapper}
