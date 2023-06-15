@@ -40,7 +40,7 @@ Start with these names for your branch depending on what your branch includes.
   - 'dependencies/'
   - 'documentation/'
   - 'enhancement/'
-  - 'feature/'
+  - 'feat/'
   - 'infrastructure/'
   - 'performance/'
 
