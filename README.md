@@ -40,7 +40,9 @@ Start with these names for your branch depending on what your branch includes.
   - 'dependencies/'
   - 'documentation/'
   - 'enhancement/'
-  - 'feat/'
+  - feat/single-rights/issue-number
+  - feat/api-delegation/issue-number
+  - feat/general/issue-number       (When it's not related to any features)
   - 'infrastructure/'
   - 'performance/'
 
