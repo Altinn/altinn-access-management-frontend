@@ -1,4 +1,3 @@
-import { List, ListItem } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import classes from './ScopeList.module.css';
