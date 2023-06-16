@@ -196,9 +196,7 @@ export const SummaryPage = ({
                   )}
                 </div>
               )}
-              <h3 className={cn(classes.failedSectionText, classes.infoText)}>
-                {failedDelegationText}
-              </h3>
+              <h3 className={classes.infoText}>{failedDelegationText}</h3>
               {showBottomSection() && (
                 <div>
                   <h2 className={classes.bottomListText}>{bottomListText}</h2>

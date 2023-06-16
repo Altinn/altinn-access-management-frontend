@@ -94,9 +94,14 @@ const delegationRequestSlice = createSlice({
         };
 
         sucessfulDelegations.push(delegation);
-        state.succesfulApiDelegations = sucessfulDelegations.sort((a, b) =>
-          a.orgName.localeCompare(b.orgName),
-        );
+        state.succesfulApiDelegations = sucessfulDelegations.sort((a, b) => {
+          const orgNameCompared = a.orgName.localeCompare(b.orgName);
+          if (orgNameCompared === 0) {
+            // Equal orgnames
+            return a.apiName.localeCompare(b.apiName);
+          }
+          return orgNameCompared;
+        });
         state.batchPostCounter += 1;
         if (state.batchPostCounter === state.batchPostSize) {
           state.loading = false;
@@ -109,9 +114,14 @@ const delegationRequestSlice = createSlice({
           orgName: action.meta.arg.orgName,
         };
         failedDelegations.push(delegation);
-        state.failedApiDelegations = failedDelegations.sort((a, b) =>
-          a.orgName.localeCompare(b.orgName),
-        );
+        state.failedApiDelegations = failedDelegations.sort((a, b) => {
+          const orgNameCompared = a.orgName.localeCompare(b.orgName);
+          if (orgNameCompared === 0) {
+            // Equal orgnames
+            return a.apiName.localeCompare(b.apiName);
+          }
+          return orgNameCompared;
+        });
         state.batchPostCounter += 1;
         if (state.batchPostCounter === state.batchPostSize) {
           state.loading = false;

@@ -52,10 +52,6 @@
   margin-top: 2.5rem;
 }
 
-.failedSectionText{
-  color: var(--fds-semantic-text-danger-default);
-}
-
 .restartButton {
   display: flex;
   justify-content: center;

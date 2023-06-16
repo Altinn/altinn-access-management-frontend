@@ -35,7 +35,7 @@ export const ReceiptPage = () => {
         bottomListText={String(t('api_delegation.succesful_delegations'))}
         failedDelegationText={
           failedApiDelegations.length > 0
-            ? String(t('api_delegation.receipt_page_bottom_text_failed'))
+            ? String(t('api_delegation.receipt_page_failed_text'))
             : undefined
         }
         bottomText={
