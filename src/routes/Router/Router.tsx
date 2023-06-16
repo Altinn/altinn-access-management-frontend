@@ -9,8 +9,9 @@ import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/sites/NotFoundSite';
+import { OverviewPage } from '@/features/singleRight/delegate/OverviewPage/OverviewPage';
 
-import { RouterPath } from './RouterPath';
+import { GeneralPath, SingleRightPath, ApiDelegationPath } from '../paths';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,36 +20,51 @@ export const Router = createBrowserRouter(
       errorElement={<NotFoundSite />}
     >
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview}
-        element={<OfferedOverviewPage />}
+        path={ApiDelegationPath.OfferedApiDelegations}
         errorElement={<NotFoundSite />}
-      />
+      >
+        <Route
+          path={ApiDelegationPath.Overview}
+          element={<OfferedOverviewPage />}
+          errorElement={<NotFoundSite />}
+        />
+        <Route
+          path={ApiDelegationPath.ChooseOrg}
+          element={<ChooseOrgPage />}
+          errorElement={<NotFoundSite />}
+        />
+        <Route
+          path={ApiDelegationPath.ChooseApi}
+          element={<ChooseApiPage />}
+          errorElement={<NotFoundSite />}
+        />
+        <Route
+          path={ApiDelegationPath.Confirmation}
+          element={<ConfirmationPage />}
+          errorElement={<NotFoundSite />}
+        />
+        <Route
+          path={ApiDelegationPath.Receipt}
+          element={<ReceiptPage />}
+          errorElement={<NotFoundSite />}
+        />
+        <Route
+          path={ApiDelegationPath.Overview}
+          element={<ReceivedOverviewPage />}
+          errorElement={<NotFoundSite />}
+        />
+      </Route>
       <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
-        element={<ChooseOrgPage />}
+        path={SingleRightPath.DelegateSingleRights}
         errorElement={<NotFoundSite />}
-      />
-      <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
-        element={<ChooseApiPage />}
-        errorElement={<NotFoundSite />}
-      />
-      <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.Confirmation}
-        element={<ConfirmationPage />}
-        errorElement={<NotFoundSite />}
-      />
-      <Route
-        path={RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt}
-        element={<ReceiptPage />}
-        errorElement={<NotFoundSite />}
-      />
-      <Route
-        path={RouterPath.ReceivedApiDelegations + '/' + RouterPath.Overview}
-        element={<ReceivedOverviewPage />}
-        errorElement={<NotFoundSite />}
-      />
+      >
+        <Route
+          path={SingleRightPath.ChooseService}
+          element={<OverviewPage />}
+          errorElement={<NotFoundSite />}
+        />
+      </Route>
     </Route>,
   ),
-  { basename: RouterPath.BasePath },
+  { basename: GeneralPath.BasePath },
 );

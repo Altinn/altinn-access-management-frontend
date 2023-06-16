@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as Add } from '@/assets/Add.svg';
 import { ReactComponent as Edit } from '@/assets/Edit.svg';
 import { ReactComponent as Error } from '@/assets/Error.svg';
-import { RouterPath } from '@/routes/Router';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -33,6 +32,7 @@ import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/de
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import { ErrorPanel } from '@/components';
+import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';
 
@@ -89,7 +89,7 @@ export const OverviewPageContent = ({
 
   const goToStartDelegation = () => {
     dispatch(restoreAllSoftDeletedItems());
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg);
   };
 
   const handleSaveDisabled = () => {
