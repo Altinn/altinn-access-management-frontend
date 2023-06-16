@@ -11,6 +11,10 @@
     font-size: 20px;
     margin-top: 2.5rem;
   }
+
+  .infoText{
+    font-size: 16px;
+  }
 }
 
 .receiptMainButton{
@@ -34,8 +38,8 @@
   display: flex;
 }
 
-.bottomText{
-  margin-top: 40px;
+.infoText{
+  margin-top: 20px;
   font-weight: 400;
 }
 
