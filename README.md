@@ -35,14 +35,16 @@ components/
 ### Naming convention on branches
 Start with these names for your branch depending on what your branch includes.
 
-  - 'automation/'
-  - 'bugfix/'
-  - 'dependencies/'
-  - 'documentation/'
-  - 'enhancement/'
-  - 'feature/'
-  - 'infrastructure/'
-  - 'performance/'
+  - automation/
+  - bugfix/
+  - dependencies/
+  - documentation/
+  - enhancement/
+  - feat/single-rights/issue-number
+  - feat/api-delegation/issue-number
+  - feat/general/issue-number       (When it's not related to any features)
+  - infrastructure/
+  - performance/
 
 ### ClassNames
 
@@ -88,16 +90,12 @@ If the bundled files are to be served from a path other than the server root, yo
 
 ## Run code with access-management backend
 
-To run the code together with access-management backend to the following
+To add test data to the app, do the following:
 
 
-- Checkout Altinn-Studio repo and 
+- Clone following repo and follow readme in that repo: https://github.com/Altinn/app-localtest
 
-- Navigate to the `development` folder in the altinn-studio repo
-
-   ```bash
-   cd src/development
-   ```
+- Do the additional steps below if the localTest doesn't work
 
 - Start the loadbalancer container that routes between the local platform services and the app
 
