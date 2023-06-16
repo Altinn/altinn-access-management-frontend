@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<MaskinportenSchemaController> _logger;
 
         [HttpPost("candelegate")]
-        public async Task<ActionResult<CanDelegateResponse>> CanDelegateAccess([FromBody] string resourceId, [FromBody] string profileId)
+        public async Task<ActionResult<CanDelegateResponse>> CanDelegateAccess([FromBody] SingleRightDelegationInput)
         {
             if (!ModelState.IsValid)
             {
