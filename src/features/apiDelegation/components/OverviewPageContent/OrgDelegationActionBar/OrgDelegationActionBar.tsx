@@ -91,6 +91,7 @@ export const OrgDelegationActionBar = ({
       softRestoreCallback={() => dispatch(softRestore([organization.id, item.id]))}
       item={item}
       isEditable={isEditable}
+      scopes={item.scopes}
     ></DeletableListItem>
   ));
 
@@ -135,7 +136,7 @@ export const OrgDelegationActionBar = ({
       }
     >
       <div className={classes.actionBarContent}>
-        <List borderStyle={'dashed'}>{listItems}</List>
+        <List borderStyle={'solid'}>{listItems}</List>
       </div>
     </ActionBar>
   );

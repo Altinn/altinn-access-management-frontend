@@ -1,4 +1,4 @@
-import { Button, List, ListItem } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import { useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
 import { Line } from '../Line';
 import { ActionBar, type ActionBarProps } from '../ActionBar';
+import ScopeList from '../ScopeList/ScopeList';
 
 import classes from './DelegationActionBar.module.css';
 
@@ -73,15 +74,7 @@ export const DelegationActionBar = ({
         {scopeList.length > 0 && (
           <div>
             <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
-            <List borderStyle='dashed'>
-              {scopeList.map((scope, i) => {
-                return (
-                  <ListItem key={i}>
-                    <div className={classes.scopeItems}>{scope}</div>
-                  </ListItem>
-                );
-              })}
-            </List>
+            <ScopeList scopeList={scopeList} />
           </div>
         )}
         {topContentText && (

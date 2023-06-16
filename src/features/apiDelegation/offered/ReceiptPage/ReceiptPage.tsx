@@ -35,10 +35,15 @@ export const ReceiptPage = () => {
         pageHeaderText={String(t('api_delegation.give_access_to_new_api'))}
         topListText={String(t('api_delegation.failed_delegations'))}
         bottomListText={String(t('api_delegation.succesful_delegations'))}
+        failedDelegationText={
+          failedApiDelegations.length > 0
+            ? String(t('api_delegation.receipt_page_failed_text'))
+            : undefined
+        }
         bottomText={
           successfulApiDelegations.length > 0
             ? String(t('api_delegation.receipt_page_bottom_text'))
-            : String(t('api_delegation.receipt_page_bottom_text_failed'))
+            : undefined
         }
         headerIcon={<ApiIcon />}
         headerColor={PageColor.Success}
