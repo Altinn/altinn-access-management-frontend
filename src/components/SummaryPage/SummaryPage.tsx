@@ -24,7 +24,7 @@ import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegab
 import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
-import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
+import { ApiDelegationPath } from '@/routes/paths';
 import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';

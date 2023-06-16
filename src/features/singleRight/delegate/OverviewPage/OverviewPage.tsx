@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { PersonCheckmarkIcon } from '@navikt/aksel-icons';
 
@@ -6,7 +5,6 @@ import { Page, PageHeader, PageContent, PageSize, PageContainer } from '@/compon
 import { useMediaQuery } from '@/resources/hooks';
 
 export const OverviewPage = () => {
-  const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
 
   return (

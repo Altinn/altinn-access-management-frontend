@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as CloseIcon } from '@/assets/RedClose.svg';
-import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
+import { GeneralPath } from '@/routes/paths';
 
 import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
 
@@ -17,7 +17,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
 
   const redirectToProfile = () => {
     const cleanHostname = window.location.hostname.replace('am.ui.', '');
-    window.location.href = 'https://' + cleanHostname + '/' + ApiDelegationPath.Profile;
+    window.location.href = 'https://' + cleanHostname + '/' + GeneralPath.Profile;
   };
 
   return (

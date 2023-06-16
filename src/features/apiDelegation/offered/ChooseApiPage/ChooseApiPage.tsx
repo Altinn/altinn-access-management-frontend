@@ -16,7 +16,7 @@ import {
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
+import { ApiDelegationPath } from '@/routes/paths';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';

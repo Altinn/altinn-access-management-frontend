@@ -1,4 +1,4 @@
 export enum SingleRightPath {
-  OfferedSingleRights = 'offered-single-rights',
-  Overview = 'overview',
+  DelegateSingleRights = 'delegate-single-rights',
+  ChooseService = 'choose-service',
 }

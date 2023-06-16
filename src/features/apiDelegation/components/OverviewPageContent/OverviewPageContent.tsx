@@ -25,14 +25,14 @@ import {
   softRestoreAll,
   deleteOfferedApiDelegation,
   deleteReceivedApiDelegation,
-  OverviewOrg,
+  type OverviewOrg,
+  type DeletionRequest,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import type { DeletionRequest } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import { ErrorPanel } from '@/components';
-import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
+import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';
 
@@ -89,8 +89,7 @@ export const OverviewPageContent = ({
 
   const goToStartDelegation = () => {
     dispatch(restoreAllSoftDeletedItems());
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg);
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg);
   };
 
   const handleSaveDisabled = () => {

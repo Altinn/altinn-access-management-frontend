@@ -27,7 +27,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
-import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
+import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';

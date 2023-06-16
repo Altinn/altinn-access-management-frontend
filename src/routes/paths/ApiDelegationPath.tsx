@@ -6,5 +6,4 @@ export enum ApiDelegationPath {
   Confirmation = 'confirmation',
   Receipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
-  Profile = 'ui/Profile',
 }

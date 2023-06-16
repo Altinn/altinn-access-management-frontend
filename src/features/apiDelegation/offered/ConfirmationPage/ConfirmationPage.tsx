@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ApiDelegationPath } from '@/routes/paths/ApiDelegationPath';
+import { ApiDelegationPath } from '@/routes/paths';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { PageContainer } from '@/components';
 import { SummaryPage } from '@/components/SummaryPage';

@@ -9,11 +9,9 @@ import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/sites/NotFoundSite';
-import { OverviewPage } from '@/features/singleRight/offered/OverviewPage/OverviewPage';
+import { OverviewPage } from '@/features/singleRight/delegate/OverviewPage/OverviewPage';
 
-import { GeneralPath } from '../paths/GeneralPath';
-import { SingleRightPath } from '../paths/SingleRightPath';
-import { ApiDelegationPath } from '../paths/ApiDelegationPath';
+import { GeneralPath, SingleRightPath, ApiDelegationPath } from '../paths';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,7 +21,6 @@ export const Router = createBrowserRouter(
     >
       <Route
         path={ApiDelegationPath.OfferedApiDelegations}
-        element={<OfferedOverviewPage />}
         errorElement={<NotFoundSite />}
       >
         <Route
@@ -58,11 +55,11 @@ export const Router = createBrowserRouter(
         />
       </Route>
       <Route
-        path={SingleRightPath.OfferedSingleRights}
+        path={SingleRightPath.DelegateSingleRights}
         errorElement={<NotFoundSite />}
       >
         <Route
-          path={SingleRightPath.Overview}
+          path={SingleRightPath.ChooseService}
           element={<OverviewPage />}
           errorElement={<NotFoundSite />}
         />
