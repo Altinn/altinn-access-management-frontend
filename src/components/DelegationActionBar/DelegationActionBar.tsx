@@ -72,13 +72,13 @@ export const DelegationActionBar = ({
       <div className={classes.newApiAccordionContent}>
         {scopeList.length > 0 && (
           <div>
-            <h4 className={classes.scopeText}>{t('api_delegation.scopes')}:</h4>
+            <h4 className={classes.h4Text}>{t('api_delegation.scopes')}:</h4>
             <ScopeList scopeList={scopeList} />
           </div>
         )}
         {topContentText && (
           <div>
-            <h4 className={classes.scopeText}>{t('api_delegation.description')}</h4>
+            <h4 className={classes.h4Text}>{t('api_delegation.description')}</h4>
             <div className={classes.contentTexts}>{topContentText}</div>
           </div>
         )}
@@ -87,7 +87,7 @@ export const DelegationActionBar = ({
         )}
         {bottomContentText && (
           <div>
-            <h4 className={classes.scopeText}>{t('api_delegation.additional_description')}</h4>
+            <h4 className={classes.h4Text}>{t('api_delegation.additional_description')}</h4>
             <div className={classes.bottomContentTexts}>{bottomContentText}</div>
           </div>
         )}
