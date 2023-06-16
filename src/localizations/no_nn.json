@@ -14,7 +14,10 @@
     "time":"Tidspunkt",
     "reset_choices": "Nullstill valg",
     "apply": "Bruk",
-    "search": "Søk"
+    "search": "Søk",
+    "add": "Legg til",
+    "remove": "Fjern",
+    "to": "Til"
   },
   "profile": {
     "received": "Mottekne",
@@ -89,6 +92,7 @@
     "find_and_submit_scheme": "Finne og sende inn nytt skjema",
     "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slett eller blir trekte tilbake.",
     "receipt_page_failed_text": "Vennlegst prøv igjen seinare. Kontakt Altinn Servicedesk om feilen vedvarer.",
-    "receipt_page_main_button": "Til totaloversikt"
+    "receipt_page_main_button": "Til totaloversikt",
+    "api_delegation_choice": "API-delegeringsvalg"
   }
 }

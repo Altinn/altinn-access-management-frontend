@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 
 namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
 {
@@ -98,5 +99,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend
         /// Description explaining the rights a recipient will receive if given access to the resource
         /// </summary>
         public string RightDescription { get; set; }
+
+        /// <summary>
+        /// ResourceReference
+        /// </summary>
+        public List<ResourceReference> ResourceReferences { get; set; }
     }
 }

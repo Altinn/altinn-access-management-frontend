@@ -1,9 +1,9 @@
-import { Button, ButtonColor, ButtonSize, ButtonVariant } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ReactComponent as ExitIcon } from '@/assets/Error.svg';
+import { ReactComponent as CloseIcon } from '@/assets/RedClose.svg';
 import { RouterPath } from '@/routes/Router';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
 
@@ -18,22 +18,25 @@ export const PageContainer = ({ children }: PageContainerProps) => {
 
   const redirectToProfile = () => {
     const cleanHostname = window.location.hostname.replace('am.ui.', '');
-    window.location.href = 'https://' + cleanHostname + '/' + RouterPath.Profile;
+    window.location.href =
+      'https://' + cleanHostname + '/' + RouterPath.Profile + '?R=' + getCookie('AltinnPartyId');
   };
 
   return (
     <div className={classes.pageMargin}>
       <div className={classes.pageContainer}>
         <UserInfoBar />
-        <div className={classes.exitButton}>
-          <Button
-            variant={ButtonVariant.Quiet}
-            color={ButtonColor.Secondary}
-            size={ButtonSize.Medium}
-            icon={<ExitIcon />}
+        <div className={classes.closeButtonContainer}>
+          <button
+            className={classes.closeButton}
             aria-label={String(t('common.close'))}
             onClick={redirectToProfile}
-          ></Button>
+          >
+            <CloseIcon
+              width={36}
+              height={30}
+            />
+          </button>
         </div>
         <div>{children}</div>
       </div>

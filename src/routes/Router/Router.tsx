@@ -8,7 +8,7 @@ import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/r
 import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
-import { NotFoundSite } from '@/resources/NotFoundSite';
+import { NotFoundSite } from '@/sites/NotFoundSite';
 
 import { RouterPath } from './RouterPath';
 
