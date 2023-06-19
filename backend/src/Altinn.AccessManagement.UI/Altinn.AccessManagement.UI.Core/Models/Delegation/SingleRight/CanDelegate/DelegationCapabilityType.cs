@@ -1,6 +1,6 @@
 namespace Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate
 {
-    public enum CanDelegateAccessType
+    public enum DelegationCapabilityType
     {
         Read,
         Write,

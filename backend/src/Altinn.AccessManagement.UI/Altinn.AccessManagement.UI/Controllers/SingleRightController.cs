@@ -15,25 +15,23 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<MaskinportenSchemaController> _logger;
 
         [HttpPost("candelegate")]
-        public async Task<ActionResult<CanDelegateResponse>> CanDelegateAccess([FromBody] SingleRightDelegationInput)
+        public async Task<ActionResult<DelegationCapabiltiesResponse>> CheckDelegationCapability([FromBody] SingleRightDelegationInputDto request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            CanDelegateResponse response = new CanDelegateResponse(resourceId, new List<RequestedAccessTypeResponses>());
+            DelegationCapabiltiesResponse response = new DelegationCapabiltiesResponse(resourceId, new List<RequestedAccessTypeResponses>());
 
-            foreach (var accessType in Enum.GetValues(typeof(CanDelegateAccessType)))
+            foreach (object? accessType in Enum.GetValues(typeof(DelegationCapabilityType)))
             {
                 bool canDelegate = await CheckDelegationCapability(request.ResourceId, accessType);
-                
+
                 response.Add(accessType, canDelegate);
             }
 
             return Ok(response);
         }
-        
-        
     }
 }
