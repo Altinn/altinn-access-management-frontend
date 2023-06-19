@@ -66,7 +66,7 @@ Configure your IDE to run `eslint --fix` on save (prettier will also reformat yo
 
 ### CSS
 
-We name css classes using camelCase and use one concept from [BEM naming convention](http://getbem.com/naming/). The concept we use is that we give classes '__' extension when there's variants of the class. E.g. alert__danger alert__warning. basically everywhere you'd use the extension '--', we use __ instead. The reason for this is that we can link stylesheets directly, which improves readability.
+We use standard camelCase for classnames to enable linking of the stylesheets directly, improving simplicity in the process. Instead of using [BEM naming convention](http://getbem.com/naming/), we separate each Element and Modifier into separate names and use regular css (eks: `.accordion.open`) to access the combination.
 
 
 ## Tests 🧨
@@ -93,43 +93,43 @@ If the bundled files are to be served from a path other than the server root, yo
 To add test data to the app, do the following:
 
 
-- Clone following repo and follow readme in that repo: https://github.com/Altinn/app-localtest
+- Clone following repo and follow readme in that repo: https://github.com/Altinn/app-localtest You have completed this step when you have localtest running locally through the command `dotnet run`
 
-- Do the additional steps below if the localTest doesn't work
+  - If following the readme on localTest doesn't work, you can try doing this
 
-- Start the loadbalancer container that routes between the local platform services and the app
+  - Start the loadbalancer container that routes between the local platform services and the app
 
-   ```bash
-   docker-compose up -d --build
-   ```
+     ```bash
+     docker-compose up -d --build
+     ```
    
    
-- Navigate to the `development/LocalTest` folder in the altinn-studio repo
+  - Navigate to the `src` folder in the app-localtest repo
 
-   ```bash
-   cd src/development/LocalTest
+     ```bash
+     cd src/
+     ```
 
-- Run below command in that folder
+  - Run below command in that folder
 
-   ```bash
-   docker-compose up
-   ```
+     ```bash
+     docker-compose up -d --build
+     ```
 
-- Set path to app folder in local platform services. There are two ways to do this:
+  - Set path to app folder in local platform services. The simplest way to do this is:
 
-   - Edit the appsettings.json file:
-      - Open `appSettings.json` in the `src/development/LocalTest` in an editor.
-      - Change the setting `"AppRepsitoryBasePath"` to the path to the folder where you've cloned the altinn-studio repo.
-      - Be aware that on mac you don't have c:/ in your paths.
-      - Create folder AltinnPlatformLocal wherever you like, copy and paste path to that folder in LocalTestingStorageBasePath.
-      - Set LocalTestingStaticTestDataPath to your full path to the file in devlopment/TestData     
+     - Edit the appsettings.json file:
+        - Open `appSettings.json` in an editor.
+        - Change the setting `"AppRepsitoryBasePath"` to the path to the folder where you've cloned your frontend and backend repos. (Be aware that on mac you don't have c:/ in your paths.)
+        - Create folder AltinnPlatformLocal wherever you like, copy and paste path to that folder in LocalTestingStorageBasePath.
+        - Set LocalTestingStaticTestDataPath to your full path to the file in src/testdata     
           
 
-- Start the local platform services (make sure you are in the LocalTest folder)
-
-   ```bash
-   dotnet run
-   ```
+  - Start the local platform services (make sure you are in the src folder)
+  
+     ```bash
+     dotnet run
+     ```
 
 - Add the following to your hosts file. Path to file on mac: /private/etc/hosts. Path to file on Windows: c:\Windows\System32\Drivers\etc\hosts.
 ```#Subdomain for accessmanagement
@@ -170,21 +170,25 @@ To add test data to the app, do the following:
    ```
 - ON MAC: change WorkspacePath in file: src/Altinn.AccessManagement/appsettings.Development.json to "Altinn.AccessManagement.Persistence/Migration".
 
-- Start Access Management
+- Start Access Management Backend
 
    ```bash
+   dotnet run
+   ```
+- Start the BFF (AccessManagement.UI)
+  ```bash
    dotnet run
    ```
 
 - Start Access Management Frontend (if not started)
 
-- Go to access-management-frontend repo
-
-- run 'yarn start'
+  - Go to access-management-frontend repo
+  
+  - run 'yarn start'
 
 - Go to http://local.altinn.cloud/
 
-- You should now see localtest intro with access management as only application
+- You should now see localtest login page with access management as the only application
 
 - Choose an account and click on button to proceed to react-app
 
