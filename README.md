@@ -183,7 +183,7 @@ To add test data to the app, do the following:
 - Start Access Management Frontend (if not started)
 
   - Go to access-management-frontend repo
-  
+  - Run 'yarn'
   - run 'yarn start'
 
 - Go to http://local.altinn.cloud/
