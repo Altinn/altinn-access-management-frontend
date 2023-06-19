@@ -48,6 +48,11 @@ export const Router = createBrowserRouter(
           element={<ReceiptPage />}
           errorElement={<NotFoundSite />}
         />
+      </Route>
+      <Route
+        path={ApiDelegationPath.ReceivedApiDelegations}
+        errorElement={<NotFoundSite />}
+      >
         <Route
           path={ApiDelegationPath.Overview}
           element={<ReceivedOverviewPage />}
