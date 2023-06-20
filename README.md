@@ -163,7 +163,7 @@ To add test data to the app, do the following:
 - Set platform_authorization_admin as owner
 
 ### Run backend and frontend
-- Open Altinn-Access-Management repo in an IDE and go to following folder.
+- Open Altinn-Access-Management repo in an IDE and go to following folder. IT IS AN OWN REPO FOUND HERE: https://github.com/Altinn/altinn-access-management
 
   ```bash
    cd src/Altinn.AccessManagement.UI
