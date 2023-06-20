@@ -152,7 +152,7 @@ To add test data to the app, do the following:
    ```
 
 ## Set up database: 
-  Download [PostgreSQL](https://www.postgresql.org/download/) USE INSTALLER, NOT HOMEBREW ON MAC. (Currently using 14 in deploy environments, but 15 works locally if you need those extra features 15 gived you)
+  Download [PostgreSQL](https://www.postgresql.org/download/). USE INSTALLER, NOT HOMEBREW ON MAC. (Currently using 14 in deploy environments, but 15 works locally if you need those extra features 15 gived you)
 - Install database server (choose your own admin password and save it some place you can find it again)
 - Start PG admin
 - Create the following users by right clicking Login/Group Roles (with privileges for authorizationdb):
