@@ -166,7 +166,7 @@ To add test data to the app, do the following:
 - Open Altinn-Access-Management repo in an IDE and go to following folder.
 
   ```bash
-   cd src/Altinn.AccessManagement
+   cd src/Altinn.AccessManagement.UI
    ```
 - ON MAC: change WorkspacePath in file: src/Altinn.AccessManagement/appsettings.Development.json to "Altinn.AccessManagement.Persistence/Migration".
 
