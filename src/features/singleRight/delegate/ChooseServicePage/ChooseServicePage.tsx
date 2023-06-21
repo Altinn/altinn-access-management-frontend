@@ -5,26 +5,21 @@ import { Button, ButtonVariant } from '@digdir/design-system-react';
 
 import { Page, PageHeader, PageContent, PageSize, PageContainer } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
+import { CheckDelegationAccessDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 
 export const ChooseServicePage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
 
+  const dto = new CheckDelegationAccessDto(
+    'urn:altinn:organizationnumber',
+    '123456789',
+    'urn:altinn:resource',
+    'testapi',
+  );
+
   const testEndpoint = () => {
     axios
-      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`, {
-        to: [
-          {
-            id: 'urn:altinn:organizationnumber',
-            value: String(123456789),
-          },
-        ],
-        resources: [
-          {
-            id: 'urn:altinn:resource',
-            value: String('testaopi'),
-          },
-        ],
-      })
+      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`, dto)
       .then((response) => {
         console.log(response);
       })

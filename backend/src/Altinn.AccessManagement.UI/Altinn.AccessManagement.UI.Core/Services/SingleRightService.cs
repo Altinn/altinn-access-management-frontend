@@ -6,20 +6,20 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc />
-    public class SingleRightService : IDelegationService
+    public class SingleRightService : ISingleRightService
     {
-        private readonly IDelegationClient _delegationClient;
+        private readonly ISingleRightClient _singleRightClient;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SingleRightService" /> class
         /// </summary>
-        public SingleRightService(IDelegationClient delegationClient)
+        public SingleRightService(ISingleRightClient singleRightClient)
         {
-            _delegationClient = delegationClient;
+            _singleRightClient = singleRightClient;
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationCapabiltiesResponse>> RequestCanDelegateAccess(string partyId, SingleRightDelegationInputDto request)
+        public async Task<List<UserDelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request)
         {
             /* remove this comment when backend is up and add json serialization of the response.
              * Also make sure Errors are returned correctly
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
              * 
              */
 
-            return _delegationClient.UserDelegationAccessCheck(partyId, request);
+            return _singleRightClient.UserDelegationAccessCheck(partyId, request);
         }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <inheritdoc />
-    public class DelegationClient : IDelegationClient
+    public class SingleRightClient : ISingleRightClient
     {
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -24,9 +24,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         };
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DelegationClient" /> class
+        ///     Initializes a new instance of the <see cref="SingleRightClient" /> class
         /// </summary>
-        public DelegationClient(
+        public SingleRightClient(
             IHttpContextAccessor httpContextAccessor,
             HttpClient httpClient,
             IOptions<PlatformSettings> platformSettings,
@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public List<DelegationCapabiltiesResponse> UserDelegationAccessCheck(string partyId, SingleRightDelegationInputDto request)
+        public List<UserDelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
         {
             /* Remove outcommented code when integrating with backend
             try
@@ -68,11 +68,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return ProduceStaticCanDelegateResponse();
         }
 
-        private List<DelegationCapabiltiesResponse> ProduceStaticCanDelegateResponse()
+        private List<UserDelegationAccessCheckResponse> ProduceStaticCanDelegateResponse()
         {
-            List<DelegationCapabiltiesResponse> responses = new List<DelegationCapabiltiesResponse>
+            List<UserDelegationAccessCheckResponse> responses = new List<UserDelegationAccessCheckResponse>
             {
-                new DelegationCapabiltiesResponse(
+                new UserDelegationAccessCheckResponse(
                     "ttd-am-k6/read",
                     new List<Resource>
                     {
@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new DelegationCapabiltiesResponse(
+                new UserDelegationAccessCheckResponse(
                     "ttd-am-k6/write",
                     new List<Resource>
                     {
@@ -104,8 +104,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new DelegationCapabiltiesResponse(
-                "ttd-am-k6/sign",
+                new UserDelegationAccessCheckResponse(
+                    "ttd-am-k6/sign",
                     new List<Resource>
                     {
                         new Resource(

@@ -6,15 +6,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     /// <summary>
     ///     Interface for client to do delegations in access-managment
     /// </summary>
-    public interface IDelegationClient
+    public interface ISingleRightClient
     {
         /// <summary>
         ///     Checks whether the user can delegate the given right to the given party
         /// </summary>
         /// <param name="partyId">
-        /// Used to identify the party the authenticated user is acting on behalf of./param>
-        /// <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
-        /// <returns></returns>
-        List<DelegationCapabiltiesResponse> UserDelegationAccessCheck(string partyId, SingleRightDelegationInputDto request);
+        ///     Used to identify the party the authenticated user is acting on behalf of./param>
+        ///     <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
+        ///     <returns></returns>
+        List<UserDelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
     }
 }

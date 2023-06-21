@@ -11,33 +11,32 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
-    
     [Route("accessmanagement/api/v1/singleright")]
     public class SingleRightController : Controller
     {
-        private readonly IDelegationService _delegationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<MaskinportenSchemaController> _logger;
+        private readonly ISingleRightService _singleRightService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleRightController" /> class
+        ///     Initializes a new instance of the <see cref="SingleRightController" /> class
         /// </summary>
-        public SingleRightController(IHttpContextAccessor httpContextAccessor, ILogger<MaskinportenSchemaController> logger, IDelegationService delegationService)
+        public SingleRightController(IHttpContextAccessor httpContextAccessor, ILogger<MaskinportenSchemaController> logger, ISingleRightService singleRightService)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-            _delegationService = delegationService;
+            _singleRightService = singleRightService;
         }
 
         /// <summary>
-        /// Endpoint for checking delegation accesses on behalf of the party having offered the delegation
+        ///     Endpoint for checking delegation accesses on behalf of the party having offered the delegation
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost("checkdelegationaccesses/{partyId}")]
-        public async Task<ActionResult<List<DelegationCapabiltiesResponse>>> CheckDelegationCapability([FromRoute] string partyId, [FromBody] SingleRightDelegationInputDto request)
+        public async Task<ActionResult<List<UserDelegationAccessCheckResponse>>> CheckDelegationCapability([FromRoute] string partyId, [FromBody] CheckDelegationAccessDto request)
         {
-            List<DelegationCapabiltiesResponse> response = await _delegationService.RequestCanDelegateAccess(partyId, request);
+            List<UserDelegationAccessCheckResponse> response = await _singleRightService.CheckDelegationAccess(partyId, request);
 
             return Ok(response);
         }

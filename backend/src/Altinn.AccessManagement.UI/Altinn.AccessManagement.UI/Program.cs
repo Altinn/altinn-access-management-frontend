@@ -21,6 +21,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -28,7 +29,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 ILogger logger;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationKey";
 
@@ -43,7 +44,7 @@ ConfigureLogging(builder.Logging);
 // setup frontend configuration
 string frontendProdFolder = AppEnvironment.GetVariable("FRONTEND_PROD_FOLDER", "wwwroot/AccessManagement/");
 
-builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile(frontendProdFolder + "manifest.json", true, true);
 
 ConfigureServices(builder.Services, builder.Configuration);
 
@@ -55,7 +56,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddEndpointsApiExplorer();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -101,7 +102,7 @@ app.Run();
 void ConfigureSetupLogging()
 {
     // Setup logging for the web host creation
-    var logFactory = LoggerFactory.Create(builder =>
+    ILoggerFactory logFactory = LoggerFactory.Create(builder =>
     {
         builder
             .AddFilter("Microsoft", LogLevel.Warning)
@@ -123,17 +124,17 @@ void ConfigureLogging(ILoggingBuilder logging)
     {
         // Add application insights https://docs.microsoft.com/en-us/azure/azure-monitor/app/ilogger
         logging.AddApplicationInsights(
-             configureTelemetryConfiguration: (config) => config.ConnectionString = applicationInsightsConnectionString,
-             configureApplicationInsightsLoggerOptions: (options) => { });
+            configureTelemetryConfiguration: config => config.ConnectionString = applicationInsightsConnectionString,
+            configureApplicationInsightsLoggerOptions: options => {});
 
         // Optional: Apply filters to control what logs are sent to Application Insights.
         // The following configures LogLevel Information or above to be sent to
         // Application Insights for all categories.
-        logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Warning);
+        logging.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Warning);
 
         // Adding the filter below to ensure logs of all severity from Program.cs
         // is sent to ApplicationInsights.
-        logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Trace);
+        logging.AddFilter<ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Trace);
     }
     else
     {
@@ -153,14 +154,14 @@ async Task SetConfigurationProviders(ConfigurationManager config)
     if (!builder.Environment.IsDevelopment())
     {
         await ConnectToKeyVaultAndSetApplicationInsights(config);
-    }    
+    }
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
 {
     logger.LogInformation("Program // Connect to key vault and set up application insights");
 
-    KeyVaultSettings keyVaultSettings = new();
+    KeyVaultSettings keyVaultSettings = new KeyVaultSettings();
 
     config.GetSection("KeyVaultSettings").Bind(keyVaultSettings);
     try
@@ -171,7 +172,7 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
     }
     catch (Exception vaultException)
     {
-        logger.LogError(vaultException, $"Unable to read application insights key.");
+        logger.LogError(vaultException, "Unable to read application insights key.");
     }
 
     try
@@ -180,7 +181,7 @@ async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager confi
     }
     catch (Exception vaultException)
     {
-        logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
+        logger.LogError(vaultException, "Unable to add key vault secrets to config.");
     }
 }
 
@@ -211,8 +212,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
-    services.AddSingleton<IDelegationService, SingleRightService>();
-    services.AddHttpClient<IDelegationClient, DelegationClient>();
+    services.AddSingleton<ISingleRightService, SingleRightService>();
+    services.AddHttpClient<ISingleRightClient, SingleRightClient>();
     if (builder.Environment.IsDevelopment())
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
@@ -221,30 +222,30 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     {
         services.AddSingleton<IKeyVaultService, KeyVaultService>();
     }
-    
+
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
-    .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
-    {
-        options.JwtCookieName = platformSettings.JwtCookieName;
-        options.MetadataAddress = platformSettings.OpenIdWellKnownEndpoint;
-        options.TokenValidationParameters = new TokenValidationParameters
+        .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, configureOptions: options =>
         {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            RequireExpirationTime = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
+            options.JwtCookieName = platformSettings.JwtCookieName;
+            options.MetadataAddress = platformSettings.OpenIdWellKnownEndpoint;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+            };
 
-        if (builder.Environment.IsDevelopment())
-        {
-            options.RequireHttpsMetadata = false;
-        }
-    });
+            if (builder.Environment.IsDevelopment())
+            {
+                options.RequireHttpsMetadata = false;
+            }
+        });
 
     services.AddAntiforgery(options =>
     {
@@ -267,17 +268,18 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
             Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
             In = ParameterLocation.Header,
             Name = "Authorization",
-            Type = SecuritySchemeType.ApiKey
+            Type = SecuritySchemeType.ApiKey,
         });
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
 
     if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     {
-        services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/logtelemetry" });
+        services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel
+            { StorageFolder = "/tmp/logtelemetry" });
         services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
         {
-            ConnectionString = applicationInsightsConnectionString
+            ConnectionString = applicationInsightsConnectionString,
         });
 
         services.AddApplicationInsightsTelemetryProcessor<HealthTelemetryFilter>();
