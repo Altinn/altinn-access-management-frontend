@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
-import axios from 'axios';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as Add } from '@/assets/Add.svg';
@@ -178,30 +177,6 @@ export const OverviewPageContent = ({
     ));
   };
 
-  const testEndpoint = () => {
-    axios
-      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`, {
-        to: [
-          {
-            id: 'urn:altinn:organizationnumber',
-            value: String(123456789),
-          },
-        ],
-        resources: [
-          {
-            id: 'urn:altinn:resource',
-            value: String('testaopi'),
-          },
-        ],
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-
   return (
     <div className={common.pageContent}>
       <div className={classes.overviewActionBarContainer}>
@@ -215,14 +190,6 @@ export const OverviewPageContent = ({
               fullWidth={isSm}
             >
               {t('api_delegation.delegate_new_org')}
-            </Button>
-            <Button
-              variant={ButtonVariant.Outline}
-              onClick={testEndpoint}
-              icon={<Add />}
-              fullWidth={isSm}
-            >
-              Test API
             </Button>
           </div>
         )}
