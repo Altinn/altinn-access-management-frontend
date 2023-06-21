@@ -1,6 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
+
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
     /// <summary>
@@ -47,7 +47,5 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="delegation">delegation to be performed</param>
         /// <returns></returns>
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
-
-        public async Task<List<DelegationCapabiltiesResponse>> RequestCanDelegateAccess(SingleRightDelegationInputDto request);
     }
 }

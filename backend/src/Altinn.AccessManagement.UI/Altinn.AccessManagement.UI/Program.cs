@@ -211,7 +211,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
-
+    services.AddSingleton<IDelegationService, SingleRightService>();
+    services.AddHttpClient<IDelegationClient, DelegationClient>();
     if (builder.Environment.IsDevelopment())
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();

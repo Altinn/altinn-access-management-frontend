@@ -1,4 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
+using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
+
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
@@ -9,9 +11,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         ///     Checks whether the user can delegate the given right to the given party
         /// </summary>
-        /// <param name="party">party</param>
-        /// <param name="delegation">delegation to be revoked</param>
+        /// <param name="partyId">
+        /// Used to identify the party the authenticated user is acting on behalf of./param>
+        /// <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
         /// <returns></returns>
-        Task<bool> UserDelegationCheck(string party, SingleRightDelegationInputDto request);
+        List<DelegationCapabiltiesResponse> UserDelegationAccessCheck(string partyId, SingleRightDelegationInputDto request);
     }
 }

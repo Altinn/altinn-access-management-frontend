@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
+
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>

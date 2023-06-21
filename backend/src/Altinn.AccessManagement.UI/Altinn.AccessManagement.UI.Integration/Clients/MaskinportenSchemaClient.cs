@@ -12,6 +12,7 @@ using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
@@ -31,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         };
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaClient" /> class
+        /// Initializes a new instance of the <see cref="MaskinportenSchemaClient" /> class
         /// </summary>
         public MaskinportenSchemaClient(
             HttpClient httpClient,
@@ -63,11 +64,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     List<MaskinportenSchemaDelegation> inboundDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(responseContent, _serializerOptions);
                     return inboundDelegations;
                 }
+
                 _logger.LogError("Getting received delegations from accessmanagement failed with {StatusCode}", response.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // GetInboundDelegations // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // MaskinportenSchemaClient // GetInboundDelegations // Exception");
                 throw;
             }
 
@@ -90,6 +92,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     List<MaskinportenSchemaDelegation> outboundDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(responseContent, _serializerOptions);
                     return outboundDelegations;
                 }
+
                 _logger.LogError("Getting offered delegations from accessmanagement failed with {StatusCode}", response.StatusCode);
             }
             catch (Exception ex)
