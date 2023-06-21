@@ -1,4 +1,4 @@
-export enum RouterPath {
+export enum ApiDelegationPath {
   OfferedApiDelegations = 'offered-api-delegations',
   Overview = 'overview',
   ChooseApi = 'choose-api',
@@ -6,6 +6,4 @@ export enum RouterPath {
   Confirmation = 'confirmation',
   Receipt = 'receipt',
   ReceivedApiDelegations = 'received-api-delegations',
-  Profile = 'ui/Profile',
-  BasePath = '/accessmanagement/ui',
 }

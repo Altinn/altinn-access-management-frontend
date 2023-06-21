@@ -4,10 +4,10 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { RouterPath } from '@/routes/Router';
+import { ApiDelegationPath } from '@/routes/paths';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { PageContainer } from '@/components';
-import { SummaryPage } from '@/components/SummaryPage';
+import { SummaryPage } from '@/features/apiDelegation/components/SummaryPage';
 import type { DelegationRequest } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import {
   postApiDelegation,
@@ -25,7 +25,7 @@ export const ConfirmationPage = () => {
 
   useEffect(() => {
     if (!loading) {
-      navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt);
+      navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt);
     }
   }, [loading]);
 
@@ -51,7 +51,9 @@ export const ConfirmationPage = () => {
       <SummaryPage
         delegableApis={chosenApis}
         delegableOrgs={chosenOrgs}
-        restartProcessPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseOrg}
+        restartProcessPath={
+          '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+        }
         pageHeaderText={t('api_delegation.give_access_to_new_api')}
         topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
         bottomListText={String(t('api_delegation.confirmation_page_content_second_text'))}

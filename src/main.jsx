@@ -8,12 +8,13 @@ import { use } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import { RefreshToken } from '@/resources/Token/RefreshToken';
-import { Router } from '@/routes/Router';
+import { Router } from '@/routes/Router/Router';
 
 import { getConfig } from '../config';
 
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
+
 import '@/resources/css/Common.module.css';
 
 /**

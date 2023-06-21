@@ -1,8 +1,8 @@
-import { RouterPath } from '@/routes/Router';
+import { ApiDelegationPath } from '@/routes/paths';
 
-describe(RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview, () => {
+describe(ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview, () => {
   it('renders correctly', () => {
-    cy.visit(RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview);
+    cy.visit(ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
   });
 });
 

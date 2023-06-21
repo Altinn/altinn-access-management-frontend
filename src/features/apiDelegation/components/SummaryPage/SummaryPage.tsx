@@ -4,6 +4,7 @@ import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import cn from 'classnames';
 
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
@@ -24,10 +25,10 @@ import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegab
 import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
-import { RouterPath } from '@/routes/Router';
+import { ApiDelegationPath } from '@/routes/paths';
 import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
-import { ListTextColor } from '../CompactDeletableListItem/CompactDeletableListItem';
+import { ListTextColor } from '../../../../components/CompactDeletableListItem/CompactDeletableListItem';
 
 import classes from './SummaryPage.module.css';
 
@@ -41,6 +42,7 @@ export interface SummaryPageProps {
   headerIcon: React.ReactNode;
   headerColor?: PageColor;
   topListText?: string;
+  failedDelegationText?: string;
   bottomListText?: string;
   bottomText?: string;
   confirmationButtonClick?: () => void;
@@ -58,6 +60,7 @@ export const SummaryPage = ({
   headerColor = PageColor.Primary,
   headerIcon,
   topListText,
+  failedDelegationText,
   bottomListText,
   bottomText,
   confirmationButtonClick,
@@ -104,8 +107,8 @@ export const SummaryPage = ({
         <CompactDeletableListItem
           key={index}
           contentColor={ListTextColor.error}
-          leftText={apiDelegation.apiName}
-          middleText={apiDelegation.orgName}
+          middleText={apiDelegation.apiName}
+          leftText={apiDelegation.orgName}
         ></CompactDeletableListItem>
       );
     },
@@ -116,8 +119,8 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          leftText={apiDelegation.apiName}
-          middleText={apiDelegation.orgName}
+          middleText={apiDelegation.apiName}
+          leftText={apiDelegation.orgName}
         ></CompactDeletableListItem>
       );
     },
@@ -147,7 +150,7 @@ export const SummaryPage = ({
 
   const navigateToOverview = () => {
     dispatch(setOveviewToReload());
-    navigate('/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Overview);
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
   };
 
   return (
@@ -193,6 +196,7 @@ export const SummaryPage = ({
                   )}
                 </div>
               )}
+              <h3 className={classes.infoText}>{failedDelegationText}</h3>
               {showBottomSection() && (
                 <div>
                   <h2 className={classes.bottomListText}>{bottomListText}</h2>
@@ -204,12 +208,19 @@ export const SummaryPage = ({
                   )}
                 </div>
               )}
-              <h3 className={classes.bottomText}>{bottomText}</h3>
+              <h3 className={classes.infoText}>{bottomText}</h3>
               {showNavigationButtons ? (
                 <NavigationButtons
-                  previousPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.ChooseApi}
+                  previousPath={
+                    '/' +
+                    ApiDelegationPath.OfferedApiDelegations +
+                    '/' +
+                    ApiDelegationPath.ChooseApi
+                  }
                   previousText={t('api_delegation.previous')}
-                  nextPath={'/' + RouterPath.OfferedApiDelegations + '/' + RouterPath.Receipt}
+                  nextPath={
+                    '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt
+                  }
                   nextText={t('api_delegation.confirm_delegation')}
                   nextDisabled={confirmationButtonDisabled}
                   nextLoading={confirmationButtonLoading}

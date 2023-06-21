@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 
-import { Line } from '../Line';
 import { ActionBar, type ActionBarProps } from '../ActionBar';
 import ScopeList from '../ScopeList/ScopeList';
 
@@ -73,16 +72,13 @@ export const DelegationActionBar = ({
       <div className={classes.newApiAccordionContent}>
         {scopeList.length > 0 && (
           <div>
-            <p className={classes.scopeText}>{t('api_delegation.scopes')}:</p>
+            <h4 className={classes.h4Text}>{t('api_delegation.scopes')}:</h4>
             <ScopeList scopeList={scopeList} />
           </div>
         )}
         {topContentText && (
           <div>
-            <div className={classes.line}>
-              <Line />
-            </div>
-            <p className={classes.scopeText}>{t('api_delegation.description')}</p>
+            <h4 className={classes.h4Text}>{t('api_delegation.description')}</h4>
             <div className={classes.contentTexts}>{topContentText}</div>
           </div>
         )}
@@ -91,10 +87,7 @@ export const DelegationActionBar = ({
         )}
         {bottomContentText && (
           <div>
-            <div className={classes.line}>
-              <Line />
-            </div>
-            <p className={classes.scopeText}>{t('api_delegation.additional_description')}</p>
+            <h4 className={classes.h4Text}>{t('api_delegation.additional_description')}</h4>
             <div className={classes.bottomContentTexts}>{bottomContentText}</div>
           </div>
         )}

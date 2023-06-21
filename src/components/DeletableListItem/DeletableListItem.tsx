@@ -66,7 +66,7 @@ export const DeletableListItem = ({
           })}
         >
           <div className={classes.listItemTexts}>
-            <div className={classes.apiListItem}>{item.apiName}</div>
+            <h4 className={classes.apiListItem}>{item.apiName}</h4>
             <div className={classes.ownerListItem}>{item.owner}</div>
             {scopes && (
               <div className={classes.scopeListContainer}>
