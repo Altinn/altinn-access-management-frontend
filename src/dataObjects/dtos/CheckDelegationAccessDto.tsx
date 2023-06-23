@@ -19,7 +19,7 @@ export class CheckDelegationAccessDto {
   /**
    * Represents an array of resource objects.
    */
-  resources: Array<{
+  resource: {
     /**
      * The Altinn ID of what field etc. of the thing that's going to be delegated.
      */
@@ -28,7 +28,7 @@ export class CheckDelegationAccessDto {
      * The ID value of the specific thing that's going to be delegated.
      */
     value: string;
-  }>;
+  };
 
   /**
    * Initializes a new instance of the DelegationInputDto class.
@@ -39,6 +39,6 @@ export class CheckDelegationAccessDto {
    */
   constructor(toId: string, toValue: string, resourceId: string, resourceValue: string) {
     this.to = { id: toId, value: toValue };
-    this.resources = [{ id: resourceId, value: resourceValue }];
+    this.resource = { id: resourceId, value: resourceValue };
   }
 }
