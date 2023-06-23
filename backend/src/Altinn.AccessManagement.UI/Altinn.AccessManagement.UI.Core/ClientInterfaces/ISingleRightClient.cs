@@ -1,5 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -15,6 +14,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     Used to identify the party the authenticated user is acting on behalf of./param>
         ///     <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
         ///     <returns></returns>
-        Task<List<UserDelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
+        Task<List<DelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
     }
 }

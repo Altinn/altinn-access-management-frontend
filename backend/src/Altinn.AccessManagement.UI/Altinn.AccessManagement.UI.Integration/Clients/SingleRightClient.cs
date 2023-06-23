@@ -5,8 +5,7 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -45,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<UserDelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
+        public async Task<List<DelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
         {
             try
             {
@@ -57,15 +56,27 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<UserDelegationAccessCheckResponse>>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<List<DelegationAccessCheckResponse>>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("Checking delegation accesses failed with {StatusCode}", response.StatusCode);
-                List<UserDelegationAccessCheckResponse> errorObject = new List<UserDelegationAccessCheckResponse>
+                if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    new UserDelegationAccessCheckResponse("Error", new List<Resource>(), string.Empty, string.Empty, string.Empty, string.Empty, new List<Role>()),
-                };
-                return errorObject;
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    HttpErrorResponse errorObject = JsonSerializer.Deserialize<HttpErrorResponse>(responseContent, _serializerOptions);
+
+                    Resource resource = new Resource(request.Resource.Id, request.Resource.Value);
+                    List<Resource> resources = new List<Resource>();
+                    resources.Add(resource);
+
+                    var errorReponseList = new List<DelegationAccessCheckResponse>
+                    {
+                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<Role>(), errorObject),
+                    };
+                    return errorReponseList;
+                }
+                
+                _logger.LogError("Checking delegation accesses failed with {StatusCode}", response.StatusCode);
+                return null;
             }
             catch (Exception ex)
             {

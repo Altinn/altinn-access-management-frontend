@@ -1,4 +1,4 @@
-namespace Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate
+namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
 {
     /// <summary>
     ///     The To object for the delegation

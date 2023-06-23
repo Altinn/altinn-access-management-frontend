@@ -1,7 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -22,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<UserDelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request)
+        public async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request)
         {
             /* remove this comment when backend is up and add json serialization of the response.
              * Also make sure Errors are returned correctly

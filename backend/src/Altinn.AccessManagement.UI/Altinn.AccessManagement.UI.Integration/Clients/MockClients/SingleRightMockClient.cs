@@ -1,8 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
@@ -10,9 +9,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
     /// <inheritdoc />
     public class SingleRightMockClient : ISingleRightMockClient
     {
-        private readonly HttpClient _client; 
+        private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        
+
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -29,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
         }
 
         /// <inheritdoc />
-        public List<UserDelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
+        public List<DelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
         {
             Random random = new Random();
             int randomNumber = random.Next(1, 4);
@@ -47,11 +46,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
             return ProduceStaticCanDelegateResponseAllAccesses();
         }
 
-        private List<UserDelegationAccessCheckResponse> ProduceStaticCanDelegateResponseOnlyRead()
+        private List<DelegationAccessCheckResponse> ProduceStaticCanDelegateResponseOnlyRead()
         {
-            List<UserDelegationAccessCheckResponse> responses = new List<UserDelegationAccessCheckResponse>
+            List<DelegationAccessCheckResponse> responses = new List<DelegationAccessCheckResponse>
             {
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/read",
                     new List<Resource>
                     {
@@ -67,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/write",
                     new List<Resource>
                     {
@@ -83,7 +82,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/sign",
                     new List<Resource>
                     {
@@ -104,11 +103,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
             return responses;
         }
 
-        private List<UserDelegationAccessCheckResponse> ProduceStaticCanDelegateResponseReadAndWrite()
+        private List<DelegationAccessCheckResponse> ProduceStaticCanDelegateResponseReadAndWrite()
         {
-            List<UserDelegationAccessCheckResponse> responses = new List<UserDelegationAccessCheckResponse>
+            List<DelegationAccessCheckResponse> responses = new List<DelegationAccessCheckResponse>
             {
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/read",
                     new List<Resource>
                     {
@@ -124,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/write",
                     new List<Resource>
                     {
@@ -140,7 +139,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/sign",
                     new List<Resource>
                     {
@@ -161,11 +160,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
             return responses;
         }
 
-        private List<UserDelegationAccessCheckResponse> ProduceStaticCanDelegateResponseAllAccesses()
+        private List<DelegationAccessCheckResponse> ProduceStaticCanDelegateResponseAllAccesses()
         {
-            List<UserDelegationAccessCheckResponse> responses = new List<UserDelegationAccessCheckResponse>
+            List<DelegationAccessCheckResponse> responses = new List<DelegationAccessCheckResponse>
             {
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/read",
                     new List<Resource>
                     {
@@ -181,7 +180,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/write",
                     new List<Resource>
                     {
@@ -197,7 +196,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients.MockClients
                     {
                         new Role("RoleRequirements", "DAGL, REGNA"),
                     }),
-                new UserDelegationAccessCheckResponse(
+                new DelegationAccessCheckResponse(
                     "ttd-am-k6/sign",
                     new List<Resource>
                     {
