@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Tests.Mocks
                 string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
                 List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
 
-                foreach(MaskinportenSchemaDelegation d in delegations)
+                foreach (MaskinportenSchemaDelegation d in delegations)
                 {
                     if (d.OfferedByPartyId.ToString() == party &&
                         d.CoveredByOrganizationNumber == toMatch.Value &&

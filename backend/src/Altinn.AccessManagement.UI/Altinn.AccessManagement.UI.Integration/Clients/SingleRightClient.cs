@@ -1,6 +1,10 @@
+using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Extensions;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -24,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         };
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SingleRightClient" /> class
+        ///     Initializes a new instance of the <see cref="SingleRightClient" />
         /// </summary>
         public SingleRightClient(
             IHttpContextAccessor httpContextAccessor,
@@ -41,9 +45,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public List<UserDelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
+        public async Task<List<UserDelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request)
         {
-            /* Remove outcommented code when integrating with backend
             try
             {
                 string endpointUrl = $"{partyId}/rights/delegation/userdelegationcheck";
@@ -54,75 +57,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<DelegationCapabiltiesResponse>>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<List<UserDelegationAccessCheckResponse>>(responseContent, _serializerOptions);
                 }
+
                 _logger.LogError("Checking delegation accesses failed with {StatusCode}", response.StatusCode);
+                List<UserDelegationAccessCheckResponse> errorObject = new List<UserDelegationAccessCheckResponse>
+                {
+                    new UserDelegationAccessCheckResponse("Error", new List<Resource>(), string.Empty, string.Empty, string.Empty, string.Empty, new List<Role>()),
+                };
+                return errorObject;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // UserDelegationAccessCheck // Exception");
                 throw;
             }
-             */
-            // Delete line below when integrating with backend
-            return ProduceStaticCanDelegateResponse();
-        }
-
-        private List<UserDelegationAccessCheckResponse> ProduceStaticCanDelegateResponse()
-        {
-            List<UserDelegationAccessCheckResponse> responses = new List<UserDelegationAccessCheckResponse>
-            {
-                new UserDelegationAccessCheckResponse(
-                    "ttd-am-k6/read",
-                    new List<Resource>
-                    {
-                        new Resource(
-                            "urn:altinn:resource",
-                            "ttd-am-k6"),
-                    },
-                    "read",
-                    "Delegable",
-                    string.Empty,
-                    string.Empty,
-                    new List<Role>
-                    {
-                        new Role("RoleRequirements", "DAGL, REGNA"),
-                    }),
-                new UserDelegationAccessCheckResponse(
-                    "ttd-am-k6/write",
-                    new List<Resource>
-                    {
-                        new Resource(
-                            "urn:altinn:resource",
-                            "ttd-am-k6"),
-                    },
-                    "write",
-                    "NotDelegable",
-                    "UserMissingRight",
-                    "User does not match any of the required role requirements (DAGL, REGNA)",
-                    new List<Role>
-                    {
-                        new Role("RoleRequirements", "DAGL, REGNA"),
-                    }),
-                new UserDelegationAccessCheckResponse(
-                    "ttd-am-k6/sign",
-                    new List<Resource>
-                    {
-                        new Resource(
-                            "urn:altinn:resource",
-                            "ttd-am-k6"),
-                    },
-                    "sign",
-                    "NotDelegable",
-                    "UserMissingRight",
-                    "User does not match any of the required role requirements (DAGL, REGNA)",
-                    new List<Role>
-                    {
-                        new Role("RoleRequirements", "DAGL, REGNA"),
-                    }),
-            };
-
-            return responses;
         }
     }
 }

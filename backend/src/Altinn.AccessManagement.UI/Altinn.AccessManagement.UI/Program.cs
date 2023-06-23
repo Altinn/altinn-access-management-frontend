@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.Configuration;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -8,6 +9,7 @@ using Altinn.AccessManagement.UI.Extensions;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
+using Altinn.AccessManagement.UI.Integration.Clients.MockClients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Common.AccessToken;
 using Altinn.Common.AccessToken.Services;
@@ -214,6 +216,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
     services.AddHttpClient<ISingleRightClient, SingleRightClient>();
+    services.AddHttpClient<ISingleRightMockClient, SingleRightMockClient>();
     if (builder.Environment.IsDevelopment())
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();

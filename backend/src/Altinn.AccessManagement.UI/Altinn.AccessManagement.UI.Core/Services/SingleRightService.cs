@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.SingleRightDelegationInputDto;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -9,13 +10,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SingleRightService : ISingleRightService
     {
         private readonly ISingleRightClient _singleRightClient;
+        private readonly ISingleRightMockClient _singleRightMockClient;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SingleRightService" /> class
         /// </summary>
-        public SingleRightService(ISingleRightClient singleRightClient)
+        public SingleRightService(ISingleRightClient singleRightClient, ISingleRightMockClient singleRightMockClient)
         {
             _singleRightClient = singleRightClient;
+            _singleRightMockClient = singleRightMockClient;
         }
 
         /// <inheritdoc />
@@ -45,7 +48,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
              * 
              */
 
-            return _singleRightClient.UserDelegationAccessCheck(partyId, request);
+            bool isMock = string.Equals(Environment.GetEnvironmentVariable("MOCK_MODE"), "mock", StringComparison.OrdinalIgnoreCase);
+
+            if (isMock)
+            {
+                return _singleRightMockClient.UserDelegationAccessCheck(partyId, request);
+            }
+
+            return await _singleRightClient.UserDelegationAccessCheck(partyId, request);
         }
     }
 }

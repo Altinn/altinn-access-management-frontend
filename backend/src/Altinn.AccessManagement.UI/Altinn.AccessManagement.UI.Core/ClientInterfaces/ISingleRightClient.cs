@@ -4,7 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.SingleRight.CanDelegate.
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
-    ///     Interface for client to do delegations in access-managment
+    ///     Interface for client to make single right requests to access-managment
     /// </summary>
     public interface ISingleRightClient
     {
@@ -15,6 +15,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     Used to identify the party the authenticated user is acting on behalf of./param>
         ///     <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
         ///     <returns></returns>
-        List<UserDelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
+        Task<List<UserDelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
     }
 }
