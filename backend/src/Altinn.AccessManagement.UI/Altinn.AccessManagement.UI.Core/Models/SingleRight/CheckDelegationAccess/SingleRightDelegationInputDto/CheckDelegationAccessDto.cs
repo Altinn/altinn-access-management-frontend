@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
+namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.SingleRightDelegationInputDto
 {
     /// <summary>
     ///     Checks whether the user can delegate the given right to the given party
@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
     public class CheckDelegationAccessDto
     {
         /// <summary>
-        ///     Checks whether the user can delegate the given right to the given party
+        ///     The To object used for delegation acccess check request object that's going to be consumed by the backend
         /// </summary>
         /// <param name="To">
         ///     Used to identify the party the authenticated user is acting on behalf of./param>
@@ -21,9 +21,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         public To To { get; set; }
 
         /// <summary>
-        ///     Checks whether the user can delegate the given right to the given party
+        ///     The Resource object for delegation acccess check request object that's going to be consumed by the backend
         /// </summary>
-        /// <param name="Resources">The delegation acccess check request object that's going to be consumed by the backend</param>
+        /// <param name="Resource">The delegation acccess check request object that's going to be consumed by the backend</param>
         /// <returns></returns>
         [Required]
         public Resource Resource { get; set; }

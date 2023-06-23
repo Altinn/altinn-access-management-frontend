@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.SingleRightDelegationInputDto;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -12,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ISingleRightMockClient _singleRightMockClient;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SingleRightService" /> class
+        ///     Initializes a new instance of the <see cref="SingleRightMockClient" /> class
         /// </summary>
         public SingleRightService(ISingleRightClient singleRightClient, ISingleRightMockClient singleRightMockClient)
         {
