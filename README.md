@@ -36,13 +36,13 @@ components/
 Start with these names for your branch depending on what your branch includes.
 
   - bugfix/
+  - chore/
   - dependencies/
   - documentation/
   - enhancement/
   - feat/single-rights/issue-number
   - feat/api-delegations/issue-number
   - feat/general/issue-number       (When it's not related to any features of the features above or relates to both)
-  - chore/
 
 ### ClassNames
 
