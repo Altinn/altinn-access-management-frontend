@@ -16,6 +16,7 @@
     "pflannery.vscode-versionlens",
     "github.copilot-chat",
     "ms-dotnettools.csdevkit",
-    "ms-dotnettools.csharp"
+    "ms-dotnettools.csharp",
+    "github.vscode-github-actions"
   ]
 }
