@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Altinn.AccessManagement.UI.Tests.Mocks;
+namespace Altinn.AccessManagement.UI.Mocks.Mocks;
 
     /// <summary>
     /// Class for mocking http responses when testing

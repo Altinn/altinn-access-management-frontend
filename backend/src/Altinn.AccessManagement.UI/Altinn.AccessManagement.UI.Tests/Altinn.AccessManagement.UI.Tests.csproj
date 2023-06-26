@@ -24,13 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj" />
     <ProjectReference Include="..\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Data\**">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 
-namespace Altinn.AccessManagement.UI.Tests.Mocks
+namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
     /// Mock class for <see cref="IKeyVaultService"></see> interface

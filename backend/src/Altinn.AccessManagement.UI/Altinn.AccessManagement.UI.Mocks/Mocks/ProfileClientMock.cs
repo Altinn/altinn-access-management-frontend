@@ -3,10 +3,9 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.Platform.Profile.Models;
 
-namespace Altinn.AccessManagement.UI.Tests.Mocks
+namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
     /// Mock class for <see cref="IProfileClient"></see> interface

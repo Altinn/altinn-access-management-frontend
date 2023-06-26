@@ -4,7 +4,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 
-namespace Altinn.AccessManagement.UI.Tests.Mocks
+namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
     /// Mock class for <see cref="IMaskinportenSchemaClient"></see> interface

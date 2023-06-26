@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Common.AccessTokenClient.Constants;
 using AltinnCore.Authentication.Constants;
 
-namespace Altinn.AccessManagement.UI.Tests.Utils
+namespace Altinn.AccessManagement.UI.Mocks.Utils
 {
     /// <summary>
     /// Utility class for usefull common operations for setup of authentication tokens for integration tests

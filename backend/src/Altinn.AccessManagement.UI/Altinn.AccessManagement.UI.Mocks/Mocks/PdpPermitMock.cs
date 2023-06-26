@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Altinn.Authorization.ABAC.Xacml.JsonProfile;
 using Altinn.Common.PEP.Interfaces;
 
-namespace Altinn.AccessManagement.UI.Tests.Mocks;
+namespace Altinn.AccessManagement.UI.Mocks.Mocks;
 
 /// <summary>
 /// tmp
