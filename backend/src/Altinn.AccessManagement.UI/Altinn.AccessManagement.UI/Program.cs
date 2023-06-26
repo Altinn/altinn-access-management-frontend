@@ -9,7 +9,6 @@ using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.Common.AccessToken.Services;
 using Altinn.Common.AccessTokenClient.Services;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
@@ -205,7 +204,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
     services.AddSingleton<IProfileService, ProfileService>();
-    services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
 
