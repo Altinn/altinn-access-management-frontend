@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
-            List<ServiceResource> resources = await _resourceAdministrationPoint.GetResources(resourceIds);
+            List<ServiceResource> resources = await _resourceAdministrationPoint.GetRegistryResources(resourceIds);
 
             List<MaskinportenSchemaDelegationFE> result = new List<MaskinportenSchemaDelegationFE>();
             foreach (MaskinportenSchemaDelegation delegation in delegations)

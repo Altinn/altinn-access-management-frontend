@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.AccessManagement.UI.Tests.Mocks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly CacheConfig _cacheConfig;
+        private readonly GeneralSettings _generalConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAdministrationPoint"/> class.
@@ -28,21 +30,39 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public ResourceAdministrationPoint(
             ILogger<IResourceAdministrationPoint> logger, 
             IResourceRegistryClient resourceRegistryClient,
+            Altinn.AccessManagement.UI.Tests.Mocks.IResourceRegistryClient resourceRegistryClientMock,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig)
+            IOptions<CacheConfig> cacheConfig,
+            IOptions<GeneralSettings> generalConfig)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
+            _generalConfig = generalConfig.Value; 
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType, string languageCode)
+        public async Task<List<ServiceResourceFE>> GetExtendedResources(string languageCode)
         {
             try
             {
-                List<ServiceResource> resources = await GetResources();
+                List<ServiceResource> resources = await GetExtendedResources();
+                return MapResourceToFrontendModel(resources, languageCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//ResourceAdministrationPoint //GetResources by resourcetype failed to fetch resources", ex);
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ServiceResourceFE>> GetRegistryResources(ResourceType resourceType, string languageCode)
+        {
+            try
+            {
+                List<ServiceResource> resources = await GetRegistryResources();
                 List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType);
                 return MapResourceToFrontendModel(resourceList, languageCode);
             }
@@ -54,11 +74,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetResources(string scopes)
+        public async Task<List<ServiceResource>> GetRegistryResources(string scopes)
         {
             List<ServiceResource> filteredResources = new List<ServiceResource>();
 
-            List<ServiceResource> resources = await GetResources();
+            List<ServiceResource> resources = await GetRegistryResources();
 
             foreach (ServiceResource resource in resources)
             {
@@ -75,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetResources(List<string> resourceIds)
+        public async Task<List<ServiceResource>> GetRegistryResources(List<string> resourceIds)
         {
             List<ServiceResource> filteredResources = new List<ServiceResource>();
 
@@ -85,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     ServiceResource resource = null;
 
-                    resource = await GetResource(id);
+                    resource = await GetRegistryResource(id);
 
                     if (resource == null)
                     {
@@ -118,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<ServiceResource> GetResource(string resourceRegistryId)
+        public async Task<ServiceResource> GetRegistryResource(string resourceRegistryId)
         {
             string cacheKey = $"rrId:{resourceRegistryId}";
 
@@ -136,7 +156,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resource;
         }
 
-        private async Task<List<ServiceResource>> GetResources()
+        private async Task<List<ServiceResource>> GetRegistryResources()
         {
             string cacheKey = $"resources:all";
 
@@ -152,6 +172,31 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resources;
+        }
+
+        private async Task<List<ServiceResource>> GetExtendedResources()
+        {
+            string cacheKey = $"resources:extended";
+            if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
+            {
+                if (_generalConfig.UseMockData)
+                {
+                    // Use mock data
+                    resources = new List<ServiceResource>();
+                }
+                else
+                {
+                    resources = await _resourceRegistryClient.GetResources();
+                }
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.High)
+               .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+
+                _memoryCache.Set(cacheKey, resources, cacheEntryOptions);
+            }
+
+            return resources;
+
         }
 
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)

@@ -14,6 +14,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1/resources")]
     public class ResourceController : ControllerBase
     {
         private readonly ILogger _logger;
@@ -46,14 +47,38 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of API service resources</returns>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/resources/maskinportenschema")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> Get()
+        [Route("maskinportenschema")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> GetMaskinportendchema()
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
-            return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
+            return await _rap.GetRegistryResources(ResourceType.MaskinportenSchema, languageCode);
+        }
+
+        /// <summary>
+        /// Search through all delegable service resources
+        /// </summary>
+        /// <returns>List of all delegable service resources</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("search")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> SearchExtended([FromQuery] PaginatedSearchParams parameters)
+        {
+            if (parameters is null)
+            {
+                // Do we need this? Should be able to get all if null...
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            Console.Write("##########################\n" + parameters.ToString() + "\n\n\n ####################");
+
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+
+            return await _rap.GetExtendedResources(languageCode);
         }
     }
 }
