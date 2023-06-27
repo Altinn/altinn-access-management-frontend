@@ -213,7 +213,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
     services.AddHttpClient<ISingleRightClient, SingleRightClient>();
-    services.AddHttpClient<ISingleRightMockClient, SingleRightMockClient>();
+    services.AddTransient<ISingleRightMockClient, SingleRightMockClient>();
     if (builder.Environment.IsDevelopment())
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();

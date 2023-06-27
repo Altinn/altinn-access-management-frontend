@@ -28,8 +28,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj"/>
-        <ProjectReference Include="..\Altinn.AccessManagement.UI.Integration\Altinn.AccessManagement.UI.Integration.csproj"/>
+        <ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
+        <ProjectReference Include="..\Altinn.AccessManagement.UI.Integration\Altinn.AccessManagement.UI.Integration.csproj" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)'=='Debug'">
         <AdditionalFiles Include="$(SolutionDir)stylecop.json">
@@ -37,7 +37,7 @@
         </AdditionalFiles>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="wwwroot\accessmanagement\"/>
+        <Folder Include="wwwroot\accessmanagement\" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">

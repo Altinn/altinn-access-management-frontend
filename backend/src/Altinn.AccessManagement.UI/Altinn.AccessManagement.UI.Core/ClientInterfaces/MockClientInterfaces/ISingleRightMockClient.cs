@@ -1,5 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.CheckDelegationAccessDto;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces
 {
@@ -16,5 +16,29 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces
         ///     <param name="request">The delegation access check request object that's going to be consumed by the backend</param>
         ///     <returns>List<UserDelegationAccessCheckResponse></UserDelegationAccessCheckResponse></returns>
         List<DelegationAccessCheckResponse> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
+
+        /// <summary>
+        ///     Produces a List<DelegationAccessCheckResponse> with only read access
+        /// </summary>
+        /// <returns>List<DelegationAccessCheckResponse></returns>
+        List<DelegationAccessCheckResponse> ProduceUserDelegationAccessCheckNoAccesses();
+
+        /// <summary>
+        ///     Produces a List<DelegationAccessCheckResponse> with only read access
+        /// </summary>
+        /// <returns>List<DelegationAccessCheckResponse></returns>
+        List<DelegationAccessCheckResponse> ProduceUserDelegationAccessCheckOnlyRead();
+
+        /// <summary>
+        ///     Produces a List<DelegationAccessCheckResponse> with read and write access
+        /// </summary>
+        /// <returns></returns>
+        List<DelegationAccessCheckResponse> ProduceUserDelegationAccessCheckReadAndWrite();
+
+        /// <summary>
+        ///     Produces a List<DelegationAccessCheckResponse> with all accesses
+        /// </summary>
+        /// <returns></returns>
+        List<DelegationAccessCheckResponse> ProduceUserDelegationAccessCheckAllAccesses();
     }
 }

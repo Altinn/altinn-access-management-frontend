@@ -1,5 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.CheckDelegationAccessDto;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {

@@ -1,7 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.SingleRightDelegationInputDto;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.CheckDelegationAccessDto;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -24,31 +24,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request)
         {
-            /* remove this comment when backend is up and add json serialization of the response.
-             * Also make sure Errors are returned correctly
-             *
-             * HttpResponseMessage response = await _delegationClient.UserDelegationAccessCheck(partyId, request);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    ValidationProblemDetails problemDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(responseContent, _serializerOptions);
-                    return new ObjectResult(problemDetails);
-                }
-                else
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
-                }
-                return response;
-             * 
-             */
-
-            bool isMock = string.Equals(Environment.GetEnvironmentVariable("MOCK_MODE"), "mock", StringComparison.OrdinalIgnoreCase);
+            bool isMock = true;
 
             if (isMock)
             {

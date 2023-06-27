@@ -9,12 +9,12 @@ using Altinn.AccessManagement.UI.Tests.Controllers;
 namespace Altinn.AccessManagement.UI.Tests.Utils
 {
     /// <summary>
-    /// Mock class for helping setup test data
+    ///     Mock class for helping setup test data
     /// </summary>
     public static class TestDataUtil
     {
         /// <summary>
-        /// Gets a list of service resources
+        ///     Gets a list of service resources
         /// </summary>
         /// <param name="resourceType">the resource type.</param>
         /// <returns>Returns thelist of service resources.</returns>
@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             if (File.Exists(path))
             {
                 string content = File.ReadAllText(path);
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
 
             filteredResources = resources.FindAll(r => r.ResourceType == resourceType);
-            
+
 
             return filteredResources;
         }
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             if (File.Exists(path))
             {
                 string content = File.ReadAllText(path);
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
@@ -58,13 +58,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
 
             filteredResources = resources.FindAll(r => r.ResourceType == resourceType);
-           
+
 
             return filteredResources;
         }
 
         /// <summary>
-        /// Sets up mock data for delegation list 
+        ///     Sets up mock data for delegation list
         /// </summary>
         /// <param name="offeredByPartyId">partyid of the reportee that delegated the resource</param>
         /// <param name="coveredByPartyId">partyid of the reportee that received the delegation</param>
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 fileName = offeredByPartyId != 0 ? "outbounddelegation" : "inbounddelegation";
             }
-            
+
             string path = GetDelegationPath();
             if (Directory.Exists(path))
             {
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     if (file.Contains(fileName))
                     {
                         string content = File.ReadAllText(Path.Combine(path, file));
-                        var options = new JsonSerializerOptions
+                        JsonSerializerOptions options = new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true,
                         };
@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                             delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
                         }
                         catch (Exception ex)
-                        { 
+                        {
                             Console.WriteLine(ex);
                         }
                     }
@@ -128,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Sets up mock data for delegation list 
+        ///     Sets up mock data for delegation list
         /// </summary>
         /// <param name="offeredByPartyId">partyid of the reportee that delegated the resource</param>
         /// <param name="coveredByPartyId">partyid of the reportee that received the delegation</param>
@@ -155,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 string file = $"{fileName}.json";
 
                 string content = File.ReadAllText(Path.Combine(path, file));
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
@@ -194,7 +194,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         private static string GetResourcesPath(string fileName)
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourceRegistry", $"{ fileName}.json");
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourceRegistry", $"{fileName}.json");
         }
     }
 }
