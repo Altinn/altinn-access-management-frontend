@@ -3,7 +3,11 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -15,7 +19,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <summary>
         /// Initializes a new instance of the <see cref="ProfileClientMock"/> class
         /// </summary>
-        public ProfileClientMock()
+        public ProfileClientMock(
+            HttpClient httpClient,
+            ILogger<ProfileClientMock> logger,
+            IHttpContextAccessor httpContextAccessor,
+            IAccessTokenProvider accessTokenProvider)
         {
         }
 
@@ -35,8 +43,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private static string GetDataPathForProfile()
         {
-            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "Data", "Profile", "userprofile.json");
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return Path.Combine(mockClientFolder, "Data", "Profile", "userprofile.json");
         }
     }
 }
