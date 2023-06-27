@@ -17,8 +17,8 @@
     "architecture": "madge --extensions ts,tsx --image graph.svg src/"
   },
   "dependencies": {
-    "@altinn/altinn-design-system": "^0.27.6",
-    "@digdir/design-system-react": "^0.15.0",
+    "@altinn/altinn-design-system": "^0.29.0",
+    "@digdir/design-system-react": "^0.16.0",
     "@navikt/aksel-icons": "^4.1.5",
     "@reduxjs/toolkit": "^1.9.3",
     "@tanstack/react-query": "^4.0.5",
