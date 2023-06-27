@@ -10,7 +10,7 @@ categories:
       - 'kind/feature-request'
   - title: '🐛 Bug Fixes'
     labels:
-      - 'bugfix'
+      - 'kind/bug'
   - title: '🧰 Maintenance'
     labels:
       - 'kind/documentation'
