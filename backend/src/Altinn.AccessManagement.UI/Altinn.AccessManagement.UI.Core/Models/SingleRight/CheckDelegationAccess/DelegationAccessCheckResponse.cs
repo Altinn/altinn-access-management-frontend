@@ -3,7 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.C
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
 {
     /// <summary>
-    /// Represents the response of the backend.
+    ///     Represents the response of the backend.
     /// </summary>
     /// <param name="RightKey">The key for the right.</param>
     /// <param name="Resource">The list of resources.</param>
