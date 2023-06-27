@@ -1,6 +1,7 @@
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
 {
     /// <summary>
+    ///     Object for current http error response for CheckDelegationAccess
     /// </summary>
     /// <param name="Type">Type of error</param>
     /// <param name="Title">Title of error</param>
