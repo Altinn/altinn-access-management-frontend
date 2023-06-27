@@ -7,7 +7,7 @@ template: |
 categories:
   - title: '🚀 Features'
     labels:
-      - 'feature'
+      - 'kind/feature-request'
   - title: '🐛 Bug Fixes'
     labels:
       - 'bugfix'
