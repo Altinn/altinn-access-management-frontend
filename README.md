@@ -35,16 +35,14 @@ components/
 ### Naming convention on branches
 Start with these names for your branch depending on what your branch includes.
 
-  - automation/
   - bugfix/
+  - chore/
   - dependencies/
   - documentation/
   - enhancement/
   - feat/single-rights/issue-number
-  - feat/api-delegation/issue-number
-  - feat/general/issue-number       (When it's not related to any features)
-  - infrastructure/
-  - performance/
+  - feat/api-delegations/issue-number
+  - feat/general/issue-number       (When it's not related to any features of the features above or relates to both)
 
 ### ClassNames
 
@@ -152,7 +150,7 @@ To add test data to the app, do the following:
    ```
 
 ## Set up database: 
-  Download [PostgreSQL](https://www.postgresql.org/download/) (Currently using 14 in Azure, but 15 works locally) 
+  Download [PostgreSQL](https://www.postgresql.org/download/). USE INSTALLER, NOT HOMEBREW ON MAC. (Currently using 14 in deploy environments, but 15 works locally if you need those extra features 15 gives you)
 - Install database server (choose your own admin password and save it some place you can find it again)
 - Start PG admin
 - Create the following users by right clicking Login/Group Roles (with privileges for authorizationdb):
@@ -163,10 +161,10 @@ To add test data to the app, do the following:
 - Set platform_authorization_admin as owner
 
 ### Run backend and frontend
-- Open Altinn-Access-Management repo in an IDE and go to following folder.
+- Open Altinn-Access-Management repo in an IDE and go to following folder. IT IS AN OWN REPO FOUND HERE: https://github.com/Altinn/altinn-access-management
 
   ```bash
-   cd src/Altinn.AccessManagement
+   cd src/Altinn.AccessManagement.UI
    ```
 - ON MAC: change WorkspacePath in file: src/Altinn.AccessManagement/appsettings.Development.json to "Altinn.AccessManagement.Persistence/Migration".
 

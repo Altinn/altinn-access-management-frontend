@@ -7,17 +7,14 @@ template: |
 categories:
   - title: '🚀 Features'
     labels:
-      - 'feature'
-      - 'enhancement'
+      - 'kind/feature-request'
   - title: '🐛 Bug Fixes'
     labels:
-      - 'bugfix'
+      - 'kind/bug'
   - title: '🧰 Maintenance'
     labels:
-      - 'infrastructure'
-      - 'automation'
-      - 'documentation'
+      - 'kind/documentation'
       - 'dependencies'
-  - title: '🏎 Performance'
-    label: 'performance'
+      - 'enhancement'
+      - 'kind/chore'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'

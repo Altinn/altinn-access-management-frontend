@@ -9,9 +9,7 @@ using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.AccessManagement.UI.Tests.Mocks;
-using Altinn.Common.AccessToken;
-using Altinn.Common.AccessToken.Services;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessTokenClient.Services;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
@@ -20,7 +18,6 @@ using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -197,31 +194,31 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
-    services.AddHttpClient<IRegisterClient, RegisterClient>();
     services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
+
+    bool useMockData = config.GetValue<bool>("GeneralSettings:UseMockData", false);
+    if (useMockData == true)
+    {
+        services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
+        services.AddHttpClient<IRegisterClient, RegisterClientMock>();
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
+        services.AddHttpClient<IRegisterClient, RegisterClient>();
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
+    }
+
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IMaskinportenSchemaService, MaskinportenSchemaService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceAdministrationPoint, ResourceAdministrationPoint>();
     services.AddSingleton<IProfileService, ProfileService>();
-    services.AddSingleton<IAuthorizationHandler, AccessTokenHandler>();
-    services.AddTransient<ISigningKeysResolver, SigningKeysResolver>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
-
-    GeneralSettings genSettings = config.GetValue<GeneralSettings>("GeneralSettings");
-
-    if (genSettings?.UseMockData)
-    {
-        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
-    }
-    else
-    {
-        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
-    }
 
     if (builder.Environment.IsDevelopment())
     {

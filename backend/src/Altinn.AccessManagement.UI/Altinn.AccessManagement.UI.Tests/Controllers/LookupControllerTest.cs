@@ -1,10 +1,9 @@
 using System.Net;
 using System.Net.Http.Headers;
-using Altinn.AccessManagement.Tests.Mocks;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Tests.Mocks;
-using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.JwtCookie;

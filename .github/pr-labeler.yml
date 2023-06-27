@@ -1,7 +1,6 @@
-feature: ['feature/*', 'feat/*']
-bugfix: fix/*
-infrastructure: infrastructure/*
-automation: automation/*
-documentation: documentation/*
+kind/feature-request: ['feature/*', 'feat/*', 'kind/feature-request/*']
+kind/bug: ['bugfix/*', 'fix/*', 'kind/bug/*', 'bug/*']
+kind/documentation: ['documentation/*', 'docs/*', 'kind/documentation/*']
 enhancement: enhancement/*
+kind/chore: ['chore/*', 'kind/chore/*']
 dependencies: ['renovate/*']
