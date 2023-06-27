@@ -24,5 +24,10 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Language cookie name
         /// </summary>
         public string LanguageCookie { get; set; }
+
+        /// <summary>
+        /// Whether or not to use Mock data where available
+        /// </summary>
+        public bool UseMockData { get; set; }
     }
 }

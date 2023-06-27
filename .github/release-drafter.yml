@@ -7,10 +7,10 @@ template: |
 categories:
   - title: '🚀 Features'
     labels:
-      - 'feature'
+      - 'kind/feature-request'
   - title: '🐛 Bug Fixes'
     labels:
-      - 'bugfix'
+      - 'kind/bug'
   - title: '🧰 Maintenance'
     labels:
       - 'kind/documentation'

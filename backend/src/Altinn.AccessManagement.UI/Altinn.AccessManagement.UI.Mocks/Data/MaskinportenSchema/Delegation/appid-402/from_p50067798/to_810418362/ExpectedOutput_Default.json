@@ -1,0 +1,22 @@
+{
+  "to": [
+    {
+      "id": "urn:altinn:organizationnumber",
+      "value": "810418362"
+    }
+  ],
+  "rightDelegationResults": [
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-402"
+        }
+      ],
+      "action": {
+        "id": "urn:oasis:names:tc:xacml:1.0:action:action-id",
+        "value": "ScopeAccess"
+      }
+    }
+  ]
+}

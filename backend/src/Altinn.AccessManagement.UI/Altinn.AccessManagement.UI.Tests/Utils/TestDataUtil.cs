@@ -188,13 +188,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         private static string GetDelegationPath()
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "MaskinportenSchema");
+            return Path.Combine(unitTestFolder, "Data", "MaskinportenSchema");
         }
 
         private static string GetResourcesPath(string fileName)
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourceRegistry", $"{fileName}.json");
+            return Path.Combine(unitTestFolder, "Data", "ResourceRegistry", $"{ fileName}.json");
         }
     }
 }
