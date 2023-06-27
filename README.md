@@ -35,16 +35,14 @@ components/
 ### Naming convention on branches
 Start with these names for your branch depending on what your branch includes.
 
-  - automation/
   - bugfix/
+  - chore/
   - dependencies/
   - documentation/
   - enhancement/
   - feat/single-rights/issue-number
-  - feat/api-delegation/issue-number
-  - feat/general/issue-number       (When it's not related to any features)
-  - infrastructure/
-  - performance/
+  - feat/api-delegations/issue-number
+  - feat/general/issue-number       (When it's not related to any features of the features above or relates to both)
 
 ### ClassNames
 
