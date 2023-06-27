@@ -104,7 +104,7 @@
     "created": "2022-10-17T11:37:58.053427Z",
     "offeredbyorganizationNumber": "810419342",
     "CoveredByOrganizationNumber": "10008387",
-    "resourceid": "nav1_aa_distribution",
+    "resourceid": "nav_aa_distribution",
     "resourcetype": "MaskinportenSchema"
   },
   {
@@ -116,6 +116,30 @@
     "created": "2022-09-24T22:00:00Z",
     "offeredbyorganizationNumber": "810419342",
     "CoveredByOrganizationNumber": "10008387",
+    "resourceid": "skd_1",
+    "resourcetype": "MaskinportenSchema"
+  },
+  {
+    "coveredbyname": "VIKESÅ OG ÅLVUNDFJORD",
+    "offeredbyname": "KOLBJORNSVIK OG ROAN",
+    "offeredbypartyid": 50004226,
+    "coveredbypartyid": 50067798,
+    "performedbyuserid": 20000002,
+    "created": "2022-10-17T11:37:58.053427Z",
+    "offeredbyorganizationNumber": "810419342",
+    "CoveredByOrganizationNumber": "910510789",
+    "resourceid": "nav_aa_distribution",
+    "resourcetype": "MaskinportenSchema"
+  },
+  {
+    "coveredbyname": "VIKESÅ OG ÅLVUNDFJORD",
+    "offeredbyname": "KOLBJORNSVIK OG ROAN",
+    "offeredbypartyid": 50004226,
+    "coveredbypartyid": 50067798,
+    "performedbyuserid": 20000002,
+    "created": "2022-09-24T22:00:00Z",
+    "offeredbyorganizationNumber": "810419342",
+    "CoveredByOrganizationNumber": "910510789",
     "resourceid": "skd_1",
     "resourcetype": "MaskinportenSchema"
   }

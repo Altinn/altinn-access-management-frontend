@@ -3,6 +3,9 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -16,7 +19,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <summary>
         /// Initializes a new instance of the <see cref="MaskinportenSchemaClientMock"/> class
         /// </summary>
-        public MaskinportenSchemaClientMock()
+        public MaskinportenSchemaClientMock(
+            HttpClient httpClient,
+            ILogger<MaskinportenSchemaClientMock> logger,
+            IHttpContextAccessor httpContextAccessor)
         {
         }
 
@@ -126,13 +132,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private static string GetDataPathForDelegations()
         {
-            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "Data", "MaskinportenSchema");
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return Path.Combine(mockClientFolder, "Data", "MaskinportenSchema");
         }       
 
         private static string GetDataPathForDelegationOutput(string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
         {
-            return $"Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";            
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return $"{mockClientFolder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";            
         }
     }
 }

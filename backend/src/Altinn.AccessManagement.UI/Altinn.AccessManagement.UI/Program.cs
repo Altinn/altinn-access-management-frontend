@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessToken;
 using Altinn.Common.AccessToken.Services;
 using Altinn.Common.AccessTokenClient.Services;
@@ -196,12 +197,24 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
     services.AddHttpClient<IProfileClient, ProfileClient>();
-    services.AddHttpClient<IRegisterClient, RegisterClient>();
     services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
-    services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
+
+    bool useMockData = config.GetValue<bool>("GeneralSettings:UseMockData", false);
+    if (useMockData == true)
+    {
+        services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
+        services.AddHttpClient<IRegisterClient, RegisterClientMock>();
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
+        services.AddHttpClient<IRegisterClient, RegisterClient>();
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
+    }
+
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IMaskinportenSchemaService, MaskinportenSchemaService>();
     services.AddSingleton<ILookupService, LookupService>();

@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Headers;
-using Altinn.AccessManagement.Tests.Mocks;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;

@@ -142,5 +142,29 @@
     "CoveredByOrganizationNumber": "810418532",
     "resourceid": "skd_1",
     "resourcetype": "MaskinportenSchema"
+  },
+  {
+    "coveredbyname": "LUNDAMO OG FLEINVAR",
+    "offeredbyname": "VIKESÅ OG ÅLVUNDFJORD",
+    "offeredbypartyid": 50067798,
+    "coveredbypartyid": 50004221,
+    "performedbyuserid": 20000002,
+    "created": "2022-09-24T22:00:00Z",
+    "offeredbyorganizationNumber": "910510789",
+    "CoveredByOrganizationNumber": "810418532",
+    "resourceid": "skd_1",
+    "resourcetype": "MaskinportenSchema"
+  },
+  {
+    "coveredbyname": "NORDRE FROGN OG MORTENHALS",
+    "offeredbyname": "VIKESÅ OG ÅLVUNDFJORD",
+    "offeredbypartyid": 50067798,
+    "coveredbypartyid": 50004220,
+    "performedbyuserid": 20000002,
+    "created": "2022-09-24T22:00:00Z",
+    "offeredbyorganizationNumber": "910510789",
+    "CoveredByOrganizationNumber": "810418362",
+    "resourceid": "skd_1",
+    "resourcetype": "MaskinportenSchema"
   }
 ]
