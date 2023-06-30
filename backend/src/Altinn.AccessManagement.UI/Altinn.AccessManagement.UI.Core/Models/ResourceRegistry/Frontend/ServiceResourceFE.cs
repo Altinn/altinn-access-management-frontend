@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// The homepage
         /// </summary>
-        public string Homepage { get; set; }
+        public string? Homepage { get; set; }
 
         /// <summary>
         /// The status
@@ -63,5 +63,42 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ResourceType ResourceType { get; set; }
+
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, List<ResourceReference> resourceReferences, ResourceType resourceType, string homepage = null)
+        {
+            Identifier = identifier;
+            Title = title;
+            Description = description;
+            RightDescription = rightDescription;
+            Homepage = homepage;
+            Status = status;
+            ValidFrom = validFrom;
+            ValidTo = validTo;
+            ResourceOwnerName = resourceOwnerName;
+            ResourceReferences = resourceReferences;
+            ResourceType = resourceType;
+        }
+
+        /// <summary>
+        /// Constructor used when copying
+        /// </summary>
+        /// <param name="serviceResourceFE">The resource to be copied</param>
+        public ServiceResourceFE(ServiceResourceFE serviceResourceFE)
+        {
+            Identifier = serviceResourceFE.Identifier;
+            Title = serviceResourceFE.Title;
+            Description = serviceResourceFE.Description;
+            RightDescription = serviceResourceFE.RightDescription;
+            Homepage = serviceResourceFE.Homepage;
+            Status = serviceResourceFE.Status;
+            ValidFrom = serviceResourceFE.ValidFrom;
+            ValidTo = serviceResourceFE.ValidTo;
+            ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
+            ResourceReferences = serviceResourceFE.ResourceReferences;
+            ResourceType = serviceResourceFE.ResourceType;
+        }
     }
 }

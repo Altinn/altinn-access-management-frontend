@@ -1,13 +1,15 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.UI.Tests.Mocks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -30,7 +32,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public ResourceAdministrationPoint(
             ILogger<IResourceAdministrationPoint> logger, 
             IResourceRegistryClient resourceRegistryClient,
-            Altinn.AccessManagement.UI.Tests.Mocks.IResourceRegistryClient resourceRegistryClientMock,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig,
             IOptions<GeneralSettings> generalConfig)
@@ -43,12 +44,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetExtendedResources(string languageCode)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[] resourceOwnerFilters, string searchString, int page, int numPerPage)
         {
             try
             {
-                List<ServiceResource> resources = await GetExtendedResources();
-                return MapResourceToFrontendModel(resources, languageCode);
+                List<ServiceResource> resources = await GetFullResourceList();
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema);
+                List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
+
+                List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
+                List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
+                return PaginationUtils.GetListPage<ServiceResourceFE>(searchResults, page, numPerPage);
             }
             catch (Exception ex)
             {
@@ -58,11 +64,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetRegistryResources(ResourceType resourceType, string languageCode)
+        public async Task<List<ServiceResourceFE>> GetResources(ResourceType resourceType, string languageCode)
         {
             try
             {
-                List<ServiceResource> resources = await GetRegistryResources();
+                List<ServiceResource> resources = await GetResources();
                 List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType);
                 return MapResourceToFrontendModel(resourceList, languageCode);
             }
@@ -74,11 +80,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetRegistryResources(string scopes)
+        public async Task<List<ServiceResource>> GetResources(string scopes)
         {
             List<ServiceResource> filteredResources = new List<ServiceResource>();
 
-            List<ServiceResource> resources = await GetRegistryResources();
+            List<ServiceResource> resources = await GetResources();
 
             foreach (ServiceResource resource in resources)
             {
@@ -95,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetRegistryResources(List<string> resourceIds)
+        public async Task<List<ServiceResource>> GetResources(List<string> resourceIds)
         {
             List<ServiceResource> filteredResources = new List<ServiceResource>();
 
@@ -105,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     ServiceResource resource = null;
 
-                    resource = await GetRegistryResource(id);
+                    resource = await GetResource(id);
 
                     if (resource == null)
                     {
@@ -138,7 +144,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<ServiceResource> GetRegistryResource(string resourceRegistryId)
+        public async Task<ServiceResource> GetResource(string resourceRegistryId)
         {
             string cacheKey = $"rrId:{resourceRegistryId}";
 
@@ -156,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resource;
         }
 
-        private async Task<List<ServiceResource>> GetRegistryResources()
+        private async Task<List<ServiceResource>> GetResources()
         {
             string cacheKey = $"resources:all";
 
@@ -174,20 +180,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resources;
         }
 
-        private async Task<List<ServiceResource>> GetExtendedResources()
+        private async Task<List<ServiceResource>> GetFullResourceList()
         {
-            string cacheKey = $"resources:extended";
+            string cacheKey = $"resources:fulllist";
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
-                if (_generalConfig.UseMockData)
-                {
-                    // Use mock data
-                    resources = new List<ServiceResource>();
-                }
-                else
-                {
-                    resources = await _resourceRegistryClient.GetResources();
-                }
+                // TODO: Rewrite current GetResurces to use new API instead of search?
+                resources = await _resourceRegistryClient.GetResources();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.High)
                .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
@@ -199,22 +198,90 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         }
 
+        /// <summary>
+        /// Filters the provided list of resources based on provided resourceOwnerFilters.
+        /// <param name="resources">The list of resources to be filtered.</param>
+        /// <param name="resourceOwnerFilters">The list of resource owners to be included in the returned list.</param>
+        /// </summary>
+        /// <returns>List of filtered resources or all resources if the list of filters is null or empty</returns>
+        private List<ServiceResourceFE> FilterResourceList(List<ServiceResourceFE> resources, string[]? resourceOwnerFilters)
+        {
+            if (resourceOwnerFilters.IsNullOrEmpty())
+            {
+                return resources;
+            }
+
+            List<ServiceResourceFE> filteredResources = new List<ServiceResourceFE>();
+            string[] lowercaseResourceOwnerFilters = Array.ConvertAll(resourceOwnerFilters, d => d.ToLower());
+
+            foreach (ServiceResourceFE res in resources)
+            {
+                if (lowercaseResourceOwnerFilters.Contains(res.ResourceOwnerName.ToLower()))
+                {
+                    filteredResources.Add(res);
+                }
+            }
+
+            return filteredResources;
+        }
+
+        /// <summary>
+        /// Searches through a list of resources after occurences of the words in a search string, resturning a list of resources where at least one of these words are present.
+        /// <param name="resources">The list of resources to be searched through.</param>
+        /// <param name="searchString">The search string to be used for the search.</param>
+        /// </summary>
+        /// <returns>List of resources containing at least one word from the search string, ordered by the number of word occurences found. Returns the full list of resources if the search string is null or empty.</returns>
+        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string? searchString)
+        {
+            if (searchString.IsNullOrEmpty())
+            {
+                return resources;
+            }
+
+            List<SortableServiceResourceFE> matchedResources = new List<SortableServiceResourceFE>();
+            string[] searchWords = searchString.ToLower().Split();
+
+            foreach (ServiceResourceFE res in resources)
+            {
+                int numMatches = 0;
+
+                foreach ( string word in searchWords)
+                {
+                    if (res.Title.ToLower().Contains(word) || res.Description.ToLower().Contains(word) || res.RightDescription.ToLower().Contains(word))
+                    {
+                        numMatches++;
+                    }
+
+                }
+
+                if (numMatches > 0)
+                {
+                    matchedResources.Add(new SortableServiceResourceFE(res, numMatches));
+                }
+            }
+
+            List<SortableServiceResourceFE> sortedMatches = matchedResources.OrderByDescending(res => res.PriorityCounter).ToList();
+
+            return sortedMatches.Select(match => new ServiceResourceFE(match.Resource)).ToList();
+        }
+
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
         {
             List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
             foreach (var resource in resources)
             {
-                ServiceResourceFE resourceFE = new ServiceResourceFE();
-                resourceFE.Title = resource?.Title?.GetValueOrDefault(languageCode) ?? resource?.Title?.GetValueOrDefault("nb");
-                resourceFE.ResourceType = resource.ResourceType;
-                resourceFE.Status = resource?.Status;
-                resourceFE.ResourceReferences = resource?.ResourceReferences;
-                resourceFE.Identifier = resource?.Identifier;
-                resourceFE.ResourceOwnerName = resource?.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource?.HasCompetentAuthority?.Name?.GetValueOrDefault("nb");
-                resourceFE.RightDescription = resource?.RightDescription?.GetValueOrDefault(languageCode) ?? resource?.RightDescription?.GetValueOrDefault("nb");
-                resourceFE.Description = resource?.Description?.GetValueOrDefault(languageCode) ?? resource?.Description?.GetValueOrDefault("nb");
-                resourceFE.ValidFrom = resource.ValidFrom;
-                resourceFE.ValidTo = resource.ValidTo;
+                ServiceResourceFE resourceFE = new ServiceResourceFE(
+                    identifier: resource?.Identifier,
+                    title: resource?.Title?.GetValueOrDefault(languageCode) ?? resource?.Title?.GetValueOrDefault("nb"),
+                    resourceType: resource.ResourceType,
+                    status: resource?.Status,
+                    resourceReferences: resource?.ResourceReferences,
+                    resourceOwnerName: resource?.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource?.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                    rightDescription: resource?.RightDescription?.GetValueOrDefault(languageCode) ?? resource?.RightDescription?.GetValueOrDefault("nb"),
+                    description: resource?.Description?.GetValueOrDefault(languageCode) ?? resource?.Description?.GetValueOrDefault("nb"),
+                    validFrom: resource.ValidFrom,
+                    validTo: resource.ValidTo);
+                
                 resourceList.Add(resourceFE);
             }
 

@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -54,31 +55,23 @@ namespace Altinn.AccessManagement.UI.Controllers
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
-            return await _rap.GetRegistryResources(ResourceType.MaskinportenSchema, languageCode);
+            return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
 
         /// <summary>
-        /// Search through all delegable service resources
+        /// Search through all delegable service resources and returns matches
         /// </summary>
-        /// <returns>List of all delegable service resources</returns>
+        /// <returns>Paginated search results</returns>
         [HttpGet]
         [Authorize]
-        [Route("search")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> SearchExtended([FromQuery] PaginatedSearchParams parameters)
+        [Route("paginatedSearch")]
+        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> SearchExtended([FromQuery] PaginatedSearchParams parameters)
         {
-            if (parameters is null)
-            {
-                // Do we need this? Should be able to get all if null...
-                throw new ArgumentNullException(nameof(parameters));
-            }
-
-            Console.Write("##########################\n" + parameters.ToString() + "\n\n\n ####################");
-
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
-            return await _rap.GetExtendedResources(languageCode);
+            return await _rap.GetPaginatedSearchResults(languageCode, parameters.ServiceOwners, parameters.SearchString, parameters.CurrentPage, parameters.NumPerPage);
         }
     }
 }
