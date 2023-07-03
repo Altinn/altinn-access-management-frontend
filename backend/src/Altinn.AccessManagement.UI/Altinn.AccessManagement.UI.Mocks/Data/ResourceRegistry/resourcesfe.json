@@ -659,7 +659,7 @@
     "resourceOwnerName": "SKD"
   },
   {
-    "title":"Tulleregisteret",
+    "title": "Tulleregisteret",
     "sector": null,
     "status": null,
     "validTo": "9999-12-31T23:59:59.997",
@@ -696,11 +696,7 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "hasCompetentAuthority": {
-      "orgcode": "PAA",
-      "organization": "985399077",
-      "name": "PÅFUNNSETATEN"
-    }
+    "resourceOwnerName": "PÅFUNNSETATEN"
   },
   {
     "title": "Blomsterhagen",
@@ -745,11 +741,7 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "hasCompetentAuthority": {
-      "orgcode": "BFINN",
-      "organization": "994598759",
-      "name": "BLOMSTERFINN"
-    }
+    "resourceOwnerName": "BLOMSTERFINN"
   },
   {
     "title": "Det magiske klesskapet",
@@ -794,11 +786,7 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "hasCompetentAuthority": {
-      "orgcode": "NRNA",
-      "organization": "971032081",
-      "name": "NARNIA"
-    }
+    "resourceOwnerName": "NARNIA"
   },
   {
     "title": "Snarveien",
@@ -838,10 +826,278 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "hasCompetentAuthority": {
-      "orgcode": "PAA",
-      "organization": "985399077",
-      "name": "PÅFUNNSETATEN"
-    }
+    "resourceOwnerName": "PÅFUNNSETATEN"
+  },
+  {
+    "title": "Snarveien - lenketjeneste",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-503",
+    "isComplete": true,
+    "description": "Snarveien som lenketjeneste",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til snarveger.",
+    "resourceReferences": [],
+    "resourceOwnerName": "PÅFUNNSETATEN"
+  },
+  {
+    "title": "Det magiske klesskapet - lenketjeneste",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-502",
+    "isComplete": true,
+    "description": "Det magiske klesskapet",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til Narnia.",
+    "resourceReferences": [],
+    "resourceOwnerName": "NARNIA"
+  },
+  {
+    "title": "A3 app",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-504",
+    "isComplete": true,
+    "description": "En Altinn 3 app",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til en A3 app.",
+    "resourceReferences": [
+      {
+        "reference": "AppId:504",
+        "referenceType": "ServiceCode",
+        "referenceSource": "Altinn3"
+      },
+      {
+        "reference": "1",
+        "referenceType": "ServiceEditionCode",
+        "referenceSource": "Altinn3"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet"
+  },
+  {
+    "title": "A2 skjema",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-505",
+    "isComplete": true,
+    "description": "En Altinn 2 app",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til en A2 app.",
+    "resourceReferences": [
+      {
+        "reference": "AppId:505",
+        "referenceType": "ServiceCode",
+        "referenceSource": "Altinn2"
+      },
+      {
+        "reference": "1",
+        "referenceType": "ServiceEditionCode",
+        "referenceSource": "Altinn2"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet"
+  },
+  {
+    "title": "A3 app 2",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-506",
+    "isComplete": true,
+    "description": "En Altinn 3 app",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til en A3 app.",
+    "resourceReferences": [
+      {
+        "reference": "AppId:506",
+        "referenceType": "ServiceCode",
+        "referenceSource": "Altinn3"
+      },
+      {
+        "reference": "1",
+        "referenceType": "ServiceEditionCode",
+        "referenceSource": "Altinn3"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet"
+  },
+  {
+    "title": "A2 skjema 2",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-507",
+    "isComplete": true,
+    "description": "En Altinn 2 app",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til en A2 app.",
+    "resourceReferences": [
+      {
+        "reference": "AppId:505",
+        "referenceType": "ServiceCode",
+        "referenceSource": "Altinn2"
+      },
+      {
+        "reference": "1",
+        "referenceType": "ServiceEditionCode",
+        "referenceSource": "Altinn2"
+      }
+    ],
+    "resourceOwnerName": "Testdepartementet"
+  },
+  {
+    "title": "Brannbilen i Brønnøysund",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-508",
+    "isComplete": true,
+    "description": "Brannbilen - det er bare én ja",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til brannbilen.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Brannvesenet"
+  },
+  {
+    "title": "Kaffemaskinen i 4. etasje",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-509",
+    "isComplete": true,
+    "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til kaffemaskinen.",
+    "resourceReferences": [],
+    "resourceOwnerName": "ØkernPortal"
+  },
+  {
+    "title": "DigDir WiFi",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-510",
+    "isComplete": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Digitaliseringsdirektoratet"
+  },
+  {
+    "title": "DigDir Sommerfest",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-511",
+    "isComplete": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Digitaliseringsdirektoratet"
+  },
+  {
+    "title": "Lønningsoversikt",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-512",
+    "isComplete": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Digitaliseringsdirektoratet"
+  },
+  {
+    "title": "Inngangsdøra på kontoret",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-513",
+    "isComplete": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Digitaliseringsdirektoratet"
   }
 ]

@@ -71,7 +71,22 @@ namespace Altinn.AccessManagement.UI.Controllers
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
-            return await _rap.GetPaginatedSearchResults(languageCode, parameters.ServiceOwners, parameters.SearchString, parameters.CurrentPage, parameters.NumPerPage);
+            try
+            {
+                return await _rap.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.NumPerPage);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == System.Net.HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    string responseContent = ex.Message;
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                }
+            }
         }
     }
 }

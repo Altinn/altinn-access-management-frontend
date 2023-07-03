@@ -17,9 +17,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string? SearchString { get; set; }
 
         /// <summary>
-        /// List of Service Owners to be used for filtering
+        /// List of Resource Owners to be used for filtering
         /// </summary>
-        public string[]? ServiceOwners { get; set; }
+        public string[]? ROFilters { get; set; }
 
         /// <summary>
         /// Number of returned resources (per page)
@@ -29,6 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Page to be returned
         /// </summary>
-        public int CurrentPage { get; set; }
+        public int Page { get; set; }
     }
 }

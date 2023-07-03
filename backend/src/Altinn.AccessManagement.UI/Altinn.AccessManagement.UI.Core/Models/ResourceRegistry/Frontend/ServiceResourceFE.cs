@@ -65,6 +65,13 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
+        /// Parameterless constructor
+        /// </summary>
+        public ServiceResourceFE()
+        {
+        }
+
+        /// <summary>
         /// Basic constructor
         /// </summary>
         public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, List<ResourceReference> resourceReferences, ResourceType resourceType, string homepage = null)

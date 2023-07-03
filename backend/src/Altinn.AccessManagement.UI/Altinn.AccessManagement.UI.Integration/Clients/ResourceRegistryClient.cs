@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.Extensions.Logging;
@@ -132,8 +133,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     string content = await response.Content.ReadAsStringAsync();
                     resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
                 }
+                else
+                {
+                    throw new HttpStatusException(response.StatusCode, "Resource List did not return expected data");
+                }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not HttpStatusException)
             {
                 _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // ResourceList // Exception");
                 throw;

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -62,6 +63,127 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertResourceExternalEqual);
+        }
+
+        /// <summary>
+        /// Test case: PaginatedSearch with pagination (no search string or filters)
+        /// Expected: PaginatedSearch returns a list of all single rights resources in paginated form with language filtered for the authenticated users selected language
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchStringAndFilterNotSet_ReturnsAll()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            int page = 1;
+            int numPerPage = 7;
+
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources();
+            PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, numPerPage), page, allExpectedResources.Count);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?NumPerPage={numPerPage}&Page={page}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResult.Page, actualResources.Page);
+            Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceExternalEqual);
+        }
+
+        /// <summary>
+        /// Test case: PaginatedSearch with pagination and filters
+        /// Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered for the authenticated users selected language
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_filterSet_ReturnsMatch()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            int page = 1;
+            int numPerPage = 4;
+            string[] roFilters = { "narnia", "testdepartementet" };
+
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerName.ToLower()));
+            PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, numPerPage), page, allExpectedResources.Count);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?NumPerPage={numPerPage}&Page={page}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResult.Page, actualResources.Page);
+            Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceExternalEqual);
+        }
+
+        /// <summary>
+        /// Test case: PaginatedSearch with pagination and search string
+        /// Expected: PaginatedSearch returns a list of resources matching the search string in paginated form with language filtered for the authenticated users selected language
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchStringSet_ReturnsMatch()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            int page = 1;
+            int numPerPage = 1;
+            string searchString = "klesskapet";
+
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => r.Title.ToLower().Contains(searchString));
+            PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, numPerPage), page, allExpectedResources.Count);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?NumPerPage={numPerPage}&Page={page}&SearchString={searchString}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResult.Page, actualResources.Page);
+            Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceExternalEqual);
+        }
+
+        /// <summary>
+        /// Test case: PaginatedSearch with search string and filters
+        /// Expected: PaginatedSearch returns a list of resources matching the filters and search string, ordered by number of matches
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchStringAndFilterSet_ReturnsCorrectOrder()
+        {
+            // Arrange
+            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            int page = 1;
+            int numPerPage = 4;
+            string searchString = "gir tilgang til brannbilen";
+            string[] roFilters = { "brannvesenet", "testdepartementet" };
+
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerName.ToLower()));
+            // The most relevant resource to our search will be the Brannvesenet service, which is stored last
+            // Thus we rearrenge the resources until they match expected output of the search
+            ServiceResourceFE mostRelevantResource = allExpectedResources.Last();
+            allExpectedResources.RemoveAt(allExpectedResources.Count - 1);
+            allExpectedResources.Insert(0, mostRelevantResource);
+            PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, numPerPage), page, allExpectedResources.Count);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?NumPerPage={numPerPage}&Page={page}&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResult.Page, actualResources.Page);
+            Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceExternalEqual);
         }
 
         private static List<ServiceResourceFE> GetExpectedResources(ResourceType resourceType)

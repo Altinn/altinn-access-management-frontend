@@ -27,6 +27,13 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         public List<T> PageList { get; set; }
 
         /// <summary>
+        /// Parameterless constructor
+        /// </summary>
+        public PaginatedList()
+        {
+        }
+
+        /// <summary>
         /// Constructor for the model
         /// </summary>
         /// <param name="list">The list entries pertaining to the page</param>

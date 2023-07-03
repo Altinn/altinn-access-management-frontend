@@ -186,7 +186,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
                 // TODO: Rewrite current GetResurces to use new API instead of search?
-                resources = await _resourceRegistryClient.GetResources();
+                resources = await _resourceRegistryClient.GetResourceList();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.High)
                .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
