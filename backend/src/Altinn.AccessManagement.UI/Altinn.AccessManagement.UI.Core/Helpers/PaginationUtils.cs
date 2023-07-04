@@ -10,7 +10,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// <summary>
     /// Utils for pagination
     /// </summary>
-    internal class PaginationUtils
+    internal static class PaginationUtils
     {
         /// <summary>
         /// Paginates a list, returning the list elements pertaining to the given page

@@ -20,7 +20,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly CacheConfig _cacheConfig;
-        private readonly GeneralSettings _generalConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAdministrationPoint"/> class.
@@ -33,18 +32,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             ILogger<IResourceAdministrationPoint> logger, 
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig,
-            IOptions<GeneralSettings> generalConfig)
+            IOptions<CacheConfig> cacheConfig)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
-            _generalConfig = generalConfig.Value; 
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[] resourceOwnerFilters, string searchString, int page, int numPerPage)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int numPerPage)
         {
             try
             {
@@ -195,7 +192,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resources;
-
         }
 
         /// <summary>
@@ -204,7 +200,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceOwnerFilters">The list of resource owners to be included in the returned list.</param>
         /// </summary>
         /// <returns>List of filtered resources or all resources if the list of filters is null or empty</returns>
-        private List<ServiceResourceFE> FilterResourceList(List<ServiceResourceFE> resources, string[]? resourceOwnerFilters)
+        private List<ServiceResourceFE> FilterResourceList(List<ServiceResourceFE> resources, string[] resourceOwnerFilters)
         {
             if (resourceOwnerFilters.IsNullOrEmpty())
             {
@@ -245,13 +241,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 int numMatches = 0;
 
-                foreach ( string word in searchWords)
+                foreach (string word in searchWords)
                 {
                     if (res.Title.ToLower().Contains(word) || res.Description.ToLower().Contains(word) || res.RightDescription.ToLower().Contains(word))
                     {
                         numMatches++;
                     }
-
                 }
 
                 if (numMatches > 0)
