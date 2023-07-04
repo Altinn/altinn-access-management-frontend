@@ -18,6 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     The delegation access check request object that's going to be consumed by the backend
         /// </param>
         /// <returns>List<DelegationAccessCheckResponse /></returns>
-        Task<List<DelegationAccessCheckResponse>> UserDelegationAccessCheck(string partyId, CheckDelegationAccessDto request);
+        Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request);
     }
 }

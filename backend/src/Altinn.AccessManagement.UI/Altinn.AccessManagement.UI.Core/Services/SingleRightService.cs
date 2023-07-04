@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request)
         {
-            return await _singleRightClient.UserDelegationAccessCheck(partyId, request);
+            return await _singleRightClient.CheckDelegationAccess(partyId, request);
         }
     }
 }
