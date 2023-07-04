@@ -270,19 +270,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
             foreach (var resource in resources)
             {
-                ServiceResourceFE resourceFE = new ServiceResourceFE(
-                    identifier: resource?.Identifier,
-                    title: resource?.Title?.GetValueOrDefault(languageCode) ?? resource?.Title?.GetValueOrDefault("nb"),
+                if (resource != null)
+                {
+                    ServiceResourceFE resourceFE = new ServiceResourceFE(
+                    identifier: resource.Identifier,
+                    title: resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
                     resourceType: resource.ResourceType,
-                    status: resource?.Status,
-                    resourceReferences: resource?.ResourceReferences,
-                    resourceOwnerName: resource?.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource?.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                    rightDescription: resource?.RightDescription?.GetValueOrDefault(languageCode) ?? resource?.RightDescription?.GetValueOrDefault("nb"),
-                    description: resource?.Description?.GetValueOrDefault(languageCode) ?? resource?.Description?.GetValueOrDefault("nb"),
+                    status: resource.Status,
+                    resourceReferences: resource.ResourceReferences,
+                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                     validFrom: resource.ValidFrom,
                     validTo: resource.ValidTo);
-                
-                resourceList.Add(resourceFE);
+
+                    resourceList.Add(resourceFE);
+                }
             }
 
             return resourceList;
