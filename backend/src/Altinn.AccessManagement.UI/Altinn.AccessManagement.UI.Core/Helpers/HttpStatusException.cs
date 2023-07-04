@@ -17,7 +17,6 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// </summary>
         public HttpStatusCode StatusCode { get; set; }
 
-
         /// <summary>
         /// Constructor
         /// </summary>
