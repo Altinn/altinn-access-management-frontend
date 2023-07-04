@@ -1,0 +1,59 @@
+[
+  {
+    "rightKey": "ttd-am-k6/read",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "ttd-am-k6"
+      }
+    ],
+    "action": "read",
+    "status": "Delegable",
+    "faultCode": "",
+    "reason": "",
+    "reasonParams": [
+      {
+        "name": "RoleRequirements",
+        "value": "DAGL, REGNA"
+      }
+    ]
+  },
+  {
+    "rightKey": "ttd-am-k6/write",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "ttd-am-k6"
+      }
+    ],
+    "action": "write",
+    "status": "Delegable",
+    "faultCode": "",
+    "reason": "",
+    "reasonParams": [
+      {
+        "name": "RoleRequirements",
+        "value": "DAGL, REGNA"
+      }
+    ]
+  },
+  {
+    "rightKey": "ttd-am-k6/sign",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "ttd-am-k6"
+      }
+    ],
+    "action": "sign",
+    "status": "Delegable",
+    "faultCode": "",
+    "reason": "",
+    "reasonParams": [
+      {
+        "name": "RoleRequirements",
+        "value": "DAGL, REGNA"
+      }
+    ]
+  }
+]

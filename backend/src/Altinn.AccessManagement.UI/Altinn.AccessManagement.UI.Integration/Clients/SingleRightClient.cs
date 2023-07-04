@@ -69,13 +69,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     List<Resource> resources = new List<Resource>();
                     resources.Add(resource);
 
-                    var errorReponseList = new List<DelegationAccessCheckResponse>
+                    List<DelegationAccessCheckResponse> errorReponseList = new List<DelegationAccessCheckResponse>
                     {
-                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<Role>(), errorObject),
+                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<ReasonParams>(), errorObject),
                     };
                     return errorReponseList;
                 }
-                
+
                 _logger.LogError("Checking delegation accesses failed with {StatusCode}", response.StatusCode);
                 return null;
             }

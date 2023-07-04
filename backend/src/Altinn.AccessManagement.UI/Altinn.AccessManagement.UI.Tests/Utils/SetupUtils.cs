@@ -1,7 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
-using Altinn.AccessManagement.UI.Integration.Clients.MockClients;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -48,8 +46,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddTransient<ISingleRightMockClient, SingleRightMockClient>();
+                    services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });

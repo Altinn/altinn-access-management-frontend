@@ -1,7 +1,6 @@
 using Altinn.AccessManagement.Configuration;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces.MockClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -9,7 +8,6 @@ using Altinn.AccessManagement.UI.Extensions;
 using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Health;
 using Altinn.AccessManagement.UI.Integration.Clients;
-using Altinn.AccessManagement.UI.Integration.Clients.MockClients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.Common.AccessTokenClient.Services;
@@ -201,18 +199,20 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
 
-    bool useMockData = config.GetValue<bool>("GeneralSettings:UseMockData", false);
-    if (useMockData == true)
+    bool useMockData = config.GetValue("GeneralSettings:UseMockData", false);
+    if (useMockData)
     {
         services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+        services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
     }
     else
     {
         services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
         services.AddHttpClient<IRegisterClient, RegisterClient>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
+        services.AddHttpClient<ISingleRightClient, SingleRightClient>();
     }
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -224,7 +224,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
     services.AddHttpClient<ISingleRightClient, SingleRightClient>();
-    services.AddTransient<ISingleRightMockClient, SingleRightMockClient>();
     if (builder.Environment.IsDevelopment())
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
