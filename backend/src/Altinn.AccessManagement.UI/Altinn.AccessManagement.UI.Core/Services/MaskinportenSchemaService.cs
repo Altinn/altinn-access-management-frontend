@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceAdministrationPoint _resourceAdministrationPoint;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
+        /// Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
         /// </summary>
         /// <param name="maskinportenSchemaClient">handler for delegations client</param>
         /// <param name="resourceAdministrationPoint">handler for resource registry</param>

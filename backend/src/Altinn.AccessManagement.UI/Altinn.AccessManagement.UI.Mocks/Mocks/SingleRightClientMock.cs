@@ -8,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class SingleRightClientMock : ISingleRightClient
     {
         /// <summary>
-        ///     Initializes a new instance of <see cref="SingleRightMockClient" />
+        ///     Initializes a new instance of <see cref="SingleRightMockClient" /> class
         /// </summary>
         public SingleRightClientMock()
         {
