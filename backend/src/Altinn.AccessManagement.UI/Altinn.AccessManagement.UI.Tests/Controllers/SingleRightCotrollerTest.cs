@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task UserDelegationAccessCheck_valid_response()
+        public async Task DelegationAccessCheck_valid_response()
         {
             // Arrange
             string partyId = "50004223";
