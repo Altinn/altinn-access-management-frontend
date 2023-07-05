@@ -24,5 +24,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         /// Means the user has access to delegate read and write access
         /// </summary>
         AllAccesses,
+        
+        /// <summary>
+        /// User has already delegated the single rights for the service
+        /// </summary>
+        AlreadyDelegated
     }
 }

@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private AccessLevel ChooseRandomAccessLevel()
         {
             Random random = new Random();
-            AccessLevel randomAccessLevel = (AccessLevel)random.Next(1, 5);
+            AccessLevel randomAccessLevel = (AccessLevel)random.Next(1, 6);
             return randomAccessLevel;
         }
     }
