@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Fetches the singleRights resources, processes them with filters and search string if given and then paginates the result
         /// </summary>
         /// <returns>the resources that match the filters and search string corresponding to the provided page</returns>
-        Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int numPerPage);
+        Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int resultsPerPage);
 
         /// <summary>
         /// Gets a list of Resources from ResourceRegister

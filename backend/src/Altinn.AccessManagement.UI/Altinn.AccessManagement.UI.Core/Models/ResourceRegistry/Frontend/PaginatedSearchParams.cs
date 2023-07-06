@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Number of returned resources (per page)
         /// </summary>
-        public int NumPerPage { get; set; }
+        public int ResultsPerPage { get; set; }
 
         /// <summary>
         /// Page to be returned

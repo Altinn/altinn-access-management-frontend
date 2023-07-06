@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("paginatedSearch")]
-        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> SearchExtended([FromQuery] PaginatedSearchParams parameters)
+        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
@@ -73,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                return await _rap.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.NumPerPage);
+                return await _rap.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
             }
             catch (HttpStatusException ex)
             {
