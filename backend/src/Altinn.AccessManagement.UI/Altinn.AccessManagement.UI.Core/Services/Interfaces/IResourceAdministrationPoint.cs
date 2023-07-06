@@ -37,5 +37,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="resourceRegistryId">The identifier of the resource in the Resource Registry</param>
         /// <returns>The resource if exists</returns>
         Task<ServiceResource> GetResource(string resourceRegistryId);
+
+        Task<List<string>> GetAllServiceOwners();
     }
 }

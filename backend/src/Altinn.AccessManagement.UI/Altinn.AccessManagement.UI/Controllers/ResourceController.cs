@@ -14,6 +14,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1/resources")]
     public class ResourceController : ControllerBase
     {
         private readonly ILogger _logger;
@@ -46,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of API service resources</returns>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/resources/maskinportenschema")]
+        [Route("maskinportenschema")]
         public async Task<ActionResult<List<ServiceResourceFE>>> Get()
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
@@ -54,6 +55,14 @@ namespace Altinn.AccessManagement.UI.Controllers
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
             return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("getallserviceowners")]
+        public async Task<ActionResult<List<string>>> GetAllServiceOwners()
+        {
+            
         }
     }
 }
