@@ -43,6 +43,7 @@ export const DelegationActionBar = ({
           color={'success'}
           onClick={onActionButtonClick}
           aria-label={t('common.add') + ' ' + title}
+          size='medium'
         ></Button>
       )}
       {buttonType === 'remove' && (
@@ -52,6 +53,7 @@ export const DelegationActionBar = ({
           color={'danger'}
           onClick={onActionButtonClick}
           aria-label={t('common.remove') + ' ' + title}
+          size='medium'
         ></Button>
       )}
     </>

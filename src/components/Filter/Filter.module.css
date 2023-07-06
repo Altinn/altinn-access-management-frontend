@@ -27,6 +27,7 @@
     justify-content: center;
     flex-direction: var(--actionsFlexDirections);
     padding: 15px 0 15px 0;
+    gap: 10px
 }
 
 .filterActions.modal {

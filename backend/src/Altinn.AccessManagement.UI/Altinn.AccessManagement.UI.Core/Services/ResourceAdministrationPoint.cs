@@ -212,7 +212,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (ServiceResourceFE res in resources)
             {
-                if (lowercaseResourceOwnerFilters.Contains(res.ResourceOwnerName.ToLower()))
+                if (lowercaseResourceOwnerFilters.Contains(res.ResourceOwnerName?.ToLower()))
                 {
                     filteredResources.Add(res);
                 }
@@ -243,7 +243,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (string word in searchWords)
                 {
-                    if (res.Title.ToLower().Contains(word) || res.Description.ToLower().Contains(word) || res.RightDescription.ToLower().Contains(word))
+                    if (res.Title?.ToLower()?.Contains(word) ?? res.Description?.ToLower()?.Contains(word) ?? res.RightDescription?.ToLower()?.Contains(word) ?? false)
                     {
                         numMatches++;
                     }

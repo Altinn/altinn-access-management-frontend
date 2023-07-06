@@ -187,6 +187,7 @@ export const OverviewPageContent = ({
             onClick={goToStartDelegation}
             icon={<Add />}
             fullWidth={isSm}
+            size='medium'
           >
             {t('api_delegation.delegate_new_org')}
           </Button>
@@ -221,7 +222,7 @@ export const OverviewPageContent = ({
                   variant={ButtonVariant.Quiet}
                   icon={<Edit />}
                   onClick={handleSetIsEditable}
-                  size={ButtonSize.Small}
+                  size='small'
                 >
                   {t('api_delegation.edit_accesses')}
                 </Button>
@@ -230,7 +231,7 @@ export const OverviewPageContent = ({
                   variant={ButtonVariant.Quiet}
                   icon={<Error />}
                   onClick={handleSetIsEditable}
-                  size={ButtonSize.Small}
+                  size='small'
                 >
                   {t('api_delegation.cancel')}
                 </Button>

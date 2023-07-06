@@ -81,6 +81,7 @@ export const ChooseServicePage = () => {
         }}
       >
         <p>{r.description}</p>
+        <p>{r.rightDescription}</p>
       </ActionBar>
       <div style={{ margin: '4px' }}></div>
     </>

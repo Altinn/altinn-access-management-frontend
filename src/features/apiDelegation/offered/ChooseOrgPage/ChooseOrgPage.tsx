@@ -120,6 +120,7 @@ export const ChooseOrgPage = () => {
               color={'success'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={t('common.add') + ' ' + org.orgName}
+              size='medium'
             ></Button>
           }
           color={'neutral'}
@@ -147,6 +148,7 @@ export const ChooseOrgPage = () => {
                 handleSoftRemove(org);
               }}
               aria-label={t('common.remove') + ' ' + org.orgName}
+              size='medium'
             ></Button>
           }
           color={'success'}

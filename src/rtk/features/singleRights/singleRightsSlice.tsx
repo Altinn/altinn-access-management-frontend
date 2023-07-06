@@ -29,7 +29,7 @@ export const singleRightsApi = createApi({
   endpoints: (builder) => ({
     getPaginatedSearch: builder.query<PaginatedListDTO, string>({
       query: (searchString: string) =>
-        `resources/paginatedSearch?Page=1&NumPerPage=10&SearchString=${searchString}`,
+        `resources/paginatedSearch?Page=1&ResultsPerPage=10&SearchString=${searchString}`,
     }),
   }),
 });
