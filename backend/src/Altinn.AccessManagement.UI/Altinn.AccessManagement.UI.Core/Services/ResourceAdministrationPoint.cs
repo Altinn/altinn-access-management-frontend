@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int numPerPage)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int resultsPerPage)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
                 List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
-                return PaginationUtils.GetListPage<ServiceResourceFE>(searchResults, page, numPerPage);
+                return PaginationUtils.GetListPage<ServiceResourceFE>(searchResults, page, resultsPerPage);
             }
             catch (Exception ex)
             {
