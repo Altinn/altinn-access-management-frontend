@@ -8,5 +8,5 @@ export interface PageContentProps {
 }
 
 export const PageContent = ({ children }: PageContentProps) => {
-  return <div className={cn(classes[`page-content`])}>{children}</div>;
+  return <div className={classes.pageContent}>{children}</div>;
 };

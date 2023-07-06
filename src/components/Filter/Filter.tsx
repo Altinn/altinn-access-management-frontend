@@ -93,6 +93,7 @@ export const Filter = ({
   useEffect(() => {
     if (values !== undefined && !arraysEqual(values, prevvalues)) {
       setActiveFilters(values);
+      setCheckedFilters(values);
     }
   }, [values]);
 

@@ -160,89 +160,84 @@ export const SummaryPage = ({
     >
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
-        <div className={common.pageContent}>
-          {showErrorPanel() ? (
-            <Panel
-              title={t('common.error')}
-              variant={PanelVariant.Error}
-              forceMobileLayout={isSm}
-              showIcon={!isSm}
-            >
-              <div>
-                <p>{t('api_delegation.delegations_not_registered')}</p>
-                <div className={classes.restartButton}>
-                  <Button
-                    variant={ButtonVariant.Outline}
-                    color={ButtonColor.Danger}
-                    onClick={() => {
-                      navigate(restartProcessPath);
-                    }}
-                  >
-                    {t('common.restart')}
-                  </Button>
-                </div>
-              </div>
-            </Panel>
-          ) : (
+        {showErrorPanel() ? (
+          <Panel
+            title={t('common.error')}
+            variant={PanelVariant.Error}
+            forceMobileLayout={isSm}
+            showIcon={!isSm}
+          >
             <div>
-              {showTopSection() && (
-                <div>
-                  <h2 className={classes.listText}>{topListText}</h2>
-                  {delegableApiListItems !== undefined && (
-                    <List borderStyle={'dashed'}>{delegableApiListItems}</List>
-                  )}
-                  {failedDelegations !== undefined && (
-                    <List borderStyle={'dashed'}>{failedDelegatedListItems}</List>
-                  )}
-                </div>
-              )}
-              <h3 className={classes.infoText}>{failedDelegationText}</h3>
-              {showBottomSection() && (
-                <div>
-                  <h2 className={classes.bottomListText}>{bottomListText}</h2>
-                  {delegableOrgs !== undefined && (
-                    <List borderStyle={'dashed'}>{delegableOrgListItems}</List>
-                  )}
-                  {successfulDelegations !== undefined && (
-                    <List borderStyle={'dashed'}>{successfulDelegatedItems}</List>
-                  )}
-                </div>
-              )}
-              <h3 className={classes.infoText}>{bottomText}</h3>
-              {showNavigationButtons ? (
-                <NavigationButtons
-                  previousPath={
-                    '/' +
-                    ApiDelegationPath.OfferedApiDelegations +
-                    '/' +
-                    ApiDelegationPath.ChooseApi
-                  }
-                  previousText={t('api_delegation.previous')}
-                  nextPath={
-                    '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt
-                  }
-                  nextText={t('api_delegation.confirm_delegation')}
-                  nextDisabled={confirmationButtonDisabled}
-                  nextLoading={confirmationButtonLoading}
-                  nextButtonColor={ButtonColor.Success}
-                  nextButtonClick={confirmationButtonClick}
-                ></NavigationButtons>
-              ) : (
-                <div className={classes.receiptMainButton}>
-                  <Button
-                    color={ButtonColor.Primary}
-                    size={ButtonSize.Small}
-                    variant={ButtonVariant.Filled}
-                    onClick={navigateToOverview}
-                    fullWidth={isSm}
-                  >
-                    {t('api_delegation.receipt_page_main_button')}
-                  </Button>
-                </div>
-              )}
+              <p>{t('api_delegation.delegations_not_registered')}</p>
+              <div className={classes.restartButton}>
+                <Button
+                  variant={ButtonVariant.Outline}
+                  color={ButtonColor.Danger}
+                  onClick={() => {
+                    navigate(restartProcessPath);
+                  }}
+                >
+                  {t('common.restart')}
+                </Button>
+              </div>
             </div>
-          )}
-        </div>
+          </Panel>
+        ) : (
+          <div>
+            {showTopSection() && (
+              <div>
+                <h2 className={classes.listText}>{topListText}</h2>
+                {delegableApiListItems !== undefined && (
+                  <List borderStyle={'dashed'}>{delegableApiListItems}</List>
+                )}
+                {failedDelegations !== undefined && (
+                  <List borderStyle={'dashed'}>{failedDelegatedListItems}</List>
+                )}
+              </div>
+            )}
+            <h3 className={classes.infoText}>{failedDelegationText}</h3>
+            {showBottomSection() && (
+              <div>
+                <h2 className={classes.bottomListText}>{bottomListText}</h2>
+                {delegableOrgs !== undefined && (
+                  <List borderStyle={'dashed'}>{delegableOrgListItems}</List>
+                )}
+                {successfulDelegations !== undefined && (
+                  <List borderStyle={'dashed'}>{successfulDelegatedItems}</List>
+                )}
+              </div>
+            )}
+            <h3 className={classes.infoText}>{bottomText}</h3>
+            {showNavigationButtons ? (
+              <NavigationButtons
+                previousPath={
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
+                }
+                previousText={t('api_delegation.previous')}
+                nextPath={
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt
+                }
+                nextText={t('api_delegation.confirm_delegation')}
+                nextDisabled={confirmationButtonDisabled}
+                nextLoading={confirmationButtonLoading}
+                nextButtonColor={ButtonColor.Success}
+                nextButtonClick={confirmationButtonClick}
+              ></NavigationButtons>
+            ) : (
+              <div className={classes.receiptMainButton}>
+                <Button
+                  color={ButtonColor.Primary}
+                  size={ButtonSize.Small}
+                  variant={ButtonVariant.Filled}
+                  onClick={navigateToOverview}
+                  fullWidth={isSm}
+                >
+                  {t('api_delegation.receipt_page_main_button')}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
       </PageContent>
     </Page>
   );

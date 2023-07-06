@@ -194,81 +194,79 @@ export const ChooseOrgPage = () => {
       <Page size={isSm ? PageSize.Small : PageSize.Medium}>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={common.pageContent}>
-            <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
-            {isSm && chosenItems.length > 0 && (
-              <div className={classes.chosenOrgs}>
-                <h4 className={classes.chosenOrgsHeader}>
-                  {t('api_delegation.businesses_going_to_get_access')}
-                </h4>
-                <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
-              </div>
-            )}
-            <div className={classes.searchSection}>
-              <SearchField
-                label={String(t('api_delegation.search_for_buisness'))}
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleSearch(event.target.value);
-                }}
-                aria-label={String(t('api_delegation.search_for_buisness'))}
-              ></SearchField>
+          <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
+          {isSm && chosenItems.length > 0 && (
+            <div className={classes.chosenOrgs}>
+              <h4 className={classes.chosenOrgsHeader}>
+                {t('api_delegation.businesses_going_to_get_access')}
+              </h4>
+              <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
             </div>
-            {viewLoading ? (
-              <div className={common.spinnerContainer}>
-                <Spinner
-                  size='large'
-                  title={String(t('common.loading'))}
-                />
-              </div>
-            ) : (
-              <div className={classes.pageContentActionBarContainer}>
-                <div className={classes.delegableOrgsContainer}>
-                  {searchString === '' ? (
-                    <h4 className={classes.actionBarContainerText}>
-                      {t('api_delegation.businesses_previously_delegated_to')}
-                    </h4>
-                  ) : (
-                    <h4 className={classes.actionBarContainerText}>
-                      {t('api_delegation.businesses_search_results')}
-                    </h4>
-                  )}
-                  {infoPanel()}
-                  <div className={classes.actionBarScrollContainer}>
-                    {searchLoading ? (
-                      <div className={common.spinnerContainer}>
-                        <Spinner
-                          size='large'
-                          title={String(t('common.loading'))}
-                        />
-                      </div>
-                    ) : (
-                      delegableOrgItems
-                    )}
-                  </div>
-                </div>
-                {!isSm && (
-                  <div className={common.chosenOrgsContainer}>
-                    <h4 className={classes.chosenOrgsHeader}>
-                      {t('api_delegation.businesses_going_to_get_access')}
-                    </h4>
-                    <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
-                  </div>
-                )}
-              </div>
-            )}
-            <NavigationButtons
-              previousText={t('api_delegation.cancel')}
-              previousPath={
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
-              }
-              nextText={t('api_delegation.next')}
-              nextDisabled={chosenOrgs.length === 0}
-              nextPath={
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
-              }
-            />
+          )}
+          <div className={classes.searchSection}>
+            <SearchField
+              label={String(t('api_delegation.search_for_buisness'))}
+              value={searchString}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                handleSearch(event.target.value);
+              }}
+              aria-label={String(t('api_delegation.search_for_buisness'))}
+            ></SearchField>
           </div>
+          {viewLoading ? (
+            <div className={common.spinnerContainer}>
+              <Spinner
+                size='large'
+                title={String(t('common.loading'))}
+              />
+            </div>
+          ) : (
+            <div className={classes.pageContentActionBarContainer}>
+              <div className={classes.delegableOrgsContainer}>
+                {searchString === '' ? (
+                  <h4 className={classes.actionBarContainerText}>
+                    {t('api_delegation.businesses_previously_delegated_to')}
+                  </h4>
+                ) : (
+                  <h4 className={classes.actionBarContainerText}>
+                    {t('api_delegation.businesses_search_results')}
+                  </h4>
+                )}
+                {infoPanel()}
+                <div className={classes.actionBarScrollContainer}>
+                  {searchLoading ? (
+                    <div className={common.spinnerContainer}>
+                      <Spinner
+                        size='large'
+                        title={String(t('common.loading'))}
+                      />
+                    </div>
+                  ) : (
+                    delegableOrgItems
+                  )}
+                </div>
+              </div>
+              {!isSm && (
+                <div className={common.chosenOrgsContainer}>
+                  <h4 className={classes.chosenOrgsHeader}>
+                    {t('api_delegation.businesses_going_to_get_access')}
+                  </h4>
+                  <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
+                </div>
+              )}
+            </div>
+          )}
+          <NavigationButtons
+            previousText={t('api_delegation.cancel')}
+            previousPath={
+              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
+            }
+            nextText={t('api_delegation.next')}
+            nextDisabled={chosenOrgs.length === 0}
+            nextPath={
+              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
+            }
+          />
         </PageContent>
       </Page>
     </PageContainer>

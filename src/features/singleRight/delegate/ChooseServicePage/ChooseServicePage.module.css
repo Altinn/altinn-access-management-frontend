@@ -1,0 +1,17 @@
+.searchSection {
+    margin-top: 2rem;
+}
+
+.searchInputs{
+    display: flex;
+    gap: 1rem;
+    align-items:end;
+}
+
+.searchField {
+    width: 50%;
+}
+
+.filterChips {
+    margin-top: 1rem !important;
+}
