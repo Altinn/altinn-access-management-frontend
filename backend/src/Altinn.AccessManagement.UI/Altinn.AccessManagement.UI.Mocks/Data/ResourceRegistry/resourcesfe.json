@@ -696,7 +696,8 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "PÅFUNNSETATEN"
+    "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgNumber": "130000000"
   },
   {
     "title": "Blomsterhagen",
@@ -741,7 +742,8 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "BLOMSTERFINN"
+    "resourceOwnerName": "BLOMSTERFINN",
+    "resourceOwnerOrgNumber": "130000000"
   },
   {
     "title": "Det magiske klesskapet",
@@ -786,7 +788,8 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "NARNIA"
+    "resourceOwnerName": "NARNIA",
+    "resourceOwnerOrgNumber": "777777777"
   },
   {
     "title": "Snarveien",
@@ -826,7 +829,8 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "PÅFUNNSETATEN"
+    "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgNumber": "130000000"
   },
   {
     "title": "Snarveien - lenketjeneste",
@@ -845,7 +849,8 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til snarveger.",
     "resourceReferences": [],
-    "resourceOwnerName": "PÅFUNNSETATEN"
+    "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgNumber": "130000000"
   },
   {
     "title": "Det magiske klesskapet - lenketjeneste",
@@ -864,7 +869,8 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til Narnia.",
     "resourceReferences": [],
-    "resourceOwnerName": "NARNIA"
+    "resourceOwnerName": "NARNIA",
+    "resourceOwnerOrgNumber": "777777777"
   },
   {
     "title": "A3 app",
@@ -894,7 +900,8 @@
         "referenceSource": "Altinn3"
       }
     ],
-    "resourceOwnerName": "Testdepartementet"
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789"
   },
   {
     "title": "A2 skjema",
@@ -924,7 +931,8 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "Testdepartementet"
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789"
   },
   {
     "title": "A3 app 2",
@@ -954,7 +962,8 @@
         "referenceSource": "Altinn3"
       }
     ],
-    "resourceOwnerName": "Testdepartementet"
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789"
   },
   {
     "title": "A2 skjema 2",
@@ -984,7 +993,8 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "Testdepartementet"
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789"
   },
   {
     "title": "Brannbilen i Brønnøysund",
@@ -1003,7 +1013,8 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til brannbilen.",
     "resourceReferences": [],
-    "resourceOwnerName": "Brannvesenet"
+    "resourceOwnerName": "Brannvesenet",
+    "resourceOwnerOrgNumber": "110110110"
   },
   {
     "title": "Kaffemaskinen i 4. etasje",
@@ -1022,7 +1033,8 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til kaffemaskinen.",
     "resourceReferences": [],
-    "resourceOwnerName": "ØkernPortal"
+    "resourceOwnerName": "ØkernPortal",
+    "resourceOwnerOrgNumber": "904111111"
   },
   {
     "title": "DigDir WiFi",
@@ -1041,7 +1053,8 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "resourceOwnerName": "Digitaliseringsdirektoratet"
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgNumber": "991825827"
   },
   {
     "title": "DigDir Sommerfest",
@@ -1060,7 +1073,8 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "resourceOwnerName": "Digitaliseringsdirektoratet"
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgNumber": "991825827"
   },
   {
     "title": "Lønningsoversikt",
@@ -1079,7 +1093,8 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "resourceOwnerName": "Digitaliseringsdirektoratet"
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgNumber": "991825827"
   },
   {
     "title": "Inngangsdøra på kontoret",
@@ -1098,6 +1113,7 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "resourceOwnerName": "Digitaliseringsdirektoratet"
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgNumber": "991825827"
   }
 ]

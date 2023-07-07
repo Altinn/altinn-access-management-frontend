@@ -54,9 +54,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string ResourceOwnerName { get; set; }
 
         /// <summary>
+        /// Org number of the resource owner
+        /// </summary>
+        public string ResourceOwnerOrgNumber { get; set; }
+
+        /// <summary>
         /// ResourceReference
         /// </summary>
         public List<ResourceReference> ResourceReferences { get; set; }
+
+        /// <summary>
+        /// Counter that denotes the priority of which the resource is to be sorted (if appliccable)
+        /// </summary>
+        public int? PriorityCounter { get; set; }
 
         /// <summary>
         /// ResourceType
@@ -74,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, List<ResourceReference> resourceReferences, ResourceType resourceType, string homepage = null)
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, string? homepage = null, int? priorityCounter = null)
         {
             Identifier = identifier;
             Title = title;
@@ -85,7 +95,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             ValidFrom = validFrom;
             ValidTo = validTo;
             ResourceOwnerName = resourceOwnerName;
+            ResourceOwnerOrgNumber = resourceOwnerOrgNumber;
             ResourceReferences = resourceReferences;
+            PriorityCounter = priorityCounter;
             ResourceType = resourceType;
         }
 
@@ -104,6 +116,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             ValidFrom = serviceResourceFE.ValidFrom;
             ValidTo = serviceResourceFE.ValidTo;
             ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
+            ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
+            PriorityCounter = serviceResourceFE.PriorityCounter;
             ResourceReferences = serviceResourceFE.ResourceReferences;
             ResourceType = serviceResourceFE.ResourceType;
         }

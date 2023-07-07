@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("maskinportenschema")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> GetMaskinportendchema()
+        public async Task<ActionResult<List<ServiceResourceFE>>> GetMaskinportenSchema()
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
