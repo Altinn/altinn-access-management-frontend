@@ -179,19 +179,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<ServiceResource>> GetFullResourceList()
         {
-            string cacheKey = $"resources:fulllist";
-            if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
-            {
-                // TODO: Rewrite current GetResurces to use new API instead of search?
-                resources = await _resourceRegistryClient.GetResourceList();
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.High)
-               .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
-
-                _memoryCache.Set(cacheKey, resources, cacheEntryOptions);
-            }
-
-            return resources;
+            return await _resourceRegistryClient.GetResourceList();
         }
 
         /// <summary>
@@ -208,11 +196,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             List<ServiceResourceFE> filteredResources = new List<ServiceResourceFE>();
-            string[] lowercaseResourceOwnerFilters = Array.ConvertAll(resourceOwnerFilters, d => d.ToLower());
 
             foreach (ServiceResourceFE res in resources)
             {
-                if (lowercaseResourceOwnerFilters.Contains(res.ResourceOwnerName.ToLower()))
+                if (resourceOwnerFilters.Contains(res.ResourceOwnerOrgNumber))
                 {
                     filteredResources.Add(res);
                 }
@@ -234,7 +221,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return resources;
             }
 
-            List<SortableServiceResourceFE> matchedResources = new List<SortableServiceResourceFE>();
+            List<ServiceResourceFE> matchedResources = new List<ServiceResourceFE>();
             string[] searchWords = searchString.ToLower().Split();
 
             foreach (ServiceResourceFE res in resources)
@@ -251,13 +238,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 if (numMatches > 0)
                 {
-                    matchedResources.Add(new SortableServiceResourceFE(res, numMatches));
+                    res.PriorityCounter = numMatches;
+                    matchedResources.Add(res);
                 }
             }
 
-            List<SortableServiceResourceFE> sortedMatches = matchedResources.OrderByDescending(res => res.PriorityCounter).ToList();
+            List<ServiceResourceFE> sortedMatches = matchedResources.OrderByDescending(res => res.PriorityCounter).ToList();
 
-            return sortedMatches.Select(match => new ServiceResourceFE(match.Resource)).ToList();
+            return sortedMatches;
         }
 
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
@@ -274,6 +262,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     status: resource.Status,
                     resourceReferences: resource.ResourceReferences,
                     resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
                     rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                     description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                     validFrom: resource.ValidFrom,
