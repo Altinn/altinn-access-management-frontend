@@ -1,22 +1,24 @@
 ﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IResourceRegistryClient"></see> interface
+    ///     Mock class for <see cref="IResourceClient"></see> interface
     /// </summary>
-    public class ResourceRegistryClientMock : IResourceRegistryClient
+    public class ResourceClientMock : IResourceClient
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceRegistryClient"/> class
+        ///     Initializes a new instance of the <see cref="ResourceRegistryClient" /> class
         /// </summary>
-        public ResourceRegistryClientMock()
+        public ResourceClientMock()
         {
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
             ServiceResource resource = null;
@@ -30,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(resource);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public Task<List<ServiceResource>> GetResources()
         {
             List<ServiceResource> resources = new List<ServiceResource>();
@@ -40,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(path))
             {
 
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
@@ -52,15 +54,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(resources);
         }
 
+        /// <inheritdoc />
+        public Task<OrgList> GetAllResourceOwners()
+        {
+            return Task.FromResult(ResourceUtil.GetMockedResourceRegistryOrgList());
+        }
+
         private static string GetResourcePath(string resourceRegistryId)
         {
-            string mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            string mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "ResourceRegistry", $"{resourceRegistryId}", "resource.json");
         }
 
         private static string GetDataPathForResources()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "ResourceRegistry", "resources.json");
         }
     }

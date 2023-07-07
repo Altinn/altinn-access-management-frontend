@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -11,28 +12,28 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc />
-    public class ResourceAdministrationPoint : IResourceAdministrationPoint
+    public class ResourceService : IResourceService
     {
-        private readonly ILogger<IResourceAdministrationPoint> _logger;
-        private readonly IMemoryCache _memoryCache;
-        private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly CacheConfig _cacheConfig;
+        private readonly ILogger<IResourceService> _logger;
+        private readonly IMemoryCache _memoryCache;
+        private readonly IResourceClient _resourceClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceAdministrationPoint"/> class.
+        ///     Initializes a new instance of the <see cref="ResourceService" /> class.
         /// </summary>
         /// <param name="logger">Logger instance.</param>
-        /// <param name="resourceRegistryClient">the handler for resource registry client</param>
+        /// <param name="resourceClient">the handler for resource registry client</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
-        public ResourceAdministrationPoint(
-            ILogger<IResourceAdministrationPoint> logger, 
-            IResourceRegistryClient resourceRegistryClient,
+        public ResourceService(
+            ILogger<IResourceService> logger,
+            IResourceClient resourceClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig)
         {
             _logger = logger;
-            _resourceRegistryClient = resourceRegistryClient;
+            _resourceClient = resourceClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
         }
@@ -48,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceAdministrationPoint //GetResources by resourcetype failed to fetch resources", ex);
+                _logger.LogError("//ResourceService //GetResources by resourcetype failed to fetch resources", ex);
                 throw;
             }
         }
@@ -93,12 +94,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         {
                             Identifier = id,
                             Title = new Dictionary<string, string>
-                        {
-                            { "en", "Not Available" },
-                            { "nb", "ikke tilgjengelig" },
-                            { "nn", "ikkje tilgjengelig" }
-                        },
-                            ResourceType = ResourceType.Default
+                            {
+                                { "en", "Not Available" },
+                                { "nb", "ikke tilgjengelig" },
+                                { "nn", "ikkje tilgjengelig" },
+                            },
+                            ResourceType = ResourceType.Default,
                         };
                         filteredResources.Add(unavailableResource);
                     }
@@ -110,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceAdministrationPoint //GetResources by resource id failed to fetch resources", ex);
+                _logger.LogError("//ResourceService //GetResources by resource id failed to fetch resources", ex);
                 throw;
             }
 
@@ -124,11 +125,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             if (!_memoryCache.TryGetValue(cacheKey, out ServiceResource resource))
             {
-                resource = await _resourceRegistryClient.GetResource(resourceRegistryId);
+                resource = await _resourceClient.GetResource(resourceRegistryId);
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-               .SetPriority(CacheItemPriority.High)
-               .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetPriority(CacheItemPriority.High)
+                    .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
 
                 _memoryCache.Set(cacheKey, resource, cacheEntryOptions);
             }
@@ -136,17 +137,55 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return resource;
         }
 
+        /// <inheritdoc />
+        public async Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode)
+        {
+            OrgList orgList = new OrgList();
+            try
+            {
+                orgList = await _resourceClient.GetAllResourceOwners();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//ResourceService //GetAllResourceOwners failed exception: {Ex}", ex);
+            }
+
+            return MapOrgListToResourceOwnersFE(orgList, languageCode);
+        }
+
+        private List<ResourceOwnerFE> MapOrgListToResourceOwnersFE(OrgList orgList, string languageCode)
+        {
+            return orgList.Orgs.Values
+                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
+                .ToList();
+        }
+
+        private string GetNameInCorrectLanguage(Name name, string languageCode)
+        {
+            switch (languageCode.ToLowerInvariant())
+            {
+                case "en":
+                    return name.En;
+                case "nb":
+                    return name.Nb;
+                case "nn":
+                    return name.Nn;
+                default:
+                    return name.En;
+            }
+        }
+
         private async Task<List<ServiceResource>> GetResources()
         {
-            string cacheKey = $"resources:all";
+            string cacheKey = "resources:all";
 
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
-                resources = await _resourceRegistryClient.GetResources();
+                resources = await _resourceClient.GetResources();
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-               .SetPriority(CacheItemPriority.High)
-               .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetPriority(CacheItemPriority.High)
+                    .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
 
                 _memoryCache.Set(cacheKey, resources, cacheEntryOptions);
             }
@@ -157,7 +196,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
         {
             List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
-            foreach (var resource in resources)
+            foreach (ServiceResource? resource in resources)
             {
                 ServiceResourceFE resourceFE = new ServiceResourceFE();
                 resourceFE.Title = resource?.Title?.GetValueOrDefault(languageCode) ?? resource?.Title?.GetValueOrDefault("nb");

@@ -5,6 +5,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,20 +13,20 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// Client implementation for integration with the Resource Registry
+    ///     Client implementation for integration with the Resource Registry
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class ResourceRegistryClient : IResourceRegistryClient
+    public class ResourceClient : IResourceClient
     {
-        private readonly HttpClient _httpClient = new ();
-        private readonly ILogger<IResourceRegistryClient> _logger;
+        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly ILogger<IResourceClient> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceRegistryClient"/> class
+        ///     Initializes a new instance of the <see cref="ResourceClient" /> class
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
-        public ResourceRegistryClient(IOptions<PlatformSettings> settings, ILogger<IResourceRegistryClient> logger)
+        public ResourceClient(IOptions<PlatformSettings> settings, ILogger<IResourceClient> logger)
         {
             PlatformSettings platformSettings = settings.Value;
             _httpClient.BaseAddress = new Uri(platformSettings.ApiResourceRegistryEndpoint);
@@ -35,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _logger = logger;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
             ServiceResource? result = null;
@@ -44,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
@@ -55,19 +56,19 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return await Task.FromResult(result);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<List<ServiceResource>> GetResources()
         {
             List<ServiceResource> resources = null;
 
             try
             {
-                string endpointUrl = $"resource/search";
+                string endpointUrl = "resource/search";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var options = new JsonSerializerOptions
+                    JsonSerializerOptions options = new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true,
                     };
@@ -77,15 +78,49 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // SearchResources // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // ResourceClient // SearchResources // Exception");
                 throw;
             }
 
             return resources;
         }
 
+        /// <inheritdoc />
+        public async Task<OrgList> GetAllResourceOwners()
+        {
+            OrgList resourceOwners = new OrgList();
+
+            string endpointUrl = "https://platform.at23.altinn.cloud/resourceregistry/api/v1/resource/orgs";
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    };
+                    string content = await response.Content.ReadAsStringAsync();
+                    resourceOwners = JsonSerializer.Deserialize<OrgList>(content, options);
+                }
+                else
+                {
+                    _logger.LogError("Getting service owners from resourceregistry/api/v1/resource/orgs failed with {StatusCode}", response.StatusCode);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "AccessManagement.UI // ResourceClient // SearchResources // Exception");
+                throw;
+            }
+
+            return resourceOwners;
+        }
+
         /// <summary>
-        /// Get resource list
+        ///     Get resource list
         /// </summary>
         /// <param name="resourceType"> the resource type</param>
         /// <returns></returns>
@@ -99,7 +134,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
