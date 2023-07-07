@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -14,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1/resources")]
     public class ResourceController : ControllerBase
     {
         private readonly ILogger _logger;
@@ -46,14 +48,45 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of API service resources</returns>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/resources/maskinportenschema")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> Get()
+        [Route("maskinportenschema")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> GetMaskinportenSchema()
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
             return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
+        }
+
+        /// <summary>
+        /// Search through all delegable service resources and returns matches
+        /// </summary>
+        /// <returns>Paginated search results</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("paginatedSearch")]
+        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
+        {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+
+            try
+            {
+                return await _rap.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == System.Net.HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    string responseContent = ex.Message;
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                }
+            }
         }
     }
 }
