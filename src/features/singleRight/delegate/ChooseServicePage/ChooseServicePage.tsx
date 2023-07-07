@@ -27,13 +27,18 @@ export const ChooseServicePage = () => {
   const [openActionBar, setOpenActionBar] = useState('');
   const [searchString, setSearchString] = useState('');
 
-  const { data, error, isLoading } = useGetPaginatedSearchQuery(searchString);
+  const { data, error, isLoading } = useGetPaginatedSearchQuery({
+    searchString,
+    ROfilters: filters,
+  });
   const resources = data?.pageList;
 
   const filterOptions = [
-    { label: 'Kort navn', value: 'A' },
-    { label: 'Et middels langt navn', value: 'B' },
-    { label: 'Et helt superduperlangt navnetull', value: 'C' },
+    { label: 'Påfunnsetaten', value: '130000000' },
+    { label: 'Testdepartementet', value: '123456789' },
+    { label: 'Narnia', value: '777777777' },
+    { label: 'Brannvesenet', value: '110110110' },
+    { label: 'Økern Portal', value: '904111111' },
   ];
 
   const unCheckFilter = (filter: string) => {

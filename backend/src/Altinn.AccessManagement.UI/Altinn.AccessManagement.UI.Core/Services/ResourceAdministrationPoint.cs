@@ -222,7 +222,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             List<ServiceResourceFE> matchedResources = new List<ServiceResourceFE>();
-            string[] searchWords = searchString.ToLower().Split();
+            string[] searchWords = searchString.Trim().ToLower().Split();
 
             foreach (ServiceResourceFE res in resources)
             {
