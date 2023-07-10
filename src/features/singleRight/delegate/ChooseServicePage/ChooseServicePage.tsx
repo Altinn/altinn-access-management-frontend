@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
-import { Chip } from '@digdir/design-system-react';
+import { Chip, Paragraph } from '@digdir/design-system-react';
 
 import {
   Page,
@@ -32,6 +32,7 @@ export const ChooseServicePage = () => {
     ROfilters: filters,
   });
   const resources = data?.pageList;
+  const totalNumberOfResults = data?.numEntriesTotal;
 
   const filterOptions = [
     { label: 'Påfunnsetaten', value: '130000000' },
@@ -74,22 +75,19 @@ export const ChooseServicePage = () => {
   );
 
   const serviceResouces = resources?.map((r: ServiceResource) => (
-    <>
-      <ActionBar
-        key={r.identifier}
-        title={r.title}
-        subtitle={r.resourceOwnerName}
-        color='neutral'
-        open={openActionBar === r.identifier}
-        onClick={() => {
-          setOpenActionBar(r.identifier);
-        }}
-      >
-        <p>{r.description}</p>
-        <p>{r.rightDescription}</p>
-      </ActionBar>
-      <div style={{ margin: '4px' }}></div>
-    </>
+    <ActionBar
+      key={r.identifier}
+      title={r.title}
+      subtitle={r.resourceOwnerName}
+      color='neutral'
+      open={openActionBar === r.identifier}
+      onClick={() => {
+        setOpenActionBar(r.identifier);
+      }}
+    >
+      <p>{r.description}</p>
+      <p>{r.rightDescription}</p>
+    </ActionBar>
   ));
 
   return (
@@ -120,8 +118,13 @@ export const ChooseServicePage = () => {
                 onApply={setFilters}
               ></Filter>
             </div>
-            {filterChips()}
-            {!isLoading && serviceResouces}
+            <div className={classes.resultCountAndChips}>
+              {totalNumberOfResults && (
+                <Paragraph>{`${totalNumberOfResults.toString()} treff på søket: `}</Paragraph>
+              )}
+              {filterChips()}
+            </div>
+            {!isLoading && <div className={classes.serviceResouces}> {serviceResouces} </div>}
           </div>
         </PageContent>
       </Page>

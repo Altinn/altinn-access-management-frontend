@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 interface PaginatedListDTO {
   page: number;
-  NumEntiresTotal: number;
+  numEntriesTotal: number;
   pageList: ServiceResource[];
 }
 
