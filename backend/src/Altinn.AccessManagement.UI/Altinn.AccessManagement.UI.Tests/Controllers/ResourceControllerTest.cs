@@ -92,11 +92,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private List<ResourceOwnerFE> MapOrgListToResourceOwnersFE(OrgList orgList, string languageCode)
         {
             return orgList.Orgs.Values
-                .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
+                .Select(org => new ResourceOwnerFE(GetOrgNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
                 .ToList();
         }
 
-        private string GetNameInCorrectLanguage(Name name, string languageCode)
+        private string GetOrgNameInCorrectLanguage(Name name, string languageCode)
         {
             switch (languageCode.ToLowerInvariant())
             {
@@ -109,21 +109,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 default:
                     return name.En;
             }
-        }
-
-        private static OrgList GetExpectedResourceOwners()
-        {
-            string mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
-            string path = Path.Combine(mockClientFolder, "Data", "ResourceRegistry", "resourceowners.json");
-
-            string content = File.ReadAllText(path);
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
-            OrgList resourceOwners = JsonSerializer.Deserialize<OrgList>(content, options);
-            return resourceOwners;
         }
 
         private static List<ServiceResourceFE> GetExpectedResources(ResourceType resourceType)
