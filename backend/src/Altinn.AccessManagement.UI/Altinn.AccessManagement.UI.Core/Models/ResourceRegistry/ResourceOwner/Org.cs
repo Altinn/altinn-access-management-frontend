@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner
 {
     /// <summary>
@@ -10,7 +8,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner
         /// <summary>
         ///     Name of organization. With lanugage support
         /// </summary>
-        [JsonProperty("name")]
         public Name Name { get; set; }
 
         /// <summary>
