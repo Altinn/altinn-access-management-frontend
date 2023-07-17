@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -18,22 +19,25 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     [ExcludeFromCodeCoverage]
     public class ResourceClient : IResourceClient
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
         private readonly ILogger<IResourceClient> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ResourceClient" /> class
+        ///     Initializes a new instance of the <see cref="ResourceClient" /> classß
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
-        public ResourceClient(IOptions<PlatformSettings> settings, ILogger<IResourceClient> logger)
+        public ResourceClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceClient> logger, IHttpContextAccessor httpContextAccessor)
         {
             PlatformSettings platformSettings = settings.Value;
+            _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri(platformSettings.ApiResourceRegistryEndpoint);
             _httpClient.Timeout = new TimeSpan(0, 0, 30);
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;  
         }
 
         /// <inheritdoc />
