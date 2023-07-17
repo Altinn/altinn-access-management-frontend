@@ -62,6 +62,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns>List of resource owners in string format</returns>
         [HttpGet]
+        [Authorize]
         [Route("resourceowners")]
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetAllResourceOwners()
         {
