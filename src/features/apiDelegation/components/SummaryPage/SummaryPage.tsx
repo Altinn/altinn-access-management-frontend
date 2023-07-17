@@ -4,7 +4,6 @@ import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
-import cn from 'classnames';
 
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
