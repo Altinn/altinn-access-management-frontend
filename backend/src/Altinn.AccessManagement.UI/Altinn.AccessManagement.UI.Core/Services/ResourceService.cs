@@ -22,6 +22,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceClient _resourceClient;
 
         /// <summary>
+        ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
+        /// </summary>
+        public ResourceService()
+        {
+        }
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class.
         /// </summary>
         /// <param name="logger">Logger instance.</param>
@@ -172,10 +179,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError("//ResourceService //GetAllResourceOwners failed exception: {Ex}", ex);
             }
 
-            return MapOrgListToResourceOwnersFE(orgList, languageCode);
+            return MapOrgListToResourceOwnerFe(orgList, languageCode);
         }
 
-        private List<ResourceOwnerFE> MapOrgListToResourceOwnersFE(OrgList orgList, string languageCode)
+        /// <inheritdoc />
+        public List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {
             return orgList.Orgs.Values
                 .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
@@ -193,7 +201,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 case "nn":
                     return name.Nn;
                 default:
-                    return name.En;
+                    return name.Nb;
             }
         }
 

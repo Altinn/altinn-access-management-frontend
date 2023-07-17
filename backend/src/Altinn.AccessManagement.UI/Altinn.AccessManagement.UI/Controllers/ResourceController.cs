@@ -98,6 +98,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NoContent();
                 }
+
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }

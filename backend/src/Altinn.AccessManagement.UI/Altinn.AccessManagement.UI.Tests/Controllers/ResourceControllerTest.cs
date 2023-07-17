@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -29,6 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<ResourceController> _factory;
+        private readonly ResourceService _resourceService;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
@@ -40,6 +43,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _factory = factory;
             _client = GetTestClient();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _resourceService = new ResourceService();
         }
 
         /// <summary>
@@ -248,7 +252,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             OrgList orgList = ResourceUtil.GetMockedResourceRegistryOrgList();
-            List<ResourceOwnerFE> expectedResult = MapOrgListToResourceOwnersFE(orgList, "nb");
+            List<ResourceOwnerFE> expectedResult = _resourceService.MapOrgListToResourceOwnerFe(orgList, "nb");
 
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -260,28 +264,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             List<ResourceOwnerFE> actualResult = await response.Content.ReadAsAsync<List<ResourceOwnerFE>>();
             Assert.True(expectedResult.SequenceEqual(actualResult));
-        }
-
-        private List<ResourceOwnerFE> MapOrgListToResourceOwnersFE(OrgList orgList, string languageCode)
-        {
-            return orgList.Orgs.Values
-                .Select(org => new ResourceOwnerFE(GetOrgNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
-                .ToList();
-        }
-
-        private string GetOrgNameInCorrectLanguage(Name name, string languageCode)
-        {
-            switch (languageCode.ToLowerInvariant())
-            {
-                case "en":
-                    return name.En;
-                case "nb":
-                    return name.Nb;
-                case "nn":
-                    return name.Nn;
-                default:
-                    return name.En;
-            }
         }
 
         private static List<ServiceResourceFE> GetExpectedResources(ResourceType resourceType)
