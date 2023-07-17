@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// The homepage
         /// </summary>
-        public string Homepage { get; set; }
+        public string? Homepage { get; set; }
 
         /// <summary>
         /// The status
@@ -54,14 +54,72 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string ResourceOwnerName { get; set; }
 
         /// <summary>
+        /// Org number of the resource owner
+        /// </summary>
+        public string ResourceOwnerOrgNumber { get; set; }
+
+        /// <summary>
         /// ResourceReference
         /// </summary>
         public List<ResourceReference> ResourceReferences { get; set; }
+
+        /// <summary>
+        /// Counter that denotes the priority of which the resource is to be sorted (if appliccable)
+        /// </summary>
+        public int? PriorityCounter { get; set; }
 
         /// <summary>
         /// ResourceType
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ResourceType ResourceType { get; set; }
+
+        /// <summary>
+        /// Parameterless constructor
+        /// </summary>
+        public ServiceResourceFE()
+        {
+        }
+
+        /// <summary>
+        /// Basic constructor
+        /// </summary>
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, string? homepage = null, int? priorityCounter = null)
+        {
+            Identifier = identifier;
+            Title = title;
+            Description = description;
+            RightDescription = rightDescription;
+            Homepage = homepage;
+            Status = status;
+            ValidFrom = validFrom;
+            ValidTo = validTo;
+            ResourceOwnerName = resourceOwnerName;
+            ResourceOwnerOrgNumber = resourceOwnerOrgNumber;
+            ResourceReferences = resourceReferences;
+            PriorityCounter = priorityCounter;
+            ResourceType = resourceType;
+        }
+
+        /// <summary>
+        /// Constructor used when copying
+        /// </summary>
+        /// <param name="serviceResourceFE">The resource to be copied</param>
+        public ServiceResourceFE(ServiceResourceFE serviceResourceFE)
+        {
+            Identifier = serviceResourceFE.Identifier;
+            Title = serviceResourceFE.Title;
+            Description = serviceResourceFE.Description;
+            RightDescription = serviceResourceFE.RightDescription;
+            Homepage = serviceResourceFE.Homepage;
+            Status = serviceResourceFE.Status;
+            ValidFrom = serviceResourceFE.ValidFrom;
+            ValidTo = serviceResourceFE.ValidTo;
+            ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
+            ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
+            PriorityCounter = serviceResourceFE.PriorityCounter;
+            ResourceReferences = serviceResourceFE.ResourceReferences;
+            ResourceType = serviceResourceFE.ResourceType;
+        }
     }
 }

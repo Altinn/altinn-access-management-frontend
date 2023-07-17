@@ -63,6 +63,29 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return filteredResources;
         }
 
+        public static List<ServiceResourceFE> GetSingleRightsResources()
+        {
+            List<ServiceResourceFE> resources = new List<ServiceResourceFE>();
+            List<ServiceResourceFE> filteredResources = null;
+
+            string path = GetResourcesPath("resourcesfe");
+
+            if (File.Exists(path))
+            {
+                string content = File.ReadAllText(path);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                resources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
+            }
+
+            filteredResources = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema);
+
+
+            return filteredResources;
+        }
+
         /// <summary>
         /// Sets up mock data for delegation list 
         /// </summary>
