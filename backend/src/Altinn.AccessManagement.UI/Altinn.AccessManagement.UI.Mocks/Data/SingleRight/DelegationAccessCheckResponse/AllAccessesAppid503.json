@@ -4,7 +4,7 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-503"
       }
     ],
     "action": "read",
@@ -23,7 +23,7 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-503"
       }
     ],
     "action": "write",
@@ -42,7 +42,7 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-503"
       }
     ],
     "action": "sign",

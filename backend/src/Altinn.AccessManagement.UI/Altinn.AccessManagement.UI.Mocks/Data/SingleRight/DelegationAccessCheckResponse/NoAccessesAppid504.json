@@ -4,13 +4,13 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-504"
       }
     ],
     "action": "read",
-    "status": "Delegable",
-    "faultCode": "",
-    "reason": "",
+    "status": "NotDelegable",
+    "faultCode": "UserMissingRight",
+    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
     "reasonParams": [
       {
         "name": "RoleRequirements",
@@ -23,7 +23,7 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-504"
       }
     ],
     "action": "write",
@@ -42,7 +42,7 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-504"
       }
     ],
     "action": "sign",

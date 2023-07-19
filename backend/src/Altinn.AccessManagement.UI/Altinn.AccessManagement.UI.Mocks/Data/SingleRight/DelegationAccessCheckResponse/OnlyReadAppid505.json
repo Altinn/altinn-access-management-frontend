@@ -4,17 +4,17 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-505"
       }
     ],
     "action": "read",
-    "status": "NotDelegable",
-    "faultCode": "AlreadyDelegated",
-    "reason": "User has already delegated this resource",
+    "status": "Delegable",
+    "faultCode": "",
+    "reason": "",
     "reasonParams": [
       {
-        "name": "AlreadyDelegated",
-        "value": ""
+        "name": "RoleRequirements",
+        "value": "DAGL, REGNA"
       }
     ]
   },
@@ -23,17 +23,17 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-505"
       }
     ],
     "action": "write",
     "status": "NotDelegable",
-    "faultCode": "AlreadyDelegated",
-    "reason": "User has already delegated this resource",
+    "faultCode": "UserMissingRight",
+    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
     "reasonParams": [
       {
-        "name": "AlreadyDelegated",
-        "value": ""
+        "name": "RoleRequirements",
+        "value": "DAGL, REGNA"
       }
     ]
   },
@@ -42,17 +42,17 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "ttd-am-k6"
+        "value": "appid-505"
       }
     ],
     "action": "sign",
     "status": "NotDelegable",
-    "faultCode": "AlreadyDelegated",
-    "reason": "User has already delegated this resource",
+    "faultCode": "UserMissingRight",
+    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
     "reasonParams": [
       {
-        "name": "AlreadyDelegated",
-        "value": ""
+        "name": "RoleRequirements",
+        "value": "DAGL, REGNA"
       }
     ]
   }

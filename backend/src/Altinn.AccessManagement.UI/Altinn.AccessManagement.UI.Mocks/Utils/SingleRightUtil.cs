@@ -10,16 +10,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
 
-            string fileName = Convert.ToString(accessLevel);
+            string filename = Convert.ToString(accessLevel) + ".json";
 
 
-            string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "DelegationAccessCheckResponse", filename);
 
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException($"The file with path {path} does not exist");
             }
-            string content = File.ReadAllText(Path.Combine(path, $"{fileName}.json"));
+            string content = File.ReadAllText(Path.Combine(path));
 
             JsonSerializerOptions options = new JsonSerializerOptions
             {
