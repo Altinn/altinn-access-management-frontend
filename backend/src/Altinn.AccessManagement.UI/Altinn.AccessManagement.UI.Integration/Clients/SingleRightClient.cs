@@ -5,8 +5,8 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.CheckDelegationAccessDto;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, CheckDelegationAccessDto request)
+        public async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
         {
             try
             {
@@ -60,14 +60,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<List<DelegationAccessCheckResponse>>(responseContent, _serializerOptions);
                 }
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
+                if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     HttpErrorResponse errorObject = JsonSerializer.Deserialize<HttpErrorResponse>(responseContent, _serializerOptions);
 
-                    Resource resource = new Resource(request.Resource.Id, request.Resource.Value);
-                    List<Resource> resources = new List<Resource>();
-                    resources.Add(resource);
+                    List<AttributeMatch> resources = new List<AttributeMatch>();
+                    resources.Add(request.Resource.FirstOrDefault());
 
                     List<DelegationAccessCheckResponse> errorReponseList = new List<DelegationAccessCheckResponse>
                     {

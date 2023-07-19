@@ -4,7 +4,7 @@ using Altinn.AccessManagement.UI.Mocks.Mocks;
 
 namespace Altinn.AccessManagement.UI.Mocks.Utils
 {
-    public class SingleRightUtil
+    public static class SingleRightUtil
     {
         public static List<DelegationAccessCheckResponse> GetMockedDelegationAccessCheckResponses(AccessLevel accessLevel)
         {
@@ -14,6 +14,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
 
 
             string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "DelegationAccessCheckResponse");
+
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"The file with path {path} does not exist");
+            }
             string content = File.ReadAllText(Path.Combine(path, $"{fileName}.json"));
 
             JsonSerializerOptions options = new JsonSerializerOptions

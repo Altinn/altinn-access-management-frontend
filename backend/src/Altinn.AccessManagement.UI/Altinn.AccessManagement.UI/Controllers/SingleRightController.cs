@@ -1,7 +1,8 @@
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.CheckDelegationAccessDto;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -30,12 +31,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost("checkdelegationaccesses/{partyId}")]
-        public async Task<ActionResult<List<DelegationAccessCheckResponse>>> CheckDelegationAccess([FromRoute] string partyId, [FromBody] CheckDelegationAccessDto request)
+        [Authorize]
+        public async Task<ActionResult<List<DelegationAccessCheckResponse>>> CheckDelegationAccess([FromRoute] string partyId, [FromBody] DelegationRequestDto request)
         {
             List<DelegationAccessCheckResponse> responses = new List<DelegationAccessCheckResponse>();
 
             responses = await _singleRightService.CheckDelegationAccess(partyId, request);
-            
+
             foreach (DelegationAccessCheckResponse response in responses)
             {
                 if (response.HttpErrorResponse != null)

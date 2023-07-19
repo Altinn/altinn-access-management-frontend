@@ -16,11 +16,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         /// <param name="status">The status of the response.</param>
         /// <param name="faultCode">The fault code, if applicable.</param>
         /// <param name="reason">The reason for the response.</param>
-        /// <param name="reasonParamsarams">The list of parameters.</param>
+        /// <param name="reasonParams">The list of parameters.</param>
         /// <param name="httpErrorResponse">The optional HTTP error response.</param>
         public DelegationAccessCheckResponse(
             string rightKey,
-            List<Resource> resource,
+            List<AttributeMatch> resource,
             string action,
             string status,
             string faultCode,
@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         ///     The list of resources.
         /// </summary>
         [JsonProperty("resource")]
-        public List<Resource> Resource { get; init; }
+        public List<AttributeMatch> Resource { get; init; }
 
         /// <summary>
         ///     The action performed.

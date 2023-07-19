@@ -3,8 +3,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess.CheckDelegationAccessDto;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 
@@ -31,17 +31,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
+        /// <summary>
+        ///     Method that checks at least 3 of the potential responses matches at least 3 of the responses in the mocked
+        ///     response.
+        /// </summary>
         [Fact]
         public async Task DelegationAccessCheck_valid_response()
         {
             // Arrange
             string partyId = "50004223";
 
-            CheckDelegationAccessDto dto = new CheckDelegationAccessDto
+            AttributeMatch attribute = new AttributeMatch
             {
-                To = new To("urn:altinn:organizationnumber", "123456789"),
-                Resource = new Resource("urn:altinn:resource", "testapi"),
+                Id = "id",
+                Value = "value",
             };
+            
+            List<AttributeMatch> resource = new List<AttributeMatch>();
+            resource.Add(attribute);
+            DelegationRequestDto dto = new DelegationRequestDto
+            {
+                Resource = resource,
+            };
+            
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
