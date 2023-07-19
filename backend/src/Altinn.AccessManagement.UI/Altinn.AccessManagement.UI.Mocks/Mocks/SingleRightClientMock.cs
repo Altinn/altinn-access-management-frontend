@@ -25,23 +25,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private AccessLevel DetermineFilePath(DelegationRequestDto request)
         {
-            if (request.Resource.FirstOrDefault().Value == "appid-504")
+            string value = request.Resource.FirstOrDefault().Value;
+
+            switch (value)
             {
-                return AccessLevel.NoAccessesAppid504;
+                case "appid-504":
+                    return AccessLevel.NoAccessesAppid504;
+                case "appid-505":
+                    return AccessLevel.OnlyReadAppid505;
+                case "appid-506":
+                    return AccessLevel.ReadAndWriteAppid506;
+                case "appid-503":
+                    return AccessLevel.AllAccessesAppid503;
+                default:
+                    return AccessLevel.AllAccessesAppid503;
             }
-            if (request.Resource.FirstOrDefault().Value == "appid-505")
-            {
-                return AccessLevel.OnlyReadAppid505;
-            }
-            if (request.Resource.FirstOrDefault().Value == "appid-506")
-            {
-                return AccessLevel.ReadAndWriteAppid506;
-            }
-            if (request.Resource.FirstOrDefault().Value == "appid-503")
-            {
-                return AccessLevel.AllAccessesAppid503;
-            }
-            return AccessLevel.AllAccessesAppid503;
         }
     }
 }
