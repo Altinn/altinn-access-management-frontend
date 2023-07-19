@@ -190,7 +190,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .ToList();
         }
 
-        private string GetNameInCorrectLanguage(Name name, string languageCode)
+        private static string GetNameInCorrectLanguage(Name name, string languageCode)
         {
             switch (languageCode.ToLowerInvariant())
             {
