@@ -8,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class SingleRightClientMock : ISingleRightClient
     {
         /// <summary>
-        ///     Initializes a new instance of <see cref="SingleRightMockClient" /> class
+        ///     Initializes a new instance of <see cref="SingleRightClientMock" /> class
         /// </summary>
         public SingleRightClientMock()
         {
@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(expectedResponse);
         }
 
-        private AccessLevel DetermineFilePath(DelegationRequestDto request)
+        private static AccessLevel DetermineFilePath(DelegationRequestDto request)
         {
             string value = request.Resource.FirstOrDefault().Value;
 

@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return countMatches;
         }
 
-        private bool AreObjectsEqual(DelegationAccessCheckResponse actualObject, DelegationAccessCheckResponse expectedObject)
+        private static bool AreObjectsEqual(DelegationAccessCheckResponse actualObject, DelegationAccessCheckResponse expectedObject)
         {
             return actualObject.RightKey == expectedObject.RightKey &&
                    actualObject.Action == expectedObject.Action &&

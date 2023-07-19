@@ -1,38 +1,38 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Common.PEP.Interfaces;
 using AltinnCore.Authentication.JwtCookie;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Microsoft.AspNetCore.Http;
 using Moq;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    /// Tests for AccessManagmet Resource metadata
+    ///     Tests for AccessManagmet Resource metadata
     /// </summary>
     [Collection("ResourceController Tests")]
     public class ResourceControllerTest : IClassFixture<CustomWebApplicationFactory<ResourceController>>
     {
         private readonly CustomWebApplicationFactory<ResourceController> _factory;
-        private HttpClient _client;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly HttpClient _client;
 
         /// <summary>
-        /// Constructor setting up factory, test client and dependencies
+        ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
         public ResourceControllerTest(CustomWebApplicationFactory<ResourceController> factory)
@@ -43,8 +43,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetResources returns a list of resources 
-        /// Expected: GetResources returns a list of resources with language filtered for the authenticated users selected language
+        ///     Test case: GetResources returns a list of resources
+        ///     Expected: GetResources returns a list of resources with language filtered for the authenticated users selected
+        ///     language
         /// </summary>
         [Fact]
         public async Task GetMaskinportenResources_valid()
@@ -52,11 +53,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             List<ServiceResourceFE> expectedResources = GetExpectedResources(ResourceType.MaskinportenSchema);
 
-            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/maskinportenschema");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -66,14 +67,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: PaginatedSearch with pagination (no search string or filters)
-        /// Expected: PaginatedSearch returns a list of all single rights resources in paginated form with language filtered for the authenticated users selected language
+        ///     Test case: PaginatedSearch with pagination (no search string or filters)
+        ///     Expected: PaginatedSearch returns a list of all single rights resources in paginated form with language filtered
+        ///     for the authenticated users selected language
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_searchStringAndFilterNotSet_ReturnsAll()
         {
             // Arrange
-            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             int page = 1;
             int resultsPerPage = 7;
@@ -94,18 +96,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: PaginatedSearch with pagination and filters
-        /// Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered for the authenticated users selected language
+        ///     Test case: PaginatedSearch with pagination and filters
+        ///     Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered
+        ///     for the authenticated users selected language
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_filterSet_ReturnsMatch()
         {
             // Arrange
-            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             int page = 1;
             int resultsPerPage = 4;
-            string[] roFilters = { "777777777", "123456789" }; // Narnia and testdepartementet
+            // Narnia and testdepartementet
+            string[] roFilters = { "777777777", "123456789" };
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
@@ -123,14 +127,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: PaginatedSearch with pagination and search string
-        /// Expected: PaginatedSearch returns a list of resources matching the search string in paginated form with language filtered for the authenticated users selected language
+        ///     Test case: PaginatedSearch with pagination and search string
+        ///     Expected: PaginatedSearch returns a list of resources matching the search string in paginated form with language
+        ///     filtered for the authenticated users selected language
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_searchStringSet_ReturnsMatch()
         {
             // Arrange
-            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             int page = 1;
             int resultsPerPage = 1;
@@ -152,19 +157,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: PaginatedSearch with search string and filters
-        /// Expected: PaginatedSearch returns a list of resources matching the filters and search string, ordered by number of matches
+        ///     Test case: PaginatedSearch with search string and filters
+        ///     Expected: PaginatedSearch returns a list of resources matching the filters and search string, ordered by number of
+        ///     matches
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_searchStringAndFilterSet_ReturnsCorrectOrder()
         {
             // Arrange
-            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             int page = 1;
             int resultsPerPage = 4;
             string searchString = "gir tilgang til brannbilen";
-            string[] roFilters = { "110110110", "123456789" }; // Brannvesnet and Testdepartementet
+            // Brannvesenet and Testdepartementet
+            string[] roFilters = { "110110110", "123456789" };
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
             // The most relevant resource to our search will be the Brannvesenet service, which is stored last
@@ -187,20 +194,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: Repeated call og PaginatedSearch to get all valid pages
-        /// Expected: PaginatedSearch returns expected number of entires for all valid pages
+        ///     Test case: Repeated call og PaginatedSearch to get all valid pages
+        ///     Expected: PaginatedSearch returns expected number of entires for all valid pages
         /// </summary>
         [Fact]
         public async Task GetSingleRightsSearch_noSearchStringAndFilters_ValidPagination()
         {
             // Arrange
-            var token = PrincipalUtil.GetToken(1337, 501337, 2);
+            string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             int resultsPerPage = 5;
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources();
 
-            int totalPages = (int) Math.Ceiling((double) allExpectedResources.Count/resultsPerPage);
+            int totalPages = (int)Math.Ceiling((double)allExpectedResources.Count / resultsPerPage);
             int resultsFinalPage = allExpectedResources.Count % resultsPerPage;
 
             List<PaginatedList<ServiceResourceFE>> allActualPages = new List<PaginatedList<ServiceResourceFE>>();
@@ -245,7 +252,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContext httpContext = new DefaultHttpContext();
             httpContext.Request.RouteValues.Add(partytype, id);
 
-            var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             httpContextAccessorMock.Setup(h => h.HttpContext).Returns(httpContext);
             return httpContextAccessorMock.Object;
         }
@@ -261,7 +268,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddSingleton(httpContextAccessor);
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                    services.AddSingleton<IPDP, PdpPermitMock>();                    
+                    services.AddSingleton<IPDP, PdpPermitMock>();
                 });
             }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 
