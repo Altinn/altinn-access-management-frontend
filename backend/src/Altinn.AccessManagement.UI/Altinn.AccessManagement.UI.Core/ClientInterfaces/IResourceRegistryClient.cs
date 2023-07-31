@@ -6,7 +6,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     /// <summary>
     ///     Interface for client integration with the Resource Registry
     /// </summary>
-    public interface IResourceClient
+    public interface IResourceRegistryClient
     {
         /// <summary>
         ///     Integration point for retrieving a single resoure by it's resource id

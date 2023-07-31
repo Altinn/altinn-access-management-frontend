@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private static string GetDataPathForProfile()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "Profile", "userprofile.json");
         }
     }

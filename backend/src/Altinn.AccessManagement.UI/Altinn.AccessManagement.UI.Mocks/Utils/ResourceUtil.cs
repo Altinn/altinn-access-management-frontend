@@ -8,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
     {
         public static OrgList GetMockedResourceRegistryOrgList()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
             string filename = "resourceowners";
 

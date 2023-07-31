@@ -7,14 +7,14 @@ using Altinn.AccessManagement.UI.Mocks.Utils;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IResourceClient"></see> interface
+    ///     Mock class for <see cref="IResourceRegistryClient"></see> interface
     /// </summary>
-    public class ResourceClientMock : IResourceClient
+    public class ResourceRegistryClientMock : IResourceRegistryClient
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceRegistryClient" /> class
         /// </summary>
-        public ResourceClientMock()
+        public ResourceRegistryClientMock()
         {
         }
 
@@ -68,13 +68,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private static string GetResourcePath(string resourceRegistryId)
         {
-            string mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
+            string mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "ResourceRegistry", $"{resourceRegistryId}", "resource.json");
         }
 
         private static string GetDataPathForResources()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "ResourceRegistry", "resources.json");
         }
     }

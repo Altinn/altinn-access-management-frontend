@@ -291,7 +291,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IProfileClient, ProfileClientMock>();
-                    services.AddSingleton<IResourceClient, ResourceClientMock>();
+                    services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddSingleton(httpContextAccessor);
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddSingleton<IPDP, PdpPermitMock>();

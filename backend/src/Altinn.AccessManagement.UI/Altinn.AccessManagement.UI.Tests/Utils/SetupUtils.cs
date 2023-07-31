@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IResourceClient, ResourceClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddTransient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IResourceClient, ResourceClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddTransient<IAuthenticationClient, AuthenticationMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
 

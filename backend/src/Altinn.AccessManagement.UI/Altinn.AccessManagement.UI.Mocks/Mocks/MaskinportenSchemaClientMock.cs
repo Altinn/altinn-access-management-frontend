@@ -132,13 +132,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private static string GetDataPathForDelegations()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "MaskinportenSchema");
         }
 
         private static string GetDataPathForDelegationOutput(string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceClientMock).Assembly.Location).LocalPath);
+            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             return $"{mockClientFolder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";
         }
     }

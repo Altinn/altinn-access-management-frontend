@@ -204,13 +204,13 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     {
         services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();
-        services.AddSingleton<IResourceClient, ResourceClientMock>();
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
     }
     else
     {
         services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
         services.AddHttpClient<IRegisterClient, RegisterClient>();
-        services.AddHttpClient<IResourceClient, ResourceClient>();
+        services.AddHttpClient<IResourceRegistryClient, ResourceRegistryRegistryClient>();
     }
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

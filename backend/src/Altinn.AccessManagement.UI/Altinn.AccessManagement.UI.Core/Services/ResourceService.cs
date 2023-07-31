@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly CacheConfig _cacheConfig;
         private readonly ILogger<IResourceService> _logger;
         private readonly IMemoryCache _memoryCache;
-        private readonly IResourceClient _resourceClient;
+        private readonly IResourceRegistryClient _resourceRegistryClient;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
@@ -32,17 +32,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         ///     Initializes a new instance of the <see cref="ResourceService" /> class.
         /// </summary>
         /// <param name="logger">Logger instance.</param>
-        /// <param name="resourceClient">the handler for resource registry client</param>
+        /// <param name="resourceRegistryClient">the handler for resource registry client</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
         public ResourceService(
             ILogger<IResourceService> logger,
-            IResourceClient resourceClient,
+            IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig)
         {
             _logger = logger;
-            _resourceClient = resourceClient;
+            _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
         }
@@ -154,7 +154,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             if (!_memoryCache.TryGetValue(cacheKey, out ServiceResource resource))
             {
-                resource = await _resourceClient.GetResource(resourceRegistryId);
+                resource = await _resourceRegistryClient.GetResource(resourceRegistryId);
 
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetPriority(CacheItemPriority.High)
@@ -172,7 +172,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             OrgList orgList = new OrgList();
             try
             {
-                orgList = await _resourceClient.GetAllResourceOwners();
+                orgList = await _resourceRegistryClient.GetAllResourceOwners();
             }
             catch (Exception ex)
             {
@@ -211,7 +211,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
-                resources = await _resourceClient.GetResources();
+                resources = await _resourceRegistryClient.GetResources();
 
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetPriority(CacheItemPriority.High)
@@ -225,7 +225,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<ServiceResource>> GetFullResourceList()
         {
-            return await _resourceClient.GetResourceList();
+            return await _resourceRegistryClient.GetResourceList();
         }
 
         /// <summary>
