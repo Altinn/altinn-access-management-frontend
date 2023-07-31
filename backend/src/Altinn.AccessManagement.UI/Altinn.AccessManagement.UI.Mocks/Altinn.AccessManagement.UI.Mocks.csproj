@@ -22,5 +22,9 @@
     <ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models" />
+  </ItemGroup>
+
 
 </Project>
