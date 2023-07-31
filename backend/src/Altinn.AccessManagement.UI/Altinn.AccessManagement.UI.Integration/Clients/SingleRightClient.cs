@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;

@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Newtonsoft.Json;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess

@@ -1,4 +1,4 @@
-namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
+namespace Altinn.AccessManagement.UI.Core.Models.Common
 {
     /// <summary>
     ///     Object for current http error response for CheckDelegationAccess
