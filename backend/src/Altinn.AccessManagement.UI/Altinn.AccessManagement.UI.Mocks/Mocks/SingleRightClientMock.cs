@@ -18,12 +18,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
         {
-            List<DelegationAccessCheckResponse> expectedResponse = SingleRightUtil.GetMockedDelegationAccessCheckResponses(DetermineFilePath(request));
+            List<DelegationAccessCheckResponse> expectedResponse = SingleRightUtil.GetMockedDelegationAccessCheckResponses(DetermineAccessLevel(request));
 
             return Task.FromResult(expectedResponse);
         }
 
-        private static AccessLevel DetermineFilePath(DelegationRequestDto request)
+        private static AccessLevel DetermineAccessLevel(DelegationRequestDto request)
         {
             string value = request.Resource.FirstOrDefault().Value;
 

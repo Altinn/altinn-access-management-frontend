@@ -36,55 +36,146 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     response.
         /// </summary>
         [Fact]
-        public async Task DelegationAccessCheck_valid_response()
+        public async Task DelegationAccessCheck_AllAccesses_valid_response()
         {
             // Arrange
-            string partyId = "50004223";
+            string partyId = "999 999 999";
 
             AttributeMatch attribute = new AttributeMatch
             {
-                Id = "id",
-                Value = "value",
+                Id = "urn:altinn:resource",
+                Value = "appid-503",
             };
-            
+
             List<AttributeMatch> resource = new List<AttributeMatch>();
             resource.Add(attribute);
             DelegationRequestDto dto = new DelegationRequestDto
             {
                 Resource = resource,
             };
-            
+
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
             List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
-            int countMatches = CountMatches(actualResponses);
+            int countMatches = CountMatches(actualResponses, AccessLevel.AllAccessesAppid503);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(3, countMatches);
         }
-        private int CountMatches(List<DelegationAccessCheckResponse> actualResponses)
+        
+        [Fact]
+        public async Task DelegationAccessCheck_NoAccesses_valid_response()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+
+            AttributeMatch attribute = new AttributeMatch
+            {
+                Id = "urn:altinn:resource",
+                Value = "appid-504",
+            };
+
+            List<AttributeMatch> resource = new List<AttributeMatch>();
+            resource.Add(attribute);
+            DelegationRequestDto dto = new DelegationRequestDto
+            {
+                Resource = resource,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
+            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            int countMatches = CountMatches(actualResponses, AccessLevel.NoAccessesAppid504);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(3, countMatches);
+        }
+
+        [Fact]
+        public async Task DelegationAccessCheck_OnlyRead_valid_response()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+
+            AttributeMatch attribute = new AttributeMatch
+            {
+                Id = "urn:altinn:resource",
+                Value = "appid-505",
+            };
+
+            List<AttributeMatch> resource = new List<AttributeMatch>();
+            resource.Add(attribute);
+            DelegationRequestDto dto = new DelegationRequestDto
+            {
+                Resource = resource,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
+            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            int countMatches = CountMatches(actualResponses, AccessLevel.OnlyReadAppid505);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(3, countMatches);
+        }
+        
+        [Fact]
+        public async Task DelegationAccessCheck_ReadAndWrite_valid_response()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+
+            AttributeMatch attribute = new AttributeMatch
+            {
+                Id = "urn:altinn:resource",
+                Value = "appid-506",
+            };
+
+            List<AttributeMatch> resource = new List<AttributeMatch>();
+            resource.Add(attribute);
+            DelegationRequestDto dto = new DelegationRequestDto
+            {
+                Resource = resource,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
+            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            int countMatches = CountMatches(actualResponses, AccessLevel.ReadAndWriteAppid506);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(3, countMatches);
+        }
+        
+        private int CountMatches(List<DelegationAccessCheckResponse> actualResponses, AccessLevel expectedAccessLevel)
         {
 
             int countMatches = 0;
-            foreach (AccessLevel accessLevel in Enum.GetValues(typeof(AccessLevel)))
+
+            List<DelegationAccessCheckResponse> expectedResponses = SingleRightUtil.GetMockedDelegationAccessCheckResponses(expectedAccessLevel);
+            countMatches = 0;
+            for (int i = 0; i < actualResponses.Count; i++)
             {
-                List<DelegationAccessCheckResponse> expectedResponses = SingleRightUtil.GetMockedDelegationAccessCheckResponses(accessLevel);
-                countMatches = 0;
-                for (int i = 0; i < actualResponses.Count; i++)
+                bool value = AreObjectsEqual(actualResponses[i], expectedResponses[i]);
+                if (value)
                 {
-                    bool value = AreObjectsEqual(actualResponses[i], expectedResponses[i]);
-                    if (value)
-                    {
-                        countMatches++;
-                    }
-                }
-                if (countMatches == 3)
-                {
-                    break;
+                    countMatches++;
                 }
             }
             return countMatches;
