@@ -162,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        private static void AssertAttributeMatchEqual(AttributeMatch expected, AttributeMatch actual)
+        private static void AssertAttributeMatchEqual(IdValuePair expected, IdValuePair actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

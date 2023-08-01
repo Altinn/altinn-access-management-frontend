@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     have been offered to.
         /// </summary>
         [Required]
-        public List<AttributeMatch> To { get; set; }
+        public List<IdValuePair> To { get; set; }
 
         /// <summary>
         ///     Gets or sets a list of rights identifying what is to be revoked

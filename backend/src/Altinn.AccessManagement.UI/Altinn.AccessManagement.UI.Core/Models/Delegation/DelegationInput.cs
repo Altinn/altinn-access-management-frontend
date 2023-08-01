@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     Gets or sets a set of Attribute Id and Attribute Value for the single entity receiving rights
         /// </summary>
         [Required]
-        public List<AttributeMatch> To { get; set; }
+        public List<IdValuePair> To { get; set; }
 
         /// <summary>
         ///     Gets or sets a list of rights which is to be delegated to the To recipient.

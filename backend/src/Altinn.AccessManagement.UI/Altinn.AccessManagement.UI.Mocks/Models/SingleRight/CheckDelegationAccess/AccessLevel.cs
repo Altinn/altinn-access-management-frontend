@@ -1,4 +1,4 @@
-namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
+namespace Altinn.AccessManagement.UI.Mocks.Models.SingleRight.CheckDelegationAccess
 {
     /// <summary>
     ///     An enum to make it more easy to use GetMockedDelegationAccessCheckResponses()

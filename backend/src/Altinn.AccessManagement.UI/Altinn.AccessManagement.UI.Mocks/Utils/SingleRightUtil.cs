@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
+using Altinn.AccessManagement.UI.Mocks.Models.SingleRight.CheckDelegationAccess;
 
 namespace Altinn.AccessManagement.UI.Mocks.Utils
 {

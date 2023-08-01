@@ -5,6 +5,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Mocks.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 
@@ -41,13 +42,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "999 999 999";
 
-            AttributeMatch attribute = new AttributeMatch
+            IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
                 Value = "appid-503",
             };
 
-            List<AttributeMatch> resource = new List<AttributeMatch>();
+            List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
             DelegationRequestDto dto = new DelegationRequestDto
             {
@@ -73,13 +74,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "999 999 999";
 
-            AttributeMatch attribute = new AttributeMatch
+            IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
                 Value = "appid-504",
             };
 
-            List<AttributeMatch> resource = new List<AttributeMatch>();
+            List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
             DelegationRequestDto dto = new DelegationRequestDto
             {
@@ -105,13 +106,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "999 999 999";
 
-            AttributeMatch attribute = new AttributeMatch
+            IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
                 Value = "appid-505",
             };
 
-            List<AttributeMatch> resource = new List<AttributeMatch>();
+            List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
             DelegationRequestDto dto = new DelegationRequestDto
             {
@@ -137,13 +138,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "999 999 999";
 
-            AttributeMatch attribute = new AttributeMatch
+            IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
                 Value = "appid-506",
             };
 
-            List<AttributeMatch> resource = new List<AttributeMatch>();
+            List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
             DelegationRequestDto dto = new DelegationRequestDto
             {

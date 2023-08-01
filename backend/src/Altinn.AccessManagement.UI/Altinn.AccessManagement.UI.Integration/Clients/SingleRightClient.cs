@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     string responseContent = await response.Content.ReadAsStringAsync();
                     HttpErrorResponse errorObject = JsonSerializer.Deserialize<HttpErrorResponse>(responseContent, _serializerOptions);
 
-                    List<AttributeMatch> resources = new List<AttributeMatch>();
+                    List<IdValuePair> resources = new List<IdValuePair>();
                     resources.Add(request.Resource.FirstOrDefault());
 
                     List<DelegationAccessCheckResponse> errorReponseList = new List<DelegationAccessCheckResponse>

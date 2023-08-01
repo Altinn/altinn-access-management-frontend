@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Mocks.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
