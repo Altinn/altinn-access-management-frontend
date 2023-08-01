@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Transactions;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
@@ -230,7 +231,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (string word in searchWords)
                 {
-                    if (res.Title.ToLower().Contains(word) || res.Description.ToLower().Contains(word) || res.RightDescription.ToLower().Contains(word))
+                    if (StringUtils.NotNullAndContains(res.Title, word) || StringUtils.NotNullAndContains(res.Description, word) || StringUtils.NotNullAndContains(res.RightDescription, word))
                     {
                         numMatches++;
                     }

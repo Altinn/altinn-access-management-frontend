@@ -73,7 +73,7 @@ export const ActionBar = ({
   const contentId = useId();
 
   return (
-    <>
+    <div>
       <ActionBarContext.Provider
         value={{
           onClick,
@@ -144,7 +144,7 @@ export const ActionBar = ({
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
-    </>
+    </div>
   );
 };
 

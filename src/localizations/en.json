@@ -95,5 +95,10 @@
     "receipt_page_failed_text": "Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice"
+  },
+  "single_rights_delegation": {
+    "search_label": "Search after form or service",
+    "filter_label": "Filter on service owner",
+    "search_hits": "matches found:"
   }
 }

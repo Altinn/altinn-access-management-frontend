@@ -2,29 +2,24 @@ import * as React from 'react';
 import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Chip, Paragraph } from '@digdir/design-system-react';
 
-import {
-  Page,
-  PageHeader,
-  PageContent,
-  PageSize,
-  PageContainer,
-  Filter,
-  ActionBar,
-} from '@/components';
+import { Page, PageHeader, PageContent, PageSize, PageContainer, Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 
+import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
+  const { t } = useTranslation('common');
+
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
-  const [openActionBar, setOpenActionBar] = useState('');
   const [searchString, setSearchString] = useState('');
 
   const { data, error, isLoading } = useGetPaginatedSearchQuery({
@@ -34,6 +29,7 @@ export const ChooseServicePage = () => {
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
 
+  // Temporary hardcoding of filter options
   const filterOptions = [
     { label: 'Påfunnsetaten', value: '130000000' },
     { label: 'Testdepartementet', value: '123456789' },
@@ -63,7 +59,7 @@ export const ChooseServicePage = () => {
       {filters.map((filterValue) => (
         <Chip.Removable
           key={filterValue}
-          aria-label={`Slett ${getFilterLabel(filterValue)}`}
+          aria-label={t('common.remove') + ' ' + getFilterLabel(filterValue)}
           onClick={() => {
             unCheckFilter(filterValue);
           }}
@@ -74,20 +70,15 @@ export const ChooseServicePage = () => {
     </Chip.Group>
   );
 
-  const serviceResouces = resources?.map((r: ServiceResource) => (
-    <ActionBar
-      key={r.identifier}
+  const serviceResouces = resources?.map((r: ServiceResource, index: any) => (
+    <ResourceActionBar
+      key={r.identifier ?? index}
       title={r.title}
       subtitle={r.resourceOwnerName}
-      color='neutral'
-      open={openActionBar === r.identifier}
-      onClick={() => {
-        setOpenActionBar(r.identifier);
-      }}
     >
       <p>{r.description}</p>
       <p>{r.rightDescription}</p>
-    </ActionBar>
+    </ResourceActionBar>
   ));
 
   return (
@@ -99,19 +90,19 @@ export const ChooseServicePage = () => {
             <div className={classes.searchInputs}>
               <div className={classes.searchField}>
                 <SearchField
-                  label='Søk etter skjema og tjeneste'
+                  label={t('single_rights_delegation.search_label')}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setSearchString(event.target.value);
                   }}
                 ></SearchField>
               </div>
               <Filter
-                icon={<FilterIcon title='filter' />}
-                label='Filtrer på tjenesteeier'
+                icon={<FilterIcon />}
+                label={t('single_rights_delegation.filter_label')}
                 options={filterOptions}
-                applyButtonLabel='Bruk'
-                resetButtonLabel='Nullstill'
-                closeButtonAriaLabel='Lukk'
+                applyButtonLabel={t('common.apply')}
+                resetButtonLabel={t('common.reset_choices')}
+                closeButtonAriaLabel={t('common.close')}
                 searchable
                 fullScreenModal={isSm}
                 values={filters}
@@ -119,8 +110,12 @@ export const ChooseServicePage = () => {
               ></Filter>
             </div>
             <div className={classes.resultCountAndChips}>
-              {totalNumberOfResults && (
-                <Paragraph>{`${totalNumberOfResults.toString()} treff på søket: `}</Paragraph>
+              {totalNumberOfResults !== undefined && (
+                <Paragraph>
+                  {totalNumberOfResults.toString() +
+                    ' ' +
+                    t('single_rights_delegation.search_hits')}
+                </Paragraph>
               )}
               {filterChips()}
             </div>
