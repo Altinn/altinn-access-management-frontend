@@ -8,56 +8,56 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <summary>
-    /// Service that integrates with the delegation client. Processes and maps the required data to the frontend model
+    ///     Service that integrates with the delegation client. Processes and maps the required data to the frontend model
     /// </summary>
     public class MaskinportenSchemaService : IMaskinportenSchemaService
     {
-        private readonly IMaskinportenSchemaClient _delegationsClient;
+        private readonly IMaskinportenSchemaClient _maskinportenSchemaClient;
         private readonly IResourceAdministrationPoint _resourceAdministrationPoint;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaskinportenSchemaService"/> class.
+        /// Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
         /// </summary>
-        /// <param name="delegationsClient">handler for delegations client</param>
+        /// <param name="maskinportenSchemaClient">handler for delegations client</param>
         /// <param name="resourceAdministrationPoint">handler for resource registry</param>
         public MaskinportenSchemaService(
-            IMaskinportenSchemaClient delegationsClient,
+            IMaskinportenSchemaClient maskinportenSchemaClient,
             IResourceAdministrationPoint resourceAdministrationPoint)
         {
-            _delegationsClient = delegationsClient;
+            _maskinportenSchemaClient = maskinportenSchemaClient;
             _resourceAdministrationPoint = resourceAdministrationPoint;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<List<MaskinportenSchemaDelegationFE>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
         {
-            List<MaskinportenSchemaDelegation> offeredDelegations = await _delegationsClient.GetOfferedMaskinportenSchemaDelegations(party);
+            List<MaskinportenSchemaDelegation> offeredDelegations = await _maskinportenSchemaClient.GetOfferedMaskinportenSchemaDelegations(party);
             return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<List<MaskinportenSchemaDelegationFE>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
         {
-            List<MaskinportenSchemaDelegation> receivedDelegations = await _delegationsClient.GetReceivedMaskinportenSchemaDelegations(party);
+            List<MaskinportenSchemaDelegation> receivedDelegations = await _maskinportenSchemaClient.GetReceivedMaskinportenSchemaDelegations(party);
             return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
-            return await _delegationsClient.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+            return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
-            return await _delegationsClient.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
+            return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            return await _delegationsClient.CreateMaskinportenScopeDelegation(party, delegation);
+            return await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegation);
         }
 
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)

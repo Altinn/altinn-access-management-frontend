@@ -68,8 +68,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
-            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
-            AttributeMatch fromMatch = delegation.From.First();
+            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            IdValuePair fromMatch = delegation.From.First();
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
@@ -93,8 +93,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
-            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
-            AttributeMatch toMatch = delegation.To.First();
+            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            IdValuePair toMatch = delegation.To.First();
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
@@ -102,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
                 List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
 
-                foreach(MaskinportenSchemaDelegation d in delegations)
+                foreach (MaskinportenSchemaDelegation d in delegations)
                 {
                     if (d.OfferedByPartyId.ToString() == party &&
                         d.CoveredByOrganizationNumber == toMatch.Value &&
@@ -118,8 +118,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
-            AttributeMatch toMatch = delegation.To.First();
+            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            IdValuePair toMatch = delegation.To.First();
             string path = GetDataPathForDelegationOutput(resourceMatch.Value, party, toMatch.Value);
             if (File.Exists(path))
             {
