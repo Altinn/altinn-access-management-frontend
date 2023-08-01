@@ -182,8 +182,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return MapOrgListToResourceOwnerFe(orgList, languageCode);
         }
 
-        /// <inheritdoc />
-        public List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
+        private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {
             return orgList.Orgs.Values
                 .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))
