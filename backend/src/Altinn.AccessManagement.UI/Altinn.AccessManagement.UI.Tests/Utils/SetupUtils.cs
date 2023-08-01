@@ -10,12 +10,12 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Tests.Utils
 {
     /// <summary>
-    /// Utility class for usefull common operations for setup for unittests
+    ///     Utility class for usefull common operations for setup for unittests
     /// </summary>
     public static class SetupUtils
     {
         /// <summary>
-        /// Gets a HttpClient for unittests testing
+        ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <returns>HttpClient</returns>
@@ -36,7 +36,26 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Adds an auth cookie to the request message
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetSingleRightTestClient(CustomWebApplicationFactory<SingleRightController> customFactory)
+        {
+            WebApplicationFactory<SingleRightController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
+        /// <summary>
+        ///     Adds an auth cookie to the request message
         /// </summary>
         /// <param name="requestMessage">the request message</param>
         /// <param name="token">the tijen to be added in the cookie</param>
@@ -52,37 +71,30 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Gets a HttpClient for unittests testing
+        ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
         /// <param name="allowRedirect">allow redirect flag</param>
         /// <returns>HttpClient</returns>
         public static HttpClient GetTestClient(CustomWebApplicationFactory<HomeController> customFactory, bool allowRedirect = false)
         {
-            try
+            WebApplicationFactory<HomeController> factory = customFactory.WithWebHostBuilder(builder =>
             {
-                WebApplicationFactory<HomeController> factory = customFactory.WithWebHostBuilder(builder =>
+                builder.ConfigureTestServices(services =>
                 {
-                    builder.ConfigureTestServices(services =>
-                    {
-                        services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
-                        services.AddTransient<IAuthenticationClient, AuthenticationMock>();
-                        services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddTransient<IAuthenticationClient, AuthenticationMock>();
+                    services.AddTransient<IProfileClient, ProfileClientMock>();
 
-                        services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                    });
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
-                var opts = new WebApplicationFactoryClientOptions
-                {
-                    AllowAutoRedirect = allowRedirect
-                };
-                factory.Server.AllowSynchronousIO = true;
-                return factory.CreateClient(opts);
-            }
-            catch (Exception)
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
             {
-                throw;
-            }
+                AllowAutoRedirect = allowRedirect,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
         }
     }
 }

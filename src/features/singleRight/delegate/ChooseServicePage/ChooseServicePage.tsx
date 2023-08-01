@@ -1,10 +1,12 @@
 import * as React from 'react';
+import axios from 'axios';
 import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Chip, Paragraph } from '@digdir/design-system-react';
 
+import { DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 import { Page, PageHeader, PageContent, PageSize, PageContainer, Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -28,6 +30,21 @@ export const ChooseServicePage = () => {
   });
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
+
+  const checkDelegationAccess = () => {
+    const dto = new DelegationRequestDto('urn:altinn:resource', 'testapi');
+
+    axios
+      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`, dto)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  checkDelegationAccess();
 
   // Temporary hardcoding of filter options
   const filterOptions = [

@@ -11,20 +11,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    /// Controller to update AccessManagement with resources existing i ResourceRegister.
+    ///     Controller to update AccessManagement with resources existing i ResourceRegister.
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     [Route("accessmanagement/api/v1/resources")]
     public class ResourceController : ControllerBase
     {
-        private readonly ILogger _logger;
-        private readonly IResourceAdministrationPoint _rap;
-        private readonly IProfileService _profileService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger _logger;
+        private readonly IProfileService _profileService;
+        private readonly IResourceAdministrationPoint _rap;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceController"/> class.
+        ///     Initializes a new instance of the <see cref="ResourceController" /> class.
         /// </summary>
         /// <param name="logger">the logger.</param>
         /// <param name="resourceAdministrationPoint">The resource administration point</param>
@@ -43,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Get list of maskinprotenschema resources
+        ///     Get list of maskinportenschema resources
         /// </summary>
         /// <returns>List of API service resources</returns>
         [HttpGet]
