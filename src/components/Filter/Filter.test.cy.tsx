@@ -85,16 +85,16 @@ describe(
       );
       cy.get('button').contains('Filter').click();
       // Button is aria-disabled and unclickable
-      cy.get('button').contains('Apply').should('have.attr', 'aria-disabled', 'true');
-      cy.get('button').contains('Apply').click();
+      cy.get('button').contains('Apply').parent().should('have.attr', 'aria-disabled', 'true');
+      cy.get('button').contains('Apply').parent().click();
       cy.get('@onApplySpy').should('not.have.been.called');
 
       // Select an option
       cy.get('button').contains(filterOptions[0].label).click();
 
       // Button is no longer aria-disabled and is clickable
-      cy.get('button').contains('Apply').should('not.have.attr', 'aria-disabled', 'true');
-      cy.get('button').contains('Apply').click();
+      cy.get('button').contains('Apply').parent().should('not.have.attr', 'aria-disabled', 'true');
+      cy.get('button').contains('Apply').parent().click();
       cy.get('@onApplySpy').should('have.been.called');
     });
 
@@ -102,7 +102,7 @@ describe(
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
       // Button is aria-disabled
-      cy.get('button').contains('Reset').should('have.attr', 'aria-disabled', 'true');
+      cy.get('button').contains('Reset').parent().should('have.attr', 'aria-disabled', 'true');
     });
 
     it('displays reset button as aria-disabled when all active options have been unchecked manually', () => {
@@ -115,7 +115,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains(filterOptions[0].label).click();
       // Button is aria-disabled
-      cy.get('button').contains('Reset').should('have.attr', 'aria-disabled', 'true');
+      cy.get('button').contains('Reset').parent().should('have.attr', 'aria-disabled', 'true');
     });
 
     it('applies the chosen options by calling onApply with the chosen values', () => {
@@ -130,7 +130,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains(filterOptions[0].label).click();
       cy.contains(filterOptions[2].label).click();
-      cy.get('button').contains('Apply').click();
+      cy.get('button').contains('Apply').parent().click();
       cy.get('@onApplySpy').should('have.been.called');
       cy.get('@onApplySpy').should('have.been.calledWith', [
         filterOptions[0].value,
@@ -182,7 +182,7 @@ describe(
       );
       cy.get('button').contains('Filter').click();
 
-      cy.get('button').contains('Reset').click();
+      cy.get('button').contains('Reset').parent().click();
       cy.contains('label', `${filterOptions[0].label}`)
         .find('[type=checkbox]')
         .should('not.be.checked');
@@ -193,7 +193,7 @@ describe(
         .find('[type=checkbox]')
         .should('not.be.checked');
 
-      cy.get('button').contains('Apply').click();
+      cy.get('button').contains('Apply').parent().click();
 
       cy.get('@onApplySpy').should('have.been.called');
       cy.get('@onApplySpy').should('have.been.calledWith', []);
@@ -205,7 +205,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains(filterOptions[0].label).click();
       cy.contains(filterOptions[2].label).click();
-      cy.get('button').contains('Apply').click();
+      cy.get('button').contains('Apply').parent().click();
 
       // Check that they are still applied when reopening
       cy.get('button').contains('Filter').click();
@@ -293,7 +293,7 @@ describe(
         .should('not.be.checked');
 
       // There are no 'changes' so the Apply button should be disabled
-      cy.get('button').contains('Apply').should('have.attr', 'aria-disabled', 'true');
+      cy.get('button').contains('Apply').parent().should('have.attr', 'aria-disabled', 'true');
     });
   },
 );
