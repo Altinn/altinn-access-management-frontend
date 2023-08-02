@@ -9,7 +9,7 @@ import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/sites/NotFoundSite';
-import { OverviewPage } from '@/features/singleRight/delegate/OverviewPage/OverviewPage';
+import { ChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
 
 import { GeneralPath, SingleRightPath, ApiDelegationPath } from '../paths';
 
@@ -65,7 +65,7 @@ export const Router = createBrowserRouter(
       >
         <Route
           path={SingleRightPath.ChooseService}
-          element={<OverviewPage />}
+          element={<ChooseServicePage />}
           errorElement={<NotFoundSite />}
         />
       </Route>

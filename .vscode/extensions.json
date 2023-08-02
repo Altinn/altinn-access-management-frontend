@@ -5,8 +5,8 @@
     "pranaygp.vscode-css-peek",
     "joy-yu.css-snippets",
     "dbaeumer.vscode-eslint",
-    "GitHub.vscode-pull-request-github",
-    "GitHub.github-vscode-theme",
+    "github.vscode-pull-request-github",
+    "github.github-vscode-theme",
     "eamodio.gitlens",
     "ecmel.vscode-html-css",
     "christian-kohler.npm-intellisense",
@@ -14,5 +14,9 @@
     "christian-kohler.path-intellisense",
     "esbenp.prettier-vscode",
     "pflannery.vscode-versionlens",
+    "github.copilot-chat",
+    "ms-dotnettools.csdevkit",
+    "ms-dotnettools.csharp",
+    "github.vscode-github-actions"
   ]
 }

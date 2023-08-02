@@ -169,6 +169,8 @@ export const ChooseOrgPage = () => {
             <a
               className={classes.link}
               href='https://www.brreg.no/'
+              target='_blank'
+              rel='noreferrer'
             >
               {t('common.broennoeysund_register')}
             </a>

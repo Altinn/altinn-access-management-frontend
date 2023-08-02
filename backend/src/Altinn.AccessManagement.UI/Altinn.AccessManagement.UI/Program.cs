@@ -205,12 +205,14 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+        services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
     }
     else
     {
         services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
         services.AddHttpClient<IRegisterClient, RegisterClient>();
-        services.AddHttpClient<IResourceRegistryClient, ResourceRegistryRegistryClient>();
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
+        services.AddHttpClient<ISingleRightClient, SingleRightClient>();
     }
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -220,7 +222,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IProfileService, ProfileService>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
-
+    services.AddSingleton<ISingleRightService, SingleRightService>();
     if (builder.Environment.IsDevelopment())
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();

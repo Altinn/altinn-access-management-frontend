@@ -67,8 +67,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
-            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
-            AttributeMatch fromMatch = delegation.From.First();
+            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            IdValuePair fromMatch = delegation.From.First();
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
@@ -92,8 +92,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
-            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
-            AttributeMatch toMatch = delegation.To.First();
+            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            IdValuePair toMatch = delegation.To.First();
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
@@ -117,8 +117,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            AttributeMatch resourceMatch = delegation.Rights.First().Resource.First();
-            AttributeMatch toMatch = delegation.To.First();
+            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            IdValuePair toMatch = delegation.To.First();
             string path = GetDataPathForDelegationOutput(resourceMatch.Value, party, toMatch.Value);
             if (File.Exists(path))
             {

@@ -4,7 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
     /// <summary>
-    /// Service interface for service handling maskinporten schema delegations
+    ///     Service interface for service handling maskinporten schema delegations
     /// </summary>
     public interface IMaskinportenSchemaService
     {

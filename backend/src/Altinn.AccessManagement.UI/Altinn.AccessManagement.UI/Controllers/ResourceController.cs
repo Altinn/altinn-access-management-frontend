@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    ///     Controller for resources existing i ResourceRegister.
+    ///     Controller to update AccessManagement with resources existing i ResourceRegister.
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Get list of maskinprotenschema resources
+        ///     Get list of maskinportenschema resources
         /// </summary>
         /// <returns>List of API service resources</returns>
         [HttpGet]

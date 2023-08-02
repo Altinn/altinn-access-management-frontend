@@ -1,25 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.Authorization.ABAC.Xacml;
-using Altinn.Authorization.ABAC.Xacml.JsonProfile;
 using Microsoft.AspNetCore.Mvc;
-using Xunit;
 
 namespace Altinn.AccessManagement.UI.Tests.Utils
 {
     /// <summary>
-    /// Class with methods that can help with assertions of larger objects.
+    ///     Class with methods that can help with assertions of larger objects.
     /// </summary>
     public static class AssertionUtil
     {
         /// <summary>
-        /// Asserts that two collections of objects have the same property values in the same positions.
+        ///     Asserts that two collections of objects have the same property values in the same positions.
         /// </summary>
         /// <typeparam name="T">The Type</typeparam>
         /// <param name="expected">A collection of expected instances</param>
@@ -59,11 +52,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="BaseRightExternal"/> have the same property in the same positions.
+        ///     Assert that two <see cref="BaseRightExternal" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertBaseRightExternalEqual(BaseRight expected, BaseRight actual)
+        public static void AssertBaseRightExternalEqual(DelegationRequestDto expected, DelegationRequestDto actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -73,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="CompetentAuthorityExternal"/> have the same property in the same positions.
+        ///     Assert that two <see cref="CompetentAuthorityExternal" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -88,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="MaskinportenSchemaDelegationFE"/> have the same property in the same positions.
+        ///     Assert that two <see cref="MaskinportenSchemaDelegationFE" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -115,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="DelegationOutput"/> have the same property in the same positions.
+        ///     Assert that two <see cref="DelegationOutput" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -129,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="ServiceResource"/> have the same property in the same positions.
+        ///     Assert that two <see cref="ServiceResource" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -148,7 +141,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Assert that two <see cref="ValidationProblemDetails"/> have the same property in the same positions.
+        ///     Assert that two <see cref="ValidationProblemDetails" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -169,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        private static void AssertAttributeMatchEqual(AttributeMatch expected, AttributeMatch actual)
+        private static void AssertAttributeMatchEqual(IdValuePair expected, IdValuePair actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

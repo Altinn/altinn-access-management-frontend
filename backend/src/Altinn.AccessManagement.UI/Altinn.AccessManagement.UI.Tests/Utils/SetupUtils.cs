@@ -36,6 +36,25 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetSingleRightTestClient(CustomWebApplicationFactory<SingleRightController> customFactory)
+        {
+            WebApplicationFactory<SingleRightController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
+        /// <summary>
         ///     Adds an auth cookie to the request message
         /// </summary>
         /// <param name="requestMessage">the request message</param>

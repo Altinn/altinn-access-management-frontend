@@ -18,18 +18,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     ///     Client implementation for integration with the Resource Registry
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class ResourceRegistryRegistryClient : IResourceRegistryClient
+    public class ResourceRegistryClient : IResourceRegistryClient
     {
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<IResourceRegistryClient> _logger;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ResourceRegistryRegistryClient" /> classß
+        ///     Initializes a new instance of the <see cref="ResourceRegistryClient" /> classß
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
-        public ResourceRegistryRegistryClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceRegistryClient> logger, IHttpContextAccessor httpContextAccessor)
+        public ResourceRegistryClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceRegistryClient> logger, IHttpContextAccessor httpContextAccessor)
         {
             PlatformSettings platformSettings = settings.Value;
             _httpClient = httpClient;

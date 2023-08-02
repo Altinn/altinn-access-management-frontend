@@ -111,7 +111,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             int page = 1;
             int resultsPerPage = 4;
-            string[] roFilters = { "777777777", "123456789" };// Narnia and testdepartementet
+            // Narnia and testdepartementet
+            string[] roFilters = { "777777777", "123456789" };
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
@@ -172,7 +173,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             int page = 1;
             int resultsPerPage = 4;
             string searchString = "gir tilgang til brannbilen";
-            string[] roFilters = { "110110110", "123456789" };// Brannvesnet and Testdepartementet
+            // Brannvesenet and Testdepartementet
+            string[] roFilters = { "110110110", "123456789" };
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
             // The most relevant resource to our search will be the Brannvesenet service, which is stored last
