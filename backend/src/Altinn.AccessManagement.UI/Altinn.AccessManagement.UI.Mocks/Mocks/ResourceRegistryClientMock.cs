@@ -55,15 +55,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<OrgList> GetAllResourceOwners()
-        {
-            return Task.FromResult(ResourceUtil.GetMockedResourceRegistryOrgList());
-        }
-
-        /// <inheritdoc />
         public Task<List<ServiceResource>> GetResourceList()
         {
             return GetResources();
+        }
+
+        /// <inheritdoc />
+        public Task<OrgList> GetAllResourceOwners()
+        {
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
+            string filename = "resourceowners";
+
+            OrgList orgList = ResourceUtil.GetMockedData<OrgList>(path, filename);
+
+            return Task.FromResult(orgList);
         }
 
         private static string GetResourcePath(string resourceRegistryId)

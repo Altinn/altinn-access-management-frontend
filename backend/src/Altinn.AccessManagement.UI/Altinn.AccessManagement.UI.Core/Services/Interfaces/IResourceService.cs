@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -48,7 +49,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         ///     Gets list of all resource owners
         /// </summary>
-        /// <returns>List of resource owners in string format</returns>
+        /// <returns>Simplified list of resource owners for frontend</returns>
         Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode);
+
+        /// <summary>
+        ///     Maps a list of organisations to a list of resource owners
+        /// </summary>
+        /// <returns>Simplified list of resource owners for frontend</returns>
+        List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode);
     }
 }

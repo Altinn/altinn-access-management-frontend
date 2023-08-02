@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -169,10 +170,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode)
         {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
             OrgList orgList = new OrgList();
             try
             {
-                orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                object result = await _resourceRegistryClient.GetAllResourceOwners();
+
+                if (result is OrgList orgListResponse)
+                {
+                    orgList = orgListResponse;
+                }
+                else
+                {
+                    _logger.LogError("//ResourceService //GetAllResourceOwners failed: Unexpected response type.");
+                }
             }
             catch (Exception ex)
             {
@@ -182,7 +196,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return MapOrgListToResourceOwnerFe(orgList, languageCode);
         }
 
-        private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
+        /// <inheritdoc />
+        public List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {
             return orgList.Orgs.Values
                 .Select(org => new ResourceOwnerFE(GetNameInCorrectLanguage(org.Name, languageCode), org.Orgnr))

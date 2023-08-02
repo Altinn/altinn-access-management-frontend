@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -251,7 +250,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetAllResourceOwners_validresults()
         {
             // Arrange
-            OrgList orgList = ResourceUtil.GetMockedResourceRegistryOrgList();
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
+            string filename = "resourceowners";
+
+            OrgList orgList = ResourceUtil.GetMockedData<OrgList>(path, filename);
             List<ResourceOwnerFE> expectedResult = _resourceService.MapOrgListToResourceOwnerFe(orgList, "nb");
 
             string token = PrincipalUtil.GetToken(1337, 501337);
