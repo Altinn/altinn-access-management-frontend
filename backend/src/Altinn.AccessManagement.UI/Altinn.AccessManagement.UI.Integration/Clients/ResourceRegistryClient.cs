@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             OrgList resourceOwners = new OrgList();
 
-            string endpointUrl = "https://platform.at23.altinn.cloud/resourceregistry/api/v1/resource/orgs";
+            string endpointUrl = "resource/orgs";
 
             try
             {

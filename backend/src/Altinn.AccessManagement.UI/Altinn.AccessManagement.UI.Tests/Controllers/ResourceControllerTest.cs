@@ -244,9 +244,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetAllResourceOwners, returns a list of resource owners in string format
-        ///     Expected: GetResources returns a list of resource owners with language filtered for the authenticated users
-        ///     selected
+        ///     Test case: GetAllResourceOwners, returns a simplified list of resource owners
+        ///     Expected: GetResources returns a list of resource owners in correct language
         /// </summary>
         [Fact]
         public async Task GetAllResourceOwners_validresults()
@@ -254,7 +253,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
-            string filename = "resourceowners";
+            string filename = "resourceowners.json";
 
             OrgList orgList = ResourceUtil.GetMockedData<OrgList>(path, filename);
             List<ResourceOwnerFE> expectedResult = _resourceService.MapOrgListToResourceOwnerFe(orgList, "nb");
