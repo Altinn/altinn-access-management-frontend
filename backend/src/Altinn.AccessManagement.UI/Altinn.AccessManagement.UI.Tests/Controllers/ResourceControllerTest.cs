@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -251,12 +250,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetAllResourceOwners_validresults()
         {
             // Arrange
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
-            string filename = "resourceowners.json";
-
-            OrgList orgList = ResourceUtil.GetMockedData<OrgList>(path, filename);
-            List<ResourceOwnerFE> expectedResult = _resourceService.MapOrgListToResourceOwnerFe(orgList, "nb");
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceControllerTest).Assembly.Location).LocalPath);
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "ResourceRegistry");
+            string filename = "resourceOwnersOrgList.json";
+            List<ResourceOwnerFE> expectedResult = Util.GetMockData<List<ResourceOwnerFE>>(path, filename);
 
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -267,7 +264,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             List<ResourceOwnerFE> actualResult = await response.Content.ReadAsAsync<List<ResourceOwnerFE>>();
-            Assert.True(expectedResult.SequenceEqual(actualResult));
+            for (int i = 0; i < expectedResult.Count; i++)
+            {
+                Assert.Equal(expectedResult[i], actualResult[i]);
+            }
         }
 
         private static List<ServiceResourceFE> GetExpectedResources(ResourceType resourceType)

@@ -2,9 +2,9 @@ using System.Text.Json;
 
 namespace Altinn.AccessManagement.UI.Mocks.Utils
 {
-    public static class ResourceUtil
+    public static class Util
     {
-        public static T GetMockedData<T>(string path, string filename)
+        public static T GetMockData<T>(string path, string filename)
         {
             string fullPath = Path.Combine(path, filename);
 

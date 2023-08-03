@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry");
             string filename = "resourceowners.json";
 
-            OrgList orgList = ResourceUtil.GetMockedData<OrgList>(path, filename);
+            OrgList orgList = Util.GetMockData<OrgList>(path, filename);
 
             return Task.FromResult(orgList);
         }
