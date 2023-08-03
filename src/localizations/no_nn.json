@@ -17,7 +17,11 @@
     "search": "Søk",
     "add": "Legg til",
     "remove": "Fjern",
-    "to": "Til"
+    "to": "Til",
+    "previous":"Forrige",
+    "next": "Neste",
+    "general_error_title": "Beklager, men det har skjedd ein feil",
+    "general_error_paragraph": "Vi klarer ikkje å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen seinare. Om problemet hald fram, ta kontakt med Altinn Servicedesk."
   },
   "profile": {
     "received": "Mottekne",

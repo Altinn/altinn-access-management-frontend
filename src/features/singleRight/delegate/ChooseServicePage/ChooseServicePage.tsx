@@ -4,7 +4,7 @@ import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, Paragraph } from '@digdir/design-system-react';
+import { Chip, Heading, Paragraph, Pagination, Spinner, Alert } from '@digdir/design-system-react';
 
 import { DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 import { Page, PageHeader, PageContent, PageSize, PageContainer, Filter } from '@/components';
@@ -23,13 +23,16 @@ export const ChooseServicePage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, error, isLoading } = useGetPaginatedSearchQuery({
+  const { data, error, isFetching } = useGetPaginatedSearchQuery({
     searchString,
     ROfilters: filters,
+    page: currentPage,
   });
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
+  const resultsPerPage = 10;
 
   const checkDelegationAccess = () => {
     const dto = new DelegationRequestDto('urn:altinn:resource', 'testapi');
@@ -53,10 +56,13 @@ export const ChooseServicePage = () => {
     { label: 'Narnia', value: '777777777' },
     { label: 'Brannvesenet', value: '110110110' },
     { label: 'Økern Portal', value: '904111111' },
+    { label: 'Digitaliseringsdirektoratet', value: '991825827' },
+    { label: 'Brønnøysundregistrene', value: '974760673' },
   ];
 
   const unCheckFilter = (filter: string) => {
     setFilters((prev) => prev.filter((f) => f !== filter));
+    setCurrentPage(1);
   };
 
   const getFilterLabel = (value: string) => {
@@ -98,6 +104,62 @@ export const ChooseServicePage = () => {
     </ResourceActionBar>
   ));
 
+  const searchResults = () => {
+    if (isFetching) {
+      return (
+        <div className={classes.spinner}>
+          <Spinner
+            title='loading'
+            size='1xLarge'
+          />
+        </div>
+      );
+    } else if (error) {
+      return (
+        <Alert
+          className={classes.searchError}
+          severity='danger'
+          iconTitle={t('common.error')}
+        >
+          <Heading
+            level={2}
+            size='xsmall'
+            spacing
+          >
+            {t('common.general_error_title')}
+          </Heading>
+          <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
+        </Alert>
+      );
+    } else {
+      return (
+        <>
+          <div className={classes.resultCountAndChips}>
+            {totalNumberOfResults !== undefined && (
+              <Paragraph>
+                {totalNumberOfResults.toString() + ' ' + t('single_rights_delegation.search_hits')}
+              </Paragraph>
+            )}
+            {filterChips()}
+          </div>
+          <div className={classes.serviceResouces}> {serviceResouces}</div>
+          {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
+            <Pagination
+              className={classes.pagination}
+              currentPage={currentPage}
+              totalPages={Math.ceil(totalNumberOfResults / resultsPerPage)}
+              nextLabel={t('common.next')}
+              previousLabel={t('common.previous')}
+              itemLabel={(num: number) => `Side ${num}`}
+              onChange={setCurrentPage}
+              size='small'
+            />
+          )}
+        </>
+      );
+    }
+  };
+
   return (
     <PageContainer>
       <Page size={isSm ? PageSize.Small : PageSize.Medium}>
@@ -110,6 +172,7 @@ export const ChooseServicePage = () => {
                   label={t('single_rights_delegation.search_label')}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setSearchString(event.target.value);
+                    setCurrentPage(1);
                   }}
                 ></SearchField>
               </div>
@@ -123,20 +186,13 @@ export const ChooseServicePage = () => {
                 searchable
                 fullScreenModal={isSm}
                 values={filters}
-                onApply={setFilters}
+                onApply={(filters) => {
+                  setFilters(filters);
+                  setCurrentPage(1);
+                }}
               ></Filter>
             </div>
-            <div className={classes.resultCountAndChips}>
-              {totalNumberOfResults !== undefined && (
-                <Paragraph>
-                  {totalNumberOfResults.toString() +
-                    ' ' +
-                    t('single_rights_delegation.search_hits')}
-                </Paragraph>
-              )}
-              {filterChips()}
-            </div>
-            {!isLoading && <div className={classes.serviceResouces}> {serviceResouces} </div>}
+            {searchResults()}
           </div>
         </PageContent>
       </Page>

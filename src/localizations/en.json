@@ -17,7 +17,11 @@
     "search": "Search",
     "add": "Add",
     "remove": "Remove",
-    "to": "To"
+    "to": "To",
+    "previous":"Previous",
+    "next": "Next",
+    "general_error_title": "Sorry, looks like somthing went wrong",
+    "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk."
   },
   "profile": {
     "received": "Received",

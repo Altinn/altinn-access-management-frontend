@@ -5,6 +5,8 @@ import { PlusIcon, MinusIcon } from '@navikt/aksel-icons';
 
 import { ActionBar } from '@/components';
 
+import classes from './ResourceActionBar.module.css';
+
 export interface ResourceActionBarProps {
   /** The subtitle to be displayed in the header of the ActionBar. */
   subtitle?: React.ReactNode;
@@ -56,7 +58,7 @@ export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionB
       }}
       actions={isAdded ? removeButton : addButton}
     >
-      {children}
+      <div className={classes.content}>{children}</div>
     </ActionBar>
   );
 };

@@ -24,6 +24,7 @@ interface resourceReference {
 interface searchParams {
   searchString: string;
   ROfilters: string[];
+  page: number;
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -34,12 +35,12 @@ export const singleRightsApi = createApi({
   endpoints: (builder) => ({
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
-        const { searchString, ROfilters } = args;
+        const { searchString, ROfilters, page } = args;
         let filterUrl = '';
         for (const filter of ROfilters) {
           filterUrl = filterUrl + `&ROFilters=${filter}`;
         }
-        return `resources/paginatedSearch?Page=1&ResultsPerPage=10&SearchString=${searchString}${filterUrl}`;
+        return `resources/paginatedSearch?Page=${page}&ResultsPerPage=10&SearchString=${searchString}${filterUrl}`;
       },
     }),
   }),

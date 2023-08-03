@@ -12,14 +12,17 @@
     width: 50%;
 }
 
-.filterChips {
-}
-
 .resultCountAndChips {
     display: flex;
+    flex-wrap: wrap;
     align-items: end;
     gap: var(--fds-spacing-2);
     margin-top: var(--fds-spacing-8);
+}
+
+.filterChips {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .serviceResouces {
@@ -27,4 +30,20 @@
     display: flex;
     flex-direction: column;
     gap: var(--fds-spacing-2);
+}
+
+.pagination {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.searchError {
+    margin-TOP: 32px;
 }
