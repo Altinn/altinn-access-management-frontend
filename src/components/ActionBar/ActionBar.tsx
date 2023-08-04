@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useId } from 'react';
 import cn from 'classnames';
+import { Paragraph } from '@digdir/design-system-react';
 
 import type { ClickHandler } from './Context';
 import { ActionBarContext } from './Context';
@@ -19,7 +20,9 @@ export interface ActionBarProps {
   /** The content to be displayed as expandable content inside the ActionBar. */
   children?: React.ReactNode;
   /** The color variant of the ActionBar. */
-  color?: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
+  color?: 'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'danger';
+  /** The size variant of the ActionBar. */
+  size?: 'small' | 'medium' | 'large';
   /** The click event handler for the ActionBar. */
   onClick?: ClickHandler;
   /** Specifies whether the ActionBar is open or closed. */
@@ -64,6 +67,7 @@ export const ActionBar = ({
   additionalText,
   children,
   color = 'neutral',
+  size = 'medium',
   onClick,
   open = false,
   subtitle,
@@ -73,7 +77,7 @@ export const ActionBar = ({
   const contentId = useId();
 
   return (
-    <>
+    <div>
       <ActionBarContext.Provider
         value={{
           onClick,
@@ -81,10 +85,11 @@ export const ActionBar = ({
           headerId,
           contentId,
           color,
+          size,
         }}
       >
         <div
-          className={cn(classes.actionBar, classes[color], {
+          className={cn(classes.actionBar, classes[color], classes[size], {
             [classes.subtitle]: subtitle,
             [classes.open]: open,
             [classes.clickable]: onClick,
@@ -93,7 +98,7 @@ export const ActionBar = ({
         >
           {onClick ? (
             <button
-              className={cn(classes.actionBarHeader, classes.clickable)}
+              className={cn(classes.actionBarHeader, classes.clickable, classes[color])}
               type='button'
               onClick={onClick}
               id={headerId}
@@ -103,25 +108,53 @@ export const ActionBar = ({
             >
               <div className={classes.actionBarButtonContainer}>
                 {children && (
-                  <div className={cn(classes.actionBarIcon)}>
+                  <div className={cn(classes.actionBarIcon, classes[size], classes[color])}>
                     <ActionBarIcon />
                   </div>
                 )}
                 <div className={classes.actionBarTexts}>
-                  <div className={classes.title}>{title}</div>
-                  <div className={classes.subtitle}>{subtitle}</div>
+                  <Paragraph
+                    as='div'
+                    size={size}
+                    className={classes.title}
+                  >
+                    {title}
+                  </Paragraph>
+                  {subtitle && (
+                    <Paragraph
+                      as='div'
+                      size='xsmall'
+                      className={classes.subtitle}
+                    >
+                      {subtitle}
+                    </Paragraph>
+                  )}
                 </div>
               </div>
             </button>
           ) : (
             <div
-              className={classes.actionBarHeader}
+              className={cn(classes.actionBarHeader)}
               id={headerId}
               data-testid='action-bar'
             >
               <div className={classes.actionBarTexts}>
-                <div className={classes.title}>{title}</div>
-                <div className={classes.subtitle}>{subtitle}</div>
+                <Paragraph
+                  as='div'
+                  size={size}
+                  className={classes.title}
+                >
+                  {title}
+                </Paragraph>
+                {subtitle && (
+                  <Paragraph
+                    as='div'
+                    size='xsmall'
+                    className={classes.subtitle}
+                  >
+                    {subtitle}
+                  </Paragraph>
+                )}
               </div>
             </div>
           )}
@@ -144,7 +177,7 @@ export const ActionBar = ({
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
-    </>
+    </div>
   );
 };
 

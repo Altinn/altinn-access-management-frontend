@@ -9,7 +9,7 @@ export interface ActionBarContentProps {
 }
 
 export const ActionBarContent = ({ children }: ActionBarContentProps) => {
-  const { open, contentId, headerId, color } = useActionBarContext();
+  const { open, contentId, headerId, color, size } = useActionBarContext();
 
   return (
     <>
@@ -18,7 +18,7 @@ export const ActionBarContent = ({ children }: ActionBarContentProps) => {
           aria-expanded={open}
           id={contentId}
           aria-labelledby={headerId}
-          className={cn(classes.actionBarContent, classes[color])}
+          className={cn(classes.actionBarContent, classes[color], classes[size])}
         >
           {children}
         </div>

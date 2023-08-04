@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import { FolderFileFillIcon, ChevronRightDoubleCircleFillIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as Add } from '@/assets/Add.svg';
@@ -31,7 +32,7 @@ import {
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
-import { ErrorPanel } from '@/components';
+import { ActionBar, ErrorPanel } from '@/components';
 import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';
@@ -177,8 +178,328 @@ export const OverviewPageContent = ({
     ));
   };
 
+  const [isTestOpen, setTestIsOpen] = useState(false);
+  const [isTestOpen2, setTestIsOpen2] = useState(false);
+
   return (
     <div className={common.pageContent}>
+      <ActionBar
+        title={'Valgte rettigheter'}
+        open={isTestOpen}
+        onClick={() => {
+          setTestIsOpen(!isTestOpen);
+        }}
+        additionalText={
+          <div className={classes.testText}>
+            <FolderFileFillIcon /> 3 tjenester lagt til
+          </div>
+        }
+        actions={
+          <Button
+            variant='quiet'
+            icon={<ChevronRightDoubleCircleFillIcon />}
+          >
+            Gå videre
+          </Button>
+        }
+        size='large'
+        color='light'
+      >
+        <div className={classes.testContent}>
+          <ActionBar
+            title='Automatiker'
+            color='light'
+            size='small'
+            subtitle='Tester'
+            actions={<Button variant='quiet'>Angre</Button>}
+            open={isTestOpen2}
+            onClick={() => {
+              setTestIsOpen2(!isTestOpen2);
+            }}
+          >
+            <p>Tester her</p>
+          </ActionBar>
+          <ActionBar
+            title='Brannbilen'
+            color='light'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+          <ActionBar
+            title='Sverdet i steinen'
+            color='light'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+        </div>
+      </ActionBar>
+      {'tester'}
+      <ActionBar
+        title={'Valgte rettigheter'}
+        open={isTestOpen}
+        onClick={() => {
+          setTestIsOpen(!isTestOpen);
+        }}
+        additionalText={
+          <div className={classes.testText}>
+            <FolderFileFillIcon /> 3 tjenester lagt til
+          </div>
+        }
+        actions={
+          <Button
+            variant='quiet'
+            icon={<ChevronRightDoubleCircleFillIcon />}
+          >
+            Gå videre
+          </Button>
+        }
+        size='large'
+        color='dark'
+      >
+        <div className={classes.testContent}>
+          <ActionBar
+            title='Automatiker'
+            color='dark'
+            size='small'
+            subtitle='Tester'
+            actions={<Button variant='quiet'>Angre</Button>}
+            open={isTestOpen2}
+            onClick={() => {
+              setTestIsOpen2(!isTestOpen2);
+            }}
+          >
+            <p>Tester her</p>
+          </ActionBar>
+          <ActionBar
+            title='Brannbilen'
+            color='dark'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+          <ActionBar
+            title='Sverdet i steinen'
+            color='dark'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+        </div>
+      </ActionBar>
+      {'tester'}
+      <ActionBar
+        title={'Valgte rettigheter'}
+        open={isTestOpen}
+        onClick={() => {
+          setTestIsOpen(!isTestOpen);
+        }}
+        additionalText={
+          <div className={classes.testText}>
+            <FolderFileFillIcon /> 3 tjenester lagt til
+          </div>
+        }
+        actions={
+          <Button
+            variant='quiet'
+            icon={<ChevronRightDoubleCircleFillIcon />}
+          >
+            Gå videre
+          </Button>
+        }
+        size='large'
+        color='neutral'
+      >
+        <div className={classes.testContent}>
+          <ActionBar
+            title='Automatiker'
+            color='neutral'
+            size='small'
+            subtitle='Tester'
+            actions={<Button variant='quiet'>Angre</Button>}
+            open={isTestOpen2}
+            onClick={() => {
+              setTestIsOpen2(!isTestOpen2);
+            }}
+          >
+            <p>Tester her</p>
+          </ActionBar>
+          <ActionBar
+            title='Brannbilen'
+            color='neutral'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+          <ActionBar
+            title='Sverdet i steinen'
+            color='neutral'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+        </div>
+      </ActionBar>
+      {'tester'}
+      <ActionBar
+        title={'Valgte rettigheter'}
+        open={isTestOpen}
+        onClick={() => {
+          setTestIsOpen(!isTestOpen);
+        }}
+        additionalText={
+          <div className={classes.testText}>
+            <FolderFileFillIcon /> 3 tjenester lagt til
+          </div>
+        }
+        actions={
+          <Button
+            variant='quiet'
+            icon={<ChevronRightDoubleCircleFillIcon />}
+          >
+            Gå videre
+          </Button>
+        }
+        size='large'
+        color='danger'
+      >
+        <div className={classes.testContent}>
+          <ActionBar
+            title='Automatiker'
+            color='danger'
+            size='small'
+            subtitle='Tester'
+            actions={<Button variant='quiet'>Angre</Button>}
+            open={isTestOpen2}
+            onClick={() => {
+              setTestIsOpen2(!isTestOpen2);
+            }}
+          >
+            <p>Tester her</p>
+          </ActionBar>
+          <ActionBar
+            title='Brannbilen'
+            color='danger'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+          <ActionBar
+            title='Sverdet i steinen'
+            color='danger'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+        </div>
+      </ActionBar>
+      {'tester'}
+      <ActionBar
+        title={'Valgte rettigheter'}
+        open={isTestOpen}
+        onClick={() => {
+          setTestIsOpen(!isTestOpen);
+        }}
+        additionalText={
+          <div className={classes.testText}>
+            <FolderFileFillIcon /> 3 tjenester lagt til
+          </div>
+        }
+        actions={
+          <Button
+            variant='quiet'
+            icon={<ChevronRightDoubleCircleFillIcon />}
+          >
+            Gå videre
+          </Button>
+        }
+        size='large'
+        color='warning'
+      >
+        <div className={classes.testContent}>
+          <ActionBar
+            title='Automatiker'
+            color='warning'
+            size='small'
+            subtitle='Tester'
+            actions={<Button variant='quiet'>Angre</Button>}
+            open={isTestOpen2}
+            onClick={() => {
+              setTestIsOpen2(!isTestOpen2);
+            }}
+          >
+            <p>Tester her</p>
+          </ActionBar>
+          <ActionBar
+            title='Brannbilen'
+            color='warning'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+          <ActionBar
+            title='Sverdet i steinen'
+            color='warning'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+        </div>
+      </ActionBar>
+      {'tester'}
+      <ActionBar
+        title={'Valgte rettigheter'}
+        open={isTestOpen}
+        onClick={() => {
+          setTestIsOpen(!isTestOpen);
+        }}
+        additionalText={
+          <div className={classes.testText}>
+            <FolderFileFillIcon /> 3 tjenester lagt til
+          </div>
+        }
+        actions={
+          <Button
+            variant='quiet'
+            icon={<ChevronRightDoubleCircleFillIcon />}
+          >
+            Gå videre
+          </Button>
+        }
+        size='large'
+        color='success'
+      >
+        <div className={classes.testContent}>
+          <ActionBar
+            title='Automatiker'
+            color='success'
+            size='small'
+            subtitle='Tester'
+            actions={<Button variant='quiet'>Angre</Button>}
+            open={isTestOpen2}
+            onClick={() => {
+              setTestIsOpen2(!isTestOpen2);
+            }}
+          >
+            <p>Tester her</p>
+          </ActionBar>
+          <ActionBar
+            title='Brannbilen'
+            color='success'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+          <ActionBar
+            title='Sverdet i steinen'
+            color='success'
+            subtitle='Tester'
+            size='small'
+            actions={<Button variant='quiet'>Angre</Button>}
+          ></ActionBar>
+        </div>
+      </ActionBar>
       <div className={classes.overviewActionBarContainer}>
         {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
         {layout === LayoutState.Offered && (
@@ -193,6 +514,19 @@ export const OverviewPageContent = ({
             </Button>
           </div>
         )}
+        <ActionBar
+          title='Automatiker'
+          color='light'
+          size='medium'
+          subtitle='Tester'
+          actions={<Button variant='quiet'>Angre</Button>}
+          open={isTestOpen2}
+          onClick={() => {
+            setTestIsOpen2(!isTestOpen2);
+          }}
+        >
+          <p>Tester her</p>
+        </ActionBar>
         <Panel
           title={t('api_delegation.card_title')}
           forceMobileLayout={isSm}
@@ -246,7 +580,7 @@ export const OverviewPageContent = ({
             <Button
               disabled={saveDisabled}
               onClick={handleSave}
-              color={ButtonColor.Success}
+              color={ButtonColor.light}
               fullWidth={isSm}
             >
               {t('api_delegation.save')}
