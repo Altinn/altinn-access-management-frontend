@@ -17,6 +17,8 @@ import {
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
 
+const searchResultsPerPage = 10;
+
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
 
@@ -29,6 +31,7 @@ export const ChooseServicePage = () => {
     searchString,
     ROfilters: filters,
     page: currentPage,
+    resultsPerPage: searchResultsPerPage,
   });
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
@@ -66,12 +69,8 @@ export const ChooseServicePage = () => {
   };
 
   const getFilterLabel = (value: string) => {
-    for (const option of filterOptions) {
-      if (option.value === value) {
-        return option.label;
-      }
-    }
-    return '';
+    const option = filterOptions.find((option) => option.value === value);
+    return option ? option.label : '';
   };
 
   const filterChips = () => (
@@ -93,7 +92,7 @@ export const ChooseServicePage = () => {
     </Chip.Group>
   );
 
-  const serviceResouces = resources?.map((r: ServiceResource, index: any) => (
+  const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
     <ResourceActionBar
       key={r.identifier ?? index}
       title={r.title}
@@ -109,7 +108,7 @@ export const ChooseServicePage = () => {
       return (
         <div className={classes.spinner}>
           <Spinner
-            title='loading'
+            title={t('common.loading')}
             size='1xLarge'
           />
         </div>
