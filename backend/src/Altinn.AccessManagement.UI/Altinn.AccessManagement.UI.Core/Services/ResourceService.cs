@@ -177,20 +177,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             OrgList orgList = new OrgList();
             try
             {
-                object result = await _resourceRegistryClient.GetAllResourceOwners();
-
-                if (result is OrgList orgListResponse)
-                {
-                    orgList = orgListResponse;
-                }
-                else
-                {
-                    _logger.LogError("//ResourceService //GetAllResourceOwners failed: Unexpected response type.");
-                }
+                orgList = await _resourceRegistryClient.GetAllResourceOwners();
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceService //GetAllResourceOwners failed exception: {Ex}", ex);
+                _logger.LogError("//ResourceService //GetAllResourceOwners failed, exception: {Ex}", ex);
             }
 
             return MapOrgListToResourceOwnerFe(orgList, languageCode);

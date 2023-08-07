@@ -10,7 +10,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
 
             if (!File.Exists(fullPath))
             {
-                throw new FileNotFoundException($"The file with path {path} does not exist");
+                throw new FileNotFoundException($"The file with path {fullPath} does not exist");
             }
 
             string content = File.ReadAllText(Path.Combine(fullPath));
