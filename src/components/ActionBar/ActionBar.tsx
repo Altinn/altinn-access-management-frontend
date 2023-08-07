@@ -23,6 +23,8 @@ export interface ActionBarProps {
   color?: 'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'danger';
   /** The size variant of the ActionBar. */
   size?: 'small' | 'medium' | 'large';
+  /** Heading level. Use this to make sure the heading is correct according to you page heading levels */
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   /** The click event handler for the ActionBar. */
   onClick?: ClickHandler;
   /** Specifies whether the ActionBar is open or closed. */
@@ -72,9 +74,23 @@ export const ActionBar = ({
   open = false,
   subtitle,
   title,
+  headingLevel,
 }: ActionBarProps) => {
   const headerId = useId();
   const contentId = useId();
+
+  let renderAsElem: React.ElementType;
+  switch (size) {
+    case 'large':
+      renderAsElem = headingLevel ? `h${headingLevel}` : 'h3';
+      break;
+    case 'medium':
+      renderAsElem = headingLevel ? `h${headingLevel}` : 'h4';
+      break;
+    case 'small':
+      renderAsElem = headingLevel ? `h${headingLevel}` : 'h5';
+      break;
+  }
 
   return (
     <div>
@@ -114,7 +130,7 @@ export const ActionBar = ({
                 )}
                 <div className={classes.actionBarTexts}>
                   <Paragraph
-                    as='div'
+                    as={renderAsElem}
                     size={size}
                     className={classes.title}
                   >
@@ -140,7 +156,7 @@ export const ActionBar = ({
             >
               <div className={classes.actionBarTexts}>
                 <Paragraph
-                  as='div'
+                  as={renderAsElem}
                   size={size}
                   className={classes.title}
                 >

@@ -210,7 +210,6 @@ export const OverviewPageContent = ({
             title='Automatiker'
             color='light'
             size='small'
-            subtitle='Tester'
             actions={<Button variant='quiet'>Angre</Button>}
             open={isTestOpen2}
             onClick={() => {
@@ -222,14 +221,12 @@ export const OverviewPageContent = ({
           <ActionBar
             title='Brannbilen'
             color='light'
-            subtitle='Tester'
             size='small'
             actions={<Button variant='quiet'>Angre</Button>}
           ></ActionBar>
           <ActionBar
             title='Sverdet i steinen'
             color='light'
-            subtitle='Tester'
             size='small'
             actions={<Button variant='quiet'>Angre</Button>}
           ></ActionBar>
@@ -250,6 +247,7 @@ export const OverviewPageContent = ({
         actions={
           <Button
             variant='quiet'
+            color='inverted'
             icon={<ChevronRightDoubleCircleFillIcon />}
           >
             Gå videre
@@ -263,8 +261,14 @@ export const OverviewPageContent = ({
             title='Automatiker'
             color='dark'
             size='small'
-            subtitle='Tester'
-            actions={<Button variant='quiet'>Angre</Button>}
+            actions={
+              <Button
+                color='inverted'
+                variant='quiet'
+              >
+                Angre
+              </Button>
+            }
             open={isTestOpen2}
             onClick={() => {
               setTestIsOpen2(!isTestOpen2);
@@ -275,16 +279,28 @@ export const OverviewPageContent = ({
           <ActionBar
             title='Brannbilen'
             color='dark'
-            subtitle='Tester'
             size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
+            actions={
+              <Button
+                color='inverted'
+                variant='quiet'
+              >
+                Angre
+              </Button>
+            }
           ></ActionBar>
           <ActionBar
             title='Sverdet i steinen'
             color='dark'
-            subtitle='Tester'
             size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
+            actions={
+              <Button
+                color='inverted'
+                variant='quiet'
+              >
+                Angre
+              </Button>
+            }
           ></ActionBar>
         </div>
       </ActionBar>
@@ -515,6 +531,7 @@ export const OverviewPageContent = ({
           </div>
         )}
         <ActionBar
+          headingLevel={1}
           title='Automatiker'
           color='light'
           size='medium'
