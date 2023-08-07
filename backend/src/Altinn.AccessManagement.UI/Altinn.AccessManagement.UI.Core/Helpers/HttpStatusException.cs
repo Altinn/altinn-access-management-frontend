@@ -1,39 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
     /// <summary>
-    /// An exception that contains the statusCode of an Http call gone wrong
+    ///     An exception that contains the statusCode of an Http call gone wrong
     /// </summary>
     public class HttpStatusException : Exception
     {
         /// <summary>
-        /// The Statuscode provided by the external call
+        ///     Constructor for HttpStatusException
         /// </summary>
-        public HttpStatusCode StatusCode { get; set; }
-        
-        public string Type { get; set; }
-        
-        public string Title { get; set; }
-
-        public string Status { get; set; }
-        
-        public string Instance { get; set; }
+        /// <param name="type">The type of error</param>
+        /// <param name="title">The title of the error</param>
+        /// <param name="status">The status code of the error</param>
+        /// <param name="traceId">The id of the error that can be traced</param>
+        public HttpStatusException(string type, string title, HttpStatusCode status, string traceId)
+        {
+            Type = type;
+            Title = title;
+            Status = status;
+            TraceId = traceId;
+        }
 
         /// <summary>
-        /// Constructor
+        ///     The type of error
         /// </summary>
-        /// <param name="statusCode">The status code</param>
-        /// <param name="message">The message</param>
-        public HttpStatusException(HttpStatusCode statusCode, string type, string Title string message) : base(message)
-        {
-            StatusCode = statusCode;
-            
-        }
+        public string Type { get; set; }
+
+        /// <summary>
+        ///     The title of the error
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        ///     The status code of the error
+        /// </summary>
+        public HttpStatusCode Status { get; set; }
+
+        /// <summary>
+        ///     The id of the error that can be traced
+        /// </summary>
+        public string TraceId { get; set; }
     }
 }

@@ -77,14 +77,14 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
-                if (ex.StatusCode == System.Net.HttpStatusCode.NoContent)
+                if (ex.Status == System.Net.HttpStatusCode.NoContent)
                 {
                     return NoContent();
                 }
                 else
                 {
                     string responseContent = ex.Message;
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.Status, "Unexpected HttpStatus response", detail: responseContent));
                 }
             }
         }

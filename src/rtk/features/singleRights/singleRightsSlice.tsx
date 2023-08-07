@@ -29,6 +29,30 @@ interface searchParams {
   page: number;
 }
 
+interface DelegationAccessCheckResponse {
+  rightKey: string;
+  resource: IdValuePair[];
+  action: string;
+  status: string;
+  details: Details;
+}
+
+interface IdValuePair {
+  id: string;
+  value: string;
+}
+
+interface Details {
+  detailCode: string;
+  info: string;
+  detailParams: DetailParams[];
+}
+
+interface DetailParams {
+  name: string;
+  value: string;
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -48,16 +72,20 @@ export const singleRightsApi = createApi({
   }),
 });
 
-/* export const delegationAccessCheckApi = createApi({
+export const delegationAccessCheckApi = createApi({
   reducerPath: 'delegationAccessCheckApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
-    getDelegationAccessCheck: builder.query<DelegationRequestDto>({
-      query: (dto: DelegationRequestDto) => {
-        return `singleright/checkdelegationaccesses/${1232131234}${dto}`;
+    getDelegationAccessCheck: builder.mutation<DelegationAccessCheckResponse, DelegationRequestDto>(
+      {
+        query: (dto: DelegationRequestDto) => ({
+          url: `singleright/checkdelegationaccesses/${1232131234}`,
+          method: 'POST',
+          body: dto,
+        }),
       },
-    }),
+    ),
   }),
-}); */
+});
 
 export const { useGetPaginatedSearchQuery } = singleRightsApi;

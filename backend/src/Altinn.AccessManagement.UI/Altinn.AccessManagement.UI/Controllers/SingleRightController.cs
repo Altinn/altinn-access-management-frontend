@@ -24,7 +24,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             _singleRightService = singleRightService;
         }
-        private Ok(responses);
 
         /// <summary>
         ///     Endpoint for checking delegation accesses on behalf of the party having offered the delegation

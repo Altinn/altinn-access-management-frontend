@@ -1816,7 +1816,7 @@ __metadata:
     husky: ^8.0.3
     i18next: ^23.0.0
     i18next-browser-languagedetector: ^7.0.1
-    lint-staged: ^13.0.3
+    lint-staged: ^13.2.3
     madge: ^6.0.0
     prettier: ^3.0.0
     react: ^18.2.0
@@ -5548,7 +5548,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^13.0.3":
+"lint-staged@npm:^13.2.3":
   version: 13.2.3
   resolution: "lint-staged@npm:13.2.3"
   dependencies:

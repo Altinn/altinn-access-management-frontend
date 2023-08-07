@@ -13,16 +13,16 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// Client implementation for integration with the Resource Registry
+    ///     Client implementation for integration with the Resource Registry
     /// </summary>
     [ExcludeFromCodeCoverage]
     public class ResourceRegistryClient : IResourceRegistryClient
     {
-        private readonly HttpClient _httpClient = new ();
+        private readonly HttpClient _httpClient = new HttpClient();
         private readonly ILogger<IResourceRegistryClient> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceRegistryClient"/> class
+        ///     Initializes a new instance of the <see cref="ResourceRegistryClient" /> class
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _logger = logger;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
             ServiceResource? result = null;
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
@@ -56,19 +56,19 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return await Task.FromResult(result);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<List<ServiceResource>> GetResources()
         {
             List<ServiceResource> resources = null;
 
             try
             {
-                string endpointUrl = $"resource/search";
+                string endpointUrl = "resource/search";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var options = new JsonSerializerOptions
+                    JsonSerializerOptions options = new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true,
                     };
@@ -86,7 +86,45 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <summary>
-        /// Get resources of a given type
+        ///     Get resource list
+        /// </summary>
+        /// <returns>List of all resources</returns>
+        public async Task<List<ServiceResource>> GetResourceList()
+        {
+            try
+            {
+                List<ServiceResource> resources = null;
+                string endpointUrl = "resource/resourcelist";
+                HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
+                    return resources;
+                }
+                else
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(content, options);
+
+                    throw error;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // ResourceList // Exception");
+                throw;
+            }
+        }
+
+        /// <summary>
+        ///     Get resources of a given type
         /// </summary>
         /// <param name="resourceType"> the resource type</param>
         /// <returns></returns>
@@ -100,48 +138,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
                 string content = await response.Content.ReadAsStringAsync();
                 resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
-            }
-
-            return resources;
-        }
-
-        /// <summary>
-        /// Get resource list
-        /// </summary>
-        /// <returns>List of all resources</returns>
-        public async Task<List<ServiceResource>> GetResourceList()
-        {
-            List<ServiceResource> resources = null;
-
-            try
-            {
-                string endpointUrl = $"resource/resourcelist";
-
-                HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    };
-                    string content = await response.Content.ReadAsStringAsync();
-                    resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
-                }
-                else
-                {
-                    throw new HttpStatusException(response.StatusCode, "Resource List did not return expected data");
-                }
-            }
-            catch (Exception ex) when (ex is not HttpStatusException)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // ResourceList // Exception");
-                throw;
             }
 
             return resources;
