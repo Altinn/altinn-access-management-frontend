@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { type DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
+
 interface PaginatedListDTO {
   page: number;
   numEntriesTotal: number;
@@ -45,5 +47,17 @@ export const singleRightsApi = createApi({
     }),
   }),
 });
+
+/* export const delegationAccessCheckApi = createApi({
+  reducerPath: 'delegationAccessCheckApi',
+  baseQuery: fetchBaseQuery({ baseUrl }),
+  endpoints: (builder) => ({
+    getDelegationAccessCheck: builder.query<DelegationRequestDto>({
+      query: (dto: DelegationRequestDto) => {
+        return `singleright/checkdelegationaccesses/${1232131234}${dto}`;
+      },
+    }),
+  }),
+}); */
 
 export const { useGetPaginatedSearchQuery } = singleRightsApi;

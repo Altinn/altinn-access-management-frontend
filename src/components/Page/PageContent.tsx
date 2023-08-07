@@ -1,5 +1,4 @@
 import * as React from 'react';
-import cn from 'classnames';
 
 import classes from './PageContent.module.css';
 

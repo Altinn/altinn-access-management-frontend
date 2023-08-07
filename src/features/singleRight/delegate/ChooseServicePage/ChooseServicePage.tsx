@@ -93,7 +93,7 @@ export const ChooseServicePage = () => {
     </Chip.Group>
   );
 
-  const serviceResouces = resources?.map((r: ServiceResource, index: any) => (
+  const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
     <ResourceActionBar
       key={r.identifier ?? index}
       title={r.title}
