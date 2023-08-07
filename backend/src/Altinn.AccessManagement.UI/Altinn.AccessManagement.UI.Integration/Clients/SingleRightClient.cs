@@ -71,7 +71,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                     List<DelegationAccessCheckResponse> errorReponseList = new List<DelegationAccessCheckResponse>
                     {
-                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<ReasonParams>(), errorObject),
+                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<DetailParams>(), errorObject),
                     };
                     return errorReponseList;
                 }
