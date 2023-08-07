@@ -16,15 +16,24 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// The Statuscode provided by the external call
         /// </summary>
         public HttpStatusCode StatusCode { get; set; }
+        
+        public string Type { get; set; }
+        
+        public string Title { get; set; }
+
+        public string Status { get; set; }
+        
+        public string Instance { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="statusCode">The status code</param>
         /// <param name="message">The message</param>
-        public HttpStatusException(HttpStatusCode statusCode, string message) : base(message)
+        public HttpStatusException(HttpStatusCode statusCode, string type, string Title string message) : base(message)
         {
             StatusCode = statusCode;
+            
         }
     }
 }

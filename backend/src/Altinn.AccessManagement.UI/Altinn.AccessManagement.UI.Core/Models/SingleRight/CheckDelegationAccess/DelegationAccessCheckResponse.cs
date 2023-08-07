@@ -15,7 +15,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         /// <param name="resources">The list of resources.</param>
         /// <param name="action">The action performed.</param>
         /// <param name="status">The status of the response.</param>
-        /// <param name="faultCode">The fault code, if applicable.</param>
         /// <param name="details">The reason for the response.</param>
         /// <param name="httpErrorResponse">The optional HTTP error response.</param>
         public DelegationAccessCheckResponse(
@@ -23,7 +22,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
             List<IdValuePair> resources,
             string action,
             string status,
-            string faultCode,
             Details details,
             HttpErrorResponse? httpErrorResponse = null)
         {
@@ -31,7 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
             Resources = resources;
             Action = action;
             Status = status;
-            FaultCode = faultCode;
             Details = details;
             HttpErrorResponse = httpErrorResponse;
         }
@@ -61,15 +58,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         public string Status { get; set; }
 
         /// <summary>
-        ///     The fault code, if applicable.
-        /// </summary>
-        [JsonProperty("faultCode")]
-        public string FaultCode { get; set; }
-
-        /// <summary>
         ///     The reason for the response.
         /// </summary>
-        [JsonProperty("reason")]
+        [JsonProperty("details")]
         public Details Details { get; set; }
 
         /// <summary>

@@ -71,8 +71,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                     List<DelegationAccessCheckResponse> errorReponseList = new List<DelegationAccessCheckResponse>
                     {
-                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<DetailParams>(), errorObject),
+                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, new Details(), errorObject),
                     };
+                    throw new HttpStatusException(H)
                     return errorReponseList;
                 }
 
@@ -85,5 +86,35 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /*
+        private async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccessProblemDetails(string partyId, DelegationRequestDto request)
+        {
+            try
+            {
+                string endpointUrl = $"{partyId}/rights/delegation/userdelegationcheck";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<DelegationAccessCheckResponse>>(responseContent, _serializerOptions);
+                }
+
+                if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                }
+
+                _logger.LogError("Checking delegation accesses failed with {StatusCode}", response.StatusCode);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // CheckDelegationAccess// Exception");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }*/
     }
 }
