@@ -5,19 +5,18 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IMaskinportenSchemaClient"></see> interface
+    ///     Mock class for <see cref="IMaskinportenSchemaClient"></see> interface
     /// </summary>
     public class MaskinportenSchemaClientMock : IMaskinportenSchemaClient
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaskinportenSchemaClientMock"/> class
+        ///     Initializes a new instance of the <see cref="MaskinportenSchemaClientMock" /> class
         /// </summary>
         public MaskinportenSchemaClientMock(
             HttpClient httpClient,
@@ -33,10 +32,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string path = GetDataPathForDelegations();
             if (Directory.Exists(path))
-            {      
+            {
                 string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
                 delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
-                
+
                 if (!string.IsNullOrEmpty(party))
                 {
                     filteredDelegations.AddRange(delegations.FindAll(od => od.CoveredByPartyId == Convert.ToInt32(party)));
@@ -124,7 +123,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(path))
             {
                 string content = File.ReadAllText(path);
-                return Task.FromResult(new HttpResponseMessage() { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
+                return Task.FromResult(new HttpResponseMessage
+                    { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
@@ -134,12 +134,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
             return Path.Combine(mockClientFolder, "Data", "MaskinportenSchema");
-        }       
+        }
 
         private static string GetDataPathForDelegationOutput(string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
         {
             string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return $"{mockClientFolder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";            
+            return $"{mockClientFolder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";
         }
     }
 }

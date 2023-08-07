@@ -13,19 +13,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class MaskinportenSchemaService : IMaskinportenSchemaService
     {
         private readonly IMaskinportenSchemaClient _maskinportenSchemaClient;
-        private readonly IResourceAdministrationPoint _resourceAdministrationPoint;
+        private readonly IResourceService _resourceService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
+        ///     Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
         /// </summary>
         /// <param name="maskinportenSchemaClient">handler for delegations client</param>
-        /// <param name="resourceAdministrationPoint">handler for resource registry</param>
+        /// <param name="resourceService">handler for resource registry</param>
         public MaskinportenSchemaService(
             IMaskinportenSchemaClient maskinportenSchemaClient,
-            IResourceAdministrationPoint resourceAdministrationPoint)
+            IResourceService resourceService)
         {
             _maskinportenSchemaClient = maskinportenSchemaClient;
-            _resourceAdministrationPoint = resourceAdministrationPoint;
+            _resourceService = resourceService;
         }
 
         /// <inheritdoc />
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
-            List<ServiceResource> resources = await _resourceAdministrationPoint.GetResources(resourceIds);
+            List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
 
             List<MaskinportenSchemaDelegationFE> result = new List<MaskinportenSchemaDelegationFE>();
             foreach (MaskinportenSchemaDelegation delegation in delegations)
