@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    /// HomeController
+    ///     HomeController
     /// </summary>
     [Route("accessmanagement/")]
     [Route("accessmanagement/ui")]
@@ -19,14 +20,14 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class HomeController : Controller
     {
         private readonly IAntiforgery _antiforgery;
-        private readonly PlatformSettings _platformSettings;
         private readonly IWebHostEnvironment _env;
-        private readonly IProfileService _profileService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly GeneralSettings _generalSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly PlatformSettings _platformSettings;
+        private readonly IProfileService _profileService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        ///     Initializes a new instance of the <see cref="HomeController" /> class.
         /// </summary>
         /// <param name="frontEndEntrypoints">Configuration of frontend entry points</param>
         /// <param name="antiforgery">the anti forgery service</param>
@@ -53,19 +54,19 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Gets the app frontend view for Accessmanagement
+        ///     Gets the app frontend view for Accessmanagement
         /// </summary>
         /// <returns>View result</returns>
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             // See comments in the configuration of Antiforgery in MvcConfiguration.cs.
-            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+            AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             if (_env.IsDevelopment())
             {
                 HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
                 {
-                    HttpOnly = false // Make this cookie readable by Javascript.
+                    HttpOnly = false,// Make this cookie readable by Javascript.
                 });
             }
             else
@@ -73,10 +74,10 @@ namespace Altinn.AccessManagement.UI.Controllers
                 HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
                 {
                     Secure = true,
-                    HttpOnly = false // Make this cookie readable by Javascript.
+                    HttpOnly = false,// Make this cookie readable by Javascript.
                 });
             }
-            
+
             if (await ShouldShowAppView())
             {
                 return View();
@@ -91,13 +92,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         private async Task SetLanguageCookie()
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            var user = await _profileService.GetUserProfile(userId);
-            var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+            UserProfile user = await _profileService.GetUserProfile(userId);
+            AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
             string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
 
             HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {
-                HttpOnly = false // Make this cookie readable by Javascript.
+                // Make this cookie readable by Javascript.
+                HttpOnly = false,
             });
         }
 
