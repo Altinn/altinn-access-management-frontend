@@ -1,7 +1,23 @@
-.page-content {
+.pageContent {
   --component-page_content-vertical-padding: 2rem;
   background-color: white;
   padding-top: var(--component-page_content-vertical-padding);
   padding-bottom: var(--component-page_content-vertical-padding);
   box-sizing: inherit;
+}
+
+@media only screen and (max-width: 768px) {
+  .pageContent{
+    --component-page-margin-horizontal: 0.5rem;
+    padding-right: var(--component-page-margin-horizontal);
+    padding-left: var(--component-page-margin-horizontal);
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .pageContent{
+    --component-page-margin-horizontal: 3rem;
+    padding-right: var(--component-page-margin-horizontal);
+    padding-left: var(--component-page-margin-horizontal);
+  }
 }

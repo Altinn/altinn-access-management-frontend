@@ -1,3 +1,5 @@
+import { Filter } from './Filter';
+
 export { CompactDeletableListItem } from './CompactDeletableListItem';
 export { SummaryPage } from '../features/apiDelegation/components/SummaryPage';
 export { DeletableListItem } from './DeletableListItem';
@@ -9,3 +11,4 @@ export { ActionBar, type ActionBarProps } from './ActionBar';
 export { Page, PageHeader, PageContent, PageColor, PageSize } from './Page';
 export { DelegationActionBar } from './DelegationActionBar';
 export { ErrorPanel } from './ErrorPanel';
+export { Filter, type FilterOption } from './Filter';

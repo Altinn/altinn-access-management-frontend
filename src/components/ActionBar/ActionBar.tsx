@@ -73,7 +73,7 @@ export const ActionBar = ({
   const contentId = useId();
 
   return (
-    <>
+    <div>
       <ActionBarContext.Provider
         value={{
           onClick,
@@ -85,7 +85,7 @@ export const ActionBar = ({
       >
         <div
           className={cn(classes.actionBar, classes[color], {
-            [classes.subtitle]: subtitle,
+            [classes.withSubtitle]: subtitle,
             [classes.open]: open,
             [classes.clickable]: onClick,
           })}
@@ -144,7 +144,7 @@ export const ActionBar = ({
         </div>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
-    </>
+    </div>
   );
 };
 

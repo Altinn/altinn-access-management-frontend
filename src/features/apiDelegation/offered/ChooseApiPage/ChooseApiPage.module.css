@@ -75,4 +75,7 @@
   margin-bottom: 5px;
   margin-right: 10px;
   margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }

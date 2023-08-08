@@ -1,11 +1,5 @@
 import { Panel } from '@altinn/altinn-design-system';
-import {
-  Button,
-  ButtonColor,
-  ButtonSize,
-  ButtonVariant,
-  Spinner,
-} from '@digdir/design-system-react';
+import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -178,82 +172,81 @@ export const OverviewPageContent = ({
   };
 
   return (
-    <div className={common.pageContent}>
-      <div className={classes.overviewActionBarContainer}>
-        {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
-        {layout === LayoutState.Offered && (
-          <div className={classes.delegateNewButton}>
-            <Button
-              variant={ButtonVariant.Outline}
-              onClick={goToStartDelegation}
-              icon={<Add />}
-              fullWidth={isSm}
-            >
-              {t('api_delegation.delegate_new_org')}
-            </Button>
-          </div>
-        )}
-        <Panel
-          title={t('api_delegation.card_title')}
-          forceMobileLayout={isSm}
-          showIcon={!isSm}
-        >
-          {t('api_delegation.api_panel_content')}{' '}
-          <a
-            className={classes.link}
-            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
-            target='_blank'
-            rel='noreferrer'
+    <div className={classes.overviewActionBarContainer}>
+      {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
+      {layout === LayoutState.Offered && (
+        <div className={classes.delegateNewButton}>
+          <Button
+            variant={ButtonVariant.Outline}
+            onClick={goToStartDelegation}
+            icon={<Add />}
+            fullWidth={isSm}
+            size='medium'
           >
-            {t('common.maskinporten')}
-          </a>
-        </Panel>
-        <div className={classes.explanatoryContainer}>
-          {overviewOrgs.length > 0 && (
-            <>
-              {isSm ? (
-                <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
-              ) : (
-                <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
-              )}
-              <div className={classes.editButton}>
-                {!isEditable ? (
-                  <Button
-                    variant={ButtonVariant.Quiet}
-                    icon={<Edit />}
-                    onClick={handleSetIsEditable}
-                    size={ButtonSize.Small}
-                  >
-                    {t('api_delegation.edit_accesses')}
-                  </Button>
-                ) : (
-                  <Button
-                    variant={ButtonVariant.Quiet}
-                    icon={<Error />}
-                    onClick={handleSetIsEditable}
-                    size={ButtonSize.Small}
-                  >
-                    {t('api_delegation.cancel')}
-                  </Button>
-                )}
-              </div>
-            </>
-          )}
+            {t('api_delegation.delegate_new_org')}
+          </Button>
         </div>
-        <>{activeDelegations()}</>
-        {isEditable && (
-          <div className={classes.saveSection}>
-            <Button
-              disabled={saveDisabled}
-              onClick={handleSave}
-              color={ButtonColor.Success}
-              fullWidth={isSm}
-            >
-              {t('api_delegation.save')}
-            </Button>
-          </div>
+      )}
+      <Panel
+        title={t('api_delegation.card_title')}
+        forceMobileLayout={isSm}
+        showIcon={!isSm}
+      >
+        {t('api_delegation.api_panel_content')}{' '}
+        <a
+          className={classes.link}
+          href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+          target='_blank'
+          rel='noreferrer'
+        >
+          {t('common.maskinporten')}
+        </a>
+      </Panel>
+      <div className={classes.explanatoryContainer}>
+        {overviewOrgs.length > 0 && (
+          <>
+            {isSm ? (
+              <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
+            ) : (
+              <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+            )}
+            <div className={classes.editButton}>
+              {!isEditable ? (
+                <Button
+                  variant={ButtonVariant.Quiet}
+                  icon={<Edit />}
+                  onClick={handleSetIsEditable}
+                  size='small'
+                >
+                  {t('api_delegation.edit_accesses')}
+                </Button>
+              ) : (
+                <Button
+                  variant={ButtonVariant.Quiet}
+                  icon={<Error />}
+                  onClick={handleSetIsEditable}
+                  size='small'
+                >
+                  {t('api_delegation.cancel')}
+                </Button>
+              )}
+            </div>
+          </>
         )}
       </div>
+      <>{activeDelegations()}</>
+      {isEditable && (
+        <div className={classes.saveSection}>
+          <Button
+            disabled={saveDisabled}
+            onClick={handleSave}
+            color={ButtonColor.Success}
+            fullWidth={isSm}
+          >
+            {t('api_delegation.save')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

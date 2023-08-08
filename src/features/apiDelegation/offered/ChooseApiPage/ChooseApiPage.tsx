@@ -151,84 +151,82 @@ export const ChooseApiPage = () => {
       <Page size={isSm ? PageSize.Small : PageSize.Medium}>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <div className={common.pageContent}>
-            {chosenDelegableOrgs.length < 1 ? (
-              <Panel
-                title={t('common.error')}
-                variant={PanelVariant.Warning}
-                forceMobileLayout={isSm}
-              >
-                {t('api_delegation.orgs_not_chosen_subtitle')}
-              </Panel>
-            ) : (
-              <div>
-                <h3>{t('api_delegation.chosen_orgs')}:</h3>
-                <List borderStyle={'dashed'}>{chosenDelegableOrgs}</List>
+          {chosenDelegableOrgs.length < 1 ? (
+            <Panel
+              title={t('common.error')}
+              variant={PanelVariant.Warning}
+              forceMobileLayout={isSm}
+            >
+              {t('api_delegation.orgs_not_chosen_subtitle')}
+            </Panel>
+          ) : (
+            <div>
+              <h3>{t('api_delegation.chosen_orgs')}:</h3>
+              <List borderStyle={'dashed'}>{chosenDelegableOrgs}</List>
+            </div>
+          )}
+          <h3 className={classes.chooseApiSecondHeader}>
+            {t('api_delegation.new_api_content_text2')}
+          </h3>
+          {isSm && chosenApis.length > 0 && (
+            <div className={common.apiAccordions}>
+              <h4>{t('api_delegation.chosen_apis')}</h4>
+              <div className={classes.chosenApisContainer}>
+                <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
               </div>
-            )}
-            <h3 className={classes.chooseApiSecondHeader}>
-              {t('api_delegation.new_api_content_text2')}
-            </h3>
-            {isSm && chosenApis.length > 0 && (
+            </div>
+          )}
+          <div className={classes.searchSection}>
+            <div className={classes.searchField}>
+              <SearchField
+                value={searchString}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleSearch(event.target.value);
+                }}
+                aria-label={String(t('api_delegation.search_for_api'))}
+              ></SearchField>
+            </div>
+            <div className={classes.filter}>
+              <Filter
+                options={filterOptions}
+                icon={<FilterIcon />}
+                label={String(t('api_delegation.filter_label'))}
+                applyButtonLabel={String(t('common.apply'))}
+                resetButtonLabel={String(t('common.reset_choices'))}
+                closeButtonAriaLabel={String(t('common.close'))}
+                onApply={handleFilterChange}
+                searchable={true}
+                fullScreenModal={isSm}
+              />
+            </div>
+          </div>
+          <div className={classes.pageContentActionBarsContainer}>
+            <div className={common.apiAccordions}>
+              <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
+              <div className={classes.delegableApisContainer}>
+                <div className={classes.actionBarWrapper}>{delegableApiActionBars()}</div>
+              </div>
+            </div>
+            {!isSm && (
               <div className={common.apiAccordions}>
-                <h4>{t('api_delegation.chosen_apis')}</h4>
-                <div className={classes.chosenApisContainer}>
+                <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
+                <div className={classes.delegableApisContainer}>
                   <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
                 </div>
               </div>
             )}
-            <div className={classes.searchSection}>
-              <div className={classes.searchField}>
-                <SearchField
-                  value={searchString}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    handleSearch(event.target.value);
-                  }}
-                  aria-label={String(t('api_delegation.search_for_api'))}
-                ></SearchField>
-              </div>
-              <div className={classes.filter}>
-                <Filter
-                  options={filterOptions}
-                  icon={<FilterIcon />}
-                  label={String(t('api_delegation.filter_label'))}
-                  applyButtonLabel={String(t('common.apply'))}
-                  resetButtonLabel={String(t('common.reset_choices'))}
-                  closeButtonAriaLabel={String(t('common.close'))}
-                  onApply={handleFilterChange}
-                  searchable={true}
-                  fullScreenModal={isSm}
-                />
-              </div>
-            </div>
-            <div className={classes.pageContentActionBarsContainer}>
-              <div className={common.apiAccordions}>
-                <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
-                <div className={classes.delegableApisContainer}>
-                  <div className={classes.actionBarWrapper}>{delegableApiActionBars()}</div>
-                </div>
-              </div>
-              {!isSm && (
-                <div className={common.apiAccordions}>
-                  <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
-                  <div className={classes.delegableApisContainer}>
-                    <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
-                  </div>
-                </div>
-              )}
-            </div>
-            <NavigationButtons
-              previousText={t('api_delegation.previous')}
-              previousPath={
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
-              }
-              nextText={t('api_delegation.next')}
-              nextPath={
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Confirmation
-              }
-              nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
-            ></NavigationButtons>
           </div>
+          <NavigationButtons
+            previousText={t('api_delegation.previous')}
+            previousPath={
+              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+            }
+            nextText={t('api_delegation.next')}
+            nextPath={
+              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Confirmation
+            }
+            nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+          ></NavigationButtons>
         </PageContent>
       </Page>
     </PageContainer>
