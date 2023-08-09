@@ -108,7 +108,14 @@ describe('ActionBar', () => {
       cy.get('[data-testid="action-bar-icon"]').should('not.exist');
     });
 
-    it('should call handleClick when expandable ActionBar is clicked by mouse', () => {
+    it('should display content when expandable ActionBar is clicked by mouse (uncontroled open)', () => {
+      cy.mount(expandableActionBar());
+
+      cy.get('[data-testid="action-bar"]').click();
+      cy.contains('Content').should('exist');
+    });
+
+    it('should call handleClick when one is provided and expandable ActionBar is clicked by mouse (controled open)', () => {
       const handleClick = () => {
         cy.stub();
       };
@@ -142,19 +149,6 @@ describe('ActionBar', () => {
       cy.mount(expandableActionBar({ onClick: handleClickSpy }));
 
       cy.get('[data-testid="action-bar"]').type('{enter}');
-      cy.get('@handleClickSpy').should('have.been.called');
-    });
-
-    it('should call handleClick when non expandable ActionBar is clicked', () => {
-      const handleClick = () => {
-        cy.stub();
-      };
-
-      const handleClickSpy = cy.spy(handleClick).as('handleClickSpy');
-
-      cy.mount(nonExpandableActionBar({ onClick: handleClickSpy }));
-
-      cy.get('[data-testid="action-bar"]').click();
       cy.get('@handleClickSpy').should('have.been.called');
     });
 

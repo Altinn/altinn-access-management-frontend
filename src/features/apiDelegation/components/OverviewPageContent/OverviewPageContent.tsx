@@ -32,7 +32,7 @@ import {
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
-import { ActionBar, ErrorPanel } from '@/components';
+import { ActionBar, ErrorPanel, SelectionBar } from '@/components';
 import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';
@@ -178,8 +178,37 @@ export const OverviewPageContent = ({
     ));
   };
 
+  // TEST!
   const [isTestOpen, setTestIsOpen] = useState(false);
   const [isTestOpen2, setTestIsOpen2] = useState(false);
+  const [testCollection, setTestCollection] = useState([
+    'Løven',
+    'Heksa',
+    'Klesskapet',
+    'Julenissen',
+    '4 barn',
+  ]);
+
+  const testCollectionActionBars = testCollection.map((title, index) => (
+    <ActionBar
+      key={index}
+      title={title}
+      size='small'
+      color='success'
+      actions={
+        <Button
+          variant='quiet'
+          onClick={() => {
+            setTestCollection(testCollection.filter((i) => i !== title));
+          }}
+        >
+          Angre
+        </Button>
+      }
+    >
+      Test
+    </ActionBar>
+  ));
 
   return (
     <div className={common.pageContent}>
@@ -269,10 +298,6 @@ export const OverviewPageContent = ({
                 Angre
               </Button>
             }
-            open={isTestOpen2}
-            onClick={() => {
-              setTestIsOpen2(!isTestOpen2);
-            }}
           >
             <p>Tester her</p>
           </ActionBar>
@@ -530,20 +555,12 @@ export const OverviewPageContent = ({
             </Button>
           </div>
         )}
-        <ActionBar
-          headingLevel={1}
-          title='Automatiker'
-          color='light'
-          size='medium'
-          subtitle='Tester'
-          actions={<Button variant='quiet'>Angre</Button>}
-          open={isTestOpen2}
-          onClick={() => {
-            setTestIsOpen2(!isTestOpen2);
-          }}
-        >
-          <p>Tester her</p>
-        </ActionBar>
+        <SelectionBar
+          title={'Valgte rettigheter'}
+          color='success'
+          collection={testCollectionActionBars}
+          compact={isSm}
+        ></SelectionBar>
         <Panel
           title={t('api_delegation.card_title')}
           forceMobileLayout={isSm}

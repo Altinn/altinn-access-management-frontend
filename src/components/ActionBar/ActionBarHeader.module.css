@@ -14,6 +14,10 @@
   cursor:pointer;
 }
 
+.actionBar:not([class*='clickable']) {
+  padding-left: 4px;
+}
+
 .actionBar.small {
   border-color: var(--background-color);
   background-color: var(--background-color);
@@ -188,6 +192,10 @@
 
 .title, .subtitle{
   color: var(--text-color) !important;
+}
+
+.title > p {
+  margin: 0px; 
 }
 
 .actionBarButtonContainer{

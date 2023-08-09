@@ -17,7 +17,9 @@
     "search": "Search",
     "add": "Add",
     "remove": "Remove",
-    "to": "To"
+    "to": "To",
+    "proceed": "Proceed",
+    "services_added": "added"
   },
   "profile": {
     "received": "Received",

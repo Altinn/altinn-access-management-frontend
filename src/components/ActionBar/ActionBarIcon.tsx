@@ -6,7 +6,7 @@ import classes from './ActionBarIcon.module.css';
 import { useActionBarContext } from './Context';
 
 export const ActionBarIcon = () => {
-  const { onClick, open, size } = useActionBarContext();
+  const { open, size } = useActionBarContext();
   const iconClassnames = [
     classes.actionBarIcon,
     {
@@ -18,7 +18,6 @@ export const ActionBarIcon = () => {
     width: 30,
     className: cn(iconClassnames, classes[size]),
     'data-testid': 'action-bar-icon',
-    onClick,
   };
 
   const isLarge = size === 'large';

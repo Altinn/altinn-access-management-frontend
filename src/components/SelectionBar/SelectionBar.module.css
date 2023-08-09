@@ -1,0 +1,32 @@
+.counterText {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    margin-right: 2rem !important;
+}
+
+.counterSymbol {
+    background-color: var(--semantic-surface-action-active);
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: inherit;
+    font-weight: 500;
+    margin-right: 2rem;
+}
+
+.counterSymbol.dark {
+    color: var(--semantic-surface-action-active);
+    background-color: white;
+}
+  
+.content {
+    margin: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}

@@ -17,7 +17,9 @@
     "search": "Søk",
     "add": "Legg til",
     "remove": "Fjern",
-    "to": "Til"
+    "to": "Til",
+    "proceed": "Gå videre",
+    "added": "lagt til"
   },
   "profile": {
     "received": "Mottatte",
