@@ -29,7 +29,7 @@ interface searchParams {
   page: number;
 }
 
-interface DelegationAccessCheckResponse {
+export interface DelegationAccessCheckResponse {
   rightKey: string;
   resource: IdValuePair[];
   action: string;
@@ -37,18 +37,18 @@ interface DelegationAccessCheckResponse {
   details: Details;
 }
 
-interface IdValuePair {
+export interface IdValuePair {
   id: string;
   value: string;
 }
 
-interface Details {
+export interface Details {
   detailCode: string;
   info: string;
   detailParams: DetailParams[];
 }
 
-interface DetailParams {
+export interface DetailParams {
   name: string;
   value: string;
 }
@@ -69,23 +69,17 @@ export const singleRightsApi = createApi({
         return `resources/paginatedSearch?Page=${page}&ResultsPerPage=10&SearchString=${searchString}${filterUrl}`;
       },
     }),
+    getDelegationAccessCheck: builder.mutation<
+      DelegationAccessCheckResponse[],
+      DelegationRequestDto
+    >({
+      query: (dto) => ({
+        url: `singleright/checkdelegationaccesses/${1232131234}`,
+        method: 'POST',
+        body: dto,
+      }),
+    }),
   }),
 });
 
-export const delegationAccessCheckApi = createApi({
-  reducerPath: 'delegationAccessCheckApi',
-  baseQuery: fetchBaseQuery({ baseUrl }),
-  endpoints: (builder) => ({
-    getDelegationAccessCheck: builder.mutation<DelegationAccessCheckResponse, DelegationRequestDto>(
-      {
-        query: (dto: DelegationRequestDto) => ({
-          url: `singleright/checkdelegationaccesses/${1232131234}`,
-          method: 'POST',
-          body: dto,
-        }),
-      },
-    ),
-  }),
-});
-
-export const { useGetPaginatedSearchQuery } = singleRightsApi;
+export const { useGetPaginatedSearchQuery, useGetDelegationAccessCheckMutation } = singleRightsApi;

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from 'axios';
 import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
@@ -12,6 +11,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
   type ServiceResource,
+  useGetDelegationAccessCheckMutation,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
@@ -24,30 +24,24 @@ export const ChooseServicePage = () => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 10;
+  const [dto, setDto] = useState<DelegationRequestDto>(new DelegationRequestDto('', ''));
+  const [abColor, setAbColor] = useState<'neutral' | 'success' | 'danger'>('neutral');
 
-  const { data, error, isFetching } = useGetPaginatedSearchQuery({
+  const {
+    data: pagingData,
+    error: pagingError,
+    isFetching: pagingIsFetching,
+  } = useGetPaginatedSearchQuery({
     searchString,
     ROfilters: filters,
     page: currentPage,
   });
-  const resources = data?.pageList;
-  const totalNumberOfResults = data?.numEntriesTotal;
-  const resultsPerPage = 10;
+  const resources = pagingData?.pageList;
+  const totalNumberOfResults = pagingData?.numEntriesTotal;
+  const [getDacr, { isLoading, isUpdating }] = useGetDelegationAccessCheckMutation();
 
-  const checkDelegationAccess = () => {
-    const dto = new DelegationRequestDto('urn:altinn:resource', 'testapi');
-
-    axios
-      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`, dto)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-
-  checkDelegationAccess();
+  // const dac = delegationCheckData?.data;
 
   // Temporary hardcoding of filter options
   const filterOptions = [
@@ -93,11 +87,34 @@ export const ChooseServicePage = () => {
     </Chip.Group>
   );
 
+  const handleSuccess = () => {
+    setAbColor('success');
+  };
+
+  const handleFailed = () => {
+    setAbColor('danger');
+  };
+
+  const actionButtonClick = () => {
+    console.log(dto);
+    void getDacr(dto);
+
+    /* const hasDelegableResponse = delegationCheckData.some(
+      (response: DelegationAccessCheckResponse) => response.status === 'Delegable',
+    );
+    hasDelegableResponse ? handleSuccess() : handleFailed(); */
+  };
+
   const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
     <ResourceActionBar
       key={r.identifier ?? index}
       title={r.title}
       subtitle={r.resourceOwnerName}
+      actionButtonClick={() => {
+        setDto(new DelegationRequestDto('urn:altinn:resource', r.identifier));
+        actionButtonClick();
+      }}
+      color={abColor}
     >
       <p>{r.description}</p>
       <p>{r.rightDescription}</p>
@@ -105,7 +122,7 @@ export const ChooseServicePage = () => {
   ));
 
   const searchResults = () => {
-    if (isFetching) {
+    if (pagingIsFetching) {
       return (
         <div className={classes.spinner}>
           <Spinner
@@ -114,7 +131,7 @@ export const ChooseServicePage = () => {
           />
         </div>
       );
-    } else if (error) {
+    } else if (pagingError) {
       return (
         <Alert
           className={classes.searchError}

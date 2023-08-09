@@ -3,25 +3,28 @@ import { useState } from 'react';
 import { Button } from '@digdir/design-system-react';
 import { PlusIcon, MinusIcon } from '@navikt/aksel-icons';
 
-import { ActionBar } from '@/components';
+import { ActionBar, type ActionBarProps } from '@/components';
 
 import classes from './ResourceActionBar.module.css';
 
-export interface ResourceActionBarProps {
-  /** The subtitle to be displayed in the header of the ActionBar. */
-  subtitle?: React.ReactNode;
-  /** The title to be displayed in the header of the ActionBar. */
-  title?: React.ReactNode;
-  /** The children to be displayed as content inside the ActionBar. */
-  children?: React.ReactNode;
+export interface ResourceActionBarProps
+  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children', 'color'> {
+  /** The callback funciton for the action button click */
+  actionButtonClick: () => void;
+  /** The type of the ResourceActionBar to be displayed */
+  type?: 'neutral' | 'failed' | 'success';
 }
 
-export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionBarProps) => {
+export const ResourceActionBar = ({
+  subtitle,
+  title,
+  children,
+  color,
+  type,
+  actionButtonClick,
+}: ResourceActionBarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
-  const [color, setColor] = useState<'neutral' | 'light' | 'warning' | 'success' | 'danger'>(
-    'neutral',
-  );
 
   const addButton = (
     <Button
@@ -29,8 +32,7 @@ export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionB
       icon={<PlusIcon title='add' />}
       size='medium'
       onClick={() => {
-        setIsAdded(true);
-        setColor('success');
+        actionButtonClick();
       }}
     ></Button>
   );
@@ -41,8 +43,7 @@ export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionB
       icon={<MinusIcon title='remove' />}
       size='medium'
       onClick={() => {
-        setIsAdded(false);
-        setColor('neutral');
+        actionButtonClick();
       }}
     ></Button>
   );
