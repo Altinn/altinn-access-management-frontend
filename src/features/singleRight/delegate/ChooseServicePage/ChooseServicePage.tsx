@@ -25,8 +25,8 @@ export const ChooseServicePage = () => {
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 10;
-  const [dto, setDto] = useState<DelegationRequestDto>(new DelegationRequestDto('', ''));
   const [abColor, setAbColor] = useState<'neutral' | 'success' | 'danger'>('neutral');
+  const dto: DelegationRequestDto = new DelegationRequestDto('', '');
 
   const {
     data: pagingData,
@@ -39,7 +39,7 @@ export const ChooseServicePage = () => {
   });
   const resources = pagingData?.pageList;
   const totalNumberOfResults = pagingData?.numEntriesTotal;
-  const [getDacr, { isLoading, isUpdating }] = useGetDelegationAccessCheckMutation();
+  const [getDacr, { isLoading, isUpdating }] = useGetDelegationAccessCheckMutation(dto);
 
   // const dac = delegationCheckData?.data;
 
@@ -95,9 +95,8 @@ export const ChooseServicePage = () => {
     setAbColor('danger');
   };
 
-  const actionButtonClick = () => {
-    console.log(dto);
-    void getDacr(dto);
+  const actionButtonClick = (identifier: string) => {
+    void getDacr(new DelegationRequestDto('urn:altinn:resource', identifier));
 
     /* const hasDelegableResponse = delegationCheckData.some(
       (response: DelegationAccessCheckResponse) => response.status === 'Delegable',
@@ -111,8 +110,7 @@ export const ChooseServicePage = () => {
       title={r.title}
       subtitle={r.resourceOwnerName}
       actionButtonClick={() => {
-        setDto(new DelegationRequestDto('urn:altinn:resource', r.identifier));
-        actionButtonClick();
+        actionButtonClick(r.identifier);
       }}
       color={abColor}
     >

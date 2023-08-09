@@ -76,7 +76,7 @@ export const singleRightsApi = createApi({
       query: (dto) => ({
         url: `singleright/checkdelegationaccesses/${1232131234}`,
         method: 'POST',
-        body: dto,
+        body: JSON.stringify(dto),
       }),
     }),
   }),
