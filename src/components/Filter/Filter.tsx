@@ -93,6 +93,7 @@ export const Filter = ({
   useEffect(() => {
     if (values !== undefined && !arraysEqual(values, prevvalues)) {
       setActiveFilters(values);
+      setCheckedFilters(values);
     }
   }, [values]);
 
@@ -128,6 +129,7 @@ export const Filter = ({
         onClick={handleOpenOrClose}
         icon={<XMarkIcon aria-label={String(t('common.close'))} />}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
+        size='medium'
       />
     </div>
   );

@@ -1,16 +1,9 @@
 import { Panel } from '@altinn/altinn-design-system';
-import {
-  Button,
-  ButtonColor,
-  ButtonSize,
-  ButtonVariant,
-  Spinner,
-} from '@digdir/design-system-react';
+import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
-import { FolderFileFillIcon, ChevronRightDoubleCircleFillIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as Add } from '@/assets/Add.svg';
@@ -32,7 +25,7 @@ import {
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
-import { ActionBar, ErrorPanel, SelectionBar } from '@/components';
+import { ActionBar, ErrorPanel } from '@/components';
 import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';
@@ -211,417 +204,81 @@ export const OverviewPageContent = ({
   ));
 
   return (
-    <div className={common.pageContent}>
-      <ActionBar
-        title={'Valgte rettigheter'}
-        open={isTestOpen}
-        onClick={() => {
-          setTestIsOpen(!isTestOpen);
-        }}
-        additionalText={
-          <div className={classes.testText}>
-            <FolderFileFillIcon /> 3 tjenester lagt til
-          </div>
-        }
-        actions={
+    <div className={classes.overviewActionBarContainer}>
+      {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
+      {layout === LayoutState.Offered && (
+        <div className={classes.delegateNewButton}>
           <Button
-            variant='quiet'
-            icon={<ChevronRightDoubleCircleFillIcon />}
+            variant={ButtonVariant.Outline}
+            onClick={goToStartDelegation}
+            icon={<Add />}
+            fullWidth={isSm}
+            size='medium'
           >
-            Gå videre
+            {t('api_delegation.delegate_new_org')}
           </Button>
-        }
-        size='large'
-        color='light'
-      >
-        <div className={classes.testContent}>
-          <ActionBar
-            title='Automatiker'
-            color='light'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-            open={isTestOpen2}
-            onClick={() => {
-              setTestIsOpen2(!isTestOpen2);
-            }}
-          >
-            <p>Tester her</p>
-          </ActionBar>
-          <ActionBar
-            title='Brannbilen'
-            color='light'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-          <ActionBar
-            title='Sverdet i steinen'
-            color='light'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
         </div>
-      </ActionBar>
-      {'tester'}
-      <ActionBar
-        title={'Valgte rettigheter'}
-        open={isTestOpen}
-        onClick={() => {
-          setTestIsOpen(!isTestOpen);
-        }}
-        additionalText={
-          <div className={classes.testText}>
-            <FolderFileFillIcon /> 3 tjenester lagt til
-          </div>
-        }
-        actions={
-          <Button
-            variant='quiet'
-            color='inverted'
-            icon={<ChevronRightDoubleCircleFillIcon />}
-          >
-            Gå videre
-          </Button>
-        }
-        size='large'
-        color='dark'
+      )}
+      <Panel
+        title={t('api_delegation.card_title')}
+        forceMobileLayout={isSm}
+        showIcon={!isSm}
       >
-        <div className={classes.testContent}>
-          <ActionBar
-            title='Automatiker'
-            color='dark'
-            size='small'
-            actions={
-              <Button
-                color='inverted'
-                variant='quiet'
-              >
-                Angre
-              </Button>
-            }
-          >
-            <p>Tester her</p>
-          </ActionBar>
-          <ActionBar
-            title='Brannbilen'
-            color='dark'
-            size='small'
-            actions={
-              <Button
-                color='inverted'
-                variant='quiet'
-              >
-                Angre
-              </Button>
-            }
-          ></ActionBar>
-          <ActionBar
-            title='Sverdet i steinen'
-            color='dark'
-            size='small'
-            actions={
-              <Button
-                color='inverted'
-                variant='quiet'
-              >
-                Angre
-              </Button>
-            }
-          ></ActionBar>
-        </div>
-      </ActionBar>
-      {'tester'}
-      <ActionBar
-        title={'Valgte rettigheter'}
-        open={isTestOpen}
-        onClick={() => {
-          setTestIsOpen(!isTestOpen);
-        }}
-        additionalText={
-          <div className={classes.testText}>
-            <FolderFileFillIcon /> 3 tjenester lagt til
-          </div>
-        }
-        actions={
-          <Button
-            variant='quiet'
-            icon={<ChevronRightDoubleCircleFillIcon />}
-          >
-            Gå videre
-          </Button>
-        }
-        size='large'
-        color='neutral'
-      >
-        <div className={classes.testContent}>
-          <ActionBar
-            title='Automatiker'
-            color='neutral'
-            size='small'
-            subtitle='Tester'
-            actions={<Button variant='quiet'>Angre</Button>}
-            open={isTestOpen2}
-            onClick={() => {
-              setTestIsOpen2(!isTestOpen2);
-            }}
-          >
-            <p>Tester her</p>
-          </ActionBar>
-          <ActionBar
-            title='Brannbilen'
-            color='neutral'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-          <ActionBar
-            title='Sverdet i steinen'
-            color='neutral'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-        </div>
-      </ActionBar>
-      {'tester'}
-      <ActionBar
-        title={'Valgte rettigheter'}
-        open={isTestOpen}
-        onClick={() => {
-          setTestIsOpen(!isTestOpen);
-        }}
-        additionalText={
-          <div className={classes.testText}>
-            <FolderFileFillIcon /> 3 tjenester lagt til
-          </div>
-        }
-        actions={
-          <Button
-            variant='quiet'
-            icon={<ChevronRightDoubleCircleFillIcon />}
-          >
-            Gå videre
-          </Button>
-        }
-        size='large'
-        color='danger'
-      >
-        <div className={classes.testContent}>
-          <ActionBar
-            title='Automatiker'
-            color='danger'
-            size='small'
-            subtitle='Tester'
-            actions={<Button variant='quiet'>Angre</Button>}
-            open={isTestOpen2}
-            onClick={() => {
-              setTestIsOpen2(!isTestOpen2);
-            }}
-          >
-            <p>Tester her</p>
-          </ActionBar>
-          <ActionBar
-            title='Brannbilen'
-            color='danger'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-          <ActionBar
-            title='Sverdet i steinen'
-            color='danger'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-        </div>
-      </ActionBar>
-      {'tester'}
-      <ActionBar
-        title={'Valgte rettigheter'}
-        open={isTestOpen}
-        onClick={() => {
-          setTestIsOpen(!isTestOpen);
-        }}
-        additionalText={
-          <div className={classes.testText}>
-            <FolderFileFillIcon /> 3 tjenester lagt til
-          </div>
-        }
-        actions={
-          <Button
-            variant='quiet'
-            icon={<ChevronRightDoubleCircleFillIcon />}
-          >
-            Gå videre
-          </Button>
-        }
-        size='large'
-        color='warning'
-      >
-        <div className={classes.testContent}>
-          <ActionBar
-            title='Automatiker'
-            color='warning'
-            size='small'
-            subtitle='Tester'
-            actions={<Button variant='quiet'>Angre</Button>}
-            open={isTestOpen2}
-            onClick={() => {
-              setTestIsOpen2(!isTestOpen2);
-            }}
-          >
-            <p>Tester her</p>
-          </ActionBar>
-          <ActionBar
-            title='Brannbilen'
-            color='warning'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-          <ActionBar
-            title='Sverdet i steinen'
-            color='warning'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-        </div>
-      </ActionBar>
-      {'tester'}
-      <ActionBar
-        title={'Valgte rettigheter'}
-        open={isTestOpen}
-        onClick={() => {
-          setTestIsOpen(!isTestOpen);
-        }}
-        additionalText={
-          <div className={classes.testText}>
-            <FolderFileFillIcon /> 3 tjenester lagt til
-          </div>
-        }
-        actions={
-          <Button
-            variant='quiet'
-            icon={<ChevronRightDoubleCircleFillIcon />}
-          >
-            Gå videre
-          </Button>
-        }
-        size='large'
-        color='success'
-      >
-        <div className={classes.testContent}>
-          <ActionBar
-            title='Automatiker'
-            color='success'
-            size='small'
-            subtitle='Tester'
-            actions={<Button variant='quiet'>Angre</Button>}
-            open={isTestOpen2}
-            onClick={() => {
-              setTestIsOpen2(!isTestOpen2);
-            }}
-          >
-            <p>Tester her</p>
-          </ActionBar>
-          <ActionBar
-            title='Brannbilen'
-            color='success'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-          <ActionBar
-            title='Sverdet i steinen'
-            color='success'
-            subtitle='Tester'
-            size='small'
-            actions={<Button variant='quiet'>Angre</Button>}
-          ></ActionBar>
-        </div>
-      </ActionBar>
-      <div className={classes.overviewActionBarContainer}>
-        {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
-        {layout === LayoutState.Offered && (
-          <div className={classes.delegateNewButton}>
-            <Button
-              variant={ButtonVariant.Outline}
-              onClick={goToStartDelegation}
-              icon={<Add />}
-              fullWidth={isSm}
-            >
-              {t('api_delegation.delegate_new_org')}
-            </Button>
-          </div>
-        )}
-        <SelectionBar
-          title={'Valgte rettigheter'}
-          color='success'
-          collection={testCollectionActionBars}
-          compact={isSm}
-        ></SelectionBar>
-        <Panel
-          title={t('api_delegation.card_title')}
-          forceMobileLayout={isSm}
-          showIcon={!isSm}
+        {t('api_delegation.api_panel_content')}{' '}
+        <a
+          className={classes.link}
+          href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+          target='_blank'
+          rel='noreferrer'
         >
-          {t('api_delegation.api_panel_content')}{' '}
-          <a
-            className={classes.link}
-            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
-            target='_blank'
-            rel='noreferrer'
-          >
-            {t('common.maskinporten')}
-          </a>
-        </Panel>
-        <div className={classes.explanatoryContainer}>
-          {overviewOrgs.length > 0 && (
-            <>
-              {isSm ? (
-                <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
+          {t('common.maskinporten')}
+        </a>
+      </Panel>
+      <div className={classes.explanatoryContainer}>
+        {overviewOrgs.length > 0 && (
+          <>
+            {isSm ? (
+              <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
+            ) : (
+              <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+            )}
+            <div className={classes.editButton}>
+              {!isEditable ? (
+                <Button
+                  variant={ButtonVariant.Quiet}
+                  icon={<Edit />}
+                  onClick={handleSetIsEditable}
+                  size='small'
+                >
+                  {t('api_delegation.edit_accesses')}
+                </Button>
               ) : (
-                <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
+                <Button
+                  variant={ButtonVariant.Quiet}
+                  icon={<Error />}
+                  onClick={handleSetIsEditable}
+                  size='small'
+                >
+                  {t('api_delegation.cancel')}
+                </Button>
               )}
-              <div className={classes.editButton}>
-                {!isEditable ? (
-                  <Button
-                    variant={ButtonVariant.Quiet}
-                    icon={<Edit />}
-                    onClick={handleSetIsEditable}
-                    size={ButtonSize.Small}
-                  >
-                    {t('api_delegation.edit_accesses')}
-                  </Button>
-                ) : (
-                  <Button
-                    variant={ButtonVariant.Quiet}
-                    icon={<Error />}
-                    onClick={handleSetIsEditable}
-                    size={ButtonSize.Small}
-                  >
-                    {t('api_delegation.cancel')}
-                  </Button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-        <>{activeDelegations()}</>
-        {isEditable && (
-          <div className={classes.saveSection}>
-            <Button
-              disabled={saveDisabled}
-              onClick={handleSave}
-              color={ButtonColor.light}
-              fullWidth={isSm}
-            >
-              {t('api_delegation.save')}
-            </Button>
-          </div>
+            </div>
+          </>
         )}
       </div>
+      <>{activeDelegations()}</>
+      {isEditable && (
+        <div className={classes.saveSection}>
+          <Button
+            disabled={saveDisabled}
+            onClick={handleSave}
+            color={ButtonColor.Success}
+            fullWidth={isSm}
+          >
+            {t('api_delegation.save')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

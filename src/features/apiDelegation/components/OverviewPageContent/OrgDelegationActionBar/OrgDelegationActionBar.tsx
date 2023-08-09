@@ -48,7 +48,7 @@ export const OrgDelegationActionBar = ({
           variant={'quiet'}
           color={'primary'}
           icon={<AddCircle />}
-          size={'small'}
+          size={'medium'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
@@ -60,7 +60,7 @@ export const OrgDelegationActionBar = ({
           <Button
             variant={'quiet'}
             color={'secondary'}
-            size={'small'}
+            size={'medium'}
             icon={<Cancel />}
             onClick={softRestoreAllCallback}
             aria-label={String(t('api_delegation.undo')) + ' ' + organization.orgName}
@@ -73,7 +73,7 @@ export const OrgDelegationActionBar = ({
               variant={'quiet'}
               color={'danger'}
               icon={<MinusCircle />}
-              size={'small'}
+              size={'medium'}
               onClick={handleSoftDeleteAll}
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
             >

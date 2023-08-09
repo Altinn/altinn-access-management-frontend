@@ -19,7 +19,11 @@
     "remove": "Remove",
     "to": "To",
     "proceed": "Proceed",
-    "services_added": "added"
+    "services_added": "added",
+    "previous":"Previous",
+    "next": "Next",
+    "general_error_title": "Sorry, looks like somthing went wrong",
+    "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk."
   },
   "profile": {
     "received": "Received",
@@ -97,5 +101,10 @@
     "receipt_page_failed_text": "Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice"
+  },
+  "single_rights_delegation": {
+    "search_label": "Search after form or service",
+    "filter_label": "Filter on service owner",
+    "search_hits": "matches found:"
   }
 }

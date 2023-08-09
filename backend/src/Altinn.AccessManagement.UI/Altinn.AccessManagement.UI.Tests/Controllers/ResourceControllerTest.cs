@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -26,10 +27,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     [Collection("ResourceController Tests")]
     public class ResourceControllerTest : IClassFixture<CustomWebApplicationFactory<ResourceController>>
     {
-        private readonly CustomWebApplicationFactory<ResourceController> _factory;
-
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<ResourceController> _factory;
+        private readonly ResourceService _resourceService;
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
@@ -40,6 +41,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _factory = factory;
             _client = GetTestClient();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _resourceService = new ResourceService();
         }
 
         /// <summary>
@@ -237,6 +239,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     Assert.Equal(resultsPerPage, allActualPages[i].PageList.Count);
                 }
                 Assert.Equal(allExpectedResources.Count, allActualPages[i].NumEntriesTotal);
+            }
+        }
+
+        /// <summary>
+        ///     Test case: GetAllResourceOwners, returns a simplified list of resource owners
+        ///     Expected: GetResources returns a list of resource owners in correct language
+        /// </summary>
+        [Fact]
+        public async Task GetAllResourceOwners_validresults()
+        {
+            // Arrange
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceControllerTest).Assembly.Location).LocalPath);
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "ResourceRegistry");
+            string filename = "resourceOwnersOrgList.json";
+            List<ResourceOwnerFE> expectedResult = Util.GetMockData<List<ResourceOwnerFE>>(path, filename);
+
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/resourceowners");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            List<ResourceOwnerFE> actualResult = await response.Content.ReadAsAsync<List<ResourceOwnerFE>>();
+            for (int i = 0; i < expectedResult.Count; i++)
+            {
+                Assert.Equal(expectedResult[i], actualResult[i]);
             }
         }
 
