@@ -75,8 +75,9 @@ export const singleRightsApi = createApi({
     >({
       query: (dto) => ({
         url: `singleright/checkdelegationaccesses/${1232131234}`,
-        method: 'POST',
+        method: 'post',
         body: JSON.stringify(dto),
+        headers: { 'Content-Type': 'application/json' },
       }),
     }),
   }),
