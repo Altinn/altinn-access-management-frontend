@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { type DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 interface PaginatedListDTO {
   page: number;
@@ -57,7 +59,17 @@ const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({
+    baseUrl,
+    prepareHeaders: (headers: Headers, api): Headers => {
+      const token = getCookie('XSRF-TOKEN');
+      if (typeof token === 'string') {
+        headers.set('X-XSRF-TOKEN', token);
+      }
+
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
@@ -73,14 +85,27 @@ export const singleRightsApi = createApi({
       DelegationAccessCheckResponse[],
       DelegationRequestDto
     >({
-      query: (dto) => ({
+      query: (dto: DelegationRequestDto) => ({
         url: `singleright/checkdelegationaccesses/${1232131234}`,
         method: 'post',
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify(dto),
-        headers: { 'Content-Type': 'application/json' },
       }),
     }),
   }),
+});
+
+const singleRightSlice = createSlice({
+  name: 'singleRightsSlice',
+  initialState,
+  reducers: {
+    softAddService: (state, action) => {
+      const mutation = useGetDelegationAccessCheckMutation();
+    },
+  },
+  extraReducers: (builder) => {
+
+  },
 });
 
 export const { useGetPaginatedSearchQuery, useGetDelegationAccessCheckMutation } = singleRightsApi;

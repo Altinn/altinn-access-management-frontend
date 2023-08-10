@@ -26,7 +26,6 @@ export const ChooseServicePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 10;
   const [abColor, setAbColor] = useState<'neutral' | 'success' | 'danger'>('neutral');
-  const dto: DelegationRequestDto = new DelegationRequestDto('', '');
 
   const {
     data: pagingData,
@@ -39,9 +38,7 @@ export const ChooseServicePage = () => {
   });
   const resources = pagingData?.pageList;
   const totalNumberOfResults = pagingData?.numEntriesTotal;
-  const [getDacr, { isLoading, isUpdating }] = useGetDelegationAccessCheckMutation(dto);
-
-  // const dac = delegationCheckData?.data;
+  const [getDacr, { data: delegationCheckResponse }] = useGetDelegationAccessCheckMutation();
 
   // Temporary hardcoding of filter options
   const filterOptions = [
@@ -98,10 +95,10 @@ export const ChooseServicePage = () => {
   const actionButtonClick = (identifier: string) => {
     void getDacr(new DelegationRequestDto('urn:altinn:resource', identifier));
 
-    /* const hasDelegableResponse = delegationCheckData.some(
-      (response: DelegationAccessCheckResponse) => response.status === 'Delegable',
+    const hasDelegableResponse = delegationCheckResponse?.some(
+      (response) => response.status === 'Delegable',
     );
-    hasDelegableResponse ? handleSuccess() : handleFailed(); */
+    hasDelegableResponse ? handleSuccess() : handleFailed();
   };
 
   const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
