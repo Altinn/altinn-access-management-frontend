@@ -760,9 +760,9 @@ __metadata:
   linkType: hard
 
 "@navikt/aksel-icons@npm:^4.7.2":
-  version: 4.7.2
-  resolution: "@navikt/aksel-icons@npm:4.7.2"
-  checksum: 2ace8d98b7864dadfab4bdc02efcc657d9a5a6bb5aa3bcfb8492f42ff85a35a398c84a35712cfa8e9e6f87a75032fecaa3bc28c156c516f6574a0965cd5bf28b
+  version: 4.10.2
+  resolution: "@navikt/aksel-icons@npm:4.10.2"
+  checksum: 72fecfc031f2239679f852e5879ca55e8e7e33c5db511aae4f329168b1c0cddf8f24c1546db83ea00c313c029de2c7908194d568f3b696dc49af851bc9e4623d
   languageName: node
   linkType: hard
 
@@ -1402,18 +1402,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:4.32.1":
-  version: 4.32.1
-  resolution: "@tanstack/query-core@npm:4.32.1"
-  checksum: 7676e367219bfddb3e153ac3771c40b47a5bd2609699351a3342c03e5c17dd5d39dc24c4a27e64a0b2628d5fff99b22d9f29ef19b0eb693ee8f1f86ddfb28b0b
+"@tanstack/query-core@npm:4.32.6":
+  version: 4.32.6
+  resolution: "@tanstack/query-core@npm:4.32.6"
+  checksum: c06f4b8d7edfc237d34da14c4ff2c71f4e6de662f123914419e9c2fbb9dccb7c1d3f46afd66ca5fea40687c5a99e514750a32a05e809d0db76343a90a45c76a8
   languageName: node
   linkType: hard
 
 "@tanstack/react-query@npm:^4.32.1":
-  version: 4.32.1
-  resolution: "@tanstack/react-query@npm:4.32.1"
+  version: 4.32.6
+  resolution: "@tanstack/react-query@npm:4.32.6"
   dependencies:
-    "@tanstack/query-core": 4.32.1
+    "@tanstack/query-core": 4.32.6
     use-sync-external-store: ^1.2.0
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -1424,7 +1424,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 31cdf93896ea0a5903c62e60fee937495cd3db1a1e3220b36012337e026c967034b5cfdd5b522339a5cc982fbb0000dad700991690e992e13f67cae41a72a589
+  checksum: 5ce7939515329d64aee35703de8f030bba383717e68eefb17a32492cca44d8421175b7045e0fd6314faff11cee8a570f42208685947a97bc50d0023d5ae1029e
   languageName: node
   linkType: hard
 
@@ -2791,13 +2791,13 @@ __metadata:
   linkType: hard
 
 "cypress-real-events@npm:^1.7.6":
-  version: 1.9.1
-  resolution: "cypress-real-events@npm:1.9.1"
+  version: 1.10.0
+  resolution: "cypress-real-events@npm:1.10.0"
   dependencies:
     prettier: ^3.0.0
   peerDependencies:
     cypress: ^4.x || ^5.x || ^6.x || ^7.x || ^8.x || ^9.x || ^10.x || ^11.x || ^12.x
-  checksum: 24d73fce163d3c738bacf8f06755aefbdb1d8d8d13b23afabb0c9de3d0a2d8f5a85da43e5fd0febcc96f08fb0fa527aa3028297b6b65149259c81810ee3ae433
+  checksum: 917cf0458f0073452462bd1468ea3e9d77382c0c7991555314cec9e1e39a82668f8185e6fbbd4e0303576ddf3cbe410fcdb1dec8237f68e1ef18d05e41d7d537
   languageName: node
   linkType: hard
 
@@ -4803,11 +4803,11 @@ __metadata:
   linkType: hard
 
 "i18next@npm:^23.0.0":
-  version: 23.4.1
-  resolution: "i18next@npm:23.4.1"
+  version: 23.4.4
+  resolution: "i18next@npm:23.4.4"
   dependencies:
     "@babel/runtime": ^7.22.5
-  checksum: d9283d3de5e4ea2e55f61bd8ada98b5aef1b7db35a69c8ccf193367c5cbee6f795a67c5cd8a7af511e56c12b021b91d97253863b6c2336726925d20518fb02cc
+  checksum: faa968dcba328528231e3cd140d5a0f4b9b472b75874b7cbf8415e2dbff48397f1cdcc36a739ea6915f6970c367fdd7f985f120e63e1c30a839c53e366d851fd
   languageName: node
   linkType: hard
 
@@ -6645,7 +6645,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.26":
+"postcss@npm:^8.4.27":
   version: 8.4.27
   resolution: "postcss@npm:8.4.27"
   dependencies:
@@ -6718,11 +6718,11 @@ __metadata:
   linkType: hard
 
 "prettier@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "prettier@npm:3.0.0"
+  version: 3.0.1
+  resolution: "prettier@npm:3.0.1"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 6a832876a1552dc58330d2467874e5a0b46b9ccbfc5d3531eb69d15684743e7f83dc9fbd202db6270446deba9c82b79d24383d09924c462b457136a759425e33
+  checksum: e1f3f16c7fe0495de3faa182597871f74927d787cce3c52095a66ff5d7eacc05173371d5f58bf12141a0a1b6bfe739a338531d6cf18b92c7256c1319f2c84e73
   languageName: node
   linkType: hard
 
@@ -7279,9 +7279,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.25.2":
-  version: 3.26.3
-  resolution: "rollup@npm:3.26.3"
+"rollup@npm:^3.27.1":
+  version: 3.28.0
+  resolution: "rollup@npm:3.28.0"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -7289,7 +7289,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: e6a765b2b7af709170344cc804392936613e06b6bdab46a04d264368d154bdadaaaf77de39e6e656bf728a060d7b4867d81e2464d791c0f37dd5b21aa9c7a6df
+  checksum: 6ded4a0d3ca531d68e82897d5eebaa9d085014a062620bc328f2859ccf78d6a148a51ed53f1275a5f89b55cc6d7b1440b7cee44e5a9e3a51442f809b4b26f727
   languageName: node
   linkType: hard
 
@@ -8319,13 +8319,13 @@ __metadata:
   linkType: hard
 
 "vite@npm:^4.2.2":
-  version: 4.4.7
-  resolution: "vite@npm:4.4.7"
+  version: 4.4.9
+  resolution: "vite@npm:4.4.9"
   dependencies:
     esbuild: ^0.18.10
     fsevents: ~2.3.2
-    postcss: ^8.4.26
-    rollup: ^3.25.2
+    postcss: ^8.4.27
+    rollup: ^3.27.1
   peerDependencies:
     "@types/node": ">= 14"
     less: "*"
@@ -8354,7 +8354,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 787c4d891da18d0a0545bee07dec73c3201979dcf2b1ea3dc13fdd2d3b9ad76d413bcc0e68502183e309007a612c1f4116adefe0093d95fbbb9cf1c1755f7e41
+  checksum: c511024ceae39c68c7dbf2ac4381ee655cd7bb62cf43867a14798bc835d3320b8fa7867a336143c30825c191c1fb4e9aa3348fce831ab617e96203080d3d2908
   languageName: node
   linkType: hard
 
