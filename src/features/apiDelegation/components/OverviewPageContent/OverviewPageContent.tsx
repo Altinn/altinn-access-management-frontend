@@ -171,38 +171,6 @@ export const OverviewPageContent = ({
     ));
   };
 
-  // TEST!
-  const [isTestOpen, setTestIsOpen] = useState(false);
-  const [isTestOpen2, setTestIsOpen2] = useState(false);
-  const [testCollection, setTestCollection] = useState([
-    'Løven',
-    'Heksa',
-    'Klesskapet',
-    'Julenissen',
-    '4 barn',
-  ]);
-
-  const testCollectionActionBars = testCollection.map((title, index) => (
-    <ActionBar
-      key={index}
-      title={title}
-      size='small'
-      color='success'
-      actions={
-        <Button
-          variant='quiet'
-          onClick={() => {
-            setTestCollection(testCollection.filter((i) => i !== title));
-          }}
-        >
-          Angre
-        </Button>
-      }
-    >
-      Test
-    </ActionBar>
-  ));
-
   return (
     <div className={classes.overviewActionBarContainer}>
       {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}

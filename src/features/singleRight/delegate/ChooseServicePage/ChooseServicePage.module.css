@@ -1,3 +1,11 @@
+.selectedResourcesContent {
+    margin: 0.4rem;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .searchSection {
     margin-top: 2rem;
 }

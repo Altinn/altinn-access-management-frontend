@@ -3,34 +3,35 @@ import { useState } from 'react';
 import { Button } from '@digdir/design-system-react';
 import { PlusIcon, MinusIcon } from '@navikt/aksel-icons';
 
-import { ActionBar } from '@/components';
+import { ActionBar, type ActionBarProps } from '@/components';
 
 import classes from './ResourceActionBar.module.css';
 
-export interface ResourceActionBarProps {
-  /** The subtitle to be displayed in the header of the ActionBar. */
-  subtitle?: React.ReactNode;
-  /** The title to be displayed in the header of the ActionBar. */
-  title?: React.ReactNode;
-  /** The children to be displayed as content inside the ActionBar. */
-  children?: React.ReactNode;
+export interface ResourceActionBarProps extends ActionBarProps {
+  /** The external state indicating whether the bar is as added or not */
+  isAdded: boolean;
+  /** The callback function to be called when the add button is pressed. */
+  onAdd?: () => void;
+  /** The callback function to be called when the remove button is pressed. */
+  onRemove?: () => void;
 }
 
-export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionBarProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
-  const [color, setColor] = useState<'neutral' | 'light' | 'warning' | 'success' | 'danger'>(
-    'neutral',
-  );
-
+export const ResourceActionBar = ({
+  color,
+  subtitle,
+  title,
+  children,
+  onAdd,
+  onRemove,
+  isAdded,
+}: ResourceActionBarProps) => {
   const addButton = (
     <Button
       variant='quiet'
       icon={<PlusIcon title='add' />}
       size='medium'
       onClick={() => {
-        setIsAdded(true);
-        setColor('success');
+        onAdd?.();
       }}
     ></Button>
   );
@@ -41,8 +42,7 @@ export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionB
       icon={<MinusIcon title='remove' />}
       size='medium'
       onClick={() => {
-        setIsAdded(false);
-        setColor('neutral');
+        onRemove?.();
       }}
     ></Button>
   );
@@ -51,11 +51,7 @@ export const ResourceActionBar = ({ subtitle, title, children }: ResourceActionB
     <ActionBar
       subtitle={subtitle}
       title={title}
-      open={isOpen}
       color={color}
-      onClick={() => {
-        setIsOpen(!isOpen);
-      }}
       actions={isAdded ? removeButton : addButton}
     >
       <div className={classes.content}>{children}</div>

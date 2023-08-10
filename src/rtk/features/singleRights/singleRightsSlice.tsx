@@ -1,11 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-interface PaginatedListDTO {
-  page: number;
-  numEntriesTotal: number;
-  pageList: ServiceResource[];
-}
-
 export interface ServiceResource {
   title: string;
   identifier: string;
@@ -13,6 +7,12 @@ export interface ServiceResource {
   rightDescription: string;
   description?: string;
   resourceReferences: resourceReference[];
+}
+
+interface paginatedListDTO {
+  page: number;
+  numEntriesTotal: number;
+  pageList: ServiceResource[];
 }
 
 interface resourceReference {
@@ -34,7 +34,7 @@ export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
-    getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
+    getPaginatedSearch: builder.query<paginatedListDTO, searchParams>({
       query: (args) => {
         const { searchString, ROfilters, page, resultsPerPage } = args;
         let filterUrl = '';

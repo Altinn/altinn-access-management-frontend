@@ -4,45 +4,35 @@ import { ChevronRightDoubleCircleFillIcon, FilesFillIcon } from '@navikt/aksel-i
 import { Button, Paragraph } from '@digdir/design-system-react';
 import cn from 'classnames';
 
-import { ActionBar } from '../ActionBar';
+import { ActionBar, type ActionBarProps } from '../ActionBar';
 
-import classes from './SelectionBar.module.css';
+import classes from './CollectionBar.module.css';
 
-export interface SelectionBarProps {
-  /** The color variant. */
-  color?: 'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'danger';
-  /** The subtitle to be displayed in the header. */
-  subtitle?: React.ReactNode;
-  /** The title to be displayed in the header. */
-  title?: React.ReactNode;
+export interface CollectionBarProps extends Pick<ActionBarProps, 'color' | 'title'> {
   /** The list of selected objects */
   collection: React.ReactNode[];
   /** Whether or not to use the compact variant */
   compact?: boolean;
 }
 
-export const SelectionBar = ({
+export const CollectionBar = ({
   color = 'neutral',
-  subtitle,
   title,
   collection,
   compact = false,
-}: SelectionBarProps) => {
+}: CollectionBarProps) => {
   const { t } = useTranslation('common');
 
   return (
     <ActionBar
       title={title}
-      subtitle={subtitle}
+      subtitle={
+        compact && (
+          <span role='status'>{collection.length.toString() + ' ' + t('common.added')}</span>
+        )
+      }
       additionalText={
-        compact ? (
-          <span
-            role='status'
-            className={cn(classes.counterSymbol, classes[color])}
-          >
-            {collection.length}
-          </span>
-        ) : (
+        !compact && (
           <Paragraph
             as={'span'}
             role='status'
@@ -71,7 +61,7 @@ export const SelectionBar = ({
       size='large'
       color={color}
     >
-      <div className={classes.content}>{collection}</div>
+      <div className={cn(classes.content, { [classes.compact]: compact })}>{collection}</div>
     </ActionBar>
   );
 };
