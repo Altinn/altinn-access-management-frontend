@@ -60,7 +60,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             aria-controls={contentId}
           >
             <div className={classes.actionBarButtonContainer}>
-              <div className={cn(classes.actionBarIcon, classes[size], classes[color])}>
+              <div className={cn(classes.actionBarIcon, classes[size])}>
                 <ActionBarIcon />
               </div>
               <div className={classes.actionBarTexts}>

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { Button } from '@digdir/design-system-react';
 import { PlusIcon, MinusIcon } from '@navikt/aksel-icons';
 

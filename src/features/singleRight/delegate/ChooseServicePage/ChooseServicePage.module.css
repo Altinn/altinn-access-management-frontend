@@ -11,6 +11,7 @@
 }
 
 .searchInputs {
+    width: 100%;
     display: flex;
     gap: 1rem;
     align-items:end;

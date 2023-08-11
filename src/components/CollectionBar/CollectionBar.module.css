@@ -15,3 +15,8 @@
 .content.compact {
     margin: 0.5rem;
 }
+
+.compactProceedButton {
+    margin-top: 2px;
+    float: right;
+}
