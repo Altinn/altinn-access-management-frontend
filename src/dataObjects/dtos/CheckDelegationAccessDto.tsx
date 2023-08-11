@@ -1,7 +1,7 @@
 /**
  * Represents the delegation input data transfer object.
  */
-export class DelegationRequestDto {
+export class DelegationRequest {
   /**
    * Represents an array of resource objects.
    */

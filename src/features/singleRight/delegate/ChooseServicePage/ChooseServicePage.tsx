@@ -5,14 +5,19 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Chip, Heading, Paragraph, Pagination, Spinner, Alert } from '@digdir/design-system-react';
 
-import { DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
+import { DelegationRequest } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 import { Page, PageHeader, PageContent, PageSize, PageContainer, Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
   type ServiceResource,
-  useGetDelegationAccessCheckMutation,
+} from '@/rtk/features/singleRights/singleRightsApi';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import {
+  type DelegationRequestDto,
+  delegationAccessCheck,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -26,6 +31,8 @@ export const ChooseServicePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 10;
   const [abColor, setAbColor] = useState<'neutral' | 'success' | 'danger'>('neutral');
+  const dispatch = useAppDispatch();
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
 
   const {
     data: pagingData,
@@ -38,7 +45,6 @@ export const ChooseServicePage = () => {
   });
   const resources = pagingData?.pageList;
   const totalNumberOfResults = pagingData?.numEntriesTotal;
-  const [getDacr, { data: delegationCheckResponse }] = useGetDelegationAccessCheckMutation();
 
   // Temporary hardcoding of filter options
   const filterOptions = [
@@ -92,13 +98,27 @@ export const ChooseServicePage = () => {
     setAbColor('danger');
   };
 
-  const actionButtonClick = (identifier: string) => {
-    void getDacr(new DelegationRequestDto('urn:altinn:resource', identifier));
+  const actionButtonClick = (identifier: string, serviceResource: ServiceResource) => {
+    const dto: DelegationRequestDto = {
+      serviceResource,
+      delegationRequest: new DelegationRequest('urn:altinn:resource', identifier),
+    };
 
-    const hasDelegableResponse = delegationCheckResponse?.some(
-      (response) => response.status === 'Delegable',
-    );
-    hasDelegableResponse ? handleSuccess() : handleFailed();
+    const response = dispatch(delegationAccessCheck(dto));
+    /* for (const r of resources) {
+      if (r.identifier === identifier) {
+        chosenServices.some((s) => {
+          s.some((serv) => {
+            if (s.service?.identifier === identifier) {
+              r.accessCheckResponses = s.accessCheckResponses;
+              console.log('testen', r);
+            }
+          });
+        });
+      }
+    } */
+
+    // hasDelegableResponse ? handleSuccess() : handleFailed();
   };
 
   const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
@@ -107,7 +127,7 @@ export const ChooseServicePage = () => {
       title={r.title}
       subtitle={r.resourceOwnerName}
       actionButtonClick={() => {
-        actionButtonClick(r.identifier);
+        actionButtonClick(r.identifier, r);
       }}
       color={abColor}
     >

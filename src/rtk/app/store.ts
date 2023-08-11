@@ -6,7 +6,8 @@ import overviewOrgReducer from '../features/apiDelegation/overviewOrg/overviewOr
 import delegableOrgReducer from '../features/apiDelegation/delegableOrg/delegableOrgSlice';
 import delegationRequestReducer from '../features/apiDelegation/delegationRequest/delegationRequestSlice';
 import userInfoReducer from '../features/userInfo/userInfoSlice';
-import { singleRightsApi } from '../features/singleRights/singleRightsSlice';
+import { singleRightsApi } from '../features/singleRights/singleRightsApi';
+import singleRightsSlice from '../features/singleRights/singleRightsSlice';
 
 const logger = createLogger();
 
@@ -19,6 +20,7 @@ const store = import.meta.env.PROD
         delegableOrg: delegableOrgReducer,
         delegationRequest: delegationRequestReducer,
         userInfo: userInfoReducer,
+        singleRightsSlice,
         [singleRightsApi.reducerPath]: singleRightsApi.reducer,
       },
     })
@@ -29,6 +31,7 @@ const store = import.meta.env.PROD
         delegableOrg: delegableOrgReducer,
         delegationRequest: delegationRequestReducer,
         userInfo: userInfoReducer,
+        singleRightsSlice,
         [singleRightsApi.reducerPath]: singleRightsApi.reducer,
       },
       middleware: (getDefaultMiddleware) =>

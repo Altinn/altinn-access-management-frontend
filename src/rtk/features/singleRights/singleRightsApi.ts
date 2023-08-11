@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { createSlice } from '@reduxjs/toolkit';
 
-import { type DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+import { type DelegationAccessCheckResponse } from './singleRightsSlice';
 
 interface PaginatedListDTO {
   page: number;
@@ -17,6 +17,7 @@ export interface ServiceResource {
   rightDescription: string;
   description?: string;
   resourceReferences: resourceReference[];
+  accessCheckResponses?: DelegationAccessCheckResponse[];
 }
 
 interface resourceReference {
@@ -31,37 +32,13 @@ interface searchParams {
   page: number;
 }
 
-export interface DelegationAccessCheckResponse {
-  rightKey: string;
-  resource: IdValuePair[];
-  action: string;
-  status: string;
-  details: Details;
-}
-
-export interface IdValuePair {
-  id: string;
-  value: string;
-}
-
-export interface Details {
-  detailCode: string;
-  info: string;
-  detailParams: DetailParams[];
-}
-
-export interface DetailParams {
-  name: string;
-  value: string;
-}
-
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
   baseQuery: fetchBaseQuery({
     baseUrl,
-    prepareHeaders: (headers: Headers, api): Headers => {
+    prepareHeaders: (headers: Headers): Headers => {
       const token = getCookie('XSRF-TOKEN');
       if (typeof token === 'string') {
         headers.set('X-XSRF-TOKEN', token);
@@ -81,31 +58,7 @@ export const singleRightsApi = createApi({
         return `resources/paginatedSearch?Page=${page}&ResultsPerPage=10&SearchString=${searchString}${filterUrl}`;
       },
     }),
-    getDelegationAccessCheck: builder.mutation<
-      DelegationAccessCheckResponse[],
-      DelegationRequestDto
-    >({
-      query: (dto: DelegationRequestDto) => ({
-        url: `singleright/checkdelegationaccesses/${1232131234}`,
-        method: 'post',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(dto),
-      }),
-    }),
   }),
 });
 
-const singleRightSlice = createSlice({
-  name: 'singleRightsSlice',
-  initialState,
-  reducers: {
-    softAddService: (state, action) => {
-      const mutation = useGetDelegationAccessCheckMutation();
-    },
-  },
-  extraReducers: (builder) => {
-
-  },
-});
-
-export const { useGetPaginatedSearchQuery, useGetDelegationAccessCheckMutation } = singleRightsApi;
+export const { useGetPaginatedSearchQuery } = singleRightsApi;
