@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Enums;
+﻿using System.Net;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -21,23 +22,23 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
         private readonly IProfileService _profileService;
-        private readonly IResourceAdministrationPoint _rap;
+        private readonly IResourceService _resourceService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceController" /> class.
         /// </summary>
         /// <param name="logger">the logger.</param>
-        /// <param name="resourceAdministrationPoint">The resource administration point</param>
+        /// <param name="resourceService">The resource administration point</param>
         /// <param name="profileService">handler for profile service</param>
         /// <param name="httpContextAccessor">handler for httpcontext</param>
         public ResourceController(
             ILogger<ResourceController> logger,
-            IResourceAdministrationPoint resourceAdministrationPoint,
+            IResourceService resourceService,
             IProfileService profileService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
-            _rap = resourceAdministrationPoint;
+            _resourceService = resourceService;
             _profileService = profileService;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -55,11 +56,27 @@ namespace Altinn.AccessManagement.UI.Controllers
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
 
-            return await _rap.GetResources(ResourceType.MaskinportenSchema, languageCode);
+            return await _resourceService.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
 
         /// <summary>
-        /// Search through all delegable service resources and returns matches
+        ///     Gets list of all resource owners
+        /// </summary>
+        /// <returns>List of resource owners in string format</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("resourceowners")]
+        public async Task<ActionResult<List<ResourceOwnerFE>>> GetAllResourceOwners()
+        {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile user = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(user);
+
+            return await _resourceService.GetAllResourceOwners(languageCode);
+        }
+
+        /// <summary>
+        ///     Search through all delegable service resources and returns matches
         /// </summary>
         /// <returns>Paginated search results</returns>
         [HttpGet]
@@ -73,19 +90,17 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                return await _rap.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
+                return await _resourceService.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
             }
             catch (HttpStatusException ex)
             {
-                if (ex.Status == System.Net.HttpStatusCode.NoContent)
+                if (ex.StatusCode == HttpStatusCode.NoContent)
                 {
                     return NoContent();
                 }
-                else
-                {
-                    string responseContent = ex.Message;
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.Status, "Unexpected HttpStatus response", detail: responseContent));
-                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
     }

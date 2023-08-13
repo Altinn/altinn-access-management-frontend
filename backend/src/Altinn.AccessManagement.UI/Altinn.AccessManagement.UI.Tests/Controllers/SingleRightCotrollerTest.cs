@@ -5,7 +5,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Mocks.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 
@@ -61,13 +61,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
             List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
-            int countMatches = CountMatches(actualResponses, AccessLevel.AllAccessesAppid503);
+            int countMatches = CountMatches(actualResponses, "AllAccessesAppid503.json");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(3, countMatches);
         }
-        
+
         [Fact]
         public async Task DelegationAccessCheck_NoAccesses_valid_response()
         {
@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
             List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
-            int countMatches = CountMatches(actualResponses, AccessLevel.NoAccessesAppid504);
+            int countMatches = CountMatches(actualResponses, "NoAccessesAppid504.json");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -125,13 +125,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
             List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
-            int countMatches = CountMatches(actualResponses, AccessLevel.OnlyReadAppid505);
+            int countMatches = CountMatches(actualResponses, "OnlyReadAppid505.json");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(3, countMatches);
         }
-        
+
         [Fact]
         public async Task DelegationAccessCheck_ReadAndWrite_valid_response()
         {
@@ -157,20 +157,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
             List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
-            int countMatches = CountMatches(actualResponses, AccessLevel.ReadAndWriteAppid506);
+            int countMatches = CountMatches(actualResponses, "ReadAndWriteAppid506.json");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(3, countMatches);
         }
-        
-        private int CountMatches(List<DelegationAccessCheckResponse> actualResponses, AccessLevel expectedAccessLevel)
-        {
 
+        private int CountMatches(List<DelegationAccessCheckResponse> actualResponses, string expectedResponseFileName)
+        {
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
+            string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "DelegationAccessCheckResponse");
+
+            List<DelegationAccessCheckResponse> expectedResponses = Util.GetMockData<List<DelegationAccessCheckResponse>>(path, expectedResponseFileName);
             int countMatches = 0;
 
-            List<DelegationAccessCheckResponse> expectedResponses = SingleRightUtil.GetMockedDelegationAccessCheckResponses(expectedAccessLevel);
-            countMatches = 0;
             for (int i = 0; i < actualResponses.Count; i++)
             {
                 bool value = AreObjectsEqual(actualResponses[i], expectedResponses[i]);

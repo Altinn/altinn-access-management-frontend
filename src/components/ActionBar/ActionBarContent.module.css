@@ -1,34 +1,70 @@
 .actionBarContent {
-  border-width: 1px;
   border-style: solid;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   background-color: var(#FFFFFF);
+  --border-color: var(--fds-semantic-border-neutral-subtle);
+  --header-color: var(--fds-semantic-surface-neutral-default);
+}
+
+.actionBarContent.small {
+  border-width: 2px;
+  border-color: var(--header-color);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.actionBarContent.medium {
+  border-width: 1px;
+  border-color: var(--border-color);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.actionBarContent.large {
+  border-width: 2px;
+  border-color: var(--header-color);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .actionBarContent.light {
-  border-color: var(--fds-semantic-border-neutral-subtle);
-  border-top-color: var(--fds-semantic-surface-neutral-default);
+  border-color: var(--border-color);
+  --border-color: var(--fds-semantic-border-neutral-subtle);
+  --header-color: var(--fds-semantic-surface-neutral-default);
+  border-top-width: 1px;
+}
+
+.actionBarContent.small.light {
+  border-width: 1px;
+}
+
+.actionBarContent.dark {
+  --border-color: var(--semantic-surface-action-active);
+  --header-color: var(--semantic-surface-action-active);
+  border-top-color: var(--header-color);
 }
 
 .actionBarContent.neutral {
-  border-color: var(--fds-semantic-border-neutral-subtle);
-  border-top-color: var(--fds-semantic-surface-neutral-subtle);
+  --border-color: var(--fds-semantic-border-neutral-subtle);
+  --header-color: var(--fds-semantic-surface-neutral-subtle);
+  border-top-color: var(--header-color);
 }
 
 .actionBarContent.warning {
-  border-color: var(--fds-semantic-border-warning-default);
-  border-top-color: var(--fds-semantic-surface-warning-subtle);
+  --border-color: var(--fds-semantic-border-warning-default);
+  --header-color: var(--fds-semantic-surface-warning-subtle);
+  border-top-color: var(--header-color);
 }
 
 .actionBarContent.success {
-  border-color: var(--fds-semantic-surface-success-default);
-  border-top-color: var(--fds-semantic-surface-success-subtle);
+  --border-color: var(--fds-semantic-surface-success-default);
+  --header-color: var(--fds-semantic-surface-success-subtle);
+  border-top-color: var(--header-color);
 }
 
 .actionBarContent.danger {
-  border-color: var(--fds-semantic-surface-danger-default);
-  border-top-color: var(--fds-semantic-surface-danger-subtle);
+  --border-color: var(--fds-semantic-surface-danger-default);
+  --header-color: var(--fds-semantic-surface-danger-subtle);
+  border-top-color: var(--header-color);
 }

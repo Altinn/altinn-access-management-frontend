@@ -7,32 +7,31 @@ import { ActionBar, type ActionBarProps } from '@/components';
 
 import classes from './ResourceActionBar.module.css';
 
-export interface ResourceActionBarProps
-  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children', 'color'> {
-  /** The callback funciton for the action button click */
-  actionButtonClick: () => void;
-  /** The type of the ResourceActionBar to be displayed */
-  type?: 'neutral' | 'failed' | 'success';
+export interface ResourceActionBarProps extends ActionBarProps {
+  /** The external state indicating whether the bar is as added or not */
+  isAdded: boolean;
+  /** The callback function to be called when the add button is pressed. */
+  onAdd?: () => void;
+  /** The callback function to be called when the remove button is pressed. */
+  onRemove?: () => void;
 }
 
 export const ResourceActionBar = ({
+  color,
   subtitle,
   title,
   children,
-  color,
-  type,
-  actionButtonClick,
+  onAdd,
+  onRemove,
+  isAdded,
 }: ResourceActionBarProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
-
   const addButton = (
     <Button
       variant='quiet'
       icon={<PlusIcon title='add' />}
       size='medium'
       onClick={() => {
-        actionButtonClick();
+        onAdd?.();
       }}
     ></Button>
   );
@@ -43,7 +42,7 @@ export const ResourceActionBar = ({
       icon={<MinusIcon title='remove' />}
       size='medium'
       onClick={() => {
-        actionButtonClick();
+        onRemove?.();
       }}
     ></Button>
   );
@@ -52,11 +51,7 @@ export const ResourceActionBar = ({
     <ActionBar
       subtitle={subtitle}
       title={title}
-      open={isOpen}
       color={color}
-      onClick={() => {
-        setIsOpen(!isOpen);
-      }}
       actions={isAdded ? removeButton : addButton}
     >
       <div className={classes.content}>{children}</div>

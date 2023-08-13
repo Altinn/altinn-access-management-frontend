@@ -1,3 +1,11 @@
+.selectedResourcesContent {
+    margin: 0.4rem;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .searchSection {
     margin-top: 2rem;
 }
@@ -46,4 +54,15 @@
 
 .searchError {
     margin-TOP: 32px;
+}
+
+@media only screen and (max-width: 768px) {
+    .searchInputs{
+        flex-direction: column;
+        align-items:start;
+    }
+
+    .searchField {
+        width: 100%;
+    }
 }

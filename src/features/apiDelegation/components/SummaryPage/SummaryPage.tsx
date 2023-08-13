@@ -1,5 +1,5 @@
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import { List, Button, ButtonVariant, ButtonColor, ButtonSize } from '@digdir/design-system-react';
+import { List, Button, ButtonVariant, ButtonColor } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -225,7 +225,6 @@ export const SummaryPage = ({
               <div className={classes.receiptMainButton}>
                 <Button
                   color={ButtonColor.Primary}
-                  size={ButtonSize.Small}
                   variant={ButtonVariant.Filled}
                   onClick={navigateToOverview}
                   fullWidth={isSm}

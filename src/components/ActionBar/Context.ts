@@ -5,10 +5,11 @@ export type ClickHandler = () => void;
 export const ActionBarContext = createContext<
   | {
       open: boolean;
-      onClick: ClickHandler | undefined;
+      toggleOpen?: ClickHandler | undefined;
       headerId: string;
       contentId: string;
-      color: 'light' | 'neutral' | 'warning' | 'success' | 'danger';
+      color: 'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'danger';
+      size: 'small' | 'medium' | 'large';
     }
   | undefined
 >(undefined);

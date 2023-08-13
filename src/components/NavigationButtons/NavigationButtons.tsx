@@ -1,10 +1,4 @@
-import {
-  Button,
-  ButtonColor,
-  ButtonSize,
-  ButtonVariant,
-  Spinner,
-} from '@digdir/design-system-react';
+import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -48,7 +42,6 @@ export const NavigationButtons = ({
         <Button
           color={ButtonColor.Primary}
           variant={ButtonVariant.Outline}
-          size={ButtonSize.Small}
           fullWidth={true}
           onClick={() => {
             navigate(previousPath);
@@ -61,7 +54,6 @@ export const NavigationButtons = ({
         <Button
           color={nextButtonColor}
           variant={ButtonVariant.Filled}
-          size={ButtonSize.Small}
           fullWidth={true}
           onClick={handleNextOnClick}
           disabled={nextDisabled}

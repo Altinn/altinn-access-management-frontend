@@ -25,7 +25,7 @@ import {
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
-import { ErrorPanel } from '@/components';
+import { ActionBar, ErrorPanel } from '@/components';
 import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';
