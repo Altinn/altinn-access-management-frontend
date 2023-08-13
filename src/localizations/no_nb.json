@@ -23,7 +23,9 @@
     "previous":"Forrige",
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd en feil",
-    "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn Servicedesk."
+    "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn Servicedesk.",
+    "not_delegable": "Ikke delegerbar",
+    "missing_delegable_right": "Mangler rettighet"
   },
   "profile": {
     "received": "Mottatte",

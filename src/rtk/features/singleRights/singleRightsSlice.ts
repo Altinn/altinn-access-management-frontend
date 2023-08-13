@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { type DelegationRequest } from '@/dataObjects/dtos/CheckDelegationAccessDto';
+import { type ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
 
 import { type ServiceResource } from './singleRightsApi';
 
 export interface DelegationRequestDto {
-  delegationRequest: DelegationRequest;
+  delegationRequest: ResourceList;
   serviceResource: ServiceResource;
 }
 
@@ -25,7 +25,7 @@ interface IdValuePair {
 
 interface Details {
   detailCode: string;
-  info: string;
+  description: string;
   detailParams: DetailParams[];
 }
 
@@ -34,9 +34,11 @@ interface DetailParams {
   value: string;
 }
 
-interface ChosenService {
+export interface ChosenService {
   accessCheckResponses?: DelegationAccessCheckResponse[];
   service?: ServiceResource;
+  status?: 'Delegable' | 'NotDelegable';
+  notDelegableDetails?: string;
 }
 
 export interface ChosenServices {
@@ -50,7 +52,6 @@ const initialState: ChosenServices = {
 export const delegationAccessCheck = createAsyncThunk(
   'singleRightSlice/delegationAccessCheck',
   async (dto: DelegationRequestDto, { rejectWithValue }) => {
-    console.log('fetchObj', dto);
     return await axios
       .post(
         `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`,
@@ -64,35 +65,34 @@ export const delegationAccessCheck = createAsyncThunk(
   },
 );
 
-/* action.payload.some((DelegationAccessCheckResponse) => {
-        dacr.some((response: DelegationAccessCheckResponse[]) => {
-          response.status === 'Delegable'
-        }),
-      }); */
-
 const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
   reducers: {
-    softAddService: (state, action) => {
-      for (const chosenService of state.chosenServices) {
-        if (chosenService.service?.identifier === action.payload.identifier) {
-        }
-      }
+    removeServiceResource: (state: ChosenServices, action) => {
+      state.chosenServices = state.chosenServices.filter((s) => s.service?.identifier !== action.payload)
     },
   },
   extraReducers: (builder) => {
     builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
       let chosenService: ChosenService = {};
-      action.payload.some((dacr: DelegationAccessCheckResponse) => {
-        if (dacr.status === 'Delegable') {
-          chosenService = {
-            accessCheckResponses: action.payload,
-            service: action.meta.arg.serviceResource,
-          };
-        }
-      });
-
+      const delegableService = action.payload.find(
+        (response: DelegationAccessCheckResponse) => response.status === 'Delegable',
+      );
+      if (delegableService) {
+        chosenService = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'Delegable',
+        };
+      } else {
+        chosenService = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'NotDelegable',
+          notDelegableDetails: action.payload[0].details[0].description,
+        };
+      }
       if (chosenService) {
         state.chosenServices.push(chosenService);
       }
@@ -101,3 +101,4 @@ const singleRightSlice = createSlice({
 });
 
 export default singleRightSlice.reducer;
+export const { removeServiceResource: removeApi } = singleRightSlice.actions;

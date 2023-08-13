@@ -40,180 +40,24 @@ import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
-
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResources, setSelectedResources] = useState<ServiceResource[]>([]);
+  const dispatch = useAppDispatch();
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
+  const resultsPerPage = 10;
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
     searchString,
     ROfilters: filters,
     page: currentPage,
-    resultsPerPage: 10,
+    resultsPerPage,
   });
+
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
-  const resultsPerPage = 10;
-
-  const {
-    data: pagingData,
-    error: pagingError,
-    isFetching: pagingIsFetching,
-  } = useGetPaginatedSearchQuery({
-    searchString,
-    ROfilters: filters,
-    page: currentPage,
-  });
-  const resources = pagingData?.pageList;
-  const totalNumberOfResults = pagingData?.numEntriesTotal;
-
-  // Temporary hardcoding of filter options
-  const filterOptions = [
-    { label: 'Påfunnsetaten', value: '130000000' },
-    { label: 'Testdepartementet', value: '123456789' },
-    { label: 'Narnia', value: '777777777' },
-    { label: 'Brannvesenet', value: '110110110' },
-    { label: 'Økern Portal', value: '904111111' },
-    { label: 'Digitaliseringsdirektoratet', value: '991825827' },
-    { label: 'Brønnøysundregistrene', value: '974760673' },
-  ];
-
-  const unCheckFilter = (filter: string) => {
-    setFilters((prev) => prev.filter((f) => f !== filter));
-    setCurrentPage(1);
-  };
-
-  const getFilterLabel = (value: string) => {
-    for (const option of filterOptions) {
-      if (option.value === value) {
-        return option.label;
-      }
-    }
-    return '';
-  };
-
-  const filterChips = () => (
-    <Chip.Group
-      size='small'
-      className={classes.filterChips}
-    >
-      {filters.map((filterValue) => (
-        <Chip.Removable
-          key={filterValue}
-          aria-label={t('common.remove') + ' ' + getFilterLabel(filterValue)}
-          onClick={() => {
-            unCheckFilter(filterValue);
-          }}
-        >
-          {getFilterLabel(filterValue)}
-        </Chip.Removable>
-      ))}
-    </Chip.Group>
-  );
-
-  const handleSuccess = () => {
-    setAbColor('success');
-  };
-
-  const handleFailed = () => {
-    setAbColor('danger');
-  };
-
-  const actionButtonClick = (identifier: string, serviceResource: ServiceResource) => {
-    const dto: DelegationRequestDto = {
-      serviceResource,
-      delegationRequest: new ResourceList('urn:altinn:resource', identifier),
-    };
-
-    const response = dispatch(delegationAccessCheck(dto));
-    /* for (const r of resources) {
-      if (r.identifier === identifier) {
-        chosenServices.some((s) => {
-          s.some((serv) => {
-            if (s.service?.identifier === identifier) {
-              r.accessCheckResponses = s.accessCheckResponses;
-              console.log('testen', r);
-            }
-          });
-        });
-      }
-    } */
-
-    // hasDelegableResponse ? handleSuccess() : handleFailed();
-  };
-
-  const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
-    <ResourceActionBar
-      key={r.identifier ?? index}
-      title={r.title}
-      subtitle={r.resourceOwnerName}
-      actionButtonClick={() => {
-        actionButtonClick(r.identifier, r);
-      }}
-      color={abColor}
-    >
-      <p>{r.description}</p>
-      <p>{r.rightDescription}</p>
-    </ResourceActionBar>
-  ));
-
-  const searchResults = () => {
-    if (pagingIsFetching) {
-      return (
-        <div className={classes.spinner}>
-          <Spinner
-            title='loading'
-            size='1xLarge'
-          />
-        </div>
-      );
-    } else if (pagingError) {
-      return (
-        <Alert
-          className={classes.searchError}
-          severity='danger'
-          iconTitle={t('common.error')}
-        >
-          <Heading
-            level={2}
-            size='xsmall'
-            spacing
-          >
-            {t('common.general_error_title')}
-          </Heading>
-          <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
-        </Alert>
-      );
-    } else {
-      return (
-        <>
-          <div className={classes.resultCountAndChips}>
-            {totalNumberOfResults !== undefined && (
-              <Paragraph>
-                {totalNumberOfResults.toString() + ' ' + t('single_rights_delegation.search_hits')}
-              </Paragraph>
-            )}
-            {filterChips()}
-          </div>
-          <div className={classes.serviceResouces}> {serviceResouces}</div>
-          {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
-            <Pagination
-              className={classes.pagination}
-              currentPage={currentPage}
-              totalPages={Math.ceil(totalNumberOfResults / resultsPerPage)}
-              nextLabel={t('common.next')}
-              previousLabel={t('common.previous')}
-              itemLabel={(num: number) => `Side ${num}`}
-              onChange={setCurrentPage}
-              size='small'
-            />
-          )}
-        </>
-      );
-    }
-  };
 
   // Temporary hardcoding of filter options
   const filterOptions = [
@@ -313,29 +157,36 @@ export const ChooseServicePage = () => {
     }
   };
 
-  const onAdd = (resource: ServiceResource) => {
-    setSelectedResources([...selectedResources, resource]);
+  const onAdd = (identifier: string, serviceResource: ServiceResource) => {
+    const dto: DelegationRequestDto = {
+      serviceResource,
+      delegationRequest: new ResourceList('urn:altinn:resource', identifier),
+    };
+
+    void dispatch(delegationAccessCheck(dto));
   };
 
   const onRemove = (resource: ServiceResource) => {
-    setSelectedResources(selectedResources.filter((r) => r.title !== resource.title));
+    void dispatch(removeServiceReosurce());
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
-    const isAdded = selectedResources.some((selected) => selected.title === resource.title);
+    const status = chosenServices.find((selected) => selected.service?.title === resource.title)
+      ?.status;
+    const details = chosenServices.find((selected) => selected.service?.title === resource.title)
+      ?.notDelegableDetails;
+
     return (
       <ResourceActionBar
         key={resource.identifier ?? index}
-        color={isAdded ? 'success' : 'neutral'}
+        color={status ? 'success' : 'neutral'}
         title={resource.title}
         subtitle={resource.resourceOwnerName}
-        isAdded={isAdded}
-        onAdd={() => {
-          onAdd(resource);
+        status={status}
+        onActionClick={() => {
+          onAdd(resource.identifier, resource);
         }}
-        onRemove={() => {
-          onRemove(resource);
-        }}
+        notDelegableDetails={status === 'NotDelegable' ? details : undefined}
       >
         <p>{resource.description}</p>
         <p>{resource.rightDescription}</p>
@@ -343,11 +194,11 @@ export const ChooseServicePage = () => {
     );
   });
 
-  const selectedResourcesActionBars = selectedResources.map((resource, index) => (
+  const selectedResourcesActionBars = chosenServices.map((resource, index) => (
     <ActionBar
       key={index}
-      title={resource.title}
-      subtitle={resource.resourceOwnerName}
+      title={resource.service?.title}
+      subtitle={resource.service?.resourceOwnerName}
       size='small'
       color='success'
       actions={
@@ -368,14 +219,12 @@ export const ChooseServicePage = () => {
       <Page size={isSm ? PageSize.Small : PageSize.Medium}>
         <PageHeader icon={<PersonCheckmarkIcon />}>EnkeltRettigheter</PageHeader>
         <PageContent>
-          {selectedResourcesActionBars.length > 0 && (
-            <CollectionBar
-              title='Valgte tjenester'
-              color='success'
-              collection={selectedResourcesActionBars}
-              compact={isSm}
-            />
-          )}
+          <CollectionBar
+            title='Valgte tjenester'
+            color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
+            collection={selectedResourcesActionBars}
+            compact={isSm}
+          />
           <div className={classes.searchSection}>
             <div className={classes.searchInputs}>
               <div className={classes.searchField}>

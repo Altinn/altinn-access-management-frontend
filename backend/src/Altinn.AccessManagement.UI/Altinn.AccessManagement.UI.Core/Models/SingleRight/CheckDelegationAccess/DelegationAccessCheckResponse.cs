@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
             List<IdValuePair> resources,
             string action,
             string status,
-            Details details)
+            List<Details> details)
         {
             RightKey = rightKey;
             Resources = resources;
@@ -57,6 +57,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         ///     The reason for the response.
         /// </summary>
         [JsonProperty("details")]
-        public Details Details { get; set; }
+        public List<Details> Details { get; set; }
     }
 }

@@ -30,6 +30,7 @@ interface searchParams {
   searchString: string;
   ROfilters: string[];
   page: number;
+  resultsPerPage: number;
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -50,12 +51,12 @@ export const singleRightsApi = createApi({
   endpoints: (builder) => ({
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
-        const { searchString, ROfilters, page } = args;
+        const { searchString, ROfilters, page, resultsPerPage } = args;
         let filterUrl = '';
         for (const filter of ROfilters) {
           filterUrl = filterUrl + `&ROFilters=${filter}`;
         }
-        return `resources/paginatedSearch?Page=${page}&ResultsPerPage=10&SearchString=${searchString}${filterUrl}`;
+        return `resources/paginatedSearch?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
       },
     }),
   }),

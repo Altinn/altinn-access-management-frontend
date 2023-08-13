@@ -12,13 +12,13 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// </summary>
         /// <param name="type">The type of error</param>
         /// <param name="title">The title of the error</param>
-        /// <param name="status">The status code of the error</param>
+        /// <param name="statusCode">The status code of the error</param>
         /// <param name="traceId">The id of the error that can be traced</param>
-        public HttpStatusException(string type, string title, HttpStatusCode status, string traceId)
+        public HttpStatusException(string type, string title, HttpStatusCode statusCode, string traceId)
         {
             Type = type;
             Title = title;
-            Status = status;
+            StatusCode = statusCode;
             TraceId = traceId;
         }
 
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         ///     The status code of the error
         /// </summary>
-        public HttpStatusCode Status { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         /// <summary>
         ///     The id of the error that can be traced

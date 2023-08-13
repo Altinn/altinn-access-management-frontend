@@ -9,12 +9,16 @@
     ],
     "action": "read",
     "status": "Delegable",
-    "faultCode": "",
-    "reason": "",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "detailCode": "",
+        "description": "",
+        "detailParams": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
       }
     ]
   },
@@ -28,12 +32,16 @@
     ],
     "action": "write",
     "status": "Delegable",
-    "faultCode": "",
-    "reason": "",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "detailCode": "",
+        "description": "",
+        "detailParams": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
       }
     ]
   },
@@ -47,12 +55,16 @@
     ],
     "action": "sign",
     "status": "Delegable",
-    "faultCode": "",
-    "reason": "",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "detailCode": "",
+        "description": "",
+        "detailParams": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
       }
     ]
   }

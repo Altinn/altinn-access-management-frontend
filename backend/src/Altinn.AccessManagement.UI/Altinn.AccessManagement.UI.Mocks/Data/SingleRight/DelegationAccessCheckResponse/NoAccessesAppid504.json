@@ -9,12 +9,16 @@
     ],
     "action": "read",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "detailCode": "RoleRequirements",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "detailParams": [
+          {
+            "name": "RoleAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   },
@@ -26,14 +30,18 @@
         "value": "appid-504"
       }
     ],
-    "action": "write",
+    "action": "read",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "detailCode": "RoleRequirements",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "detailParams": [
+          {
+            "name": "RoleAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   },
@@ -45,14 +53,18 @@
         "value": "appid-504"
       }
     ],
-    "action": "sign",
+    "action": "read",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "detailCode": "RoleRequirements",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "detailParams": [
+          {
+            "name": "RoleAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   }
