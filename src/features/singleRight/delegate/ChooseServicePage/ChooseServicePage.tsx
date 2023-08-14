@@ -11,6 +11,7 @@ import { Page, PageHeader, PageContent, PageSize, PageContainer, Filter } from '
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
+  useGetResourceOwnersQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 
@@ -33,6 +34,9 @@ export const ChooseServicePage = () => {
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
   });
+
+  const { data: ROdata } = useGetResourceOwnersQuery();
+
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
   const resultsPerPage = 10;
@@ -52,16 +56,14 @@ export const ChooseServicePage = () => {
 
   checkDelegationAccess();
 
-  // Temporary hardcoding of filter options
-  const filterOptions = [
-    { label: 'Påfunnsetaten', value: '130000000' },
-    { label: 'Testdepartementet', value: '123456789' },
-    { label: 'Narnia', value: '777777777' },
-    { label: 'Brannvesenet', value: '110110110' },
-    { label: 'Økern Portal', value: '904111111' },
-    { label: 'Digitaliseringsdirektoratet', value: '991825827' },
-    { label: 'Brønnøysundregistrene', value: '974760673' },
-  ];
+  const filterOptions = ROdata
+    ? ROdata.map((ro) => {
+        return {
+          label: ro.organisationName,
+          value: ro.organisationNumber,
+        };
+      })
+    : [];
 
   const unCheckFilter = (filter: string) => {
     setFilters((prev) => prev.filter((f) => f !== filter));
