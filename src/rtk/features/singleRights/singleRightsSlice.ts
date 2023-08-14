@@ -70,7 +70,9 @@ const singleRightSlice = createSlice({
   initialState,
   reducers: {
     removeServiceResource: (state: ChosenServices, action) => {
-      state.chosenServices = state.chosenServices.filter((s) => s.service?.identifier !== action.payload)
+      state.chosenServices = state.chosenServices.filter(
+        (s) => s.service?.identifier !== action.payload,
+      );
     },
   },
   extraReducers: (builder) => {
@@ -101,4 +103,4 @@ const singleRightSlice = createSlice({
 });
 
 export default singleRightSlice.reducer;
-export const { removeServiceResource: removeApi } = singleRightSlice.actions;
+export const { removeServiceResource } = singleRightSlice.actions;

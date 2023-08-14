@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
   type DelegationRequestDto,
   delegationAccessCheck,
+  removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
 
@@ -44,9 +45,11 @@ export const ChooseServicePage = () => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedResources, setSelectedResources] = useState<ServiceResource[]>([]);
   const dispatch = useAppDispatch();
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
+  const successfulChosenServices = useAppSelector((state) =>
+    state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
+  );
   const resultsPerPage = 10;
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
@@ -166,8 +169,8 @@ export const ChooseServicePage = () => {
     void dispatch(delegationAccessCheck(dto));
   };
 
-  const onRemove = (resource: ServiceResource) => {
-    void dispatch(removeServiceReosurce());
+  const onRemove = (identifier: string) => {
+    void dispatch(removeServiceResource(identifier));
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
@@ -183,8 +186,11 @@ export const ChooseServicePage = () => {
         title={resource.title}
         subtitle={resource.resourceOwnerName}
         status={status}
-        onActionClick={() => {
+        onAddClick={() => {
           onAdd(resource.identifier, resource);
+        }}
+        onRemoveClick={() => {
+          onRemove(resource.identifier);
         }}
         notDelegableDetails={status === 'NotDelegable' ? details : undefined}
       >
@@ -194,7 +200,7 @@ export const ChooseServicePage = () => {
     );
   });
 
-  const selectedResourcesActionBars = chosenServices.map((resource, index) => (
+  const selectedResourcesActionBars = successfulChosenServices.map((resource, index) => (
     <ActionBar
       key={index}
       title={resource.service?.title}
@@ -205,7 +211,7 @@ export const ChooseServicePage = () => {
         <Button
           variant='quiet'
           onClick={() => {
-            onRemove(resource);
+            onRemove(resource.service?.identifier);
           }}
         >
           {t('common.remove')}

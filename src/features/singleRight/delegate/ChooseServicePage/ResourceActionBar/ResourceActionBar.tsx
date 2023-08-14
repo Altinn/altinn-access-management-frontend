@@ -11,12 +11,10 @@ import classes from './ResourceActionBar.module.css';
 export interface ResourceActionBarProps extends ActionBarProps {
   /** Indicates the status of the ActionBar */
   status: 'Delegable' | 'NotDelegable' | undefined;
-  /** The callback function to be called when the action button is pressed. */
-  onActionClick: () => void;
   /** The callback function to be called when the add button is pressed. */
-  onAdd?: () => void;
+  onAddClick?: () => void;
   /** The callback function to be called when the remove button is pressed. */
-  onRemove?: () => void;
+  onRemoveClick?: () => void;
   /** Shows details about why the service isn't delegable */
   notDelegableDetails?: string;
 }
@@ -26,11 +24,20 @@ export const ResourceActionBar = ({
   title,
   children,
   status = undefined,
-  onActionClick,
   notDelegableDetails = '',
-  open,
+  onAddClick,
+  onRemoveClick,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
+  const [open, setOpen] = useState(status === 'NotDelegable');
+
+  useMemo(() => {
+    if (status === 'NotDelegable') {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [status]);
 
   const color = useMemo(() => {
     if (status === 'Delegable') {
@@ -47,7 +54,7 @@ export const ResourceActionBar = ({
       variant='quiet'
       icon={<PlusCircleIcon title='add' />}
       size='medium'
-      onClick={onActionClick}
+      onClick={onAddClick}
       iconPlacement='right'
     >
       {t('common.add')}
@@ -59,7 +66,7 @@ export const ResourceActionBar = ({
       variant='quiet'
       icon={<MinusCircleIcon title='remove' />}
       size='medium'
-      onClick={onActionClick}
+      onClick={onRemoveClick}
       iconPlacement='right'
     >
       {t('api_delegation.undo')}
@@ -67,7 +74,13 @@ export const ResourceActionBar = ({
   );
 
   const notDelegableLabel = (
-    <div className={classes.notDelegableContainer}>
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      className={classes.notDelegableContainer}
+      onClick={() => {
+        setOpen(!open);
+      }}
+    >
       <p>{t('common.missing_delegable_right')}</p>
       <ExclamationmarkTriangleIcon
         title='a11y-title'
@@ -93,6 +106,10 @@ export const ResourceActionBar = ({
       title={title}
       color={color}
       actions={action()}
+      open={open}
+      onClick={() => {
+        setOpen(!open);
+      }}
     >
       <div className={classes.content}>
         <div>{children}</div>
