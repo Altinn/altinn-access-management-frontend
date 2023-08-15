@@ -10,42 +10,42 @@ export interface DelegationRequestDto {
   serviceResource: ServiceResource;
 }
 
-export interface DelegationAccessCheckResponse {
+interface delegationAccessCheckResponse {
   rightKey: string;
-  resource: IdValuePair[];
+  resource: idValuePair[];
   action: string;
   status: string;
-  details: Details;
+  details: details;
 }
 
-interface IdValuePair {
+interface idValuePair {
   id: string;
   value: string;
 }
 
-interface Details {
+interface details {
   code: string;
   description: string;
-  detailParams: DetailParams[];
+  detailParams: detailParams[];
 }
 
-interface DetailParams {
+interface detailParams {
   name: string;
   value: string;
 }
 
-export interface ChosenService {
-  accessCheckResponses?: DelegationAccessCheckResponse[];
+interface chosenService {
+  accessCheckResponses?: delegationAccessCheckResponse[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable';
   code?: string;
 }
 
-export interface ChosenServices {
-  chosenServices: ChosenService[];
+interface chosenServices {
+  chosenServices: chosenService[];
 }
 
-const initialState: ChosenServices = {
+const initialState: chosenServices = {
   chosenServices: [],
 };
 
@@ -69,7 +69,7 @@ const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
   reducers: {
-    removeServiceResource: (state: ChosenServices, action) => {
+    removeServiceResource: (state: chosenServices, action) => {
       state.chosenServices = state.chosenServices.filter(
         (s) => s.service?.identifier !== action.payload,
       );
@@ -77,9 +77,9 @@ const singleRightSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      let chosenService: ChosenService = {};
+      let chosenService: chosenService = {};
       const delegableService = action.payload.find(
-        (response: DelegationAccessCheckResponse) => response.status === 'Delegable',
+        (response: delegationAccessCheckResponse) => response.status === 'Delegable',
       );
       if (delegableService) {
         chosenService = {

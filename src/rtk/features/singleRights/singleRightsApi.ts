@@ -2,8 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { type DelegationAccessCheckResponse } from './singleRightsSlice';
-
 interface PaginatedListDTO {
   page: number;
   numEntriesTotal: number;
@@ -22,12 +20,6 @@ export interface ServiceResource {
 export interface ResourceOwner {
   organisationName: string;
   organisationNumber: string;
-}
-
-interface paginatedListDTO {
-  page: number;
-  numEntriesTotal: number;
-  pageList: ServiceResource[];
 }
 
 interface resourceReference {

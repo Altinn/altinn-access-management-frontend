@@ -19,7 +19,7 @@ export interface ResourceActionBarProps
   /** The callback function to be called when the remove button is pressed. */
   onRemoveClick?: () => void;
   /** Shows details about why the service isn't delegable */
-  notDelegableCode?: 'Unknown' | 'MissingRoleAccess' | 'MissingDelegationAccess' | undefined;
+  notDelegableCode?: string | undefined;
 }
 
 export const ResourceActionBar = ({
@@ -54,7 +54,6 @@ export const ResourceActionBar = ({
   }, [status]);
 
   const LocalizeNotDelegableCode = () => {
-    console.log(notDelegableCode);
     if (notDelegableCode === 'MissingRoleAccess') {
       return 'missing_role_access';
     } else if (notDelegableCode === 'MissingDelegationAccess') {

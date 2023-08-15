@@ -50,9 +50,7 @@ export const ChooseServicePage = () => {
   const dispatch = useAppDispatch();
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
   const successfulChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.chosenServices.filter(
-      (s: ChosenService) => s.status !== 'NotDelegable',
-    ),
+    state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
   );
   const resultsPerPage = 10;
 
@@ -62,7 +60,7 @@ export const ChooseServicePage = () => {
     page: currentPage,
     resultsPerPage,
   });
-  
+
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
   const { data: ROdata } = useGetResourceOwnersQuery();
@@ -75,7 +73,6 @@ export const ChooseServicePage = () => {
         };
       })
     : [];
-
 
   const unCheckFilter = (filter: string) => {
     setFilters((prev) => prev.filter((f) => f !== filter));
