@@ -6,6 +6,7 @@ import { PlusCircleIcon, MinusCircleIcon, ExclamationmarkTriangleIcon } from '@n
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
+import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
 
 import classes from './ResourceActionBar.module.css';
 
@@ -32,6 +33,7 @@ export const ResourceActionBar = ({
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(status === 'NotDelegable');
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   useMemo(() => {
     if (status === 'NotDelegable') {
@@ -70,11 +72,11 @@ export const ResourceActionBar = ({
     <Button
       variant='quiet'
       icon={<PlusCircleIcon title='add' />}
-      size='medium'
+      size={isSm ? 'large' : 'medium'}
       onClick={onAddClick}
       iconPlacement='right'
     >
-      {t('common.add')}
+      {!isSm && t('common.add')}
     </Button>
   );
 
@@ -82,11 +84,11 @@ export const ResourceActionBar = ({
     <Button
       variant='quiet'
       icon={<MinusCircleIcon title='remove' />}
-      size='medium'
+      size={isSm ? 'large' : 'medium'}
       onClick={onRemoveClick}
       iconPlacement='right'
     >
-      {t('common.remove')}
+      {!isSm && t('common.remove')}
     </Button>
   );
 
@@ -98,7 +100,7 @@ export const ResourceActionBar = ({
         setOpen(!open);
       }}
     >
-      <p> {t(`single_rights.${LocalizeNotDelegableCode()}_title`)}</p>
+      {!isSm && <Paragraph> {t(`single_rights.${LocalizeNotDelegableCode()}_title`)}</Paragraph>}
       <ExclamationmarkTriangleIcon
         title='a11y-title'
         fontSize='1.5rem'

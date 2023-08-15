@@ -135,7 +135,7 @@ export const ChooseServicePage = () => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {totalNumberOfResults.toString() + ' ' + t('single_rights_delegation.search_hits')}
+                {totalNumberOfResults.toString() + ' ' + t('single_rights.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
