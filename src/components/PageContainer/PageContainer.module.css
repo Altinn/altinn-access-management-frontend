@@ -1,25 +1,3 @@
-@media only screen and (min-width: 576px) {
-  .pageMargin{
-    margin: 0;
-  }
-}
-
-@media only screen and (min-width: 769px) {
-  .pageMargin{
-    margin: 0 16px 0 16px;
-  }
-}
-
-@media only screen and (min-width: 992px) {
-  .pageMargin{
-    margin: 0 40px 0 40px;
-  }
-}
-
-.pageMargin{
-  margin-top: 20px;
-}
-
 .pageContainer{
   margin-left: auto;
   margin-right: auto;
@@ -50,4 +28,22 @@
 
 .closeButton:hover{
   background-color: #d6eefd;
+}
+
+@media only screen and (min-width: 375px) {
+  .pageMargin{
+    margin: 0 8px 0 8px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .pageMargin{
+    margin: 0 16px 0 16px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .pageMargin{
+    margin: 20px 40px 0 40px;
+  }
 }

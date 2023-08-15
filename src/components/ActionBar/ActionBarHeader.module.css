@@ -141,11 +141,13 @@
 }
 
 .actionBar.subtitle.medium {
-  min-height: 68px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .actionBar.subtitle.small{
-  min-height: 48px;
+  padding-top: 4px;
+  padding-bottom: 2px;
 }
 
 .actionBarIcon{
@@ -156,13 +158,7 @@
 
 .actionBarIcon.large {
   margin-right: 16px;
-  padding-left: 8px;
-  padding-right: 16px;
-  border-right: solid 1px rgba(0, 0, 0, .15);
-}
-
-.actionBarIcon.large.dark {
-  border-right: solid 1px rgba(255, 255, 255, 0.2);
+  margin-left: 8px;
 }
 
 .actionBarAdditionalText{
