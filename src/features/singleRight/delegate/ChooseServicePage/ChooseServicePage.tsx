@@ -4,10 +4,27 @@ import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, Heading, Paragraph, Pagination, Spinner, Alert } from '@digdir/design-system-react';
+import {
+  Chip,
+  Heading,
+  Paragraph,
+  Pagination,
+  Spinner,
+  Alert,
+  Button,
+} from '@digdir/design-system-react';
 
 import { DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
-import { Page, PageHeader, PageContent, PageSize, PageContainer, Filter } from '@/components';
+import {
+  Page,
+  PageHeader,
+  PageContent,
+  PageSize,
+  PageContainer,
+  Filter,
+  ActionBar,
+  CollectionBar,
+} from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
@@ -27,6 +44,7 @@ export const ChooseServicePage = () => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedResources, setSelectedResources] = useState<ServiceResource[]>([]);
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
     searchString,
@@ -94,17 +112,6 @@ export const ChooseServicePage = () => {
     </Chip.Group>
   );
 
-  const serviceResouces = resources?.map((r: ServiceResource, index: number) => (
-    <ResourceActionBar
-      key={r.identifier ?? index}
-      title={r.title}
-      subtitle={r.resourceOwnerName}
-    >
-      <p>{r.description}</p>
-      <p>{r.rightDescription}</p>
-    </ResourceActionBar>
-  ));
-
   const searchResults = () => {
     if (isFetching) {
       return (
@@ -154,6 +161,8 @@ export const ChooseServicePage = () => {
               itemLabel={(num: number) => `Side ${num}`}
               onChange={setCurrentPage}
               size='small'
+              compact={isSm}
+              hideLabels={isSm}
             />
           )}
         </>
@@ -161,11 +170,71 @@ export const ChooseServicePage = () => {
     }
   };
 
+  const onAdd = (resource: ServiceResource) => {
+    setSelectedResources([...selectedResources, resource]);
+  };
+
+  const onRemove = (resource: ServiceResource) => {
+    setSelectedResources(selectedResources.filter((r) => r.title !== resource.title));
+  };
+
+  const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
+    const isAdded = selectedResources.some((selected) => selected.title === resource.title);
+    return (
+      <ResourceActionBar
+        key={resource.identifier ?? index}
+        color={isAdded ? 'success' : 'neutral'}
+        title={resource.title}
+        subtitle={resource.resourceOwnerName}
+        isAdded={isAdded}
+        onAdd={() => {
+          onAdd(resource);
+        }}
+        onRemove={() => {
+          onRemove(resource);
+        }}
+      >
+        <div className={classes.serviceResourceContent}>
+          <Paragraph size='small'>{resource.description}</Paragraph>
+          <Paragraph size='small'>{resource.rightDescription}</Paragraph>
+        </div>
+      </ResourceActionBar>
+    );
+  });
+
+  const selectedResourcesActionBars = selectedResources.map((resource, index) => (
+    <ActionBar
+      key={index}
+      title={resource.title}
+      subtitle={resource.resourceOwnerName}
+      size='small'
+      color='success'
+      actions={
+        <Button
+          variant='quiet'
+          onClick={() => {
+            onRemove(resource);
+          }}
+        >
+          {t('common.remove')}
+        </Button>
+      }
+    ></ActionBar>
+  ));
+
   return (
     <PageContainer>
       <Page size={isSm ? PageSize.Small : PageSize.Medium}>
         <PageHeader icon={<PersonCheckmarkIcon />}>EnkeltRettigheter</PageHeader>
         <PageContent>
+          {selectedResourcesActionBars.length > 0 && (
+            <CollectionBar
+              title='Valgte tjenester'
+              color='success'
+              collection={selectedResourcesActionBars}
+              compact={isSm}
+            />
+          )}
           <div className={classes.searchSection}>
             <div className={classes.searchInputs}>
               <div className={classes.searchField}>

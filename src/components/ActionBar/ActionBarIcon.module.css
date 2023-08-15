@@ -6,3 +6,8 @@
 .actionBarIcon.open {
   transform: rotate(180deg);
 }
+
+.actionBarIcon.large {
+  height: 40px;
+  width: 40px;
+}

@@ -11,4 +11,5 @@ export { ActionBar, type ActionBarProps } from './ActionBar';
 export { Page, PageHeader, PageContent, PageColor, PageSize } from './Page';
 export { DelegationActionBar } from './DelegationActionBar';
 export { ErrorPanel } from './ErrorPanel';
+export { CollectionBar, type CollectionBarProps } from './CollectionBar';
 export { Filter, type FilterOption } from './Filter';

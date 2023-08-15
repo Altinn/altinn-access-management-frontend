@@ -94,3 +94,14 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.testText {
+  margin-right: 40px;
+}
+
+.testContent {
+  margin: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

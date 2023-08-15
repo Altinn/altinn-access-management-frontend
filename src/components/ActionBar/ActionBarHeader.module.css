@@ -1,0 +1,197 @@
+.actionBar {
+  --component-actionbar_header-border_top_style: solid;
+  --border-color: var(--fds-semantic-border-neutral-subtle);
+  --background-color: var(--fds-semantic-surface-neutral-default);
+  --text-color: var(--fds-semantic-text-neutral-default);
+  display: flex;
+  border-width: 1px;
+  border-radius: 12px;
+  border-style: var(--component-actionbar_header-border_top_style);
+  outline: none;
+  color: var(--text-color);
+}
+
+.actionBar.clickable{
+  cursor:pointer;
+}
+
+.actionBar:not([class*='clickable']) {
+  padding-left: 4px;
+}
+
+.actionBar.small {
+  border-color: var(--background-color);
+  background-color: var(--background-color);
+}
+
+.actionBar.medium {
+  border-color: var(--border-color);
+  background-color: var(--background-color);
+  min-height: 56px;
+}
+
+.actionBar.large {
+  border-color: var(--background-color);
+  background-color: var(--background-color);
+  min-height: 100px;
+  border-width: 2px;
+}
+
+.actionBar.open{
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-style: none;
+}
+
+.actionBar.light {
+  border-color: var(--border-color);
+  --border-color: var(--fds-semantic-border-neutral-subtle);
+  --background-color: var(--fds-semantic-surface-neutral-default);
+}
+
+.actionBar.light.clickable:hover {
+  --background-color: var(--fds-semantic-surface-neutral-subtle-hover);
+}
+
+.actionBar.dark {
+  --text-color: var(--fds-semantic-text-neutral-on_inverted);
+  --border-color: var(--semantic-surface-action-active);
+  --background-color: var(--semantic-surface-action-active);
+}
+
+.actionBar.dark.clickable:hover {
+  --background-color: var(--semantic-surface-action-hover);
+}
+
+.actionBar.neutral {
+  --border-color: var(--fds-semantic-border-neutral-subtle);
+  --background-color: var(--fds-semantic-surface-neutral-subtle);
+}
+
+.actionBar.neutral.clickable:hover {
+  --background-color: var(--fds-semantic-surface-neutral-subtle-hover);
+}
+
+.actionBar.warning {
+  --border-color: var(--fds-semantic-border-warning-default);
+  --background-color: var(--fds-semantic-surface-warning-subtle);
+}
+
+.actionBar.warning.clickable:hover {
+  --background-color: var(--fds-semantic-surface-warning-subtle-hover);
+}
+
+.actionBar.success {
+  --border-color: var(--fds-semantic-border-success-default);
+  --background-color: var(--fds-semantic-surface-success-subtle);
+}
+
+.actionBar.success.clickable:hover {
+  --background-color: var(--fds-semantic-surface-success-subtle-hover);
+}
+
+.actionBar.danger {
+  --border-color: var(--fds-semantic-surface-danger-default);
+  --background-color: var(--fds-semantic-surface-danger-subtle);
+}
+
+.actionBar.danger.clickable:hover {
+  --background-color: var(--fds-semantic-surface-danger-subtle-hover);
+}
+
+.actionBarHeader {
+  --component-actionbar_header_title-color-background: none;
+  display: flex;
+  align-items: center;
+  padding: 0px 4px 0px 8px;
+  flex: 1 1 auto;
+  border-style: none;
+  text-align: var(--component-actionbar_header_title-text-align);
+  background-color: var(--component-actionbar_header_title-color-background);
+  font-family: inherit;
+  font-size: var(--font_size-300);
+  color: inherit;
+  line-height: 16px;
+  word-break: break-word;
+  composes: focusable from '@/resources/utils/utility.module.css';
+}
+
+.actionBarHeader.clickable {
+  cursor: pointer;
+}
+
+.actionBarActions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.3rem;
+  padding: 0;
+  height: auto;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.actionBarSubtitle{
+  font-weight: 400;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.actionBar.subtitle {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.actionBarIcon{
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.actionBarIcon.large {
+  margin-right: 16px;
+  margin-left: 8px;
+}
+
+.actionBarAdditionalText{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  border-style: none;
+  color: inherit;
+  background-color: inherit;
+  padding: 0;
+  word-break: break-word;
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.actionBarAdditionalText.clickable{
+  cursor: pointer;
+}
+
+.actionBarTexts{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title, .subtitle{
+  color: var(--text-color) !important;
+}
+
+.title {
+  font-weight: 500 !important;
+}
+
+.title > p {
+  margin: 0px; 
+}
+
+.actionBarButtonContainer{
+  display: flex;
+  height: 100%;
+}

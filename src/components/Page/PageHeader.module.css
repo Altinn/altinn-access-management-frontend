@@ -26,7 +26,7 @@
 }
 
 .page-header--primary {
-  --component-page_header-background-color: #022f51;
+  --component-page_header-background-color: var(--semantic-surface-action-active);
   --component-page_header-color: white;
 }
 

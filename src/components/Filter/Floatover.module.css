@@ -73,3 +73,21 @@
         top: 100%;
     }
 }
+
+@media (prefers-reduced-motion) {
+    .popover.open {
+        animation: none;
+    }
+    
+    .popover.closed {
+        animation: none;
+    }
+    
+    .modal.open {
+        animation: none;
+    }
+    
+    .modal.closed {
+        animation: none;
+    }
+}
