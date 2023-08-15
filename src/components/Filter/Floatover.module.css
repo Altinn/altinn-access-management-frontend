@@ -6,7 +6,7 @@
     overflow: clip;
     z-index: 2;
     box-shadow: var(--fds-shadow-medium);
-    width: 280px;
+    width: 286px;
     margin-top: 10px;
     background-color: var(--fds-semantic-surface-neutral-subtle);
     border-radius: 20px;

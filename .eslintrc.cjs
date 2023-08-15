@@ -36,6 +36,7 @@ module.exports = {
     "@typescript-eslint/strict-boolean-expressions": 0,
     "@typescript-eslint/triple-slash-reference": "off",
     "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-invalid-void-type": 0,
     'import/order': [
       'warn',
       {

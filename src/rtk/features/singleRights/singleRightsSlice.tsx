@@ -9,6 +9,11 @@ export interface ServiceResource {
   resourceReferences: resourceReference[];
 }
 
+export interface ResourceOwner {
+  organisationName: string;
+  organisationNumber: string;
+}
+
 interface paginatedListDTO {
   page: number;
   numEntriesTotal: number;
@@ -44,7 +49,10 @@ export const singleRightsApi = createApi({
         return `resources/paginatedSearch?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
       },
     }),
+    getResourceOwners: builder.query<ResourceOwner[], void>({
+      query: () => 'resources/resourceowners',
+    }),
   }),
 });
 
-export const { useGetPaginatedSearchQuery } = singleRightsApi;
+export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery } = singleRightsApi;
