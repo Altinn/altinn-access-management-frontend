@@ -103,9 +103,17 @@
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg"
   },
-  "single_rights_delegation": {
+  "single_rights": {
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
-    "search_hits": "treff på søket:"
+    "search_hits": "treff på søket:",
+    "missing_role_access": "Brukaren har ikkje nokon av dei nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegera den.",
+    "missing_delegation_access": "Brukaren har ikkje dei nødvendige delegeringsrettane til å delegera tenesta",
+    "unknown": "Uvisst",
+    "new_error": "Dette er ein ny feil, me ikkje har fått før. Vennlegast rapportar til Altinn ved å senda inn eit skjermbilete",
+    "missing_role_access_title": "Mangler rolle",
+    "missing_delegation_access_title": "Mangler delegeringsrettighet",
+    "unknown_title": "Unknown error",
+    "new_error_title": "New error"
   }
 }

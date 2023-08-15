@@ -24,7 +24,7 @@ interface IdValuePair {
 }
 
 interface Details {
-  detailCode: string;
+  code: string;
   description: string;
   detailParams: DetailParams[];
 }
@@ -38,7 +38,7 @@ export interface ChosenService {
   accessCheckResponses?: DelegationAccessCheckResponse[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable';
-  notDelegableDetails?: string;
+  code?: string;
 }
 
 export interface ChosenServices {
@@ -92,7 +92,7 @@ const singleRightSlice = createSlice({
           accessCheckResponses: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'NotDelegable',
-          notDelegableDetails: action.payload[0].details[0].description,
+          code: action.payload[0].details[0].code,
         };
       }
       if (chosenService) {

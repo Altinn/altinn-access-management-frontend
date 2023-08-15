@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         ///     The detail code of the response.
         /// </summary>
         [JsonProperty("detailCode")]
-        public string DetailCode { get; set; }
+        public string Code { get; set; }
 
         /// <summary>
         ///     Info about details for the response.

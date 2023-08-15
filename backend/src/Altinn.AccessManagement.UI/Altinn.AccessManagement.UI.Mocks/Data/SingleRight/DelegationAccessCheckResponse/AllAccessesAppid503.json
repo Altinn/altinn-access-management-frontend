@@ -11,8 +11,8 @@
     "status": "Delegable",
     "details": [
       {
-        "detailCode": "",
-        "description": "",
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "detailParams": [
           {
             "name": "",
@@ -34,8 +34,8 @@
     "status": "Delegable",
     "details": [
       {
-        "detailCode": "",
-        "description": "",
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "detailParams": [
           {
             "name": "",
@@ -57,8 +57,8 @@
     "status": "Delegable",
     "details": [
       {
-        "detailCode": "",
-        "description": "",
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "detailParams": [
           {
             "name": "",

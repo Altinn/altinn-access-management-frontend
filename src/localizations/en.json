@@ -104,9 +104,17 @@
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice"
   },
-  "single_rights_delegation": {
+  "single_rights": {
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
-    "search_hits": "matches found:"
+    "search_hits": "matches found:",
+    "missing_role_access": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+    "missing_delegation_access": "The user does not have the necessary delegation accesses to delegate this service.",
+    "unknown": "Unknown",
+    "new_error": "This is a new error that we haven't gotten before. Please report it to Altinn by sending in a screen shot.",
+    "missing_role_access_title": "Mangler rolle",
+    "missing_delegation_access_title": "Mangler delegeringsrettighet",
+    "unknown_title": "Unknown error",
+    "new_error_title": "New error"
   }
 }

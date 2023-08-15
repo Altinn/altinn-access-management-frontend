@@ -169,7 +169,7 @@ export const ChooseServicePage = () => {
     void dispatch(delegationAccessCheck(dto));
   };
 
-  const onRemove = (identifier: string) => {
+  const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
   };
 
@@ -177,7 +177,7 @@ export const ChooseServicePage = () => {
     const status = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.status;
     const details = chosenServices.find((selected) => selected.service?.title === resource.title)
-      ?.notDelegableDetails;
+      ?.code;
 
     return (
       <ResourceActionBar
@@ -192,7 +192,7 @@ export const ChooseServicePage = () => {
         onRemoveClick={() => {
           onRemove(resource.identifier);
         }}
-        notDelegableDetails={status === 'NotDelegable' ? details : undefined}
+        notDelegableCode={status === 'NotDelegable' ? details : undefined}
       >
         <p>{resource.description}</p>
         <p>{resource.rightDescription}</p>
@@ -235,7 +235,7 @@ export const ChooseServicePage = () => {
             <div className={classes.searchInputs}>
               <div className={classes.searchField}>
                 <SearchField
-                  label={t('single_rights_delegation.search_label')}
+                  label={t('single_rights.search_label')}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setSearchString(event.target.value);
                     setCurrentPage(1);
@@ -244,7 +244,7 @@ export const ChooseServicePage = () => {
               </div>
               <Filter
                 icon={<FilterIcon />}
-                label={t('single_rights_delegation.filter_label')}
+                label={t('single_rights.filter_label')}
                 options={filterOptions}
                 applyButtonLabel={t('common.apply')}
                 resetButtonLabel={t('common.reset_choices')}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
 import { Alert, Button, Heading, Paragraph } from '@digdir/design-system-react';
@@ -8,7 +9,8 @@ import { ActionBar, type ActionBarProps } from '@/components';
 
 import classes from './ResourceActionBar.module.css';
 
-export interface ResourceActionBarProps extends ActionBarProps {
+export interface ResourceActionBarProps
+  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
   status: 'Delegable' | 'NotDelegable' | undefined;
   /** The callback function to be called when the add button is pressed. */
@@ -16,7 +18,7 @@ export interface ResourceActionBarProps extends ActionBarProps {
   /** The callback function to be called when the remove button is pressed. */
   onRemoveClick?: () => void;
   /** Shows details about why the service isn't delegable */
-  notDelegableDetails?: string;
+  notDelegableCode?: 'Unknown' | 'MissingRoleAccess' | 'MissingDelegationAccess' | undefined;
 }
 
 export const ResourceActionBar = ({
@@ -24,7 +26,7 @@ export const ResourceActionBar = ({
   title,
   children,
   status = undefined,
-  notDelegableDetails = '',
+  notDelegableCode = undefined,
   onAddClick,
   onRemoveClick,
 }: ResourceActionBarProps) => {
@@ -49,6 +51,21 @@ export const ResourceActionBar = ({
     }
   }, [status]);
 
+  const LocalizeNotDelegableCode = () => {
+    console.log(notDelegableCode);
+    if (notDelegableCode === 'MissingRoleAccess') {
+      return 'missing_role_access';
+    } else if (notDelegableCode === 'MissingDelegationAccess') {
+      return 'missing_delegation_access';
+    } else if (notDelegableCode === 'Unknown') {
+      return 'unknown';
+    } else if (notDelegableCode === undefined) {
+      return undefined;
+    } else {
+      return 'new_error';
+    }
+  };
+
   const addButton = (
     <Button
       variant='quiet'
@@ -69,7 +86,7 @@ export const ResourceActionBar = ({
       onClick={onRemoveClick}
       iconPlacement='right'
     >
-      {t('api_delegation.undo')}
+      {t('common.remove')}
     </Button>
   );
 
@@ -81,7 +98,7 @@ export const ResourceActionBar = ({
         setOpen(!open);
       }}
     >
-      <p>{t('common.missing_delegable_right')}</p>
+      <p> {t(`single_rights.${LocalizeNotDelegableCode()}_title`)}</p>
       <ExclamationmarkTriangleIcon
         title='a11y-title'
         fontSize='1.5rem'
@@ -113,13 +130,15 @@ export const ResourceActionBar = ({
     >
       <div className={classes.content}>
         <div>{children}</div>
-        {notDelegableDetails && (
+        {notDelegableCode && (
           <Alert
             severity='danger'
             elevated={false}
           >
-            <Heading size='xsmall'>{t('common.missing_delegable_right')}</Heading>
-            <Paragraph>{notDelegableDetails}</Paragraph>
+            <Heading size='xsmall'>
+              {t(`single_rights.${LocalizeNotDelegableCode()}_title`)}
+            </Heading>
+            <Paragraph>{t(`single_rights.${LocalizeNotDelegableCode()}`)}</Paragraph>
           </Alert>
         )}
       </div>
