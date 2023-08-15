@@ -9,19 +9,13 @@ import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
 import { ActionBarIcon } from './ActionBarIcon';
 import { ActionBarActions } from './ActionBarActions';
+import { type ActionBarProps } from './ActionBar';
 
-export interface ActionBarHeaderProps {
-  /** Additional actions to be displayed on the right side of the ActionBar. */
-  actions?: React.ReactNode;
-  /** Additional text to be displayed on the right side of the header of the ActionBar. */
-  additionalText?: React.ReactNode;
-  /** Heading level. Use this to make sure the heading is correct according to you page heading levels */
-  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
-  /** The subtitle to be displayed in the header of the ActionBar. */
-  subtitle?: React.ReactNode;
-  /** The title to be displayed in the header of the ActionBar. */
-  title?: React.ReactNode;
-}
+export interface ActionBarHeaderProps
+  extends Pick<
+    ActionBarProps,
+    'headingLevel' | 'title' | 'subtitle' | 'additionalText' | 'actions'
+  > {}
 
 export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderProps>(
   ({ additionalText, headingLevel, subtitle, title, actions }, ref) => {

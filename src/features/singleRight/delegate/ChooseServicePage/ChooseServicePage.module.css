@@ -41,6 +41,12 @@
     gap: var(--fds-spacing-2);
 }
 
+.serviceResourceContent {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .pagination {
     margin-top: 16px;
     display: flex;
