@@ -32,7 +32,6 @@ import {
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
 import {
-  type ChosenService,
   type DelegationRequestDto,
   delegationAccessCheck,
   removeServiceResource,
