@@ -131,7 +131,6 @@ export const ResourceActionBar = ({
       }}
     >
       <div className={classes.content}>
-        <div>{children}</div>
         {notDelegableCode && (
           <Alert
             severity='danger'
@@ -143,6 +142,7 @@ export const ResourceActionBar = ({
             <Paragraph>{t(`single_rights.${LocalizeNotDelegableCode()}`)}</Paragraph>
           </Alert>
         )}
+        <div>{children}</div>
       </div>
     </ActionBar>
   );
