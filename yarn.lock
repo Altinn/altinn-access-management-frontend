@@ -759,10 +759,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^4.7.2":
-  version: 4.10.2
-  resolution: "@navikt/aksel-icons@npm:4.10.2"
-  checksum: 72fecfc031f2239679f852e5879ca55e8e7e33c5db511aae4f329168b1c0cddf8f24c1546db83ea00c313c029de2c7908194d568f3b696dc49af851bc9e4623d
+"@navikt/aksel-icons@npm:^4.11.0":
+  version: 4.11.0
+  resolution: "@navikt/aksel-icons@npm:4.11.0"
+  checksum: 46749017a5bd6ca986819cd158500ce4d70f5ba2bbe550a14854f7b894ba498af84e279fd9c596577e7a43766bf4d9e3ada0dea601cbf645aa268631ee26fa4d
   languageName: node
   linkType: hard
 
@@ -1409,7 +1409,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^4.32.1":
+"@tanstack/react-query@npm:^4.32.6":
   version: 4.32.6
   resolution: "@tanstack/react-query@npm:4.32.6"
   dependencies:
@@ -1797,9 +1797,9 @@ __metadata:
     "@altinn/altinn-design-system": ^0.29.0
     "@digdir/design-system-react": ^0.22.0
     "@digdir/design-system-tokens": ^0.2.0
-    "@navikt/aksel-icons": ^4.7.2
+    "@navikt/aksel-icons": ^4.11.0
     "@reduxjs/toolkit": ^1.9.5
-    "@tanstack/react-query": ^4.32.1
+    "@tanstack/react-query": ^4.32.6
     "@testing-library/cypress": ^9.0.0
     "@types/react": ^18.0.28
     "@types/react-dom": ^18.0.11
