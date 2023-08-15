@@ -212,6 +212,7 @@ export const ChooseServicePage = () => {
       actions={
         <Button
           variant='quiet'
+          size='small'
           onClick={() => {
             onRemove(resource);
           }}

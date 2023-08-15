@@ -22,15 +22,19 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
 
     let renderAsElem: React.ElementType;
+    let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
     switch (size) {
       case 'large':
         renderAsElem = headingLevel ? `h${headingLevel}` : 'h3';
+        headingSize = 'large';
         break;
       case 'medium':
         renderAsElem = headingLevel ? `h${headingLevel}` : 'h4';
+        headingSize = 'small';
         break;
       case 'small':
         renderAsElem = headingLevel ? `h${headingLevel}` : 'h5';
+        headingSize = 'xsmall';
         break;
     }
 
@@ -60,7 +64,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               <div className={classes.actionBarTexts}>
                 <Paragraph
                   as={renderAsElem}
-                  size={size}
+                  size={headingSize}
                   className={classes.title}
                 >
                   {title}
