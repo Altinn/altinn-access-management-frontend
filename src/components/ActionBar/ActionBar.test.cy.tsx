@@ -98,12 +98,7 @@ describe('ActionBar', () => {
       cy.get('div').should('not.contain', 'Content');
     });
 
-    it('non expandable version should not render chevron when it is rendered ', () => {
-      cy.mount(nonExpandableActionBar());
-      cy.get('[data-testid="action-bar-icon"]').should('not.exist');
-    });
-
-    it('should not render chevron when non expandable versjon is rendered ', () => {
+    it('should not render chevron when non-expandable versjon is rendered ', () => {
       cy.mount(nonExpandableActionBar());
       cy.get('[data-testid="action-bar-icon"]').should('not.exist');
     });
@@ -115,7 +110,7 @@ describe('ActionBar', () => {
       cy.contains('Content').should('exist');
     });
 
-    it('should call handleClick when one is provided and expandable ActionBar is clicked by mouse (controled open)', () => {
+    it('should call handleClick when provided and expandable ActionBar is clicked by mouse (controled open)', () => {
       const handleClick = () => {
         cy.stub();
       };

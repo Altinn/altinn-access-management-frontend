@@ -2,6 +2,8 @@
   border-style: solid;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   background-color: var(#FFFFFF);
   --border-color: var(--fds-semantic-border-neutral-subtle);
   --header-color: var(--fds-semantic-surface-neutral-default);
@@ -10,22 +12,16 @@
 .actionBarContent.small {
   border-width: 2px;
   border-color: var(--header-color);
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
 }
 
 .actionBarContent.medium {
   border-width: 1px;
   border-color: var(--border-color);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
 }
 
 .actionBarContent.large {
   border-width: 2px;
   border-color: var(--header-color);
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
 }
 
 .actionBarContent.light {
@@ -58,7 +54,7 @@
 }
 
 .actionBarContent.success {
-  --border-color: var(--fds-semantic-surface-success-default);
+  --border-color: var(--fds-semantic-border-success-default);
   --header-color: var(--fds-semantic-surface-success-subtle);
   border-top-color: var(--header-color);
 }

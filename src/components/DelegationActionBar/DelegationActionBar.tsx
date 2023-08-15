@@ -64,6 +64,7 @@ export const DelegationActionBar = ({
       title={<p className={classes.actionBarHeaderTitle}>{title}</p>}
       subtitle={subtitle}
       actions={actions}
+      size='medium'
       color={color}
       open={open}
       onClick={() => {

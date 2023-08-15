@@ -5,6 +5,7 @@
   --text-color: var(--fds-semantic-text-neutral-default);
   display: flex;
   border-width: 1px;
+  border-radius: 12px;
   border-style: var(--component-actionbar_header-border_top_style);
   outline: none;
   color: var(--text-color);
@@ -21,20 +22,17 @@
 .actionBar.small {
   border-color: var(--background-color);
   background-color: var(--background-color);
-  border-radius: 12px;
 }
 
 .actionBar.medium {
   border-color: var(--border-color);
   background-color: var(--background-color);
-  border-radius: 8px;
-  min-height: 48px;
+  min-height: 56px;
 }
 
 .actionBar.large {
   border-color: var(--background-color);
   background-color: var(--background-color);
-  border-radius: 12px;
   min-height: 100px;
   border-width: 2px;
 }
@@ -84,7 +82,7 @@
 }
 
 .actionBar.success {
-  --border-color: var(--fds-semantic-surface-success-default);
+  --border-color: var(--fds-semantic-border-success-default);
   --background-color: var(--fds-semantic-surface-success-subtle);
 }
 
@@ -140,14 +138,9 @@
   margin-bottom: 5px;
 }
 
-.actionBar.subtitle.medium {
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
-.actionBar.subtitle.small{
+.actionBar.subtitle {
   padding-top: 4px;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
 }
 
 .actionBarIcon{
@@ -188,6 +181,10 @@
 
 .title, .subtitle{
   color: var(--text-color) !important;
+}
+
+.title {
+  font-weight: 500 !important;
 }
 
 .title > p {
