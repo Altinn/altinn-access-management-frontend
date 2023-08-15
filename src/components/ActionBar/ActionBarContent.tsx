@@ -4,10 +4,9 @@ import cn from 'classnames';
 
 import classes from './ActionBarContent.module.css';
 import { useActionBarContext } from './Context';
+import { type ActionBarProps } from './ActionBar';
 
-export interface ActionBarContentProps {
-  children?: React.ReactNode;
-}
+export interface ActionBarContentProps extends Pick<ActionBarProps, 'children'> {}
 
 export const ActionBarContent = forwardRef<HTMLDivElement, ActionBarContentProps>(
   ({ children }, ref) => {
