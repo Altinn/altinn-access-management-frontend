@@ -192,8 +192,10 @@ export const ChooseServicePage = () => {
           onRemove(resource);
         }}
       >
-        <p>{resource.description}</p>
-        <p>{resource.rightDescription}</p>
+        <div className={classes.serviceResourceContent}>
+          <Paragraph size='small'>{resource.description}</Paragraph>
+          <Paragraph size='small'>{resource.rightDescription}</Paragraph>
+        </div>
       </ResourceActionBar>
     );
   });
