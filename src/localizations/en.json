@@ -18,6 +18,8 @@
     "add": "Add",
     "remove": "Remove",
     "to": "To",
+    "proceed": "Proceed",
+    "services_added": "added",
     "previous":"Previous",
     "next": "Next",
     "general_error_title": "Sorry, looks like somthing went wrong",

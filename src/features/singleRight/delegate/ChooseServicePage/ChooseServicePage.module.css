@@ -1,8 +1,17 @@
+.selectedResourcesContent {
+    margin: 0.4rem;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .searchSection {
     margin-top: 2rem;
 }
 
 .searchInputs {
+    width: 100%;
     display: flex;
     gap: 1rem;
     align-items:end;
@@ -30,6 +39,12 @@
     display: flex;
     flex-direction: column;
     gap: var(--fds-spacing-2);
+}
+
+.serviceResourceContent {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .pagination {

@@ -27,3 +27,10 @@
 .companyIconContainer{
   align-self: center;
 }
+
+@media only screen and (max-width: 576px) {
+  .userInfoBar {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
