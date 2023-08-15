@@ -29,12 +29,13 @@ import {
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
 import {
+  type ChosenService,
   type DelegationRequestDto,
   delegationAccessCheck,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
-import { ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -48,7 +49,9 @@ export const ChooseServicePage = () => {
   const dispatch = useAppDispatch();
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
   const successfulChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
+    state.singleRightsSlice.chosenServices.filter(
+      (s: ChosenService) => s.status !== 'NotDelegable',
+    ),
   );
   const resultsPerPage = 10;
 

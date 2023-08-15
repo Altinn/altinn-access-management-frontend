@@ -388,12 +388,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.21.0":
-  version: 0.21.0
-  resolution: "@digdir/design-system-react@npm:0.21.0"
+"@digdir/design-system-react@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "@digdir/design-system-react@npm:0.22.0"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-tokens": ^0.1.7
+    "@digdir/design-system-tokens": ^0.2.0
     "@floating-ui/react": 0.24.1
     "@navikt/aksel-icons": ^3.2.4
     "@navikt/ds-icons": ^2.3.0
@@ -401,7 +401,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 857ba14fcb78d7da62a197fe34a4105d5734a7003ff702f8e68096227265e7c66f5fb46315ecf1b7d2d27e3e773ab59e6b9a348cd8bc97aee3dce3e7ebd204ed
+  checksum: 775fcc91a25bb0f9ae447706c853f7f494c067a7b738bf2420d47e0c0955492d663bdf1cdfc23c7530664b5179067bc57748b2dc9b755f515ab17107633c33d7
   languageName: node
   linkType: hard
 
@@ -412,10 +412,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@digdir/design-system-tokens@npm:0.1.7"
-  checksum: dabe357c8d262cd6f6430a722f30dc3aa70243bd12cdc39886b655b1ee9a22c471e5131906944a6164c166ef54b86e69526fec5fa8750ad8c9f4444a4aeedf0d
+"@digdir/design-system-tokens@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@digdir/design-system-tokens@npm:0.2.0"
+  checksum: 33e4ad9fc47a41ff60d30e98e06c71d80766fd412984c4a6f3c01e7c0afaee706ff83a514d0b5b0fd8dbdd16bbb3d88a940324b3e10c9a2fcb89ee9f89d928e5
   languageName: node
   linkType: hard
 
@@ -1795,8 +1795,8 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@altinn/altinn-design-system": ^0.29.0
-    "@digdir/design-system-react": ^0.21.0
-    "@digdir/design-system-tokens": ^0.1.7
+    "@digdir/design-system-react": ^0.22.0
+    "@digdir/design-system-tokens": ^0.2.0
     "@navikt/aksel-icons": ^4.7.2
     "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.32.1
