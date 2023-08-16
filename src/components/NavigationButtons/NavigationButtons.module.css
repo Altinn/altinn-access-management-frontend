@@ -3,11 +3,11 @@
     justify-content: center;
   }
 
-  .navButtonLeft{
+  .navButtonLeft {
     max-width: 50%;
   }
 
-  .navButtonRight{
+  .navButtonRight {
     max-width: 50%;
   }
 }
@@ -17,18 +17,18 @@
     justify-content: flex-end;
   }
 
-  .navButtonLeft{
+  .navButtonLeft {
     justify-content: flex-start;
     display: flex;
-    flex:1;
+    flex: 1;
     margin-right: 10px;
     max-width: 130px;
   }
-  
-  .navButtonRight{
+
+  .navButtonRight {
     justify-content: flex-end;
     display: flex;
-    flex:1;
+    flex: 1;
     margin-left: 10px;
     max-width: 130px;
   }
@@ -40,16 +40,16 @@
   margin-bottom: 2rem;
 }
 
-.navButtonLeft{
+.navButtonLeft {
   justify-content: flex-start;
   display: flex;
-  flex:1;
+  flex: 1;
   margin-right: 10px;
 }
 
-.navButtonRight{
+.navButtonRight {
   justify-content: flex-end;
   display: flex;
-  flex:1;
+  flex: 1;
   margin-left: 10px;
 }

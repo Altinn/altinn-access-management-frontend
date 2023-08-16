@@ -1,9 +1,9 @@
-.newApiAccordionContent{
+.newApiAccordionContent {
   margin-left: 50px;
   margin-right: 20px;
 }
 
-.h4Text{
+.h4Text {
   font-weight: 500;
 }
 
@@ -12,21 +12,21 @@
   margin: 10px;
 }
 
-.line{
+.line {
   margin-top: 25px;
   margin-right: 5px;
 }
 
-.contentTexts{
+.contentTexts {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.bottomContentTexts{
+.bottomContentTexts {
   margin-bottom: 20px;
 }
 
-.actionBarHeaderTitle{
+.actionBarHeaderTitle {
   font-weight: 500;
   margin-top: 2px;
   margin-bottom: 5px;

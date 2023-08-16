@@ -1,36 +1,34 @@
-@media only screen and (max-width: 768px) { 
-  .actionBarContent{
+@media only screen and (max-width: 768px) {
+  .actionBarContent {
     padding-left: 0.7rem;
   }
 
-  .orgDelegationActionBarTitle{
+  .orgDelegationActionBarTitle {
     font-size: 14px;
   }
 }
 
 @media only screen and (min-width: 769px) {
-  .actionBarContent{
+  .actionBarContent {
     padding-left: 50px;
   }
 }
 
-.actionBarContent{
+.actionBarContent {
   padding-right: 10px;
 }
 
-
-.actionBarText__softDelete{
+.actionBarText__softDelete {
   text-decoration: line-through;
   opacity: 70%;
 }
 
-.actionBarSubtitle__softDelete{
+.actionBarSubtitle__softDelete {
   text-decoration: line-through;
   opacity: 70%;
 }
 
-
-.accordionHeaderRightText{
+.accordionHeaderRightText {
   margin-right: 15px;
 }
 

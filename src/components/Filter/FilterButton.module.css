@@ -1,59 +1,59 @@
 .icon {
-    display: inline-block;
-    height: var(--component-button-size-icon-small);
-    width: var(--component-button-size-icon-small);
+  display: inline-block;
+  height: var(--component-button-size-icon-small);
+  width: var(--component-button-size-icon-small);
 }
 
 .chevron.open {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .filterButton {
-    composes: focusable from '@/resources/utils/utility.module.css';
-    background-color: var(--fds-semantic-surface-neutral-subtle);
-    align-items: center;
-    border-radius: 50px;
-    border: solid transparent;
-    box-sizing: border-box;
-    cursor: pointer;
-    display: flex;
-    gap: 2px;
-    font-family: inherit;
-    font-weight: 500;
-    height: var(--component-button-size-height-small);
-    justify-content: center;
-    padding: 0 var(--component-button-space-padding-x-small);
-    text-align: center;
-    max-width: 300px;
-    position: auto;
+  composes: focusable from '@/resources/utils/utility.module.css';
+  background-color: var(--fds-semantic-surface-neutral-subtle);
+  align-items: center;
+  border-radius: 50px;
+  border: solid transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  gap: 2px;
+  font-family: inherit;
+  font-weight: 500;
+  height: var(--component-button-size-height-small);
+  justify-content: center;
+  padding: 0 var(--component-button-space-padding-x-small);
+  text-align: center;
+  max-width: 300px;
+  position: auto;
 }
 
 .filterButton:not([aria-disabled='true'], :disabled):hover {
-    background-color: var(--fds-semantic-surface-neutral-subtle-hover);
+  background-color: var(--fds-semantic-surface-neutral-subtle-hover);
 }
 
 .filterButton:not([aria-disabled='true'], :disabled):active {
-    background-color: #b6b6b6;
+  background-color: #b6b6b6;
 }
 
 .activeBadge {
-    background-color: var(--fds-semantic-surface-action-primary-active);
-    border-radius: 50%;
-    height: 18px;
-    width: 18px;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: -5px;
-    top: -5Px;
-    font-family: inherit;
-    font-weight: 500;
-    font-size: small;
+  background-color: var(--fds-semantic-surface-action-primary-active);
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: small;
 }
 
 .filterButtonContainer {
-    position: relative;
-    width: fit-content;
+  position: relative;
+  width: fit-content;
 }
