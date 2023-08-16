@@ -7,13 +7,15 @@ import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
 import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
+import { useUpdate } from '@/resources/hooks/useUpdate';
+import { usePrevious } from '@/resources/hooks';
 
 import classes from './ResourceActionBar.module.css';
 
 export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
-  status: 'Delegable' | 'NotDelegable' | undefined;
+  status: 'Delegable' | 'NotDelegable' | 'Unchecked';
   /** The callback function to be called when the add button is pressed. */
   onAddClick?: () => void;
   /** The callback function to be called when the remove button is pressed. */
@@ -26,17 +28,18 @@ export const ResourceActionBar = ({
   subtitle,
   title,
   children,
-  status = undefined,
+  status = 'Unchecked',
   notDelegableCode = undefined,
   onAddClick,
   onRemoveClick,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
-  const [open, setOpen] = useState(status === 'NotDelegable');
+  const [open, setOpen] = useState(false);
   const isSm = useMediaQuery('(max-width: 768px)');
 
-  useMemo(() => {
-    if (status === 'NotDelegable') {
+  const previousStatus = usePrevious(status);
+  useUpdate(() => {
+    if (status === 'NotDelegable' && previousStatus !== undefined) {
       setOpen(true);
     } else {
       setOpen(false);

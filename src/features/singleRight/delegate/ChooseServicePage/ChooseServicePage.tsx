@@ -74,7 +74,7 @@ export const ChooseServicePage = () => {
     : [];
 
   const unCheckFilter = (filter: string) => {
-    setFilters((prev) => prev.filter((f) => f !== filter));
+    setFilters((prevState: string[]) => prevState.filter((f) => f !== filter));
     setCurrentPage(1);
   };
 
@@ -88,7 +88,7 @@ export const ChooseServicePage = () => {
       size='small'
       className={classes.filterChips}
     >
-      {filters.map((filterValue) => (
+      {filters.map((filterValue: string) => (
         <Chip.Removable
           key={filterValue}
           aria-label={t('common.remove') + ' ' + getFilterLabel(filterValue)}
@@ -185,7 +185,7 @@ export const ChooseServicePage = () => {
         color={status ? 'success' : 'neutral'}
         title={resource.title}
         subtitle={resource.resourceOwnerName}
-        status={status}
+        status={status ?? 'Unchecked'}
         onAddClick={() => {
           onAdd(resource.identifier, resource);
         }}
