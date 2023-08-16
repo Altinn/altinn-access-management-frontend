@@ -214,12 +214,13 @@ export const ChooseServicePage = () => {
           <Alert
             severity='danger'
             elevated={false}
+            className={classes.notDelegableAlert}
           >
             <Heading size='xsmall'>{t(`single_rights.${notDelegableCode}_title`)}</Heading>
             <Paragraph>{t(`single_rights.${notDelegableCode}`)}</Paragraph>
           </Alert>
         )}
-        <div className={classes.serviceResourceContent}>
+        <div>
           <Paragraph size='small'>{resource.description}</Paragraph>
           <Paragraph size='small'>{resource.rightDescription}</Paragraph>
         </div>
