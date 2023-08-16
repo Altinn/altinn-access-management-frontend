@@ -56,7 +56,7 @@ export const SummaryPage = ({
   failedDelegations,
   successfulDelegations,
   pageHeaderText,
-  headerColor = PageColor.Primary,
+  headerColor = PageColor.Dark,
   headerIcon,
   topListText,
   failedDelegationText,

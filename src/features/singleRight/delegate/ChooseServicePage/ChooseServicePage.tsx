@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
+import { PersonIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,7 @@ import {
   Filter,
   ActionBar,
   CollectionBar,
+  PageColor,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -225,8 +226,11 @@ export const ChooseServicePage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
-        <PageHeader icon={<PersonCheckmarkIcon />}>EnkeltRettigheter</PageHeader>
+      <Page
+        color={PageColor.Light}
+        size={isSm ? PageSize.Small : PageSize.Medium}
+      >
+        <PageHeader icon={<PersonIcon />}>EnkeltRettigheter</PageHeader>
         <PageContent>
           {selectedResourcesActionBars.length > 0 && (
             <CollectionBar
