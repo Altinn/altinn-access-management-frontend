@@ -1,22 +1,22 @@
-.pageContainer{
+.pageContainer {
   margin-left: auto;
   margin-right: auto;
   margin-top: 1rem;
-  background-color: #1EADF7;
+  background-color: #1eadf7;
   min-width: 280px;
   max-width: 1056px;
   width: 100%;
 }
 
-.closeButtonContainer{
+.closeButtonContainer {
   margin-top: 30px;
   display: flex;
   justify-content: flex-end;
 }
 
-.closeButton{
+.closeButton {
   border-radius: 50%;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   padding: 0px;
   height: 36px;
@@ -26,24 +26,24 @@
   margin-right: 6px;
 }
 
-.closeButton:hover{
+.closeButton:hover {
   background-color: #d6eefd;
 }
 
 @media only screen and (min-width: 375px) {
-  .pageMargin{
+  .pageMargin {
     margin: 0 8px 0 8px;
   }
 }
 
 @media only screen and (min-width: 769px) {
-  .pageMargin{
+  .pageMargin {
     margin: 0 16px 0 16px;
   }
 }
 
 @media only screen and (min-width: 992px) {
-  .pageMargin{
+  .pageMargin {
     margin: 20px 40px 0 40px;
   }
 }

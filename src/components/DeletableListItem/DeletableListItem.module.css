@@ -1,6 +1,6 @@
 .deleteSection {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .listItem {
@@ -38,11 +38,11 @@
   font-weight: 400;
 }
 
-.scopeText{
+.scopeText {
   font-weight: 400;
 }
 
-.scopeListContainer{
+.scopeListContainer {
   margin-top: 10px;
   margin-bottom: 20px;
 }

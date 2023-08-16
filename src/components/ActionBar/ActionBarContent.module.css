@@ -4,7 +4,7 @@
   border-top-right-radius: 0px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  background-color: var(#FFFFFF);
+  background-color: var(#ffffff);
   --border-color: var(--fds-semantic-border-neutral-subtle);
   --header-color: var(--fds-semantic-surface-neutral-default);
 }
