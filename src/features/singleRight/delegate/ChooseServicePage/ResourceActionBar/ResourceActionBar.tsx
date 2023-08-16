@@ -95,7 +95,10 @@ export const ResourceActionBar = ({
       }}
     >
       {!compact && <Paragraph> {t(`single_rights.${notDelegableCode}_title`)}</Paragraph>}
-      <ExclamationmarkTriangleIcon className={classes.notDelegableIcon} />
+      <ExclamationmarkTriangleIcon
+        className={classes.notDelegableIcon}
+        fontSize='1.5rem'
+      />
     </div>
   );
 
