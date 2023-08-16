@@ -192,7 +192,7 @@ export const ChooseServicePage = () => {
     const status = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.status;
     const details = chosenServices.find((selected) => selected.service?.title === resource.title)
-      ?.code;
+      ?.errorCode;
     const notDelegableCode = localizeNotDelegableCode(details);
 
     return (

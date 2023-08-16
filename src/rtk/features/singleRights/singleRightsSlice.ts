@@ -39,7 +39,7 @@ interface chosenService {
   accessCheckResponses?: delegationAccessCheckResponse[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable';
-  code?: string;
+  errorCode?: string;
 }
 
 interface chosenServices {
@@ -95,7 +95,7 @@ const singleRightSlice = createSlice({
           accessCheckResponses: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'NotDelegable',
-          code: action.payload[0].details[0].code,
+          errorCode: action.payload[0].details[0].code,
         };
       }
       if (chosenService) {

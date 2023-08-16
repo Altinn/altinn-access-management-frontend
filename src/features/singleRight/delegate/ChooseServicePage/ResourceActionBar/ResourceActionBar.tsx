@@ -43,6 +43,7 @@ export const ResourceActionBar = ({
   const [open, setOpen] = useState(false);
 
   const previousStatus = usePrevious(status);
+
   useUpdate(() => {
     if (status === 'NotDelegable' && previousStatus !== undefined) {
       setOpen(true);
