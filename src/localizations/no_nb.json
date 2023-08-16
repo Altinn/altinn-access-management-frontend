@@ -24,8 +24,7 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd en feil",
     "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn Servicedesk.",
-    "not_delegable": "Ikke delegerbar",
-    "missing_delegable_right": "Mangler rettighet"
+    "not_delegable": "Ikke delegerbar"
   },
   "profile": {
     "received": "Mottatte",
@@ -108,13 +107,14 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Brukaren har ikke noen av de nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegere den.",
+    "missing_role_access": "Brukeren har ikke noen av de nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegere den.",
     "missing_delegation_access": "Brukeren har ikke de nødvendige delegeringsrettighetene til å delegere tjenesten",
     "unknown": "Uvisst",
     "new_error": "Dette er en ny feil, vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
-    "new_error_title": "New error"
+    "new_error_title": "New error",
+    "missing_delegable_right": "Mangler rettighet"
   }
 }

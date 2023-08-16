@@ -18,7 +18,7 @@ export interface CollectionBarProps extends Pick<ActionBarProps, 'color' | 'titl
   collection: React.ReactNode[];
   /** Whether or not to use the compact variant */
   compact?: boolean;
-  /** The path to redirect to when pressing the proceed button */
+  /** when true saves as much space as possible. Usually true for smaller screens */
   proceedToPath?: string;
 }
 

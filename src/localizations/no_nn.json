@@ -24,8 +24,7 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd ein feil",
     "general_error_paragraph": "Vi klarer ikkje å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen seinare. Om problemet hald fram, ta kontakt med Altinn Servicedesk.",
-    "not_delegable": "Ikkje delegerbar",
-    "missing_delegable_right": "Mangler rettighet"
+    "not_delegable": "Ikkje delegerbar"
   },
   "profile": {
     "received": "Mottekne",
@@ -114,6 +113,7 @@
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
-    "new_error_title": "New error"
+    "new_error_title": "New error",
+    "missing_delegable_right": "Manglar rettigheit"
   }
 }

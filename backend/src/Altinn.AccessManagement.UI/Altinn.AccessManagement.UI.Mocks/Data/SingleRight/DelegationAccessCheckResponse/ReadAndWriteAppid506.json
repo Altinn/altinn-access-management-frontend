@@ -13,7 +13,7 @@
       {
         "code": "RoleAccess",
         "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "detailParams": [
+        "parameters": [
           {
             "name": "",
             "value": ""
@@ -36,7 +36,7 @@
       {
         "code": "RoleAccess",
         "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "detailParams": [
+        "parameters": [
           {
             "name": "",
             "value": ""
@@ -59,7 +59,7 @@
       {
         "code": "MissingDelegationAccess",
         "description": "The user does not have access through delegation(s) of the right",
-        "detailParams": [
+        "parameters": [
           {
             "name": "RoleAccess",
             "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"

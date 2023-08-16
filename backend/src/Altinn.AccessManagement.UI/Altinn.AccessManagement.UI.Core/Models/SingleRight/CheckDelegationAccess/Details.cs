@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         /// <summary>
         ///     Further details about the reason for the response.
         /// </summary>
-        [JsonProperty("detailParams")]
-        public List<DetailParams>? DetailParams { get; set; }
+        [JsonProperty("parameters")]
+        public List<Parameters>? Parameters { get; set; }
     }
 }

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Alert, Button, Heading, Paragraph } from '@digdir/design-system-react';
+import { Button, Paragraph } from '@digdir/design-system-react';
 import { PlusCircleIcon, MinusCircleIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
-import { useMediaQuery } from '@/resources/hooks/useMediaQuery';
 import { useUpdate } from '@/resources/hooks/useUpdate';
 import { usePrevious } from '@/resources/hooks';
 
@@ -16,12 +15,18 @@ export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
   status: 'Delegable' | 'NotDelegable' | 'Unchecked';
+
   /** The callback function to be called when the add button is pressed. */
   onAddClick?: () => void;
+
   /** The callback function to be called when the remove button is pressed. */
   onRemoveClick?: () => void;
+
   /** Shows details about why the service isn't delegable */
   notDelegableCode?: string | undefined;
+
+  /** When true saves as much space as possible. Usually true for smaller screens */
+  compact?: boolean;
 }
 
 export const ResourceActionBar = ({
@@ -32,10 +37,10 @@ export const ResourceActionBar = ({
   notDelegableCode = undefined,
   onAddClick,
   onRemoveClick,
+  compact = false,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
-  const isSm = useMediaQuery('(max-width: 768px)');
 
   const previousStatus = usePrevious(status);
   useUpdate(() => {
@@ -56,29 +61,15 @@ export const ResourceActionBar = ({
     }
   }, [status]);
 
-  const LocalizeNotDelegableCode = () => {
-    if (notDelegableCode === 'MissingRoleAccess') {
-      return 'missing_role_access';
-    } else if (notDelegableCode === 'MissingDelegationAccess') {
-      return 'missing_delegation_access';
-    } else if (notDelegableCode === 'Unknown') {
-      return 'unknown';
-    } else if (notDelegableCode === undefined) {
-      return undefined;
-    } else {
-      return 'new_error';
-    }
-  };
-
   const addButton = (
     <Button
       variant='quiet'
       icon={<PlusCircleIcon title='add' />}
-      size={isSm ? 'large' : 'medium'}
+      size={compact ? 'large' : 'medium'}
       onClick={onAddClick}
       iconPlacement='right'
     >
-      {!isSm && t('common.add')}
+      {!compact && t('common.add')}
     </Button>
   );
 
@@ -86,11 +77,11 @@ export const ResourceActionBar = ({
     <Button
       variant='quiet'
       icon={<MinusCircleIcon title='remove' />}
-      size={isSm ? 'large' : 'medium'}
+      size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
       iconPlacement='right'
     >
-      {!isSm && t('common.remove')}
+      {!compact && t('common.remove')}
     </Button>
   );
 
@@ -102,12 +93,8 @@ export const ResourceActionBar = ({
         setOpen(!open);
       }}
     >
-      {!isSm && <Paragraph> {t(`single_rights.${LocalizeNotDelegableCode()}_title`)}</Paragraph>}
-      <ExclamationmarkTriangleIcon
-        title='a11y-title'
-        fontSize='1.5rem'
-        className={classes.notDelegableIcon}
-      />
+      {!compact && <Paragraph> {t(`single_rights.${notDelegableCode}_title`)}</Paragraph>}
+      <ExclamationmarkTriangleIcon className={classes.notDelegableIcon} />
     </div>
   );
 
@@ -133,17 +120,6 @@ export const ResourceActionBar = ({
       }}
     >
       <div className={classes.content}>
-        {notDelegableCode && (
-          <Alert
-            severity='danger'
-            elevated={false}
-          >
-            <Heading size='xsmall'>
-              {t(`single_rights.${LocalizeNotDelegableCode()}_title`)}
-            </Heading>
-            <Paragraph>{t(`single_rights.${LocalizeNotDelegableCode()}`)}</Paragraph>
-          </Alert>
-        )}
         <div>{children}</div>
       </div>
     </ActionBar>

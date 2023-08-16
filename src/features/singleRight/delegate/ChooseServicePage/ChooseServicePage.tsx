@@ -40,6 +40,8 @@ import {
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
 
+const searchResultsPerPage = 10;
+
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
@@ -48,16 +50,15 @@ export const ChooseServicePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useAppDispatch();
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
-  const successfulChosenServices = useAppSelector((state) =>
+  const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
   );
-  const resultsPerPage = 10;
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
     searchString,
     ROfilters: filters,
     page: currentPage,
-    resultsPerPage,
+    resultsPerPage: searchResultsPerPage,
   });
 
   const resources = data?.pageList;
@@ -145,7 +146,7 @@ export const ChooseServicePage = () => {
             <Pagination
               className={classes.pagination}
               currentPage={currentPage}
-              totalPages={Math.ceil(totalNumberOfResults / resultsPerPage)}
+              totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
               nextLabel={t('common.next')}
               previousLabel={t('common.previous')}
               itemLabel={(num: number) => `Side ${num}`}
@@ -173,16 +174,30 @@ export const ChooseServicePage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
+  const localizeNotDelegableCode = (notDelegableCode: string | undefined) => {
+    if (notDelegableCode === 'MissingRoleAccess') {
+      return 'missing_role_access';
+    } else if (notDelegableCode === 'MissingDelegationAccess') {
+      return 'missing_delegation_access';
+    } else if (notDelegableCode === 'Unknown') {
+      return 'unknown';
+    } else if (notDelegableCode === undefined) {
+      return undefined;
+    } else {
+      return 'new_error';
+    }
+  };
+
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
     const status = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.status;
     const details = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.code;
+    const notDelegableCode = localizeNotDelegableCode(details);
 
     return (
       <ResourceActionBar
         key={resource.identifier ?? index}
-        color={status ? 'success' : 'neutral'}
         title={resource.title}
         subtitle={resource.resourceOwnerName}
         status={status ?? 'Unchecked'}
@@ -192,15 +207,27 @@ export const ChooseServicePage = () => {
         onRemoveClick={() => {
           onRemove(resource.identifier);
         }}
-        notDelegableCode={status === 'NotDelegable' ? details : undefined}
+        notDelegableCode={notDelegableCode}
+        compact={isSm}
       >
-        <p>{resource.description}</p>
-        <p>{resource.rightDescription}</p>
+        {notDelegableCode && (
+          <Alert
+            severity='danger'
+            elevated={false}
+          >
+            <Heading size='xsmall'>{t(`single_rights.${notDelegableCode}_title`)}</Heading>
+            <Paragraph>{t(`single_rights.${notDelegableCode}`)}</Paragraph>
+          </Alert>
+        )}
+        <div className={classes.serviceResourceContent}>
+          <Paragraph size='small'>{resource.description}</Paragraph>
+          <Paragraph size='small'>{resource.rightDescription}</Paragraph>
+        </div>
       </ResourceActionBar>
     );
   });
 
-  const selectedResourcesActionBars = successfulChosenServices.map((resource, index) => (
+  const selectedResourcesActionBars = delegableChosenServices.map((resource, index) => (
     <ActionBar
       key={index}
       title={resource.service?.title}

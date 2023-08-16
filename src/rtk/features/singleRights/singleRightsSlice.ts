@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { type ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -52,9 +53,11 @@ const initialState: chosenServices = {
 export const delegationAccessCheck = createAsyncThunk(
   'singleRightSlice/delegationAccessCheck',
   async (dto: DelegationRequestDto, { rejectWithValue }) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
     return await axios
       .post(
-        `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`,
+        `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
         dto.delegationRequest,
       )
       .then((response) => response.data)

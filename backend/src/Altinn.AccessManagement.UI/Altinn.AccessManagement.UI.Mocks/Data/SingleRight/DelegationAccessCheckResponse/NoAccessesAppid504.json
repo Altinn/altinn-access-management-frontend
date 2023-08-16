@@ -12,8 +12,8 @@
     "details": [
       {
         "code": "MissingRoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "detailParams": [
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": [
           {
             "name": "MissingDelegationAccess",
             "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
@@ -35,8 +35,8 @@
     "details": [
       {
         "code": "MissingRoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "detailParams": [
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": [
           {
             "name": "RoleAccess",
             "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
@@ -58,8 +58,8 @@
     "details": [
       {
         "code": "MissingRoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "detailParams": [
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": [
           {
             "name": "RoleAccess",
             "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"

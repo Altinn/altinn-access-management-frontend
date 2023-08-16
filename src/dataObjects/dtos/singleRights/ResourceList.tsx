@@ -1,5 +1,5 @@
 /**
- * Represents the delegation input data transfer object.
+ * Represents a list of Resources that's sent in to backend to enable backend to identify the resource.
  */
 export class ResourceList {
   /**

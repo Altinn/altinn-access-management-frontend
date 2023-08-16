@@ -13,7 +13,7 @@
       {
         "code": "DelegationAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "detailParams": [
+        "parameters": [
           {
             "name": "",
             "value": ""
@@ -36,7 +36,7 @@
       {
         "code": "DelegationAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "detailParams": [
+        "parameters": [
           {
             "name": "",
             "value": ""
@@ -59,7 +59,7 @@
       {
         "code": "DelegationAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "detailParams": [
+        "parameters": [
           {
             "name": "",
             "value": ""
