@@ -11,7 +11,7 @@
     "coverage:e2e": "vite & wait-on http://localhost:5173 & cypress run",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc.cjs",
     "postinstall": "husky install",
     "madge": "madge",
     "architecture": "madge --extensions ts,tsx --image graph.svg src/"

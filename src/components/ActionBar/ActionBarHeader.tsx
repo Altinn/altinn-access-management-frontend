@@ -16,7 +16,6 @@ export interface ActionBarHeaderProps
     ActionBarProps,
     'headingLevel' | 'title' | 'subtitle' | 'additionalText' | 'actions'
   > {}
-
 export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderProps>(
   ({ additionalText, headingLevel, subtitle, title, actions }, ref) => {
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
