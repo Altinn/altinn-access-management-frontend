@@ -24,6 +24,7 @@ import {
   Filter,
   ActionBar,
   CollectionBar,
+  NavigationButtons,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -264,6 +265,9 @@ export const ChooseServicePage = () => {
               ></Filter>
             </div>
             {searchResults()}
+            <div>
+              <NavigationButtons></NavigationButtons>
+            </div>
           </div>
         </PageContent>
       </Page>
