@@ -191,9 +191,9 @@ export const ChooseServicePage = () => {
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
     const status = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.status;
-    const details = chosenServices.find((selected) => selected.service?.title === resource.title)
+    const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.errorCode;
-    const notDelegableCode = localizeNotDelegableCode(details);
+    const localizedErrorCode = localizeNotDelegableCode(errorCode);
 
     return (
       <ResourceActionBar
@@ -207,17 +207,18 @@ export const ChooseServicePage = () => {
         onRemoveClick={() => {
           onRemove(resource.identifier);
         }}
-        notDelegableCode={notDelegableCode}
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        errorText={t(`single_rights.${localizedErrorCode}_title`)}
         compact={isSm}
       >
-        {notDelegableCode && (
+        {localizedErrorCode && (
           <Alert
             severity='danger'
             elevated={false}
             className={classes.notDelegableAlert}
           >
-            <Heading size='xsmall'>{t(`single_rights.${notDelegableCode}_title`)}</Heading>
-            <Paragraph>{t(`single_rights.${notDelegableCode}`)}</Paragraph>
+            <Heading size='xsmall'>{t(`single_rights.${localizedErrorCode}_title`)}</Heading>
+            <Paragraph>{t(`single_rights.${localizedErrorCode}`)}</Paragraph>
           </Alert>
         )}
         <div>

@@ -23,7 +23,7 @@ export interface ResourceActionBarProps
   onRemoveClick?: () => void;
 
   /** Shows details about why the service isn't delegable */
-  notDelegableCode?: string | undefined;
+  errorText?: string | undefined;
 
   /** When true saves as much space as possible. Usually true for smaller screens */
   compact?: boolean;
@@ -34,7 +34,7 @@ export const ResourceActionBar = ({
   title,
   children,
   status = 'Unchecked',
-  notDelegableCode = undefined,
+  errorText = undefined,
   onAddClick,
   onRemoveClick,
   compact = false,
@@ -94,7 +94,7 @@ export const ResourceActionBar = ({
         setOpen(!open);
       }}
     >
-      {!compact && <Paragraph> {t(`single_rights.${notDelegableCode}_title`)}</Paragraph>}
+      {!compact && <Paragraph>{errorText}</Paragraph>}
       <ExclamationmarkTriangleIcon
         className={classes.notDelegableIcon}
         fontSize='1.5rem'
