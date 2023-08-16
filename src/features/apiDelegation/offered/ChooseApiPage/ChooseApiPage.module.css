@@ -1,6 +1,6 @@
 @media only screen and (max-width: 768px) {
-  .searchField{
-    width: 100%
+  .searchField {
+    width: 100%;
   }
 
   .delegableApisContainer {
@@ -12,7 +12,7 @@
     margin-bottom: 30px;
     width: 100%;
   }
-  .searchSection{
+  .searchSection {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -24,17 +24,17 @@
 }
 
 @media only screen and (min-width: 769px) {
-  .searchSection{
+  .searchSection {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
   }
 
-  .searchField{
+  .searchField {
     width: 47.5%;
   }
 
-  .pageContentActionBarsContainer{
+  .pageContentActionBarsContainer {
     grid-template-columns: 1fr 1fr;
     display: grid;
   }
@@ -57,20 +57,20 @@
   }
 }
 
-.chosenOrgsListHeader{
+.chosenOrgsListHeader {
   font-weight: 500;
 }
 
-.chooseApiSecondHeader{
+.chooseApiSecondHeader {
   font-weight: 500;
 }
 
-.explanationTexts{
+.explanationTexts {
   font-weight: 500;
   margin-left: 10px;
 }
 
-.actionBarWrapper{
+.actionBarWrapper {
   display: flex;
   flex-direction: column;
   gap: 5px;

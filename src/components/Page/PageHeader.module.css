@@ -1,12 +1,12 @@
 @media only screen and (max-width: 768px) {
-  .page-header{
+  .page-header {
     gap: 1rem;
     padding-left: 1.2rem;
   }
 }
 
 @media only screen and (min-width: 769px) {
-  .page-header{
+  .page-header {
     gap: 1.5rem;
     padding-left: 2rem;
   }
@@ -45,12 +45,12 @@
   --page-header-height: 96px;
 }
 
-.page-header__icon--small{
+.page-header__icon--small {
   min-width: 28px;
   min-height: 28px;
 }
 
-.page-header__icon--medium{
+.page-header__icon--medium {
   min-width: 40px;
   min-height: 40px;
 }

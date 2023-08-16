@@ -11,7 +11,7 @@
     "coverage:e2e": "vite & wait-on http://localhost:5173 & cypress run",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc.cjs",
     "postinstall": "husky install",
     "madge": "madge",
     "architecture": "madge --extensions ts,tsx --image graph.svg src/"
@@ -61,10 +61,6 @@
     "prettier": "^3.0.0",
     "typescript": "5.1.6",
     "vite": "^4.2.2"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,cjs,mjs}": "yarn lint --cache --fix",
-    "*.{css,md,mdx,json}": "yarn prettier --write"
   },
   "packageManager": "yarn@3.6.1"
 }

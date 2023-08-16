@@ -1,9 +1,9 @@
 @media only screen and (max-width: 768px) {
-  .overviewAccordionsContainer{
+  .overviewAccordionsContainer {
     margin-top: 0rem;
   }
 
-  .delegateNewButton{
+  .delegateNewButton {
     margin-bottom: 1.3rem;
     margin-top: 0rem;
   }
@@ -20,11 +20,11 @@
 }
 
 @media only screen and (min-width: 769px) {
-  .overviewActionBarContainer{
+  .overviewActionBarContainer {
     margin-top: 3rem;
   }
 
-  .delegateNewButton{
+  .delegateNewButton {
     margin-bottom: 3rem;
   }
 
@@ -34,7 +34,7 @@
     align-items: center;
   }
 
-  .saveSection{
+  .saveSection {
     margin-right: 0.5rem;
     display: flex;
     justify-content: flex-end;
@@ -47,7 +47,7 @@
     flex: 1;
   }
 
-  .explanatoryContainer{
+  .explanatoryContainer {
     margin-top: 30px;
     display: flex;
   }
@@ -57,17 +57,17 @@
   margin-top: 1.5rem;
 }
 
-.spinnerContainer{
+.spinnerContainer {
   margin-top: 3rem;
   display: flex;
   justify-content: center;
 }
 
-.saveSection{
+.saveSection {
   margin-top: 2rem;
 }
 
-.apiSubheading{
+.apiSubheading {
   display: flex;
   margin-bottom: 2rem;
   font-weight: 500;
@@ -81,16 +81,16 @@
 .link {
   color: black;
   text-decoration-line: underline;
-  text-decoration-color: #1EADF7;
+  text-decoration-color: #1eadf7;
   display: inline-block;
   background: transparent;
 }
 
-.errorPanel{
+.errorPanel {
   margin-top: 2rem;
 }
 
-.actionBarWrapper{
+.actionBarWrapper {
   margin-top: 5px;
   margin-bottom: 5px;
 }

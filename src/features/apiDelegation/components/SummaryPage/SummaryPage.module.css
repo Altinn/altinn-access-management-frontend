@@ -1,5 +1,5 @@
 @media only screen and (max-width: 768px) {
-  .receiptMainButton{
+  .receiptMainButton {
     width: 100%;
   }
 
@@ -12,33 +12,33 @@
     margin-top: 2.5rem;
   }
 
-  .infoText{
+  .infoText {
     font-size: 16px;
   }
 }
 
-.receiptMainButton{
+.receiptMainButton {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
-.navButtonContainer{
+.navButtonContainer {
   margin-top: 8rem;
   display: flex;
   justify-content: end;
   margin-bottom: 70px;
 }
 
-.previousButton{
+.previousButton {
   display: flex;
   margin-right: 3rem;
 }
 
-.confirmButton{
+.confirmButton {
   display: flex;
 }
 
-.infoText{
+.infoText {
   margin-top: 20px;
   font-weight: 400;
 }
@@ -57,8 +57,7 @@
   justify-content: center;
 }
 
-.receiptMainButton{
+.receiptMainButton {
   display: flex;
   justify-content: flex-end;
 }
-

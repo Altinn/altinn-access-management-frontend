@@ -5,7 +5,7 @@
 
 .errorMessage {
   font-size: 14px;
-  color: darkslategray;   
+  color: darkslategray;
 }
 
 .contentText {
@@ -23,21 +23,21 @@
 .link {
   color: black;
   text-decoration-line: underline;
-  text-decoration-color: #1EADF7;
+  text-decoration-color: #1eadf7;
   display: inline-block;
   background: transparent;
 }
 
 @media only screen and (max-width: 576px) {
   .rightContainer {
-      display: none;
+    display: none;
   }
 
   .header {
-      font-size: 20px;
+    font-size: 20px;
   }
 
   .contentText {
-      font-size: 14px;
+    font-size: 14px;
   }
 }

@@ -1,17 +1,17 @@
 @media only screen and (max-width: 768px) {
-  .listItemTexts{
+  .listItemTexts {
     margin-top: 8px;
     margin-bottom: 8px;
   }
 
-  .middleText{
+  .middleText {
     margin-top: 5px;
     opacity: 60%;
   }
 }
 
-@media only screen and (min-width: 769px) {  
-  .listItemTexts{
+@media only screen and (min-width: 769px) {
+  .listItemTexts {
     display: flex;
   }
 
@@ -23,16 +23,16 @@
   }
 }
 
-.baseListItemContent{
+.baseListItemContent {
   display: flex;
   flex: 1;
   align-items: center;
 }
 
 .compactListItem {
-    display: flex;
-    margin-left: 10px;
-    min-height: 40px;
+  display: flex;
+  margin-left: 10px;
+  min-height: 40px;
 }
 
 .deleteSection {
@@ -41,8 +41,8 @@
   align-items: center;
 }
 
-.listItemTexts{
-  --list-text-color-error: #E02E49;
+.listItemTexts {
+  --list-text-color-error: #e02e49;
   font-size: 16px;
   flex: 1;
   align-items: center;
@@ -70,5 +70,3 @@
 .middleText__error {
   color: var(--list-text-color-error);
 }
-
-

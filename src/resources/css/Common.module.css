@@ -1,24 +1,24 @@
-@import "@digdir/design-system-tokens/brand/digdir/tokens.css";
+@import '@digdir/design-system-tokens/brand/digdir/tokens.css';
 
 body {
   margin: 0;
 }
 
-:root { 
+:root {
   font-family: 'Inter', sans-serif;
 }
 
 @supports (font-variation-settings: normal) {
-  :root {  
+  :root {
     font-family: 'Inter', sans-serif;
   }
 }
 
-.backgroundColor{
-  background-color: #1EADF7;
+.backgroundColor {
+  background-color: #1eadf7;
 }
 
-.spinnerContainer{
+.spinnerContainer {
   margin-top: 1rem;
   display: flex;
   justify-content: center;

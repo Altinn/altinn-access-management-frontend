@@ -1,22 +1,22 @@
 .counterText {
-    display: flex;
-    gap: 2px;
-    align-items: center;
-    margin-right: 2rem !important;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  margin-right: 2rem !important;
 }
-  
+
 .content {
-    margin: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  margin: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .content.compact {
-    margin: 0.5rem;
+  margin: 0.5rem;
 }
 
 .compactProceedButton {
-    margin-top: 2px;
-    float: right;
+  margin-top: 2px;
+  float: right;
 }
