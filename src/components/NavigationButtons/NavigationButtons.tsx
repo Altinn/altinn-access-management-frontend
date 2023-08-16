@@ -1,4 +1,4 @@
-import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ export interface NavigationButtonsProps {
   nextPath: string;
   nextDisabled: boolean;
   nextLoading?: boolean;
-  nextButtonColor?: ButtonColor;
+  nextButtonColor?: 'primary' | 'success';
   nextButtonClick?: () => void;
 }
 
@@ -23,7 +23,7 @@ export const NavigationButtons = ({
   nextDisabled,
   nextPath,
   nextLoading,
-  nextButtonColor = ButtonColor.Primary,
+  nextButtonColor = 'primary',
   nextButtonClick,
 }: NavigationButtonsProps) => {
   const navigate = useNavigate();
@@ -40,8 +40,8 @@ export const NavigationButtons = ({
     <div className={classes.navButtonContainer}>
       <div className={classes.navButtonLeft}>
         <Button
-          color={ButtonColor.Primary}
-          variant={ButtonVariant.Outline}
+          color='primary'
+          variant='outline'
           fullWidth={true}
           onClick={() => {
             navigate(previousPath);
@@ -53,7 +53,7 @@ export const NavigationButtons = ({
       <div className={classes.navButtonRight}>
         <Button
           color={nextButtonColor}
-          variant={ButtonVariant.Filled}
+          variant='filled'
           fullWidth={true}
           onClick={handleNextOnClick}
           disabled={nextDisabled}

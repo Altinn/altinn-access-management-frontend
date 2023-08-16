@@ -1,5 +1,5 @@
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import { List, Button, ButtonVariant, ButtonColor } from '@digdir/design-system-react';
+import { List, Button } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -170,8 +170,8 @@ export const SummaryPage = ({
               <p>{t('api_delegation.delegations_not_registered')}</p>
               <div className={classes.restartButton}>
                 <Button
-                  variant={ButtonVariant.Outline}
-                  color={ButtonColor.Danger}
+                  variant='outline'
+                  color='danger'
                   onClick={() => {
                     navigate(restartProcessPath);
                   }}
@@ -219,14 +219,14 @@ export const SummaryPage = ({
                 nextText={t('api_delegation.confirm_delegation')}
                 nextDisabled={confirmationButtonDisabled}
                 nextLoading={confirmationButtonLoading}
-                nextButtonColor={ButtonColor.Success}
+                nextButtonColor='success'
                 nextButtonClick={confirmationButtonClick}
               ></NavigationButtons>
             ) : (
               <div className={classes.receiptMainButton}>
                 <Button
-                  color={ButtonColor.Primary}
-                  variant={ButtonVariant.Filled}
+                  color='primary'
+                  variant='filled'
                   onClick={navigateToOverview}
                   fullWidth={isSm}
                 >

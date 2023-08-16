@@ -1,4 +1,4 @@
-import { Button, ButtonVariant, ListItem, ButtonColor } from '@digdir/design-system-react';
+import { Button, ListItem } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -34,8 +34,8 @@ export const DeletableListItem = ({
     <div className={cn(classes.deleteSection)}>
       {item.isSoftDelete ? (
         <Button
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Secondary}
+          variant={'quiet'}
+          color='secondary'
           onClick={softRestoreCallback}
           icon={<Cancel />}
           size='medium'
@@ -45,8 +45,8 @@ export const DeletableListItem = ({
         </Button>
       ) : (
         <Button
-          variant={ButtonVariant.Quiet}
-          color={ButtonColor.Danger}
+          variant='quiet'
+          color='danger'
           icon={<MinusCircle />}
           size='medium'
           onClick={softDeleteCallback}

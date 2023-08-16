@@ -1,5 +1,5 @@
 import { Panel } from '@altinn/altinn-design-system';
-import { Button, ButtonColor, ButtonVariant, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -177,7 +177,7 @@ export const OverviewPageContent = ({
       {layout === LayoutState.Offered && (
         <div className={classes.delegateNewButton}>
           <Button
-            variant={ButtonVariant.Outline}
+            variant='outline'
             onClick={goToStartDelegation}
             icon={<Add />}
             fullWidth={isSm}
@@ -213,7 +213,7 @@ export const OverviewPageContent = ({
             <div className={classes.editButton}>
               {!isEditable ? (
                 <Button
-                  variant={ButtonVariant.Quiet}
+                  variant='quiet'
                   icon={<Edit />}
                   onClick={handleSetIsEditable}
                   size='small'
@@ -222,7 +222,7 @@ export const OverviewPageContent = ({
                 </Button>
               ) : (
                 <Button
-                  variant={ButtonVariant.Quiet}
+                  variant='quiet'
                   icon={<Error />}
                   onClick={handleSetIsEditable}
                   size='small'
@@ -240,7 +240,7 @@ export const OverviewPageContent = ({
           <Button
             disabled={saveDisabled}
             onClick={handleSave}
-            color={ButtonColor.Success}
+            color='success'
             fullWidth={isSm}
           >
             {t('api_delegation.save')}
