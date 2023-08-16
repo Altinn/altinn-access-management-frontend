@@ -90,7 +90,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             <div className={classes.actionBarTexts}>
               <Paragraph
                 as={renderAsElem}
-                size={size}
+                size={headingSize}
                 className={classes.title}
               >
                 {title}
