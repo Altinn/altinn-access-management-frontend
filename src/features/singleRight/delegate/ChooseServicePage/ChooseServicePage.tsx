@@ -13,6 +13,7 @@ import {
   Alert,
   Button,
 } from '@digdir/design-system-react';
+import { useNavigate } from 'react-router-dom';
 
 import { DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 import {
@@ -24,7 +25,7 @@ import {
   Filter,
   ActionBar,
   CollectionBar,
-  NavigationButtons,
+  DualElementsContainer,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -32,6 +33,8 @@ import {
   useGetResourceOwnersQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { GeneralPath, SingleRightPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -40,7 +43,7 @@ const searchResultsPerPage = 10;
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
-
+  const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
@@ -102,7 +105,7 @@ export const ChooseServicePage = () => {
       {filters.map((filterValue) => (
         <Chip.Removable
           key={filterValue}
-          aria-label={t('common.remove') + ' ' + getFilterLabel(filterValue)}
+          aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
           onClick={() => {
             unCheckFilter(filterValue);
           }}
@@ -146,7 +149,7 @@ export const ChooseServicePage = () => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {totalNumberOfResults.toString() + ' ' + t('single_rights_delegation.search_hits')}
+                {String(totalNumberOfResults) + ' ' + t('single_rights_delegation.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
@@ -177,6 +180,20 @@ export const ChooseServicePage = () => {
 
   const onRemove = (resource: ServiceResource) => {
     setSelectedResources(selectedResources.filter((r) => r.title !== resource.title));
+  };
+
+  const onCancel = () => {
+    const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    window.location.href =
+      'https://' +
+      cleanHostname +
+      '/' +
+      GeneralPath.Altinn2SingleRights +
+      '?userID=' +
+      getCookie('AltinnUserId') +
+      '&amp;' +
+      'partyID=' +
+      getCookie('AltinnPartyId');
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
@@ -265,9 +282,35 @@ export const ChooseServicePage = () => {
               ></Filter>
             </div>
             {searchResults()}
-            <div>
-              <NavigationButtons></NavigationButtons>
-            </div>
+            <DualElementsContainer
+              leftElement={
+                <Button
+                  variant='quiet'
+                  color='danger'
+                  fullWidth={true}
+                  onClick={onCancel}
+                >
+                  {t('common.cancel')}
+                </Button>
+              }
+              rightElement={
+                <Button
+                  variant='filled'
+                  color='primary'
+                  fullWidth={true}
+                  onClick={() => {
+                    navigate(
+                      '/' +
+                        SingleRightPath.DelegateSingleRights +
+                        '/' +
+                        SingleRightPath.ChooseRights,
+                    );
+                  }}
+                >
+                  {t('common.proceed')}
+                </Button>
+              }
+            />
           </div>
         </PageContent>
       </Page>

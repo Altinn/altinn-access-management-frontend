@@ -1,1 +1,1 @@
-export type { CustomError } from './CustomError/CustomError';
+export type { CustomError } from './customError/CustomError';
