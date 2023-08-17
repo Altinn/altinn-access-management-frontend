@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
+import { PersonIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,7 @@ import {
   Filter,
   ActionBar,
   CollectionBar,
+  PageColor,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -252,8 +253,13 @@ export const ChooseServicePage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
-        <PageHeader icon={<PersonCheckmarkIcon />}>EnkeltRettigheter</PageHeader>
+      <Page
+        color={PageColor.Light}
+        size={isSm ? PageSize.Small : PageSize.Medium}
+      >
+        <PageHeader icon={<PersonIcon />}>
+          {t('single_rights_delegation.delegate_single_rights')}
+        </PageHeader>
         <PageContent>
           <CollectionBar
             title='Valgte tjenester'
