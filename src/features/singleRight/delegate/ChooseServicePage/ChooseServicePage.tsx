@@ -176,11 +176,11 @@ export const ChooseServicePage = () => {
 
   const getErrorCodeTextKey = (errorCode: string | undefined) => {
     if (errorCode === 'MissingRoleAccess') {
-      return 'missing_role_access';
+      return 'single_rights.missing_role_access';
     } else if (errorCode === 'MissingDelegationAccess') {
-      return 'missing_delegation_access';
+      return 'single_rights.missing_delegation_access';
     } else if (errorCode === 'Unknown') {
-      return 'unknown';
+      return 'single_rights.unknown';
     } else if (errorCode === undefined) {
       return undefined;
     } else {
@@ -193,7 +193,7 @@ export const ChooseServicePage = () => {
       ?.status;
     const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.errorCode;
-    const localizedErrorCode = getErrorCodeTextKey(errorCode);
+    const errorCodeTextKey = getErrorCodeTextKey(errorCode);
 
     return (
       <ResourceActionBar
@@ -208,18 +208,18 @@ export const ChooseServicePage = () => {
           onRemove(resource.identifier);
         }}
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        errorText={t(`single_rights.${localizedErrorCode}_title`)}
+        errorText={t(`${errorCodeTextKey}_title`)}
         compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
-          {localizedErrorCode && (
+          {errorCodeTextKey && (
             <Alert
               severity='danger'
               elevated={false}
               className={classes.notDelegableAlert}
             >
-              <Heading size='xsmall'>{t(`single_rights.${localizedErrorCode}_title`)}</Heading>
-              <Paragraph>{t(`single_rights.${localizedErrorCode}`)}</Paragraph>
+              <Heading size='xsmall'>{t(`${errorCodeTextKey}_title`)}</Heading>
+              <Paragraph>{t(`${errorCodeTextKey}`)}</Paragraph>
             </Alert>
           )}
           <Paragraph size='small'>{resource.description}</Paragraph>
