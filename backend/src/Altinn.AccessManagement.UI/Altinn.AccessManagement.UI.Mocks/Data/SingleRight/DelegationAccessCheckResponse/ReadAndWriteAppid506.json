@@ -9,12 +9,16 @@
     ],
     "action": "read",
     "status": "Delegable",
-    "faultCode": "",
-    "reason": "",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
       }
     ]
   },
@@ -28,12 +32,16 @@
     ],
     "action": "write",
     "status": "Delegable",
-    "faultCode": "",
-    "reason": "",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
       }
     ]
   },
@@ -47,12 +55,16 @@
     ],
     "action": "sign",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "code": "MissingDelegationAccess",
+        "description": "The user does not have access through delegation(s) of the right",
+        "parameters": [
+          {
+            "name": "RoleAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   }

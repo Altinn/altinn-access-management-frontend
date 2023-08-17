@@ -1,4 +1,22 @@
-.content {
-  margin: 4px;
-  margin-left: 20px;
+@media only screen and (max-width: 768px) {
+  .content {
+    margin: 10px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .content {
+    margin: 20px;
+  }
+}
+
+.notDelegableContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.notDelegableIcon {
+  margin-left: 10px;
 }

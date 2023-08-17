@@ -34,19 +34,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         public async Task<ActionResult<List<DelegationAccessCheckResponse>>> CheckDelegationAccess([FromRoute] string partyId, [FromBody] DelegationRequestDto request)
         {
-            List<DelegationAccessCheckResponse> responses = new List<DelegationAccessCheckResponse>();
-
-            responses = await _singleRightService.CheckDelegationAccess(partyId, request);
-
-            foreach (DelegationAccessCheckResponse response in responses)
+            try
             {
-                if (response.HttpErrorResponse != null)
-                {
-                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, response.HttpErrorResponse.Status, response.HttpErrorResponse.Title, response.HttpErrorResponse.Detail));
-                }
+                return await _singleRightService.CheckDelegationAccess(partyId, request);
             }
-
-            return Ok(responses);
+            catch (Exception)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
         }
     }
 }

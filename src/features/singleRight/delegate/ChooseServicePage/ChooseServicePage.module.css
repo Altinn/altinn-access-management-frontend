@@ -47,6 +47,18 @@
   gap: 6px;
 }
 
+@media only screen and (max-width: 768px) {
+  .notDelegableAlert {
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .notDelegableAlert {
+    margin-bottom: 30px;
+  }
+}
+
 .pagination {
   margin-top: 16px;
   display: flex;

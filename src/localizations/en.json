@@ -23,7 +23,8 @@
     "previous":"Previous",
     "next": "Next",
     "general_error_title": "Sorry, looks like somthing went wrong",
-    "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk."
+    "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk.",
+    "not_delegable": "Not delegable"
   },
   "profile": {
     "received": "Received",
@@ -106,6 +107,15 @@
     "delegate_single_rights": "Delegate single rights",
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
-    "search_hits": "matches found:"
+    "search_hits": "matches found:",
+    "missing_role_access": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+    "missing_delegation_access": "The user does not have the necessary delegation accesses to delegate this service.",
+    "unknown": "Unknown",
+    "new_error": "This is a new error that we haven't gotten before. Please report it to Altinn by sending in a screen shot.",
+    "missing_role_access_title": "Mangler rolle",
+    "missing_delegation_access_title": "Mangler delegeringsrettighet",
+    "unknown_title": "Unknown error",
+    "new_error_title": "New error",
+    "missing_delegable_right": "Missing delegable rights"
   }
 }

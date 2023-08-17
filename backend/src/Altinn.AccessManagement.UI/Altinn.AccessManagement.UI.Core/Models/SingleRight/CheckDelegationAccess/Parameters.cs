@@ -5,14 +5,14 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
     /// <summary>
     ///     Represents a reason for why something failed.
     /// </summary>
-    public class ReasonParams
+    public class Parameters
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ReasonParams" /> class.
+        ///     Initializes a new instance of the <see cref="Parameters" /> class.
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
-        public ReasonParams(string name, string value)
+        public Parameters(string name, string value)
         {
             Name = name;
             Value = value;
