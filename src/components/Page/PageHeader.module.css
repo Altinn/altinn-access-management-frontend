@@ -41,6 +41,11 @@
   --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
 }
 
+.pageHeader.danger {
+  --component-page_header-background-color: var(--fds-semantic-surface-danger-default);
+  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+}
+
 .pageHeader.small {
   --page_header-title-font-size: 9px;
   --page-header-height: 72px;

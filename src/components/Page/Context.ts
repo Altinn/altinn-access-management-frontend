@@ -4,6 +4,7 @@ export enum PageColor {
   Dark = 'dark',
   Light = 'light',
   Success = 'success',
+  Danger = 'danger',
 }
 
 export enum PageSize {

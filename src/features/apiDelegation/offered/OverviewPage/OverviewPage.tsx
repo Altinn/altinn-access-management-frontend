@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 
-import { Page, PageHeader, PageContent, PageSize, PageContainer } from '@/components';
+import { Page, PageHeader, PageContent, PageSize, PageContainer, PageColor } from '@/components';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { useMediaQuery } from '@/resources/hooks';
 
@@ -14,7 +14,10 @@ export const OverviewPage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
+      <Page
+        color={PageColor.Light}
+        size={isSm ? PageSize.Small : PageSize.Medium}
+      >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
         <PageContent>
           <OverviewPageContent layout={LayoutState.Offered} />

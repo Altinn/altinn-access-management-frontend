@@ -17,7 +17,6 @@ import {
   PageColor,
   PageSize,
 } from '@/components';
-import common from '@/resources/css/Common.module.css';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -56,7 +55,7 @@ export const SummaryPage = ({
   failedDelegations,
   successfulDelegations,
   pageHeaderText,
-  headerColor = PageColor.Dark,
+  headerColor = PageColor.Light,
   headerIcon,
   topListText,
   failedDelegationText,

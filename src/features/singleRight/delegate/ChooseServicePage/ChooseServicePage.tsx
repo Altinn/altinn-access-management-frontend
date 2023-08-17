@@ -230,7 +230,9 @@ export const ChooseServicePage = () => {
         color={PageColor.Light}
         size={isSm ? PageSize.Small : PageSize.Medium}
       >
-        <PageHeader icon={<PersonIcon />}>EnkeltRettigheter</PageHeader>
+        <PageHeader icon={<PersonIcon />}>
+          {t('single_rights_delegation.delegate_single_rights')}
+        </PageHeader>
         <PageContent>
           {selectedResourcesActionBars.length > 0 && (
             <CollectionBar
