@@ -32,18 +32,18 @@
 
 @media only screen and (min-width: 375px) {
   .pageMargin {
-    margin: 0 8px 0 8px;
+    margin: 0 8px 8px 8px;
   }
 }
 
 @media only screen and (min-width: 769px) {
   .pageMargin {
-    margin: 0 16px 0 16px;
+    margin: 0 16px 16px 16px;
   }
 }
 
 @media only screen and (min-width: 992px) {
   .pageMargin {
-    margin: 20px 40px 0 40px;
+    margin: 20px 40px 40px 40px;
   }
 }
