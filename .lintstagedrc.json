@@ -1,23 +1,19 @@
 {
     "*.ts": [
-      "prettier --write",
+      "yarn prettier --write",
       "eslint"
     ],
     "*.tsx": [
-        "prettier --write",
+        "yarn prettier --write",
         "eslint"
     ],
     "*.js": [
-        "prettier --write",
+        "yarn prettier --write",
         "eslint"
     ],
     "*.jsx": [
-        "prettier --write",
+        "yarn prettier --write",
         "eslint"
     ],
-    "*.html": [
-      "eslint",
-      "prettier --write"
-    ],
-    "*.scss": "prettier --write"
+    "*.css": "yarn prettier --write"
   }

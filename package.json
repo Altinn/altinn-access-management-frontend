@@ -11,7 +11,7 @@
     "coverage:e2e": "vite & wait-on http://localhost:5173 & cypress run",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css}' --config ./.prettierrc.cjs",
     "postinstall": "husky install",
     "madge": "madge",
     "architecture": "madge --extensions ts,tsx --image graph.svg src/"
@@ -29,7 +29,7 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "i18next": "^23.0.0",
     "i18next-browser-languagedetector": "^7.0.1",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^13.0.0",
@@ -61,10 +61,6 @@
     "prettier": "^3.0.0",
     "typescript": "5.1.6",
     "vite": "^4.2.2"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,cjs,mjs}": "yarn lint --cache --fix",
-    "*.{css,md,mdx,json}": "yarn prettier --write"
   },
   "packageManager": "yarn@3.6.1"
 }

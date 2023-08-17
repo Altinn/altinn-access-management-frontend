@@ -1,18 +1,17 @@
-
 @media only screen and (max-width: 768px) {
-  .searchSection{
+  .searchSection {
     width: 100%;
   }
 
-  .chosenOrgs{
+  .chosenOrgs {
     margin-bottom: 1.5rem;
   }
 
-  .topText{
+  .topText {
     font-size: 20px;
   }
 
-  .delegableOrgsContainer{
+  .delegableOrgsContainer {
     margin-bottom: 2rem;
   }
 
@@ -20,7 +19,7 @@
     margin-bottom: 2rem;
   }
 
-  .pageContentActionBarContainer{
+  .pageContentActionBarContainer {
     width: 100%;
   }
 }
@@ -31,19 +30,19 @@
     overflow-y: auto;
   }
 
-  .searchSection{
+  .searchSection {
     width: 47.5%;
   }
 
-  .delegableOrgsContainer{
+  .delegableOrgsContainer {
     margin-right: 25px;
   }
 
   .chosenOrgsContainer {
     margin-left: 25px;
   }
-  
-  .pageContentActionBarContainer{
+
+  .pageContentActionBarContainer {
     grid-template-columns: 1fr 1fr;
     display: grid;
   }
@@ -55,7 +54,7 @@
   justify-content: flex-end;
 }
 
-.navButton{
+.navButton {
   margin-right: 3rem;
   width: 10rem;
   margin-bottom: 70px;
@@ -64,7 +63,7 @@
 .link {
   color: black;
   text-decoration-line: underline;
-  text-decoration-color: #1EADF7;
+  text-decoration-color: #1eadf7;
   display: inline-block;
   background: transparent;
 }
@@ -78,16 +77,16 @@
   font-weight: 500;
 }
 
-.topText{
+.topText {
   font-weight: 500;
 }
 
-.chosenOrgsHeader{
+.chosenOrgsHeader {
   font-weight: 500;
   margin-bottom: 5px;
 }
 
-.actionBarWrapper{
+.actionBarWrapper {
   margin-top: 5px;
   margin-bottom: 5px;
 }
