@@ -30,7 +30,7 @@ import {
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
+import { ResourceDto } from '@/dataObjects/dtos/singleRights/ResourceDto';
 import {
   type DelegationRequestDto,
   delegationAccessCheck,
@@ -164,7 +164,7 @@ export const ChooseServicePage = () => {
   const onAdd = (identifier: string, serviceResource: ServiceResource) => {
     const dto: DelegationRequestDto = {
       serviceResource,
-      delegationRequest: new ResourceList('urn:altinn:resource', identifier),
+      delegationRequest: new ResourceDto('urn:altinn:resource', identifier),
     };
 
     void dispatch(delegationAccessCheck(dto));
@@ -174,14 +174,14 @@ export const ChooseServicePage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
-  const localizeNotDelegableCode = (notDelegableCode: string | undefined) => {
-    if (notDelegableCode === 'MissingRoleAccess') {
+  const getErrorCodeTextKey = (errorCode: string | undefined) => {
+    if (errorCode === 'MissingRoleAccess') {
       return 'missing_role_access';
-    } else if (notDelegableCode === 'MissingDelegationAccess') {
+    } else if (errorCode === 'MissingDelegationAccess') {
       return 'missing_delegation_access';
-    } else if (notDelegableCode === 'Unknown') {
+    } else if (errorCode === 'Unknown') {
       return 'unknown';
-    } else if (notDelegableCode === undefined) {
+    } else if (errorCode === undefined) {
       return undefined;
     } else {
       return 'new_error';
@@ -193,7 +193,7 @@ export const ChooseServicePage = () => {
       ?.status;
     const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.errorCode;
-    const localizedErrorCode = localizeNotDelegableCode(errorCode);
+    const localizedErrorCode = getErrorCodeTextKey(errorCode);
 
     return (
       <ResourceActionBar
@@ -211,17 +211,17 @@ export const ChooseServicePage = () => {
         errorText={t(`single_rights.${localizedErrorCode}_title`)}
         compact={isSm}
       >
-        {localizedErrorCode && (
-          <Alert
-            severity='danger'
-            elevated={false}
-            className={classes.notDelegableAlert}
-          >
-            <Heading size='xsmall'>{t(`single_rights.${localizedErrorCode}_title`)}</Heading>
-            <Paragraph>{t(`single_rights.${localizedErrorCode}`)}</Paragraph>
-          </Alert>
-        )}
-        <div>
+        <div className={classes.serviceResourceContent}>
+          {localizedErrorCode && (
+            <Alert
+              severity='danger'
+              elevated={false}
+              className={classes.notDelegableAlert}
+            >
+              <Heading size='xsmall'>{t(`single_rights.${localizedErrorCode}_title`)}</Heading>
+              <Paragraph>{t(`single_rights.${localizedErrorCode}`)}</Paragraph>
+            </Alert>
+          )}
           <Paragraph size='small'>{resource.description}</Paragraph>
           <Paragraph size='small'>{resource.rightDescription}</Paragraph>
         </div>

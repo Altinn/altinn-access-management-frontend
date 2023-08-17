@@ -1,7 +1,7 @@
 /**
- * Represents a list of Resources that's sent in to backend to enable backend to identify the resource.
+ * Represents a Resource DTO that the backend uses to identify the resource.
  */
-export class ResourceList {
+export class ResourceDto {
   /**
    * Represents an array of resource objects.
    */

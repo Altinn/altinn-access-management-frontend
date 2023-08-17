@@ -16,9 +16,11 @@ import classes from './CollectionBar.module.css';
 export interface CollectionBarProps extends Pick<ActionBarProps, 'color' | 'title'> {
   /** The list of selected objects */
   collection: React.ReactNode[];
-  /** Whether or not to use the compact variant */
+
+  /** When true saves as much space as possible. Usually used for smaller screens */
   compact?: boolean;
-  /** when true saves as much space as possible. Usually true for smaller screens */
+
+  /** The path to redirect to when pressing the proceed button */
   proceedToPath?: string;
 }
 

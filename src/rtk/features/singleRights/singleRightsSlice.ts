@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { type ResourceList } from '@/dataObjects/dtos/singleRights/ResourceList';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { type ResourceDto } from '@/dataObjects/dtos/singleRights/ResourceDto';
 
 import { type ServiceResource } from './singleRightsApi';
 
 export interface DelegationRequestDto {
-  delegationRequest: ResourceList;
+  delegationRequest: ResourceDto;
   serviceResource: ServiceResource;
 }
 
