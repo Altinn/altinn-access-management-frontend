@@ -103,6 +103,7 @@
     "api_delegation_choice": "API delegation choice"
   },
   "single_rights_delegation": {
+    "delegate_single_rights": "Delegate single rights",
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
     "search_hits": "matches found:"

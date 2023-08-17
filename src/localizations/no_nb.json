@@ -103,6 +103,7 @@
     "api_delegation_choice": "API-delegeringsvalg"
   },
   "single_rights_delegation": {
+    "delegate_single_rights": "Gi nye enkeltrettigheter",
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:"

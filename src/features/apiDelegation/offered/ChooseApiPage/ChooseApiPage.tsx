@@ -13,6 +13,7 @@ import {
   NavigationButtons,
   PageContainer,
   ErrorPanel,
+  PageColor,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
@@ -148,7 +149,10 @@ export const ChooseApiPage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
+      <Page
+        color={PageColor.Light}
+        size={isSm ? PageSize.Small : PageSize.Medium}
+      >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           {chosenDelegableOrgs.length < 1 ? (

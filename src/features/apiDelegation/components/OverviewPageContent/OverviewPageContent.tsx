@@ -23,9 +23,8 @@ import {
   type DeletionRequest,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { ErrorPanel } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
-import common from '@/resources/css/Common.module.css';
-import { ActionBar, ErrorPanel } from '@/components';
 import { ApiDelegationPath } from '@/routes/paths';
 
 import { LayoutState } from '../LayoutState';

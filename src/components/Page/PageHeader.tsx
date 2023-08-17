@@ -14,15 +14,9 @@ export const PageHeader = ({ children, icon }: PageHeaderProps) => {
   const { color, size } = usePageContext();
 
   return (
-    <header
-      className={cn(
-        classes['page-header'],
-        classes[`page-header--${color}`],
-        classes[`page-header--${size}`],
-      )}
-    >
+    <header className={cn(classes.pageHeader, classes[color], classes[size])}>
       <SvgIcon
-        className={classes[`page-header__icon--${size}`]}
+        className={cn(classes.icon, classes[size])}
         svgIconComponent={icon}
       />
       <h1 className={classes.headerText}>{children}</h1>
