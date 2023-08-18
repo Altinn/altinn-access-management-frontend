@@ -1,6 +1,11 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Register.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -9,6 +14,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class RegisterClientMock : IRegisterClient
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
+        /// </summary>
+        /// <param name="httpClient">http client</param>
+        /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
+        /// <param name="accessTokenProvider">the handler for access token generator</param>
+        public RegisterClientMock(
+            HttpClient httpClient,
+            IHttpContextAccessor httpContextAccessor,
+            IAccessTokenProvider accessTokenProvider)
+        {
+        }
+        public RegisterClientMock() { }
+
         /// <inheritdoc/>
         public Task<Party> GetPartyForOrganization(string organizationNumber)
         {
