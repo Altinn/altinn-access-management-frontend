@@ -102,7 +102,7 @@
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg"
   },
-  "single_rights_delegation": {
+  "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettar",
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",

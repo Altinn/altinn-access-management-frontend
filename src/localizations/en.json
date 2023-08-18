@@ -103,7 +103,7 @@
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice"
   },
-  "single_rights_delegation": {
+  "single_rights": {
     "delegate_single_rights": "Delegate single rights",
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
