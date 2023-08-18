@@ -9,11 +9,11 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// <summary>
     /// Controller responsible for all operations for lookup
     /// </summary>
-    [Route("accessmanagement/api/v1/lookup")]
+    [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class LookupController : ControllerBase
     {
         private readonly ILogger _logger;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILookupService _lookupService;
 
         /// <summary>
@@ -23,21 +23,20 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="lookupService">service implementation for lookups</param>
         public LookupController(
             ILogger<LookupController> logger,
-            ILookupService lookupService,
-            IHttpContextAccessor httpContextAccessor)
+            ILookupService lookupService)
         {
             _logger = logger;
             _lookupService = lookupService;
-            _httpContextAccessor = httpContextAccessor;
         }
-        
+
         /// <summary>
         /// Endpoint for retrieving delegated rules between parties
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
-        [Route("org/{orgNummer}")]
+        [Authorize]
+        [Route("accessmanagement/api/v1/lookup/org/{orgNummer}")]
         public async Task<ActionResult<Party>> GetOrganisation(string orgNummer)
         {
             try
@@ -66,6 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="partyId">The partyId for the reportee to look up</param>
         /// <returns>Reportee if party is in authenticated users reporteelist</returns>
         [HttpGet]
+        [Authorize]
         [Route("accessmanagement/api/v1/lookup/reportee/{partyId}")]
         public async Task<ActionResult<Party>> GetPartyFromReporteeListIfExists(int partyId)
         {           
