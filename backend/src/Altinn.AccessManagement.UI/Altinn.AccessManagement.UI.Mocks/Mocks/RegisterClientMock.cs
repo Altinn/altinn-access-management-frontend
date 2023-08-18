@@ -1,11 +1,8 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
