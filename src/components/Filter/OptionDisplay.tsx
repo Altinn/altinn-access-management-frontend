@@ -109,18 +109,29 @@ export const OptionDisplay = ({
             }
           }}
         >
-          <LegacyCheckbox
+          <Checkbox
+            className={classes.checkbox}
             onChange={() => {
               handleSelection(option.value);
             }}
-            checked={isSelected}
-            label={option.label}
-            compact={compact}
-          />
+            size={compact ? 'xsmall' : 'small'}
+            value={option.value}
+          >
+            {option.label}
+          </Checkbox>
         </div>
       </button>
     );
   });
+
+  const newCheckboxes = (
+    <Checkbox.Group
+      value={selectedValues}
+      className={classes.checkboxGroup}
+    >
+      <div className={classes.optionList}>{checkboxes}</div>
+    </Checkbox.Group>
+  );
 
   return (
     <div className={classes.optionDisplay}>
@@ -138,7 +149,7 @@ export const OptionDisplay = ({
         className={classes.scrollContainer}
         tabIndex={-1}
       >
-        <div className={classes.optionList}>{checkboxes}</div>
+        {newCheckboxes}
       </div>
     </div>
   );

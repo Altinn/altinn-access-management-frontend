@@ -7,7 +7,7 @@
 
 .optionList {
   display: flex;
-  align-items: left;
+  align-items: start;
   flex-direction: column;
   border-left: 1px solid var(--fds-semantic-border-neutral-divider);
   border-right: 1px solid var(--fds-semantic-border-neutral-divider);
@@ -15,9 +15,9 @@
 }
 
 .option {
+  width: 100%;
   border: none;
   border-bottom: 1px solid var(--fds-semantic-border-neutral-divider);
-  padding: 8px 10px 8px 10px;
   background-color: var(--fds-semantic-background-default);
   cursor: pointer;
   font: inherit;
@@ -25,11 +25,16 @@
 }
 
 .option:hover {
-  background-color: var(--fds-semantic-surface-action-subtle);
+  background-color: var(--fds-semantic-surface-info-subtle);
 }
 
 .option:active {
-  background-color: var(--fds-semantic-surface-action-subtle-hover);
+  background-color: var(--fds-semantic-surface-info-subtle-hover);
+}
+
+.checkboxGroup {
+  margin: 0;
+  padding: 0;
 }
 
 .propagationStopper {
