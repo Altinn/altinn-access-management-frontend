@@ -1,17 +1,17 @@
 /**
- * Represents the delegation input data transfer object.
+ * Represents a Resource DTO that the backend uses to identify the resource.
  */
-export class DelegationRequestDto {
+export class ResourceIdentifierDto {
   /**
    * Represents an array of resource objects.
    */
   resource: Array<{
     /**
-     * The Altinn ID of what field etc. of the thing that's going to be delegated.
+     * The Altinn ID of what field etc. of the element that's going to be delegated.
      */
     id: string;
     /**
-     * The ID value of the specific thing that's going to be delegated.
+     * The ID value of the specific element that's going to be delegated.
      */
     value: string;
   }>;

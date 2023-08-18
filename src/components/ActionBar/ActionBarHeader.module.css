@@ -5,7 +5,7 @@
   --text-color: var(--fds-semantic-text-neutral-default);
   display: flex;
   border-width: 1px;
-  border-radius: 12px;
+  border-radius: 6px;
   border-style: var(--component-actionbar_header-border_top_style);
   outline: none;
   color: var(--text-color);

@@ -15,6 +15,7 @@ import {
   ActionBar,
   NavigationButtons,
   PageContainer,
+  PageColor,
 } from '@/components';
 import {
   softAddOrg,
@@ -195,7 +196,10 @@ export const ChooseOrgPage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
+      <Page
+        color={PageColor.Light}
+        size={isSm ? PageSize.Small : PageSize.Medium}
+      >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>

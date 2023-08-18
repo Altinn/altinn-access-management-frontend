@@ -1220,7 +1220,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^1.9.3":
+"@reduxjs/toolkit@npm:^1.9.5":
   version: 1.9.5
   resolution: "@reduxjs/toolkit@npm:1.9.5"
   dependencies:
@@ -1783,7 +1783,7 @@ __metadata:
     "@digdir/design-system-react": ^0.22.0
     "@digdir/design-system-tokens": ^0.2.0
     "@navikt/aksel-icons": ^4.11.0
-    "@reduxjs/toolkit": ^1.9.3
+    "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.32.6
     "@testing-library/cypress": ^9.0.0
     "@types/react": ^18.0.28

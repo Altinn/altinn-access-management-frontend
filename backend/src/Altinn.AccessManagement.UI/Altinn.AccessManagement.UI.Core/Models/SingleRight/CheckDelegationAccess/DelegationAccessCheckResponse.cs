@@ -1,4 +1,3 @@
-using Altinn.AccessManagement.UI.Core.Models.Common;
 using Newtonsoft.Json;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
@@ -15,76 +14,49 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         /// <param name="resources">The list of resources.</param>
         /// <param name="action">The action performed.</param>
         /// <param name="status">The status of the response.</param>
-        /// <param name="faultCode">The fault code, if applicable.</param>
-        /// <param name="reason">The reason for the response.</param>
-        /// <param name="reasonParams">The list of parameters.</param>
-        /// <param name="httpErrorResponse">The optional HTTP error response.</param>
+        /// <param name="details">The reason for the response.</param>
         public DelegationAccessCheckResponse(
             string rightKey,
             List<IdValuePair> resources,
             string action,
             string status,
-            string faultCode,
-            string reason,
-            List<ReasonParams> reasonParams,
-            HttpErrorResponse? httpErrorResponse = null)
+            List<Details> details)
         {
             RightKey = rightKey;
             Resources = resources;
             Action = action;
             Status = status;
-            FaultCode = faultCode;
-            Reason = reason;
-            ReasonParams = reasonParams;
-            HttpErrorResponse = httpErrorResponse;
+            Details = details;
         }
 
         /// <summary>
         ///     The key for the right.
         /// </summary>
         [JsonProperty("rightKey")]
-        public string RightKey { get; init; }
+        public string RightKey { get; set; }
 
         /// <summary>
         ///     The list of resources.
         /// </summary>
         [JsonProperty("resource")]
-        public List<IdValuePair> Resources { get; init; }
+        public List<IdValuePair> Resources { get; set; }
 
         /// <summary>
         ///     The action performed.
         /// </summary>
         [JsonProperty("action")]
-        public string Action { get; init; }
+        public string Action { get; set; }
 
         /// <summary>
         ///     The status of the response.
         /// </summary>
         [JsonProperty("status")]
-        public string Status { get; init; }
-
-        /// <summary>
-        ///     The fault code, if applicable.
-        /// </summary>
-        [JsonProperty("faultCode")]
-        public string FaultCode { get; init; }
+        public string Status { get; set; }
 
         /// <summary>
         ///     The reason for the response.
         /// </summary>
-        [JsonProperty("reason")]
-        public string Reason { get; init; }
-
-        /// <summary>
-        ///     The list of parameters.
-        /// </summary>
-        [JsonProperty("reasonParams")]
-        public List<ReasonParams> ReasonParams { get; init; }
-
-        /// <summary>
-        ///     The optional HTTP error response.
-        /// </summary>
-        [JsonProperty("httpErrorResponse")]
-        public HttpErrorResponse? HttpErrorResponse { get; init; }
+        [JsonProperty("details")]
+        public List<Details>? Details { get; set; }
     }
 }

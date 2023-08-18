@@ -187,8 +187,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             return actualObject.RightKey == expectedObject.RightKey &&
                    actualObject.Action == expectedObject.Action &&
-                   actualObject.FaultCode == expectedObject.FaultCode &&
-                   actualObject.Reason == expectedObject.Reason &&
                    actualObject.Status == expectedObject.Status;
         }
     }

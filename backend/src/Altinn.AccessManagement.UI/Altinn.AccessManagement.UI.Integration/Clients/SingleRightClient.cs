@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -60,24 +59,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     string responseContent = await response.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<List<DelegationAccessCheckResponse>>(responseContent, _serializerOptions);
                 }
-
-                if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                else
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    HttpErrorResponse errorObject = JsonSerializer.Deserialize<HttpErrorResponse>(responseContent, _serializerOptions);
+                    HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
 
-                    List<IdValuePair> resources = new List<IdValuePair>();
-                    resources.Add(request.Resource.FirstOrDefault());
-
-                    List<DelegationAccessCheckResponse> errorReponseList = new List<DelegationAccessCheckResponse>
-                    {
-                        new DelegationAccessCheckResponse(string.Empty, resources, string.Empty, string.Empty, string.Empty, string.Empty, new List<ReasonParams>(), errorObject),
-                    };
-                    return errorReponseList;
+                    throw error;
                 }
-
-                _logger.LogError("Checking delegation accesses failed with {StatusCode}", response.StatusCode);
-                return null;
             }
             catch (Exception ex)
             {
