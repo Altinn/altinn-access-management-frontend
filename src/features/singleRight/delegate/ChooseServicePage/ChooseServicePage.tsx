@@ -265,6 +265,34 @@ export const ChooseServicePage = () => {
             collection={selectedResourcesActionBars}
             compact={isSm}
           />
+          tester
+          <CollectionBar
+            title='Valgte tjenester'
+            color={'warning'}
+            collection={selectedResourcesActionBars}
+            compact={isSm}
+          />
+          tester
+          <CollectionBar
+            title='Valgte tjenester'
+            color={'danger'}
+            collection={selectedResourcesActionBars}
+            compact={isSm}
+          />
+          tester
+          <CollectionBar
+            title='Valgte tjenester'
+            color={'light'}
+            collection={selectedResourcesActionBars}
+            compact={isSm}
+          />
+          tester
+          <CollectionBar
+            title='Valgte tjenester'
+            color={'dark'}
+            collection={selectedResourcesActionBars}
+            compact={isSm}
+          />
           <div className={classes.searchSection}>
             <div className={classes.searchInputs}>
               <div className={classes.searchField}>

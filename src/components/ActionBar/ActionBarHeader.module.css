@@ -1,12 +1,11 @@
 .actionBar {
-  --component-actionbar_header-border_top_style: solid;
   --border-color: var(--fds-semantic-border-neutral-subtle);
   --background-color: var(--fds-semantic-surface-neutral-default);
   --text-color: var(--fds-semantic-text-neutral-default);
   display: flex;
   border-width: 1px;
   border-radius: 6px;
-  border-style: var(--component-actionbar_header-border_top_style);
+  border-style: solid;
   outline: none;
   color: var(--text-color);
 }
@@ -31,10 +30,10 @@
 }
 
 .actionBar.large {
-  border-color: var(--background-color);
+  border-color: var(--border-color);
   background-color: var(--background-color);
   min-height: 100px;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .actionBar.open {
@@ -44,7 +43,6 @@
 }
 
 .actionBar.light {
-  border-color: var(--border-color);
   --border-color: var(--fds-semantic-border-neutral-subtle);
   --background-color: var(--fds-semantic-surface-neutral-default);
 }
@@ -73,7 +71,7 @@
 }
 
 .actionBar.warning {
-  --border-color: var(--fds-semantic-border-warning-default);
+  --border-color: var(--fds-semantic-surface-warning-default);
   --background-color: var(--fds-semantic-surface-warning-subtle);
 }
 
@@ -82,7 +80,7 @@
 }
 
 .actionBar.success {
-  --border-color: var(--fds-semantic-border-success-default);
+  --border-color: var(--fds-semantic-surface-success-subtle-hover);
   --background-color: var(--fds-semantic-surface-success-subtle);
 }
 
@@ -91,7 +89,7 @@
 }
 
 .actionBar.danger {
-  --border-color: var(--fds-semantic-surface-danger-default);
+  --border-color: var(--fds-semantic-surface-danger-subtle-hover);
   --background-color: var(--fds-semantic-surface-danger-subtle);
 }
 

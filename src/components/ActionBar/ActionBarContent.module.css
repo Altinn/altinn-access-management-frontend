@@ -20,8 +20,8 @@
 }
 
 .actionBarContent.large {
-  border-width: 2px;
-  border-color: var(--header-color);
+  border-width: 1px;
+  border-color: var(--border-color);
 }
 
 .actionBarContent.light {
@@ -48,19 +48,19 @@
 }
 
 .actionBarContent.warning {
-  --border-color: var(--fds-semantic-border-warning-default);
+  --border-color: var(--fds-semantic-surface-warning-default);
   --header-color: var(--fds-semantic-surface-warning-subtle);
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.success {
-  --border-color: var(--fds-semantic-border-success-default);
+  --border-color: var(--fds-semantic-surface-success-subtle-hover);
   --header-color: var(--fds-semantic-surface-success-subtle);
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.danger {
-  --border-color: var(--fds-semantic-surface-danger-default);
+  --border-color: var(--fds-semantic-surface-danger-subtle-hover);
   --header-color: var(--fds-semantic-surface-danger-subtle);
   border-top-color: var(--header-color);
 }
