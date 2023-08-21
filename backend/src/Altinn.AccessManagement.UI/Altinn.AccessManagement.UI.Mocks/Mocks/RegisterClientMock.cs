@@ -9,6 +9,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class RegisterClientMock : IRegisterClient
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
+        /// </summary>
+        /// <param name="httpClient">http client</param>
+        public RegisterClientMock(HttpClient httpClient)
+        {
+        }
+        public RegisterClientMock() { }
+
         /// <inheritdoc/>
         public Task<Party> GetPartyForOrganization(string organizationNumber)
         {

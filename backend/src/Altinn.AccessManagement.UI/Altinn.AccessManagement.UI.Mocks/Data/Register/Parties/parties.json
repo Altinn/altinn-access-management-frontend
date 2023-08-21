@@ -365,17 +365,60 @@
     "ChildParties": null
   },
   {
-    "partyId": "50067798",
-    "partyTypeName": 2,
-    "orgNumber": "910510789",
-    "ssn": null,
-    "unitType": "AS",
-    "name": "VIKESÅ OG ÅLVUNDFJORD",
-    "isDeleted": false,
-    "onlyHierarchyElementWithNoAccess": false,
-    "person": null,
-    "organisation": null,
-    "childParties": null
+    "PartyTypeName": 2,
+    "SSN": "",
+    "OrgNumber": "910510789",
+    "Person": null,
+    "Organization": {
+      "OrgNumber": "910510789",
+      "Name": "VIKESÅ OG ÅLVUNDFJORD",
+      "UnitType": "AS",
+      "TelephoneNumber": "12345678",
+      "MobileNumber": "92010000",
+      "FaxNumber": "92110000",
+      "EMailAddress": "central@vikesaa.no",
+      "InternetAddress": "http://vikesaa.no",
+      "MailingAddress": "Jarles Gate 1",
+      "MailingPostalCode": "0170",
+      "MailingPostalCity": "Oslo",
+      "BusinessAddress": "Jarles Gate 1",
+      "BusinessPostalCode": "0170",
+      "BusinessPostalCity": "By"
+    },
+    "PartyId": 50067798,
+    "UnitType": "AS",
+    "Name": "VIKESÅ OG ÅLVUNDFJORD",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "ChildParties": null
+  },
+  {
+    "PartyTypeName": 2,
+    "SSN": "",
+    "OrgNumber": "991825827",
+    "Person": null,
+    "Organization": {
+      "OrgNumber": "991825827",
+      "Name": "Digitaliseringsdirektoratet",
+      "UnitType": "AS",
+      "TelephoneNumber": "12345678",
+      "MobileNumber": "92010000",
+      "FaxNumber": "92110000",
+      "EMailAddress": "the@digidir.no",
+      "InternetAddress": "https://www.digdir.no/",
+      "MailingAddress": "Økern Portal",
+      "MailingPostalCode": "0170",
+      "MailingPostalCity": "Oslo",
+      "BusinessAddress": "Økern Portal",
+      "BusinessPostalCode": "0170",
+      "BusinessPostalCity": "Oslo"
+    },
+    "PartyId": 50067798,
+    "UnitType": "AS",
+    "Name": "VIKESÅ OG ÅLVUNDFJORD",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "ChildParties": null
   }
 
 ]
