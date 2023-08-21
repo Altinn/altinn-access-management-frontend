@@ -1,8 +1,6 @@
 ﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Register.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -15,12 +13,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
         /// </summary>
         /// <param name="httpClient">http client</param>
-        /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
-        /// <param name="accessTokenProvider">the handler for access token generator</param>
-        public RegisterClientMock(
-            HttpClient httpClient,
-            IHttpContextAccessor httpContextAccessor,
-            IAccessTokenProvider accessTokenProvider)
+        public RegisterClientMock(HttpClient httpClient)
         {
         }
         public RegisterClientMock() { }
