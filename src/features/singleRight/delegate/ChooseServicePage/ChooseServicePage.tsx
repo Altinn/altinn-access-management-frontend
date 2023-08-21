@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PersonIcon, FilterIcon } from '@navikt/aksel-icons';
-import { SearchField } from '@altinn/altinn-design-system';
+import { CircularProgress, SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -296,6 +296,12 @@ export const ChooseServicePage = () => {
             </div>
             {searchResults()}
           </div>
+          <CircularProgress
+            width={150}
+            value={25}
+            label='1/4'
+            id='progress'
+          ></CircularProgress>
         </PageContent>
       </Page>
     </PageContainer>
