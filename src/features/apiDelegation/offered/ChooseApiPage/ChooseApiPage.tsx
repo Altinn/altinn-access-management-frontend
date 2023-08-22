@@ -150,7 +150,7 @@ export const ChooseApiPage = () => {
   return (
     <PageContainer>
       <Page
-        color={PageColor.Light}
+        color={PageColor.Dark}
         size={isSm ? PageSize.Small : PageSize.Medium}
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
