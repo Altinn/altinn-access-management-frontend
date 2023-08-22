@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
 import { PersonIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
@@ -283,6 +284,9 @@ export const ChooseServicePage = () => {
             color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
             collection={selectedResourcesActionBars}
             compact={isSm}
+            proceedToPath={
+              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
+            }
           />
           <div className={classes.searchSection}>
             <div className={classes.searchInputs}>

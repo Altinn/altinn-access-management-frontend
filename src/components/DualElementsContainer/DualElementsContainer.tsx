@@ -6,22 +6,11 @@ import classes from './DualElementsContainer.module.css';
  * @component
  * A component that displays two elements side by side within a container.
  
- *
- * @param {React.ReactNode} leftElement - The element to display on the left side.
- * @param {React.ReactNode} rightElement - The element to display on the right side.
- *
  * @example
- * import React from 'react';
- * import { DualElementsContainer } from './DualElementsContainer';
- *
- * const MyComponent = () => {
- *   return (
- *     <DualElementsContainer
- *       leftElement={<button>Left Button</button>}
- *       rightElement={<button>Right Button</button>}
- *     />
- *   );
- * };
+ * <DualElementsContainer
+ *  leftElement={<button>Left Button</button>}
+ *  rightElement={<button>Right Button</button>}
+ * />
  */
 
 export interface SplitButtonContainerProps {
