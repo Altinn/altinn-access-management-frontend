@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
 import { PersonIcon, FilterIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
@@ -12,6 +13,7 @@ import {
   Alert,
   Button,
 } from '@digdir/design-system-react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Page,
@@ -22,6 +24,7 @@ import {
   Filter,
   ActionBar,
   CollectionBar,
+  DualElementsContainer,
   PageColor,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -37,6 +40,8 @@ import {
   delegationAccessCheck,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { GeneralPath, SingleRightPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -45,6 +50,7 @@ const searchResultsPerPage = 10;
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
+  const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
@@ -93,7 +99,7 @@ export const ChooseServicePage = () => {
       {filters.map((filterValue: string) => (
         <Chip.Removable
           key={filterValue}
-          aria-label={t('common.remove') + ' ' + getFilterLabel(filterValue)}
+          aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
           onClick={() => {
             unCheckFilter(filterValue);
           }}
@@ -137,7 +143,7 @@ export const ChooseServicePage = () => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {totalNumberOfResults.toString() + ' ' + t('single_rights.search_hits')}
+                {String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
@@ -187,6 +193,20 @@ export const ChooseServicePage = () => {
     } else {
       return 'new_error';
     }
+  };
+
+  const onCancel = () => {
+    const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    window.location.href =
+      'https://' +
+      cleanHostname +
+      '/' +
+      String(GeneralPath.Altinn2SingleRights) +
+      '?userID=' +
+      getCookie('AltinnUserId') +
+      '&amp;' +
+      'partyID=' +
+      getCookie('AltinnPartyId');
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
@@ -264,6 +284,9 @@ export const ChooseServicePage = () => {
             color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
             collection={selectedResourcesActionBars}
             compact={isSm}
+            proceedToPath={
+              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
+            }
           />
           <div className={classes.searchSection}>
             <div className={classes.searchInputs}>
@@ -293,6 +316,35 @@ export const ChooseServicePage = () => {
               ></Filter>
             </div>
             {searchResults()}
+            <DualElementsContainer
+              leftElement={
+                <Button
+                  variant='quiet'
+                  color='danger'
+                  fullWidth={true}
+                  onClick={onCancel}
+                >
+                  {t('common.cancel')}
+                </Button>
+              }
+              rightElement={
+                <Button
+                  variant='filled'
+                  color='primary'
+                  fullWidth={true}
+                  onClick={() => {
+                    navigate(
+                      '/' +
+                        SingleRightPath.DelegateSingleRights +
+                        '/' +
+                        String(SingleRightPath.ChooseRights),
+                    );
+                  }}
+                >
+                  {t('common.proceed')}
+                </Button>
+              }
+            />
           </div>
         </PageContent>
       </Page>

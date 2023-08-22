@@ -197,7 +197,7 @@ export const ChooseOrgPage = () => {
   return (
     <PageContainer>
       <Page
-        color={PageColor.Light}
+        color={PageColor.Dark}
         size={isSm ? PageSize.Small : PageSize.Medium}
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
@@ -265,7 +265,7 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <NavigationButtons
-            previousText={t('api_delegation.cancel')}
+            previousText={t('common.cancel')}
             previousPath={
               '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
             }
