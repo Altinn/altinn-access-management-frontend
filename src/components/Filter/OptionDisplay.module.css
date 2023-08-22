@@ -22,6 +22,7 @@
   cursor: pointer;
   font: inherit;
   text-align: left;
+  padding: 0;
 }
 
 .option:hover {
@@ -30,11 +31,6 @@
 
 .option:active {
   background-color: var(--fds-semantic-surface-info-subtle-hover);
-}
-
-.checkboxGroup {
-  margin: 0;
-  padding: 0;
 }
 
 .propagationStopper {

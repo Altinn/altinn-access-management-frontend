@@ -110,12 +110,12 @@ export const OptionDisplay = ({
           }}
         >
           <Checkbox
-            className={classes.checkbox}
             onChange={() => {
               handleSelection(option.value);
             }}
             size={compact ? 'xsmall' : 'small'}
             value={option.value}
+            checked={isSelected}
           >
             {option.label}
           </Checkbox>
@@ -123,15 +123,6 @@ export const OptionDisplay = ({
       </button>
     );
   });
-
-  const newCheckboxes = (
-    <Checkbox.Group
-      value={selectedValues}
-      className={classes.checkboxGroup}
-    >
-      <div className={classes.optionList}>{checkboxes}</div>
-    </Checkbox.Group>
-  );
 
   return (
     <div className={classes.optionDisplay}>
@@ -149,7 +140,7 @@ export const OptionDisplay = ({
         className={classes.scrollContainer}
         tabIndex={-1}
       >
-        {newCheckboxes}
+        <div className={classes.optionList}>{checkboxes}</div>
       </div>
     </div>
   );
