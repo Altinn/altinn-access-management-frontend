@@ -37,7 +37,6 @@ import {
   delegationAccessCheck,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
-import { ProgressModal } from '@/components/ProgressModal/ProgressModal';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -55,7 +54,6 @@ export const ChooseServicePage = () => {
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
   );
-  const [modalOpen, setModalOpen] = useState(false);
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
     searchString,
@@ -298,19 +296,6 @@ export const ChooseServicePage = () => {
             </div>
             {searchResults()}
           </div>
-          <Button
-            onClick={() => {
-              setModalOpen(!modalOpen);
-            }}
-          >
-            Åpne
-          </Button>
-          <ProgressModal
-            open={modalOpen}
-            progressLabel='1/5'
-            progressValue={20}
-            loadingText='Prosesserer delegeringer'
-          ></ProgressModal>
         </PageContent>
       </Page>
     </PageContainer>
