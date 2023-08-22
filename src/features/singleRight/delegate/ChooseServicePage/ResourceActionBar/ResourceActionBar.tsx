@@ -2,7 +2,12 @@
 import * as React from 'react';
 import { useMemo, useState } from 'react';
 import { Button, Paragraph } from '@digdir/design-system-react';
-import { PlusCircleIcon, MinusCircleIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import {
+  PlusCircleIcon,
+  MinusCircleIcon,
+  ExclamationmarkTriangleIcon,
+  ArrowUndoIcon,
+} from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
@@ -77,12 +82,12 @@ export const ResourceActionBar = ({
   const removeButton = (
     <Button
       variant='quiet'
-      icon={<MinusCircleIcon title='remove' />}
+      icon={<ArrowUndoIcon title={t('common.undo')} />}
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
       iconPlacement='right'
     >
-      {!compact && t('common.remove')}
+      {!compact && t('common.undo')}
     </Button>
   );
 

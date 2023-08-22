@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PersonIcon, FilterIcon } from '@navikt/aksel-icons';
+import { PersonIcon, FilterIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,12 +17,10 @@ import {
   Page,
   PageHeader,
   PageContent,
-  PageSize,
   PageContainer,
   Filter,
   ActionBar,
   CollectionBar,
-  PageColor,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
@@ -240,12 +238,13 @@ export const ChooseServicePage = () => {
       actions={
         <Button
           variant='quiet'
-          size='small'
+          size={isSm ? 'medium' : 'small'}
           onClick={() => {
             onRemove(resource.service?.identifier);
           }}
+          icon={isSm && <MinusCircleIcon title={t('common.remove')} />}
         >
-          {t('common.remove')}
+          {!isSm && t('common.remove')}
         </Button>
       }
     ></ActionBar>
@@ -254,42 +253,14 @@ export const ChooseServicePage = () => {
   return (
     <PageContainer>
       <Page
-        color={PageColor.Light}
-        size={isSm ? PageSize.Small : PageSize.Medium}
+        color='light'
+        size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
           <CollectionBar
             title='Valgte tjenester'
             color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
-            collection={selectedResourcesActionBars}
-            compact={isSm}
-          />
-          tester
-          <CollectionBar
-            title='Valgte tjenester'
-            color={'warning'}
-            collection={selectedResourcesActionBars}
-            compact={isSm}
-          />
-          tester
-          <CollectionBar
-            title='Valgte tjenester'
-            color={'danger'}
-            collection={selectedResourcesActionBars}
-            compact={isSm}
-          />
-          tester
-          <CollectionBar
-            title='Valgte tjenester'
-            color={'light'}
-            collection={selectedResourcesActionBars}
-            compact={isSm}
-          />
-          tester
-          <CollectionBar
-            title='Valgte tjenester'
-            color={'dark'}
             collection={selectedResourcesActionBars}
             compact={isSm}
           />

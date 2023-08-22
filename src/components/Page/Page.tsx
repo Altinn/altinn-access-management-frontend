@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { PageColor, PageContext, PageSize } from './Context';
+import { type PageColor, PageContext, type PageSize } from './Context';
 import classes from './Page.module.css';
 
 export interface PageProps {
@@ -9,7 +9,7 @@ export interface PageProps {
   size?: PageSize;
 }
 
-export const Page = ({ children, color = PageColor.Dark, size = PageSize.Medium }: PageProps) => {
+export const Page = ({ children, color = 'dark', size = 'medium' }: PageProps) => {
   return (
     <div className={classes.page}>
       <PageContext.Provider value={{ color, size }}>{children}</PageContext.Provider>

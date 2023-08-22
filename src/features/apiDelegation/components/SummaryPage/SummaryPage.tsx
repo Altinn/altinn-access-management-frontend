@@ -14,8 +14,7 @@ import {
   Page,
   PageContent,
   PageHeader,
-  PageColor,
-  PageSize,
+  type PageColor,
 } from '@/components';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -55,7 +54,7 @@ export const SummaryPage = ({
   failedDelegations,
   successfulDelegations,
   pageHeaderText,
-  headerColor = PageColor.Light,
+  headerColor = 'dark',
   headerIcon,
   topListText,
   failedDelegationText,
@@ -154,7 +153,7 @@ export const SummaryPage = ({
   return (
     <Page
       color={headerColor}
-      size={isSm ? PageSize.Small : PageSize.Medium}
+      size={isSm ? 'small' : 'medium'}
     >
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>

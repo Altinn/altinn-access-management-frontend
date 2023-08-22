@@ -1,20 +1,12 @@
 import { createContext, useContext } from 'react';
 
-export enum PageColor {
-  Dark = 'dark',
-  Light = 'light',
-  Success = 'success',
-  Danger = 'danger',
-}
+export type PageColor = 'dark' | 'light' | 'success' | 'danger';
 
-export enum PageSize {
-  Small = 'small',
-  Medium = 'medium',
-}
+export type PageSize = 'small' | 'medium';
 
 export const PageContext = createContext({
-  color: PageColor.Dark,
-  size: PageSize.Medium,
+  color: 'dark',
+  size: 'medium',
 });
 
 export const usePageContext = () => {

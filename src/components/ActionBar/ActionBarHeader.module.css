@@ -71,7 +71,7 @@
 }
 
 .actionBar.warning {
-  --border-color: var(--fds-semantic-surface-warning-default);
+  --border-color: var(--fds-semantic-border-warning-default);
   --background-color: var(--fds-semantic-surface-warning-subtle);
 }
 
@@ -80,7 +80,7 @@
 }
 
 .actionBar.success {
-  --border-color: var(--fds-semantic-surface-success-subtle-hover);
+  --border-color: var(--fds-semantic-border-success-default);
   --background-color: var(--fds-semantic-surface-success-subtle);
 }
 
@@ -89,7 +89,7 @@
 }
 
 .actionBar.danger {
-  --border-color: var(--fds-semantic-surface-danger-subtle-hover);
+  --border-color: var(--fds-semantic-border-danger-default);
   --background-color: var(--fds-semantic-surface-danger-subtle);
 }
 
