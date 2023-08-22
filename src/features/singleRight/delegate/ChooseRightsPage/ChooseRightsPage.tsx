@@ -3,7 +3,7 @@ import { PageHeader } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 
-import { Page, PageColor, PageContainer, PageContent, PageSize } from '@/components';
+import { Page, PageColor, PageContainer, PageContent } from '@/components';
 
 export const ChooseRightsPage = () => {
   const { t } = useTranslation();
