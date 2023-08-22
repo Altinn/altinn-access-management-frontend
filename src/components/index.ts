@@ -11,13 +11,4 @@ export { DelegationActionBar } from './DelegationActionBar';
 export { ErrorPanel } from './ErrorPanel';
 export { CollectionBar, type CollectionBarProps } from './CollectionBar';
 export { Filter, type FilterOption } from './Filter';
-export {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeading,
-  DialogTrigger,
-  DialogClose,
-  type DialogProps,
-  type DialogTriggerProps,
-} from './Dialog';
+export { Dialog, DialogContent, DialogDescription, type DialogProps } from './Dialog';

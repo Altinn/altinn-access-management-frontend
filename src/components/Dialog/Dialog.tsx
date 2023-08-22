@@ -4,22 +4,19 @@ import { useFloating, useClick, useDismiss, useRole, useInteractions } from '@fl
 import { DialogContext } from './DialogContext';
 
 export interface DialogProps {
-  initialOpen?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
 export function useDialog({
-  initialOpen = false,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
 }: DialogProps = {}) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(initialOpen);
   const [labelId, setLabelId] = React.useState<string | undefined>();
   const [descriptionId, setDescriptionId] = React.useState<string | undefined>();
 
-  const open = controlledOpen ?? uncontrolledOpen;
-  const setOpen = setControlledOpen ?? setUncontrolledOpen;
+  const open = controlledOpen;
+  const setOpen = setControlledOpen;
 
   const data = useFloating({
     open,
@@ -51,6 +48,7 @@ export function useDialog({
   );
 }
 
+// If you need to develop this component further, see: https://codesandbox.io/s/charming-bush-47epk2?file=/src/App.tsx
 export function Dialog({
   children,
   ...options
