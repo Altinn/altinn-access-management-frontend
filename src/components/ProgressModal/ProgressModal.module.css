@@ -1,0 +1,34 @@
+@media only screen and (max-width: 768px) {
+  .loadingTextContainer {
+    margin-top: 10px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .content {
+    width: 350px;
+    height: 250px;
+  }
+
+  .loadingTextContainer {
+    margin-top: 40px;
+  }
+
+  .circularProgressContainer {
+    margin-top: 50px;
+  }
+}
+
+.loadingTextContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.circularProgressContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.loadingText {
+  margin-right: 10px;
+}
