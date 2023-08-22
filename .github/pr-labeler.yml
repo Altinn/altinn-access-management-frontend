@@ -1,4 +1,5 @@
 kind/feature-request: ['feature/*', 'feat/*', 'kind/feature-request/*']
+bugfix: ['bugfix/*', 'fix/*', 'kind/bug/*', 'bug/*']
 kind/bug: ['bugfix/*', 'fix/*', 'kind/bug/*', 'bug/*']
 kind/documentation: ['documentation/*', 'docs/*', 'kind/documentation/*']
 enhancement: enhancement/*
