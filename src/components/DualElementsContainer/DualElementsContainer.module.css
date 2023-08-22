@@ -1,18 +1,3 @@
-@media only screen and (max-width: 0px) {
-  .elementContainer {
-    justify-content: center;
-    margin-bottom: 0px;
-  }
-
-  .leftElement {
-    max-width: 50%;
-  }
-
-  .rightElement {
-    max-width: 50%;
-  }
-}
-
 @media only screen and (min-width: 769px) {
   .elementContainer {
     justify-content: flex-end;

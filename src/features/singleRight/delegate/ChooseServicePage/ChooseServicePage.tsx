@@ -142,7 +142,7 @@ export const ChooseServicePage = () => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {String(totalNumberOfResults) + ' ' + t('single_rights_delegation.search_hits')}
+                {String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
@@ -276,9 +276,7 @@ export const ChooseServicePage = () => {
         color={PageColor.Light}
         size={isSm ? PageSize.Small : PageSize.Medium}
       >
-        <PageHeader icon={<PersonIcon />}>
-          {t('single_rights_delegation.delegate_single_rights')}
-        </PageHeader>
+        <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
           <CollectionBar
             title='Valgte tjenester'

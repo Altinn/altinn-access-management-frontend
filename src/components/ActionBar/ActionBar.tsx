@@ -9,24 +9,34 @@ import { ActionBarHeader } from './ActionBarHeader';
 export interface ActionBarProps {
   /** Additional actions to be displayed on the right side of the ActionBar. */
   actions?: React.ReactNode;
+
   /** Additional text to be displayed on the right side of the header of the ActionBar. */
   additionalText?: React.ReactNode;
+
   /** The content to be displayed as expandable content inside the ActionBar. */
   children?: React.ReactNode;
+
   /** The color variant of the ActionBar. */
   color?: 'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'danger';
+
   /** The size variant of the ActionBar. */
   size?: 'small' | 'medium' | 'large';
+
   /** Heading level. Use this to make sure the heading is correct according to you page heading levels */
   headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+
   /** The click event handler for the ActionBar header. */
   onClick?: ClickHandler;
+
   /** Specifies whether the ActionBar is open or closed. */
   open?: boolean;
+
   /**  Defaults the ActionBar to open if not controlled */
   defaultOpen?: boolean;
+
   /** The subtitle to be displayed in the header of the ActionBar. */
   subtitle?: React.ReactNode;
+
   /** The title to be displayed in the header of the ActionBar. */
   title?: React.ReactNode;
 }
