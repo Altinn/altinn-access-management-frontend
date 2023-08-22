@@ -2,6 +2,14 @@ import * as React from 'react';
 
 import classes from './DualElementsContainer.module.css';
 
+export interface SplitButtonContainerProps {
+  /** The element to display on the left side */
+  leftElement: React.ReactNode;
+
+  /** The element to display on the right side */
+  rightElement: React.ReactNode;
+}
+
 /**
  * @component
  * A component that displays two elements side by side within a container.
@@ -12,14 +20,6 @@ import classes from './DualElementsContainer.module.css';
  *  rightElement={<button>Right Button</button>}
  * />
  */
-
-export interface SplitButtonContainerProps {
-  /** The element to display on the left side */
-  leftElement: React.ReactNode;
-
-  /** The element to display on the right side */
-  rightElement: React.ReactNode;
-}
 
 export const DualElementsContainer = ({ leftElement, rightElement }: SplitButtonContainerProps) => {
   return (
