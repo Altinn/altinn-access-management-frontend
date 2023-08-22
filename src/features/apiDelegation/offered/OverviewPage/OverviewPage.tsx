@@ -15,7 +15,7 @@ export const OverviewPage = () => {
   return (
     <PageContainer>
       <Page
-        color={PageColor.Light}
+        color={PageColor.Dark}
         size={isSm ? PageSize.Small : PageSize.Medium}
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
