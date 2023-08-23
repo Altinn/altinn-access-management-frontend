@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { PageHeader } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 
-import { Page, PageContainer, PageContent } from '@/components';
+import { Page, PageContainer, PageContent, PageHeader } from '@/components';
 
 export const ChooseRightsPage = () => {
   const { t } = useTranslation();
