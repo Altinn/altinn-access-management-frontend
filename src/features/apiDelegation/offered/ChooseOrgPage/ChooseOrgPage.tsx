@@ -11,11 +11,9 @@ import {
   Page,
   PageHeader,
   PageContent,
-  PageSize,
   ActionBar,
   NavigationButtons,
   PageContainer,
-  PageColor,
 } from '@/components';
 import {
   softAddOrg,
@@ -197,8 +195,8 @@ export const ChooseOrgPage = () => {
   return (
     <PageContainer>
       <Page
-        color={PageColor.Light}
-        size={isSm ? PageSize.Small : PageSize.Medium}
+        color='dark'
+        size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
@@ -265,7 +263,7 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <NavigationButtons
-            previousText={t('api_delegation.cancel')}
+            previousText={t('common.cancel')}
             previousPath={
               '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
             }

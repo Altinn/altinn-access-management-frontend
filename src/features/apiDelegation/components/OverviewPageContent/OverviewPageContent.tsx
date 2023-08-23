@@ -226,7 +226,7 @@ export const OverviewPageContent = ({
                   onClick={handleSetIsEditable}
                   size='small'
                 >
-                  {t('api_delegation.cancel')}
+                  {t('common.cancel')}
                 </Button>
               )}
             </div>

@@ -17,6 +17,7 @@
     "search": "Søk",
     "add": "Legg til",
     "remove": "Fjern",
+    "undo": "Angra",
     "to": "Til",
     "proceed": "Gå vidare",
     "added": "lagt til",
@@ -24,7 +25,7 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd ein feil",
     "general_error_paragraph": "Vi klarer ikkje å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen seinare. Om problemet hald fram, ta kontakt med Altinn Servicedesk.",
-    "not_delegable": "Ikkje delegerbar"
+    "cancel": "Avbryt"
   },
   "profile": {
     "received": "Mottekne",
@@ -66,7 +67,6 @@
     "previous":"Forrige",
     "next": "Neste",
     "add_new_business": "Legg til ny verksemd",
-    "undo": "Angra",
     "card_title": "Programmerings\u00adgrensesnitt - API",
     "confirm_delegation": "Stadfest",
     "confirmation_page_content_top_text": "Du ønskjer å gi rettar til følgjande API:",
@@ -102,7 +102,7 @@
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg"
   },
-  "single_rights_delegation": {
+  "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettar",
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",

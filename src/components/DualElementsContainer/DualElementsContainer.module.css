@@ -1,45 +1,31 @@
-@media only screen and (max-width: 0px) {
-  .navButtonContainer {
-    justify-content: center;
-  }
-
-  .navButtonLeft {
-    max-width: 50%;
-  }
-
-  .navButtonRight {
-    max-width: 50%;
-  }
-}
-
 @media only screen and (min-width: 769px) {
-  .navButtonContainer {
+  .elementContainer {
     justify-content: flex-end;
+    margin-bottom: 2rem;
   }
 
-  .navButtonLeft {
+  .leftElement {
     max-width: 130px;
   }
 
-  .navButtonRight {
+  .rightElement {
     max-width: 130px;
   }
 }
 
-.navButtonContainer {
+.elementContainer {
   margin-top: 2rem;
   display: flex;
-  margin-bottom: 2rem;
 }
 
-.navButtonLeft {
+.leftElement {
   justify-content: flex-start;
   display: flex;
   flex: 1;
   margin-right: 10px;
 }
 
-.navButtonRight {
+.rightElement {
   justify-content: flex-end;
   display: flex;
   flex: 1;

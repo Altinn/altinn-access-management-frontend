@@ -7,7 +7,7 @@ import { ApiDelegationPath } from '@/routes/paths';
 import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import { SummaryPage, PageContainer, PageColor } from '@/components';
+import { SummaryPage, PageContainer } from '@/components';
 
 export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
@@ -46,7 +46,7 @@ export const ReceiptPage = () => {
             : undefined
         }
         headerIcon={<ApiIcon />}
-        headerColor={PageColor.Success}
+        headerColor='success'
         showNavigationButtons={false}
       ></SummaryPage>
     </PageContainer>
