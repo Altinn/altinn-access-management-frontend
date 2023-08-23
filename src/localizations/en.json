@@ -25,7 +25,7 @@
     "next": "Next",
     "general_error_title": "Sorry, looks like somthing went wrong",
     "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk.",
-    "not_delegable": "Not delegable"
+    "cancel": "Cancel"
   },
   "profile": {
     "received": "Received",
@@ -55,7 +55,6 @@
     "edit_accesses": "Edit accesses",
     "api_overview_text": "Here you'll find an overview over the API-accesses your organisation has delegated to other organisations",
     "api_received_overview_text": "Here you'll find an overview over the API-accesses your organisation has been granted by other organisations",
-    "cancel": "Cancel",
     "card_title": "Application programming interface - API",
     "give_access_to_new_api": "Give access to new API",
     "new_org_content_text": "Select which users will have access by clicking the plus sign. You can also add a new organization by using the search field.",

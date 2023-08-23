@@ -25,7 +25,7 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd en feil",
     "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn Servicedesk.",
-    "not_delegable": "Ikke delegerbar"
+    "cancel": "Avbryt"
   },
   "profile": {
     "received": "Mottatte",
@@ -55,7 +55,6 @@
     "edit_accesses": "Rediger tilganger",
     "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter.",
     "api_received_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har blitt tildelt av andre virksomheter.",
-    "cancel": "Avbryt",
     "give_access_to_new_api": "Gi tilgang til nytt API",
     "new_org_content_text": "Velg hvilke brukere som skal få tilgang ved å klikke pluss-tegnet. Du kan også legge til ny virksomhet ved å benytte søkefeltet.",
     "businesses_previously_delegated_to": "Tidligere tildelegerte virksomheter:",

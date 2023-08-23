@@ -263,7 +263,7 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <NavigationButtons
-            previousText={t('api_delegation.cancel')}
+            previousText={t('common.cancel')}
             previousPath={
               '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
             }
