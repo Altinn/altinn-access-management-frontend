@@ -37,6 +37,7 @@ import {
   delegationAccessCheck,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { ProgressModal } from '@/components/ProgressModal/ProgressModal';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -49,6 +50,7 @@ export const ChooseServicePage = () => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
   const delegableChosenServices = useAppSelector((state) =>
@@ -261,6 +263,19 @@ export const ChooseServicePage = () => {
           {t('single_rights_delegation.delegate_single_rights')}
         </PageHeader>
         <PageContent>
+          <Button
+            onClick={() => {
+              setModalOpen(!modalOpen);
+            }}
+          >
+            HER
+          </Button>
+          <ProgressModal
+            progressValue={25}
+            open={modalOpen}
+            progressLabel='1/5'
+            loadingText='Prosesserer delegeringer'
+          ></ProgressModal>
           <CollectionBar
             title='Valgte tjenester'
             color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}

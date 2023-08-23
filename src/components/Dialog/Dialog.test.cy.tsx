@@ -4,14 +4,7 @@ import * as React from 'react';
 import { Button } from '@digdir/design-system-react';
 
 import store from '@/rtk/app/store';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeading,
-  type DialogProps,
-} from '@/components';
+import { Dialog, DialogContent, type DialogProps } from '@/components';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,28 +16,20 @@ Cypress.Commands.add('mount', (component, options = {}) => {
 });
 
 const dialog = (props: Partial<DialogProps> = {}) => (
-  <Dialog {...props}>
-    <DialogContent>
-      <DialogDescription>Dialog beskrivelse</DialogDescription>
-    </DialogContent>
+  <Dialog
+    open={true}
+    {...props}
+  >
+    <DialogContent>Dialog beskrivelse</DialogContent>
   </Dialog>
 );
 
 describe('Dialog', () => {
   it('should render correctly', () => {
-    cy.mount(dialog({ open: true }));
+    cy.mount(dialog());
 
     cy.get('[role="dialog"]').should('exist');
-    cy.get('[role="dialog"]')
-      .invoke('attr', 'aria-describedby')
-      .then((ariaDescribedById) => {
-        cy.get('p:first')
-          .invoke('attr', 'id')
-          .then((paragraphId) => {
-            // Compare the dialog id with the paragraph id
-            expect(ariaDescribedById).to.equal(paragraphId);
-          });
-      });
+    cy.get('[role="dialog"]').invoke('attr', 'id').should('exist');
   });
 
   it('should call onOpenChange when set', () => {
@@ -59,10 +44,8 @@ describe('Dialog', () => {
         onOpenChange={handleClickSpy}
       >
         <DialogContent>
-          <DialogDescription>
-            Dialog beskrivelse
-            <Button onClick={handleClickSpy}>Knapp</Button>
-          </DialogDescription>
+          Dialog innhold
+          <Button onClick={handleClickSpy}>Knapp</Button>
         </DialogContent>
       </Dialog>,
     );

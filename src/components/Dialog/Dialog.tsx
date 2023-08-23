@@ -4,14 +4,14 @@ import { useFloating, useClick, useDismiss, useRole, useInteractions } from '@fl
 import { DialogContext } from './DialogContext';
 
 export interface DialogProps {
-  open?: boolean;
+  /** The state that tells if the dialog should be visible or not */
+  open: boolean;
+
+  /** Used for closing dialog by clicking outside it */
   onOpenChange?: (open: boolean) => void;
 }
 
-export function useDialog({
-  open: controlledOpen,
-  onOpenChange: setControlledOpen,
-}: DialogProps = {}) {
+export function useDialog({ open: controlledOpen, onOpenChange: setControlledOpen }: DialogProps) {
   const [labelId, setLabelId] = React.useState<string | undefined>();
   const [descriptionId, setDescriptionId] = React.useState<string | undefined>();
 

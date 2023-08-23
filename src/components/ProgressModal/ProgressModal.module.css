@@ -6,16 +6,10 @@
 
 @media only screen and (min-width: 769px) {
   .content {
-    width: 350px;
-    height: 250px;
-  }
-
-  .loadingTextContainer {
-    margin-top: 40px;
-  }
-
-  .circularProgressContainer {
-    margin-top: 50px;
+    padding: 10px 20px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }
 
