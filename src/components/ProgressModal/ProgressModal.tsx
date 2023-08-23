@@ -13,7 +13,7 @@ export interface ProgressModalProps extends Pick<DialogProps, 'open'> {
   /** The text that's displayed besides the spinner */
   loadingText?: string;
 
-  /** The text that's displayed in the middle of the Progress */
+  /** The text that's displayed in the middle of the progress bar */
   progressLabel?: string;
 
   /** A number value in percentage from 0-100 that sets how much of the circular progress that will be filled */
