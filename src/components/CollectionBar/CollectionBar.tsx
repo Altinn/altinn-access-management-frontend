@@ -55,7 +55,7 @@ export const CollectionBar = ({
               as={'span'}
               role='status'
               size='small'
-              className={classes.counterText}
+              className={cn(classes.counterText, classes[color])}
             >
               <FilesFillIcon
                 height={20}

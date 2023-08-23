@@ -5,6 +5,10 @@
   margin-right: 2rem !important;
 }
 
+.counterText.dark {
+  color: var(--fds-semantic-text-neutral-on_inverted);
+}
+
 .content {
   margin: 1.5rem;
   display: flex;

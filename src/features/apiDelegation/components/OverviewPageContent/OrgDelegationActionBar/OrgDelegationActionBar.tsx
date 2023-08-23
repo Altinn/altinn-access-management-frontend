@@ -63,9 +63,9 @@ export const OrgDelegationActionBar = ({
             size={'medium'}
             icon={<Cancel />}
             onClick={softRestoreAllCallback}
-            aria-label={String(t('api_delegation.undo')) + ' ' + organization.orgName}
+            aria-label={String(t('common.undo')) + ' ' + organization.orgName}
           >
-            {!isSm && t('api_delegation.undo')}
+            {!isSm && t('common.undo')}
           </Button>
         ) : (
           <div>

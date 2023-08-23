@@ -9,11 +9,9 @@ import {
   Page,
   PageHeader,
   PageContent,
-  PageSize,
   NavigationButtons,
   PageContainer,
   ErrorPanel,
-  PageColor,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
@@ -150,8 +148,8 @@ export const ChooseApiPage = () => {
   return (
     <PageContainer>
       <Page
-        color={PageColor.Dark}
-        size={isSm ? PageSize.Small : PageSize.Medium}
+        color='dark'
+        size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>

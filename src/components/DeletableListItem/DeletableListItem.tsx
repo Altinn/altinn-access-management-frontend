@@ -39,9 +39,9 @@ export const DeletableListItem = ({
           onClick={softRestoreCallback}
           icon={<Cancel />}
           size='medium'
-          aria-label={String(t('api_delegation.undo')) + ' ' + item.apiName}
+          aria-label={String(t('common.undo')) + ' ' + item.apiName}
         >
-          {!isSm && t('api_delegation.undo')}
+          {!isSm && t('common.undo')}
         </Button>
       ) : (
         <Button
