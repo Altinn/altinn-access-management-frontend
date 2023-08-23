@@ -2,12 +2,7 @@
 import * as React from 'react';
 import { useMemo, useState } from 'react';
 import { Button, Paragraph } from '@digdir/design-system-react';
-import {
-  PlusCircleIcon,
-  MinusCircleIcon,
-  ExclamationmarkTriangleIcon,
-  ArrowUndoIcon,
-} from '@navikt/aksel-icons';
+import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
