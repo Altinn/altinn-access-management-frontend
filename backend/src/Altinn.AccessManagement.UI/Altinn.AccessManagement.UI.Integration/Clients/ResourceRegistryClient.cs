@@ -132,24 +132,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             List<ServiceResource> resources = null;
 
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
             try
             {
                 string endpointUrl = "resource/resourcelist";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+                string content = await response.Content.ReadAsStringAsync();
+
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    JsonSerializerOptions options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    };
-                    string content = await response.Content.ReadAsStringAsync();
-                    resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
+                    return JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
                 }
-                else
-                {
-                    throw new HttpStatusException(response.StatusCode, "Resource List did not return expected data");
-                }
+
+                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(content, options);
+                throw error;
             }
             catch (Exception ex) when (ex is not HttpStatusException)
             {

@@ -16,8 +16,10 @@ import classes from './CollectionBar.module.css';
 export interface CollectionBarProps extends Pick<ActionBarProps, 'color' | 'title'> {
   /** The list of selected objects */
   collection: React.ReactNode[];
-  /** Whether or not to use the compact variant */
+
+  /** When true saves as much space as possible. Usually used for smaller screens */
   compact?: boolean;
+
   /** The path to redirect to when pressing the proceed button */
   proceedToPath?: string;
 }
@@ -53,7 +55,7 @@ export const CollectionBar = ({
               as={'span'}
               role='status'
               size='small'
-              className={classes.counterText}
+              className={cn(classes.counterText, classes[color])}
             >
               <FilesFillIcon
                 height={20}

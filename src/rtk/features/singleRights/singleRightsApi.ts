@@ -1,5 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+interface PaginatedListDTO {
+  page: number;
+  numEntriesTotal: number;
+  pageList: ServiceResource[];
+}
+
 export interface ServiceResource {
   title: string;
   identifier: string;
@@ -12,12 +20,6 @@ export interface ServiceResource {
 export interface ResourceOwner {
   organisationName: string;
   organisationNumber: string;
-}
-
-interface paginatedListDTO {
-  page: number;
-  numEntriesTotal: number;
-  pageList: ServiceResource[];
 }
 
 interface resourceReference {
@@ -37,9 +39,19 @@ const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: fetchBaseQuery({
+    baseUrl,
+    prepareHeaders: (headers: Headers): Headers => {
+      const token = getCookie('XSRF-TOKEN');
+      if (typeof token === 'string') {
+        headers.set('X-XSRF-TOKEN', token);
+      }
+
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
-    getPaginatedSearch: builder.query<paginatedListDTO, searchParams>({
+    getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
         const { searchString, ROfilters, page, resultsPerPage } = args;
         let filterUrl = '';

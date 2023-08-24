@@ -9,12 +9,16 @@
     ],
     "action": "read",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": [
+          {
+            "name": "MissingDelegationAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   },
@@ -28,12 +32,16 @@
     ],
     "action": "write",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": [
+          {
+            "name": "RoleAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   },
@@ -47,12 +55,16 @@
     ],
     "action": "sign",
     "status": "NotDelegable",
-    "faultCode": "UserMissingRight",
-    "reason": "User does not match any of the required role requirements (DAGL, REGNA)",
-    "reasonParams": [
+    "details": [
       {
-        "name": "RoleRequirements",
-        "value": "DAGL, REGNA"
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": [
+          {
+            "name": "RoleAccess",
+            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
+          }
+        ]
       }
     ]
   }

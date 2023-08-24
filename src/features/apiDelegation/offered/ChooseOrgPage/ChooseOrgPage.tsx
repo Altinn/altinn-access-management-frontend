@@ -11,7 +11,6 @@ import {
   Page,
   PageHeader,
   PageContent,
-  PageSize,
   ActionBar,
   NavigationButtons,
   PageContainer,
@@ -195,7 +194,10 @@ export const ChooseOrgPage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
+      <Page
+        color='dark'
+        size={isSm ? 'small' : 'medium'}
+      >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
@@ -261,7 +263,7 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <NavigationButtons
-            previousText={t('api_delegation.cancel')}
+            previousText={t('common.cancel')}
             previousPath={
               '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
             }

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
-import axios from 'axios';
-import { PersonCheckmarkIcon, FilterIcon } from '@navikt/aksel-icons';
+import { PersonIcon, FilterIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,24 +13,33 @@ import {
   Alert,
   Button,
 } from '@digdir/design-system-react';
+import { useNavigate } from 'react-router-dom';
 
-import { DelegationRequestDto } from '@/dataObjects/dtos/CheckDelegationAccessDto';
 import {
   Page,
   PageHeader,
   PageContent,
-  PageSize,
   PageContainer,
   Filter,
   ActionBar,
   CollectionBar,
+  DualElementsContainer,
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
   useGetResourceOwnersQuery,
   type ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
+import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
+import {
+  type DelegationRequestDto,
+  delegationAccessCheck,
+  removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { GeneralPath, SingleRightPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -39,12 +48,16 @@ const searchResultsPerPage = 10;
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
-
+  const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedResources, setSelectedResources] = useState<ServiceResource[]>([]);
+  const dispatch = useAppDispatch();
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
+  const delegableChosenServices = useAppSelector((state) =>
+    state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
+  );
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
     searchString,
@@ -53,26 +66,9 @@ export const ChooseServicePage = () => {
     resultsPerPage: searchResultsPerPage,
   });
 
-  const { data: ROdata } = useGetResourceOwnersQuery();
-
   const resources = data?.pageList;
   const totalNumberOfResults = data?.numEntriesTotal;
-  const resultsPerPage = 10;
-
-  const checkDelegationAccess = () => {
-    const dto = new DelegationRequestDto('urn:altinn:resource', 'testapi');
-
-    axios
-      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${1232131234}`, dto)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-
-  checkDelegationAccess();
+  const { data: ROdata } = useGetResourceOwnersQuery();
 
   const filterOptions = ROdata
     ? ROdata.map((ro) => {
@@ -84,7 +80,7 @@ export const ChooseServicePage = () => {
     : [];
 
   const unCheckFilter = (filter: string) => {
-    setFilters((prev) => prev.filter((f) => f !== filter));
+    setFilters((prevState: string[]) => prevState.filter((f) => f !== filter));
     setCurrentPage(1);
   };
 
@@ -98,7 +94,7 @@ export const ChooseServicePage = () => {
       size='small'
       className={classes.filterChips}
     >
-      {filters.map((filterValue) => (
+      {filters.map((filterValue: string) => (
         <Chip.Removable
           key={filterValue}
           aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
@@ -145,7 +141,7 @@ export const ChooseServicePage = () => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {String(totalNumberOfResults) + ' ' + t('single_rights_delegation.search_hits')}
+                {String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
@@ -155,7 +151,7 @@ export const ChooseServicePage = () => {
             <Pagination
               className={classes.pagination}
               currentPage={currentPage}
-              totalPages={Math.ceil(totalNumberOfResults / resultsPerPage)}
+              totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
               nextLabel={t('common.next')}
               previousLabel={t('common.previous')}
               itemLabel={(num: number) => `Side ${num}`}
@@ -170,31 +166,81 @@ export const ChooseServicePage = () => {
     }
   };
 
-  const onAdd = (resource: ServiceResource) => {
-    setSelectedResources([...selectedResources, resource]);
+  const onAdd = (identifier: string, serviceResource: ServiceResource) => {
+    const dto: DelegationRequestDto = {
+      serviceResource,
+      delegationRequest: new ResourceIdentifierDto('urn:altinn:resource', identifier),
+    };
+
+    void dispatch(delegationAccessCheck(dto));
   };
 
-  const onRemove = (resource: ServiceResource) => {
-    setSelectedResources(selectedResources.filter((r) => r.title !== resource.title));
+  const onRemove = (identifier: string | undefined) => {
+    void dispatch(removeServiceResource(identifier));
+  };
+
+  const getErrorCodeTextKey = (errorCode: string | undefined) => {
+    if (errorCode === 'MissingRoleAccess') {
+      return 'single_rights.missing_role_access';
+    } else if (errorCode === 'MissingDelegationAccess') {
+      return 'single_rights.missing_delegation_access';
+    } else if (errorCode === 'Unknown') {
+      return 'single_rights.unknown';
+    } else if (errorCode === undefined) {
+      return undefined;
+    } else {
+      return 'new_error';
+    }
+  };
+
+  const onCancel = () => {
+    const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    window.location.href =
+      'https://' +
+      cleanHostname +
+      '/' +
+      String(GeneralPath.Altinn2SingleRights) +
+      '?userID=' +
+      getCookie('AltinnUserId') +
+      '&amp;' +
+      'partyID=' +
+      getCookie('AltinnPartyId');
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
-    const isAdded = selectedResources.some((selected) => selected.title === resource.title);
+    const status = chosenServices.find((selected) => selected.service?.title === resource.title)
+      ?.status;
+    const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)
+      ?.errorCode;
+    const errorCodeTextKey = getErrorCodeTextKey(errorCode);
+
     return (
       <ResourceActionBar
         key={resource.identifier ?? index}
-        color={isAdded ? 'success' : 'neutral'}
         title={resource.title}
         subtitle={resource.resourceOwnerName}
-        isAdded={isAdded}
-        onAdd={() => {
-          onAdd(resource);
+        status={status ?? 'Unchecked'}
+        onAddClick={() => {
+          onAdd(resource.identifier, resource);
         }}
-        onRemove={() => {
-          onRemove(resource);
+        onRemoveClick={() => {
+          onRemove(resource.identifier);
         }}
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        errorText={t(`${errorCodeTextKey}_title`)}
+        compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
+          {errorCodeTextKey && (
+            <Alert
+              severity='danger'
+              elevated={false}
+              className={classes.notDelegableAlert}
+            >
+              <Heading size='xsmall'>{t(`${errorCodeTextKey}_title`)}</Heading>
+              <Paragraph>{t(`${errorCodeTextKey}`)}</Paragraph>
+            </Alert>
+          )}
           <Paragraph size='small'>{resource.description}</Paragraph>
           <Paragraph size='small'>{resource.rightDescription}</Paragraph>
         </div>
@@ -202,22 +248,23 @@ export const ChooseServicePage = () => {
     );
   });
 
-  const selectedResourcesActionBars = selectedResources.map((resource, index) => (
+  const selectedResourcesActionBars = delegableChosenServices.map((resource, index) => (
     <ActionBar
       key={index}
-      title={resource.title}
-      subtitle={resource.resourceOwnerName}
+      title={resource.service?.title}
+      subtitle={resource.service?.resourceOwnerName}
       size='small'
       color='success'
       actions={
         <Button
           variant='quiet'
-          size='small'
+          size={isSm ? 'medium' : 'small'}
           onClick={() => {
-            onRemove(resource);
+            onRemove(resource.service?.identifier);
           }}
+          icon={isSm && <MinusCircleIcon title={t('common.remove')} />}
         >
-          {t('common.remove')}
+          {!isSm && t('common.remove')}
         </Button>
       }
     ></ActionBar>
@@ -225,22 +272,26 @@ export const ChooseServicePage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
-        <PageHeader icon={<PersonCheckmarkIcon />}>EnkeltRettigheter</PageHeader>
+      <Page
+        color='light'
+        size={isSm ? 'small' : 'medium'}
+      >
+        <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          {selectedResourcesActionBars.length > 0 && (
-            <CollectionBar
-              title='Valgte tjenester'
-              color='success'
-              collection={selectedResourcesActionBars}
-              compact={isSm}
-            />
-          )}
+          <CollectionBar
+            title='Valgte tjenester'
+            color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
+            collection={selectedResourcesActionBars}
+            compact={isSm}
+            proceedToPath={
+              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
+            }
+          />
           <div className={classes.searchSection}>
             <div className={classes.searchInputs}>
               <div className={classes.searchField}>
                 <SearchField
-                  label={t('single_rights_delegation.search_label')}
+                  label={t('single_rights.search_label')}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setSearchString(event.target.value);
                     setCurrentPage(1);
@@ -249,7 +300,7 @@ export const ChooseServicePage = () => {
               </div>
               <Filter
                 icon={<FilterIcon />}
-                label={t('single_rights_delegation.filter_label')}
+                label={t('single_rights.filter_label')}
                 options={filterOptions}
                 applyButtonLabel={t('common.apply')}
                 resetButtonLabel={t('common.reset_choices')}
@@ -264,6 +315,35 @@ export const ChooseServicePage = () => {
               ></Filter>
             </div>
             {searchResults()}
+            <DualElementsContainer
+              leftElement={
+                <Button
+                  variant='quiet'
+                  color='danger'
+                  fullWidth={true}
+                  onClick={onCancel}
+                >
+                  {t('common.cancel')}
+                </Button>
+              }
+              rightElement={
+                <Button
+                  variant='filled'
+                  color='primary'
+                  fullWidth={true}
+                  onClick={() => {
+                    navigate(
+                      '/' +
+                        SingleRightPath.DelegateSingleRights +
+                        '/' +
+                        String(SingleRightPath.ChooseRights),
+                    );
+                  }}
+                >
+                  {t('common.proceed')}
+                </Button>
+              }
+            />
           </div>
         </PageContent>
       </Page>

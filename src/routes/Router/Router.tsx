@@ -10,6 +10,7 @@ import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/sites/NotFoundSite';
 import { ChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
+import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
 
 import { GeneralPath, SingleRightPath, ApiDelegationPath } from '../paths';
 
@@ -66,6 +67,11 @@ export const Router = createBrowserRouter(
         <Route
           path={SingleRightPath.ChooseService}
           element={<ChooseServicePage />}
+          errorElement={<NotFoundSite />}
+        />
+        <Route
+          path={SingleRightPath.ChooseRights}
+          element={<ChooseRightsPage />}
           errorElement={<NotFoundSite />}
         />
       </Route>

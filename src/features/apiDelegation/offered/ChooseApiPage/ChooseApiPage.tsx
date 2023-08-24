@@ -9,7 +9,6 @@ import {
   Page,
   PageHeader,
   PageContent,
-  PageSize,
   NavigationButtons,
   PageContainer,
   ErrorPanel,
@@ -148,7 +147,10 @@ export const ChooseApiPage = () => {
 
   return (
     <PageContainer>
-      <Page size={isSm ? PageSize.Small : PageSize.Medium}>
+      <Page
+        color='dark'
+        size={isSm ? 'small' : 'medium'}
+      >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           {chosenDelegableOrgs.length < 1 ? (

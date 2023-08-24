@@ -31,16 +31,6 @@ export interface DelegableApiWithPriority {
   priority: number;
 }
 
-export interface SliceState {
-  loading: boolean;
-  delegableApiList: DelegableApi[];
-  presentedApiList: DelegableApi[];
-  chosenDelegableApiList: DelegableApi[];
-  delegableApiSearchPool: DelegableApi[];
-  apiProviders: string[];
-  error: CustomError;
-}
-
 interface resourceReferenceDTO {
   reference: string;
   referenceType: string;
@@ -77,6 +67,16 @@ export const fetchDelegableApis = createAsyncThunk(
     }
   },
 );
+
+export interface SliceState {
+  loading: boolean;
+  delegableApiList: DelegableApi[];
+  presentedApiList: DelegableApi[];
+  chosenDelegableApiList: DelegableApi[];
+  delegableApiSearchPool: DelegableApi[];
+  apiProviders: string[];
+  error: CustomError;
+}
 
 const initialState: SliceState = {
   loading: true,
