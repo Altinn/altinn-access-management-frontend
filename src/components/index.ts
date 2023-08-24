@@ -1,5 +1,3 @@
-import { Filter } from './Filter';
-
 export { CompactDeletableListItem } from './CompactDeletableListItem';
 export { SummaryPage } from '../features/apiDelegation/components/SummaryPage';
 export { DeletableListItem } from './DeletableListItem';

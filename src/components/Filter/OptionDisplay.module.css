@@ -1,3 +1,5 @@
+@import '@digdir/design-system-tokens/brand/altinn/tokens.css'; /*imported here to implicitly import to other filter-related tests */
+
 .optionDisplay {
   display: flex;
   justify-content: center;

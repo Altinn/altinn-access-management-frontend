@@ -101,7 +101,7 @@ export const ChooseServicePage = () => {
       {filters.map((filterValue) => (
         <Chip.Removable
           key={filterValue}
-          aria-label={t('common.remove') + ' ' + getFilterLabel(filterValue)}
+          aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
           onClick={() => {
             unCheckFilter(filterValue);
           }}
@@ -145,7 +145,7 @@ export const ChooseServicePage = () => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {totalNumberOfResults.toString() + ' ' + t('single_rights_delegation.search_hits')}
+                {String(totalNumberOfResults) + ' ' + t('single_rights_delegation.search_hits')}
               </Paragraph>
             )}
             {filterChips()}

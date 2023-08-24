@@ -1,3 +1,5 @@
+import '@digdir/design-system-tokens/brand/altinn/tokens.css'; // need to import tokens locally for correct styling
+
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 import { Button } from '@digdir/design-system-react';
