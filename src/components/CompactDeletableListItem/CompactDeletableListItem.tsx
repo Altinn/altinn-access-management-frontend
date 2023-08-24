@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { Button, ButtonVariant, ListItem, ButtonColor } from '@digdir/design-system-react';
+import { Button, ListItem } from '@digdir/design-system-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
@@ -60,8 +60,8 @@ export const CompactDeletableListItem = ({
           <div className={classes.deleteSection}>
             {removeCallback && (
               <Button
-                variant={ButtonVariant.Quiet}
-                color={ButtonColor.Danger}
+                variant={'quiet'}
+                color={'danger'}
                 icon={<MinusCircle />}
                 onClick={removeCallback}
                 aria-label={

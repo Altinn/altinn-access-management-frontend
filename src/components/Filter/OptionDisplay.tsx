@@ -113,10 +113,12 @@ export const OptionDisplay = ({
             onChange={() => {
               handleSelection(option.value);
             }}
+            size={compact ? 'xsmall' : 'small'}
+            value={option.value}
             checked={isSelected}
-            label={option.label}
-            compact={compact}
-          />
+          >
+            {option.label}
+          </Checkbox>
         </div>
       </button>
     );
