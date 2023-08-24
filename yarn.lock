@@ -417,6 +417,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@digdir/design-system-tokens@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@digdir/design-system-tokens@npm:0.3.0"
+  checksum: 77a409f4cc43a8d57c783d94111b492a289fc05c8540becc1f11b238883592fbd480ce9652405d7b458d69ad61edd7ededa7a376b8fd306e4ff869e43b858a1c
+  languageName: node
+  linkType: hard
+
 "@esbuild/android-arm64@npm:0.18.20":
   version: 0.18.20
   resolution: "@esbuild/android-arm64@npm:0.18.20"
@@ -1781,7 +1788,7 @@ __metadata:
   dependencies:
     "@altinn/altinn-design-system": 0.29.0
     "@digdir/design-system-react": 0.22.0
-    "@digdir/design-system-tokens": ^0.2.0
+    "@digdir/design-system-tokens": ^0.3.0
     "@navikt/aksel-icons": ^4.11.0
     "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.32.6
