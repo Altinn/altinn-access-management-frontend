@@ -25,7 +25,9 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd en feil",
     "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn Servicedesk.",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "confirm": "Bekreft",
+    "complete": "Fullfør"
   },
   "profile": {
     "received": "Mottatte",
@@ -68,7 +70,6 @@
     "next": "Neste",
     "add_new_business": "Legg til ny virksomhet",
     "card_title": "Programmerings\u00adgrensesnitt - API",
-    "confirm_delegation": "Bekreft",
     "confirmation_page_content_top_text": "Du ønsker å gi rettigheter til følgende API:",
     "confirmation_page_content_second_text": "API-tilgangene blir gitt til:",
     "confirmation_page_content_bottom_text": "Tilgangene vil bli gitt og er gyldige til de aktivt slettes eller trekkes tilbake.",
@@ -115,6 +116,7 @@
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "missing_delegable_right": "Mangler rettighet"
+    "missing_delegable_right": "Mangler rettighet",
+    "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}."
   }
 }

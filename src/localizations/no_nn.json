@@ -25,7 +25,9 @@
     "next": "Neste",
     "general_error_title": "Beklager, men det har skjedd ein feil",
     "general_error_paragraph": "Vi klarer ikkje å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen seinare. Om problemet hald fram, ta kontakt med Altinn Servicedesk.",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "confirm": "Stadfest",
+    "complete": "Fullfør"
   },
   "profile": {
     "received": "Mottekne",
@@ -68,7 +70,6 @@
     "next": "Neste",
     "add_new_business": "Legg til ny verksemd",
     "card_title": "Programmerings\u00adgrensesnitt - API",
-    "confirm_delegation": "Stadfest",
     "confirmation_page_content_top_text": "Du ønskjer å gi rettar til følgjande API:",
     "confirmation_page_content_second_text": "API-tilgangane blir gitt til:",
     "confirmation_page_content_bottom_text": "Tilgang vil bli gitt og er gyldig til den aktivt blir fjerna eller trekt tilbake.",
@@ -115,6 +116,9 @@
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "missing_delegable_right": "Manglar rettigheit"
+    "missing_delegable_right": "Manglar rettigheit",
+    "complete_delegation": "Fullfør delegering",
+    "confirm_delegation": "Stadfest delegering",
+    "confirm_delegation_text": "Stadfest at du vil gi desse rettane til {{name}}."
   }
 }

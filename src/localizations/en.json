@@ -25,7 +25,9 @@
     "next": "Next",
     "general_error_title": "Sorry, looks like somthing went wrong",
     "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "complete": "Complete"
   },
   "profile": {
     "received": "Received",
@@ -115,6 +117,7 @@
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "missing_delegable_right": "Missing delegable rights"
+    "missing_delegable_right": "Missing delegable rights",
+    "confirm_delegation_text": "Confirm that you want to give these rights to {{name}}"
   }
 }

@@ -146,7 +146,7 @@ export const ChooseServicePage = () => {
             )}
             {filterChips()}
           </div>
-          <div className={classes.serviceResouces}> {serviceResouces}</div>
+          <div className={classes.serviceResources}> {serviceResources}</div>
           {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
             <Pagination
               className={classes.pagination}
@@ -207,7 +207,7 @@ export const ChooseServicePage = () => {
       getCookie('AltinnPartyId');
   };
 
-  const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
+  const serviceResources = resources?.map((resource: ServiceResource, index: number) => {
     const status = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.status;
     const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)

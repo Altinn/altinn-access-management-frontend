@@ -34,19 +34,18 @@ interface detailParams {
   name: string;
   value: string;
 }
-
-interface chosenService {
+export interface ChosenService {
   accessCheckResponses?: delegationAccessCheckResponse[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable';
   errorCode?: string;
 }
 
-interface chosenServices {
-  chosenServices: chosenService[];
+export interface ChosenServiceList {
+  chosenServices: ChosenService[];
 }
 
-const initialState: chosenServices = {
+const initialState: ChosenServiceList = {
   chosenServices: [],
 };
 
@@ -72,7 +71,7 @@ const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
   reducers: {
-    removeServiceResource: (state: chosenServices, action) => {
+    removeServiceResource: (state: ChosenServiceList, action) => {
       state.chosenServices = state.chosenServices.filter(
         (s) => s.service?.identifier !== action.payload,
       );
@@ -80,7 +79,7 @@ const singleRightSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      let chosenService: chosenService = {};
+      let chosenService: ChosenService = {};
       const delegableService = action.payload.find(
         (response: delegationAccessCheckResponse) => response.status === 'Delegable',
       );

@@ -214,7 +214,7 @@ export const SummaryPage = ({
                 nextPath={
                   '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt
                 }
-                nextText={t('api_delegation.confirm_delegation')}
+                nextText={t('common.confirm')}
                 nextDisabled={confirmationButtonDisabled}
                 nextLoading={confirmationButtonLoading}
                 nextButtonColor={ButtonColor.Success}
