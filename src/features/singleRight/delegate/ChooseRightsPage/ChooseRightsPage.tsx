@@ -93,10 +93,9 @@ export const ChooseRightsPage = () => {
 
   const serviceResouces = delegableChosenServices?.map(
     (chosenService: ChosenService, index: number) => {
-
-      const status = chosenService.accessCheckResponses.
-      find((selected) => selected.service?.title === resource.title)
-        ?.status; */
+      const status = chosenService.accessCheckResponses?.find(
+        (resp) => resp.status === 'NotDelegable',
+      );
 
       return (
         <ResourceActionBar
