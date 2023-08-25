@@ -111,7 +111,7 @@
     "missing_role_access": "Brukeren har ikke noen av de nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegere den.",
     "missing_delegation_access": "Brukeren har ikke de nødvendige delegeringsrettighetene til å delegere tjenesten",
     "unknown": "Uvisst",
-    "new_error": "Dette er en ny feil, vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
+    "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",

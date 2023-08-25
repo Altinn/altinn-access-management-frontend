@@ -189,7 +189,7 @@ export const ChooseServicePage = () => {
     } else if (errorCode === undefined) {
       return undefined;
     } else {
-      return 'new_error';
+      return 'single_rights.new_error';
     }
   };
 

@@ -93,20 +93,19 @@ export const ChooseRightsPage = () => {
 
   const serviceResouces = delegableChosenServices?.map(
     (chosenService: ChosenService, index: number) => {
-      const status = chosenService.accessCheckResponses?.find(
-        (resp) => resp.status === 'NotDelegable',
-      );
+      const status = chosenService.status;
 
       return (
         <ResourceActionBar
           key={chosenService.service?.identifier ?? index}
           title={chosenService.service?.title}
           subtitle={chosenService.service?.resourceOwnerName}
-          status={'Unchecked'}
+          status={status ?? 'Unchecked'}
           onRemoveClick={() => {
             onRemove(chosenService.service?.identifier);
           }}
           compact={isSm}
+          canBePartiallyDelegable={true}
         >
           <div className={classes.serviceResourceContent}>
             <Paragraph size='small'>{chosenService.service?.description}</Paragraph>

@@ -14,7 +14,7 @@ import classes from './ResourceActionBar.module.css';
 export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
-  status: 'Delegable' | 'NotDelegable' | 'Unchecked';
+  status: 'Delegable' | 'NotDelegable' | 'Unchecked' | 'PartiallyDelegable';
 
   /** The callback function to be called when the add button is pressed. */
   onAddClick?: () => void;
@@ -27,6 +27,9 @@ export interface ResourceActionBarProps
 
   /** When true saves as much space as possible. Usually true for smaller screens */
   compact?: boolean;
+
+  /** Adds functionality for automatically showing warning color when status is PartiallyDelegable */
+  canBePartiallyDelegable?: boolean;
 }
 
 export const ResourceActionBar = ({
@@ -38,6 +41,7 @@ export const ResourceActionBar = ({
   onAddClick,
   onRemoveClick,
   compact = false,
+  canBePartiallyDelegable: warningColor = false,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
@@ -57,6 +61,10 @@ export const ResourceActionBar = ({
       return 'success';
     } else if (status === 'NotDelegable') {
       return 'danger';
+    } else if (status === 'PartiallyDelegable' && warningColor) {
+      return 'warning';
+    } else if (status === 'PartiallyDelegable') {
+      return 'success';
     } else {
       return 'neutral';
     }
@@ -107,6 +115,8 @@ export const ResourceActionBar = ({
       return removeButton;
     } else if (status === 'NotDelegable') {
       return notDelegableLabel;
+    } else if (status === 'PartiallyDelegable' && warningColor) {
+      return removeButton;
     } else {
       return addButton;
     }
