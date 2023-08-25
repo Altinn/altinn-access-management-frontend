@@ -9,10 +9,8 @@ import { DualElementsContainer, Page, PageContainer, PageContent, PageHeader } f
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
 import { useMediaQuery } from '@/resources/hooks';
-import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   type ChosenService,
-  ChosenServiceList,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 

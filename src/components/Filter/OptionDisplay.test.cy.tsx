@@ -35,11 +35,9 @@ describe('OptionDisplay', () => {
     renderOptionDisplay({ values: checked });
     for (let i = 0; i < options.length; i++) {
       if (checked.includes(options[i].value)) {
-        cy.contains('label', `${options[i].label}`).find('[type=checkbox]').should('be.checked');
+        cy.contains('div', `${options[i].label}`).find('[type=checkbox]').should('be.checked');
       } else {
-        cy.contains('label', `${options[i].label}`)
-          .find('[type=checkbox]')
-          .should('not.be.checked');
+        cy.contains('div', `${options[i].label}`).find('[type=checkbox]').should('not.be.checked');
       }
     }
   });

@@ -39,8 +39,7 @@ describe(
     it('opens a popup labelled by the button', () => {
       mount(<Filter {...defaultProps} />);
       cy.get('button').contains('Filter').click();
-      cy.get('button')
-        .contains('Filter')
+      cy.contains('button', 'Filter')
         .invoke('attr', 'id')
         .then((buttonId) => {
           cy.get('[role="dialog"]')
@@ -74,6 +73,15 @@ describe(
       cy.get('[role="dialog"]').should('not.exist');
     });
 
+    it('closes the popup when user presses the Apply button', () => {
+      mount(<Filter {...defaultProps} />);
+      cy.contains('button', 'Filter').click();
+      cy.contains(filterOptions[0].label).click();
+      // Press the Apply button
+      cy.contains('button', 'Apply').click();
+      cy.get('[role="dialog"]').should('not.exist');
+    });
+
     it('displays apply button as disabled and unclickable until user has made a change', () => {
       const onApply = (value: string[]) => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
@@ -85,24 +93,24 @@ describe(
       );
       cy.get('button').contains('Filter').click();
       // Button is aria-disabled and unclickable
-      cy.get('button').contains('Apply').parent().should('have.attr', 'aria-disabled', 'true');
-      cy.get('button').contains('Apply').parent().click();
+      cy.contains('button', 'Apply').should('have.attr', 'aria-disabled', 'true');
+      cy.contains('button', 'Apply').click();
       cy.get('@onApplySpy').should('not.have.been.called');
 
       // Select an option
       cy.get('button').contains(filterOptions[0].label).click();
 
       // Button is no longer aria-disabled and is clickable
-      cy.get('button').contains('Apply').parent().should('not.have.attr', 'aria-disabled', 'true');
-      cy.get('button').contains('Apply').parent().click();
+      cy.contains('button', 'Apply').should('not.have.attr', 'aria-disabled', 'true');
+      cy.contains('button', 'Apply').click();
       cy.get('@onApplySpy').should('have.been.called');
     });
 
     it('displays reset button as aria-disabled when there are no options checked', () => {
       mount(<Filter {...defaultProps} />);
-      cy.get('button').contains('Filter').click();
+      cy.contains('button', 'Filter').click();
       // Button is aria-disabled
-      cy.get('button').contains('Reset').parent().should('have.attr', 'aria-disabled', 'true');
+      cy.contains('button', 'Reset').should('have.attr', 'aria-disabled', 'true');
     });
 
     it('displays reset button as aria-disabled when all active options have been unchecked manually', () => {
@@ -115,7 +123,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains(filterOptions[0].label).click();
       // Button is aria-disabled
-      cy.get('button').contains('Reset').parent().should('have.attr', 'aria-disabled', 'true');
+      cy.contains('button', 'Reset').should('have.attr', 'aria-disabled', 'true');
     });
 
     it('applies the chosen options by calling onApply with the chosen values', () => {
@@ -130,7 +138,7 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains(filterOptions[0].label).click();
       cy.contains(filterOptions[2].label).click();
-      cy.get('button').contains('Apply').parent().click();
+      cy.contains('button', 'Apply').click();
       cy.get('@onApplySpy').should('have.been.called');
       cy.get('@onApplySpy').should('have.been.calledWith', [
         filterOptions[0].value,
@@ -182,18 +190,18 @@ describe(
       );
       cy.get('button').contains('Filter').click();
 
-      cy.get('button').contains('Reset').parent().click();
-      cy.contains('label', `${filterOptions[0].label}`)
+      cy.get('button').contains('Reset').click();
+      cy.contains('button', `${filterOptions[0].label}`)
         .find('[type=checkbox]')
         .should('not.be.checked');
-      cy.contains('label', `${filterOptions[1].label}`)
+      cy.contains('button', `${filterOptions[1].label}`)
         .find('[type=checkbox]')
         .should('not.be.checked');
-      cy.contains('label', `${filterOptions[2].label}`)
+      cy.contains('button', `${filterOptions[2].label}`)
         .find('[type=checkbox]')
         .should('not.be.checked');
 
-      cy.get('button').contains('Apply').parent().click();
+      cy.get('button').contains('Apply').click();
 
       cy.get('@onApplySpy').should('have.been.called');
       cy.get('@onApplySpy').should('have.been.calledWith', []);
@@ -205,14 +213,15 @@ describe(
       cy.get('button').contains('Filter').click();
       cy.contains(filterOptions[0].label).click();
       cy.contains(filterOptions[2].label).click();
-      cy.get('button').contains('Apply').parent().click();
+      cy.get('button').contains('Apply').click();
+      cy.wait(500);
 
       // Check that they are still applied when reopening
       cy.get('button').contains('Filter').click();
-      cy.contains('label', `${filterOptions[0].label}`)
+      cy.contains('button', `${filterOptions[0].label}`)
         .find('[type=checkbox]')
         .should('be.checked');
-      cy.contains('label', `${filterOptions[2].label}`)
+      cy.contains('button', `${filterOptions[2].label}`)
         .find('[type=checkbox]')
         .should('be.checked');
     });
@@ -285,15 +294,15 @@ describe(
         />,
       );
       cy.get('button').contains('Filter').click();
-      cy.contains('label', `${filterOptions[0].label}`)
+      cy.contains('button', `${filterOptions[0].label}`)
         .find('[type=checkbox]')
         .should('be.checked');
-      cy.contains('label', `${filterOptions[1].label}`)
+      cy.contains('button', `${filterOptions[1].label}`)
         .find('[type=checkbox]')
         .should('not.be.checked');
 
       // There are no 'changes' so the Apply button should be disabled
-      cy.get('button').contains('Apply').parent().should('have.attr', 'aria-disabled', 'true');
+      cy.get('button').contains('Apply').should('have.attr', 'aria-disabled', 'true');
     });
   },
 );

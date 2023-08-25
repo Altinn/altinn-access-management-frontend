@@ -19,20 +19,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-design-system@npm:0.29.0":
-  version: 0.29.0
-  resolution: "@altinn/altinn-design-system@npm:0.29.0"
+"@altinn/altinn-design-system@npm:0.29.1":
+  version: 0.29.1
+  resolution: "@altinn/altinn-design-system@npm:0.29.1"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-react": 0.14.0
-    "@navikt/ds-icons": ^2.0.0
+    "@digdir/design-system-react": 0.16.0
+    "@navikt/ds-icons": ^3.0.0
     "@radix-ui/react-popover": ^1.0.0
     leaflet: ^1.9.4
     react-leaflet: ^4.2.1
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 2ba06101fa9b6b4696409f0270c3fa2f82fd22146a7edcea31adba8f6ac2e431e4af6320be49fc7785fdb03cdfec75fee78c7762e63062476aa620b7b266e02c
+  checksum: b4a8ec7142edfb07f7c87134065842b96e2fb9c4ff4bbe7829b8b0de44062e58404caef6c071df44ee45fb502750b07e94082b04cac22ee88db4a74f44829939
   languageName: node
   linkType: hard
 
@@ -369,12 +369,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:0.14.0":
-  version: 0.14.0
-  resolution: "@digdir/design-system-react@npm:0.14.0"
+"@digdir/design-system-react@npm:0.16.0":
+  version: 0.16.0
+  resolution: "@digdir/design-system-react@npm:0.16.0"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-tokens": ^0.1.3
+    "@digdir/design-system-tokens": ^0.1.4
     "@floating-ui/react": 0.24.1
     "@navikt/aksel-icons": ^3.2.4
     "@navikt/ds-icons": ^2.3.0
@@ -382,38 +382,37 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 3d6e7ac6cbd4631578a68c55e469fcce1032383d79dac7e2face874b9e338af8c13a476346ca9a9f11c6d3b1ffead425132872689328c47e8d88ec35352b05bc
+  checksum: 8387a5744f89310bda130f2c57cdd930974c93f86fe90715a053045ce3b7a3844cf9c6187112ca2f268567a046fd53dbb5d013cf4c62be06693a58ed43df49e4
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:0.22.0":
-  version: 0.22.0
-  resolution: "@digdir/design-system-react@npm:0.22.0"
+"@digdir/design-system-react@npm:0.23.2":
+  version: 0.23.2
+  resolution: "@digdir/design-system-react@npm:0.23.2"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-tokens": ^0.2.0
+    "@digdir/design-system-tokens": ^0.4.1
     "@floating-ui/react": 0.24.1
     "@navikt/aksel-icons": ^3.2.4
-    "@navikt/ds-icons": ^2.3.0
     react-number-format: 5.2.2
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 775fcc91a25bb0f9ae447706c853f7f494c067a7b738bf2420d47e0c0955492d663bdf1cdfc23c7530664b5179067bc57748b2dc9b755f515ab17107633c33d7
+  checksum: 708250c71feba127e427820dfa855897455ee6ba3772fe43bdbc79a79c4a52c0677d955c3cf0e54cc6e629d62c975c0be0a8d87d899632c0cdb464157e07a89b
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.1.3":
+"@digdir/design-system-tokens@npm:^0.1.4":
   version: 0.1.7
   resolution: "@digdir/design-system-tokens@npm:0.1.7"
   checksum: dabe357c8d262cd6f6430a722f30dc3aa70243bd12cdc39886b655b1ee9a22c471e5131906944a6164c166ef54b86e69526fec5fa8750ad8c9f4444a4aeedf0d
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@digdir/design-system-tokens@npm:0.2.0"
-  checksum: 33e4ad9fc47a41ff60d30e98e06c71d80766fd412984c4a6f3c01e7c0afaee706ff83a514d0b5b0fd8dbdd16bbb3d88a940324b3e10c9a2fcb89ee9f89d928e5
+"@digdir/design-system-tokens@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@digdir/design-system-tokens@npm:0.4.1"
+  checksum: 38e672a6003175b432d48162332ca2cc3f39d8ce53440f48a324e1dcd66529f2e5ff26a26964407e0d2d97fd9172e81c14781cc927663a9647fd65ce04fc1ad0
   languageName: node
   linkType: hard
 
@@ -753,14 +752,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^4.11.0":
-  version: 4.12.1
-  resolution: "@navikt/aksel-icons@npm:4.12.1"
-  checksum: 7c4d671c1cda7fed95f3d740a60cbc1c9885518c04073b2636430322da18b4b4e4dbb48af9be87bb707880c3df5745d890e692fadaf435a2aaf9a628ed9b5c89
+"@navikt/aksel-icons@npm:^5.0.3":
+  version: 5.0.3
+  resolution: "@navikt/aksel-icons@npm:5.0.3"
+  checksum: 855a025365fc2d2caf7f90acc29158b5b2e0ac58f6574af9ff0078568020766a1affa8317a4c1a092c2651e5757450d3880aa8639d4b041cc20017af39a8bd41
   languageName: node
   linkType: hard
 
-"@navikt/ds-icons@npm:^2.0.0, @navikt/ds-icons@npm:^2.3.0":
+"@navikt/ds-icons@npm:^2.3.0":
   version: 2.9.8
   resolution: "@navikt/ds-icons@npm:2.9.8"
   peerDependencies:
@@ -770,6 +769,19 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 37788d056c41cf8450c5ec837449c6f967652f1880ffc267bcee45be7f02a27234061305ef4365a2bef3d35004b9e808df854fe7336498b9cbd1ebaa13b95a5e
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-icons@npm:^3.0.0":
+  version: 3.4.3
+  resolution: "@navikt/ds-icons@npm:3.4.3"
+  peerDependencies:
+    "@types/react": ^17.0.30 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 3b5f917c65ea4ca6296075dcc5b91e4c2ebdd8146731fc58ab6ea2d7fcad7f6dfa8b63d550717c862a0dc889c6dc1a7dd04bf8ac84b6b88c6d75b94d4127f199
   languageName: node
   linkType: hard
 
@@ -1779,10 +1791,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-design-system": 0.29.0
-    "@digdir/design-system-react": 0.22.0
-    "@digdir/design-system-tokens": ^0.2.0
-    "@navikt/aksel-icons": ^4.11.0
+    "@altinn/altinn-design-system": 0.29.1
+    "@digdir/design-system-react": 0.23.2
+    "@digdir/design-system-tokens": ^0.4.1
+    "@navikt/aksel-icons": ^5.0.3
     "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.32.6
     "@testing-library/cypress": ^9.0.0
@@ -1793,8 +1805,8 @@ __metadata:
     "@vitejs/plugin-react": ^4.0.0
     axios: ^1.3.4
     classnames: ^2.3.2
-    cypress: ^12.17.3
-    cypress-real-events: ^1.7.6
+    cypress: 12.17.4
+    cypress-real-events: ^1.10.0
     eslint: ^8.45.0
     eslint-config-prettier: ^9.0.0
     eslint-config-standard-with-typescript: ^37.0.0
@@ -2800,7 +2812,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-real-events@npm:^1.7.6":
+"cypress-real-events@npm:^1.10.0":
   version: 1.10.0
   resolution: "cypress-real-events@npm:1.10.0"
   dependencies:
@@ -2811,7 +2823,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^12.17.3":
+"cypress@npm:12.17.4":
   version: 12.17.4
   resolution: "cypress@npm:12.17.4"
   dependencies:

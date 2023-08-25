@@ -9,9 +9,9 @@ import { ReactComponent as SeagullIcon } from '@/assets/Seagull.svg';
 import classes from './NotFoundSite.module.css';
 
 export const NotFoundSite = () => {
-  const error: any = useRouteError(); // fixme: error har ikke Type ennå
+  const error: any = useRouteError();
 
-  const { t } = useTranslation('common'); // "t" is the (ugly) convention of "translate"
+  const { t } = useTranslation('common');
 
   return (
     <div>
