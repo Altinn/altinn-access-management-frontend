@@ -48,7 +48,7 @@ const colors: Array<'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'dang
 ];
 
 describe('ActionBar', () => {
-  describe('Varants', () => {
+  describe('Variants', () => {
     it('should have heading of given size when explicitly set', () => {
       cy.mount(expandableActionBar({ headingLevel: 1, color: 'neutral', onClick: cy.stub() }));
       cy.get('h1').should('exist');

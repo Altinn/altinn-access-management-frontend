@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
