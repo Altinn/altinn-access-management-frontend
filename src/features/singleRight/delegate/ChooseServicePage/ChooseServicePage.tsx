@@ -154,7 +154,7 @@ export const ChooseServicePage = () => {
               totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
               nextLabel={t('common.next')}
               previousLabel={t('common.previous')}
-              itemLabel={(num: number) => `Side ${num}`}
+              itemLabel={(num: number) => t('common.page') + ` ${num}`}
               onChange={setCurrentPage}
               size='small'
               compact={isSm}
@@ -278,72 +278,74 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          <CollectionBar
-            title='Valgte tjenester'
-            color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
-            collection={selectedResourcesActionBars}
-            compact={isSm}
-            proceedToPath={
-              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
-            }
-          />
-          <div className={classes.searchSection}>
-            <div className={classes.searchInputs}>
-              <div className={classes.searchField}>
-                <SearchField
-                  label={t('single_rights.search_label')}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setSearchString(event.target.value);
-                    setCurrentPage(1);
-                  }}
-                ></SearchField>
-              </div>
-              <Filter
-                icon={<FilterIcon />}
-                label={t('single_rights.filter_label')}
-                options={filterOptions}
-                applyButtonLabel={t('common.apply')}
-                resetButtonLabel={t('common.reset_choices')}
-                closeButtonAriaLabel={t('common.close')}
-                searchable
-                fullScreenModal={isSm}
-                values={filters}
-                onApply={(filters) => {
-                  setFilters(filters);
-                  setCurrentPage(1);
-                }}
-              ></Filter>
-            </div>
-            {searchResults()}
-            <DualElementsContainer
-              leftElement={
-                <Button
-                  variant='quiet'
-                  color='danger'
-                  fullWidth={true}
-                  onClick={onCancel}
-                >
-                  {t('common.cancel')}
-                </Button>
-              }
-              rightElement={
-                <Button
-                  variant='filled'
-                  color='primary'
-                  fullWidth={true}
-                  onClick={() => {
-                    navigate(
-                      '/' +
-                        SingleRightPath.DelegateSingleRights +
-                        '/' +
-                        String(SingleRightPath.ChooseRights),
-                    );
-                  }}
-                >
-                  {t('common.proceed')}
-                </Button>
+          <div className={classes.pageContent}>
+            <CollectionBar
+              title='Valgte tjenester'
+              color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
+              collection={selectedResourcesActionBars}
+              compact={isSm}
+              proceedToPath={
+                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
               }
             />
+            <div className={classes.searchSection}>
+              <div className={classes.searchInputs}>
+                <div className={classes.searchField}>
+                  <SearchField
+                    label={t('single_rights.search_label')}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setSearchString(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                  ></SearchField>
+                </div>
+                <Filter
+                  icon={<FilterIcon />}
+                  label={t('single_rights.filter_label')}
+                  options={filterOptions}
+                  applyButtonLabel={t('common.apply')}
+                  resetButtonLabel={t('common.reset_choices')}
+                  closeButtonAriaLabel={t('common.close')}
+                  searchable
+                  fullScreenModal={isSm}
+                  values={filters}
+                  onApply={(filters) => {
+                    setFilters(filters);
+                    setCurrentPage(1);
+                  }}
+                ></Filter>
+              </div>
+              {searchResults()}
+              <DualElementsContainer
+                leftElement={
+                  <Button
+                    variant='quiet'
+                    color='danger'
+                    fullWidth={true}
+                    onClick={onCancel}
+                  >
+                    {t('common.cancel')}
+                  </Button>
+                }
+                rightElement={
+                  <Button
+                    variant='filled'
+                    color='primary'
+                    fullWidth={true}
+                    onClick={() => {
+                      navigate(
+                        '/' +
+                          SingleRightPath.DelegateSingleRights +
+                          '/' +
+                          String(SingleRightPath.ChooseRights),
+                      );
+                    }}
+                  >
+                    {t('common.proceed')}
+                  </Button>
+                }
+              />
+            </div>
           </div>
         </PageContent>
       </Page>

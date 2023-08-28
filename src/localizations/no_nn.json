@@ -26,8 +26,12 @@
     "general_error_title": "Beklager, men det har skjedd ein feil",
     "general_error_paragraph": "Vi klarer ikkje å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen seinare. Om problemet hald fram, ta kontakt med Altinn Servicedesk.",
     "cancel": "Avbryt",
-    "confirm": "Stadfest",
-    "complete": "Fullfør"
+    "confirm_delegation": "Stadfest delegering",
+    "complete": "Fullfør",
+    "page": "Side",
+    "read": "Lesa",
+    "write": "Skriva",
+    "sign": "Signera"
   },
   "profile": {
     "received": "Mottekne",
@@ -119,6 +123,8 @@
     "missing_delegable_right": "Manglar rettigheit",
     "complete_delegation": "Fullfør delegering",
     "confirm_delegation": "Stadfest delegering",
-    "confirm_delegation_text": "Stadfest at du vil gi desse rettane til {{name}}."
+    "confirm_delegation_text": "Stadfest at du vil gi desse rettane til {{name}}.",
+    "choose_rights_chip_text": "Vel kva rettar du vil delegera tilgang til under:",
+    "choose_service_page_top_text": "Her kan du velja kva skjema og tenester du vil delegera tilgang til {{name}} for. Me tilrår å filtrera på skjemaeigar, og søkja med namn på tenesta."
   }
 }

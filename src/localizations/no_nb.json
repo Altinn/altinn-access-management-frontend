@@ -26,8 +26,12 @@
     "general_error_title": "Beklager, men det har skjedd en feil",
     "general_error_paragraph": "Vi klarer ikke å hente informasjonen du ser etter akkurat nå. Vennligst prøv igjen senere. Om problemet vedvarer, ta kontakt med Altinn Servicedesk.",
     "cancel": "Avbryt",
-    "confirm": "Bekreft",
-    "complete": "Fullfør"
+    "confirm_delegation": "Bekreft delegering",
+    "complete": "Fullfør",
+    "page": "Side",
+    "read": "Lese",
+    "write": "Skrive",
+    "sign": "Signere"
   },
   "profile": {
     "received": "Mottatte",
@@ -117,6 +121,8 @@
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
     "missing_delegable_right": "Mangler rettighet",
-    "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}."
+    "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",
+    "choose_rights_chip_text": "Velg hvilke rettigheter du vil delegere tilgang til under:",
+    "choose_service_page_top_text": "Her kan du velge hvilke skjemaer og tjenester du vil delegere tilgang til {{name}} for. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten."
   }
 }

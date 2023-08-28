@@ -1,5 +1,5 @@
-.popoverTextContainer {
-  margin-top: 10px;
+.popoverButtonContainer {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
 }
@@ -15,4 +15,13 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.chipContainer {
+  display: flex;
+  gap: 5px;
+}
+
+.navigationContainer {
+  margin-top: 40px;
 }

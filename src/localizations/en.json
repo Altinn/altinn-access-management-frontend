@@ -26,8 +26,12 @@
     "general_error_title": "Sorry, looks like somthing went wrong",
     "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk.",
     "cancel": "Cancel",
-    "confirm": "Confirm",
-    "complete": "Complete"
+    "confirm_delegation": "Confirm delegation",
+    "complete": "Complete",
+    "page": "Page",
+    "read": "Read",
+    "write": "Write",
+    "sign": "Sign"
   },
   "profile": {
     "received": "Received",
@@ -118,6 +122,8 @@
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
     "missing_delegable_right": "Missing delegable rights",
-    "confirm_delegation_text": "Confirm that you want to give these rights to {{name}}"
+    "confirm_delegation_text": "Confirm that you want to give these rights to {{name}}",
+    "choose_rights_chip_text": "Choose rights you want to give access to below:",
+    "choose_service_page_top_text": "Her kan du gi tilgang til skjema og tjenester til {{name}}. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten. Legg til ved å velge fra listen under."
   }
 }
