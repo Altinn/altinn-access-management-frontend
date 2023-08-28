@@ -30,6 +30,9 @@ export interface ResourceActionBarProps
 
   /** Adds functionality for automatically showing warning color when status is PartiallyDelegable */
   canBePartiallyDelegable?: boolean;
+
+  /** Independent open state that can be used to open the ActionBar */
+  initialOpen?: boolean;
 }
 
 export const ResourceActionBar = ({
@@ -42,19 +45,24 @@ export const ResourceActionBar = ({
   onRemoveClick,
   compact = false,
   canBePartiallyDelegable: warningColor = false,
+  initialOpen = false,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(initialOpen);
 
   const previousStatus = usePrevious(status);
 
   useUpdate(() => {
-    if (status === 'NotDelegable' && previousStatus !== undefined) {
-      setOpen(true);
+    if (initialOpen) {
+      setOpen(initialOpen);
     } else {
-      setOpen(false);
+      if (status === 'NotDelegable' && previousStatus !== undefined) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
     }
-  }, [status]);
+  }, [status, initialOpen]);
 
   const color = useMemo(() => {
     if (status === 'Delegable') {
@@ -82,7 +90,7 @@ export const ResourceActionBar = ({
     </Button>
   );
 
-  const removeButton = (
+  const undoButton = (
     <Button
       variant='quiet'
       icon={<ArrowUndoIcon title={t('common.undo')} />}
@@ -111,12 +119,10 @@ export const ResourceActionBar = ({
   );
 
   const action = () => {
-    if (status === 'Delegable') {
-      return removeButton;
+    if (status === 'Delegable' || status === 'PartiallyDelegable') {
+      return undoButton;
     } else if (status === 'NotDelegable') {
       return notDelegableLabel;
-    } else if (status === 'PartiallyDelegable' && warningColor) {
-      return removeButton;
     } else {
       return addButton;
     }

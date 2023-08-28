@@ -91,8 +91,6 @@ const singleRightSlice = createSlice({
       );
 
       if (isNotDelegable) {
-        console.log(action.payload);
-
         const isDelegable = action.payload.find(
           (response: delegationAccessCheckResponse) => response.status === 'Delegable',
         );

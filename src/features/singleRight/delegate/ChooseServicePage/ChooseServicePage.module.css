@@ -85,3 +85,7 @@
     width: 100%;
   }
 }
+
+.pageContent {
+  min-height: 1200px;
+}
