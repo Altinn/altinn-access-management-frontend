@@ -156,9 +156,9 @@ export const ChooseServicePage = () => {
               previousLabel={t('common.previous')}
               itemLabel={(num: number) => t('common.page') + ` ${num}`}
               onChange={setCurrentPage}
-              size='small'
+              size={isSm ? 'small' : 'medium'}
               compact={isSm}
-              hideLabels={isSm}
+              hideLabels
             />
           )}
         </>

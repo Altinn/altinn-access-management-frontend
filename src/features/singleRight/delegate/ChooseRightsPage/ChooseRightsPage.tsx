@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { Button, Chip, Paragraph, Popover } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { DualElementsContainer, Page, PageContainer, PageContent, PageHeader } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -40,6 +40,10 @@ export const ChooseRightsPage = () => {
     state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
   );
 
+  useEffect(() => {
+    serviceResources;
+  }, [delegableChosenServices]);
+
   const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
   };
@@ -66,9 +70,7 @@ export const ChooseRightsPage = () => {
     });
   }, [delegableChosenServices]);
 
-  const chipStates = serviceResources?.map(() => useState(true));
-
-  const serviceResouces = serviceResources?.map((chosenService: ChosenService, index: number) => {
+  const serviceResourcesActionBars = serviceResources?.map((chosenService: ChosenService) => {
     const isPartiallyDelegable =
       chosenService.status === 'PartiallyDelegable' && !hasPartiallyDelegableAppeared;
 
@@ -76,9 +78,11 @@ export const ChooseRightsPage = () => {
       hasPartiallyDelegableAppeared = true;
     }
 
+    console.log('serviceResources', serviceResources);
+
     return (
       <ResourceActionBar
-        key={chosenService.service?.identifier ?? index}
+        key={chosenService.service?.identifier}
         title={chosenService.service?.title}
         subtitle={chosenService.service?.resourceOwnerName}
         status={chosenService.status ?? 'Unchecked'}
@@ -95,15 +99,15 @@ export const ChooseRightsPage = () => {
           <Paragraph>{t('single_rights.choose_rights_chip_text')}</Paragraph>
           <div className={classes.chipContainer}>
             {chosenService.accessCheckResponses
-              ?.filter((response) => response.status !== 'Delegable')
+              ?.filter((response) => response.status !== 'NotDelegable')
               .map((response, index: number) => {
-                const [checked, setChecked] = chipStates[index];
+                // const [checked, setChecked] = useState(true);
 
                 const dto = {
                   title: chosenService.service?.title,
                   serviceIdentifier: chosenService.service?.identifier,
                   rightKey: response.rightKey,
-                  checked,
+                  checked: true,
                 };
                 delegationList.push(dto);
 
@@ -111,9 +115,9 @@ export const ChooseRightsPage = () => {
                   <div key={index}>
                     <Chip.Toggle
                       checkmark
-                      selected={dto.checked}
+                      selected={true}
                       onClick={() => {
-                        setChecked(!checked);
+                        // setChecked(!checked);
                       }}
                     >
                       {t(`common.${response.action}`)}
@@ -188,7 +192,7 @@ export const ChooseRightsPage = () => {
       <Page color='light'>
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          <div className={classes.serviceResources}>{serviceResouces}</div>
+          <div className={classes.serviceResources}>{serviceResourcesActionBars}</div>
           <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>
       </Page>
