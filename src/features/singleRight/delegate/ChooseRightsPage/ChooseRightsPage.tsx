@@ -40,21 +40,6 @@ export const ChooseRightsPage = () => {
     state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
   );
 
-  useEffect(() => {
-    const initialCheckedStates: Record<string, boolean> = {};
-
-    serviceResources?.forEach((chosenService: ChosenService) => {
-      chosenService.accessCheckResponses?.forEach((response) => {
-        if (response.status !== 'NotDelegable') {
-          const key = `${chosenService.service?.identifier}-${response.rightKey}`;
-          initialCheckedStates[key] = true;
-        }
-      });
-    });
-
-    setCheckedStates(initialCheckedStates);
-  }, [serviceResources]);
-
   const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
   };
@@ -65,7 +50,21 @@ export const ChooseRightsPage = () => {
     console.log('filteredList', filteredList);
   };
 
+  const serviceResources = useMemo(() => {
+    return [...delegableChosenServices]?.sort((a, b) => {
+      const isPartiallyDelegableA = a.status === 'PartiallyDelegable';
+      const isPartiallyDelegableB = b.status === 'PartiallyDelegable';
 
+      if (isPartiallyDelegableA && !isPartiallyDelegableB) {
+        return -1;
+      }
+      if (!isPartiallyDelegableA && isPartiallyDelegableB) {
+        return 1;
+      }
+
+      return a.service?.title.localeCompare(b.service.title);
+    });
+  }, [delegableChosenServices]);
 
   const [checkedStates, setCheckedStates] = useState<Record<string, boolean>>({});
 
