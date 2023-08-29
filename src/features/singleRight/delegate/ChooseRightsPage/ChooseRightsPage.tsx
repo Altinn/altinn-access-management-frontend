@@ -41,8 +41,19 @@ export const ChooseRightsPage = () => {
   );
 
   useEffect(() => {
-    serviceResources;
-  }, [delegableChosenServices]);
+    const initialCheckedStates: Record<string, boolean> = {};
+
+    serviceResources?.forEach((chosenService: ChosenService) => {
+      chosenService.accessCheckResponses?.forEach((response) => {
+        if (response.status !== 'NotDelegable') {
+          const key = `${chosenService.service?.identifier}-${response.rightKey}`;
+          initialCheckedStates[key] = true;
+        }
+      });
+    });
+
+    setCheckedStates(initialCheckedStates);
+  }, [serviceResources]);
 
   const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
@@ -51,24 +62,19 @@ export const ChooseRightsPage = () => {
   const onConfirm = () => {
     setPopoverOpen(!popoverOpen);
     const filteredList = delegationList.filter((right) => right.checked);
-    console.log(filteredList);
+    console.log('filteredList', filteredList);
   };
 
-  const serviceResources = useMemo(() => {
-    return [...delegableChosenServices]?.sort((a, b) => {
-      const isPartiallyDelegableA = a.status === 'PartiallyDelegable';
-      const isPartiallyDelegableB = b.status === 'PartiallyDelegable';
 
-      if (isPartiallyDelegableA && !isPartiallyDelegableB) {
-        return -1;
-      }
-      if (!isPartiallyDelegableA && isPartiallyDelegableB) {
-        return 1;
-      }
 
-      return a.service?.title.localeCompare(b.service.title);
-    });
-  }, [delegableChosenServices]);
+  const [checkedStates, setCheckedStates] = useState<Record<string, boolean>>({});
+
+  const handleToggleChecked = (serviceIdentifier: string, rightKey: string) => {
+    setCheckedStates((prevCheckedStates) => ({
+      ...prevCheckedStates,
+      [`${serviceIdentifier}-${rightKey}`]: !prevCheckedStates[`${serviceIdentifier}-${rightKey}`],
+    }));
+  };
 
   const serviceResourcesActionBars = serviceResources?.map((chosenService: ChosenService) => {
     const isPartiallyDelegable =
@@ -101,13 +107,14 @@ export const ChooseRightsPage = () => {
             {chosenService.accessCheckResponses
               ?.filter((response) => response.status !== 'NotDelegable')
               .map((response, index: number) => {
-                // const [checked, setChecked] = useState(true);
+                const isChecked =
+                  checkedStates[`${chosenService.service?.identifier}-${response.rightKey}`];
 
                 const dto = {
                   title: chosenService.service?.title,
                   serviceIdentifier: chosenService.service?.identifier,
                   rightKey: response.rightKey,
-                  checked: true,
+                  checked: isChecked,
                 };
                 delegationList.push(dto);
 
@@ -115,9 +122,9 @@ export const ChooseRightsPage = () => {
                   <div key={index}>
                     <Chip.Toggle
                       checkmark
-                      selected={true}
+                      selected={isChecked}
                       onClick={() => {
-                        // setChecked(!checked);
+                        handleToggleChecked(chosenService.service?.identifier, response.rightKey);
                       }}
                     >
                       {t(`common.${response.action}`)}
