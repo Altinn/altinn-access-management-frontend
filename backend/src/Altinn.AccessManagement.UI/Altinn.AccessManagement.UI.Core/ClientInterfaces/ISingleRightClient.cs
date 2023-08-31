@@ -19,5 +19,17 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </param>
         /// <returns>List<DelegationAccessCheckResponse /></returns>
         Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request);
+
+        /// <summary>
+        ///     Creates a single rights delegation
+        /// </summary>
+        /// <param name="party">
+        ///     The party from which to delegate the right
+        /// </param>
+        /// <param name="delegation">
+        ///     The delegation to be created
+        /// </param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation);
     }
 }

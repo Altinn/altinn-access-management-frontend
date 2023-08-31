@@ -23,5 +23,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
             T res = JsonSerializer.Deserialize<T>(content, options);
             return res;
         }
+
+        public static string GetMockDataSerialized(string path, string filename)
+        {
+            string fullPath = Path.Combine(path, filename);
+
+            if (!File.Exists(fullPath))
+            {
+                throw new FileNotFoundException($"The file with path {fullPath} does not exist");
+            }
+
+            return File.ReadAllText(Path.Combine(fullPath));
+
+        }
     }
 }

@@ -13,10 +13,7 @@
           "value": "appid-400"
         }
       ],
-      "action": {
-        "id": "urn:oasis:names:tc:xacml:1.0:action:action-id",
-        "value": "ScopeAccess"
-      }
+      "action": "ScopeAccess"
     }
   ]
 }

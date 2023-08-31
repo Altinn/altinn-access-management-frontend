@@ -4,7 +4,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
 {
     /// <summary>
-    /// Model describing a complete resource from the resource registry.
+    /// Model describing a complete resource from the resource registry
     /// </summary>
     public class ServiceResource
     {
@@ -59,19 +59,29 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         public bool IsPublicService { get; set; }
 
         /// <summary>
-        /// ThematicArea
+        /// ThematicAreas
         /// </summary>
-        public string? ThematicArea { get; set; }
+        public List<string>? ThematicAreas { get; set; }
 
         /// <summary>
         /// ResourceReference
         /// </summary>
-        public List<ResourceReference> ResourceReferences { get; set; }
+        public List<ResourceReference>? ResourceReferences { get; set; }
 
         /// <summary>
         /// IsComplete
         /// </summary>
         public bool? IsComplete { get; set; }
+
+        /// <summary>
+        /// Is this resource possible to delegate to others or not
+        /// </summary>
+        public bool Delegable { get; set; } = true;
+
+        /// <summary>
+        /// The visibility of the resource
+        /// </summary>
+        public bool Visible { get; set; } = true;
 
         /// <summary>
         /// HasCompetentAuthority
@@ -93,5 +103,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ResourceType ResourceType { get; set; }
+
+        /// <summary>
+        /// The fallback language of the resource
+        /// </summary>
+        public string MainLanguage { get; set; } = "nb";
+
+        /// <summary>
+        /// Writes key information when this object is written to Log.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"Identifier: {Identifier}, ResourceType: {ResourceType}";
+        }
     }
 }
