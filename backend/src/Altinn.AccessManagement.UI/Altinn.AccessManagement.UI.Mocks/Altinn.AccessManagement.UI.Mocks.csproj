@@ -13,15 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Data\SingleRight\CreateDelegation\3225.json" />
-    <None Remove="Data\SingleRight\CreateDelegation\322a.json" />
-    <None Remove="Data\SingleRight\CreateDelegation\a3-app2.json" />
-    <None Remove="Data\SingleRight\CreateDelegation\appid-502.json" />
-    <None Remove="Data\SingleRight\CreateDelegation\appid-503.json" />
-    <None Remove="Data\SingleRight\CreateDelegation\appid-508.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Altinn.App.Common" Version="6.0.2" />
     <PackageReference Include="Altinn.Common.PEP" Version="1.3.0" />
     <PackageReference Include="JWTCookieAuthentication" Version="3.0.1" />

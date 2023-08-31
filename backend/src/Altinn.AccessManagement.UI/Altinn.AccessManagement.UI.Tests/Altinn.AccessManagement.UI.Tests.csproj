@@ -50,12 +50,4 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    <ItemGroup>
-      <None Remove="Data\ExpectedResults\SingleRight\CreateDelegation\3225.json" />
-      <None Remove="Data\ExpectedResults\SingleRight\CreateDelegation\322a.json" />
-      <None Remove="Data\ExpectedResults\SingleRight\CreateDelegation\a3-app2.json" />
-      <None Remove="Data\ExpectedResults\SingleRight\CreateDelegation\appid-502.json" />
-      <None Remove="Data\ExpectedResults\SingleRight\CreateDelegation\appid-503.json" />
-      <None Remove="Data\ExpectedResults\SingleRight\CreateDelegation\appid-508.json" />
-    </ItemGroup>
 </Project>
