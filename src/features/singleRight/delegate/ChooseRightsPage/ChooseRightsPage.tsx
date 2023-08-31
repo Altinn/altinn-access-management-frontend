@@ -49,7 +49,6 @@ export const ChooseRightsPage = () => {
     setPopoverOpen(!popoverOpen);
     const filteredList = rightsToBeDelegated.filter((right) => right.checked);
     const listWithoutChecked = filteredList.map(({ checked, ...rest }) => rest);
-    console.log('listWithoutChecked', listWithoutChecked);
   };
 
   const handleToggleChecked = (serviceIdentifier: string, rightKey: string) => {
@@ -188,6 +187,7 @@ export const ChooseRightsPage = () => {
                 onClick={() => {
                   setPopoverOpen(!popoverOpen);
                 }}
+                disabled={delegableChosenServices.length < 1}
               >
                 {t('common.complete')}
               </Button>
