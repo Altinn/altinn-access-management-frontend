@@ -34,7 +34,6 @@ export const ChooseRightsPage = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [checkedStates, setCheckedStates] = useState<Record<string, boolean>>({});
   const isSm = useMediaQuery('(max-width: 768px)');
-  let hasPartiallyDelegableAppeared = false;
   const rightsToBeDelegated: DelegationResourceDTO[] = [];
 
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
@@ -76,6 +75,7 @@ export const ChooseRightsPage = () => {
 
   const serviceResourcesActionBars = useMemo(() => {
     return sortedServiceResources?.map((chosenService: ChosenService) => {
+      let hasPartiallyDelegableAppeared = false;
       const isPartiallyDelegable =
         chosenService.status === 'PartiallyDelegable' && !hasPartiallyDelegableAppeared;
 
