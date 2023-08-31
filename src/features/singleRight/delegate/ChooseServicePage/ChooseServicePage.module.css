@@ -89,3 +89,7 @@
 .pageContent {
   min-height: 1200px;
 }
+
+.navigationButtons {
+  margin-top: 4rem;
+}

@@ -97,6 +97,9 @@ const singleRightSlice = createSlice({
 
         if (isDelegable) {
           chosenService.status = 'PartiallyDelegable';
+          chosenService.errorCode = action.payload.find(
+            (resp: delegationAccessCheckResponse) => resp.status === 'NotDelegable',
+          ).details[0].code;
         } else {
           chosenService.status = 'NotDelegable';
           chosenService.errorCode = action.payload[0].details[0].code;

@@ -20,8 +20,19 @@
 .chipContainer {
   display: flex;
   gap: 5px;
+  margin-top: 15px;
 }
 
 .navigationContainer {
   margin-top: 40px;
+}
+
+.secondaryText {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.alertContainer {
+  max-width: 500px;
+  margin-top: 30px;
 }

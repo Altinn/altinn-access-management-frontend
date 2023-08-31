@@ -12,6 +12,7 @@ import {
   Spinner,
   Alert,
   Button,
+  Ingress,
 } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,6 +41,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GeneralPath, SingleRightPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ChooseServicePage.module.css';
@@ -179,22 +181,11 @@ export const ChooseServicePage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
-  const getErrorCodeTextKey = (errorCode: string | undefined) => {
-    if (errorCode === 'MissingRoleAccess') {
-      return 'single_rights.missing_role_access';
-    } else if (errorCode === 'MissingDelegationAccess') {
-      return 'single_rights.missing_delegation_access';
-    } else if (errorCode === 'Unknown') {
-      return 'single_rights.unknown';
-    } else if (errorCode === undefined) {
-      return undefined;
-    } else {
-      return 'single_rights.new_error';
-    }
-  };
-
   const onCancel = () => {
     const cleanHostname = window.location.hostname.replace('am.ui.', '');
+
+    const encodedUrl = 'ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=50024116';
+
     window.location.href =
       'https://' +
       cleanHostname +
@@ -204,7 +195,8 @@ export const ChooseServicePage = () => {
       getCookie('AltinnUserId') +
       '&amp;' +
       'partyID=' +
-      getCookie('AltinnPartyId');
+      getCookie('AltinnPartyId') +
+      encodeURIComponent(encodedUrl);
   };
 
   const serviceResources = resources?.map((resource: ServiceResource, index: number) => {
@@ -212,7 +204,7 @@ export const ChooseServicePage = () => {
       ?.status;
     const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)
       ?.errorCode;
-    const errorCodeTextKey = getErrorCodeTextKey(errorCode);
+    const errorCodeTextKey = getSingleRightsErrorCodeTextKey(errorCode);
 
     return (
       <ResourceActionBar
@@ -279,6 +271,9 @@ export const ChooseServicePage = () => {
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
           <div className={classes.pageContent}>
+            <Ingress spacing>
+              {t('single_rights.choose_service_page_top_text', { name: 'ANNEMA FIGMA' })}
+            </Ingress>
             <CollectionBar
               title='Valgte tjenester'
               color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
@@ -316,35 +311,37 @@ export const ChooseServicePage = () => {
                 ></Filter>
               </div>
               {searchResults()}
-              <DualElementsContainer
-                leftElement={
-                  <Button
-                    variant='quiet'
-                    color='danger'
-                    fullWidth={true}
-                    onClick={onCancel}
-                  >
-                    {t('common.cancel')}
-                  </Button>
-                }
-                rightElement={
-                  <Button
-                    variant='filled'
-                    color='primary'
-                    fullWidth={true}
-                    onClick={() => {
-                      navigate(
-                        '/' +
-                          SingleRightPath.DelegateSingleRights +
+              <div className={classes.navigationButtons}>
+                <DualElementsContainer
+                  leftElement={
+                    <Button
+                      variant='quiet'
+                      color='danger'
+                      fullWidth={true}
+                      onClick={onCancel}
+                    >
+                      {t('common.cancel')}
+                    </Button>
+                  }
+                  rightElement={
+                    <Button
+                      variant='filled'
+                      color='primary'
+                      fullWidth={true}
+                      onClick={() => {
+                        navigate(
                           '/' +
-                          String(SingleRightPath.ChooseRights),
-                      );
-                    }}
-                  >
-                    {t('common.proceed')}
-                  </Button>
-                }
-              />
+                            SingleRightPath.DelegateSingleRights +
+                            '/' +
+                            String(SingleRightPath.ChooseRights),
+                        );
+                      }}
+                    >
+                      {t('common.proceed')}
+                    </Button>
+                  }
+                />
+              </div>
             </div>
           </div>
         </PageContent>

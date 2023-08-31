@@ -114,6 +114,7 @@
     "search_hits": "treff på søket:",
     "missing_role_access": "Brukeren har ikke noen av de nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegere den.",
     "missing_delegation_access": "Brukeren har ikke de nødvendige delegeringsrettighetene til å delegere tjenesten",
+    "missing_srr_right_access": "Brukeren har ikke de nødvendige SRR-rettighetene",
     "unknown": "Uvisst",
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
@@ -121,8 +122,15 @@
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
     "missing_delegable_right": "Mangler rettighet",
+    "missing_srr_right_access_title": "Mangler SRR-rettighet",
     "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",
     "choose_rights_chip_text": "Velg hvilke rettigheter du vil delegere tilgang til under:",
-    "choose_service_page_top_text": "Her kan du velge hvilke skjemaer og tjenester du vil delegere tilgang til {{name}} for. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten."
+    "choose_service_page_top_text": "Her kan du velge hvilke skjemaer og tjenester du vil delegere tilgang til {{name}} for. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten.",
+    "choose_rights_page_top_text": "Her kan du velge hvilke enkeltrettigheter du vil delegere til {{name}}.",
+    "choose_rights_page_secondary_text": "Dersom du ønsker å tilpasse tilgangene, f.eks. Fjerne signeringsrettighet, kan du klikke på pilen for å åpne tjenesten og tilpasse dette",
+    "alert_partially_delegable_header": "Du får ikke delegert hele tjenesten",
+    "alert_info_text": "En eller flere av rettighetene på denne tjenesten blir ikke delegert siden {{reason}}. Nedenfor ser du hvilke det gjelder.",
+    "you_cant_delegate_these_rights": "Disse rettighetene kan du ikke delegere:",
+    "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på sjekkmerkene nedenfor for å fjerne dem"
   }
 }
