@@ -6,8 +6,8 @@ import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/Reso
 
 import { type ServiceResource } from './singleRightsApi';
 
-export interface DelegationRequestDto {
-  delegationRequest: ResourceIdentifierDto;
+export interface DelegationAccessCheckDto {
+  resourceIdentifierDto: ResourceIdentifierDto;
   serviceResource: ServiceResource;
 }
 
@@ -41,23 +41,23 @@ export interface ChosenService {
   errorCode?: string;
 }
 
-export interface ChosenServiceList {
+interface chosenServiceList {
   chosenServices: ChosenService[];
 }
 
-const initialState: ChosenServiceList = {
+const initialState: chosenServiceList = {
   chosenServices: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
   'singleRightSlice/delegationAccessCheck',
-  async (dto: DelegationRequestDto, { rejectWithValue }) => {
+  async (dto: DelegationAccessCheckDto, { rejectWithValue }) => {
     const altinnPartyId = getCookie('AltinnPartyId');
 
     return await axios
       .post(
         `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
-        dto.delegationRequest,
+        dto.resourceIdentifierDto,
       )
       .then((response) => response.data)
       .catch((error) => {
@@ -71,7 +71,7 @@ const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
   reducers: {
-    removeServiceResource: (state: ChosenServiceList, action) => {
+    removeServiceResource: (state: chosenServiceList, action) => {
       state.chosenServices = state.chosenServices.filter(
         (s) => s.service?.identifier !== action.payload,
       );

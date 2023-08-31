@@ -35,7 +35,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import {
-  type DelegationRequestDto,
+  type DelegationAccessCheckDto,
   delegationAccessCheck,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
@@ -169,9 +169,9 @@ export const ChooseServicePage = () => {
   };
 
   const onAdd = (identifier: string, serviceResource: ServiceResource) => {
-    const dto: DelegationRequestDto = {
+    const dto: DelegationAccessCheckDto = {
       serviceResource,
-      delegationRequest: new ResourceIdentifierDto('urn:altinn:resource', identifier),
+      resourceIdentifierDto: new ResourceIdentifierDto('urn:altinn:resource', identifier),
     };
 
     void dispatch(delegationAccessCheck(dto));
