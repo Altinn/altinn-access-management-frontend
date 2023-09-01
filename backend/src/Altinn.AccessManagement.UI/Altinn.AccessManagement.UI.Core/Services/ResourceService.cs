@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             try
             {
                 List<ServiceResource> resources = await GetFullResourceList();
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.SystemResource);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.SystemResource && r.Delegable && r.Visible);
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             try
             {
                 List<ServiceResource> resources = await GetResources();
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == resourceType && r.Delegable && r.Visible);
                 return MapResourceToFrontendModel(resourceList, languageCode);
             }
             catch (Exception ex)
@@ -322,7 +322,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                         description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                         validFrom: resource.ValidFrom,
-                        validTo: resource.ValidTo);
+                        validTo: resource.ValidTo,
+                        visible: resource.Visible,
+                        delegable: resource.Delegable);
 
                     resourceList.Add(resourceFE);
                 }

@@ -42,6 +42,11 @@
   border-bottom-style: none;
 }
 
+.actionBar.small.light {
+  border-color: var(--border-color);
+  background-color: var(--background-color);
+}
+
 .actionBar.light {
   --border-color: var(--fds-semantic-border-neutral-subtle);
   --background-color: var(--fds-semantic-surface-neutral-default);

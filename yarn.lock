@@ -409,7 +409,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.4.1, @digdir/design-system-tokens@npm:^0.4.2":
+"@digdir/design-system-tokens@npm:^0.4.2":
   version: 0.4.2
   resolution: "@digdir/design-system-tokens@npm:0.4.2"
   checksum: e75d52501d183eb7a78d92b9403909ec1c00c4ef19bd1fcf0677c1cc3a7b918a48b5d460377bc7ead331a101b817b4a08093b8e394187dec7e181512934f5d04
@@ -1793,7 +1793,7 @@ __metadata:
   dependencies:
     "@altinn/altinn-design-system": 0.29.1
     "@digdir/design-system-react": 0.23.3
-    "@digdir/design-system-tokens": ^0.4.1
+    "@digdir/design-system-tokens": ^0.4.2
     "@navikt/aksel-icons": ^5.0.3
     "@reduxjs/toolkit": ^1.9.5
     "@tanstack/react-query": ^4.32.6

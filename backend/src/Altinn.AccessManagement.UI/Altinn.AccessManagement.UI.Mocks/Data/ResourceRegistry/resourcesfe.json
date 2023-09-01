@@ -833,26 +833,6 @@
     "resourceOwnerOrgNumber": "130000000"
   },
   {
-    "title": "Snarveien - lenketjeneste",
-    "sector": null,
-    "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
-    "identifier": "appid-503",
-    "isComplete": true,
-    "description": "Snarveien som lenketjeneste",
-    "resourceType": "Default",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir tilgang til snarveger.",
-    "resourceReferences": [],
-    "resourceOwnerName": "PÅFUNNSETATEN",
-    "resourceOwnerOrgNumber": "130000000"
-  },
-  {
     "title": "Det magiske klesskapet - lenketjeneste",
     "sector": null,
     "status": null,
@@ -863,6 +843,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-502",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Det magiske klesskapet",
     "resourceType": "Default",
     "thematicArea": null,
@@ -871,6 +853,28 @@
     "resourceReferences": [],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgNumber": "777777777"
+  },
+  {
+    "title": "Snarveien - lenketjeneste",
+    "sector": null,
+    "status": null,
+    "validTo": "9999-12-31T23:59:59.997",
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "validFrom": "2020-03-04T18:04:27.27",
+    "identifier": "appid-503",
+    "isComplete": true,
+    "visible": true,
+    "delegable": true,
+    "description": "Snarveien som lenketjeneste",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til snarveger.",
+    "resourceReferences": [],
+    "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgNumber": "130000000"
   },
   {
     "title": "A3 app",
@@ -883,21 +887,18 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-504",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "En Altinn 3 app",
-    "resourceType": "Default",
+    "resourceType": "AltinnApp",
     "thematicArea": null,
     "isPublicService": true,
     "rightDescription": "Gir tilgang til en A3 app.",
     "resourceReferences": [
       {
-        "reference": "AppId:504",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn3"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn3"
+        "referenceSource": "Altinn3",
+        "reference": "ttd/a3-app",
+        "referenceType": "ApplicationId"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -914,21 +915,23 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-505",
     "isComplete": true,
-    "description": "En Altinn 2 app",
-    "resourceType": "Default",
+    "visible": true,
+    "delegable": true,
+    "description": "Et Altinn 2 skjema",
+    "resourceType": "Altinn2Service",
     "thematicArea": null,
     "isPublicService": true,
-    "rightDescription": "Gir tilgang til en A2 app.",
+    "rightDescription": "Gir tilgang til et A2 skjema.",
     "resourceReferences": [
       {
-        "reference": "AppId:505",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
+        "referenceSource": "Altinn2",
+        "reference": "3225",
+        "referenceType": "ServiceCode"
       },
       {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
+        "referenceSource": "Altinn2",
+        "reference": "1596",
+        "referenceType": "ServiceEditionCode"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -945,21 +948,18 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-506",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "En Altinn 3 app",
-    "resourceType": "Default",
+    "resourceType": "AltinnApp",
     "thematicArea": null,
     "isPublicService": true,
     "rightDescription": "Gir tilgang til en A3 app.",
     "resourceReferences": [
       {
-        "reference": "AppId:506",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn3"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn3"
+        "referenceSource": "Altinn3",
+        "reference": "ttd/a3-app2",
+        "referenceType": "ApplicationId"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -976,21 +976,23 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-507",
     "isComplete": true,
-    "description": "En Altinn 2 app",
-    "resourceType": "Default",
+    "visible": true,
+    "delegable": true,
+    "description": "Et Altinn 2 skjema",
+    "resourceType": "Altinn2Service",
     "thematicArea": null,
     "isPublicService": true,
-    "rightDescription": "Gir tilgang til en A2 app.",
+    "rightDescription": "Gir tilgang til et A2 skjema.",
     "resourceReferences": [
       {
-        "reference": "AppId:505",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
+        "referenceSource": "Altinn2",
+        "reference": "322a",
+        "referenceType": "ServiceCode"
       },
       {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
+        "referenceSource": "Altinn2",
+        "reference": "159b",
+        "referenceType": "ServiceEditionCode"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -1007,6 +1009,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-508",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Brannbilen - det er bare én ja",
     "resourceType": "Default",
     "thematicArea": null,
@@ -1027,6 +1031,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-509",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
     "resourceType": "Default",
     "thematicArea": null,
@@ -1047,6 +1053,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-510",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
     "resourceType": "Default",
     "thematicArea": null,
@@ -1067,6 +1075,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-511",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
     "resourceType": "Default",
     "thematicArea": null,
@@ -1087,6 +1097,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-512",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
     "resourceType": "Default",
     "thematicArea": null,
@@ -1107,6 +1119,8 @@
     "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-513",
     "isComplete": true,
+    "visible": true,
+    "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
     "resourceType": "Default",
     "thematicArea": null,

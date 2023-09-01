@@ -1,0 +1,37 @@
+{
+  "to": [
+    {
+      "id": "urn:altinn:ssn",
+      "value": "50019992"
+    }
+  ],
+  "rightDelegationResults": [
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-503"
+        }
+      ],
+      "action": "read"
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-503"
+        }
+      ],
+      "action": "write"
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-503"
+        }
+      ],
+      "action": "sign"
+    }
+  ]
+}

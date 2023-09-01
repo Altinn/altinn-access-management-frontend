@@ -23,5 +23,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _singleRightClient.CheckDelegationAccess(partyId, request);
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
+        {
+            return await _singleRightClient.CreateDelegation(party, delegation);
+        }
     }
 }

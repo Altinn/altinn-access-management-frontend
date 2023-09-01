@@ -39,6 +39,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string Status { get; set; }
 
         /// <summary>
+        /// Is this resource possible to delegate to others or not
+        /// </summary>
+        public bool Delegable { get; set; } = true;
+
+        /// <summary>
+        /// The visibility of the resource
+        /// </summary>
+        public bool Visible { get; set; } = true;
+
+        /// <summary>
         /// When the resource is available from
         /// </summary>
         public DateTime ValidFrom { get; set; }
@@ -84,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, string? homepage = null, int? priorityCounter = null)
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
         {
             Identifier = identifier;
             Title = title;
@@ -99,6 +109,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             ResourceReferences = resourceReferences;
             PriorityCounter = priorityCounter;
             ResourceType = resourceType;
+            Visible = visible;
+            Delegable = delegable;
         }
 
         /// <summary>
@@ -120,6 +132,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             PriorityCounter = serviceResourceFE.PriorityCounter;
             ResourceReferences = serviceResourceFE.ResourceReferences;
             ResourceType = serviceResourceFE.ResourceType;
+            Visible = serviceResourceFE.Visible;
+            Delegable = serviceResourceFE.Delegable;
         }
     }
 }
