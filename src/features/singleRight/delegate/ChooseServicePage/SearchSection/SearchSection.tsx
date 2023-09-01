@@ -20,13 +20,16 @@ import { ResourceActionBar } from '../ResourceActionBar/ResourceActionBar';
 import classes from './SearchSection.module.css';
 
 export interface SearchSectionParams {
+  /** The callback function to be called when a service is selected. */
   onAdd: (resourceIdentifier: string, resource: ServiceResource) => void;
-  onRemove: (resourceIdentifier: string) => void;
+
+  /** The callback function to be called when a undoing the selection choice of a service. */
+  onUndo: (resourceIdentifier: string) => void;
 }
 
 const searchResultsPerPage = 10;
 
-export const SearchSection = ({ onAdd, onRemove }: SearchSectionParams) => {
+export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
@@ -34,15 +37,19 @@ export const SearchSection = ({ onAdd, onRemove }: SearchSectionParams) => {
   const [currentPage, setCurrentPage] = useState(1);
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
 
-  const { data, error, isFetching } = useGetPaginatedSearchQuery({
+  const {
+    data: searchData,
+    error,
+    isFetching,
+  } = useGetPaginatedSearchQuery({
     searchString,
     ROfilters: filters,
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
   });
 
-  const resources = data?.pageList;
-  const totalNumberOfResults = data?.numEntriesTotal;
+  const resources = searchData?.pageList;
+  const totalNumberOfResults = searchData?.numEntriesTotal;
   const { data: ROdata } = useGetResourceOwnersQuery();
 
   const filterOptions = ROdata
@@ -172,7 +179,7 @@ export const SearchSection = ({ onAdd, onRemove }: SearchSectionParams) => {
           onAdd(resource.identifier, resource);
         }}
         onRemoveClick={() => {
-          onRemove(resource.identifier);
+          onUndo(resource.identifier);
         }}
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         errorText={t(`${errorCodeTextKey}_title`)}
