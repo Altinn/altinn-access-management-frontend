@@ -26,7 +26,7 @@
     "general_error_title": "Sorry, looks like somthing went wrong",
     "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk.",
     "cancel": "Cancel",
-    "confirm_delegation": "Confirm delegation",
+    "confirm": "Confirm",
     "complete": "Complete",
     "page": "Page",
     "read": "Read",
@@ -74,7 +74,6 @@
     "previous":"Previous",
     "next": "Next",
     "add_new_business": "Add new business",
-    "confirm_delegation": "Confirm",
     "confirmation_page_content_top_text": "You wish to give access to the following APIs",
     "confirmation_page_content_second_text": "The API-accesses will be given to:",
     "confirmation_page_content_bottom_text": "The accesses will be given and is valid until they're actively deleted.",
@@ -113,9 +112,9 @@
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
     "search_hits": "matches found:",
-    "missing_role_access": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-    "missing_delegation_access": "The user does not have the necessary delegation accesses to delegate this service.",
-    "missing_srr_right_access": "The user doesn't have SRR right access to delegate",
+    "missing_role_access": "You don't have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+    "missing_delegation_access": "You don't have the necessary delegation accesses to delegate this service.",
+    "missing_srr_right_access": "You don't have SRR right access to delegate",
     "unknown": "Unknown",
     "new_error": "This is a new error that we haven't gotten before. Please report it to Altinn by sending in a screen shot.",
     "missing_role_access_title": "Mangler rolle",
@@ -130,8 +129,7 @@
     "choose_rights_page_top_text": "Choose which single rights you want to delegate to {{name}}.",
     "choose_rights_page_secondary_text": "If you want to adjust the accesses e.g. Remove write access, click the arrow to open the service to adjust this.",
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",
-    "alert_info_text": "One or more of the rights on this service can't be delegated because: {{reason}}. Below you can see which rights affected by this",
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
-    "action_bar_adjust_rights_text": "If you want to limit the delegable access you can click the the checkmarks on the specific access"
+    "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the the checkmarks on the specific access"
   }
 }
