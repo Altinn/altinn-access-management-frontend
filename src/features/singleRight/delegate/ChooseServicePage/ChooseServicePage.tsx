@@ -105,7 +105,7 @@ export const ChooseServicePage = () => {
           />
           <SearchSection
             onAdd={onAdd}
-            onRemove={onRemove}
+            onUndo={onRemove}
           />
           <DualElementsContainer
             leftElement={
