@@ -223,7 +223,7 @@ export const ChooseServicePage = () => {
         compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
-          {errorCodeTextKey && (
+          {status === 'NotDelegable' && errorCodeTextKey && (
             <Alert
               severity='danger'
               elevated={false}

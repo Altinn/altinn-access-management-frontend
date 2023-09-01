@@ -27,12 +27,6 @@ export interface ResourceActionBarProps
 
   /** When true saves as much space as possible. Usually true for smaller screens */
   compact?: boolean;
-
-  /** Adds functionality for automatically showing warning color when status is PartiallyDelegable */
-  canBePartiallyDelegable?: boolean;
-
-  /** Independent open state that can be used to open the ActionBar */
-  initialOpen?: boolean;
 }
 
 export const ResourceActionBar = ({
@@ -44,37 +38,27 @@ export const ResourceActionBar = ({
   onAddClick,
   onRemoveClick,
   compact = false,
-  canBePartiallyDelegable: warningColor = false,
-  initialOpen = false,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
-  const [open, setOpen] = useState(initialOpen);
+  const [open, setOpen] = useState(false);
 
   const previousStatus = usePrevious(status);
 
   useUpdate(() => {
-    if (initialOpen) {
-      setOpen(initialOpen);
-    } else {
-      if (status === 'NotDelegable' && previousStatus !== undefined) {
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
+    if (status === 'NotDelegable' && previousStatus !== undefined) {
+      setOpen(true);
     }
-  }, [status, initialOpen]);
+  }, [status]);
 
   const color = useMemo(() => {
-    if (status === 'Delegable') {
-      return 'success';
-    } else if (status === 'NotDelegable') {
-      return 'danger';
-    } else if (status === 'PartiallyDelegable' && warningColor) {
-      return 'warning';
-    } else if (status === 'PartiallyDelegable') {
-      return 'success';
-    } else {
-      return 'neutral';
+    switch (status) {
+      case 'Delegable':
+      case 'PartiallyDelegable':
+        return 'success';
+      case 'NotDelegable':
+        return 'danger';
+      default:
+        return 'neutral';
     }
   }, [status]);
 
@@ -119,12 +103,14 @@ export const ResourceActionBar = ({
   );
 
   const action = () => {
-    if (status === 'Delegable' || status === 'PartiallyDelegable') {
-      return undoButton;
-    } else if (status === 'NotDelegable') {
-      return notDelegableLabel;
-    } else {
-      return addButton;
+    switch (status) {
+      case 'Delegable':
+      case 'PartiallyDelegable':
+        return undoButton;
+      case 'NotDelegable':
+        return notDelegableLabel;
+      default:
+        return addButton;
     }
   };
 
