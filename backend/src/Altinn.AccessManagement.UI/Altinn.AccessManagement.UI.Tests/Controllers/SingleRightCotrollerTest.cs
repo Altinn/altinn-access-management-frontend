@@ -397,7 +397,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new IdValuePair
                 {
                     Id = "urn:altinn:resource",
-                    Value = "NonExistant",
+                    Value = "Nonexistent",
 
                 }
             };
