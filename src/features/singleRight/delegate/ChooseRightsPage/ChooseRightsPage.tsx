@@ -41,8 +41,7 @@ export const ChooseRightsPage = () => {
   const [checkedStates, setCheckedStates] = useState<Record<string, boolean>>({});
   const isSm = useMediaQuery('(max-width: 768px)');
   let hasPartiallyDelegableAppeared = false;
-  const rightsToBeDelegated: DelegationResourceDTO[] = [];
-  console.log(rightsToBeDelegated);
+  const [rightsToBeDelegated, setRightsToBeDelegated] = useState<DelegationResourceDTO[]>([]);
 
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
 
@@ -54,13 +53,30 @@ export const ChooseRightsPage = () => {
 
   const onConfirm = () => {
     const filteredList = rightsToBeDelegated.filter((right) => right.checked);
+    console.log('filtered list', rightsToBeDelegated);
   };
 
-  const handleToggleChecked = (serviceIdentifier: string, rightKey: string) => {
+  const handleToggleChecked = (
+    title: string,
+    serviceIdentifier: string,
+    action: string,
+    checked: boolean,
+  ) => {
     setCheckedStates((prevCheckedStates) => ({
       ...prevCheckedStates,
-      [`${serviceIdentifier}-${rightKey}`]: !prevCheckedStates[`${serviceIdentifier}-${rightKey}`],
+      [`${serviceIdentifier}-${action}`]: !prevCheckedStates[`${serviceIdentifier}-${action}`],
     }));
+
+    if (!checked) {
+      const dto = {
+        title,
+        serviceIdentifier,
+        action,
+        checked,
+      };
+      rightsToBeDelegated.push(dto);
+      console.log(rightsToBeDelegated);
+    }
   };
 
   const sortedServiceResources = [...delegableChosenServices]?.sort((a, b) => {
@@ -112,21 +128,18 @@ export const ChooseRightsPage = () => {
               .map((response, index: number) => {
                 const isChecked =
                   !checkedStates[`${chosenService.service?.identifier}-${response.rightKey}`];
-                const dto = {
-                  title: chosenService.service?.title,
-                  serviceIdentifier: chosenService.service?.identifier,
-                  action: response.action,
-                  checked: isChecked,
-                };
-                rightsToBeDelegated.push(dto);
-
                 return (
                   <div key={index}>
                     <Chip.Toggle
                       checkmark
                       selected={isChecked}
                       onClick={() => {
-                        handleToggleChecked(chosenService.service?.identifier, response.rightKey);
+                        handleToggleChecked(
+                          chosenService.service?.title,
+                          chosenService.service?.identifier,
+                          response.action,
+                          isChecked,
+                        );
                       }}
                     >
                       {t(`common.${response.action}`)}
