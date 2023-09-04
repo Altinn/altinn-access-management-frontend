@@ -30,7 +30,7 @@ import classes from './ChooseRightsPage.module.css';
 interface DelegationResourceDTO {
   title: string | undefined;
   serviceIdentifier: string | undefined;
-  rightKey: string;
+  action: string;
   checked: boolean;
 }
 
@@ -42,6 +42,7 @@ export const ChooseRightsPage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   let hasPartiallyDelegableAppeared = false;
   const rightsToBeDelegated: DelegationResourceDTO[] = [];
+  console.log(rightsToBeDelegated);
 
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
 
@@ -96,9 +97,9 @@ export const ChooseRightsPage = () => {
         initialOpen={partiallyDelegableOpen}
       >
         <div className={classes.serviceResourceContent}>
-          <Paragraph spacing>{chosenService.service?.description}</Paragraph>
-          <Paragraph spacing>{chosenService.service?.rightDescription}</Paragraph>
-          <Paragraph spacing>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
+          <Paragraph>{chosenService.service?.description}</Paragraph>
+          <Paragraph>{chosenService.service?.rightDescription}</Paragraph>
+          <Paragraph>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
           <Heading
             size={'xxsmall'}
             level={5}
@@ -114,7 +115,7 @@ export const ChooseRightsPage = () => {
                 const dto = {
                   title: chosenService.service?.title,
                   serviceIdentifier: chosenService.service?.identifier,
-                  rightKey: response.rightKey,
+                  action: response.action,
                   checked: isChecked,
                 };
                 rightsToBeDelegated.push(dto);
