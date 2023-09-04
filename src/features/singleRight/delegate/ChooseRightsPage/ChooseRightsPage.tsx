@@ -43,15 +43,12 @@ export const ChooseRightsPage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   let hasPartiallyDelegableAppeared = false;
 
-  const createCheckedStatesList = delegableChosenServices.flatMap(
-    (cs) =>
-      cs.accessCheckResponses
-        ?.filter((response) => response.status !== 'NotDelegable')
-        .map((acr) => ({
-          title: cs.service?.title,
-          serviceIdentifier: cs.service?.identifier,
-          action: acr.action,
-        })),
+  const createCheckedStatesList = delegableChosenServices.flatMap((cs) =>
+    cs.accessCheckResponses.map((acr) => ({
+      title: cs.service?.title,
+      serviceIdentifier: cs.service?.identifier,
+      action: acr.action,
+    })),
   );
 
   useEffect(() => {
@@ -97,25 +94,15 @@ export const ChooseRightsPage = () => {
     return a.service?.title.localeCompare(b.service.title);
   });
 
-  const serviceResourcesActionBars = sortedServiceResources?.map((chosenService: ChosenService) => {
-    const partiallyDelegableOpen = chosenService.status && !hasPartiallyDelegableAppeared;
+  const chooseRightsActionBars = (sortedServiceResources: any) => {
+    return sortedServiceResources?.map((chosenService: ChosenService) => {
+      const partiallyDelegableOpen = chosenService.status && !hasPartiallyDelegableAppeared;
 
-    if (partiallyDelegableOpen) {
-      hasPartiallyDelegableAppeared = true;
-    }
+      if (partiallyDelegableOpen) {
+        hasPartiallyDelegableAppeared = true;
+      }
 
-    return (
-      <RightsActionBar
-        key={chosenService.service?.identifier}
-        title={chosenService.service?.title}
-        subtitle={chosenService.service?.resourceOwnerName}
-        status={chosenService.status}
-        onRemoveClick={() => {
-          onRemove(chosenService.service?.identifier);
-        }}
-        compact={isSm}
-        initialOpen={partiallyDelegableOpen}
-      >
+      const serviceResourceContent = (
         <div className={classes.serviceResourceContent}>
           <Paragraph>{chosenService.service?.description}</Paragraph>
           <Paragraph>{chosenService.service?.rightDescription}</Paragraph>
@@ -155,37 +142,55 @@ export const ChooseRightsPage = () => {
                 );
               })}
           </div>
-          {chosenService.status === 'PartiallyDelegable' && (
-            <div className={classes.alertContainer}>
-              <Alert severity='warning'>
-                <Paragraph
-                  size={'large'}
-                  spacing
-                >
-                  {t('single_rights.alert_partially_delegable_header')}
-                </Paragraph>
-                <Paragraph spacing>
-                  {t(`${getSingleRightsErrorCodeTextKey(chosenService.errorCode)}`)}
-                </Paragraph>
-                <Paragraph>{t('single_rights.you_cant_delegate_these_rights')}</Paragraph>
-                <div className={classes.chipContainer}>
-                  {chosenService.accessCheckResponses
-                    ?.filter((response) => response.status === 'NotDelegable')
-                    .map((response, index: number) => {
-                      return (
-                        <div key={index}>
-                          <Chip.Toggle>{t(`common.${response.action}`)}</Chip.Toggle>
-                        </div>
-                      );
-                    })}
-                </div>
-              </Alert>
-            </div>
-          )}
         </div>
-      </RightsActionBar>
-    );
-  });
+      );
+
+      const alertContainer = chosenService.status === 'PartiallyDelegable' && (
+        <div className={classes.alertContainer}>
+          <Alert severity='warning'>
+            <Paragraph
+              size={'large'}
+              spacing
+            >
+              {t('single_rights.alert_partially_delegable_header')}
+            </Paragraph>
+            <Paragraph spacing>
+              {t(`${getSingleRightsErrorCodeTextKey(chosenService.errorCode)}`)}
+            </Paragraph>
+            <Paragraph>{t('single_rights.you_cant_delegate_these_rights')}</Paragraph>
+            <div className={classes.chipContainer}>
+              {chosenService.accessCheckResponses
+                ?.filter((response) => response.status === 'NotDelegable')
+                .map((response, index: number) => {
+                  return (
+                    <div key={index}>
+                      <Chip.Toggle>{t(`common.${response.action}`)}</Chip.Toggle>
+                    </div>
+                  );
+                })}
+            </div>
+          </Alert>
+        </div>
+      );
+
+      return (
+        <RightsActionBar
+          key={chosenService.service?.identifier}
+          title={chosenService.service?.title}
+          subtitle={chosenService.service?.resourceOwnerName}
+          status={chosenService.status}
+          onRemoveClick={() => {
+            onRemove(chosenService.service?.identifier);
+          }}
+          compact={isSm}
+          initialOpen={partiallyDelegableOpen}
+        >
+          {serviceResourceContent}
+          {alertContainer}
+        </RightsActionBar>
+      );
+    });
+  };
 
   const navigationButtons = () => {
     return (
@@ -248,7 +253,9 @@ export const ChooseRightsPage = () => {
           <div className={classes.secondaryText}>
             <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
           </div>
-          <div className={classes.serviceResources}>{serviceResourcesActionBars}</div>
+          <div className={classes.serviceResources}>
+            {chooseRightsActionBars(sortedServiceResources)}
+          </div>
           <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>
       </Page>

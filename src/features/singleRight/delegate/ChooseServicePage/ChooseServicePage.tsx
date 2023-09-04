@@ -313,38 +313,38 @@ export const ChooseServicePage = () => {
                 ></Filter>
               </div>
               {searchResults()}
-              <div className={classes.navigationButtons}>
-                <DualElementsContainer
-                  leftElement={
-                    <Button
-                      variant='quiet'
-                      color='danger'
-                      fullWidth={true}
-                      onClick={onCancel}
-                    >
-                      {t('common.cancel')}
-                    </Button>
-                  }
-                  rightElement={
-                    <Button
-                      variant='filled'
-                      color='primary'
-                      fullWidth={true}
-                      disabled={delegableChosenServices.length < 1}
-                      onClick={() => {
-                        navigate(
+            </div>
+            <div className={classes.navigationButtons}>
+              <DualElementsContainer
+                leftElement={
+                  <Button
+                    variant='quiet'
+                    color='danger'
+                    fullWidth={true}
+                    onClick={onCancel}
+                  >
+                    {t('common.cancel')}
+                  </Button>
+                }
+                rightElement={
+                  <Button
+                    variant='filled'
+                    color='primary'
+                    fullWidth={true}
+                    disabled={delegableChosenServices.length < 1}
+                    onClick={() => {
+                      navigate(
+                        '/' +
+                          SingleRightPath.DelegateSingleRights +
                           '/' +
-                            SingleRightPath.DelegateSingleRights +
-                            '/' +
-                            String(SingleRightPath.ChooseRights),
-                        );
-                      }}
-                    >
-                      {t('common.proceed')}
-                    </Button>
-                  }
-                />
-              </div>
+                          String(SingleRightPath.ChooseRights),
+                      );
+                    }}
+                  >
+                    {t('common.proceed')}
+                  </Button>
+                }
+              />
             </div>
           </div>
         </PageContent>
