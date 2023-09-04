@@ -56,9 +56,9 @@ export const ChooseServicePage = () => {
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useAppDispatch();
-  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
   const delegableChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
+    state.singleRightsSlice.chosenServiceList.filter((s) => s.status !== 'NotDelegable'),
   );
 
   const { data, error, isFetching } = useGetPaginatedSearchQuery({
@@ -184,7 +184,9 @@ export const ChooseServicePage = () => {
   const onCancel = () => {
     const cleanHostname = window.location.hostname.replace('am.ui.', '');
 
-    const encodedUrl = 'ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=50024116';
+    const partyId = getCookie('AltinnPartyId');
+
+    const encodedUrl = `ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=${partyId}`;
 
     window.location.href =
       'https://' +

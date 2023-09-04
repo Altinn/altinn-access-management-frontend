@@ -41,12 +41,12 @@ export interface ChosenService {
   errorCode?: string;
 }
 
-interface chosenServiceList {
-  chosenServices: ChosenService[];
+interface sliceState {
+  chosenServiceList: ChosenService[];
 }
 
-const initialState: chosenServiceList = {
-  chosenServices: [],
+const initialState: sliceState = {
+  chosenServiceList: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
@@ -71,8 +71,8 @@ const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
   reducers: {
-    removeServiceResource: (state: chosenServiceList, action) => {
-      state.chosenServices = state.chosenServices.filter(
+    removeServiceResource: (state: sliceState, action) => {
+      state.chosenServiceList = state.chosenServiceList.filter(
         (s) => s.service?.identifier !== action.payload,
       );
     },
@@ -107,7 +107,7 @@ const singleRightSlice = createSlice({
       }
 
       if (chosenService) {
-        state.chosenServices.push(chosenService);
+        state.chosenServiceList.push(chosenService);
       }
     });
   },
