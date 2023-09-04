@@ -24,8 +24,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
-import { ResourceActionBar } from '../ChooseServicePage/ResourceActionBar/ResourceActionBar';
-
+import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import classes from './ChooseRightsPage.module.css';
 
 interface DelegationResourceDTO {
@@ -86,7 +85,7 @@ export const ChooseRightsPage = () => {
     }
 
     return (
-      <ResourceActionBar
+      <RightsActionBar
         key={chosenService.service?.identifier}
         title={chosenService.service?.title}
         subtitle={chosenService.service?.resourceOwnerName}
@@ -95,13 +94,12 @@ export const ChooseRightsPage = () => {
           onRemove(chosenService.service?.identifier);
         }}
         compact={isSm}
-        canBePartiallyDelegable={true}
         initialOpen={isPartiallyDelegable}
       >
         <div className={classes.serviceResourceContent}>
-          <Paragraph>{chosenService.service?.description}</Paragraph>
-          <Paragraph>{chosenService.service?.rightDescription}</Paragraph>
-          <Paragraph>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
+          <Paragraph spacing>{chosenService.service?.description}</Paragraph>
+          <Paragraph spacing>{chosenService.service?.rightDescription}</Paragraph>
+          <Paragraph spacing>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
           <Heading
             size={'xxsmall'}
             level={5}
@@ -165,7 +163,7 @@ export const ChooseRightsPage = () => {
             </div>
           )}
         </div>
-      </ResourceActionBar>
+      </RightsActionBar>
     );
   });
 
