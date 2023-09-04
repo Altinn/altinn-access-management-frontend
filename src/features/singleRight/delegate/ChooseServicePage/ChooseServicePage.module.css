@@ -57,31 +57,16 @@
   display: flex;
   justify-content: center;
   margin: 20px;
+  margin-top: 50px;
+  min-height: 820px;
 }
 
 .searchError {
   margin-top: 32px;
 }
 
-.pageContent {
-  min-height: 1200px;
-}
-
 .navigationButtons {
   margin-top: 4rem;
-}
-
-@media only screen and (min-width: 769px) {
-  .notDelegableAlert {
-    margin-bottom: 30px;
-  }
-
-  .navigationButtons {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: flex-end;
-  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -96,5 +81,11 @@
 
   .notDelegableAlert {
     margin-bottom: 20px;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .notDelegableAlert {
+    margin-bottom: 30px;
   }
 }
