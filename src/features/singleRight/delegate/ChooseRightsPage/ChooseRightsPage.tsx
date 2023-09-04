@@ -12,7 +12,7 @@ import {
   Popover,
 } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { DualElementsContainer, Page, PageContainer, PageContent, PageHeader } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -31,52 +31,56 @@ interface DelegationResourceDTO {
   title: string | undefined;
   serviceIdentifier: string | undefined;
   action: string;
-  checked: boolean;
 }
 
 export const ChooseRightsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [checkedStates, setCheckedStates] = useState<Record<string, boolean>>({});
+  const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
+  const delegableChosenServices = chosenServices.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
   let hasPartiallyDelegableAppeared = false;
-  const [rightsToBeDelegated, setRightsToBeDelegated] = useState<DelegationResourceDTO[]>([]);
 
-  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
+  const createCheckedStatesList = delegableChosenServices.flatMap(
+    (cs) =>
+      cs.accessCheckResponses
+        ?.filter((response) => response.status !== 'NotDelegable')
+        .map((acr) => ({
+          title: cs.service?.title,
+          serviceIdentifier: cs.service?.identifier,
+          action: acr.action,
+        })),
+  );
 
-  const delegableChosenServices = chosenServices.filter((s) => s.status !== 'NotDelegable');
+  useEffect(() => {
+    setSelectedRights(createCheckedStatesList);
+  }, []);
 
   const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
   };
 
   const onConfirm = () => {
-    const filteredList = rightsToBeDelegated.filter((right) => right.checked);
-    console.log('filtered list', rightsToBeDelegated);
+    console.log('confirm checkedStates', selectedRights);
   };
 
-  const handleToggleChecked = (
-    title: string,
-    serviceIdentifier: string,
-    action: string,
-    checked: boolean,
-  ) => {
-    setCheckedStates((prevCheckedStates) => ({
-      ...prevCheckedStates,
-      [`${serviceIdentifier}-${action}`]: !prevCheckedStates[`${serviceIdentifier}-${action}`],
-    }));
+  const handleToggleChecked = (title: string, serviceIdentifier: string, action: string) => {
+    const existsInList = !!selectedRights.find(
+      (s) => s.serviceIdentifier === serviceIdentifier && s.action === action,
+    );
 
-    if (!checked) {
-      const dto = {
-        title,
-        serviceIdentifier,
-        action,
-        checked,
-      };
-      rightsToBeDelegated.push(dto);
-      console.log(rightsToBeDelegated);
+    let newList: DelegationResourceDTO[] = [...selectedRights];
+    if (existsInList) {
+      newList = selectedRights.filter(
+        (s) => s.serviceIdentifier !== serviceIdentifier || s.action !== action,
+      );
+    } else {
+      newList.push({ title, serviceIdentifier, action });
     }
+
+    setSelectedRights(newList);
   };
 
   const sortedServiceResources = [...delegableChosenServices]?.sort((a, b) => {
@@ -126,8 +130,12 @@ export const ChooseRightsPage = () => {
             {chosenService.accessCheckResponses
               ?.filter((response) => response.status !== 'NotDelegable')
               .map((response, index: number) => {
-                const isChecked =
-                  !checkedStates[`${chosenService.service?.identifier}-${response.rightKey}`];
+                const isChecked = !!selectedRights.find(
+                  (s) =>
+                    s.serviceIdentifier === chosenService.service?.identifier &&
+                    s.action === response.action,
+                );
+
                 return (
                   <div key={index}>
                     <Chip.Toggle
@@ -138,7 +146,6 @@ export const ChooseRightsPage = () => {
                           chosenService.service?.title,
                           chosenService.service?.identifier,
                           response.action,
-                          isChecked,
                         );
                       }}
                     >
