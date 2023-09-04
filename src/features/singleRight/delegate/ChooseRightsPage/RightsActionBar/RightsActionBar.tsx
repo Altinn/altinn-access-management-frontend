@@ -12,7 +12,7 @@ import classes from './RightsActionBar.module.css';
 export interface RightsActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
-  status: 'Delegable' | 'NotDelegable' | 'Unchecked' | 'PartiallyDelegable';
+  status: 'Delegable' | 'PartiallyDelegable';
 
   /** The callback function to be called when the remove button is pressed. */
   onRemoveClick?: () => void;
@@ -28,7 +28,7 @@ export const RightsActionBar = ({
   subtitle,
   title,
   children,
-  status = 'Unchecked',
+  status,
   onRemoveClick,
   initialOpen,
   compact = false,

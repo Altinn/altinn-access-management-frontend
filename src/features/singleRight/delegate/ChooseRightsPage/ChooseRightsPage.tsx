@@ -77,10 +77,9 @@ export const ChooseRightsPage = () => {
   });
 
   const serviceResourcesActionBars = sortedServiceResources?.map((chosenService: ChosenService) => {
-    const isPartiallyDelegable =
-      chosenService.status === 'PartiallyDelegable' && !hasPartiallyDelegableAppeared;
+    const partiallyDelegableOpen = chosenService.status && !hasPartiallyDelegableAppeared;
 
-    if (isPartiallyDelegable) {
+    if (partiallyDelegableOpen) {
       hasPartiallyDelegableAppeared = true;
     }
 
@@ -94,7 +93,7 @@ export const ChooseRightsPage = () => {
           onRemove(chosenService.service?.identifier);
         }}
         compact={isSm}
-        initialOpen={isPartiallyDelegable}
+        initialOpen={partiallyDelegableOpen}
       >
         <div className={classes.serviceResourceContent}>
           <Paragraph spacing>{chosenService.service?.description}</Paragraph>
@@ -208,7 +207,7 @@ export const ChooseRightsPage = () => {
                   onConfirm();
                 }}
               >
-                {t('common.confirm_delegation')}
+                {t('common.confirm')}
               </Button>
             </div>
           </Popover>
