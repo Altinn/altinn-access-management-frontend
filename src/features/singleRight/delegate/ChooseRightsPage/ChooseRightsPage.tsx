@@ -43,12 +43,15 @@ export const ChooseRightsPage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   let hasPartiallyDelegableAppeared = false;
 
-  const createCheckedStatesList = delegableChosenServices.flatMap((cs) =>
-    cs.accessCheckResponses.map((acr) => ({
-      title: cs.service?.title,
-      serviceIdentifier: cs.service?.identifier,
-      action: acr.action,
-    })),
+  const createCheckedStatesList = delegableChosenServices.flatMap(
+    (cs) =>
+      cs.accessCheckResponses
+        ?.filter((acr) => acr.status !== 'NotDelegable')
+        .map((acr) => ({
+          title: cs.service?.title,
+          serviceIdentifier: cs.service?.identifier,
+          action: acr.action,
+        })),
   );
 
   useEffect(() => {
