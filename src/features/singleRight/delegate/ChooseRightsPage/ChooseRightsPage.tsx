@@ -59,9 +59,7 @@ export const ChooseRightsPage = () => {
   }, []);
 
   const onRemove = (identifier: string | undefined) => {
-    const newList = selectedRights.filter(
-      (s) => s.serviceIdentifier !== identifier,
-    );
+    const newList = selectedRights.filter((s) => s.serviceIdentifier !== identifier);
 
     setSelectedRights(newList);
 
@@ -103,7 +101,7 @@ export const ChooseRightsPage = () => {
     return a.service?.title.localeCompare(b.service.title);
   });
 
-  const chooseRightsActionBars = (sortedServiceResources: any) => {
+  const chooseRightsActionBars = (sortedServiceResources: ChosenService[]) => {
     return sortedServiceResources?.map((chosenService: ChosenService) => {
       const partiallyDelegableOpen = chosenService.status && !hasPartiallyDelegableAppeared;
 

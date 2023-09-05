@@ -15,6 +15,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import { type ChosenService } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import { ResourceActionBar } from '../ResourceActionBar/ResourceActionBar';
 
@@ -152,10 +153,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
     const status = chosenServices.find(
-      (selected: any) => selected.service?.title === resource.title,
+      (selected: ChosenService) => selected.service?.title === resource.title,
     )?.status;
     const errorCode = chosenServices.find(
-      (selected: any) => selected.service?.title === resource.title,
+      (selected: ChosenService) => selected.service?.title === resource.title,
     )?.errorCode;
     const errorCodeTextKey = getSingleRightsErrorCodeTextKey(errorCode);
 
