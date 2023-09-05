@@ -102,7 +102,7 @@ export const ChooseOrgPage = () => {
     }
   }
 
-  const delegableOrgItems = delegableOrgs.map((org: DelegableOrg, index: Key) => {
+  const delegableOrgItems = delegableOrgs.map((org: DelegableOrg) => {
     return (
       <div
         className={classes.actionBarWrapper}
