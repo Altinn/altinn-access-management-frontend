@@ -1,0 +1,49 @@
+{
+  "to": [
+    {
+      "id": "urn:altinn:ssn",
+      "value": "50019992"
+    }
+  ],
+  "rightDelegationResults": [
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:servicecode",
+          "value": "322a"
+        },
+        {
+          "id": "urn:altinn:serviceeditioncode",
+          "value": "159b"
+        }
+      ],
+      "action": "read"
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:servicecode",
+          "value": "322a"
+        },
+        {
+          "id": "urn:altinn:serviceeditioncode",
+          "value": "159b"
+        }
+      ],
+      "action": "write"
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:servicecode",
+          "value": "322a"
+        },
+        {
+          "id": "urn:altinn:serviceeditioncode",
+          "value": "159b"
+        }
+      ],
+      "action": "sign"
+    }
+  ]
+}

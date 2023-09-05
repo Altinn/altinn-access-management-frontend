@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -15,14 +17,18 @@ namespace Altinn.AccessManagement.UI.Controllers
     [Route("accessmanagement/api/v1/singleright")]
     public class SingleRightController : Controller
     {
+        private readonly ILogger<SingleRightController> _logger;
         private readonly ISingleRightService _singleRightService;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SingleRightController" /> class
         /// </summary>
-        public SingleRightController(ISingleRightService singleRightService)
+        public SingleRightController(ISingleRightService singleRightService, ILogger<SingleRightController> logger)
         {
             _singleRightService = singleRightService;
+            _serializerOptions.Converters.Add(new JsonStringEnumConverter());
+            _logger = logger;
         }
 
         /// <summary>
@@ -40,6 +46,43 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception)
             {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for delegating a single right from the reportee party to a third party
+        /// </summary>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("delegate/{party}")]
+        public async Task<ActionResult<DelegationOutput>> CreateDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
+        {
+            try
+            {
+                HttpResponseMessage response = await _singleRightService.CreateDelegation(party, delegation);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Bad request", detail: responseContent));
+                }
+                else
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

@@ -1,0 +1,36 @@
+{
+  "to": [
+    {
+      "id": "urn:altinn:ssn",
+      "value": "50019992"
+    }
+  ],
+  "rightDelegationResults": [
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:applicationid",
+          "value": "a3-app2"
+        },
+        {
+          "id": "urn:altinn:org",
+          "value": "ttd"
+        }
+      ],
+      "action": "read"
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:applicationid",
+          "value": "a3-app2"
+        },
+        {
+          "id": "urn:altinn:org",
+          "value": "ttd"
+        }
+      ],
+      "action": "write"
+    }
+  ]
+}
