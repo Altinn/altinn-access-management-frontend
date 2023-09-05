@@ -73,6 +73,9 @@ export const Router = createBrowserRouter(
           element={<ChooseRightsPage />}
           errorElement={<NotFoundSite />}
         />
+        <Route>
+          
+        </Route>
       </Route>
     </Route>,
   ),
