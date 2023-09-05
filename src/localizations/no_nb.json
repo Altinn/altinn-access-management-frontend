@@ -115,6 +115,9 @@
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "missing_delegable_right": "Mangler rettighet"
+    "missing_delegable_right": "Mangler rettighet",
+    "to_delegation_page": "Gå til delegeringsside",
+    "has_received_these_rights": "{{name}} har fått disse rettighetene:",
+    "rights_are_valid_until_deletion": "Rettighetene er gyldige til de slettes eller trekkes tilbake"
   }
 }
