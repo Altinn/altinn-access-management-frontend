@@ -59,6 +59,12 @@ export const ChooseRightsPage = () => {
   }, []);
 
   const onRemove = (identifier: string | undefined) => {
+    const newList = selectedRights.filter(
+      (s) => s.serviceIdentifier !== identifier,
+    );
+
+    setSelectedRights(newList);
+
     void dispatch(removeServiceResource(identifier));
   };
 

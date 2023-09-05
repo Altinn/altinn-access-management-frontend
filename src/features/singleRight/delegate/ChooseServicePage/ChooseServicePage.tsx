@@ -52,9 +52,7 @@ export const ChooseServicePage = () => {
 
   const onCancel = () => {
     const cleanHostname = window.location.hostname.replace('am.ui.', '');
-
     const partyId = getCookie('AltinnPartyId');
-
     const encodedUrl = `ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=${partyId}`;
 
     window.location.href =
