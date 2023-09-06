@@ -1,4 +1,4 @@
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
 import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -180,14 +180,18 @@ export const ChooseOrgPage = () => {
       );
     } else if (!searchLoading && promptOrgNumber) {
       return (
-        <Panel
-          variant={PanelVariant.Info}
-          showIcon={false}
-          title={String(t('api_delegation.buisness_search_info_title'))}
-          forceMobileLayout={true}
+        <Alert
+          severity='info'
+          role='status'
         >
-          {t('api_delegation.buisness_search_info_content')}
-        </Panel>
+          <Heading
+            size={'small'}
+            level={4}
+          >
+            {String(t('api_delegation.buisness_search_info_title'))}
+          </Heading>
+          <Paragraph>{t('api_delegation.buisness_search_info_content')}</Paragraph>
+        </Alert>
       );
     }
   };
@@ -203,9 +207,9 @@ export const ChooseOrgPage = () => {
           <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
           {isSm && chosenItems.length > 0 && (
             <div className={classes.chosenOrgs}>
-              <h4 className={classes.chosenOrgsHeader}>
+              <h3 className={classes.chosenOrgsHeader}>
                 {t('api_delegation.businesses_going_to_get_access')}
-              </h4>
+              </h3>
               <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
             </div>
           )}
@@ -254,9 +258,9 @@ export const ChooseOrgPage = () => {
               </div>
               {!isSm && (
                 <div className={common.chosenOrgsContainer}>
-                  <h4 className={classes.chosenOrgsHeader}>
+                  <h3 className={classes.chosenOrgsHeader}>
                     {t('api_delegation.businesses_going_to_get_access')}
-                  </h4>
+                  </h3>
                   <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
                 </div>
               )}
