@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { PersonIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@digdir/design-system-react';
+import { Button, Ingress } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -19,7 +19,7 @@ import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import {
-  type DelegationRequestDto,
+  type DelegationAccessCheckDto,
   delegationAccessCheck,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
@@ -34,13 +34,13 @@ export const ChooseServicePage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const delegableChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.chosenServices.filter((s) => s.status !== 'NotDelegable'),
+    state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
 
   const onAdd = (identifier: string, serviceResource: ServiceResource) => {
-    const dto: DelegationRequestDto = {
+    const dto: DelegationAccessCheckDto = {
       serviceResource,
-      delegationRequest: new ResourceIdentifierDto('urn:altinn:resource', identifier),
+      resourceIdentifierDto: new ResourceIdentifierDto('urn:altinn:resource', identifier),
     };
 
     void dispatch(delegationAccessCheck(dto));
@@ -52,6 +52,9 @@ export const ChooseServicePage = () => {
 
   const onCancel = () => {
     const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    const partyId = getCookie('AltinnPartyId');
+    const encodedUrl = `ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=${partyId}`;
+
     window.location.href =
       'https://' +
       cleanHostname +
@@ -61,7 +64,8 @@ export const ChooseServicePage = () => {
       getCookie('AltinnUserId') +
       '&amp;' +
       'partyID=' +
-      getCookie('AltinnPartyId');
+      getCookie('AltinnPartyId') +
+      encodeURIComponent(encodedUrl);
   };
 
   const selectedResourcesActionBars = delegableChosenServices.map((resource, index) => (
@@ -94,6 +98,9 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
+          <Ingress spacing>
+            {t('single_rights.choose_service_page_top_text', { name: 'ANNEMA FIGMA' })}
+          </Ingress>
           <CollectionBar
             title='Valgte tjenester'
             color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}

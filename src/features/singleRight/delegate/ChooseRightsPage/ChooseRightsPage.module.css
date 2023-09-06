@@ -1,0 +1,38 @@
+.popoverButtonContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.serviceResources {
+  margin-top: var(--fds-spacing-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fds-spacing-2);
+}
+
+.serviceResourceContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chipContainer {
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+}
+
+.navigationContainer {
+  margin-top: 40px;
+}
+
+.secondaryText {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.alertContainer {
+  max-width: 500px;
+  margin-top: 30px;
+}

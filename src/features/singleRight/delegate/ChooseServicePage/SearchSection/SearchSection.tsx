@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -14,6 +15,8 @@ import {
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
+import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import { type ServiceWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import { ResourceActionBar } from '../ResourceActionBar/ResourceActionBar';
 
@@ -35,7 +38,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServices);
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
 
   const {
     data: searchData,
@@ -97,6 +100,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <Spinner
             title={t('common.loading')}
             size='1xLarge'
+            variant='interaction'
           />
         </div>
       );
@@ -128,7 +132,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
             )}
             {filterChips()}
           </div>
-          <div className={classes.serviceResouces}> {serviceResouces}</div>
+          <div className={classes.serviceResources}> {serviceResouces}</div>
           {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
             <Pagination
               className={classes.pagination}
@@ -148,26 +152,16 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     }
   };
 
-  const getErrorCodeTextKey = (errorCode: string | undefined) => {
-    if (errorCode === 'MissingRoleAccess') {
-      return 'single_rights.missing_role_access';
-    } else if (errorCode === 'MissingDelegationAccess') {
-      return 'single_rights.missing_delegation_access';
-    } else if (errorCode === 'Unknown') {
-      return 'single_rights.unknown';
-    } else if (errorCode === undefined) {
-      return undefined;
-    } else {
-      return 'new_error';
-    }
-  };
-
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
-    const status = chosenServices.find((selected) => selected.service?.title === resource.title)
-      ?.status;
-    const errorCode = chosenServices.find((selected) => selected.service?.title === resource.title)
-      ?.errorCode;
-    const errorCodeTextKey = getErrorCodeTextKey(errorCode);
+    const status = chosenServices.find(
+      (selected: ServiceWithStatus) => selected.service?.title === resource.title,
+    )?.status;
+    console.log('status', status);
+    const errorCode = chosenServices.find(
+      (selected: ServiceWithStatus) => selected.service?.title === resource.title,
+    )?.errorCode;
+    console.log('errorCode', errorCode);
+    const errorCodeTextKey = getSingleRightsErrorCodeTextKey(errorCode);
 
     return (
       <ResourceActionBar
@@ -186,7 +180,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
-          {errorCodeTextKey && (
+          {errorCode && (
             <Alert
               severity='danger'
               elevated={false}
