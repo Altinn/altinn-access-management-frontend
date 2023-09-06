@@ -1,5 +1,5 @@
-import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
-import { List, Spinner } from '@digdir/design-system-react';
+import { SearchField } from '@altinn/altinn-design-system';
+import { Alert, Heading, List, Paragraph, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -154,13 +154,18 @@ export const ChooseApiPage = () => {
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           {chosenDelegableOrgs.length < 1 ? (
-            <Panel
-              title={t('common.error')}
-              variant={PanelVariant.Warning}
-              forceMobileLayout={isSm}
+            <Alert
+              severity='warning'
+              role='status'
             >
-              {t('api_delegation.orgs_not_chosen_subtitle')}
-            </Panel>
+              <Heading
+                size='small'
+                level={2}
+              >
+                {t('common.error')}
+              </Heading>
+              <Paragraph>{t('api_delegation.orgs_not_chosen_subtitle')}</Paragraph>
+            </Alert>
           ) : (
             <div>
               <h3>{t('api_delegation.chosen_orgs')}:</h3>

@@ -1,5 +1,5 @@
-import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
-import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Alert, Button, Heading, Link, Paragraph, Spinner } from '@digdir/design-system-react';
+import { SearchField } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -156,27 +156,29 @@ export const ChooseOrgPage = () => {
     );
   });
 
-  const infoPanel = () => {
+  const notFoundAlert = () => {
     if (!searchLoading && searchOrgNotExist) {
       return (
-        <Panel
-          variant={PanelVariant.Error}
-          showIcon={false}
-          title={String(t('api_delegation.buisness_search_notfound_title'))}
-          forceMobileLayout={true}
+        <Alert
+          severity='danger'
+          role='status'
         >
-          <div>
-            {t('api_delegation.buisness_search_notfound_content')}{' '}
-            <a
-              className={classes.link}
-              href='https://www.brreg.no/'
-              target='_blank'
-              rel='noreferrer'
-            >
-              {t('common.broennoeysund_register')}
-            </a>
-          </div>
-        </Panel>
+          <Heading
+            size={'small'}
+            level={4}
+            spacing
+          >
+            {String(t('api_delegation.buisness_search_notfound_title'))}
+          </Heading>
+          <Paragraph>{t('api_delegation.buisness_search_notfound_content')}</Paragraph>
+          <Link
+            href='https://www.brreg.no/'
+            target='_blank'
+            rel='noreferrer'
+          >
+            {t('common.broennoeysund_register')}
+          </Link>
+        </Alert>
       );
     } else if (!searchLoading && promptOrgNumber) {
       return (
@@ -187,6 +189,7 @@ export const ChooseOrgPage = () => {
           <Heading
             size={'small'}
             level={4}
+            spacing
           >
             {String(t('api_delegation.buisness_search_info_title'))}
           </Heading>
@@ -242,7 +245,7 @@ export const ChooseOrgPage = () => {
                     {t('api_delegation.businesses_search_results')}
                   </h4>
                 )}
-                {infoPanel()}
+                {notFoundAlert()}
                 <div className={classes.actionBarScrollContainer}>
                   {searchLoading ? (
                     <div className={common.spinnerContainer}>

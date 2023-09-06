@@ -1,5 +1,4 @@
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import { List, Button } from '@digdir/design-system-react';
+import { List, Button, Paragraph, Alert, Heading } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -141,7 +140,7 @@ export const SummaryPage = ({
     );
   };
 
-  const showErrorPanel = () => {
+  const showErrorAlert = () => {
     return !showTopSection() && !showBottomSection();
   };
 
@@ -157,28 +156,32 @@ export const SummaryPage = ({
     >
       <PageHeader icon={headerIcon}>{pageHeaderText}</PageHeader>
       <PageContent>
-        {showErrorPanel() ? (
-          <Panel
-            title={t('common.error')}
-            variant={PanelVariant.Error}
-            forceMobileLayout={isSm}
-            showIcon={!isSm}
+        {showErrorAlert() ? (
+          <Alert
+            severity='danger'
+            role='status'
           >
-            <div>
-              <p>{t('api_delegation.delegations_not_registered')}</p>
-              <div className={classes.restartButton}>
-                <Button
-                  variant='outline'
-                  color='danger'
-                  onClick={() => {
-                    navigate(restartProcessPath);
-                  }}
-                >
-                  {t('common.restart')}
-                </Button>
-              </div>
+            <Heading
+              size={'medium'}
+              level={2}
+              spacing
+            >
+              {t('common.error')}
+            </Heading>
+            <Paragraph spacing>{t('api_delegation.delegations_not_registered')}</Paragraph>
+            <div className={classes.restartButton}>
+              <Button
+                variant='outline'
+                color='danger'
+                onClick={() => {
+                  navigate(restartProcessPath);
+                }}
+                size='large'
+              >
+                {t('common.restart')}
+              </Button>
             </div>
-          </Panel>
+          </Alert>
         ) : (
           <div>
             {showTopSection() && (
