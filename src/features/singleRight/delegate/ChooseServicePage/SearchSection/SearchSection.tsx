@@ -37,7 +37,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
 
   const {
     data: searchData,

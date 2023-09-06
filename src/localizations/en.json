@@ -125,7 +125,7 @@
     "missing_delegable_right": "Missing delegable rights",
     "confirm_delegation_text": "Confirm that you want to give these rights to {{name}}",
     "choose_rights_chip_text": "Choose rights you want to give access to below:",
-    "choose_service_page_top_text": "Her kan du gi tilgang til skjema og tjenester til {{name}}. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten. Legg til ved å velge fra listen under.",
+    "choose_service_page_top_text": "On this page you can give access to forms and services to {{name}}. We recommend to filter on owner, and to search on name on the service. You can add by picking from the list below.",
     "choose_rights_page_top_text": "Choose which single rights you want to delegate to {{name}}.",
     "choose_rights_page_secondary_text": "If you want to adjust the accesses e.g. Remove write access, click the arrow to open the service to adjust this.",
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",

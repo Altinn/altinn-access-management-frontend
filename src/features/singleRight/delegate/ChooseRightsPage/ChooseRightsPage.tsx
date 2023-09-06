@@ -38,10 +38,9 @@ export const ChooseRightsPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
-  const chosenServices = useAppSelector((state) => state.singleRightsSlice.chosenServiceList);
+  const chosenServices = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
   const delegableChosenServices = chosenServices.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
-  let hasPartiallyDelegableAppeared = false;
 
   const createCheckedStatesList = delegableChosenServices.flatMap(
     (cs) =>
@@ -102,13 +101,7 @@ export const ChooseRightsPage = () => {
   });
 
   const chooseRightsActionBars = (sortedServiceResources: ChosenService[]) => {
-    return sortedServiceResources?.map((chosenService: ChosenService) => {
-      const partiallyDelegableOpen = chosenService.status && !hasPartiallyDelegableAppeared;
-
-      if (partiallyDelegableOpen) {
-        hasPartiallyDelegableAppeared = true;
-      }
-
+    return sortedServiceResources?.map((chosenService: ChosenService, chosenServicesIndex) => {
       const serviceResourceContent = (
         <div className={classes.serviceResourceContent}>
           <Paragraph>{chosenService.service?.description}</Paragraph>
@@ -155,12 +148,13 @@ export const ChooseRightsPage = () => {
       const alertContainer = chosenService.status === 'PartiallyDelegable' && (
         <div className={classes.alertContainer}>
           <Alert severity='warning'>
-            <Paragraph
-              size={'large'}
+            <Heading
+              size={'xsmall'}
+              level={6}
               spacing
             >
               {t('single_rights.alert_partially_delegable_header')}
-            </Paragraph>
+            </Heading>
             <Paragraph spacing>
               {t(`${getSingleRightsErrorCodeTextKey(chosenService.errorCode)}`)}
             </Paragraph>
@@ -190,7 +184,7 @@ export const ChooseRightsPage = () => {
             onRemove(chosenService.service?.identifier);
           }}
           compact={isSm}
-          initialOpen={partiallyDelegableOpen}
+          initialOpen={chosenServicesIndex === 0}
         >
           {serviceResourceContent}
           {alertContainer}

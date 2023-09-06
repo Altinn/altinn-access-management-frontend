@@ -34,7 +34,7 @@ export const ChooseServicePage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const delegableChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.chosenServiceList.filter((s) => s.status !== 'NotDelegable'),
+    state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
 
   const onAdd = (identifier: string, serviceResource: ServiceResource) => {

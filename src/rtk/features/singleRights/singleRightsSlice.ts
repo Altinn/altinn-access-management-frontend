@@ -34,7 +34,7 @@ interface detailParams {
   name: string;
   value: string;
 }
-export interface ChosenService {
+export interface ServicesWithStatus {
   accessCheckResponses?: delegationAccessCheckResponse[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
@@ -42,11 +42,11 @@ export interface ChosenService {
 }
 
 interface sliceState {
-  chosenServiceList: ChosenService[];
+  servicesWithStatus: ServicesWithStatus[];
 }
 
 const initialState: sliceState = {
-  chosenServiceList: [],
+  servicesWithStatus: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
@@ -72,26 +72,26 @@ const singleRightSlice = createSlice({
   initialState,
   reducers: {
     removeServiceResource: (state: sliceState, action) => {
-      state.chosenServiceList = state.chosenServiceList.filter(
+      state.servicesWithStatus = state.servicesWithStatus.filter(
         (s) => s.service?.identifier !== action.payload,
       );
     },
   },
   extraReducers: (builder) => {
     builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      const chosenService: ChosenService = {
+      const chosenService: ServicesWithStatus = {
         accessCheckResponses: action.payload,
         service: action.meta.arg.serviceResource,
         status: 'Delegable',
         errorCode: '',
       };
 
-      const isNotDelegable = action.payload.find(
+      const hasNonDelegableRights = !!action.payload.find(
         (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
       );
 
-      if (isNotDelegable) {
-        const isDelegable = action.payload.find(
+      if (hasNonDelegableRights) {
+        const isDelegable = !!action.payload.find(
           (response: delegationAccessCheckResponse) => response.status === 'Delegable',
         );
 
@@ -107,7 +107,7 @@ const singleRightSlice = createSlice({
       }
 
       if (chosenService) {
-        state.chosenServiceList.push(chosenService);
+        state.servicesWithStatus.push(chosenService);
       }
     });
   },
