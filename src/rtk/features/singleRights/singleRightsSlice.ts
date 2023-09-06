@@ -34,7 +34,7 @@ interface detailParams {
   name: string;
   value: string;
 }
-export interface ServicesWithStatus {
+export interface ServiceWithStatus {
   accessCheckResponses?: delegationAccessCheckResponse[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
@@ -42,7 +42,7 @@ export interface ServicesWithStatus {
 }
 
 interface sliceState {
-  servicesWithStatus: ServicesWithStatus[];
+  servicesWithStatus: ServiceWithStatus[];
 }
 
 const initialState: sliceState = {
@@ -79,7 +79,7 @@ const singleRightSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      const chosenService: ServicesWithStatus = {
+      const serviceWithStatus: ServiceWithStatus = {
         accessCheckResponses: action.payload,
         service: action.meta.arg.serviceResource,
         status: 'Delegable',
@@ -96,18 +96,15 @@ const singleRightSlice = createSlice({
         );
 
         if (isDelegable) {
-          chosenService.status = 'PartiallyDelegable';
-          chosenService.errorCode = action.payload.find(
-            (resp: delegationAccessCheckResponse) => resp.status === 'NotDelegable',
-          ).details[0].code;
+          serviceWithStatus.status = 'PartiallyDelegable';
         } else {
-          chosenService.status = 'NotDelegable';
-          chosenService.errorCode = action.payload[0].details[0].code;
+          serviceWithStatus.status = 'NotDelegable';
+          serviceWithStatus.errorCode = action.payload[0].details[0].code;
         }
       }
 
-      if (chosenService) {
-        state.servicesWithStatus.push(chosenService);
+      if (serviceWithStatus) {
+        state.servicesWithStatus.push(serviceWithStatus);
       }
     });
   },

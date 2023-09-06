@@ -31,7 +31,8 @@
     "page": "Page",
     "read": "Read",
     "write": "Write",
-    "sign": "Sign"
+    "sign": "Sign",
+    "access": "Access to whole service"
   },
   "profile": {
     "received": "Received",

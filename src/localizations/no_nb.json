@@ -31,7 +31,8 @@
     "page": "Side",
     "read": "Lese",
     "write": "Skrive",
-    "sign": "Signere"
+    "sign": "Signere",
+    "access": "Tilgang til hele tjenesten"
   },
   "profile": {
     "received": "Mottatte",
@@ -119,8 +120,8 @@
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
-    "unknown_title": "Unknown error",
-    "new_error_title": "New error",
+    "unknown_title": "Ukjent feil",
+    "new_error_title": "Ny feil",
     "missing_delegable_right": "Mangler rettighet",
     "missing_srr_right_access_title": "Mangler SRR-rettighet",
     "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",

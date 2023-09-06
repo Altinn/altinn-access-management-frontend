@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -15,7 +16,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-import { type ChosenService } from '@/rtk/features/singleRights/singleRightsSlice';
+import { type ServiceWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import { ResourceActionBar } from '../ResourceActionBar/ResourceActionBar';
 
@@ -153,11 +154,13 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
     const status = chosenServices.find(
-      (selected: ChosenService) => selected.service?.title === resource.title,
+      (selected: ServiceWithStatus) => selected.service?.title === resource.title,
     )?.status;
+    console.log('status', status);
     const errorCode = chosenServices.find(
-      (selected: ChosenService) => selected.service?.title === resource.title,
+      (selected: ServiceWithStatus) => selected.service?.title === resource.title,
     )?.errorCode;
+    console.log('errorCode', errorCode);
     const errorCodeTextKey = getSingleRightsErrorCodeTextKey(errorCode);
 
     return (
@@ -177,7 +180,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
-          {errorCodeTextKey && (
+          {errorCode && (
             <Alert
               severity='danger'
               elevated={false}

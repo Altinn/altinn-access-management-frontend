@@ -79,6 +79,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return "ReadAndWriteAppid506.json";
                 case "appid-503":
                     return "AllAccessesAppid503.json";
+                case "appid-502":
+                    return "OneAccessAppid502.json";
                 default:
                     return "AllAccessesAppid503.json";
             }

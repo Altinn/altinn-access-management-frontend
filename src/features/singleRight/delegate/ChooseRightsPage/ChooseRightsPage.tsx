@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
 import { useMediaQuery } from '@/resources/hooks';
 import {
-  type ChosenService,
+  type ServiceWithStatus,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
@@ -38,11 +38,11 @@ export const ChooseRightsPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
-  const chosenServices = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
-  const delegableChosenServices = chosenServices.filter((s) => s.status !== 'NotDelegable');
+  const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
+  const delegableServices = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
 
-  const createCheckedStatesList = delegableChosenServices.flatMap(
+  const initialCheckedRightsList = delegableServices.flatMap(
     (cs) =>
       cs.accessCheckResponses
         ?.filter((acr) => acr.status !== 'NotDelegable')
@@ -54,7 +54,7 @@ export const ChooseRightsPage = () => {
   );
 
   useEffect(() => {
-    setSelectedRights(createCheckedStatesList);
+    setSelectedRights(initialCheckedRightsList);
   }, []);
 
   const onRemove = (identifier: string | undefined) => {
@@ -86,7 +86,7 @@ export const ChooseRightsPage = () => {
     setSelectedRights(newList);
   };
 
-  const sortedServiceResources = [...delegableChosenServices]?.sort((a, b) => {
+  const sortedServiceResources = [...delegableServices]?.sort((a, b) => {
     const isPartiallyDelegableA = a.status === 'PartiallyDelegable';
     const isPartiallyDelegableB = b.status === 'PartiallyDelegable';
 
@@ -100,8 +100,8 @@ export const ChooseRightsPage = () => {
     return a.service?.title.localeCompare(b.service.title);
   });
 
-  const chooseRightsActionBars = (sortedServiceResources: ChosenService[]) => {
-    return sortedServiceResources?.map((chosenService: ChosenService, chosenServicesIndex) => {
+  const chooseRightsActionBars = (sortedServiceResources: ServiceWithStatus[]) => {
+    return sortedServiceResources?.map((chosenService: ServiceWithStatus, chosenServicesIndex) => {
       const serviceResourceContent = (
         <div className={classes.serviceResourceContent}>
           <Paragraph>{chosenService.service?.description}</Paragraph>
@@ -218,7 +218,7 @@ export const ChooseRightsPage = () => {
                 variant='filled'
                 color='primary'
                 fullWidth={true}
-                disabled={delegableChosenServices.length < 1}
+                disabled={selectedRights.length < 1}
               >
                 {t('common.complete')}
               </Button>
