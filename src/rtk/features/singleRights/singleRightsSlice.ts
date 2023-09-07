@@ -13,13 +13,13 @@ export interface DelegationAccessCheckDto {
 
 interface delegationAccessCheckResponse {
   rightKey: string;
-  resource: idValuePair[];
+  resource: IdValuePair[];
   action: string;
   status: string;
   details: details;
 }
 
-interface idValuePair {
+export interface IdValuePair {
   id: string;
   value: string;
 }

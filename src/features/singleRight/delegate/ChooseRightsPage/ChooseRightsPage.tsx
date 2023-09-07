@@ -23,6 +23,12 @@ import {
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import {
+  type DelegationRequestDto,
+  useDelegateMutation,
+  type DelegationInput,
+} from '@/rtk/features/singleRights/singleRightsApi';
+import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import classes from './ChooseRightsPage.module.css';
@@ -39,6 +45,7 @@ export const ChooseRightsPage = () => {
   const dispatch = useAppDispatch();
   const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
   const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
+  const [delegate, { data: delegationOutput }] = useDelegateMutation();
   const delegableServices = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
 
@@ -65,7 +72,22 @@ export const ChooseRightsPage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
+  const postDelegations = () => {
+    selectedRights.map(async (right) => {
+      const dto: DelegationRequestDto = {
+        resourceDto: new ResourceIdentifierDto('urn:altinn:resource', right.serviceIdentifier),
+        action: right.action,
+      };
+      const delegationInput: DelegationInput = {
+        receivingPart: new ResourceIdentifierDto('urn:altinn:ssn', '50019992'),
+        delegationRequests: dto,
+      };
+      return await delegate(delegationInput);
+    });
+  };
+
   const onConfirm = () => {
+    postDelegations();
     console.log('confirm checkedStates', selectedRights);
   };
 
