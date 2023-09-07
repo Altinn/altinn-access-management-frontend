@@ -14,7 +14,7 @@ import classes from './ResourceActionBar.module.css';
 export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
-  status: 'Delegable' | 'NotDelegable' | 'Unchecked';
+  status: 'Delegable' | 'NotDelegable' | 'Unchecked' | 'PartiallyDelegable';
 
   /** The callback function to be called when the add button is pressed. */
   onAddClick?: () => void;
@@ -47,18 +47,18 @@ export const ResourceActionBar = ({
   useUpdate(() => {
     if (status === 'NotDelegable' && previousStatus !== undefined) {
       setOpen(true);
-    } else {
-      setOpen(false);
     }
   }, [status]);
 
   const color = useMemo(() => {
-    if (status === 'Delegable') {
-      return 'success';
-    } else if (status === 'NotDelegable') {
-      return 'danger';
-    } else {
-      return 'neutral';
+    switch (status) {
+      case 'Delegable':
+      case 'PartiallyDelegable':
+        return 'success';
+      case 'NotDelegable':
+        return 'danger';
+      default:
+        return 'neutral';
     }
   }, [status]);
 
@@ -74,7 +74,7 @@ export const ResourceActionBar = ({
     </Button>
   );
 
-  const removeButton = (
+  const undoButton = (
     <Button
       variant='quiet'
       icon={<ArrowUndoIcon title={t('common.undo')} />}
@@ -103,12 +103,14 @@ export const ResourceActionBar = ({
   );
 
   const action = () => {
-    if (status === 'Delegable') {
-      return removeButton;
-    } else if (status === 'NotDelegable') {
-      return notDelegableLabel;
-    } else {
-      return addButton;
+    switch (status) {
+      case 'Delegable':
+      case 'PartiallyDelegable':
+        return undoButton;
+      case 'NotDelegable':
+        return notDelegableLabel;
+      default:
+        return addButton;
     }
   };
 
