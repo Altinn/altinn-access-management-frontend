@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 
 import { type IdValuePair } from './singleRightsSlice';
-import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 
 interface PaginatedListDTO {
   page: number;
@@ -87,7 +87,7 @@ export const singleRightsApi = createApi({
         url: `singleright/delegate/${1232131234}`,
         method: 'post',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(dto),
+        body: dto,
       }),
     }),
   }),
