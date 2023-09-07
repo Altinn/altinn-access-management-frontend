@@ -156,11 +156,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const status = chosenServices.find(
       (selected: ServiceWithStatus) => selected.service?.title === resource.title,
     )?.status;
-    console.log('status', status);
     const errorCode = chosenServices.find(
       (selected: ServiceWithStatus) => selected.service?.title === resource.title,
     )?.errorCode;
-    console.log('errorCode', errorCode);
     const errorCodeTextKey = getSingleRightsErrorCodeTextKey(errorCode);
 
     return (
