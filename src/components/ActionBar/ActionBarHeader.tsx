@@ -11,11 +11,10 @@ import { ActionBarIcon } from './ActionBarIcon';
 import { ActionBarActions } from './ActionBarActions';
 import { type ActionBarProps } from './ActionBar';
 
-export interface ActionBarHeaderProps
-  extends Pick<
-    ActionBarProps,
-    'headingLevel' | 'title' | 'subtitle' | 'additionalText' | 'actions'
-  > {}
+export type ActionBarHeaderProps = Pick<
+  ActionBarProps,
+  'headingLevel' | 'title' | 'subtitle' | 'additionalText' | 'actions'
+>;
 
 export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderProps>(
   ({ additionalText, headingLevel, subtitle, title, actions }, ref) => {

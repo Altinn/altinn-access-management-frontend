@@ -66,7 +66,7 @@ export const postApiDelegation = createAsyncThunk(
           },
         ],
       })
-      .then((response) => {
+      .then(() => {
         return delegation;
       })
       .catch((error) => {

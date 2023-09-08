@@ -166,7 +166,7 @@ const delegableApiSlice = createSlice({
 
         state.presentedApiList = prioritizedApiList
           .sort((a, b) => (a.priority < b.priority ? 1 : -1))
-          .map(({ priority, ...otherAttr }) => otherAttr);
+          .map(({ ...otherAttr }) => otherAttr);
       } else {
         state.presentedApiList = delegableApiSearchPool;
       }
