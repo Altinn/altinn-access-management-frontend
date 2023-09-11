@@ -3,8 +3,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 
-import { type IdValuePair } from './singleRightsSlice';
-
 interface PaginatedListDTO {
   page: number;
   numEntriesTotal: number;
@@ -48,11 +46,6 @@ export interface DelegationOutput {
   delegationResponses: DelegationRequestDto[];
 }
 
-export interface DelegationInput {
-  receivingPart: ResourceIdentifierDto;
-  delegationRequests: DelegationRequestDto;
-}
-
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -82,16 +75,8 @@ export const singleRightsApi = createApi({
     getResourceOwners: builder.query<ResourceOwner[], void>({
       query: () => 'resources/resourceowners',
     }),
-    delegate: builder.mutation<DelegationOutput, DelegationInput>({
-      query: (dto: DelegationInput) => ({
-        url: `singleright/delegate/${1232131234}`,
-        method: 'post',
-        headers: { 'content-type': 'application/json' },
-        body: dto,
-      }),
-    }),
   }),
 });
 
-export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery, useDelegateMutation } =
+export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery, useDelegateApiMutation } =
   singleRightsApi;

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
+import { type DelegationInputDto } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -43,10 +44,14 @@ export interface ServiceWithStatus {
 
 interface sliceState {
   servicesWithStatus: ServiceWithStatus[];
+  successfulDelegations: DelegationInputDto[];
+  failedDelegations: DelegationInputDto[];
 }
 
 const initialState: sliceState = {
   servicesWithStatus: [],
+  successfulDelegations: [],
+  failedDelegations: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
@@ -67,6 +72,28 @@ export const delegationAccessCheck = createAsyncThunk(
   },
 );
 
+export const delegate = createAsyncThunk(
+  'singleRights/delegate',
+  async (dto: DelegationInputDto, { rejectWithValue }) => {
+    try {
+      const altinnPartyId = getCookie('AltinnPartyId');
+
+      if (!altinnPartyId) {
+        throw new Error('Could not get AltinnPartyId cookie value');
+      }
+
+      const response = await axios.post(
+        `/accessmanagement/api/v1/singleright/delegate/${altinnPartyId}`,
+        dto,
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error);
+    }
+  },
+);
+
 const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
@@ -78,35 +105,42 @@ const singleRightSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      const serviceWithStatus: ServiceWithStatus = {
-        accessCheckResponses: action.payload,
-        service: action.meta.arg.serviceResource,
-        status: 'Delegable',
-        errorCode: '',
-      };
+    builder
+      .addCase(delegationAccessCheck.fulfilled, (state, action) => {
+        const serviceWithStatus: ServiceWithStatus = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'Delegable',
+          errorCode: '',
+        };
 
-      const hasNonDelegableRights = !!action.payload.find(
-        (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
-      );
-
-      if (hasNonDelegableRights) {
-        const isDelegable = !!action.payload.find(
-          (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+        const hasNonDelegableRights = !!action.payload.find(
+          (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
         );
 
-        if (isDelegable) {
-          serviceWithStatus.status = 'PartiallyDelegable';
-        } else {
-          serviceWithStatus.status = 'NotDelegable';
-          serviceWithStatus.errorCode = action.payload[0].details[0].code;
-        }
-      }
+        if (hasNonDelegableRights) {
+          const isDelegable = !!action.payload.find(
+            (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+          );
 
-      if (serviceWithStatus) {
-        state.servicesWithStatus.push(serviceWithStatus);
-      }
-    });
+          if (isDelegable) {
+            serviceWithStatus.status = 'PartiallyDelegable';
+          } else {
+            serviceWithStatus.status = 'NotDelegable';
+            serviceWithStatus.errorCode = action.payload[0].details[0].code;
+          }
+        }
+
+        if (serviceWithStatus) {
+          state.servicesWithStatus.push(serviceWithStatus);
+        }
+      })
+      .addCase(delegate.fulfilled, (state, action) => {
+        state.successfulDelegations.push(action.meta.arg);
+      })
+      .addCase(delegate.rejected, (state, action) => {
+        state.failedDelegations.push(action.meta.arg);
+      });
   },
 });
 
