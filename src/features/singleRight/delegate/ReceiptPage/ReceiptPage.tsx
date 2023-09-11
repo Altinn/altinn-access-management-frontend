@@ -3,10 +3,13 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { PersonIcon } from '@navikt/aksel-icons';
+import { useEffect } from 'react';
 
 import { SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
+import { useAppDispatch } from '@/rtk/app/hooks';
+import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import classes from './ReceiptPage.module.css';
 
@@ -14,6 +17,11 @@ export const ReceiptPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    void dispatch(resetServicesWithStatus());
+  }, []);
 
   return (
     <PageContainer>

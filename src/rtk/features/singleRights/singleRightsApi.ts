@@ -78,5 +78,4 @@ export const singleRightsApi = createApi({
   }),
 });
 
-export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery, useDelegateApiMutation } =
-  singleRightsApi;
+export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery } = singleRightsApi;

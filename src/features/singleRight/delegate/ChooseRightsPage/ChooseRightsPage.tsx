@@ -48,18 +48,13 @@ interface DelegationResourceDTO {
   serviceOwner: string;
 }
 
-let delegationCount = 0;
-
-const incrementDelegationCount = () => {
-  delegationCount++;
-};
-
 export const ChooseRightsPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
-  const [openPopover, setOpenPopover] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [delegationCount, setDelegationCount] = useState(0);
   const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
   const processedDelegations = useAppSelector(
     (state) => state.singleRightsSlice.processedDelegations,
@@ -81,7 +76,9 @@ export const ChooseRightsPage = () => {
 
   useEffect(() => {
     setSelectedRights(initialCheckedRightsList);
-  }, [processedDelegations]);
+  }, []);
+
+  const progressLabel = processedDelegations.length + '/' + delegationCount;
 
   const delegatedPercentage = (): number => {
     const percent = Math.round((processedDelegations.length / delegationCount) * 100);
@@ -89,8 +86,10 @@ export const ChooseRightsPage = () => {
   };
 
   useMemo(() => {
-    if (Math.round((processedDelegations.length / delegationCount) * 100) === 100) {
-      navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
+    if (delegatedPercentage() === 100) {
+      const goFurther = () =>
+        navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
+      setTimeout(goFurther, 500);
     }
   }, [processedDelegations]);
 
@@ -122,9 +121,9 @@ export const ChooseRightsPage = () => {
 
   const postDelegations = () => {
     const groupedList = groupServices();
+    setDelegationCount(groupedList.length);
+
     groupedList.map((item) => {
-      incrementDelegationCount();
-      console.log('dette skjer');
       const delegationInput: DelegationInputDto = {
         // TODO: make adjustments to code when we get GUID from altinn2
         To: [new IdValuePair('urn:altinn:ssn', '50019992')],
@@ -145,7 +144,7 @@ export const ChooseRightsPage = () => {
 
   const onConfirm = () => {
     void postDelegations();
-    setOpenPopover(false);
+    setPopoverOpen(false);
   };
 
   const handleToggleChecked = (
@@ -298,14 +297,15 @@ export const ChooseRightsPage = () => {
         rightElement={
           <Popover
             placement={'top'}
-            open={openPopover}
+            open={popoverOpen}
+            onOpenChange={() => setPopoverOpen(!popoverOpen)}
             trigger={
               <Button
                 variant='filled'
                 color='primary'
                 fullWidth={true}
                 disabled={selectedRights.length < 1}
-                onClick={() => setOpenPopover(true)}
+                onClick={() => setPopoverOpen(!popoverOpen)}
               >
                 {t('common.complete')}
               </Button>
@@ -348,7 +348,7 @@ export const ChooseRightsPage = () => {
             open={delegationCount > 0}
             loadingText={t('single_rights.processing_delegations')}
             progressValue={delegatedPercentage()}
-            progressLabel={processedDelegations.length + '/' + delegationCount}
+            progressLabel={progressLabel}
           ></ProgressModal>
           <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>

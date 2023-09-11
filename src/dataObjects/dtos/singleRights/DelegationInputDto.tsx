@@ -1,5 +1,5 @@
 export interface DelegationInputDto {
-  To: IdValuePair[];
+  To?: IdValuePair[];
   Rights: DelegationRequestDto[];
   ServiceDto: ServiceDto;
 }

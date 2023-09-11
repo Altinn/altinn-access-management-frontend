@@ -3,7 +3,10 @@ import axios from 'axios';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
-import { type DelegationInputDto } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import type {
+  IdValuePair,
+  type DelegationInputDto,
+} from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -18,11 +21,6 @@ interface delegationAccessCheckResponse {
   action: string;
   status: string;
   details: details;
-}
-
-export interface IdValuePair {
-  id: string;
-  value: string;
 }
 
 interface details {
@@ -104,6 +102,9 @@ const singleRightSlice = createSlice({
     resetProcessedDelegations: (state: sliceState) => {
       state.processedDelegations = initialState.processedDelegations;
     },
+    resetServicesWithStatus: (state: sliceState) => {
+      state.servicesWithStatus = initialState.servicesWithStatus;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -137,13 +138,27 @@ const singleRightSlice = createSlice({
         }
       })
       .addCase(delegate.fulfilled, (state, action) => {
-        state.processedDelegations.push(action.meta.arg);
+        console.log('action.meta.arg', action.meta.arg);
+
+        const delegationInput: DelegationInputDto = {
+          To: [{ id: action.meta.arg.To[0].id, value: action.meta.arg.To[0].value }],
+          Rights: action.meta.arg.Rights.map((right) => ({
+            Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
+            Action: right.Action,
+          })),
+          ServiceDto: {
+            serviceTitle: action.meta.arg.ServiceDto.serviceTitle,
+            serviceOwner: action.meta.arg.ServiceDto.serviceOwner,
+          },
+        };
+        state.processedDelegations.push(delegationInput);
       })
       .addCase(delegate.rejected, (state, action) => {
-        state.processedDelegations.push(action.meta.arg);
+        //state.processedDelegations.push(action.meta.arg);
       });
   },
 });
 
 export default singleRightSlice.reducer;
-export const { removeServiceResource, resetProcessedDelegations } = singleRightSlice.actions;
+export const { removeServiceResource, resetProcessedDelegations, resetServicesWithStatus } =
+  singleRightSlice.actions;
