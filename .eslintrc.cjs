@@ -14,7 +14,6 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
