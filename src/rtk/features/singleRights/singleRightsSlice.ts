@@ -6,8 +6,8 @@ import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/Reso
 
 import { type ServiceResource } from './singleRightsApi';
 
-export interface DelegationRequestDto {
-  delegationRequest: ResourceIdentifierDto;
+export interface DelegationAccessCheckDto {
+  resourceIdentifierDto: ResourceIdentifierDto;
   serviceResource: ServiceResource;
 }
 
@@ -34,31 +34,30 @@ interface detailParams {
   name: string;
   value: string;
 }
-
-interface chosenService {
+export interface ServiceWithStatus {
   accessCheckResponses?: delegationAccessCheckResponse[];
   service?: ServiceResource;
-  status?: 'Delegable' | 'NotDelegable';
+  status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
   errorCode?: string;
 }
 
-interface chosenServices {
-  chosenServices: chosenService[];
+interface sliceState {
+  servicesWithStatus: ServiceWithStatus[];
 }
 
-const initialState: chosenServices = {
-  chosenServices: [],
+const initialState: sliceState = {
+  servicesWithStatus: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
   'singleRightSlice/delegationAccessCheck',
-  async (dto: DelegationRequestDto, { rejectWithValue }) => {
+  async (dto: DelegationAccessCheckDto, { rejectWithValue }) => {
     const altinnPartyId = getCookie('AltinnPartyId');
 
     return await axios
       .post(
         `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
-        dto.delegationRequest,
+        dto.resourceIdentifierDto,
       )
       .then((response) => response.data)
       .catch((error) => {
@@ -72,34 +71,40 @@ const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
   reducers: {
-    removeServiceResource: (state: chosenServices, action) => {
-      state.chosenServices = state.chosenServices.filter(
+    removeServiceResource: (state: sliceState, action) => {
+      state.servicesWithStatus = state.servicesWithStatus.filter(
         (s) => s.service?.identifier !== action.payload,
       );
     },
   },
   extraReducers: (builder) => {
     builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      let chosenService: chosenService = {};
-      const delegableService = action.payload.find(
-        (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+      const serviceWithStatus: ServiceWithStatus = {
+        accessCheckResponses: action.payload,
+        service: action.meta.arg.serviceResource,
+        status: 'Delegable',
+        errorCode: '',
+      };
+
+      const hasNonDelegableRights = !!action.payload.find(
+        (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
       );
-      if (delegableService) {
-        chosenService = {
-          accessCheckResponses: action.payload,
-          service: action.meta.arg.serviceResource,
-          status: 'Delegable',
-        };
-      } else {
-        chosenService = {
-          accessCheckResponses: action.payload,
-          service: action.meta.arg.serviceResource,
-          status: 'NotDelegable',
-          errorCode: action.payload[0].details[0].code,
-        };
+
+      if (hasNonDelegableRights) {
+        const isDelegable = !!action.payload.find(
+          (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+        );
+
+        if (isDelegable) {
+          serviceWithStatus.status = 'PartiallyDelegable';
+        } else {
+          serviceWithStatus.status = 'NotDelegable';
+          serviceWithStatus.errorCode = action.payload[0].details[0].code;
+        }
       }
-      if (chosenService) {
-        state.chosenServices.push(chosenService);
+
+      if (serviceWithStatus) {
+        state.servicesWithStatus.push(serviceWithStatus);
       }
     });
   },

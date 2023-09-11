@@ -68,7 +68,7 @@ export const OptionDisplay = ({
     }
   }, [options]);
 
-  const changeHandler = (newValues: string[], addedValue?: string) => {
+  const changeHandler = (newValues: string[]) => {
     setSelectedValues(newValues);
     onValueChange?.(newValues);
   };
@@ -77,7 +77,7 @@ export const OptionDisplay = ({
     if (selectedValues?.includes(selectedValue)) {
       changeHandler(selectedValues.filter((v) => v !== selectedValue));
     } else {
-      changeHandler([...selectedValues, selectedValue], selectedValue);
+      changeHandler([...selectedValues, selectedValue]);
     }
   };
 
@@ -85,7 +85,7 @@ export const OptionDisplay = ({
     setSortedOptions(optionSearch(options, searchString));
   };
 
-  const checkboxes = sortedOptions.map((option, index) => {
+  const checkboxes = sortedOptions.map((option) => {
     const isSelected = selectedValues?.includes(option.value);
     return (
       <button
