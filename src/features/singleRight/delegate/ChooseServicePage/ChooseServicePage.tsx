@@ -130,6 +130,7 @@ export const ChooseServicePage = () => {
                 variant='filled'
                 color='primary'
                 fullWidth={true}
+                disabled={delegableChosenServices.length < 1}
                 onClick={() => {
                   navigate(
                     '/' +
