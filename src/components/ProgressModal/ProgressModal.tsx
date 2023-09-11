@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CircularProgress } from '@altinn/altinn-design-system';
 import { Paragraph, Spinner } from '@digdir/design-system-react';
-import { useId } from 'react';
+import { useId, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Dialog, DialogContent, type DialogProps } from '@/components';
@@ -46,6 +46,9 @@ export const ProgressModal = ({
   const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
 
+  const memoizedProgressValue = useMemo(() => progressValue, [progressValue]);
+  const memoizedProgressLabel = useMemo(() => progressLabel, [progressLabel]);
+
   return (
     <Dialog open={open}>
       <DialogContent>
@@ -53,8 +56,8 @@ export const ProgressModal = ({
           <div className={classes.circularProgressContainer}>
             <CircularProgress
               width={isSm ? 100 : 130}
-              value={progressValue}
-              label={progressLabel}
+              value={memoizedProgressValue}
+              label={memoizedProgressLabel}
               id={'progress' + useId()}
             ></CircularProgress>
           </div>

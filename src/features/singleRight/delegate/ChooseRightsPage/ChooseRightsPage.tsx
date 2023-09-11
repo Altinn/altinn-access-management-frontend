@@ -14,7 +14,14 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 
-import { DualElementsContainer, Page, PageContainer, PageContent, PageHeader } from '@/components';
+import {
+  DualElementsContainer,
+  Page,
+  PageContainer,
+  PageContent,
+  PageHeader,
+  ProgressModal,
+} from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
 import { useMediaQuery } from '@/resources/hooks';
@@ -24,7 +31,6 @@ import {
   delegate,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import {
   type DelegationInputDto,
   IdValuePair,
@@ -42,14 +48,21 @@ interface DelegationResourceDTO {
   serviceOwner: string;
 }
 
+let delegationCount = 0;
+
+const incrementDelegationCount = () => {
+  delegationCount++;
+};
+
 export const ChooseRightsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
+  const [openPopover, setOpenPopover] = useState(false);
   const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
-  const successfulDelegations = useAppSelector(
-    (state) => state.singleRightsSlice.successfulDelegations,
+  const processedDelegations = useAppSelector(
+    (state) => state.singleRightsSlice.processedDelegations,
   );
   const delegableServices = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
@@ -68,8 +81,18 @@ export const ChooseRightsPage = () => {
 
   useEffect(() => {
     setSelectedRights(initialCheckedRightsList);
-    console.log('successfulDelegations', successfulDelegations);
-  }, [successfulDelegations]);
+  }, [processedDelegations]);
+
+  const delegatedPercentage = (): number => {
+    const percent = Math.round((processedDelegations.length / delegationCount) * 100);
+    return percent;
+  };
+
+  useMemo(() => {
+    if (Math.round((processedDelegations.length / delegationCount) * 100) === 100) {
+      navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
+    }
+  }, [processedDelegations]);
 
   const onRemove = (identifier: string | undefined) => {
     const newList = selectedRights.filter((s) => s.serviceIdentifier !== identifier);
@@ -97,12 +120,11 @@ export const ChooseRightsPage = () => {
     );
   };
 
-  const postDelegations = async () => {
+  const postDelegations = () => {
     const groupedList = groupServices();
-    console.log('groupedList', groupedList);
-
-    groupedList.map(async (item) => {
-      console.log('item[index]', item);
+    groupedList.map((item) => {
+      incrementDelegationCount();
+      console.log('dette skjer');
       const delegationInput: DelegationInputDto = {
         // TODO: make adjustments to code when we get GUID from altinn2
         To: [new IdValuePair('urn:altinn:ssn', '50019992')],
@@ -117,12 +139,13 @@ export const ChooseRightsPage = () => {
         ServiceDto: new ServiceDto(item[0].serviceTitle, item[0].serviceOwner),
       };
 
-      return await dispatch(delegate(delegationInput));
+      return dispatch(delegate(delegationInput));
     });
   };
 
   const onConfirm = () => {
     void postDelegations();
+    setOpenPopover(false);
   };
 
   const handleToggleChecked = (
@@ -275,12 +298,14 @@ export const ChooseRightsPage = () => {
         rightElement={
           <Popover
             placement={'top'}
+            open={openPopover}
             trigger={
               <Button
                 variant='filled'
                 color='primary'
                 fullWidth={true}
                 disabled={selectedRights.length < 1}
+                onClick={() => setOpenPopover(true)}
               >
                 {t('common.complete')}
               </Button>
@@ -319,6 +344,12 @@ export const ChooseRightsPage = () => {
           <div className={classes.serviceResources}>
             {chooseRightsActionBars(sortedServiceResources)}
           </div>
+          <ProgressModal
+            open={delegationCount > 0}
+            loadingText={t('single_rights.processing_delegations')}
+            progressValue={delegatedPercentage()}
+            progressLabel={processedDelegations.length + '/' + delegationCount}
+          ></ProgressModal>
           <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>
       </Page>

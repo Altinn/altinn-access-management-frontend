@@ -44,14 +44,12 @@ export interface ServiceWithStatus {
 
 interface sliceState {
   servicesWithStatus: ServiceWithStatus[];
-  successfulDelegations: DelegationInputDto[];
-  failedDelegations: DelegationInputDto[];
+  processedDelegations: DelegationInputDto[];
 }
 
 const initialState: sliceState = {
   servicesWithStatus: [],
-  successfulDelegations: [],
-  failedDelegations: [],
+  processedDelegations: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
@@ -103,6 +101,9 @@ const singleRightSlice = createSlice({
         (s) => s.service?.identifier !== action.payload,
       );
     },
+    resetProcessedDelegations: (state: sliceState) => {
+      state.processedDelegations = initialState.processedDelegations;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -136,13 +137,13 @@ const singleRightSlice = createSlice({
         }
       })
       .addCase(delegate.fulfilled, (state, action) => {
-        state.successfulDelegations.push(action.meta.arg);
+        state.processedDelegations.push(action.meta.arg);
       })
       .addCase(delegate.rejected, (state, action) => {
-        state.failedDelegations.push(action.meta.arg);
+        state.processedDelegations.push(action.meta.arg);
       });
   },
 });
 
 export default singleRightSlice.reducer;
-export const { removeServiceResource } = singleRightSlice.actions;
+export const { removeServiceResource, resetProcessedDelegations } = singleRightSlice.actions;
