@@ -5,8 +5,10 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import type {
   IdValuePair,
-  type DelegationInputDto,
+  DelegationInputDto,
+  DelegationRequestDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import { ReduxStatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -90,6 +92,27 @@ export const delegate = createAsyncThunk(
   },
 );
 
+const createSerializedDelegationInput = (arg: DelegationInputDto, status: ReduxStatusResponse) => {
+  const To = [{ id: arg.To[0].id, value: arg.To[0].value }];
+
+  const Rights = arg.Rights.map((right: DelegationRequestDto) => ({
+    Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
+    Action: right.Action,
+  }));
+
+  const serviceDto = {
+    serviceTitle: arg.serviceDto.serviceTitle,
+    serviceOwner: arg.serviceDto.serviceOwner,
+  };
+
+  return {
+    To,
+    Rights,
+    serviceDto,
+    status,
+  };
+};
+
 const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
@@ -138,23 +161,18 @@ const singleRightSlice = createSlice({
         }
       })
       .addCase(delegate.fulfilled, (state, action) => {
-        console.log('action.meta.arg', action.meta.arg);
-
-        const delegationInput: DelegationInputDto = {
-          To: [{ id: action.meta.arg.To[0].id, value: action.meta.arg.To[0].value }],
-          Rights: action.meta.arg.Rights.map((right) => ({
-            Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
-            Action: right.Action,
-          })),
-          ServiceDto: {
-            serviceTitle: action.meta.arg.ServiceDto.serviceTitle,
-            serviceOwner: action.meta.arg.ServiceDto.serviceOwner,
-          },
-        };
+        const delegationInput = createSerializedDelegationInput(
+          action.meta.arg,
+          ReduxStatusResponse.Fulfilled,
+        );
         state.processedDelegations.push(delegationInput);
       })
       .addCase(delegate.rejected, (state, action) => {
-        //state.processedDelegations.push(action.meta.arg);
+        const delegationInput = createSerializedDelegationInput(
+          action.meta.arg,
+          ReduxStatusResponse.Rejected,
+        );
+        state.processedDelegations.push(delegationInput);
       });
   },
 });

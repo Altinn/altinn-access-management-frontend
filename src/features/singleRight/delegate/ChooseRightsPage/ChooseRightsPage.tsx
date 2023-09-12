@@ -61,6 +61,9 @@ export const ChooseRightsPage = () => {
   );
   const delegableServices = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
+  const progressLabel = processedDelegations.length + '/' + delegationCount;
+  const processedDelegationsRatio = (): number =>
+    Math.round((processedDelegations.length / delegationCount) * 100);
 
   const initialCheckedRightsList = delegableServices.flatMap(
     (ds) =>
@@ -78,18 +81,13 @@ export const ChooseRightsPage = () => {
     setSelectedRights(initialCheckedRightsList);
   }, []);
 
-  const progressLabel = processedDelegations.length + '/' + delegationCount;
-
-  const delegatedPercentage = (): number => {
-    const percent = Math.round((processedDelegations.length / delegationCount) * 100);
-    return percent;
-  };
-
   useMemo(() => {
-    if (delegatedPercentage() === 100) {
-      const goFurther = () =>
+    if (processedDelegationsRatio() === 100) {
+      const goToReceipt = () =>
         navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
-      setTimeout(goFurther, 500);
+
+      // Need to wait a moment before navigating to make sure all states were set
+      setTimeout(goToReceipt, 500);
     }
   }, [processedDelegations]);
 
@@ -105,13 +103,7 @@ export const ChooseRightsPage = () => {
     return Object.values(
       selectedRights.reduce((grouped, item) => {
         const { serviceIdentifier } = item;
-
-        // If the key (serviceIdentifier) doesn't exist in grouped, create an empty array for it
-        if (!grouped[serviceIdentifier]) {
-          grouped[serviceIdentifier] = [];
-        }
-
-        // Push the current item to the corresponding array
+        grouped[serviceIdentifier] = [];
         grouped[serviceIdentifier].push(item);
 
         return grouped;
@@ -125,17 +117,17 @@ export const ChooseRightsPage = () => {
 
     groupedList.map((item) => {
       const delegationInput: DelegationInputDto = {
-        // TODO: make adjustments to code when we get GUID from altinn2
+        // TODO: make adjustments to codeline below when we get GUID from altinn2
         To: [new IdValuePair('urn:altinn:ssn', '50019992')],
         Rights: item.map((content) => {
           return new DelegationRequestDto(
-            // TODO: make adjustments to code when we get urn from resourceregistry
+            // TODO: make adjustments to codline below when we get urn from resourceregistry
             'urn:altinn:resource',
             content.serviceIdentifier,
             content.action,
           );
         }),
-        ServiceDto: new ServiceDto(item[0].serviceTitle, item[0].serviceOwner),
+        serviceDto: new ServiceDto(item[0].serviceTitle, item[0].serviceOwner),
       };
 
       return dispatch(delegate(delegationInput));
@@ -347,7 +339,7 @@ export const ChooseRightsPage = () => {
           <ProgressModal
             open={delegationCount > 0}
             loadingText={t('single_rights.processing_delegations')}
-            progressValue={delegatedPercentage()}
+            progressValue={processedDelegationsRatio()}
             progressLabel={progressLabel}
           ></ProgressModal>
           <div className={classes.navigationContainer}>{navigationButtons()}</div>
