@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 
 interface PaginatedListDTO {
   page: number;
@@ -34,16 +33,6 @@ interface searchParams {
   ROfilters: string[];
   page: number;
   resultsPerPage: number;
-}
-
-export interface DelegationRequestDto {
-  resourceDto: ResourceIdentifierDto;
-  action: string;
-}
-
-export interface DelegationOutput {
-  receivingPart: ResourceIdentifierDto;
-  delegationResponses: DelegationRequestDto[];
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
