@@ -1,19 +1,11 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
-import { PersonIcon, MinusCircleIcon } from '@navikt/aksel-icons';
+import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Button, Ingress } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Page,
-  PageHeader,
-  PageContent,
-  PageContainer,
-  ActionBar,
-  CollectionBar,
-  DualElementsContainer,
-} from '@/components';
+import { Page, PageHeader, PageContent, PageContainer, DualElementsContainer } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -26,7 +18,8 @@ import {
 import { GeneralPath, SingleRightPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { SearchSection } from './SearchSection/SearchSection';
+import { SearchSection } from '../../components/SearchSection';
+import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -68,28 +61,6 @@ export const ChooseServicePage = () => {
       encodeURIComponent(encodedUrl);
   };
 
-  const selectedResourcesActionBars = delegableChosenServices.map((resource, index) => (
-    <ActionBar
-      key={index}
-      title={resource.service?.title}
-      subtitle={resource.service?.resourceOwnerName}
-      size='small'
-      color='success'
-      actions={
-        <Button
-          variant='quiet'
-          size={isSm ? 'medium' : 'small'}
-          onClick={() => {
-            onRemove(resource.service?.identifier);
-          }}
-          icon={isSm && <MinusCircleIcon title={t('common.remove')} />}
-        >
-          {!isSm && t('common.remove')}
-        </Button>
-      }
-    ></ActionBar>
-  ));
-
   return (
     <PageContainer>
       <Page
@@ -101,10 +72,11 @@ export const ChooseServicePage = () => {
           <Ingress spacing>
             {t('single_rights.choose_service_page_top_text', { name: 'ANNEMA FIGMA' })}
           </Ingress>
-          <CollectionBar
-            title='Valgte tjenester'
-            color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
-            collection={selectedResourcesActionBars}
+          <ResourceCollectionBar
+            resources={delegableChosenServices.map(
+              (servicewithStatus) => servicewithStatus.service,
+            )}
+            onRemove={onRemove}
             compact={isSm}
             proceedToPath={
               '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
