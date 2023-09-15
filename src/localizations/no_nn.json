@@ -130,9 +130,11 @@
     "complete_delegation": "Fullfør delegering",
     "confirm_delegation_text": "Stadfest at du vil gi desse rettane til {{name}}.",
     "choose_rights_chip_text": "Vel kva rettar du vil delegera tilgang til under:",
-    "choose_service_page_top_text": "Her kan du velja kva skjema og tenester du vil delegera tilgang til {{name}} for. Me tilrår å filtrera på skjemaeigar, og søkja med namn på tenesta.",
+    "delegate_choose_service_page_top_text": "Her kan du velja kva skjema og tenester du vil delegera tilgang til {{name}} for. Me tilrår å filtrera på skjemaeigar, og søkja med namn på tenesta.",
+    "request_choose_service_page_top_text": "Her kan du be om fleire tilganger til {{name}}. Vi anbefaler å filtrere på skjemaeiar, og søke med navn på tjenesta. Legg til ved å velje fra lista under.",
     "choose_rights_page_top_text": "Her kan du velja kva enkeltrettar du vil gi delegera {{name}}.",
     "choose_rights_page_secondary_text": "Dersom du ønskjer å tilpassa tilgangane, t.d. fjerne signeringsrett,  kan du klikka på pilen ved sida av tenesta for å opne den og tilpassa dette.",
+    "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
     "you_cant_delegate_these_rights": "Desse rettegheitane kan du ikkje delegera:",
     "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på sjekkmerka nedanfor for å fjerna dei"

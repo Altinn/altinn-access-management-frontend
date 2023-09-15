@@ -48,7 +48,7 @@ export const ResourceCollectionBar = ({
 
   return (
     <CollectionBar
-      title='Valgte tjenester'
+      title={t('single_rights.chosen_services')}
       color={selectedResourcesActionBars.length > 0 ? 'success' : 'neutral'}
       collection={selectedResourcesActionBars}
       compact={compact}

@@ -67,6 +67,24 @@ export const delegationAccessCheck = createAsyncThunk(
   },
 );
 
+export const fetchRights = createAsyncThunk(
+  'singleRightSlice/fetchRights',
+  async (dto: DelegationAccessCheckDto, { rejectWithValue }) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+    // TODO: Change to new fetchRights endpoint when available
+    return await axios
+      .post(
+        `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
+        dto.resourceIdentifierDto,
+      )
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        return rejectWithValue(error);
+      });
+  },
+);
+
 const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
@@ -78,35 +96,48 @@ const singleRightSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      const serviceWithStatus: ServiceWithStatus = {
-        accessCheckResponses: action.payload,
-        service: action.meta.arg.serviceResource,
-        status: 'Delegable',
-        errorCode: '',
-      };
+    builder
+      .addCase(delegationAccessCheck.fulfilled, (state, action) => {
+        const serviceWithStatus: ServiceWithStatus = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'Delegable',
+          errorCode: '',
+        };
 
-      const hasNonDelegableRights = !!action.payload.find(
-        (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
-      );
-
-      if (hasNonDelegableRights) {
-        const isDelegable = !!action.payload.find(
-          (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+        const hasNonDelegableRights = !!action.payload.find(
+          (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
         );
 
-        if (isDelegable) {
-          serviceWithStatus.status = 'PartiallyDelegable';
-        } else {
-          serviceWithStatus.status = 'NotDelegable';
-          serviceWithStatus.errorCode = action.payload[0].details[0].code;
-        }
-      }
+        if (hasNonDelegableRights) {
+          const isDelegable = !!action.payload.find(
+            (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+          );
 
-      if (serviceWithStatus) {
-        state.servicesWithStatus.push(serviceWithStatus);
-      }
-    });
+          if (isDelegable) {
+            serviceWithStatus.status = 'PartiallyDelegable';
+          } else {
+            serviceWithStatus.status = 'NotDelegable';
+            serviceWithStatus.errorCode = action.payload[0].details[0].code;
+          }
+        }
+
+        if (serviceWithStatus) {
+          state.servicesWithStatus.push(serviceWithStatus);
+        }
+      })
+      .addCase(fetchRights.fulfilled, (state, action) => {
+        const serviceWithStatus: ServiceWithStatus = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'Delegable',
+          errorCode: '',
+        };
+
+        if (serviceWithStatus) {
+          state.servicesWithStatus.push(serviceWithStatus);
+        }
+      });
   },
 });
 
