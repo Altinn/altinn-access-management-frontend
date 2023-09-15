@@ -46,9 +46,6 @@ export const ProgressModal = ({
   const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
 
-  const memoizedProgressValue = useMemo(() => progressValue, [progressValue]);
-  const memoizedProgressLabel = useMemo(() => progressLabel, [progressLabel]);
-
   return (
     <Dialog open={open}>
       <DialogContent>
@@ -56,8 +53,8 @@ export const ProgressModal = ({
           <div className={classes.circularProgressContainer}>
             <CircularProgress
               width={isSm ? 100 : 130}
-              value={memoizedProgressValue}
-              label={memoizedProgressLabel}
+              value={progressValue}
+              label={progressLabel}
               id={'progress' + useId()}
             ></CircularProgress>
           </div>

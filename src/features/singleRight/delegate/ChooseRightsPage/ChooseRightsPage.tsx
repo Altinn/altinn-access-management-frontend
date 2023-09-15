@@ -103,6 +103,7 @@ export const ChooseRightsPage = () => {
     return Object.values(
       selectedRights.reduce((grouped, item) => {
         const { serviceIdentifier } = item;
+        item.serviceIdentifier;
         grouped[serviceIdentifier] = [];
         grouped[serviceIdentifier].push(item);
 

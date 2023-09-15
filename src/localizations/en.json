@@ -135,6 +135,6 @@
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the the checkmarks on the specific access",
-    "processing_delegations": "processing delegations"
+    "processing_delegations": "Processing delegations"
   }
 }
