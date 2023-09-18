@@ -72,7 +72,7 @@ export const delegationAccessCheck = createAsyncThunk(
 
 export const delegate = createAsyncThunk(
   'singleRights/delegate',
-  async (dto: DelegationInputDto, { rejectWithValue }) => {
+  async (dto: DelegationInputDto) => {
     try {
       const altinnPartyId = getCookie('AltinnPartyId');
 
@@ -87,7 +87,6 @@ export const delegate = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error(error);
-      return rejectWithValue(error);
     }
   },
 );
@@ -168,6 +167,7 @@ const singleRightSlice = createSlice({
         state.processedDelegations.push(delegationInput);
       })
       .addCase(delegate.rejected, (state, action) => {
+        console.log('addCaseDelegateAction', action);
         const delegationInput = createSerializedDelegationInput(
           action.meta.arg,
           ReduxStatusResponse.Rejected,
