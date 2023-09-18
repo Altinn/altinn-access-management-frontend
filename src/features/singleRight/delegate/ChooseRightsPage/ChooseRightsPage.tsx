@@ -81,14 +81,9 @@ export const ChooseRightsPage = () => {
     setSelectedRights(initialCheckedRightsList);
   }, []);
 
-  useMemo(() => {
-    if (processedDelegationsRatio() === 100) {
-      const goToReceipt = () =>
-        navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
-
-      // Need to wait a moment before navigating to make sure all states were set
-      setTimeout(goToReceipt, 500);
-    }
+  useEffect(() => {
+    processedDelegationsRatio() === 100 &&
+      navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
   }, [processedDelegations]);
 
   const onRemove = (identifier: string | undefined) => {
