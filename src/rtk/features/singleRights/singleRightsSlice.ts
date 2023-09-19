@@ -3,6 +3,12 @@ import axios from 'axios';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
+import type {
+  IdValuePair,
+  DelegationInputDto,
+  DelegationRequestDto,
+} from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import { ReduxStatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -13,15 +19,10 @@ export interface DelegationAccessCheckDto {
 
 interface delegationAccessCheckResponse {
   rightKey: string;
-  resource: idValuePair[];
+  resource: IdValuePair[];
   action: string;
   status: string;
   details: details;
-}
-
-interface idValuePair {
-  id: string;
-  value: string;
 }
 
 interface details {
@@ -43,10 +44,12 @@ export interface ServiceWithStatus {
 
 interface sliceState {
   servicesWithStatus: ServiceWithStatus[];
+  processedDelegations: DelegationInputDto[];
 }
 
 const initialState: sliceState = {
   servicesWithStatus: [],
+  processedDelegations: [],
 };
 
 export const delegationAccessCheck = createAsyncThunk(
@@ -67,6 +70,48 @@ export const delegationAccessCheck = createAsyncThunk(
   },
 );
 
+export const delegate = createAsyncThunk(
+  'singleRights/delegate',
+  async (dto: DelegationInputDto) => {
+    try {
+      const altinnPartyId = getCookie('AltinnPartyId');
+
+      if (!altinnPartyId) {
+        throw new Error('Could not get AltinnPartyId cookie value');
+      }
+
+      const response = await axios.post(
+        `/accessmanagement/api/v1/singleright/delegate/${altinnPartyId}`,
+        dto,
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+);
+
+const createSerializedDelegationInput = (arg: DelegationInputDto, status: ReduxStatusResponse) => {
+  const To = [{ id: arg.To[0].id, value: arg.To[0].value }];
+
+  const Rights = arg.Rights.map((right: DelegationRequestDto) => ({
+    Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
+    Action: right.Action,
+  }));
+
+  const serviceDto = {
+    serviceTitle: arg.serviceDto.serviceTitle,
+    serviceOwner: arg.serviceDto.serviceOwner,
+  };
+
+  return {
+    To,
+    Rights,
+    serviceDto,
+    status,
+  };
+};
+
 const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
@@ -76,39 +121,62 @@ const singleRightSlice = createSlice({
         (s) => s.service?.identifier !== action.payload,
       );
     },
+    resetProcessedDelegations: (state: sliceState) => {
+      state.processedDelegations = initialState.processedDelegations;
+    },
+    resetServicesWithStatus: (state: sliceState) => {
+      state.servicesWithStatus = initialState.servicesWithStatus;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(delegationAccessCheck.fulfilled, (state, action) => {
-      const serviceWithStatus: ServiceWithStatus = {
-        accessCheckResponses: action.payload,
-        service: action.meta.arg.serviceResource,
-        status: 'Delegable',
-        errorCode: '',
-      };
+    builder
+      .addCase(delegationAccessCheck.fulfilled, (state, action) => {
+        const serviceWithStatus: ServiceWithStatus = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'Delegable',
+          errorCode: '',
+        };
 
-      const hasNonDelegableRights = !!action.payload.find(
-        (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
-      );
-
-      if (hasNonDelegableRights) {
-        const isDelegable = !!action.payload.find(
-          (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+        const hasNonDelegableRights = !!action.payload.find(
+          (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
         );
 
-        if (isDelegable) {
-          serviceWithStatus.status = 'PartiallyDelegable';
-        } else {
-          serviceWithStatus.status = 'NotDelegable';
-          serviceWithStatus.errorCode = action.payload[0].details[0].code;
-        }
-      }
+        if (hasNonDelegableRights) {
+          const isDelegable = !!action.payload.find(
+            (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+          );
 
-      if (serviceWithStatus) {
-        state.servicesWithStatus.push(serviceWithStatus);
-      }
-    });
+          if (isDelegable) {
+            serviceWithStatus.status = 'PartiallyDelegable';
+          } else {
+            serviceWithStatus.status = 'NotDelegable';
+            serviceWithStatus.errorCode = action.payload[0].details[0].code;
+          }
+        }
+
+        if (serviceWithStatus) {
+          state.servicesWithStatus.push(serviceWithStatus);
+        }
+      })
+      .addCase(delegate.fulfilled, (state, action) => {
+        const delegationInput = createSerializedDelegationInput(
+          action.meta.arg,
+          ReduxStatusResponse.Fulfilled,
+        );
+        state.processedDelegations.push(delegationInput);
+      })
+      .addCase(delegate.rejected, (state, action) => {
+        console.log('addCaseDelegateAction', action);
+        const delegationInput = createSerializedDelegationInput(
+          action.meta.arg,
+          ReduxStatusResponse.Rejected,
+        );
+        state.processedDelegations.push(delegationInput);
+      });
   },
 });
 
 export default singleRightSlice.reducer;
-export const { removeServiceResource } = singleRightSlice.actions;
+export const { removeServiceResource, resetProcessedDelegations, resetServicesWithStatus } =
+  singleRightSlice.actions;
