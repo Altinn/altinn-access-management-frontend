@@ -137,6 +137,7 @@
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikke delegert hele tjenesten",
     "you_cant_delegate_these_rights": "Disse rettighetene kan du ikke delegere:",
-    "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på sjekkmerkene nedenfor for å fjerne dem"
+    "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på sjekkmerkene nedenfor for å fjerne dem",
+    "processing_delegations": "Prosesserer delegeringer"
   }
 }

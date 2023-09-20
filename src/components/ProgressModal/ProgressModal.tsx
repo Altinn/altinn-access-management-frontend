@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CircularProgress } from '@altinn/altinn-design-system';
 import { Paragraph, Spinner } from '@digdir/design-system-react';
-import { useId } from 'react';
+import { useId, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Dialog, DialogContent, type DialogProps } from '@/components';

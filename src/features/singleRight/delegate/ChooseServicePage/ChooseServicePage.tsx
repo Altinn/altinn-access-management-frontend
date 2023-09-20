@@ -4,6 +4,7 @@ import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Button, Ingress } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import { Page, PageHeader, PageContent, PageContainer, DualElementsContainer } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -14,6 +15,7 @@ import {
   type DelegationAccessCheckDto,
   delegationAccessCheck,
   removeServiceResource,
+  resetProcessedDelegations,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GeneralPath, SingleRightPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -29,6 +31,10 @@ export const ChooseServicePage = () => {
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
+
+  useEffect(() => {
+    void dispatch(resetProcessedDelegations());
+  }, []);
 
   const onAdd = (identifier: string, serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -102,6 +108,7 @@ export const ChooseServicePage = () => {
                 variant='filled'
                 color='primary'
                 fullWidth={true}
+                disabled={delegableChosenServices.length < 1}
                 onClick={() => {
                   navigate(
                     '/' +

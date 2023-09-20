@@ -1,10 +1,8 @@
+using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Azure.Core;
-using System.Net;
-using System.Text;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -36,7 +34,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IdValuePair resource = delegation.Rights.First().Resource.First();
 
             string resourceFileName;
-            switch (resource.Id) {
+            switch (resource.Id)
+            {
                 case "urn:altinn:resource":
                 case "urn:altinn:servicecode":
                 case "urn:altinn:applicationid":
@@ -56,8 +55,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string data = Util.GetMockDataSerialized(dataPath, resourceFileName + ".json");
                 return new HttpResponseMessage
-                { StatusCode = HttpStatusCode.Created, Content = new StringContent(data) };
-
+                    { StatusCode = HttpStatusCode.Created, Content = new StringContent(data) };
             }
             catch
             {
