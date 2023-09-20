@@ -1,4 +1,11 @@
 .successButtonContainer {
   display: flex;
   justify-content: end;
+  margin-top: 40px;
+}
+
+.actionBars {
+  gap: var(--fds-spacing-2);
+  display: flex;
+  flex-direction: column;
 }
