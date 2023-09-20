@@ -39,6 +39,17 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string Status { get; set; }
 
         /// <summary>
+        /// spatial coverage
+        /// This property represents that area(s) a Public Service is likely to be available only within, typically the area(s) covered by a particular public authority.
+        /// </summary>
+        public List<string>? Spatial { get; set; }
+
+        /// <summary>
+        /// List of possible contact points
+        /// </summary>
+        public List<ContactPoint> ContactPoints { get; set; }
+
+        /// <summary>
         /// Is this resource possible to delegate to others or not
         /// </summary>
         public bool Delegable { get; set; } = true;
@@ -47,16 +58,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// The visibility of the resource
         /// </summary>
         public bool Visible { get; set; } = true;
-
-        /// <summary>
-        /// When the resource is available from
-        /// </summary>
-        public DateTime ValidFrom { get; set; }
-
-        /// <summary>
-        /// When the resource is available to
-        /// </summary>
-        public DateTime ValidTo { get; set; }
 
         /// <summary>
         /// Name of resource owner
@@ -94,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, DateTime validFrom, DateTime validTo, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
         {
             Identifier = identifier;
             Title = title;
@@ -102,8 +103,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             RightDescription = rightDescription;
             Homepage = homepage;
             Status = status;
-            ValidFrom = validFrom;
-            ValidTo = validTo;
             ResourceOwnerName = resourceOwnerName;
             ResourceOwnerOrgNumber = resourceOwnerOrgNumber;
             ResourceReferences = resourceReferences;
@@ -111,6 +110,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             ResourceType = resourceType;
             Visible = visible;
             Delegable = delegable;
+            ContactPoints = contactPoints;
+            Spatial = spatial;
         }
 
         /// <summary>
@@ -125,8 +126,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             RightDescription = serviceResourceFE.RightDescription;
             Homepage = serviceResourceFE.Homepage;
             Status = serviceResourceFE.Status;
-            ValidFrom = serviceResourceFE.ValidFrom;
-            ValidTo = serviceResourceFE.ValidTo;
             ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
             ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
             PriorityCounter = serviceResourceFE.PriorityCounter;
@@ -134,6 +133,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             ResourceType = serviceResourceFE.ResourceType;
             Visible = serviceResourceFE.Visible;
             Delegable = serviceResourceFE.Delegable;
+            ContactPoints = serviceResourceFE.ContactPoints;
+            Spatial = serviceResourceFE.Spatial;
         }
     }
 }
