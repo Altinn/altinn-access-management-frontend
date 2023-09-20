@@ -7,15 +7,35 @@ import type { CollectionBarProps } from '@/components';
 import { ActionBar, CollectionBar } from '@/components';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
-export interface ResourceCollectionBarProps extends Pick<CollectionBarProps, 'proceedToPath'> {
+export interface ResourceCollectionBarProps
+  extends Pick<CollectionBarProps, 'proceedToPath' | 'compact'> {
   /** The resources that are to appear in the CollectionBar content */
   resources: ServiceResource[];
-  /** Whether or not to use the CollectionBars compact mode */
-  compact: boolean;
   /** The callback function to be called when the remove button is pressed on a resource. */
   onRemove: (identifier: string) => void;
 }
 
+/**
+ * A React component that displays a collection of resources using the CollectionBar component.
+ * The resources are displayed as small actionBar components inside the contents of an CollectionBar component
+ *
+ * @component
+ * @param {Object} props - The props for the ResourceCollectionBar component.
+ * @param {ServiceResource[]} props.resources - The resources that are to appear in the CollectionBar content.
+ * @param {boolean} props.compact - Whether or not to use the CollectionBar's compact mode.
+ * @param {function} props.onRemove - The callback function to be called when the remove button is pressed on a resource.
+ * @param {string} props.proceedToPath - The path to proceed to.
+ * @returns {JSX.Element} The rendered ResourceCollectionBar component.
+ *
+ * @example
+ * // Example usage:
+ * <ResourceCollectionBar
+ *   resources={[{ title: 'Resource 1', resourceOwnerName: 'Owner 1', identifier: 'appid-101' }]}
+ *   compact={false}
+ *   onRemove={(identifier) => handleRemoveResource(identifier)}
+ *   proceedToPath="/next-page"
+ * />
+ */
 export const ResourceCollectionBar = ({
   resources = [],
   proceedToPath,
