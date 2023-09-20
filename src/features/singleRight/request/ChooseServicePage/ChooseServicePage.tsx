@@ -14,7 +14,7 @@ import {
   fetchRights,
   removeServiceResource,
 } from '@/rtk/features/singleRights/singleRightsSlice';
-import { GeneralPath, SingleRightPath } from '@/routes/paths';
+import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { SearchSection } from '../../components/SearchSection';
