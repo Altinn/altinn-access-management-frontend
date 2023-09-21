@@ -2,11 +2,18 @@
   {
     "title": "Automation Regression",
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-119",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
@@ -37,16 +44,23 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
-    "validFrom": "2020-03-06T09:36:15.443",
     "identifier": "appid-122",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
@@ -77,16 +91,23 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
-    "validFrom": "2020-03-06T09:41:15.817",
     "identifier": "appid-123",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -119,19 +140,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T19:07:46.143",
     "identifier": "appid-120",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -164,19 +192,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-25T15:17:18.487",
     "identifier": "appid-124",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -209,16 +244,23 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
-    "validFrom": "2020-05-13T11:10:52.203",
     "identifier": "appid-126",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -251,19 +293,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-19T11:13:36.8",
     "identifier": "appid-127",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -296,19 +345,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-25T15:20:40.17",
     "identifier": "appid-125",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -341,19 +397,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-19T11:18:52.84",
     "identifier": "appid-128",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -386,19 +449,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-20T11:49:19.26",
     "identifier": "appid-129",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -431,19 +501,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-20T12:32:41.78",
     "identifier": "appid-130",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -476,19 +553,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-28T23:38:06.337",
     "identifier": "appid-132",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -521,19 +605,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-28T23:39:09.01",
     "identifier": "appid-133",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -566,19 +657,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-28T23:40:31.413",
     "identifier": "appid-134",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -611,19 +709,26 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Automation Regression",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-29T09:50:19.333",
     "identifier": "appid-136",
-    "isComplete": false,
+
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -656,19 +761,27 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "resourceOwnerName": "SKD"
+    "resourceOwnerName": "Skatteetaten",
+    "resourceOwnerOrgNumber": "974761076"
   },
   {
     "title": "Tulleregisteret",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-400",
-    "isComplete": true,
+    
     "description": "Tulleregisteret",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -703,13 +816,20 @@
     "title": "Blomsterhagen",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-401",
-    "isComplete": true,
+    
     "description": "Blomsterhagen",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -749,13 +869,20 @@
     "title": "Det magiske klesskapet",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-402",
-    "isComplete": true,
+    
     "description": "Det magiske klesskapet",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -795,13 +922,20 @@
     "title": "Snarveien",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-403",
-    "isComplete": true,
+    
     "description": "Snarveien",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -836,13 +970,20 @@
     "title": "Det magiske klesskapet - lenketjeneste",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-502",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Det magiske klesskapet",
@@ -858,20 +999,27 @@
     "title": "Snarveien - lenketjeneste",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-503",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Snarveien som lenketjeneste",
     "resourceType": "Default",
     "thematicArea": null,
     "isPublicService": true,
-    "rightDescription": "Gir tilgang til snarveger.",
+    "rightDescription": "Gir tilgang til snarveier.",
     "resourceReferences": [],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgNumber": "130000000"
@@ -880,13 +1028,20 @@
     "title": "A3 app",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-504",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "En Altinn 3 app",
@@ -908,13 +1063,20 @@
     "title": "A2 skjema",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-505",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Et Altinn 2 skjema",
@@ -941,13 +1103,20 @@
     "title": "A3 app 2",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-506",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "En Altinn 3 app",
@@ -969,13 +1138,20 @@
     "title": "A2 skjema 2",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-507",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Et Altinn 2 skjema",
@@ -1002,13 +1178,20 @@
     "title": "Brannbilen i Brønnøysund",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-508",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Brannbilen - det er bare én ja",
@@ -1024,13 +1207,20 @@
     "title": "Kaffemaskinen i 4. etasje",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-509",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
@@ -1046,13 +1236,20 @@
     "title": "DigDir WiFi",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-510",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1068,13 +1265,20 @@
     "title": "DigDir Sommerfest",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-511",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1090,13 +1294,20 @@
     "title": "Lønningsoversikt",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-512",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1112,13 +1323,20 @@
     "title": "Inngangsdøra på kontoret",
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
+
     "identifier": "appid-513",
-    "isComplete": true,
+    
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
