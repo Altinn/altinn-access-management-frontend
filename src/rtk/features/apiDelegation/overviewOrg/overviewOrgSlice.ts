@@ -37,7 +37,7 @@ interface DelegationDTO {
   resourceTitle: string;
   resourceOwnerName: string;
   rightDescription: string;
-  resourceReferences: ResourceReference[];
+  resourceReferences?: ResourceReference[];
 }
 
 export interface SliceState {
@@ -71,9 +71,11 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
       description: delegation.rightDescription,
       scopes: [],
     };
-    for (const ref of delegation.resourceReferences) {
-      if (ref.referenceType === 'MaskinportenScope') {
-        api.scopes.push(ref.reference);
+    if (delegation.resourceReferences) {
+      for (const ref of delegation.resourceReferences) {
+        if (ref.referenceType === 'MaskinportenScope') {
+          api.scopes.push(ref.reference);
+        }
       }
     }
 

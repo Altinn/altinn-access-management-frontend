@@ -18,7 +18,7 @@ export interface DelegableApiDto {
   resourceOwnername: string;
   rightDescription: string;
   description?: string;
-  resourceReferences: resourceReferenceDTO[];
+  resourceReferences?: resourceReferenceDTO[];
 }
 
 export interface DelegableApiWithPriority {
@@ -46,9 +46,11 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
     description: obj.description,
     scopes: [],
   };
-  for (const ref of obj.resourceReferences) {
-    if (ref.referenceType === 'MaskinportenScope') {
-      delegableApi.scopes.push(ref.reference);
+  if (obj.resourceReferences) {
+    for (const ref of obj.resourceReferences) {
+      if (ref.referenceType === 'MaskinportenScope') {
+        delegableApi.scopes.push(ref.reference);
+      }
     }
   }
 
