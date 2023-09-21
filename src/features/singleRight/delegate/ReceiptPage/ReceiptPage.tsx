@@ -12,8 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { ReduxStatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
-import { ResourceActionBar } from '../ChooseServicePage/ResourceActionBar/ResourceActionBar';
-
+import { ResourceActionBar } from './ResourceActionBar/ResourceActionBar';
 import classes from './ReceiptPage.module.css';
 
 export const ReceiptPage = () => {
@@ -42,9 +41,9 @@ export const ReceiptPage = () => {
         key={resource.To[0].id}
         title={resource.serviceDto.serviceTitle}
         subtitle={resource.serviceDto.serviceOwner}
-        status={'NotDelegable'}
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         compact={isSm}
+        additionalText={t('common.failed')}
       ></ResourceActionBar>
     );
   });
@@ -55,14 +54,13 @@ export const ReceiptPage = () => {
         key={resource.To[0].id}
         title={resource.serviceDto.serviceTitle}
         subtitle={resource.serviceDto.serviceOwner}
-        status={'Delegable'}
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         compact={isSm}
+        additionalText={t('common.failed')}
+        color={'success'}
       ></ResourceActionBar>
     );
   });
-
-  console.log();
 
   return (
     <PageContainer>

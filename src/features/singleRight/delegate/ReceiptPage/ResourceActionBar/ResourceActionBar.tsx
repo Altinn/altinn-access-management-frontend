@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, Paragraph } from '@digdir/design-system-react';
-import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
-import { useUpdate } from '@/resources/hooks/useUpdate';
-import { usePrevious } from '@/resources/hooks';
 
 import classes from './ResourceActionBar.module.css';
 
 export interface ResourceActionBarProps
-  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children' | 'color'> {
+  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children' | 'color' | 'additionalText'> {
   /** Shows details about why the service isn't delegable */
   errorText?: string | undefined;
 
@@ -24,22 +20,10 @@ export const ResourceActionBar = ({
   subtitle,
   title,
   children,
-  status = 'Unchecked',
-  errorText = undefined,
-  onAddClick,
-  onRemoveClick,
-  compact = false,
+  additionalText,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
-
-  const previousStatus = usePrevious(status);
-
-  useUpdate(() => {
-    if (status === 'NotDelegable' && previousStatus !== undefined) {
-      setOpen(true);
-    }
-  }, [status]);
 
   const color = useMemo(() => {
     switch (status) {
@@ -53,68 +37,12 @@ export const ResourceActionBar = ({
     }
   }, [status]);
 
-  const addButton = (
-    <Button
-      variant='quiet'
-      icon={<PlusCircleIcon title='add' />}
-      size={compact ? 'large' : 'medium'}
-      onClick={onAddClick}
-      iconPlacement='right'
-    >
-      {!compact && t('common.add')}
-    </Button>
-  );
-
-  const undoButton = (
-    <Button
-      variant='quiet'
-      icon={<ArrowUndoIcon title={t('common.undo')} />}
-      size={compact ? 'large' : 'medium'}
-      onClick={onRemoveClick}
-      iconPlacement='right'
-    >
-      {!compact && t('common.undo')}
-    </Button>
-  );
-
-  const notDelegableLabel = (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div
-      className={classes.notDelegableContainer}
-      onClick={() => {
-        setOpen(!open);
-      }}
-    >
-      {!compact && <Paragraph>{errorText}</Paragraph>}
-      <ExclamationmarkTriangleIcon
-        className={classes.notDelegableIcon}
-        fontSize='1.5rem'
-      />
-    </div>
-  );
-
-  const action = () => {
-    switch (status) {
-      case 'Delegable':
-      case 'PartiallyDelegable':
-        return undoButton;
-      case 'NotDelegable':
-        return notDelegableLabel;
-      default:
-        return addButton;
-    }
-  };
-
   return (
     <ActionBar
       subtitle={subtitle}
       title={title}
       color={color}
-      actions={action()}
-      open={open}
-      onClick={() => {
-        setOpen(!open);
-      }}
+      additionalText={additionalText}
     >
       <div className={classes.content}>
         <div>{children}</div>

@@ -32,7 +32,8 @@
     "read": "Lese",
     "write": "Skrive",
     "sign": "Signere",
-    "access": "Tilgang til hele tjenesten"
+    "access": "Tilgang til hele tjenesten",
+    "failed": "Feilet"
   },
   "profile": {
     "received": "Mottatte",
@@ -135,6 +136,8 @@
     "alert_partially_delegable_header": "Du får ikke delegert hele tjenesten",
     "you_cant_delegate_these_rights": "Disse rettighetene kan du ikke delegere:",
     "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på sjekkmerkene nedenfor for å fjerne dem",
-    "processing_delegations": "Prosesserer delegeringer"
+    "processing_delegations": "Prosesserer delegeringer",
+    "woops_something_went_wrong": "Oi, her var det noe som gikk galt med en eller flere tjenester. Disse er røde. Du kan prøve igjen senere",
+    "techncal_problem_paragraph": "Et teknisk problem har oppstått ved delegering av tjenestene. Vi anbefaler at du starter delegeringsprosessen på nytt. Hvis problemet vedvarer ber vi deg kontakte brukerservice på telefon 75 00 60 00. Vi beklager!"
   }
 }

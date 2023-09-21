@@ -32,7 +32,8 @@
     "read": "Read",
     "write": "Write",
     "sign": "Sign",
-    "access": "Access to whole service"
+    "access": "Access to whole service",
+    "failed": "Failed"
   },
   "profile": {
     "received": "Received",
@@ -135,6 +136,9 @@
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the the checkmarks on the specific access",
-    "processing_delegations": "Processing delegations"
+    "processing_delegations": "Processing delegations",
+    "woops_something_went_wrong": "Oi, her var det noe som gikk galt med en eller flere tjenester disse er merket med rødt. Du kan prøve igjen senere",
+    "techncal_problem_paragraph": "Et teknisk problem har oppstått ved delegering av denne tjenesten. Vi anbefaler at du starter en ny delegering og prøver en gang til. Hvis problemet vedvarer ber vi deg kontakte Brukerservice på telefon 75 00 60 00. Vi beklager!"
+
   }
 }

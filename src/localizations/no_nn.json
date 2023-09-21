@@ -32,7 +32,8 @@
     "read": "Lesa",
     "write": "Skriva",
     "sign": "Signera",
-    "access": "Tilgang til heile tenesta"
+    "access": "Tilgang til heile tenesta",
+    "failed": "Feila"
   },
   "profile": {
     "received": "Mottekne",
@@ -136,6 +137,8 @@
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
     "you_cant_delegate_these_rights": "Desse rettegheitane kan du ikkje delegera:",
     "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på sjekkmerka nedanfor for å fjerna dei",
-    "processing_delegations": "Prosesserer delegeringar"
+    "processing_delegations": "Prosesserer delegeringar",
+    "woops_something_went_wrong": "Oi, her var det noko som gjekk gale med ein eller fleire tenester. Desse er raude. Du kan prøva igjen seinare",
+    "techncal_problem_paragraph": "Eit teknisk problem har oppstått ved delegering av tenestene. Me tilrår at du startar delegeringsprosessen på nytt. Viss problemet held fram ber me deg kontakta brukarservice på telefon 75 00 60 00. Me beklagar!"
   }
 }
