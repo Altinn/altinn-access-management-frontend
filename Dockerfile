@@ -8,7 +8,7 @@ RUN yarn --immutable
 RUN yarn build
 
 # Building the backend
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS generate-accessmanagement-backend
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS generate-accessmanagement-backend
 WORKDIR /build
 COPY backend .
 RUN dotnet build src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj -c Release -o /app_output
