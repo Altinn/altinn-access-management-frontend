@@ -16,11 +16,10 @@ export interface ResourceCollectionBarProps
 }
 
 /**
- * A React component that displays a collection of resources using the CollectionBar component.
- * The resources are displayed as small actionBar components inside the contents of an CollectionBar component
+ * This component renders a CollectionBar and populates its content with resources, rendered as removable ActionBars.
+ * Colors and text is handled automatically inside the component
  *
  * @component
- * @param {Object} props - The props for the ResourceCollectionBar component.
  * @param {ServiceResource[]} props.resources - The resources that are to appear in the CollectionBar content.
  * @param {boolean} props.compact - Whether or not to use the CollectionBar's compact mode.
  * @param {function} props.onRemove - The callback function to be called when the remove button is pressed on a resource.
