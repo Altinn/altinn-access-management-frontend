@@ -18,7 +18,7 @@ import { useAppSelector } from '@/rtk/app/hooks';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import { type ServiceWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 
-import { ResourceActionBar } from '../ResourceActionBar/ResourceActionBar';
+import { ResourceActionBar } from '../ResourceActionBar';
 
 import classes from './SearchSection.module.css';
 

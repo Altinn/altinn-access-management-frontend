@@ -8,7 +8,8 @@ import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { NotFoundSite } from '@/sites/NotFoundSite';
-import { ChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
+import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
+import { ChooseServicePage as RequestChooseServicePage } from '@/features/singleRight/request/ChooseServicePage/ChooseServicePage';
 import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
 import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
 
@@ -66,7 +67,7 @@ export const Router = createBrowserRouter(
       >
         <Route
           path={SingleRightPath.ChooseService}
-          element={<ChooseServicePage />}
+          element={<DelegateChooseServicePage />}
           errorElement={<NotFoundSite />}
         />
         <Route
@@ -77,6 +78,16 @@ export const Router = createBrowserRouter(
         <Route
           path={SingleRightPath.Receipt}
           element={<SingleRightReceiptPage />}
+          errorElement={<NotFoundSite />}
+        />
+      </Route>
+      <Route
+        path={SingleRightPath.RequestSingleRights}
+        errorElement={<NotFoundSite />}
+      >
+        <Route
+          path={SingleRightPath.ChooseService}
+          element={<RequestChooseServicePage />}
           errorElement={<NotFoundSite />}
         />
       </Route>
