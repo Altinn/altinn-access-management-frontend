@@ -1,15 +1,13 @@
-using System;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -65,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
             int countMatches = CountMatches(actualResponses, "AllAccessesAppid503.json");
 
             // Assert
@@ -97,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
             int countMatches = CountMatches(actualResponses, "NoAccessesAppid504.json");
 
             // Assert
@@ -129,7 +127,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
             int countMatches = CountMatches(actualResponses, "OnlyReadAppid505.json");
 
             // Assert
@@ -161,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationAccessCheckResponse> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationAccessCheckResponse>>();
+            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
             int countMatches = CountMatches(actualResponses, "ReadAndWriteAppid506.json");
 
             // Assert
@@ -174,7 +172,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: CreateDelegation returns the delegated actions of the standard resource
         /// </summary>
         [Fact]
-        public async Task CreateDelegation_StandardResource_valid()
+        public async Task CreateDelegation_StandardResource_appid503_OnlyReadDelegated()
         {
             // Arrange
             string partyId = "999 999 999";
@@ -190,7 +188,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     Id = "urn:altinn:resource",
                     Value = "appid-503",
 
-                }
+                },
             };
 
             List<IdValuePair> to = new List<IdValuePair>
@@ -198,33 +196,103 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new IdValuePair
                 {
                     Id = "urn:altinn:ssn",
-                    Value = toSsn
-                }
+                    Value = toSsn,
+                },
             };
 
             List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            {
+                new DelegationRequestDto
                 {
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "read"
-                    },
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "write"
-                    },
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "sign"
-                    },
-                };
+                    Resource = resource,
+                    Action = "read",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "sign",
+                },
+            };
 
             DelegationInput delegation = new DelegationInput
             {
                 To = to,
-                Rights = rights
+                Rights = rights,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(delegation);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
+            DelegationOutput actualResponse = await httpResponse.Content.ReadAsAsync<DelegationOutput>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
+        }
+        
+         /// <summary>
+        ///     Test case: CreateDelegation delegates the actions of a standard resource
+        ///     Expected: CreateDelegation returns the delegated actions of the standard resource
+        /// </summary>
+        [Fact]
+        public async Task CreateDelegation_StandardResource_appid506_NoneDelegated()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string toSsn = "50019992";
+
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
+            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "appid-506_NoneDelegated.json");
+
+            List<IdValuePair> resource = new List<IdValuePair>
+            {
+                new IdValuePair
+                {
+                    Id = "urn:altinn:resource",
+                    Value = "appid-503",
+
+                },
+            };
+
+            List<IdValuePair> to = new List<IdValuePair>
+            {
+                new IdValuePair
+                {
+                    Id = "urn:altinn:ssn",
+                    Value = toSsn,
+                },
+            };
+
+            List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            {
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "read",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "sign",
+                },
+            };
+
+            DelegationInput delegation = new DelegationInput
+            {
+                To = to,
+                Rights = rights,
             };
 
             string jsonDto = JsonSerializer.Serialize(delegation);
@@ -266,7 +334,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     Id = "urn:altinn:org",
                     Value = "ttd",
 
-                }
+                },
             };
 
             List<IdValuePair> to = new List<IdValuePair>
@@ -274,28 +342,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new IdValuePair
                 {
                     Id = "urn:altinn:ssn",
-                    Value = toSsn
-                }
+                    Value = toSsn,
+                },
             };
 
             List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            {
+                new DelegationRequestDto
                 {
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "read"
-                    },
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "write"
-                    },
-                };
+                    Resource = resource,
+                    Action = "read",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+            };
 
             DelegationInput delegation = new DelegationInput
             {
                 To = to,
-                Rights = rights
+                Rights = rights,
             };
 
             string jsonDto = JsonSerializer.Serialize(delegation);
@@ -337,7 +405,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     Id = "urn:altinn:serviceeditioncode",
                     Value = "1596",
 
-                }
+                },
             };
 
             List<IdValuePair> to = new List<IdValuePair>
@@ -345,28 +413,28 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new IdValuePair
                 {
                     Id = "urn:altinn:ssn",
-                    Value = toSsn
-                }
+                    Value = toSsn,
+                },
             };
 
             List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            {
+                new DelegationRequestDto
                 {
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "read"
-                    },
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "write"
-                    },
-                };
+                    Resource = resource,
+                    Action = "read",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+            };
 
             DelegationInput delegation = new DelegationInput
             {
                 To = to,
-                Rights = rights
+                Rights = rights,
             };
 
             string jsonDto = JsonSerializer.Serialize(delegation);
@@ -399,7 +467,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     Id = "urn:altinn:resource",
                     Value = "Nonexistent",
 
-                }
+                },
             };
 
             List<IdValuePair> to = new List<IdValuePair>
@@ -407,33 +475,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new IdValuePair
                 {
                     Id = "urn:altinn:ssn",
-                    Value = toSsn
-                }
+                    Value = toSsn,
+                },
             };
 
             List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            {
+                new DelegationRequestDto
                 {
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "read"
-                    },
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "write"
-                    },
-                    new DelegationRequestDto
-                    {
-                        Resource = resource,
-                        Action = "sign"
-                    },
-                };
+                    Resource = resource,
+                    Action = "read",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+                new DelegationRequestDto
+                {
+                    Resource = resource,
+                    Action = "sign",
+                },
+            };
 
             DelegationInput delegation = new DelegationInput
             {
                 To = to,
-                Rights = rights
+                Rights = rights,
             };
 
             string jsonDto = JsonSerializer.Serialize(delegation);
@@ -446,11 +514,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
-        private int CountMatches(List<DelegationAccessCheckResponse> actualResponses, string expectedResponseFileName)
+        private int CountMatches(List<DelegationResponseData> actualResponses, string expectedResponseFileName)
         {
             string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
-            List<DelegationAccessCheckResponse> expectedResponses = Util.GetMockData<List<DelegationAccessCheckResponse>>(path, expectedResponseFileName);
+            List<DelegationResponseData> expectedResponses = Util.GetMockData<List<DelegationResponseData>>(path, expectedResponseFileName);
             int countMatches = 0;
 
             for (int i = 0; i < actualResponses.Count; i++)
@@ -464,7 +532,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return countMatches;
         }
 
-        private static bool AreObjectsEqual(DelegationAccessCheckResponse actualObject, DelegationAccessCheckResponse expectedObject)
+        private static bool AreObjectsEqual(DelegationResponseData actualObject, DelegationResponseData expectedObject)
         {
             return actualObject.RightKey == expectedObject.RightKey &&
                    actualObject.Action == expectedObject.Action &&

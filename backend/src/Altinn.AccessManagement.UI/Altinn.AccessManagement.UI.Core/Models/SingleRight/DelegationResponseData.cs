@@ -1,11 +1,12 @@
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Newtonsoft.Json;
 
-namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
+namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
 {
     /// <summary>
     ///     Represents the response of the backend for Delegation access check response.
     /// </summary>
-    public class DelegationAccessCheckResponse
+    public class DelegationResponseData
     {
         /// <summary>
         ///     Represents the response of the backend for Delegation access check response.
@@ -15,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         /// <param name="action">The action performed.</param>
         /// <param name="status">The status of the response.</param>
         /// <param name="details">The reason for the response.</param>
-        public DelegationAccessCheckResponse(
+        public DelegationResponseData(
             string rightKey,
             List<IdValuePair> resources,
             string action,

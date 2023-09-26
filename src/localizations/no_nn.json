@@ -33,7 +33,8 @@
     "write": "Skriva",
     "sign": "Signera",
     "access": "Tilgang til heile tenesta",
-    "failed": "Feila"
+    "failed": "Feila",
+    "failed_lowercase": "feila"
   },
   "profile": {
     "received": "Mottekne",
@@ -139,6 +140,12 @@
     "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på sjekkmerka nedanfor for å fjerna dei",
     "processing_delegations": "Prosesserer delegeringar",
     "woops_something_went_wrong": "Oi, her var det noko som gjekk gale med ein eller fleire tenester. Desse er raude. Du kan prøva igjen seinare",
-    "techncal_problem_paragraph": "Eit teknisk problem har oppstått ved delegering av tenestene. Me tilrår at du startar delegeringsprosessen på nytt. Viss problemet held fram ber me deg kontakta brukarservice på telefon 75 00 60 00. Me beklagar!"
+    "all_failed_techncal_problem_paragraph": "Eit teknisk problem har oppstått ved delegering av tenestene. Me tilrår at du startar delegeringsprosessen på nytt ved å gå til delegeringssida. Viss problemet held fram ber me deg kontakta brukarservice på telefon 75 00 60 00. Me beklagar!",
+    "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
+    "some_failed_technical_problem": "Pga. Av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",
+    "these_rights_were_not_delegated": "Disse rettighetene kunne ikke delegeres:",
+    "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:",
+    "something_went_wrong": "Noko feila",
+    "all_went_wrong": "Alt feila"
   }
 }

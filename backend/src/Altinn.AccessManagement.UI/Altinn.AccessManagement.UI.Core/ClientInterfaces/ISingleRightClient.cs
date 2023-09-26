@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -18,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     The delegation access check request object that's going to be consumed by the backend
         /// </param>
         /// <returns>List<DelegationAccessCheckResponse /></returns>
-        Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request);
+        Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, DelegationRequestDto request);
 
         /// <summary>
         ///     Creates a single rights delegation

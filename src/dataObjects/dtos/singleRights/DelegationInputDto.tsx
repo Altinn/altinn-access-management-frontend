@@ -1,4 +1,4 @@
-export enum ReduxStatusResponse {
+export enum StatusResponse {
   Fulfilled = 'fulfilled',
   Rejected = 'rejected',
 }
@@ -7,7 +7,7 @@ export interface DelegationInputDto {
   To: IdValuePair[];
   Rights: DelegationRequestDto[];
   serviceDto: ServiceDto;
-  status?: ReduxStatusResponse;
+  status?: StatusResponse;
 }
 
 export class ServiceDto {

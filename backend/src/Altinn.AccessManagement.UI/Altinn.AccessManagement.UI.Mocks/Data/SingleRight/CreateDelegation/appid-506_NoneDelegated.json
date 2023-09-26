@@ -17,20 +17,20 @@
       "resource": [
         {
           "id": "urn:altinn:resource",
-          "value": "appid-502"
+          "value": "appid-506"
         }
       ],
       "action": "read",
-      "status": "Delegated",
+      "status": "NotDelegated",
       "details": [
         {
-          "code": "",
-          "description": "",
+          "code": "Unknown",
+          "description": "Unknown",
           "parameters": {
             "roleRequirementsMatches": [
               {
-                "id": "",
-                "value": ""
+                "id": "urn:altinn:role",
+                "value": "DAGL"
               }
             ]
           }
@@ -42,7 +42,7 @@
       "resource": [
         {
           "id": "urn:altinn:resource",
-          "value": "appid-502"
+          "value": "appid-503"
         }
       ],
       "action": "write",
@@ -67,7 +67,7 @@
       "resource": [
         {
           "id": "urn:altinn:resource",
-          "value": "appid-502"
+          "value": "appid-503"
         }
       ],
       "action": "sign",

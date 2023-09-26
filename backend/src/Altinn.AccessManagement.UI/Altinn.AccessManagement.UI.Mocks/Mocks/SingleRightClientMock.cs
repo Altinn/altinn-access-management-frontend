@@ -1,7 +1,7 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -19,11 +19,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
+        public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
         {
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
-            List<DelegationAccessCheckResponse> expectedResponse = Util.GetMockData<List<DelegationAccessCheckResponse>>(dataPath, DetermineAccessLevel(request));
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(dataPath, DetermineAccessLevel(request));
 
             return Task.FromResult(expectedResponse);
         }
@@ -40,6 +40,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 case "urn:altinn:servicecode":
                 case "urn:altinn:applicationid":
                     resourceFileName = resource.Value;
+                    if (resource.Value == "appid-506")
+                    {
+                        resourceFileName = "appid-506_NoneDelegated";
+                    }
                     break;
                 case "urn:altinn:org":
                 case "urn:altinn:serviceeditioncode":

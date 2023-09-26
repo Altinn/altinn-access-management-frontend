@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
@@ -19,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
+        public async Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
         {
             return await _singleRightClient.CheckDelegationAccess(partyId, request);
         }

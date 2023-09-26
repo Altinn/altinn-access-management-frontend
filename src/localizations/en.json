@@ -33,7 +33,8 @@
     "write": "Write",
     "sign": "Sign",
     "access": "Access to whole service",
-    "failed": "Failed"
+    "failed": "Failed",
+    "failed_lowercase": "failed"
   },
   "profile": {
     "received": "Received",
@@ -82,7 +83,7 @@
     "filter_label": "Filter by provider",
     "chosen_orgs": "Chosen organisations",
     "new_api_content_text2": "Select which APIs you want to grant access to by clicking the plus sign. You can also search for APIs by name and filter by provider.",
-    "delegable_apis": "Delegable apis",
+    "delegable_apis": "Delegable APIs",
     "chosen_apis": "Chosen APIs:",
     "no_chosen_orgs": "You have no selected organizations to provide API access to. Please click the previous button at the bottom right.",
     "scopes": "Scopes",
@@ -137,8 +138,13 @@
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the the checkmarks on the specific access",
     "processing_delegations": "Processing delegations",
-    "woops_something_went_wrong": "Oi, her var det noe som gikk galt med en eller flere tjenester disse er merket med rødt. Du kan prøve igjen senere",
-    "techncal_problem_paragraph": "Et teknisk problem har oppstått ved delegering av denne tjenesten. Vi anbefaler at du starter en ny delegering og prøver en gang til. Hvis problemet vedvarer ber vi deg kontakte Brukerservice på telefon 75 00 60 00. Vi beklager!"
-
+    "woops_something_went_wrong": "Oi, her var det noe som gikk galt med en eller flere tjenester. Disse er merket med rødt. Du kan prøve igjen senere.",
+    "all_failed_techncal_problem": "A technical problem has arised delegating this service. We recommend that you start a new delegation and try one more time. If the problem persists we ask you to contact user service on phone number 75 00 60 00. We're sorry!",
+    "woops_something_went_wrong_alert": "Woops! Something went wrong",
+    "some_failed_technical_problem": "Because of a technical error all rights weren't delegated. We recommend that you retry delegating the service by going to the delegation page.",
+    "these_rights_were_not_delegated": "These rights couldn't be delegated:",
+    "these_rights_were_delegated": "These rights were delegated:",
+    "something_went_wrong": "Something failed",
+    "all_went_wrong": "Everything failed"
   }
 }

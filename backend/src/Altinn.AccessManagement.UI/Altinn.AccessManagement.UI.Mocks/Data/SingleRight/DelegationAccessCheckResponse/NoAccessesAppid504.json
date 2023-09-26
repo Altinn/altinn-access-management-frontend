@@ -13,12 +13,14 @@
       {
         "code": "MissingRoleAccess",
         "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-        "parameters": [
-          {
-            "name": "MissingDelegationAccess",
-            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
-          }
-        ]
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   },
@@ -36,12 +38,14 @@
       {
         "code": "MissingRoleAccess",
         "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-        "parameters": [
-          {
-            "name": "RoleAccess",
-            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
-          }
-        ]
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   },
@@ -59,12 +63,14 @@
       {
         "code": "MissingRoleAccess",
         "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
-        "parameters": [
-          {
-            "name": "RoleAccess",
-            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
-          }
-        ]
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   }

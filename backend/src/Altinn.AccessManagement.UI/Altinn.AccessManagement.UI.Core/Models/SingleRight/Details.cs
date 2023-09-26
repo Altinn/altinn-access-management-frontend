@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess
+namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
 {
     /// <summary>
     ///     Represents details about why something failed.
@@ -23,6 +23,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAcce
         ///     Further details about the reason for the response.
         /// </summary>
         [JsonProperty("parameters")]
-        public List<Parameters>? Parameters { get; set; }
+        public Parameter? Parameters { get; set; }
     }
 }

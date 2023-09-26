@@ -21,21 +21,10 @@ export const ResourceActionBar = ({
   title,
   children,
   additionalText,
+  color,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
-
-  const color = useMemo(() => {
-    switch (status) {
-      case 'Delegable':
-      case 'PartiallyDelegable':
-        return 'success';
-      case 'NotDelegable':
-        return 'danger';
-      default:
-        return 'neutral';
-    }
-  }, [status]);
 
   return (
     <ActionBar
