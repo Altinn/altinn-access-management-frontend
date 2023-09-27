@@ -237,7 +237,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
         }
         
-         /// <summary>
+        /// <summary>
         ///     Test case: CreateDelegation delegates the actions of a standard resource
         ///     Expected: CreateDelegation returns the delegated actions of the standard resource
         /// </summary>
@@ -249,15 +249,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string toSsn = "50019992";
 
             string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
-            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "appid-506_NoneDelegated.json");
+            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "appid-506.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
             {
                 new IdValuePair
                 {
                     Id = "urn:altinn:resource",
-                    Value = "appid-503",
-
+                    Value = "appid-506",
                 },
             };
 
