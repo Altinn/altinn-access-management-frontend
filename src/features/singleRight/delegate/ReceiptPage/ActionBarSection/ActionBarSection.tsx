@@ -25,18 +25,28 @@ export const ActionBarSection = () => {
   const { t } = useTranslation();
   const delegations = useAppSelector((state) => state.singleRightsSlice.processedDelegations);
 
-  const firstFailedIndex = delegations.findIndex((pd: ProcessedDelegation) => {
-    const successfulDelegations = pd.bffResponseList?.filter(
-      (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.NotDelegated,
-    );
-    return successfulDelegations?.length === 0;
-  });
+  let mostFailedIndex = -1;
+  let mostFailedDelegations = -1;
 
   const firstSuccesfulIndex = delegations.findIndex((pd: ProcessedDelegation) => {
     const failedDelegations = pd.bffResponseList?.filter(
       (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.Delegated,
     );
     return failedDelegations?.length === 0;
+  });
+
+  // logic for finding the delegation with the most failed Delegations
+  delegations.forEach((pd, index) => {
+    const failedDelegations = pd.bffResponseList?.filter(
+      (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.Delegated,
+    );
+
+    const numFailedDelegations = failedDelegations?.length || 0;
+
+    if (numFailedDelegations > mostFailedDelegations) {
+      mostFailedDelegations = numFailedDelegations;
+      mostFailedIndex = index;
+    }
   });
 
   const actionBars = delegations
@@ -50,13 +60,6 @@ export const ActionBarSection = () => {
       );
 
       const numFailedDelegations = failedDelegations?.length || 0;
-
-      /*       if (
-        numFailedDelegations > 0 &&
-        (firstFailedDelegationIndex === -1 || numFailedDelegations > firstFailedDelegationIndex)
-      ) {
-        firstFailedDelegationIndex = numFailedDelegations;
-      } */
 
       const additionalText = () => {
         if (numFailedDelegations > 0) {
@@ -163,10 +166,11 @@ export const ActionBarSection = () => {
         );
       };
 
+      console.log('mostFailedIndex', mostFailedIndex);
       return {
         actionBar: (
           <>
-            {index === firstFailedIndex && failedDelegationIngress()}
+            {index === mostFailedIndex && failedDelegationIngress()}
             {index === firstSuccesfulIndex && successfulDelegationParagraph()}
             <ReceiptActionBar
               key={pd.meta.Rights[0].Resource[0].value}
@@ -174,7 +178,7 @@ export const ActionBarSection = () => {
               subtitle={pd.meta.serviceDto.serviceOwner}
               additionalText={additionalText()}
               color={numFailedDelegations === 0 ? 'success' : 'danger'}
-              defaultOpen={index === firstFailedIndex}
+              defaultOpen={index === mostFailedIndex && numFailedDelegations > 0}
             >
               {dangerAlert()}
               {successfulDelegations?.length > 0 && successfulChips()}
