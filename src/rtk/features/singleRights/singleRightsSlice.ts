@@ -8,7 +8,7 @@ import type {
   DelegationInputDto,
   DelegationRequestDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import { StatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import { ReduxStatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -106,7 +106,7 @@ export const delegate = createAsyncThunk(
   },
 );
 
-const createSerializedMeta = (meta: DelegationInputDto, status: StatusResponse) => {
+const createSerializedMeta = (meta: DelegationInputDto, status: ReduxStatusResponse) => {
   const To = [{ id: meta.To[0].id, value: meta.To[0].value }];
 
   const Rights = meta.Rights.map((right: DelegationRequestDto) => ({
@@ -175,7 +175,10 @@ const singleRightSlice = createSlice({
         }
       })
       .addCase(delegate.fulfilled, (state, action) => {
-        const delegationInput = createSerializedMeta(action.meta.arg, StatusResponse.Fulfilled);
+        const delegationInput = createSerializedMeta(
+          action.meta.arg,
+          ReduxStatusResponse.Fulfilled,
+        );
 
         const pushData: ProcessedDelegation = {
           meta: delegationInput,
@@ -184,7 +187,7 @@ const singleRightSlice = createSlice({
         state.processedDelegations.push(pushData);
       })
       .addCase(delegate.rejected, (state, action) => {
-        const delegationInput = createSerializedMeta(action.meta.arg, StatusResponse.Rejected);
+        const delegationInput = createSerializedMeta(action.meta.arg, ReduxStatusResponse.Rejected);
 
         const pushData: ProcessedDelegation = {
           meta: delegationInput,

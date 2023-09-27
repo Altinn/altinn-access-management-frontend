@@ -22,6 +22,9 @@ export interface CollectionBarProps extends Pick<ActionBarProps, 'color' | 'titl
 
   /** The path to redirect to when pressing the proceed button */
   proceedToPath?: string;
+
+  /** Disables proceeding to path when true */
+  disabledProceedClick?: boolean;
 }
 
 export const CollectionBar = ({
@@ -30,6 +33,7 @@ export const CollectionBar = ({
   collection,
   compact = false,
   proceedToPath,
+  disabledProceedClick,
 }: CollectionBarProps) => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
@@ -73,6 +77,7 @@ export const CollectionBar = ({
               icon={<ChevronRightDoubleCircleFillIcon />}
               color={color === 'dark' ? 'inverted' : undefined}
               onClick={proceedClick}
+              disabled={disabledProceedClick}
             >
               {t('common.proceed')}
             </Button>
@@ -91,6 +96,7 @@ export const CollectionBar = ({
           icon={<ChevronRightDoubleIcon />}
           iconPlacement='right'
           onClick={proceedClick}
+          disabled={disabledProceedClick}
         >
           {t('common.proceed')}
         </Button>

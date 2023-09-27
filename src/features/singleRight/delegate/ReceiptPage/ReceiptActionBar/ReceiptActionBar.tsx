@@ -1,37 +1,34 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
 
-import classes from './ResourceActionBar.module.css';
+import classes from './ReceiptActionBar.module.css';
 
-export interface ResourceActionBarProps
-  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children' | 'color' | 'additionalText'> {
+export interface ReceiptActionBarProps
+  extends Pick<
+    ActionBarProps,
+    'subtitle' | 'title' | 'children' | 'color' | 'additionalText' | 'defaultOpen'
+  > {
   /** Shows details about why the service isn't delegable */
   errorText?: string | undefined;
-
-  /** When true saves as much space as possible. Usually true for smaller screens */
-  compact?: boolean;
 }
 
-export const ResourceActionBar = ({
+export const ReceiptActionBar = ({
   subtitle,
   title,
   children,
   additionalText,
   color,
-}: ResourceActionBarProps) => {
-  const { t } = useTranslation('common');
-  const [open, setOpen] = useState(false);
-
+  defaultOpen,
+}: ReceiptActionBarProps) => {
   return (
     <ActionBar
       subtitle={subtitle}
       title={title}
       color={color}
       additionalText={additionalText}
+      defaultOpen={defaultOpen}
     >
       <div className={classes.content}>
         <div>{children}</div>
