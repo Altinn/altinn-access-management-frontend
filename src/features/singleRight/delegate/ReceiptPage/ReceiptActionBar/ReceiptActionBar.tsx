@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
+import { forwardRef } from 'react';
 
 import { ActionBar, type ActionBarProps } from '@/components';
 
@@ -14,25 +15,23 @@ export interface ReceiptActionBarProps
   errorText?: string | undefined;
 }
 
-export const ReceiptActionBar = ({
-  subtitle,
-  title,
-  children,
-  additionalText,
-  color,
-  defaultOpen,
-}: ReceiptActionBarProps) => {
-  return (
-    <ActionBar
-      subtitle={subtitle}
-      title={title}
-      color={color}
-      additionalText={additionalText}
-      defaultOpen={defaultOpen}
-    >
-      <div className={classes.content}>
-        <div>{children}</div>
-      </div>
-    </ActionBar>
-  );
-};
+export const ReceiptActionBar = forwardRef<HTMLDivElement, ReceiptActionBarProps>(
+  ({ subtitle, title, children, additionalText, color, defaultOpen }, ref) => {
+    return (
+      <ActionBar
+        subtitle={subtitle}
+        title={title}
+        color={color}
+        additionalText={additionalText}
+        defaultOpen={defaultOpen}
+        ref={ref}
+      >
+        <div className={classes.content}>
+          <div>{children}</div>
+        </div>
+      </ActionBar>
+    );
+  },
+);
+
+ReceiptActionBar.displayName = 'ReceiptActionBar';

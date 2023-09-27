@@ -179,6 +179,7 @@ export const ActionBarSection = () => {
               additionalText={additionalText()}
               color={numFailedDelegations === 0 ? 'success' : 'danger'}
               defaultOpen={index === mostFailedIndex && numFailedDelegations > 0}
+              key={`receipt-action-bar-${index}`}
             >
               {dangerAlert()}
               {successfulDelegations?.length > 0 && successfulChips()}
