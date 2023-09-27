@@ -138,7 +138,7 @@
     "you_cant_delegate_these_rights": "Disse rettighetene kan du ikke delegere:",
     "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på sjekkmerkene nedenfor for å fjerne dem",
     "processing_delegations": "Prosesserer delegeringer",
-    "woops_something_went_wrong_ingress": "Oi, her var det noe som gikk galt med en eller flere tjenester. Disse er røde. Du kan prøve igjen senere",
+    "woops_something_went_wrong_ingress": "Oi, her var det noe som gikk galt med en eller flere tjenester. Du kan se mer informasjon i de røde kolonnene under. Du kan prøve igjen senere",
     "all_failed_techncal_problem_paragraph": "Et teknisk problem har oppstått ved delegering av tjenestene. Vi anbefaler at du starter delegeringsprosessen på nytt ved å gå til delegeringsside. Hvis problemet vedvarer ber vi deg kontakte brukerservice på telefon 75 00 60 00. Vi beklager!",
     "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
     "some_failed_technical_problem": "Pga. Av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",

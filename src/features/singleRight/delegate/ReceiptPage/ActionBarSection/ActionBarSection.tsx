@@ -1,5 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { Alert, Chip, ErrorMessage, Heading, Paragraph } from '@digdir/design-system-react';
+import {
+  Alert,
+  Chip,
+  ErrorMessage,
+  Heading,
+  Ingress,
+  Paragraph,
+} from '@digdir/design-system-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
@@ -17,7 +24,13 @@ import classes from './ActionBarSection.module.css';
 export const ActionBarSection = () => {
   const { t } = useTranslation();
   const delegations = useAppSelector((state) => state.singleRightsSlice.processedDelegations);
-  let firstFailedDelegationIndex = -1;
+
+  const firstFailedIndex = delegations.findIndex((pd: ProcessedDelegation) => {
+    const successfulDelegations = pd.bffResponseList?.filter(
+      (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.NotDelegated,
+    );
+    return successfulDelegations?.length === 0;
+  });
 
   const firstSuccesfulIndex = delegations.findIndex((pd: ProcessedDelegation) => {
     const failedDelegations = pd.bffResponseList?.filter(
@@ -38,15 +51,12 @@ export const ActionBarSection = () => {
 
       const numFailedDelegations = failedDelegations?.length || 0;
 
-      const isFirstDelegationWithNoFailures = index === firstSuccesfulIndex;
-
-      if (
+      /*       if (
         numFailedDelegations > 0 &&
         (firstFailedDelegationIndex === -1 || numFailedDelegations > firstFailedDelegationIndex)
       ) {
-        // Update firstFailedDelegationIndex if this delegation has more failures
         firstFailedDelegationIndex = numFailedDelegations;
-      }
+      } */
 
       const additionalText = () => {
         if (numFailedDelegations > 0) {
@@ -65,50 +75,6 @@ export const ActionBarSection = () => {
         } else {
           return undefined;
         }
-      };
-
-      const receivedRightsParagraph = () => {
-        return (
-          <Paragraph
-            className={classes.successText}
-            spacing
-          >
-            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
-          </Paragraph>
-        );
-      };
-
-      const successfulChips = () => {
-        return (
-          <div className={classes.successfulChipsContainer}>
-            <Heading
-              size={'xxsmall'}
-              level={3}
-            >
-              {t('single_rights.these_rights_were_delegated')}
-            </Heading>
-            <div
-              className={classes.chipContainer}
-              key={index}
-            >
-              {successfulDelegations?.map((right) => {
-                return (
-                  <Chip.Group
-                    size='small'
-                    key={index}
-                  >
-                    <Chip.Toggle
-                      selected={true}
-                      checkmark
-                    >
-                      {t(`common.${right.action}`)}
-                    </Chip.Toggle>
-                  </Chip.Group>
-                );
-              })}
-            </div>
-          </div>
-        );
       };
 
       const dangerAlert = () => {
@@ -130,20 +96,14 @@ export const ActionBarSection = () => {
                 >
                   {t('single_rights.these_rights_were_not_delegated')}
                 </Heading>
-                <div
-                  className={classes.chipContainer}
-                  key={index}
-                >
-                  {failedDelegations?.map((failedRight, index) => {
-                    return (
-                      <Chip.Group
-                        size='small'
-                        key={index}
-                      >
-                        <Chip.Toggle>{t(`common.${failedRight.action}`)}</Chip.Toggle>
-                      </Chip.Group>
-                    );
-                  })}
+                <div className={classes.chipContainer}>
+                  <Chip.Group size='small'>
+                    {failedDelegations?.map((failedRight, index) => {
+                      return (
+                        <Chip.Toggle key={index}>{t(`common.${failedRight.action}`)}</Chip.Toggle>
+                      );
+                    })}
+                  </Chip.Group>
                 </div>
               </Alert>
             )}
@@ -151,17 +111,70 @@ export const ActionBarSection = () => {
         );
       };
 
+      const successfulChips = () => {
+        return (
+          <div className={classes.successfulChipsContainer}>
+            <Heading
+              size={'xxsmall'}
+              level={3}
+            >
+              {t('single_rights.these_rights_were_delegated')}
+            </Heading>
+            <div className={classes.chipContainer}>
+              <Chip.Group size='small'>
+                {successfulDelegations?.map((right, index) => {
+                  return (
+                    <Chip.Toggle
+                      selected={true}
+                      checkmark
+                      key={index}
+                    >
+                      {t(`common.${right.action}`)}
+                    </Chip.Toggle>
+                  );
+                })}
+              </Chip.Group>
+            </div>
+          </div>
+        );
+      };
+
+      const failedDelegationIngress = () => {
+        return (
+          <Ingress
+            className={classes.failedText}
+            level={2}
+            spacing
+          >
+            {t('single_rights.woops_something_went_wrong_ingress')}
+          </Ingress>
+        );
+      };
+
+      const successfulDelegationParagraph = () => {
+        return (
+          <Ingress
+            className={classes.successText}
+            spacing
+            level={2}
+          >
+            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
+          </Ingress>
+        );
+      };
+
       return {
         actionBar: (
           <>
-            {index === firstSuccesfulIndex && receivedRightsParagraph}
+            {index === firstFailedIndex && failedDelegationIngress()}
+            {index === firstSuccesfulIndex && successfulDelegationParagraph()}
             <ReceiptActionBar
-              key={index}
+              key={pd.meta.Rights[0].Resource[0].value}
               title={pd.meta.serviceDto.serviceTitle}
               subtitle={pd.meta.serviceDto.serviceOwner}
               additionalText={additionalText()}
               color={numFailedDelegations === 0 ? 'success' : 'danger'}
-              defaultOpen={firstFailedDelegationIndex === numFailedDelegations}
+              defaultOpen={index === firstFailedIndex}
             >
               {dangerAlert()}
               {successfulDelegations?.length > 0 && successfulChips()}

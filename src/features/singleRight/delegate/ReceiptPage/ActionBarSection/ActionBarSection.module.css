@@ -44,3 +44,7 @@
 .successText {
   margin-top: 50px !important;
 }
+
+.failedText {
+  margin-top: 10px !important;
+}
