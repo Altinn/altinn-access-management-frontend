@@ -85,6 +85,24 @@ export const delegationAccessCheck = createAsyncThunk(
   },
 );
 
+export const fetchRights = createAsyncThunk(
+  'singleRightSlice/fetchRights',
+  async (dto: DelegationAccessCheckDto, { rejectWithValue }) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+    // TODO: Change to new fetchRights endpoint when available
+    return await axios
+      .post(
+        `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
+        dto.resourceIdentifierDto,
+      )
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        return rejectWithValue(error);
+      });
+  },
+);
+
 export const delegate = createAsyncThunk(
   'singleRights/delegate',
   async (dto: DelegationInputDto) => {
@@ -169,6 +187,18 @@ const singleRightSlice = createSlice({
             serviceWithStatus.errorCode = action.payload[0].details[0].code;
           }
         }
+
+        if (serviceWithStatus) {
+          state.servicesWithStatus.push(serviceWithStatus);
+        }
+      })
+      .addCase(fetchRights.fulfilled, (state, action) => {
+        const serviceWithStatus: ServiceWithStatus = {
+          accessCheckResponses: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: 'Delegable',
+          errorCode: '',
+        };
 
         if (serviceWithStatus) {
           state.servicesWithStatus.push(serviceWithStatus);

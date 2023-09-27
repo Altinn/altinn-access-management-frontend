@@ -133,12 +133,55 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Identifier, actual.Identifier);
-            Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.Description, actual.Description);
+            Assert.Equal(expected.RightDescription, actual.RightDescription);
+            Assert.Equal(expected.Homepage, actual.Homepage);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.Spatial, actual.Spatial);
+            AssertContactPointsEqual(expected.ContactPoints, actual.ContactPoints);
+            AssertResourceReferences(expected.ResourceReferences, actual.ResourceReferences);
+            Assert.Equal(expected.Delegable, actual.Delegable);
+            Assert.Equal(expected.Visible, actual.Visible);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
-            Assert.Equal(expected.ValidFrom, actual.ValidFrom);
-            Assert.Equal(expected.ValidTo, actual.ValidTo);
+        }
+
+        /// <summary>
+        ///     Assert that two Lists of <see cref="ResourceReference" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertResourceReferences(List<ResourceReference> expected, List<ResourceReference> actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            for (int i = 0; i < actual.Count; i++)
+            {
+                Assert.Equal(expected[i].ReferenceType, actual[i].ReferenceType);
+                Assert.Equal(expected[i].ReferenceSource, actual[i].ReferenceSource);
+                Assert.Equal(expected[i].Reference, actual[i].Reference);
+            }
+        }
+
+        /// <summary>
+        ///     Assert that two Lists of <see cref="ContactPoint" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertContactPointsEqual(List<ContactPoint> expected, List<ContactPoint> actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            for (int i = 0; i < actual.Count; i++)
+            {
+                Assert.Equal(expected[i].Category, actual[i].Category);
+                Assert.Equal(expected[i].Email, actual[i].Email);
+                Assert.Equal(expected[i].Telephone, actual[i].Telephone);
+                Assert.Equal(expected[i].ContactPage, actual[i].ContactPage);
+            }
+
         }
 
         /// <summary>

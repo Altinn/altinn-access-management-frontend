@@ -7,13 +7,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-119",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -52,7 +60,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -63,13 +76,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-06T09:36:15.443",
     "identifier": "appid-122",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -108,7 +129,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -119,13 +145,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-06T09:41:15.817",
     "identifier": "appid-123",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -164,7 +198,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -175,13 +214,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T19:07:46.143",
     "identifier": "appid-120",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -220,7 +267,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -231,13 +283,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-25T15:17:18.487",
     "identifier": "appid-124",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -276,7 +336,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -287,13 +352,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-13T11:10:52.203",
     "identifier": "appid-126",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -332,7 +405,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -343,13 +421,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-19T11:13:36.8",
     "identifier": "appid-127",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -388,7 +474,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -399,13 +490,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-25T15:20:40.17",
     "identifier": "appid-125",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -444,7 +543,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -455,13 +559,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-19T11:18:52.84",
     "identifier": "appid-128",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -500,7 +612,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -511,13 +628,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-20T11:49:19.26",
     "identifier": "appid-129",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -556,7 +681,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -567,13 +697,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-20T12:32:41.78",
     "identifier": "appid-130",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -612,7 +750,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -623,13 +766,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-28T23:38:06.337",
     "identifier": "appid-132",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -668,7 +819,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -679,13 +835,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-28T23:39:09.01",
     "identifier": "appid-133",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -724,7 +888,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -735,13 +904,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-28T23:40:31.413",
     "identifier": "appid-134",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -780,7 +957,12 @@
     ],
     "hasCompetentAuthority": {
       "orgcode": "SKD",
-      "organization": "974761076"
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -791,13 +973,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-05-29T09:50:19.333",
     "identifier": "appid-136",
-    "isComplete": false,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": null,
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -835,8 +1025,13 @@
       }
     ],
     "hasCompetentAuthority": {
-      "orgcode": "MAT",
-      "organization": "985399077"
+      "orgcode": "SKD",
+      "organization": "974761076",
+      "name": {
+        "en": "Skatteetaten",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      }
     }
   },
   {
@@ -847,13 +1042,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-400",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": {
       "en": "Humbug Registry",
       "nb": "Tulleregisteret",
@@ -907,13 +1110,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-401",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": {
       "en": "The Flowergarden",
       "nb": "Blomsterhagen",
@@ -972,13 +1183,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-402",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": {
       "en": "The Magic Closet",
       "nb": "Det magiske klesskapet",
@@ -1037,13 +1256,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-403",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "description": {
       "en": "The Shortcut",
       "nb": "Snarveien",
@@ -1097,13 +1324,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-502",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1138,13 +1373,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-503",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1179,13 +1422,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-504",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1226,13 +1477,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-505",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1245,8 +1504,8 @@
     "isPublicService": true,
     "rightDescription": {
       "en": "Gives access an A2 form.",
-      "nb": "Gir tilgang til en A2 skjema.",
-      "nn": "Gir tilgang til en A2 skjema."
+      "nb": "Gir tilgang til et A2 skjema.",
+      "nn": "Gir tilgang til et A2 skjema."
     },
     "resourceReferences": [
       {
@@ -1278,13 +1537,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-506",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1325,13 +1592,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-507",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1377,13 +1652,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-508",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1418,13 +1701,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-509",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1459,13 +1750,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-510",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1500,13 +1799,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-511",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1541,13 +1848,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-512",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {
@@ -1582,13 +1897,21 @@
     },
     "sector": null,
     "status": null,
-    "validTo": "9999-12-31T23:59:59.997",
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "validFrom": "2020-03-04T18:04:27.27",
     "identifier": "appid-513",
-    "isComplete": true,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
     "visible": true,
     "delegable": true,
     "description": {

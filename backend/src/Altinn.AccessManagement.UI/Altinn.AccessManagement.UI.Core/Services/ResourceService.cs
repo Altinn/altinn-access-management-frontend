@@ -321,10 +321,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
                         rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                         description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                        validFrom: resource.ValidFrom,
-                        validTo: resource.ValidTo,
                         visible: resource.Visible,
-                        delegable: resource.Delegable);
+                        delegable: resource.Delegable,
+                        contactPoints: resource.ContactPoints,
+                        spatial: resource.Spatial);
 
                     resourceList.Add(resourceFE);
                 }
