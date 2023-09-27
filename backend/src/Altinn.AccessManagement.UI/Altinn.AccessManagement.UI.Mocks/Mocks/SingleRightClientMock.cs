@@ -40,10 +40,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 case "urn:altinn:servicecode":
                 case "urn:altinn:applicationid":
                     resourceFileName = resource.Value;
-                    if (resource.Value == "appid-506")
-                    {
-                        resourceFileName = "appid-506_NoneDelegated";
-                    }
                     break;
                 case "urn:altinn:org":
                 case "urn:altinn:serviceeditioncode":

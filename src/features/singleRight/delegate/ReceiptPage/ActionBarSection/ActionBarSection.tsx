@@ -166,7 +166,6 @@ export const ActionBarSection = () => {
         );
       };
 
-      console.log('mostFailedIndex', mostFailedIndex);
       return {
         actionBar: (
           <>
