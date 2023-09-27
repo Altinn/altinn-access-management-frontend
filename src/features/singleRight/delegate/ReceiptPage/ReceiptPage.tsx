@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Button,
-  Chip,
-  ErrorMessage,
-  Heading,
-  Ingress,
-  Paragraph,
-} from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

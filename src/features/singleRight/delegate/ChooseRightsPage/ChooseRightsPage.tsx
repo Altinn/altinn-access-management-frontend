@@ -12,7 +12,7 @@ import {
   Popover,
 } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   DualElementsContainer,
@@ -29,7 +29,6 @@ import {
   type ServiceWithStatus,
   removeServiceResource,
   delegate,
-  ProcessedDelegation,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import {
