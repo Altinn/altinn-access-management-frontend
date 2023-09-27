@@ -101,9 +101,11 @@ export const ActionBarSection = () => {
                 </Heading>
                 <div className={classes.chipContainer}>
                   <Chip.Group size='small'>
-                    {failedDelegations?.map((failedRight, index) => {
+                    {failedDelegations?.map((failedRight, innerIndex) => {
                       return (
-                        <Chip.Toggle key={index}>{t(`common.${failedRight.action}`)}</Chip.Toggle>
+                        <Chip.Toggle key={`failed-${index}-${innerIndex}`}>
+                          {t(`common.${failedRight.action}`)}
+                        </Chip.Toggle>
                       );
                     })}
                   </Chip.Group>
@@ -125,12 +127,12 @@ export const ActionBarSection = () => {
             </Heading>
             <div className={classes.chipContainer}>
               <Chip.Group size='small'>
-                {successfulDelegations?.map((right, index) => {
+                {successfulDelegations?.map((right, innerIndex) => {
                   return (
                     <Chip.Toggle
                       selected={true}
                       checkmark
-                      key={index}
+                      key={`successful-${index}-${innerIndex}`}
                     >
                       {t(`common.${right.action}`)}
                     </Chip.Toggle>
@@ -172,7 +174,6 @@ export const ActionBarSection = () => {
             {index === mostFailedIndex && failedDelegationIngress()}
             {index === firstSuccesfulIndex && successfulDelegationParagraph()}
             <ReceiptActionBar
-              key={pd.meta.Rights[0].Resource[0].value}
               title={pd.meta.serviceDto.serviceTitle}
               subtitle={pd.meta.serviceDto.serviceOwner}
               additionalText={additionalText()}

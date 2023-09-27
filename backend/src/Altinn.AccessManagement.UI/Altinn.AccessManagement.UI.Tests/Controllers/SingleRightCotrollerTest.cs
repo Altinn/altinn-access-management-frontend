@@ -248,7 +248,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "999 999 999";
             string toSsn = "50019992";
 
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
+            string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "CreateDelegation");
             DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "appid-506.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
