@@ -111,6 +111,46 @@ export const ActionBarSection = () => {
         );
       };
 
+      const dangerAlert = () => {
+        return (
+          <div className={classes.alertContainer}>
+            {numFailedDelegations > 0 && (
+              <Alert severity='danger'>
+                <Heading
+                  size={'xsmall'}
+                  level={2}
+                  spacing
+                >
+                  {t('single_rights.woops_something_went_wrong_alert')}
+                </Heading>
+                <Paragraph spacing>{t('single_rights.some_failed_technical_problem')}</Paragraph>
+                <Heading
+                  size={'xxsmall'}
+                  level={3}
+                >
+                  {t('single_rights.these_rights_were_not_delegated')}
+                </Heading>
+                <div
+                  className={classes.chipContainer}
+                  key={index}
+                >
+                  {failedDelegations?.map((failedRight, index) => {
+                    return (
+                      <Chip.Group
+                        size='small'
+                        key={index}
+                      >
+                        <Chip.Toggle>{t(`common.${failedRight.action}`)}</Chip.Toggle>
+                      </Chip.Group>
+                    );
+                  })}
+                </div>
+              </Alert>
+            )}
+          </div>
+        );
+      };
+
       return {
         actionBar: (
           <>
@@ -123,43 +163,7 @@ export const ActionBarSection = () => {
               color={numFailedDelegations === 0 ? 'success' : 'danger'}
               defaultOpen={firstFailedDelegationIndex === numFailedDelegations}
             >
-              <div className={classes.alertContainer}>
-                {numFailedDelegations > 0 && (
-                  <Alert severity='danger'>
-                    <Heading
-                      size={'xsmall'}
-                      level={2}
-                      spacing
-                    >
-                      {t('single_rights.woops_something_went_wrong_alert')}
-                    </Heading>
-                    <Paragraph spacing>
-                      {t('single_rights.some_failed_technical_problem')}
-                    </Paragraph>
-                    <Heading
-                      size={'xxsmall'}
-                      level={3}
-                    >
-                      {t('single_rights.these_rights_were_not_delegated')}
-                    </Heading>
-                    <div
-                      className={classes.chipContainer}
-                      key={index}
-                    >
-                      {failedDelegations?.map((failedRight, index) => {
-                        return (
-                          <Chip.Group
-                            size='small'
-                            key={index}
-                          >
-                            <Chip.Toggle>{t(`common.${failedRight.action}`)}</Chip.Toggle>
-                          </Chip.Group>
-                        );
-                      })}
-                    </div>
-                  </Alert>
-                )}
-              </div>
+              {dangerAlert()}
               {successfulDelegations?.length > 0 && successfulChips()}
             </ReceiptActionBar>
           </>
