@@ -27,7 +27,6 @@ export interface ResourceCollectionBarProps
  * @returns {JSX.Element} The rendered ResourceCollectionBar component.
  *
  * @example
- * // Example usage:
  * <ResourceCollectionBar
  *   resources={[{ title: 'Resource 1', resourceOwnerName: 'Owner 1', identifier: 'appid-101' }]}
  *   compact={false}

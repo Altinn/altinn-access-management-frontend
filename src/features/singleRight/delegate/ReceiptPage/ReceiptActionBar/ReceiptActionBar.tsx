@@ -6,14 +6,29 @@ import { ActionBar, type ActionBarProps } from '@/components';
 
 import classes from './ReceiptActionBar.module.css';
 
-export interface ReceiptActionBarProps
-  extends Pick<
-    ActionBarProps,
-    'subtitle' | 'title' | 'children' | 'color' | 'additionalText' | 'defaultOpen'
-  > {
-  /** Shows details about why the service isn't delegable */
-  errorText?: string | undefined;
-}
+export type ReceiptActionBarProps = Pick<
+  ActionBarProps,
+  'subtitle' | 'title' | 'children' | 'color' | 'additionalText' | 'defaultOpen'
+>;
+
+/**
+ * This component renders a CollectionBar and populates its content with resources, rendered as removable ActionBars.
+ * Colors and text is handled automatically inside the component
+ *
+ * @example
+ * <ReceiptActionBar
+ *  subtitle={'service owner'}
+ *  title={'service name'}
+ *  color={'success'}
+ *  additionalText={'help text'}
+ *  defaultOpen={true}
+ *  ref={ref}
+  >
+    <div>
+      content inside the actionBar
+    </div>
+  </ReceiptActionBar>
+ */
 
 export const ReceiptActionBar = forwardRef<HTMLDivElement, ReceiptActionBarProps>(
   ({ subtitle, title, children, additionalText, color, defaultOpen }, ref) => {
