@@ -30,6 +30,18 @@ export interface DelegationResponseData {
   details: details;
 }
 
+export interface ProcessedDelegation {
+  meta: DelegationInputDto;
+  bffResponseList?: DelegationResponseData[];
+}
+
+export interface ServiceWithStatus {
+  rightDelegationResults?: DelegationResponseData[];
+  service?: ServiceResource;
+  status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
+  errorCode?: string;
+}
+
 interface details {
   code: string;
   description: string;
@@ -43,18 +55,6 @@ interface parameters {
 interface roleRequirementsMatches {
   name: string;
   value: string;
-}
-
-export interface ProcessedDelegation {
-  meta: DelegationInputDto;
-  bffResponseList?: DelegationResponseData[];
-}
-
-export interface ServiceWithStatus {
-  rightDelegationResults?: DelegationResponseData[];
-  service?: ServiceResource;
-  status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
-  errorCode?: string;
 }
 
 interface sliceState {
@@ -194,7 +194,7 @@ const singleRightSlice = createSlice({
       })
       .addCase(fetchRights.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
-          accessCheckResponses: action.payload,
+          rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'Delegable',
           errorCode: '',
