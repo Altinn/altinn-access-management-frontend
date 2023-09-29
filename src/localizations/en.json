@@ -32,7 +32,7 @@
     "read": "Read",
     "write": "Write",
     "sign": "Sign",
-    "access": "Access to whole service",
+    "access": "Access to the whole service",
     "finished": "Finished"
   },
   "profile": {
