@@ -222,7 +222,7 @@ export const ChooseRightsPage = () => {
           <Alert severity='warning'>
             <Heading
               size={'xsmall'}
-              level={6}
+              level={4}
               spacing
             >
               {t('single_rights.alert_partially_delegable_header')}
@@ -230,7 +230,12 @@ export const ChooseRightsPage = () => {
             <Paragraph spacing>
               {t(`${getSingleRightsErrorCodeTextKey(service.errorCode)}`)}
             </Paragraph>
-            <Paragraph>{t('single_rights.you_cant_delegate_these_rights')}</Paragraph>
+            <Heading
+              size={'xxsmall'}
+              level={5}
+            >
+              {t('single_rights.you_cant_delegate_these_rights')}
+            </Heading>
             <div className={classes.chipContainer}>
               {service.accessCheckResponses
                 ?.filter((response) => response.status === 'NotDelegable')

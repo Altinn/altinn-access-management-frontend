@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, Paragraph } from '@digdir/design-system-react';
+import { Button, ErrorMessage, Paragraph } from '@digdir/design-system-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -94,11 +94,14 @@ export const ResourceActionBar = ({
         setOpen(!open);
       }}
     >
-      {!compact && <Paragraph>{errorText}</Paragraph>}
-      <ExclamationmarkTriangleIcon
-        className={classes.notDelegableIcon}
-        fontSize='1.5rem'
-      />
+      {!compact && <ErrorMessage>{errorText} </ErrorMessage>}
+      <ErrorMessage>
+        <ExclamationmarkTriangleIcon
+          className={classes.notDelegableIcon}
+          fontSize='1.5rem'
+          aria-label={errorText}
+        />
+      </ErrorMessage>
     </div>
   );
 
