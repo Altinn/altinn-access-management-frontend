@@ -32,7 +32,8 @@
     "read": "Read",
     "write": "Write",
     "sign": "Sign",
-    "access": "Access to whole service"
+    "access": "Access to whole service",
+    "finished": "Finished"
   },
   "profile": {
     "received": "Received",
@@ -122,7 +123,7 @@
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "to_delegation_page": "Go to delegation page",
+    "give_more_rights": "Give more rights",
     "has_received_these_rights": "{{name}} has received these rights:",
     "rights_are_valid_until_deletion": "The rights are valid until they're deleted or withdrawn",
     "missing_srr_right_access_title": "Missing SRR right access",

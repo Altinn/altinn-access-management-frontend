@@ -1,6 +1,6 @@
 @media only screen and (max-width: 768px) {
   .receiptMainButton {
-    width: 100%;
+    margin-top: 40px;
   }
 
   .listText {
@@ -18,8 +18,7 @@
 }
 
 .receiptMainButton {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 40px;
 }
 
 .navButtonContainer {
@@ -55,9 +54,4 @@
 .restartButton {
   display: flex;
   justify-content: center;
-}
-
-.receiptMainButton {
-  display: flex;
-  justify-content: flex-end;
 }

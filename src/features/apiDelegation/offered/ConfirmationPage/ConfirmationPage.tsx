@@ -30,6 +30,7 @@ export const ConfirmationPage = () => {
   }, [loading]);
 
   const handleConfirm = () => {
+    console.log('Denne gjøres');
     setIsProcessingDelegations(true);
     const batchSize = chosenOrgs.length * chosenApis.length;
     dispatch(setBatchPostSize(batchSize));

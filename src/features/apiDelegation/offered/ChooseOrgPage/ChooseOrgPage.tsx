@@ -4,6 +4,7 @@ import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
 import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
@@ -12,8 +13,8 @@ import {
   PageHeader,
   PageContent,
   ActionBar,
-  NavigationButtons,
   PageContainer,
+  GroupElements,
 } from '@/components';
 import {
   softAddOrg,
@@ -45,6 +46,7 @@ export const ChooseOrgPage = () => {
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
   const [viewLoading, setViewLoading] = useState(true);
   const isSm = useMediaQuery('(max-width: 768px)');
+  const navigate = useNavigate();
 
   const { t } = useTranslation('common');
 
@@ -262,17 +264,30 @@ export const ChooseOrgPage = () => {
               )}
             </div>
           )}
-          <NavigationButtons
-            previousText={t('common.cancel')}
-            previousPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
-            }
-            nextText={t('api_delegation.next')}
-            nextDisabled={chosenOrgs.length === 0}
-            nextPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
-            }
-          />
+          <GroupElements>
+            <Button
+              variant={'outline'}
+              onClick={() =>
+                navigate(
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview,
+                )
+              }
+              fullWidth={isSm}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              disabled={chosenOrgs.length === 0}
+              onClick={() =>
+                navigate(
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
+                )
+              }
+              fullWidth={isSm}
+            >
+              {t('api_delegation.next')}
+            </Button>
+          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>
