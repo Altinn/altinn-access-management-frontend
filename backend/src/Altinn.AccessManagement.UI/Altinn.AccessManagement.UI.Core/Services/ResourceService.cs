@@ -324,7 +324,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         visible: resource.Visible,
                         delegable: resource.Delegable,
                         contactPoints: resource.ContactPoints,
-                        spatial: resource.Spatial);
+                        spatial: resource.Spatial,
+                        authorizationReference: resource.AuthorizationReference);
 
                     resourceList.Add(resourceFE);
                 }
