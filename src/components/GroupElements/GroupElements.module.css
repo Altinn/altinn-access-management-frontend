@@ -1,0 +1,13 @@
+.list {
+  display: flex;
+  gap: 30px;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .listItem {
+    flex: 1;
+  }
+}

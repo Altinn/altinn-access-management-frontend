@@ -32,7 +32,8 @@
     "read": "Lesa",
     "write": "Skriva",
     "sign": "Signera",
-    "access": "Tilgang til heile tenesta"
+    "access": "Tilgang til heile tenesta",
+    "finished": "Ferdig"
   },
   "profile": {
     "received": "Mottekne",
@@ -120,7 +121,7 @@
     "new_error": "Dette er ein ny feil me ikkje har fått før. Vennlegast rapportar til Altinn ved å senda inn eit skjermbilete",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
-    "to_delegation_page": "Gå til delegeringssida",
+    "give_more_rights": "Gi fleire rettar",
     "has_received_these_rights": "{{name}} har fått desse rettane:",
     "rights_are_valid_until_deletion": "Rettane er gyldige til dei er sletta eller blir trekte tilbake",
     "unknown_title": "Ukjent feil",

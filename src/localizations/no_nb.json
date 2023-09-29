@@ -32,7 +32,8 @@
     "read": "Lese",
     "write": "Skrive",
     "sign": "Signere",
-    "access": "Tilgang til hele tjenesten"
+    "access": "Tilgang til hele tjenesten",
+    "finished": "Ferdig"
   },
   "profile": {
     "received": "Mottatte",
@@ -121,7 +122,7 @@
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
-    "to_delegation_page": "Gå til delegeringsside",
+    "give_more_rights": "Gi flere rettigheter",
     "has_received_these_rights": "{{name}} har fått disse rettighetene:",
     "rights_are_valid_until_deletion": "Rettighetene er gyldige til de slettes eller trekkes tilbake",
     "unknown_title": "Ukjent feil",

@@ -197,7 +197,6 @@ const singleRightSlice = createSlice({
         state.processedDelegations.push(delegationInput);
       })
       .addCase(delegate.rejected, (state, action) => {
-        console.log('addCaseDelegateAction', action);
         const delegationInput = createSerializedDelegationInput(
           action.meta.arg,
           ReduxStatusResponse.Rejected,
