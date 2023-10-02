@@ -4,8 +4,7 @@ import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
-
-import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import classes from './CompactDeletableListItem.module.css';
 
@@ -62,7 +61,8 @@ export const CompactDeletableListItem = ({
               <Button
                 variant={'quiet'}
                 color={'danger'}
-                icon={<MinusCircle />}
+                icon={<MinusCircleIcon />}
+                size='large'
                 onClick={removeCallback}
                 aria-label={
                   t('common.remove') +

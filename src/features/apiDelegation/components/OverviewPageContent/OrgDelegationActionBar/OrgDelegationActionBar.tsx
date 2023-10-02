@@ -3,13 +3,11 @@ import { Button, List } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
+import { MinusCircleIcon, ArrowUndoIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
-import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
-import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import { DeletableListItem, ActionBar } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 
@@ -47,8 +45,8 @@ export const OrgDelegationActionBar = ({
         <Button
           variant={'quiet'}
           color={'primary'}
-          icon={<AddCircle />}
-          size={'medium'}
+          icon={<PlusCircleIcon />}
+          size={'large'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
@@ -60,8 +58,8 @@ export const OrgDelegationActionBar = ({
           <Button
             variant={'quiet'}
             color={'secondary'}
-            size={'medium'}
-            icon={<Cancel />}
+            size={'large'}
+            icon={<ArrowUndoIcon />}
             onClick={softRestoreAllCallback}
             aria-label={String(t('common.undo')) + ' ' + organization.orgName}
           >
@@ -72,8 +70,8 @@ export const OrgDelegationActionBar = ({
             <Button
               variant={'quiet'}
               color={'danger'}
-              icon={<MinusCircle />}
-              size={'medium'}
+              icon={<MinusCircleIcon />}
+              size={'large'}
               onClick={handleSoftDeleteAll}
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
             >

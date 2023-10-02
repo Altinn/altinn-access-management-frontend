@@ -37,8 +37,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.10.0",
     "redux-logger": "^3.0.6",
-    "typescript-plugin-css-modules": "^5.0.0",
-    "vite-plugin-svgr": "^4.0.0"
+    "typescript-plugin-css-modules": "^5.0.0"
   },
   "devDependencies": {
     "@digdir/design-system-tokens": "0.7.0",
@@ -60,7 +59,8 @@
     "madge": "^6.0.0",
     "prettier": "^3.0.0",
     "typescript": "5.2.2",
-    "vite": "^4.2.2"
+    "vite": "^4.2.2",
+    "vite-plugin-svgr": "^4.1.0"
   },
   "packageManager": "yarn@3.6.3"
 }
