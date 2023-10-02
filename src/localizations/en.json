@@ -107,7 +107,9 @@
     "find_and_submit_scheme": "Find and submit a new form",
     "receipt_page_failed_text": "Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
-    "api_delegation_choice": "API delegation choice"
+    "api_delegation_choice": "API delegation choice",
+    "own_orgnumber_delegation_heading": "You can't delegate to your own organisation number",
+    "own_orgnumber_delegation_paragraph": "It isn't possible to delegate API to yourself. Write another organisation number to continue."
   },
   "single_rights": {
     "delegate_single_rights": "Delegate single rights",

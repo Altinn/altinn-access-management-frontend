@@ -1,4 +1,4 @@
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
 import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -41,6 +41,7 @@ export const ChooseOrgPage = () => {
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
   const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
+  const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
@@ -159,7 +160,21 @@ export const ChooseOrgPage = () => {
   });
 
   const infoPanel = () => {
-    if (!searchLoading && searchOrgNotExist) {
+    if (reporteeOrgNumber === searchString) {
+      return (
+        <Alert severity='warning'>
+          <Heading
+            size={'xsmall'}
+            level={2}
+            spacing
+            role='alert'
+          >
+            {t('api_delegation.own_orgnumber_delegation_heading')}
+          </Heading>
+          <Paragraph>{t('api_delegation.own_orgnumber_delegation_paragraph')}</Paragraph>
+        </Alert>
+      );
+    } else if (!searchLoading && searchOrgNotExist) {
       return (
         <Panel
           variant={PanelVariant.Error}
