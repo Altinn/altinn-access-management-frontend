@@ -4,10 +4,9 @@ import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch } from '@/rtk/app/hooks';
-import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import {
   CompactDeletableListItem,
   Page,
@@ -74,7 +73,7 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          startIcon={<SettingsIcon />}
+          startIcon={<CogIcon />}
           removeCallback={delegableApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
           leftText={api.apiName}
           middleText={api.orgName}
@@ -88,7 +87,7 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          startIcon={<OfficeIcon />}
+          startIcon={<Buldings3Icon />}
           removeCallback={delegableOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
           leftText={org.orgName}
           middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}

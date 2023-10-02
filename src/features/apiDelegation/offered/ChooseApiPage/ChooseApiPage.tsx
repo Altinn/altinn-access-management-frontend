@@ -2,7 +2,7 @@ import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
 import { Button, List, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterIcon } from '@navikt/aksel-icons';
+import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,9 +15,8 @@ import {
   GroupElements,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ApiDelegationPath } from '@/routes/paths';
-import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
+import ApiIcon from '@/assets/Api.svg?react';
 import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
@@ -139,7 +138,7 @@ export const ChooseApiPage = () => {
     return (
       <CompactDeletableListItem
         key={org.orgNr}
-        startIcon={<OfficeIcon />}
+        startIcon={<Buldings3Icon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
         middleText={!isSm ? t('api_delegation.org_nr') + ' ' + org.orgNr : undefined}
