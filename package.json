@@ -38,7 +38,7 @@
     "react-router-dom": "^6.10.0",
     "redux-logger": "^3.0.6",
     "typescript-plugin-css-modules": "^5.0.0",
-    "vite-plugin-svgr": "^3.0.0"
+    "vite-plugin-svgr": "^4.0.0"
   },
   "devDependencies": {
     "@digdir/design-system-tokens": "0.7.0",
