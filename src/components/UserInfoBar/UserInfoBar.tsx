@@ -30,7 +30,7 @@ export const UserInfoBar = () => {
           <AltinnLogo />
         </div>
         <div className={classes.userInfoContent}>
-          <div>
+          <div className={classes.userInfoTextContainer}>
             {userInfoName && <p className={classes.userInfoText}>{userInfoName}</p>}
             {userInfoName !== reporteeName && reporteeName && (
               <p className={classes.userInfoText}>for {reporteeName}</p>

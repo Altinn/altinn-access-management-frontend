@@ -26,7 +26,15 @@
 }
 
 .companyIconContainer {
+  display: flex;
   align-self: center;
+  flex-direction: column;
+}
+
+.userInfoTextContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media only screen and (max-width: 576px) {
