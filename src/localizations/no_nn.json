@@ -114,7 +114,7 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Du har ikkje nokon av dei nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegera den.",
+    "missing_role_access": "Du har ikkje nokon av dei nødvendige rollene for å delegere tjenesten. urn:altinn:rolecode:HADM, urn:altinn:location:garage, vil gi tilgang til å delegera den.",
     "missing_delegation_access": "Du har ikkje dei nødvendige delegeringsrettane til å delegera tenesta",
     "missing_srr_right_access": "Du har ikkje dei nødvendige SRR-rettigheitane",
     "unknown": "Uvisst",
@@ -138,7 +138,7 @@
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
     "you_cant_delegate_these_rights": "Desse rettegheitane kan du ikkje delegera:",
-    "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på sjekkmerka nedanfor for å fjerna dei",
+    "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på knappana nedanfor for å fjerna dei",
     "processing_delegations": "Prosesserer delegeringar"
   }
 }

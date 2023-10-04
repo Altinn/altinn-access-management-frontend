@@ -114,7 +114,7 @@
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
     "search_hits": "matches found:",
-    "missing_role_access": "You don't have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+    "missing_role_access": "You don't have any required role(s) for the reportee party. urn:altinn:rolecode:HADM, urn:altinn:location:garage, would give access to delegate the service.",
     "missing_delegation_access": "You don't have the necessary delegation accesses to delegate this service.",
     "missing_srr_right_access": "You don't have SRR right access to delegate",
     "unknown": "Unknown",
@@ -137,7 +137,7 @@
     "chosen_services": "Chosen services",
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
-    "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the the checkmarks on the specific access",
+    "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the buttons below to remove them",
     "processing_delegations": "Processing delegations"
   }
 }
