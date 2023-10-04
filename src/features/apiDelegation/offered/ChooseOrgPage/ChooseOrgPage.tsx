@@ -69,7 +69,11 @@ export const ChooseOrgPage = () => {
   useEffect(() => {
     if (delegableOrgs.length > 0) {
       setPromptOrgNumber(false);
-    } else if (searchString.length === 9 && !chosenOrgs.some((org) => org.orgNr === searchString)) {
+    } else if (
+      searchString.length === 9 &&
+      !chosenOrgs.some((org) => org.orgNr === searchString) &&
+      reporteeOrgNumber !== searchString
+    ) {
       dispatch(setSearchLoading());
       void dispatch(lookupOrg(searchString));
     } else if (searchString.length !== 9) {
@@ -160,7 +164,7 @@ export const ChooseOrgPage = () => {
   });
 
   const infoPanel = () => {
-    if (reporteeOrgNumber === searchString) {
+    if (reporteeOrgNumber === searchString && searchString.length > 0) {
       return (
         <Alert severity='warning'>
           <Heading
