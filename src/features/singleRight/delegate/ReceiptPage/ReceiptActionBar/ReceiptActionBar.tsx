@@ -12,8 +12,7 @@ export type ReceiptActionBarProps = Pick<
 >;
 
 /**
- * This component renders a CollectionBar and populates its content with resources, rendered as removable ActionBars.
- * Colors and text is handled automatically inside the component
+ * This component renders an ActionBar specialized for 
  *
  * @example
  * <ReceiptActionBar

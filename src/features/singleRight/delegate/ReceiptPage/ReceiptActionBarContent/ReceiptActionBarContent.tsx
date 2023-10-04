@@ -7,11 +7,30 @@ import type { DelegationResponseData } from '@/rtk/features/singleRights/singleR
 import classes from './ReceiptActionBarContent.module.css';
 
 export interface ReceiptActionBarContent {
+  /** List of failed delegations */
   failedDelegations: DelegationResponseData[] | undefined;
+
+  /** List of successful delegations */
   successfulDelegations: DelegationResponseData[] | undefined;
+
+  /** If there's http problems with the delegation */
   isRejectedDelegation: boolean | undefined;
+
+  /** Outer index used to create unique keys */
   index: number;
 }
+
+/**
+ * This component renders ActionBarContent specialized for ActionBars in ActionBarSection on ReceiptPage
+ *
+ * @example
+ * <ReceiptActionBarContent
+ * failedDelegations={failedDelegations}
+ * successfulDelegations={successfulDelegations}
+ * isRejectedDelegation={isRejectedDelegation}
+ * index={index}
+ * />
+ */
 
 export const ReceiptActionBarContent = ({
   failedDelegations,
@@ -86,7 +105,7 @@ export const ReceiptActionBarContent = ({
   };
 
   return (
-    <div>
+    <div className={classes.content}>
       {failedDelegations && failedDelegations?.length > 1 && dangerAlert()}
       {successfulDelegations && successfulDelegations?.length > 0 && successfulChips()}
       {isRejectedDelegation && (

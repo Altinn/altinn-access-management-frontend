@@ -20,6 +20,7 @@ import {
   BFFDelegatedStatus,
   ReduxStatusResponse,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { ActionBar } from '@/components';
 
 import { ReceiptActionBar } from '../ReceiptActionBar/ReceiptActionBar';
 import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActionBarContent';
@@ -126,7 +127,7 @@ export const ActionBarSection = () => {
           <>
             {index === mostFailedIndex && failedDelegationIngress()}
             {index === firstSuccesfulIndex && successfulDelegationParagraph()}
-            <ReceiptActionBar
+            <ActionBar
               title={pd.meta.serviceDto.serviceTitle}
               subtitle={pd.meta.serviceDto.serviceOwner}
               additionalText={additionalText()}
@@ -140,7 +141,7 @@ export const ActionBarSection = () => {
                 isRejectedDelegation={isRejectedDelegation}
                 index={index}
               />
-            </ReceiptActionBar>
+            </ActionBar>
           </>
         ),
         numFailedDelegations,
