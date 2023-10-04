@@ -8,9 +8,13 @@ import type {
   DelegationInputDto,
   DelegationRequestDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import { ReduxStatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
+
+export enum ReduxStatusResponse {
+  Fulfilled = 'fulfilled',
+  Rejected = 'rejected',
+}
 
 export enum BFFDelegatedStatus {
   Delegated = 'Delegated',
@@ -23,11 +27,12 @@ export interface DelegationAccessCheckDto {
 }
 
 export interface DelegationResponseData {
-  rightKey: string;
+  rightKey?: string;
   resource: IdValuePair[];
   action: string;
   status: string;
-  details: details;
+  details?: details;
+  reduxStatus: ReduxStatusResponse;
 }
 
 export interface ProcessedDelegation {
@@ -43,9 +48,9 @@ export interface ServiceWithStatus {
 }
 
 interface details {
-  code: string;
-  description: string;
-  parameters: parameters[];
+  code?: string;
+  description?: string;
+  parameters?: parameters[];
 }
 
 interface parameters {
@@ -124,7 +129,7 @@ export const delegate = createAsyncThunk(
   },
 );
 
-const createSerializedMeta = (meta: DelegationInputDto, status: ReduxStatusResponse) => {
+const createSerializedMeta = (meta: DelegationInputDto) => {
   const To = [{ id: meta.To[0].id, value: meta.To[0].value }];
 
   const Rights = meta.Rights.map((right: DelegationRequestDto) => ({
@@ -141,7 +146,27 @@ const createSerializedMeta = (meta: DelegationInputDto, status: ReduxStatusRespo
     To,
     Rights,
     serviceDto,
-    status,
+  };
+};
+
+const createDelegationResponseData = (
+  resourceId: string,
+  resourceValue: string,
+  action: string,
+  status: string,
+  reduxStatus: ReduxStatusResponse,
+  detailsCode?: string,
+  detailsDescription?: string,
+): DelegationResponseData => {
+  return {
+    resource: [{ id: resourceId, value: resourceValue }],
+    action: action,
+    status: status,
+    details: {
+      code: detailsCode,
+      description: detailsDescription,
+    },
+    reduxStatus,
   };
 };
 
@@ -205,22 +230,39 @@ const singleRightSlice = createSlice({
         }
       })
       .addCase(delegate.fulfilled, (state, action) => {
-        const delegationInput = createSerializedMeta(
-          action.meta.arg,
-          ReduxStatusResponse.Fulfilled,
+        const delegationInput = createSerializedMeta(action.meta.arg);
+
+        const bffResponseList: DelegationResponseData[] = action.payload.rightDelegationResults;
+        bffResponseList.forEach(
+          (data: DelegationResponseData) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
         );
 
         const pushData: ProcessedDelegation = {
           meta: delegationInput,
-          bffResponseList: action.payload.rightDelegationResults,
+          bffResponseList,
         };
         state.processedDelegations.push(pushData);
       })
       .addCase(delegate.rejected, (state, action) => {
-        const delegationInput = createSerializedMeta(action.meta.arg, ReduxStatusResponse.Rejected);
+        const delegationInput = createSerializedMeta(action.meta.arg);
+
+        const bffResponseList: DelegationResponseData[] = [];
+
+        bffResponseList.push(
+          createDelegationResponseData(
+            delegationInput.Rights[0].Resource[0].id,
+            delegationInput.Rights[0].Resource[0].value,
+            delegationInput.Rights[0].Action,
+            BFFDelegatedStatus.NotDelegated,
+            ReduxStatusResponse.Rejected,
+            action.error.code,
+            action.error.message,
+          ),
+        );
 
         const pushData: ProcessedDelegation = {
           meta: delegationInput,
+          bffResponseList,
         };
         state.processedDelegations.push(pushData);
       });

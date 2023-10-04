@@ -146,8 +146,6 @@
     "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
     "some_failed_technical_problem": "Pga. Av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",
     "these_rights_were_not_delegated": "Disse rettighetene kunne ikke delegeres:",
-    "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:",
-    "something_went_wrong": "Noe feilet",
-    "all_went_wrong": "Alt feilet"
+    "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:"
   }
 }

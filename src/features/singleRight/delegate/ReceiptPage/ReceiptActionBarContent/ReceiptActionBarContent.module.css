@@ -1,0 +1,14 @@
+.alertContainer {
+  margin-top: 30px;
+}
+
+.chipContainer {
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+  flex: 0;
+}
+
+.successfulChipsContainer {
+  margin-top: 30px;
+}

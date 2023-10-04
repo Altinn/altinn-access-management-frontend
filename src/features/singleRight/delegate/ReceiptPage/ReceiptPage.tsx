@@ -32,7 +32,10 @@ export const ReceiptPage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          <div className={classes.actionBars}>
+          <div
+            key='1'
+            className={classes.actionBars}
+          >
             <ActionBarSection />
           </div>
           <div className={classes.successButtonContainer}>
