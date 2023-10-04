@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            AssertCollections(expected.Resources, actual.Resources, AssertAttributeMatchEqual);
+            AssertCollections(expected.Resource, actual.Resource, AssertAttributeMatchEqual);
             Assert.Equal(expected.Action, actual.Action);
         }
 

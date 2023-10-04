@@ -1,8 +1,8 @@
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -19,8 +19,8 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class SingleRightController : Controller
     {
         private readonly ILogger<SingleRightController> _logger;
-        private readonly ISingleRightService _singleRightService;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly ISingleRightService _singleRightService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SingleRightController" /> class
@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for delegating a single right from the reportee party to a third party
+        ///     Endpoint for delegating a single right from the reportee party to a third party
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -65,12 +65,13 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 HttpResponseMessage response = await _singleRightService.CreateDelegation(party, delegation);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                if (response.StatusCode == HttpStatusCode.Created)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Bad request", detail: responseContent));

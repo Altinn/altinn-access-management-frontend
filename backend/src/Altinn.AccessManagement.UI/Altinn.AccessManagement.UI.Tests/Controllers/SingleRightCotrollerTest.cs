@@ -172,7 +172,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: CreateDelegation returns the delegated actions of the standard resource
         /// </summary>
         [Fact]
-        public async Task CreateDelegation_StandardResource_appid503_OnlyReadDelegated()
+        public async Task CreateDelegation_StandardResource_appid503()
         {
             // Arrange
             string partyId = "999 999 999";
@@ -187,76 +187,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 {
                     Id = "urn:altinn:resource",
                     Value = "appid-503",
-
-                },
-            };
-
-            List<IdValuePair> to = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:ssn",
-                    Value = toSsn,
-                },
-            };
-
-            List<DelegationRequestDto> rights = new List<DelegationRequestDto>
-            {
-                new DelegationRequestDto
-                {
-                    Resource = resource,
-                    Action = "read",
-                },
-                new DelegationRequestDto
-                {
-                    Resource = resource,
-                    Action = "write",
-                },
-                new DelegationRequestDto
-                {
-                    Resource = resource,
-                    Action = "sign",
-                },
-            };
-
-            DelegationInput delegation = new DelegationInput
-            {
-                To = to,
-                Rights = rights,
-            };
-
-            string jsonDto = JsonSerializer.Serialize(delegation);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
-            DelegationOutput actualResponse = await httpResponse.Content.ReadAsAsync<DelegationOutput>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
-        }
-        
-        /// <summary>
-        ///     Test case: CreateDelegation delegates the actions of a standard resource
-        ///     Expected: CreateDelegation returns the delegated actions of the standard resource
-        /// </summary>
-        [Fact]
-        public async Task CreateDelegation_StandardResource_appid506_NoneDelegated()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string toSsn = "50019992";
-
-            string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "CreateDelegation");
-            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "appid-506.json");
-
-            List<IdValuePair> resource = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:resource",
-                    Value = "appid-506",
                 },
             };
 

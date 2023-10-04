@@ -1,4 +1,10 @@
 {
+  "from": [
+    {
+      "id": "urn:altinn:organizationnumber",
+      "value": "991825827"
+    }
+  ],
   "to": [
     {
       "id": "urn:altinn:ssn",
@@ -7,6 +13,7 @@
   ],
   "rightDelegationResults": [
     {
+      "rightKey": "ttd-somereasourceid/read",
       "resource": [
         {
           "id": "urn:altinn:servicecode",
@@ -17,9 +24,25 @@
           "value": "159b"
         }
       ],
-      "action": "read"
+      "action": "read",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
     },
     {
+      "rightKey": "ttd-somereasourceid/write",
       "resource": [
         {
           "id": "urn:altinn:servicecode",
@@ -30,9 +53,25 @@
           "value": "159b"
         }
       ],
-      "action": "write"
+      "action": "write",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
     },
     {
+      "rightKey": "ttd-somereasourceid/sign",
       "resource": [
         {
           "id": "urn:altinn:servicecode",
@@ -43,7 +82,22 @@
           "value": "159b"
         }
       ],
-      "action": "sign"
+      "action": "sign",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }
