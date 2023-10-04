@@ -19,10 +19,5 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     applies to
         /// </summary>
         public string? Action { get; set; }
-
-        /// <summary>
-        ///     The object containing data about the single right delegations
-        /// </summary>
-        public DelegationResponseData? RightDelegationResults { get; set; }
     }
 }
