@@ -385,6 +385,16 @@
         "referenceType": "ApplicationId"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgNumber": "123456789"
   },
@@ -427,12 +437,12 @@
     ],
     "authorizationReference": [
       {
-        "id": "urn:altinn:app",
-        "value": "a3-app"
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
       },
       {
-        "id": "urn:altinn:org",
-        "value": "ttd"
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
       }
     ],
     "resourceOwnerName": "Testdepartementet",

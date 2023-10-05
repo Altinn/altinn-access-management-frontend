@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// List of autorizationReference attributes to reference this resource in authorization API
         /// </summary>
-        public List<AuthorizationReferenceAttribute>? AuthorizationReference { get; set; }
+        public List<IdValuePair>? AuthorizationReference { get; set; }
 
         /// <summary>
         /// Parameterless constructor
@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, List<AuthorizationReferenceAttribute> authorizationReference, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, List<IdValuePair> authorizationReference, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
         {
             Identifier = identifier;
             Title = title;

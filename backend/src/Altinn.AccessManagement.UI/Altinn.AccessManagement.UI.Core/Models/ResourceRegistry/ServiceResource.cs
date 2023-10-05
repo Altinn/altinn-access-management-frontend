@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         /// <summary>
         /// List of autorizationReference attributes to reference this resource in authorization API
         /// </summary>
-        public List<AuthorizationReferenceAttribute>? AuthorizationReference { get; set; }
+        public List<IdValuePair>? AuthorizationReference { get; set; }
 
         /// <summary>
         /// Writes key information when this object is written to Log.

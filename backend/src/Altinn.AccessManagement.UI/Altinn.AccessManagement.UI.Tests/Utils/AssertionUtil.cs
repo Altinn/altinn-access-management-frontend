@@ -126,7 +126,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertResourceExternalEqual(ServiceResourceFE expected, ServiceResourceFE actual)
+        public static void AssertResourceEqual(ServiceResourceFE expected, ServiceResourceFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -143,6 +143,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Delegable, actual.Delegable);
             Assert.Equal(expected.Visible, actual.Visible);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
+            AssertCollections(expected.AuthorizationReference, actual.AuthorizationReference, AssertAttributeMatchEqual);
         }
 
         /// <summary>
