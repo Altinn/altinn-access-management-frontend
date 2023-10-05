@@ -10,6 +10,7 @@ export interface SliceState {
   reporteeName: string;
   userInfoError: string;
   reporteeError: string;
+  reporteeOrgNumber: string;
 }
 
 const initialState: SliceState = {
@@ -19,6 +20,7 @@ const initialState: SliceState = {
   reporteeName: '',
   userInfoError: '',
   reporteeError: '',
+  reporteeOrgNumber: '',
 };
 
 export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfoSlice', async () => {
@@ -60,6 +62,7 @@ const userInfoSlice = createSlice({
         const reporteeDataArray = action.payload;
         state.reporteeName = reporteeDataArray.name;
         state.reporteeLoading = false;
+        state.reporteeOrgNumber = reporteeDataArray.orgNumber;
       })
       .addCase(fetchReportee.rejected, (state, action) => {
         state.reporteeError = action.error.message ?? 'Unknown error';
