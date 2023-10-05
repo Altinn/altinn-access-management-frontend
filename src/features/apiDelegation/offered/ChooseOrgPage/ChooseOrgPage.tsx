@@ -4,16 +4,16 @@ import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PlusCircleIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 
-import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
-import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
 import {
   Page,
   PageHeader,
   PageContent,
   ActionBar,
-  NavigationButtons,
   PageContainer,
+  GroupElements,
 } from '@/components';
 import {
   softAddOrg,
@@ -25,7 +25,7 @@ import {
 } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
+import ApiIcon from '@/assets/Api.svg?react';
 import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
@@ -45,6 +45,7 @@ export const ChooseOrgPage = () => {
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
   const [viewLoading, setViewLoading] = useState(true);
   const isSm = useMediaQuery('(max-width: 768px)');
+  const navigate = useNavigate();
 
   const { t } = useTranslation('common');
 
@@ -114,12 +115,12 @@ export const ChooseOrgPage = () => {
           subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
-              icon={<AddCircle />}
+              icon={<PlusCircleIcon fontSize='3rem' />}
               variant={'quiet'}
               color={'success'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={t('common.add') + ' ' + org.orgName}
-              size='medium'
+              size='large'
             ></Button>
           }
           color={'neutral'}
@@ -140,14 +141,14 @@ export const ChooseOrgPage = () => {
           subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
-              icon={<MinusCircle />}
+              icon={<MinusCircleIcon />}
               variant={'quiet'}
               color={'danger'}
               onClick={() => {
                 handleSoftRemove(org);
               }}
               aria-label={t('common.remove') + ' ' + org.orgName}
-              size='medium'
+              size='large'
             ></Button>
           }
           color={'success'}
@@ -262,17 +263,30 @@ export const ChooseOrgPage = () => {
               )}
             </div>
           )}
-          <NavigationButtons
-            previousText={t('common.cancel')}
-            previousPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview
-            }
-            nextText={t('api_delegation.next')}
-            nextDisabled={chosenOrgs.length === 0}
-            nextPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
-            }
-          />
+          <GroupElements>
+            <Button
+              variant={'outline'}
+              onClick={() =>
+                navigate(
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview,
+                )
+              }
+              fullWidth={isSm}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              disabled={chosenOrgs.length === 0}
+              onClick={() =>
+                navigate(
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
+                )
+              }
+              fullWidth={isSm}
+            >
+              {t('api_delegation.next')}
+            </Button>
+          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>

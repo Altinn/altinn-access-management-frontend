@@ -1,20 +1,19 @@
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import { List, Button } from '@digdir/design-system-react';
+import { List, Button, Spinner } from '@digdir/design-system-react';
 import type { Key } from 'react';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch } from '@/rtk/app/hooks';
-import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
-import { ReactComponent as SettingsIcon } from '@/assets/Settings.svg';
 import {
   CompactDeletableListItem,
-  NavigationButtons,
   Page,
   PageContent,
   PageHeader,
   type PageColor,
+  GroupElements,
 } from '@/components';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
@@ -61,7 +60,6 @@ export const SummaryPage = ({
   bottomListText,
   bottomText,
   confirmationButtonClick,
-  confirmationButtonDisabled = false,
   confirmationButtonLoading = false,
   restartProcessPath,
   showNavigationButtons = true,
@@ -75,7 +73,7 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          startIcon={<SettingsIcon />}
+          startIcon={<CogIcon />}
           removeCallback={delegableApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
           leftText={api.apiName}
           middleText={api.orgName}
@@ -89,7 +87,7 @@ export const SummaryPage = ({
       return (
         <CompactDeletableListItem
           key={index}
-          startIcon={<OfficeIcon />}
+          startIcon={<Buldings3Icon />}
           removeCallback={delegableOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
           leftText={org.orgName}
           middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
@@ -150,6 +148,14 @@ export const SummaryPage = ({
     navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
   };
 
+  const handleNextOnClick = () => {
+    if (confirmationButtonClick) {
+      confirmationButtonClick();
+    } else {
+      navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt);
+    }
+  };
+
   return (
     <Page
       color={headerColor}
@@ -206,20 +212,36 @@ export const SummaryPage = ({
             )}
             <h3 className={classes.infoText}>{bottomText}</h3>
             {showNavigationButtons ? (
-              <NavigationButtons
-                previousPath={
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
-                }
-                previousText={t('api_delegation.previous')}
-                nextPath={
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt
-                }
-                nextText={t('common.confirm')}
-                nextDisabled={confirmationButtonDisabled}
-                nextLoading={confirmationButtonLoading}
-                nextButtonColor='success'
-                nextButtonClick={confirmationButtonClick}
-              ></NavigationButtons>
+              <GroupElements>
+                <Button
+                  variant={'outline'}
+                  fullWidth={isSm}
+                  onClick={() =>
+                    navigate(
+                      '/' +
+                        ApiDelegationPath.OfferedApiDelegations +
+                        '/' +
+                        ApiDelegationPath.ChooseApi,
+                    )
+                  }
+                >
+                  {t('api_delegation.previous')}
+                </Button>
+                <Button
+                  onClick={handleNextOnClick}
+                  color={'success'}
+                  fullWidth={isSm}
+                >
+                  {confirmationButtonLoading && (
+                    <Spinner
+                      title={String(t('common.loading'))}
+                      size='small'
+                      variant='interaction'
+                    />
+                  )}
+                  {t('common.confirm')}
+                </Button>
+              </GroupElements>
             ) : (
               <div className={classes.receiptMainButton}>
                 <Button

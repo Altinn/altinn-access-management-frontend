@@ -32,7 +32,8 @@
     "read": "Read",
     "write": "Write",
     "sign": "Sign",
-    "access": "Access to whole service"
+    "access": "Access to the whole service",
+    "finished": "Finished"
   },
   "profile": {
     "received": "Received",
@@ -113,7 +114,7 @@
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
     "search_hits": "matches found:",
-    "missing_role_access": "You don't have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+    "missing_role_access": "You don't have any required role(s) for the reportee party. urn:altinn:rolecode:HADM, urn:altinn:location:garage, would give access to delegate the service.",
     "missing_delegation_access": "You don't have the necessary delegation accesses to delegate this service.",
     "missing_srr_right_access": "You don't have SRR right access to delegate",
     "unknown": "Unknown",
@@ -122,19 +123,21 @@
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "to_delegation_page": "Go to delegation page",
+    "give_more_rights": "Give more rights",
     "has_received_these_rights": "{{name}} has received these rights:",
     "rights_are_valid_until_deletion": "The rights are valid until they're deleted or withdrawn",
     "missing_srr_right_access_title": "Missing SRR right access",
     "missing_delegable_right": "Missing delegable rights",
     "confirm_delegation_text": "Confirm that you want to give these rights to {{name}}",
     "choose_rights_chip_text": "Choose rights you want to give access to below:",
-    "choose_service_page_top_text": "On this page you can give access to forms and services to {{name}}. We recommend to filter on owner, and to search on name on the service. You can add by picking from the list below.",
+    "delegate_choose_service_page_top_text": "On this page, you can give {{name}} access to forms and services by choosing them from the list below. We recommend that you filter the services based on relevant owners or search for a specific service by name.",
+    "request_choose_service_page_top_text": "On this page you, as {{name}}, can request access to forms and services by choosing them from the list below. We recommend that you filter the services based on relevant owners or search for a specific service by name.",
     "choose_rights_page_top_text": "Choose which single rights you want to delegate to {{name}}.",
     "choose_rights_page_secondary_text": "If you want to adjust the accesses e.g. Remove write access, click the arrow to open the service to adjust this.",
+    "chosen_services": "Chosen services",
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
-    "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the the checkmarks on the specific access",
+    "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the buttons below to remove them",
     "processing_delegations": "Processing delegations"
   }
 }

@@ -2,10 +2,9 @@ import { Button, ListItem } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
+import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 
 import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
-import { ReactComponent as Cancel } from '@/assets/Cancel.svg';
 import { useMediaQuery } from '@/resources/hooks';
 
 import ScopeList from '../ScopeList/ScopeList';
@@ -37,8 +36,8 @@ export const DeletableListItem = ({
           variant={'quiet'}
           color='secondary'
           onClick={softRestoreCallback}
-          icon={<Cancel />}
-          size='medium'
+          icon={<ArrowUndoIcon />}
+          size='large'
           aria-label={String(t('common.undo')) + ' ' + item.apiName}
         >
           {!isSm && t('common.undo')}
@@ -47,8 +46,8 @@ export const DeletableListItem = ({
         <Button
           variant='quiet'
           color='danger'
-          icon={<MinusCircle />}
-          size='medium'
+          icon={<MinusCircleIcon />}
+          size='large'
           onClick={softDeleteCallback}
           aria-label={String(t('api_delegation.delete') + ' ' + item.apiName)}
         >

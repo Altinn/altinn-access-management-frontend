@@ -32,7 +32,8 @@
     "read": "Lesa",
     "write": "Skriva",
     "sign": "Signera",
-    "access": "Tilgang til heile tenesta"
+    "access": "Tilgang til heile tenesta",
+    "finished": "Ferdig"
   },
   "profile": {
     "received": "Mottekne",
@@ -113,14 +114,14 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Du har ikkje nokon av dei nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegera den.",
+    "missing_role_access": "Du har ikkje nokon av dei nødvendige rollene for å delegere tjenesten. urn:altinn:rolecode:HADM, urn:altinn:location:garage, vil gi tilgang til å delegera den.",
     "missing_delegation_access": "Du har ikkje dei nødvendige delegeringsrettane til å delegera tenesta",
     "missing_srr_right_access": "Du har ikkje dei nødvendige SRR-rettigheitane",
     "unknown": "Uvisst",
     "new_error": "Dette er ein ny feil me ikkje har fått før. Vennlegast rapportar til Altinn ved å senda inn eit skjermbilete",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
-    "to_delegation_page": "Gå til delegeringssida",
+    "give_more_rights": "Gi fleire rettar",
     "has_received_these_rights": "{{name}} har fått desse rettane:",
     "rights_are_valid_until_deletion": "Rettane er gyldige til dei er sletta eller blir trekte tilbake",
     "unknown_title": "Ukjent feil",
@@ -130,12 +131,14 @@
     "complete_delegation": "Fullfør delegering",
     "confirm_delegation_text": "Stadfest at du vil gi desse rettane til {{name}}.",
     "choose_rights_chip_text": "Vel kva rettar du vil delegera tilgang til under:",
-    "choose_service_page_top_text": "Her kan du velja kva skjema og tenester du vil delegera tilgang til {{name}} for. Me tilrår å filtrera på skjemaeigar, og søkja med namn på tenesta.",
+    "delegate_choose_service_page_top_text": "Her kan du velja kva skjema og tenester du vil delegera tilgang til {{name}} for. Me tilrår å filtrera på skjemaeigar, og søkja med namn på tenesta.",
+    "request_choose_service_page_top_text": "Her kan du be om fleire tilganger til {{name}}. Vi anbefaler å filtrere på skjemaeiar, og søke med navn på tjenesta. Legg til ved å velje fra lista under.",
     "choose_rights_page_top_text": "Her kan du velja kva enkeltrettar du vil gi delegera {{name}}.",
     "choose_rights_page_secondary_text": "Dersom du ønskjer å tilpassa tilgangane, t.d. fjerne signeringsrett,  kan du klikka på pilen ved sida av tenesta for å opne den og tilpassa dette.",
+    "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
     "you_cant_delegate_these_rights": "Desse rettegheitane kan du ikkje delegera:",
-    "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på sjekkmerka nedanfor for å fjerna dei",
+    "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på knappana nedanfor for å fjerna dei",
     "processing_delegations": "Prosesserer delegeringar"
   }
 }

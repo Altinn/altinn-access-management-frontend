@@ -2,9 +2,7 @@ import { Button } from '@digdir/design-system-react';
 import { useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { ReactComponent as MinusCircle } from '@/assets/MinusCircle.svg';
-import { ReactComponent as AddCircle } from '@/assets/AddCircle.svg';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { ActionBar, type ActionBarProps } from '../ActionBar';
 import ScopeList from '../ScopeList/ScopeList';
@@ -38,22 +36,22 @@ export const DelegationActionBar = ({
     <>
       {buttonType === 'add' && (
         <Button
-          icon={<AddCircle />}
+          icon={<PlusCircleIcon />}
           variant={'quiet'}
           color={'success'}
           onClick={onActionButtonClick}
           aria-label={t('common.add') + ' ' + title}
-          size='medium'
+          size='large'
         ></Button>
       )}
       {buttonType === 'remove' && (
         <Button
-          icon={<MinusCircle />}
+          icon={<MinusCircleIcon />}
           variant={'quiet'}
           color={'danger'}
           onClick={onActionButtonClick}
           aria-label={t('common.remove') + ' ' + title}
-          size='medium'
+          size='large'
         ></Button>
       )}
     </>
@@ -64,7 +62,7 @@ export const DelegationActionBar = ({
       title={<p className={classes.actionBarHeaderTitle}>{title}</p>}
       subtitle={subtitle}
       actions={actions}
-      size='medium'
+      size='large'
       color={color}
       open={open}
       onClick={() => {
