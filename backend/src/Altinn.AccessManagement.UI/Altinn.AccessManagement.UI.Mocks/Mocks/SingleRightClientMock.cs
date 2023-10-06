@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
+        public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, SingleRightDto request)
         {
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static string DetermineAccessLevel(DelegationRequestDto request)
+        private static string DetermineAccessLevel(SingleRightDto request)
         {
             string value = request.Resource.FirstOrDefault().Value;
 

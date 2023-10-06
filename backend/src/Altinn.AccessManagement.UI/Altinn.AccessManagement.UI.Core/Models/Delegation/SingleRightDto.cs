@@ -6,7 +6,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
     /// <summary>
     ///     This model describes a single right
     /// </summary>
-    public class DelegationRequestDto
+    public class SingleRightDto
     {
         /// <summary>
         ///     Gets or sets the list of resource matches which uniquely identifies the resource this right applies to.

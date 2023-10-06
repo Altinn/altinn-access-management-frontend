@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            DelegationRequestDto dto = new DelegationRequestDto
+            SingleRightDto dto = new SingleRightDto
             {
                 Resource = resource,
             };
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            DelegationRequestDto dto = new DelegationRequestDto
+            SingleRightDto dto = new SingleRightDto
             {
                 Resource = resource,
             };
@@ -117,7 +117,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            DelegationRequestDto dto = new DelegationRequestDto
+            SingleRightDto dto = new SingleRightDto
             {
                 Resource = resource,
             };
@@ -149,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            DelegationRequestDto dto = new DelegationRequestDto
+            SingleRightDto dto = new SingleRightDto
             {
                 Resource = resource,
             };
@@ -199,19 +199,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            List<SingleRightDto> rights = new List<SingleRightDto>
             {
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "sign",
@@ -275,14 +275,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            List<SingleRightDto> rights = new List<SingleRightDto>
             {
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "write",
@@ -346,14 +346,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            List<SingleRightDto> rights = new List<SingleRightDto>
             {
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "write",
@@ -408,19 +408,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<DelegationRequestDto> rights = new List<DelegationRequestDto>
+            List<SingleRightDto> rights = new List<SingleRightDto>
             {
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new DelegationRequestDto
+                new SingleRightDto
                 {
                     Resource = resource,
                     Action = "sign",
