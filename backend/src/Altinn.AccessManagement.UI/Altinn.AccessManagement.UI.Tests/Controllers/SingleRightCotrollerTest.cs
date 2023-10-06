@@ -172,7 +172,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: CreateDelegation returns the delegated actions of the standard resource
         /// </summary>
         [Fact]
-        public async Task CreateDelegation_StandardResource_appid503()
+        public async Task CreateDelegation_StandardResource_valid()
         {
             // Arrange
             string partyId = "999 999 999";
