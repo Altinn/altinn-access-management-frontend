@@ -1,7 +1,7 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -19,11 +19,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<DelegationAccessCheckResponse>> CheckDelegationAccess(string partyId, DelegationRequestDto request)
+        public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, Right request)
         {
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
-            List<DelegationAccessCheckResponse> expectedResponse = Util.GetMockData<List<DelegationAccessCheckResponse>>(dataPath, DetermineAccessLevel(request));
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(dataPath, DetermineAccessLevel(request));
 
             return Task.FromResult(expectedResponse);
         }
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static string DetermineAccessLevel(DelegationRequestDto request)
+        private static string DetermineAccessLevel(Right request)
         {
             string value = request.Resource.FirstOrDefault().Value;
 

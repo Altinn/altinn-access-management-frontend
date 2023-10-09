@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Tests.Utils
@@ -56,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertBaseRightExternalEqual(DelegationRequestDto expected, DelegationRequestDto actual)
+        public static void AssertBaseRightExternalEqual(DelegationResponseData expected, DelegationResponseData actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

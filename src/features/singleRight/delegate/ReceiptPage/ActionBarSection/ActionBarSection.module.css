@@ -1,0 +1,44 @@
+.successButtonContainer {
+  display: flex;
+  justify-content: end;
+  margin-top: 40px;
+}
+
+.actionBars {
+  gap: var(--fds-spacing-2);
+  display: flex;
+  flex-direction: column;
+}
+
+.additionalText {
+  min-width: 65px;
+}
+
+.additionalTextRejected {
+  min-width: 50px;
+}
+
+.additionalTextContainer {
+  display: flex;
+}
+
+.warningIcon {
+  margin-left: 5px;
+  min-width: 25px;
+  min-height: 25px;
+  color: var(--fds-semantic-text-danger-default);
+}
+
+.warningIconRejected {
+  min-width: 25px;
+  min-height: 25px;
+  color: var(--fds-semantic-text-danger-default);
+}
+
+.successText {
+  margin-top: 50px !important;
+}
+
+.failedText {
+  margin-top: 10px !important;
+}

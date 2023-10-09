@@ -33,6 +33,8 @@
     "write": "Write",
     "sign": "Sign",
     "access": "Access to the whole service",
+    "failed": "Failed",
+    "failed_lowercase": "failed",
     "finished": "Finished"
   },
   "profile": {
@@ -82,7 +84,7 @@
     "filter_label": "Filter by provider",
     "chosen_orgs": "Chosen organisations",
     "new_api_content_text2": "Select which APIs you want to grant access to by clicking the plus sign. You can also search for APIs by name and filter by provider.",
-    "delegable_apis": "Delegable apis",
+    "delegable_apis": "Delegable APIs",
     "chosen_apis": "Chosen APIs:",
     "no_chosen_orgs": "You have no selected organizations to provide API access to. Please click the previous button at the bottom right.",
     "scopes": "Scopes",
@@ -109,7 +111,7 @@
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice",
     "own_orgnumber_delegation_heading": "You can't delegate to your own organisation number",
-    "own_orgnumber_delegation_paragraph": "It isn't possible to delegate API to yourself. Write another organisation number to continue."
+    "own_orgnumber_delegation_paragraph": "It isn't possible to delegate API to yourself. Write another organisation number to continue.",
   },
   "single_rights": {
     "delegate_single_rights": "Delegate single rights",
@@ -139,7 +141,14 @@
     "chosen_services": "Chosen services",
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
+    "processing_delegations": "Processing delegations",
+    "woops_something_went_wrong": "Woops, something  wen wrong with one or more services. These are marked in red. You can try again later.",
+    "all_failed_techncal_problem": "A technical problem has arised delegating this service. We recommend that you start a new delegation and try one more time. If the problem persists we ask you to contact user service on phone number 75 00 60 00. We're sorry!",
+    "woops_something_went_wrong_alert": "Woops! Something went wrong",
+    "some_failed_technical_problem": "Because of a technical error all rights weren't delegated. We recommend that you retry delegating the service by going to the delegation page.",
+    "these_rights_were_not_delegated": "These rights couldn't be delegated:",
+    "these_rights_were_delegated": "These rights were delegated:",
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the buttons below to remove them",
-    "processing_delegations": "Processing delegations"
+    "delegable_apis": "Delegable APIs"
   }
 }

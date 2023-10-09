@@ -67,7 +67,7 @@ export const ChooseRightsPage = () => {
 
   const initialCheckedRightsList = delegableServices.flatMap(
     (ds) =>
-      ds.accessCheckResponses
+      ds.rightDelegationResults
         ?.filter((acr) => acr.status !== 'NotDelegable')
         .map((acr) => ({
           serviceTitle: ds.service?.title,
@@ -185,7 +185,7 @@ export const ChooseRightsPage = () => {
             {t('single_rights.choose_rights_chip_text')}
           </Heading>
           <div className={classes.chipContainer}>
-            {service.accessCheckResponses
+            {service.rightDelegationResults
               ?.filter((response) => response.status !== 'NotDelegable')
               .map((response, index: number) => {
                 const isChecked = !!selectedRights.find(
@@ -237,7 +237,7 @@ export const ChooseRightsPage = () => {
               {t('single_rights.you_cant_delegate_these_rights')}
             </Heading>
             <div className={classes.chipContainer}>
-              {service.accessCheckResponses
+              {service.rightDelegationResults
                 ?.filter((response) => response.status === 'NotDelegable')
                 .map((response, index: number) => {
                   return (

@@ -8,43 +8,63 @@ import type {
   DelegationInputDto,
   DelegationRequestDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import { ReduxStatusResponse } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { type ServiceResource } from './singleRightsApi';
+
+export enum ReduxStatusResponse {
+  Fulfilled = 'fulfilled',
+  Rejected = 'rejected',
+}
+
+export enum BFFDelegatedStatus {
+  Delegated = 'Delegated',
+  NotDelegated = 'NotDelegated',
+}
 
 export interface DelegationAccessCheckDto {
   resourceIdentifierDto: ResourceIdentifierDto;
   serviceResource: ServiceResource;
 }
 
-interface delegationAccessCheckResponse {
-  rightKey: string;
+export interface DelegationResponseData {
+  rightKey?: string;
   resource: IdValuePair[];
   action: string;
   status: string;
-  details: details;
+  details?: details;
+  reduxStatus: ReduxStatusResponse;
 }
 
-interface details {
-  code: string;
-  description: string;
-  detailParams: detailParams[];
+export interface ProcessedDelegation {
+  meta: DelegationInputDto;
+  bffResponseList?: DelegationResponseData[];
 }
 
-interface detailParams {
-  name: string;
-  value: string;
-}
 export interface ServiceWithStatus {
-  accessCheckResponses?: delegationAccessCheckResponse[];
+  rightDelegationResults?: DelegationResponseData[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
   errorCode?: string;
 }
 
+interface details {
+  code?: string;
+  description?: string;
+  parameters?: parameters[];
+}
+
+interface parameters {
+  roleRequirementsMatches: roleRequirementsMatches;
+}
+
+interface roleRequirementsMatches {
+  name: string;
+  value: string;
+}
+
 interface sliceState {
   servicesWithStatus: ServiceWithStatus[];
-  processedDelegations: DelegationInputDto[];
+  processedDelegations: ProcessedDelegation[];
 }
 
 const initialState: sliceState = {
@@ -91,42 +111,62 @@ export const fetchRights = createAsyncThunk(
 export const delegate = createAsyncThunk(
   'singleRights/delegate',
   async (dto: DelegationInputDto) => {
-    try {
-      const altinnPartyId = getCookie('AltinnPartyId');
+    const altinnPartyId = getCookie('AltinnPartyId');
 
-      if (!altinnPartyId) {
-        throw new Error('Could not get AltinnPartyId cookie value');
-      }
-
-      const response = await axios.post(
-        `/accessmanagement/api/v1/singleright/delegate/${altinnPartyId}`,
-        dto,
-      );
-      return response.data;
-    } catch (error) {
-      console.error(error);
+    if (!altinnPartyId) {
+      throw new Error('Could not get AltinnPartyId cookie value');
     }
+
+    return await axios
+      .post(`/accessmanagement/api/v1/singleright/delegate/${altinnPartyId}`, dto)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      });
   },
 );
 
-const createSerializedDelegationInput = (arg: DelegationInputDto, status: ReduxStatusResponse) => {
-  const To = [{ id: arg.To[0].id, value: arg.To[0].value }];
+const createSerializedMeta = (meta: DelegationInputDto) => {
+  const To = [{ id: meta.To[0].id, value: meta.To[0].value }];
 
-  const Rights = arg.Rights.map((right: DelegationRequestDto) => ({
+  const Rights = meta.Rights.map((right: DelegationRequestDto) => ({
     Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
     Action: right.Action,
   }));
 
   const serviceDto = {
-    serviceTitle: arg.serviceDto.serviceTitle,
-    serviceOwner: arg.serviceDto.serviceOwner,
+    serviceTitle: meta.serviceDto.serviceTitle,
+    serviceOwner: meta.serviceDto.serviceOwner,
   };
 
   return {
     To,
     Rights,
     serviceDto,
-    status,
+  };
+};
+
+const createDelegationResponseData = (
+  resourceId: string,
+  resourceValue: string,
+  action: string,
+  status: string,
+  reduxStatus: ReduxStatusResponse,
+  detailsCode?: string,
+  detailsDescription?: string,
+): DelegationResponseData => {
+  return {
+    resource: [{ id: resourceId, value: resourceValue }],
+    action: action,
+    status: status,
+    details: {
+      code: detailsCode,
+      description: detailsDescription,
+    },
+    reduxStatus,
   };
 };
 
@@ -150,19 +190,19 @@ const singleRightSlice = createSlice({
     builder
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
-          accessCheckResponses: action.payload,
+          rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'Delegable',
           errorCode: '',
         };
 
         const hasNonDelegableRights = !!action.payload.find(
-          (response: delegationAccessCheckResponse) => response.status === 'NotDelegable',
+          (response: DelegationResponseData) => response.status === 'NotDelegable',
         );
 
         if (hasNonDelegableRights) {
           const isDelegable = !!action.payload.find(
-            (response: delegationAccessCheckResponse) => response.status === 'Delegable',
+            (response: DelegationResponseData) => response.status === 'Delegable',
           );
 
           if (isDelegable) {
@@ -179,7 +219,7 @@ const singleRightSlice = createSlice({
       })
       .addCase(fetchRights.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
-          accessCheckResponses: action.payload,
+          rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'Delegable',
           errorCode: '',
@@ -190,18 +230,41 @@ const singleRightSlice = createSlice({
         }
       })
       .addCase(delegate.fulfilled, (state, action) => {
-        const delegationInput = createSerializedDelegationInput(
-          action.meta.arg,
-          ReduxStatusResponse.Fulfilled,
+        const delegationInput = createSerializedMeta(action.meta.arg);
+
+        const bffResponseList: DelegationResponseData[] = action.payload.rightDelegationResults;
+        bffResponseList.forEach(
+          (data: DelegationResponseData) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
         );
-        state.processedDelegations.push(delegationInput);
+
+        const pushData: ProcessedDelegation = {
+          meta: delegationInput,
+          bffResponseList,
+        };
+        state.processedDelegations.push(pushData);
       })
       .addCase(delegate.rejected, (state, action) => {
-        const delegationInput = createSerializedDelegationInput(
-          action.meta.arg,
-          ReduxStatusResponse.Rejected,
+        const delegationInput = createSerializedMeta(action.meta.arg);
+
+        const bffResponseList: DelegationResponseData[] = [];
+
+        bffResponseList.push(
+          createDelegationResponseData(
+            delegationInput.Rights[0].Resource[0].id,
+            delegationInput.Rights[0].Resource[0].value,
+            delegationInput.Rights[0].Action,
+            BFFDelegatedStatus.NotDelegated,
+            ReduxStatusResponse.Rejected,
+            action.error.code,
+            action.error.message,
+          ),
         );
-        state.processedDelegations.push(delegationInput);
+
+        const pushData: ProcessedDelegation = {
+          meta: delegationInput,
+          bffResponseList,
+        };
+        state.processedDelegations.push(pushData);
       });
   },
 });

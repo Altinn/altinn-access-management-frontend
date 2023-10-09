@@ -13,12 +13,14 @@
       {
         "code": "RoleAccess",
         "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
-        "parameters": [
-          {
-            "name": "",
-            "value": ""
-          }
-        ]
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   },
@@ -36,12 +38,14 @@
       {
         "code": "MissingSrrRightAccess",
         "description": "MissingSrrRightAccess",
-        "parameters": [
-          {
-            "name": "RoleAccess",
-            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
-          }
-        ]
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   },
@@ -59,12 +63,14 @@
       {
         "code": "MissingSrrRightAccess",
         "description": "MissingSrrRightAccess",
-        "parameters": [
-          {
-            "name": "RoleAccess",
-            "value": "urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM"
-          }
-        ]
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   }

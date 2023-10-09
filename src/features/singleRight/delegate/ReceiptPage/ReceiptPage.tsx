@@ -13,6 +13,7 @@ import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRight
 import { GroupElements } from '@/components/GroupElements/GroupElements';
 
 import classes from './ReceiptPage.module.css';
+import { ActionBarSection } from './ActionBarSection/ActionBarSection';
 
 export const ReceiptPage = () => {
   const { t } = useTranslation();
@@ -32,9 +33,9 @@ export const ReceiptPage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          <Ingress spacing>
-            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
-          </Ingress>
+          <div className={classes.actionBars}>
+            <ActionBarSection />
+          </div>
           <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
           <GroupElements>
             <Button
