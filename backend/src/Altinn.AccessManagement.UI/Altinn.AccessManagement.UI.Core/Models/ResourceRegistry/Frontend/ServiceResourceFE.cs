@@ -141,7 +141,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Delegable = serviceResourceFE.Delegable;
             ContactPoints = serviceResourceFE.ContactPoints;
             Spatial = serviceResourceFE.Spatial;
-            AuthorizationReference= serviceResourceFE.AuthorizationReference;
+            AuthorizationReference = serviceResourceFE.AuthorizationReference;
         }
     }
 }
