@@ -124,7 +124,7 @@ export const ActionBarSection = () => {
 
       return {
         actionBar: (
-          <>
+          <div key={`receipt-action-bar-${index}`}>
             {index === mostFailedIndex && failedDelegationIngress()}
             {index === firstSuccesfulIndex && successfulDelegationParagraph()}
             <ActionBar
@@ -133,7 +133,6 @@ export const ActionBarSection = () => {
               additionalText={additionalText()}
               color={numFailedDelegations !== 0 ? 'danger' : 'success'}
               defaultOpen={index === mostFailedIndex && numFailedDelegations > 0}
-              key={`receipt-action-bar-${index}`}
             >
               <ReceiptActionBarContent
                 failedDelegations={failedDelegations}
@@ -142,7 +141,7 @@ export const ActionBarSection = () => {
                 index={index}
               />
             </ActionBar>
-          </>
+          </div>
         ),
         numFailedDelegations,
       };
