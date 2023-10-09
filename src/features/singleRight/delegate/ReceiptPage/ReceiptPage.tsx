@@ -36,9 +36,6 @@ export const ReceiptPage = () => {
           <div className={classes.actionBars}>
             <ActionBarSection />
           </div>
-          <Ingress spacing>
-            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
-          </Ingress>
           <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
           <GroupElements>
             <Button
