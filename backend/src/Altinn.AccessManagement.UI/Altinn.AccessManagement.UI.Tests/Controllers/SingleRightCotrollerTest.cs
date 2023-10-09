@@ -82,7 +82,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
-                Value = "appid-504",
+                Value = "app_ttd_a3-app",
             };
 
             List<IdValuePair> resource = new List<IdValuePair>();
@@ -114,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
-                Value = "appid-505",
+                Value = "se_3225_1596",
             };
 
             List<IdValuePair> resource = new List<IdValuePair>();
@@ -146,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IdValuePair attribute = new IdValuePair
             {
                 Id = "urn:altinn:resource",
-                Value = "appid-506",
+                Value = "app_ttd_a3-app2",
             };
 
             List<IdValuePair> resource = new List<IdValuePair>();
