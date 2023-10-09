@@ -69,11 +69,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             switch (value)
             {
-                case "appid-504":
+                case "app_ttd_a3-app":
                     return "NoAccessesAppid504.json";
-                case "appid-505":
+                case "se_3225_1596":
                     return "OnlyReadAppid505.json";
-                case "appid-506":
+                case "app_ttd_a3-app2":
                     return "ReadAndWriteAppid506.json";
                 case "appid-503":
                     return "AllAccessesAppid503.json";
