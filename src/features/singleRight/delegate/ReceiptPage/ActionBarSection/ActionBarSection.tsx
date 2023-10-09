@@ -1,12 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Alert,
-  Chip,
-  ErrorMessage,
-  Heading,
-  Ingress,
-  Paragraph,
-} from '@digdir/design-system-react';
+import { ErrorMessage, Ingress } from '@digdir/design-system-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -22,7 +15,6 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { ActionBar } from '@/components';
 
-import { ReceiptActionBar } from '../ReceiptActionBar/ReceiptActionBar';
 import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActionBarContent';
 
 import classes from './ActionBarSection.module.css';

@@ -20,6 +20,6 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     delegation will find and delegate all the rights the delegating user have for the resource.
         /// </summary>
         [Required]
-        public List<SingleRightDto> Rights { get; set; }
+        public List<Right> Rights { get; set; }
     }
 }

@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            SingleRightDto dto = new SingleRightDto
+            Right dto = new Right
             {
                 Resource = resource,
             };
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            SingleRightDto dto = new SingleRightDto
+            Right dto = new Right
             {
                 Resource = resource,
             };
@@ -117,7 +117,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            SingleRightDto dto = new SingleRightDto
+            Right dto = new Right
             {
                 Resource = resource,
             };
@@ -149,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<IdValuePair> resource = new List<IdValuePair>();
             resource.Add(attribute);
-            SingleRightDto dto = new SingleRightDto
+            Right dto = new Right
             {
                 Resource = resource,
             };
@@ -199,19 +199,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<SingleRightDto> rights = new List<SingleRightDto>
+            List<Right> rights = new List<Right>
             {
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "sign",
@@ -275,14 +275,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<SingleRightDto> rights = new List<SingleRightDto>
+            List<Right> rights = new List<Right>
             {
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "write",
@@ -346,14 +346,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<SingleRightDto> rights = new List<SingleRightDto>
+            List<Right> rights = new List<Right>
             {
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "write",
@@ -408,19 +408,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 },
             };
 
-            List<SingleRightDto> rights = new List<SingleRightDto>
+            List<Right> rights = new List<Right>
             {
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "read",
                 },
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "write",
                 },
-                new SingleRightDto
+                new Right
                 {
                     Resource = resource,
                     Action = "sign",

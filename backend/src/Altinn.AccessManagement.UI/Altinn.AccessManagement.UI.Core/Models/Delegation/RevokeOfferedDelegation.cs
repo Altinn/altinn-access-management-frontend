@@ -21,6 +21,6 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     the operation will find and revoke all the rights the recipient party have received for the given resource.
         /// </summary>
         [Required]
-        public List<SingleRightDto> Rights { get; set; }
+        public List<Right> Rights { get; set; }
     }
 }

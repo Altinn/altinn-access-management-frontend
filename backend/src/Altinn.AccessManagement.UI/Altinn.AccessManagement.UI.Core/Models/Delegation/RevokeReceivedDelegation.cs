@@ -21,6 +21,6 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     the operation will find and revoke all the rights received from the delegating party.
         /// </summary>
         [Required]
-        public List<SingleRightDto> Rights { get; set; }
+        public List<Right> Rights { get; set; }
     }
 }
