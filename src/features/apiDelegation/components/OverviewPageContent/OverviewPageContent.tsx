@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
+import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ReactComponent as Add } from '@/assets/Add.svg';
-import { ReactComponent as Edit } from '@/assets/Edit.svg';
-import { ReactComponent as Error } from '@/assets/Error.svg';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
@@ -178,7 +176,7 @@ export const OverviewPageContent = ({
           <Button
             variant='outline'
             onClick={goToStartDelegation}
-            icon={<Add />}
+            icon={<PlusIcon />}
             fullWidth={isSm}
             size='medium'
           >
@@ -213,18 +211,18 @@ export const OverviewPageContent = ({
               {!isEditable ? (
                 <Button
                   variant='quiet'
-                  icon={<Edit />}
+                  icon={<PencilIcon />}
                   onClick={handleSetIsEditable}
-                  size='small'
+                  size='medium'
                 >
                   {t('api_delegation.edit_accesses')}
                 </Button>
               ) : (
                 <Button
                   variant='quiet'
-                  icon={<Error />}
+                  icon={<XMarkOctagonIcon />}
                   onClick={handleSetIsEditable}
-                  size='small'
+                  size='medium'
                 >
                   {t('common.cancel')}
                 </Button>

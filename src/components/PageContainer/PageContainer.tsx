@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { XMarkIcon } from '@navikt/aksel-icons';
 
-import { ReactComponent as CloseIcon } from '@/assets/RedClose.svg';
 import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -32,9 +32,10 @@ export const PageContainer = ({ children }: PageContainerProps) => {
             aria-label={String(t('common.close'))}
             onClick={redirectToProfile}
           >
-            <CloseIcon
+            <XMarkIcon
               width={36}
               height={30}
+              className={classes.closeIcon}
             />
           </button>
         </div>

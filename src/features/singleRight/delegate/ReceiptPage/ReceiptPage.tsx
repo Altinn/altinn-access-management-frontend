@@ -1,4 +1,4 @@
-import { Button } from '@digdir/design-system-react';
+import { Button, Ingress, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { Page, PageContainer, PageContent, PageHeader } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+import { GroupElements } from '@/components/GroupElements/GroupElements';
 
 import classes from './ReceiptPage.module.css';
 import { ActionBarSection } from './ActionBarSection/ActionBarSection';
@@ -35,18 +36,29 @@ export const ReceiptPage = () => {
           <div className={classes.actionBars}>
             <ActionBarSection />
           </div>
-          <div className={classes.successButtonContainer}>
+          <Ingress spacing>
+            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
+          </Ingress>
+          <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
+          <GroupElements>
+            <Button
+              color={'success'}
+              fullWidth={isSm}
+            >
+              {t('common.finished')}
+            </Button>
             <Button
               onClick={() => {
                 navigate(
                   '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
                 );
               }}
-              color={'success'}
+              color={'primary'}
+              fullWidth={isSm}
             >
-              {t('single_rights.to_delegation_page')}
+              {t('single_rights.give_more_rights')}
             </Button>
-          </div>
+          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>

@@ -6,7 +6,7 @@ import { Button, Ingress } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import { Page, PageHeader, PageContent, PageContainer, DualElementsContainer } from '@/components';
+import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -93,36 +93,33 @@ export const ChooseServicePage = () => {
             onAdd={onAdd}
             onUndo={onRemove}
           />
-          <DualElementsContainer
-            leftElement={
-              <Button
-                variant='quiet'
-                color='danger'
-                fullWidth={true}
-                onClick={onCancel}
-              >
-                {t('common.cancel')}
-              </Button>
-            }
-            rightElement={
-              <Button
-                variant='filled'
-                color='primary'
-                fullWidth={true}
-                disabled={delegableChosenServices.length < 1}
-                onClick={() => {
-                  navigate(
+
+          <GroupElements>
+            <Button
+              variant='quiet'
+              color='danger'
+              fullWidth={isSm}
+              onClick={onCancel}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              variant='filled'
+              color='primary'
+              fullWidth={isSm}
+              disabled={delegableChosenServices.length < 1}
+              onClick={() => {
+                navigate(
+                  '/' +
+                    SingleRightPath.DelegateSingleRights +
                     '/' +
-                      SingleRightPath.DelegateSingleRights +
-                      '/' +
-                      String(SingleRightPath.ChooseRights),
-                  );
-                }}
-              >
-                {t('common.proceed')}
-              </Button>
-            }
-          />
+                    String(SingleRightPath.ChooseRights),
+                );
+              }}
+            >
+              {t('common.proceed')}
+            </Button>
+          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>

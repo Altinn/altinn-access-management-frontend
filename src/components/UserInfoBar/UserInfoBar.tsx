@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Office1Filled } from '@navikt/ds-icons';
 import { useEffect } from 'react';
 
-import { ReactComponent as AltinnLogo } from '@/assets/AltinnTextLogo.svg';
+import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { fetchUserInfo, fetchReportee } from '@/rtk/features/userInfo/userInfoSlice';
 
@@ -27,12 +27,14 @@ export const UserInfoBar = () => {
     <div>
       <div className={classes.userInfoBar}>
         <div>
-          <AltinnLogo />
+          <AltinnTextLogo />
         </div>
         <div className={classes.userInfoContent}>
-          <div>
-            {userInfoName && <h5 className={classes.userInfoText}>{userInfoName}</h5>}
-            {reporteeName && <h5 className={classes.userInfoText}>for {reporteeName}</h5>}
+          <div className={classes.userInfoTextContainer}>
+            {userInfoName && <p className={classes.userInfoText}>{userInfoName}</p>}
+            {userInfoName !== reporteeName && reporteeName && (
+              <p className={classes.userInfoText}>for {reporteeName}</p>
+            )}
           </div>
           <div className={classes.companyIconContainer}>
             <SvgIcon

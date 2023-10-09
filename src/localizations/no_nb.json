@@ -34,7 +34,8 @@
     "sign": "Signere",
     "access": "Tilgang til hele tjenesten",
     "failed": "Feilet",
-    "failed_lowercase": "feilet"
+    "failed_lowercase": "feilet",
+    "finished": "Ferdig"
   },
   "profile": {
     "received": "Mottatte",
@@ -108,7 +109,9 @@
     "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slettes eller trekkes tilbake.",
     "receipt_page_failed_text": "Vennligst prøv igjen senere. Kontakt Altinn Servicedesk om feilen vedvarer.",
     "receipt_page_main_button": "Til totaloversikt",
-    "api_delegation_choice": "API-delegeringsvalg"
+    "api_delegation_choice": "API-delegeringsvalg",
+    "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
+    "own_orgnumber_delegation_paragraph": "Det er ikke mulig å delegere API til deg selv. Skriv inn et annet organisasjonsnummer for å fortsette."
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettigheter",
@@ -116,14 +119,14 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Du har ikke noen av de nødvendige rollene for å delegere tjenesten. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), vil gi tilgang til å delegere den.",
+    "missing_role_access": "Du har ikke noen av de nødvendige rollene for å delegere tjenesten. urn:altinn:rolecode:HADM, urn:altinn:location:garage, vil gi tilgang til å delegere den.",
     "missing_delegation_access": "Du har ikke de nødvendige delegeringsrettighetene til å delegere tjenesten",
     "missing_srr_right_access": "Du har ikke de nødvendige SRR-rettighetene",
     "unknown": "Uvisst",
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
-    "to_delegation_page": "Gå til delegeringsside",
+    "give_more_rights": "Gi flere rettigheter",
     "has_received_these_rights": "{{name}} har fått disse rettighetene:",
     "rights_are_valid_until_deletion": "Rettighetene er gyldige til de slettes eller trekkes tilbake",
     "unknown_title": "Ukjent feil",
@@ -139,7 +142,7 @@
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikke delegert hele tjenesten",
     "you_cant_delegate_these_rights": "Disse rettighetene kan du ikke delegere:",
-    "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på sjekkmerkene nedenfor for å fjerne dem",
+    "action_bar_adjust_rights_text": "Hvis du vil begrense tilgangen til en rettighet kan du klikke på knappene nedenfor for å fjerne dem",
     "processing_delegations": "Prosesserer delegeringer",
     "woops_something_went_wrong_ingress": "Oi, her var det noe som gikk galt med en eller flere tjenester. Du kan se mer informasjon i de røde kolonnene under. Du kan prøve igjen senere",
     "all_failed_techncal_problem_paragraph": "Et teknisk problem har oppstått ved delegering av tjenestene. Vi anbefaler at du starter delegeringsprosessen på nytt ved å gå til delegeringsside. Hvis problemet vedvarer ber vi deg kontakte brukerservice på telefon 75 00 60 00. Vi beklager!",

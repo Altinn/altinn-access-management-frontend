@@ -1,22 +1,22 @@
 import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
-import { List, Spinner } from '@digdir/design-system-react';
+import { Button, List, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterIcon } from '@navikt/aksel-icons';
+import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Page,
   PageHeader,
   PageContent,
-  NavigationButtons,
   PageContainer,
   ErrorPanel,
+  GroupElements,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ReactComponent as OfficeIcon } from '@/assets/Office1.svg';
 import { ApiDelegationPath } from '@/routes/paths';
-import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
+import ApiIcon from '@/assets/Api.svg?react';
 import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
@@ -48,6 +48,7 @@ export const ChooseApiPage = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (loading) {
@@ -137,7 +138,7 @@ export const ChooseApiPage = () => {
     return (
       <CompactDeletableListItem
         key={org.orgNr}
-        startIcon={<OfficeIcon />}
+        startIcon={<Buldings3Icon />}
         removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
         leftText={org.orgName}
         middleText={!isSm ? t('api_delegation.org_nr') + ' ' + org.orgNr : undefined}
@@ -218,17 +219,33 @@ export const ChooseApiPage = () => {
               </div>
             )}
           </div>
-          <NavigationButtons
-            previousText={t('api_delegation.previous')}
-            previousPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
-            }
-            nextText={t('api_delegation.next')}
-            nextPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Confirmation
-            }
-            nextDisabled={chosenApis.length < 1 || chosenOrgs.length < 1}
-          ></NavigationButtons>
+          <GroupElements>
+            <Button
+              variant={'outline'}
+              onClick={() =>
+                navigate(
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
+                )
+              }
+              fullWidth={isSm}
+            >
+              {t('api_delegation.previous')}
+            </Button>
+            <Button
+              disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+              fullWidth={isSm}
+              onClick={() =>
+                navigate(
+                  '/' +
+                    ApiDelegationPath.OfferedApiDelegations +
+                    '/' +
+                    ApiDelegationPath.Confirmation,
+                )
+              }
+            >
+              {t('api_delegation.next')}
+            </Button>
+          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>

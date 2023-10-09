@@ -22,10 +22,19 @@
   margin-left: 1rem;
   text-align: right;
   word-break: break-word;
+  font-size: 12px;
 }
 
 .companyIconContainer {
+  display: flex;
   align-self: center;
+  flex-direction: column;
+}
+
+.userInfoTextContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media only screen and (max-width: 576px) {

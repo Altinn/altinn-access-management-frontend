@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Ingress } from '@digdir/design-system-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { Page, PageHeader, PageContent, PageContainer, DualElementsContainer } from '@/components';
+import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
@@ -83,27 +83,23 @@ export const ChooseServicePage = () => {
             onAdd={onAdd}
             onUndo={onRemove}
           />
-          <DualElementsContainer
-            leftElement={
-              <Button
-                variant='quiet'
-                color='danger'
-                fullWidth={true}
-                onClick={onCancel}
-              >
-                {t('common.cancel')}
-              </Button>
-            }
-            rightElement={
-              <Button
-                variant='filled'
-                color='primary'
-                fullWidth={true}
-              >
-                {t('common.proceed')}
-              </Button>
-            }
-          />
+          <GroupElements>
+            <Button
+              variant='quiet'
+              color='danger'
+              fullWidth={isSm}
+              onClick={onCancel}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              variant='filled'
+              color='primary'
+              fullWidth={isSm}
+            >
+              {t('common.proceed')}
+            </Button>
+          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>

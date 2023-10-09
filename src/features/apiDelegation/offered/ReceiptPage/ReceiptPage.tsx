@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
-import { ReactComponent as ApiIcon } from '@/assets/Api.svg';
+import ApiIcon from '@/assets/Api.svg?react';
 import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { SummaryPage, PageContainer } from '@/components';

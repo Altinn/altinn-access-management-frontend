@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import {
-  DualElementsContainer,
+  GroupElements,
   Page,
   PageContainer,
   PageContent,
@@ -222,7 +222,7 @@ export const ChooseRightsPage = () => {
           <Alert severity='warning'>
             <Heading
               size={'xsmall'}
-              level={6}
+              level={4}
               spacing
             >
               {t('single_rights.alert_partially_delegable_header')}
@@ -230,7 +230,12 @@ export const ChooseRightsPage = () => {
             <Paragraph spacing>
               {t(`${getSingleRightsErrorCodeTextKey(service.errorCode)}`)}
             </Paragraph>
-            <Paragraph>{t('single_rights.you_cant_delegate_these_rights')}</Paragraph>
+            <Heading
+              size={'xxsmall'}
+              level={5}
+            >
+              {t('single_rights.you_cant_delegate_these_rights')}
+            </Heading>
             <div className={classes.chipContainer}>
               {service.rightDelegationResults
                 ?.filter((response) => response.status === 'NotDelegable')
@@ -267,54 +272,50 @@ export const ChooseRightsPage = () => {
 
   const navigationButtons = () => {
     return (
-      <DualElementsContainer
-        leftElement={
-          <Button
-            variant='outline'
-            color='primary'
-            fullWidth={true}
-            onClick={() => {
-              navigate(
-                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
-              );
-            }}
-          >
-            {t('common.previous')}
-          </Button>
-        }
-        rightElement={
-          <Popover
-            placement={'top'}
-            open={popoverOpen}
-            onOpenChange={() => setPopoverOpen(!popoverOpen)}
-            trigger={
-              <Button
-                variant='filled'
-                color='primary'
-                fullWidth={true}
-                disabled={selectedRights.length < 1}
-                onClick={() => setPopoverOpen(!popoverOpen)}
-              >
-                {t('common.complete')}
-              </Button>
-            }
-            variant={'info'}
-          >
-            <Paragraph>
-              {t('single_rights.confirm_delegation_text', { name: 'ANNEMA FIGMA' })}
-            </Paragraph>
-            <div className={classes.popoverButtonContainer}>
-              <Button
-                onClick={() => {
-                  onConfirm();
-                }}
-              >
-                {t('common.confirm')}
-              </Button>
-            </div>
-          </Popover>
-        }
-      />
+      <GroupElements>
+        <Button
+          variant='outline'
+          color='primary'
+          fullWidth={isSm}
+          onClick={() => {
+            navigate(
+              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
+            );
+          }}
+        >
+          {t('common.previous')}
+        </Button>
+        <Popover
+          placement={'top'}
+          open={popoverOpen}
+          onOpenChange={() => setPopoverOpen(!popoverOpen)}
+          trigger={
+            <Button
+              variant='filled'
+              color='primary'
+              fullWidth={isSm}
+              disabled={selectedRights.length < 1}
+              onClick={() => setPopoverOpen(!popoverOpen)}
+            >
+              {t('common.complete')}
+            </Button>
+          }
+          variant={'info'}
+        >
+          <Paragraph>
+            {t('single_rights.confirm_delegation_text', { name: 'ANNEMA FIGMA' })}
+          </Paragraph>
+          <div className={classes.popoverButtonContainer}>
+            <Button
+              onClick={() => {
+                onConfirm();
+              }}
+            >
+              {t('common.confirm')}
+            </Button>
+          </div>
+        </Popover>
+      </GroupElements>
     );
   };
 
