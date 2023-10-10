@@ -86,6 +86,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
+        /// List of autorizationReference attributes to reference this resource in authorization API
+        /// </summary>
+        public List<IdValuePair>? AuthorizationReference { get; set; }
+
+        /// <summary>
         /// Parameterless constructor
         /// </summary>
         public ServiceResourceFE()
@@ -95,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, List<IdValuePair> authorizationReference, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
         {
             Identifier = identifier;
             Title = title;
@@ -112,6 +117,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Delegable = delegable;
             ContactPoints = contactPoints;
             Spatial = spatial;
+            AuthorizationReference = authorizationReference;
         }
 
         /// <summary>
@@ -135,6 +141,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Delegable = serviceResourceFE.Delegable;
             ContactPoints = serviceResourceFE.ContactPoints;
             Spatial = serviceResourceFE.Spatial;
+            AuthorizationReference = serviceResourceFE.AuthorizationReference;
         }
     }
 }
