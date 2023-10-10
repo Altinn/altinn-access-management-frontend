@@ -57,12 +57,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertBaseRightExternalEqual(DelegationResponseData expected, DelegationResponseData actual)
+        public static void AssertEqual(DelegationResponseData expected, DelegationResponseData actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            AssertCollections(expected.Resource, actual.Resource, AssertAttributeMatchEqual);
+            AssertCollections(expected.Resource, actual.Resource, AssertEqual);
             Assert.Equal(expected.Action, actual.Action);
         }
 
@@ -71,7 +71,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertCompetentAuthorityEqual(CompetentAuthority expected, CompetentAuthority actual)
+        public static void AssertEqual(CompetentAuthority expected, CompetentAuthority actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertMaskinportenSchemaDelegationFEEqual(MaskinportenSchemaDelegationFE expected, MaskinportenSchemaDelegationFE actual)
+        public static void AssertEqual(MaskinportenSchemaDelegationFE expected, MaskinportenSchemaDelegationFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -113,13 +113,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertDelegationOutputEqual(DelegationOutput expected, DelegationOutput actual)
+        public static void AssertEqual(DelegationOutput expected, DelegationOutput actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            AssertCollections(expected.To, actual.To, AssertAttributeMatchEqual);
-            AssertCollections(expected.RightDelegationResults, actual.RightDelegationResults, AssertBaseRightExternalEqual);
+            AssertCollections(expected.To, actual.To, AssertEqual);
+            AssertCollections(expected.RightDelegationResults, actual.RightDelegationResults, AssertEqual);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertResourceExternalEqual(ServiceResourceFE expected, ServiceResourceFE actual)
+        public static void AssertEqual(ServiceResourceFE expected, ServiceResourceFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -139,8 +139,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Homepage, actual.Homepage);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.Spatial, actual.Spatial);
-            AssertContactPointsEqual(expected.ContactPoints, actual.ContactPoints);
-            AssertResourceReferences(expected.ResourceReferences, actual.ResourceReferences);
+            AssertEqual(expected.ContactPoints, actual.ContactPoints);
+            AssertEqual(expected.ResourceReferences, actual.ResourceReferences);
             Assert.Equal(expected.Delegable, actual.Delegable);
             Assert.Equal(expected.Visible, actual.Visible);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
@@ -151,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertResourceReferences(List<ResourceReference> expected, List<ResourceReference> actual)
+        public static void AssertEqual(List<ResourceReference> expected, List<ResourceReference> actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -169,7 +169,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertContactPointsEqual(List<ContactPoint> expected, List<ContactPoint> actual)
+        public static void AssertEqual(List<ContactPoint> expected, List<ContactPoint> actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -189,7 +189,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
-        public static void AssertValidationProblemDetailsEqual(ValidationProblemDetails expected, ValidationProblemDetails actual)
+        public static void AssertEqual(ValidationProblemDetails expected, ValidationProblemDetails actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -206,7 +206,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        private static void AssertAttributeMatchEqual(IdValuePair expected, IdValuePair actual)
+        private static void AssertEqual(IdValuePair expected, IdValuePair actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
