@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
-            AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertResourceEqual);
+            AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Equal(expectedResult.Page, actualResources.Page);
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
-            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceEqual);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Equal(expectedResult.Page, actualResources.Page);
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
-            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceEqual);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Equal(expectedResult.Page, actualResources.Page);
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
-            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceEqual);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             Assert.Equal(expectedResult.Page, actualResources.Page);
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
-            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertResourceEqual);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
 
         /// <summary>

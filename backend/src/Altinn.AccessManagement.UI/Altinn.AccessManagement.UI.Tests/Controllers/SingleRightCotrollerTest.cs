@@ -233,7 +233,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
@@ -375,7 +375,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
