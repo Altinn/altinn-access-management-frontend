@@ -43,42 +43,75 @@ import classes from './ChooseRightsPage.module.css';
 
 interface DelegationResourceDTO {
   serviceIdentifier: string;
+  resource: IdValuePair[];
   action: string;
   serviceTitle: string;
   serviceOwner: string;
 }
+
+type Service = {
+  serviceIdentifier: string;
+  description: string;
+  rightDescription: string;
+  status: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable' | undefined;
+  rights: Right[];
+};
+
+type Right = {
+  action: string;
+  delegable: boolean;
+  checked: boolean;
+  resourceReference: IdValuePair[];
+};
 
 export const ChooseRightsPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [selectedRights, setSelectedRights] = useState<DelegationResourceDTO[]>([]);
+  const [serviceStates, setServiceStates] = useState<Service[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [delegationCount, setDelegationCount] = useState(0);
   const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
   const processedDelegations = useAppSelector(
     (state) => state.singleRightsSlice.processedDelegations,
   );
-  const delegableServices = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
+  // const delegableServices = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
   const isSm = useMediaQuery('(max-width: 768px)');
   const progressLabel = processedDelegations.length + '/' + delegationCount;
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
 
-  const initialCheckedRightsList = delegableServices.flatMap(
-    (ds) =>
-      ds.rightDelegationResults
-        ?.filter((acr) => acr.status !== 'NotDelegable')
-        .map((acr) => ({
-          serviceTitle: ds.service?.title,
-          serviceOwner: ds.service?.resourceOwnerName,
-          serviceIdentifier: ds.service?.identifier,
-          action: acr.action,
-        })),
-  );
+  console.log('delegableServices', delegableServices);
+
+  // TO DO:
+  // Rewrite the logic of the toggling
+  // Add nullable bool for if checked or not to Rights in delegableServices and use that throughout this whole page
+  // No reason to transform a 2D array to a 1D array, only to then make it back into a 2D array
+
+  const initializeDelegableServices = () => {
+    const delegable = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
+    return delegable.map((service) => {
+      const rights =
+        service.rightDelegationResults?.map((right) => ({
+          action: right.action,
+          delegable: right.status === 'Delegable',
+          checked: right.status === 'Delegable',
+          resourceReference: right.resource,
+        })) ?? [];
+      return {
+        serviceIdentifier: service.service?.identifier ?? '',
+        description: service.service?.description ?? '',
+        rightDescription: service.service?.rightDescription ?? '',
+        status: service.status,
+        rights: rights,
+      };
+    });
+  };
 
   useEffect(() => {
-    setSelectedRights(initialCheckedRightsList);
+    const initialized: Service[] = initializeDelegableServices();
+    setServiceStates(initialized);
   }, []);
 
   useEffect(() => {
@@ -96,34 +129,36 @@ export const ChooseRightsPage = () => {
 
   const groupServices = (): DelegationResourceDTO[][] => {
     return Object.values(
-      selectedRights.reduce((grouped, item) => {
-        const { serviceIdentifier } = item;
-        item.serviceIdentifier;
-        grouped[serviceIdentifier] = [];
-        grouped[serviceIdentifier].push(item);
+      selectedRights.reduce((batchedRights, right) => {
+        const { serviceIdentifier } = right;
+        console.log('hello serviceIdentifier', serviceIdentifier);
+        batchedRights[serviceIdentifier] = [];
+        batchedRights[serviceIdentifier].push(right);
 
-        return grouped;
+        return batchedRights;
       }, {}),
     );
   };
 
   const postDelegations = () => {
     const groupedList = groupServices();
+    console.log('selectedRights', selectedRights);
+    console.log('groupedList', groupedList);
     setDelegationCount(groupedList.length);
 
-    groupedList.map((item) => {
+    groupedList.map((resource) => {
       const delegationInput: DelegationInputDto = {
         // TODO: make adjustments to codeline below when we get GUID from altinn2
         To: [new IdValuePair('urn:altinn:ssn', '50019992')],
-        Rights: item.map((content) => {
+        Rights: resource.map((right) => {
           return new DelegationRequestDto(
             // TODO: make adjustments to codline below when we get urn from resourceregistry
             'urn:altinn:resource',
-            content.serviceIdentifier,
-            content.action,
+            right.serviceIdentifier,
+            right.action,
           );
         }),
-        serviceDto: new ServiceDto(item[0].serviceTitle, item[0].serviceOwner),
+        serviceDto: new ServiceDto(resource[0].serviceTitle, resource[0].serviceOwner),
       };
 
       return dispatch(delegate(delegationInput));
@@ -135,26 +170,22 @@ export const ChooseRightsPage = () => {
     setPopoverOpen(false);
   };
 
-  const handleToggleChecked = (
-    serviceTitle: string,
-    serviceOwner: string,
-    serviceIdentifier: string,
-    action: string,
-  ) => {
-    const existsInList = !!selectedRights.find(
-      (s) => s.serviceIdentifier === serviceIdentifier && s.action === action,
-    );
+  const handleToggleChecked = (serviceIdentifier: string, action: string) => {
+    const serviceStateCopy = [...serviceStates];
 
-    let newList: DelegationResourceDTO[] = [...selectedRights];
-    if (existsInList) {
-      newList = selectedRights.filter(
-        (s) => s.serviceIdentifier !== serviceIdentifier || s.action !== action,
-      );
-    } else {
-      newList.push({ serviceIdentifier, action, serviceTitle, serviceOwner });
+    for (const service of serviceStateCopy) {
+      if (service.serviceIdentifier === serviceIdentifier) {
+        for (const right of service.rights) {
+          if (right.action === action) {
+            right.checked = !right.checked;
+          }
+          break;
+        }
+        break;
+      }
     }
 
-    setSelectedRights(newList);
+    setServiceStates(serviceStateCopy);
   };
 
   const sortedServiceResources = [...delegableServices]?.sort((a, b) => {

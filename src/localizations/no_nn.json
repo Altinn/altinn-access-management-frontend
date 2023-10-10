@@ -32,6 +32,8 @@
     "read": "Lesa",
     "write": "Skriva",
     "sign": "Signera",
+    "delete": "Slett",
+    "instantiate": "Instansier",
     "access": "Tilgang til heile tenesta",
     "failed": "Feila",
     "failed_lowercase": "feila",

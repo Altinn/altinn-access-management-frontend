@@ -50,14 +50,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"{partyId}/rights/delegation/userdelegationcheck";
+                string endpointUrl = $"{partyId}/rights/delegation/delegationcheck";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
+                    // TODO: TEEEEEEEST !!!!!!!!!!!!!!!!!!
+                    string responseContent = "[{\"rightKey\":\"oedresource_for_k6test:read\",\"resource\":[{\"id\":\"urn:altinn:resource\",\"value\":\"oedresource_for_k6test\"}],\"action\":\"read\",\"status\":\"Delegable\",\"details\":[{\"code\":\"RoleAccess\",\"description\":\"Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:REGNA, urn:altinn:rolecode:DAGL. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.\",\"parameters\":{\"RoleRequirementsMatches\":\"urn:altinn:rolecode:REGNA, urn:altinn:rolecode:DAGL\"}}]},{\"rightKey\":\"oedresource_for_k6test:write\",\"resource\":[{\"id\":\"urn:altinn:resource\",\"value\":\"oedresource_for_k6test\"}],\"action\":\"write\",\"status\":\"Delegable\",\"details\":[{\"code\":\"RoleAccess\",\"description\":\"Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:REGNA, urn:altinn:rolecode:DAGL. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.\",\"parameters\":{\"RoleRequirementsMatches\":\"urn:altinn:rolecode:REGNA, urn:altinn:rolecode:DAGL\"}}]},{\"rightKey\":\"oedresource_for_k6test:fire_rocket\",\"resource\":[{\"id\":\"urn:altinn:resource\",\"value\":\"oedresource_for_k6test\"}],\"action\":\"fire_rocket\",\"status\":\"Delegable\",\"details\":[{\"code\":\"RoleAccess\",\"description\":\"Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:REGNA, urn:altinn:rolecode:DAGL. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.\",\"parameters\":{\"RoleRequirementsMatches\":\"urn:altinn:rolecode:REGNA, urn:altinn:rolecode:DAGL\"}}]}]"; // = await response.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, _serializerOptions);
                 }
                 else
