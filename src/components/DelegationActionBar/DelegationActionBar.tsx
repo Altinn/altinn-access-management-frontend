@@ -62,14 +62,13 @@ export const DelegationActionBar = ({
       title={<p className={classes.actionBarHeaderTitle}>{title}</p>}
       subtitle={subtitle}
       actions={actions}
-      size='large'
+      size='medium'
       color={color}
       open={open}
       onClick={() => {
         setOpen(!open);
       }}
     >
-      {' '}
       <div className={classes.newApiAccordionContent}>
         {scopeList.length > 0 && (
           <div>

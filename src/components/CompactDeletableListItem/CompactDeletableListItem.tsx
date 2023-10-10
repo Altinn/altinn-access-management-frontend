@@ -39,8 +39,8 @@ export const CompactDeletableListItem = ({
           {startIcon && (
             <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
               <SvgIcon
-                width={14}
-                height={14}
+                width={20}
+                height={20}
                 svgIconComponent={startIcon}
                 className={classes.listItemIcon}
               />
@@ -62,7 +62,7 @@ export const CompactDeletableListItem = ({
                 variant={'quiet'}
                 color={'danger'}
                 icon={<MinusCircleIcon />}
-                size='large'
+                size='medium'
                 onClick={removeCallback}
                 aria-label={
                   t('common.remove') +
