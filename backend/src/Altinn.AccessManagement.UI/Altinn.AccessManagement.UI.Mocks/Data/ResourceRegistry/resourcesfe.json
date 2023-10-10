@@ -1,719 +1,6 @@
 [
   {
     "title": "Automation Regression",
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-
-    "identifier": "appid-119",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "8f08210a-d792-48f5-9e27-0f029e41111e",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:119",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "identifier": "appid-122",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "da7650a5-d893-404a-9bfe-28d0904fe896",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:122",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "identifier": "appid-123",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "3cb27d7b-9e2c-475c-ba91-e1fc359bc717",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:123",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-120",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "a6574ca8-5836-46b0-91f0-8ebb0ff214cf",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:120",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-124",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "fb1bc117-333d-4dea-9400-6bd3e1ce07dd",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:124",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "identifier": "appid-126",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "4f9b0f81-74a6-4b76-8ce5-0e1fe153c872",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:126",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-127",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "38da61a2-4cd8-4dac-9d6b-8205f91661c4",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:127",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-125",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "c8e7b227-3d62-4682-81a2-f2865f0eb91f",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:125",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-128",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "74f5dcb3-eee0-4a3b-9499-93fc2148a513",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:128",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-129",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "d0fc231c-aaa3-4e6a-bece-4e283e6e2f6f",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:129",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-130",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "3fc8a856-d5b1-4861-ace0-6b3fd5ffd916",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:130",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-132",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "923bdaaf-0a5e-4b63-908b-4a5ecf75e37b",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:132",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-133",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "f7670967-0428-4b90-86a2-2ac637d0ec2a",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:133",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
-    "sector": null,
-    "status": null,
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-134",
-
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-    "resourceReferences": [
-      {
-        "reference": "d812fd77-7a43-4332-a782-375b37aff1eb",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:134",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076"
-  },
-  {
-    "title": "Automation Regression",
     "sector": null,
     "status": null,
     "contactPoints": [
@@ -761,6 +48,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-136"
+      }
+    ],
     "resourceOwnerName": "Skatteetaten",
     "resourceOwnerOrgNumber": "974761076"
   },
@@ -781,7 +74,7 @@
     "keywords": null,
 
     "identifier": "appid-400",
-    
+
     "description": "Tulleregisteret",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -809,6 +102,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-400"
+      }
+    ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgNumber": "130000000"
   },
@@ -829,7 +128,7 @@
     "keywords": null,
 
     "identifier": "appid-401",
-    
+
     "description": "Blomsterhagen",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -862,6 +161,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-401"
+      }
+    ],
     "resourceOwnerName": "BLOMSTERFINN",
     "resourceOwnerOrgNumber": "130000000"
   },
@@ -882,7 +187,7 @@
     "keywords": null,
 
     "identifier": "appid-402",
-    
+
     "description": "Det magiske klesskapet",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -915,6 +220,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-402"
+      }
+    ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgNumber": "777777777"
   },
@@ -935,7 +246,7 @@
     "keywords": null,
 
     "identifier": "appid-403",
-    
+
     "description": "Snarveien",
     "resourceType": "MaskinportenSchema",
     "thematicArea": null,
@@ -963,6 +274,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-403"
+      }
+    ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgNumber": "130000000"
   },
@@ -983,7 +300,7 @@
     "keywords": null,
 
     "identifier": "appid-502",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Det magiske klesskapet",
@@ -992,6 +309,12 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til Narnia.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-502"
+      }
+    ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgNumber": "777777777"
   },
@@ -1012,7 +335,7 @@
     "keywords": null,
 
     "identifier": "appid-503",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Snarveien som lenketjeneste",
@@ -1021,6 +344,12 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til snarveier.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-503"
+      }
+    ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgNumber": "130000000"
   },
@@ -1040,8 +369,8 @@
     "isPartOf": null,
     "keywords": null,
 
-    "identifier": "appid-504",
-    
+    "identifier": "app_ttd_a3-app",
+
     "visible": true,
     "delegable": true,
     "description": "En Altinn 3 app",
@@ -1054,6 +383,16 @@
         "referenceSource": "Altinn3",
         "reference": "ttd/a3-app",
         "referenceType": "ApplicationId"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -1075,8 +414,8 @@
     "isPartOf": null,
     "keywords": null,
 
-    "identifier": "appid-505",
-    
+    "identifier": "se_3225_1596",
+
     "visible": true,
     "delegable": true,
     "description": "Et Altinn 2 skjema",
@@ -1094,6 +433,16 @@
         "referenceSource": "Altinn2",
         "reference": "1596",
         "referenceType": "ServiceEditionCode"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -1115,8 +464,8 @@
     "isPartOf": null,
     "keywords": null,
 
-    "identifier": "appid-506",
-    
+    "identifier": "app_ttd_a3-app2",
+
     "visible": true,
     "delegable": true,
     "description": "En Altinn 3 app",
@@ -1129,6 +478,16 @@
         "referenceSource": "Altinn3",
         "reference": "ttd/a3-app2",
         "referenceType": "ApplicationId"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app2"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -1150,8 +509,8 @@
     "isPartOf": null,
     "keywords": null,
 
-    "identifier": "appid-507",
-    
+    "identifier": "se_322a_159b",
+
     "visible": true,
     "delegable": true,
     "description": "Et Altinn 2 skjema",
@@ -1169,6 +528,16 @@
         "referenceSource": "Altinn2",
         "reference": "159b",
         "referenceType": "ServiceEditionCode"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "322a"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "159b"
       }
     ],
     "resourceOwnerName": "Testdepartementet",
@@ -1191,7 +560,7 @@
     "keywords": null,
 
     "identifier": "appid-508",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Brannbilen - det er bare én ja",
@@ -1200,6 +569,12 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til brannbilen.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-508"
+      }
+    ],
     "resourceOwnerName": "Brannvesenet",
     "resourceOwnerOrgNumber": "110110110"
   },
@@ -1220,7 +595,7 @@
     "keywords": null,
 
     "identifier": "appid-509",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
@@ -1229,6 +604,12 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til kaffemaskinen.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-509"
+      }
+    ],
     "resourceOwnerName": "ØkernPortal",
     "resourceOwnerOrgNumber": "904111111"
   },
@@ -1249,7 +630,7 @@
     "keywords": null,
 
     "identifier": "appid-510",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1258,6 +639,12 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgNumber": "991825827"
   },
@@ -1278,7 +665,7 @@
     "keywords": null,
 
     "identifier": "appid-511",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1287,6 +674,12 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-511"
+      }
+    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgNumber": "991825827"
   },
@@ -1307,7 +700,7 @@
     "keywords": null,
 
     "identifier": "appid-512",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1316,6 +709,12 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-512"
+      }
+    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgNumber": "991825827"
   },
@@ -1336,7 +735,7 @@
     "keywords": null,
 
     "identifier": "appid-513",
-    
+
     "visible": true,
     "delegable": true,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
@@ -1345,6 +744,12 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-513"
+      }
+    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
     "resourceOwnerOrgNumber": "991825827"
   }

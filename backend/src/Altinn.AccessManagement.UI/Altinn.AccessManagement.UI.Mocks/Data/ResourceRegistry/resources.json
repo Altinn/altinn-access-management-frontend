@@ -13,972 +13,6 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "identifier": "appid-119",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "8f08210a-d792-48f5-9e27-0f029e41111e",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:119",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-122",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "da7650a5-d893-404a-9bfe-28d0904fe896",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:122",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-123",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "3cb27d7b-9e2c-475c-ba91-e1fc359bc717",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:123",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-120",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "a6574ca8-5836-46b0-91f0-8ebb0ff214cf",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:120",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-124",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "fb1bc117-333d-4dea-9400-6bd3e1ce07dd",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:124",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-126",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "4f9b0f81-74a6-4b76-8ce5-0e1fe153c872",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:126",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-127",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "38da61a2-4cd8-4dac-9d6b-8205f91661c4",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:127",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-125",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "c8e7b227-3d62-4682-81a2-f2865f0eb91f",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:125",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-128",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "74f5dcb3-eee0-4a3b-9499-93fc2148a513",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:128",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-129",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "d0fc231c-aaa3-4e6a-bece-4e283e6e2f6f",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:129",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-130",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "3fc8a856-d5b1-4861-ace0-6b3fd5ffd916",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:130",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-132",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "923bdaaf-0a5e-4b63-908b-4a5ecf75e37b",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:132",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-133",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "f7670967-0428-4b90-86a2-2ac637d0ec2a",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:133",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
-    "identifier": "appid-134",
-    "contactPoints": [
-      {
-        "category": "Some category",
-        "email": "email@someemaildigdir.no",
-        "telephone": "12345678",
-        "contactPage": "Some page (webpage maybe?)"
-      }
-    ],
-    "description": null,
-    "resourceType": "MaskinportenSchema",
-    "thematicArea": null,
-    "isPublicService": true,
-    "rightDescription": {
-      "en": "Allows you to test maskinporten changes as part of automation testing",
-      "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
-      "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
-    },
-    "resourceReferences": [
-      {
-        "reference": "d812fd77-7a43-4332-a782-375b37aff1eb",
-        "referenceType": "DelegationSchemeId",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.write",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "altinn:test/theworld.admin",
-        "referenceType": "MaskinportenScope",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "AppId:134",
-        "referenceType": "ServiceCode",
-        "referenceSource": "Altinn2"
-      },
-      {
-        "reference": "1",
-        "referenceType": "ServiceEditionCode",
-        "referenceSource": "Altinn2"
-      }
-    ],
-    "hasCompetentAuthority": {
-      "orgcode": "SKD",
-      "organization": "974761076",
-      "name": {
-        "en": "Skatteetaten",
-        "nb": "Skatteetaten",
-        "nn": "Skatteetaten"
-      }
-    }
-  },
-  {
-    "title": {
-      "en": "Automation Regression",
-      "nb": "Automation Regression",
-      "nn": "Automation Regression"
-    },
-    "sector": null,
-    "status": null,
-    "limitedByRRR": false,
-    "SelfIdentifiedUserEnabled": false,
-    "EnterpriseUserEnabled": false,
-    "homepage": null,
-    "isPartOf": null,
-    "keywords": null,
     "identifier": "appid-136",
     "contactPoints": [
       {
@@ -1022,6 +56,12 @@
         "reference": "1",
         "referenceType": "ServiceEditionCode",
         "referenceSource": "Altinn2"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-136"
       }
     ],
     "hasCompetentAuthority": {
@@ -1090,6 +130,12 @@
         "reference": "1",
         "referenceType": "ServiceEditionCode",
         "referenceSource": "Altinn2"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-400"
       }
     ],
     "hasCompetentAuthority": {
@@ -1165,6 +211,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-401"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "BFINN",
       "organization": "994598759",
@@ -1238,6 +290,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-402"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "NRNA",
       "organization": "777777777",
@@ -1306,6 +364,12 @@
         "referenceSource": "Altinn2"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-403"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "PAA",
       "organization": "130000000",
@@ -1355,6 +419,12 @@
       "nn": "Gir tilgang til Narnia."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-502"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "NRNA",
       "organization": "777777777",
@@ -1404,6 +474,12 @@
       "nn": "Gir tilgang til snarveger."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-503"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "PAA",
       "organization": "130000000",
@@ -1428,7 +504,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "identifier": "appid-504",
+    "identifier": "app_ttd_a3-app",
     "contactPoints": [
       {
         "category": "Some category",
@@ -1459,6 +535,16 @@
         "referenceType": "ApplicationId"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "TTD",
       "organization": "123456789",
@@ -1483,7 +569,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "identifier": "appid-505",
+    "identifier": "se_3225_1596",
     "contactPoints": [
       {
         "category": "Some category",
@@ -1519,6 +605,16 @@
         "referenceType": "ServiceEditionCode"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "TTD",
       "organization": "123456789",
@@ -1543,7 +639,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "identifier": "appid-506",
+    "identifier": "app_ttd_a3-app2",
     "contactPoints": [
       {
         "category": "Some category",
@@ -1574,6 +670,16 @@
         "referenceType": "ApplicationId"
       }
     ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app2"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "TTD",
       "organization": "123456789",
@@ -1598,7 +704,7 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": null,
-    "identifier": "appid-507",
+    "identifier": "se_322a_159b",
     "contactPoints": [
       {
         "category": "Some category",
@@ -1632,6 +738,16 @@
         "referenceSource": "Altinn2",
         "reference": "159b",
         "referenceType": "ServiceEditionCode"
+      }
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "322a"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "159b"
       }
     ],
     "hasCompetentAuthority": {
@@ -1683,6 +799,12 @@
       "nn": "Gir tilgang til brannbilen."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-508"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "FD",
       "organization": "110110110",
@@ -1732,6 +854,12 @@
       "nn": "Gir tilgang til kaffemaskinen."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-509"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "OP",
       "organization": "904111111",
@@ -1781,6 +909,12 @@
       "nn": "Her er en beskrivelse."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "DIGDIR",
       "organization": "991825827",
@@ -1830,6 +964,12 @@
       "nn": "Her er en beskrivelse."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-511"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "DIGDIR",
       "organization": "991825827",
@@ -1879,6 +1019,12 @@
       "nn": "Her er en beskrivelse."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-512"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "DIGDIR",
       "organization": "991825827",
@@ -1928,6 +1074,12 @@
       "nn": "Her er en beskrivelse."
     },
     "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-513"
+      }
+    ],
     "hasCompetentAuthority": {
       "orgcode": "DIGDIR",
       "organization": "991825827",
