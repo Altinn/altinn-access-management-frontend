@@ -16,7 +16,7 @@
       "rightKey": "ttd-somereasourceid/read",
       "resource": [
         {
-          "id": "urn:altinn:applicationid",
+          "id": "urn:altinn:app",
           "value": "a3-app2"
         },
         {
@@ -45,7 +45,7 @@
       "rightKey": "ttd-somereasourceid/write",
       "resource": [
         {
-          "id": "urn:altinn:applicationid",
+          "id": "urn:altinn:app",
           "value": "a3-app2"
         },
         {
