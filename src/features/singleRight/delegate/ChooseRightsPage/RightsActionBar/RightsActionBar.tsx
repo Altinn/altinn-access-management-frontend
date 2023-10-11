@@ -10,10 +10,7 @@ import { ActionBar, type ActionBarProps } from '@/components';
 import classes from './RightsActionBar.module.css';
 
 export interface RightsActionBarProps
-  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
-  /** Indicates the status of the ActionBar */
-  status: 'Delegable' | 'PartiallyDelegable';
-
+  extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children' | 'color'> {
   /** The callback function to be called when the remove button is pressed. */
   onRemoveClick?: () => void;
 
@@ -28,22 +25,13 @@ export const RightsActionBar = ({
   subtitle,
   title,
   children,
-  status,
+  color,
   onRemoveClick,
   initialOpen,
   compact = false,
 }: RightsActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(initialOpen);
-
-  const color = useMemo(() => {
-    switch (status) {
-      case 'Delegable':
-        return 'success';
-      case 'PartiallyDelegable':
-        return 'warning';
-    }
-  }, [status]);
 
   const removeButton = (
     <Button
