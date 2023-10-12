@@ -64,7 +64,7 @@ export const ChooseServicePage = () => {
   return (
     <PageContainer>
       <Page
-        color='light'
+        color='dark'
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.request_single_rights')}</PageHeader>
