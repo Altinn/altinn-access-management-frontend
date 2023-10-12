@@ -35,7 +35,8 @@
     "access": "Access to the whole service",
     "failed": "Failed",
     "failed_lowercase": "failed",
-    "finished": "Finished"
+    "finished": "Finished",
+    "an_error_has_occured": "An error occured"
   },
   "profile": {
     "received": "Received",

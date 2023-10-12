@@ -35,7 +35,8 @@
     "access": "Tilgang til hele tjenesten",
     "failed": "Feilet",
     "failed_lowercase": "feilet",
-    "finished": "Ferdig"
+    "finished": "Ferdig",
+    "an_error_has_occured": "En feil har skjedd"
   },
   "profile": {
     "received": "Mottatte",

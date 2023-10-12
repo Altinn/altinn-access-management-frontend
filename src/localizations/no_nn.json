@@ -35,7 +35,8 @@
     "access": "Tilgang til heile tenesta",
     "failed": "Feila",
     "failed_lowercase": "feila",
-    "finished": "Ferdig"
+    "finished": "Ferdig",
+    "an_error_has_occured": "Ein feil har skjedd"
   },
   "profile": {
     "received": "Mottekne",

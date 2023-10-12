@@ -4,7 +4,15 @@ import * as React from 'react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Spinner } from '@digdir/design-system-react';
+import {
+  Alert,
+  Button,
+  Heading,
+  Ingress,
+  List,
+  Paragraph,
+  Spinner,
+} from '@digdir/design-system-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -67,29 +75,39 @@ export const ConfirmationPage = () => {
     }
   };
 
-  const delegableApiList = chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => {
+  const delegableApiList = () => {
     return (
-      <CompactDeletableListItem
-        key={index}
-        startIcon={<CogIcon />}
-        removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
-        leftText={api.apiName}
-        middleText={api.orgName}
-      ></CompactDeletableListItem>
+      <div className={classes.listContainer}>
+        <List borderStyle='dashed'>
+          {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
+            <CompactDeletableListItem
+              key={index}
+              startIcon={<CogIcon />}
+              removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
+              leftText={api.apiName}
+              middleText={api.orgName}
+            ></CompactDeletableListItem>
+          ))}
+        </List>
+      </div>
     );
-  });
+  };
 
-  const delegableOrgList = chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => {
+  const delegableOrgList = () => {
     return (
-      <CompactDeletableListItem
-        key={index}
-        startIcon={<Buldings3Icon />}
-        removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        leftText={org.orgName}
-        middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
-      ></CompactDeletableListItem>
+      <List borderStyle='dashed'>
+        {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
+          <CompactDeletableListItem
+            key={index}
+            startIcon={<Buldings3Icon />}
+            removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
+            leftText={org.orgName}
+            middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          ></CompactDeletableListItem>
+        ))}
+      </List>
     );
-  });
+  };
 
   const showTopSection = () => {
     return chosenApis !== null && chosenApis !== undefined && chosenApis?.length > 0;
@@ -103,6 +121,84 @@ export const ConfirmationPage = () => {
     return !showTopSection() && !showBottomSection();
   };
 
+  const errorAlert = () => {
+    return (
+      <Alert severity='danger'>
+        <Heading
+          size='small'
+          level={2}
+        >
+          {t('common.an_error_has_occured')}
+        </Heading>
+        <Ingress>{t('api_delegation.delegations_not_registered')}</Ingress>
+        <div className={classes.restartButton}>
+          <Button
+            variant='outline'
+            color='danger'
+            onClick={() => {
+              navigate(
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
+              );
+            }}
+          >
+            {t('common.restart')}
+          </Button>
+        </div>
+      </Alert>
+    );
+  };
+
+  const delegationContent = () => {
+    return (
+      <div>
+        <Heading
+          size='medium'
+          level={2}
+        >
+          {t('api_delegation.confirmation_page_content_top_text')}
+        </Heading>
+        {delegableApiList()}
+        <Heading
+          size='medium'
+          level={2}
+        >
+          {t('api_delegation.confirmation_page_content_second_text')}
+        </Heading>
+        {delegableOrgList()}
+        <Paragraph size='large'>
+          {t('api_delegation.confirmation_page_content_bottom_text')}
+        </Paragraph>
+        <GroupElements>
+          <Button
+            variant={'outline'}
+            fullWidth={isSm}
+            onClick={() =>
+              navigate(
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
+              )
+            }
+          >
+            {t('api_delegation.previous')}
+          </Button>
+          <Button
+            onClick={handleConfirm}
+            color={'success'}
+            fullWidth={isSm}
+          >
+            {isProcessingDelegations && (
+              <Spinner
+                title={String(t('common.loading'))}
+                size='small'
+                variant='interaction'
+              />
+            )}
+            {t('common.confirm')}
+          </Button>
+        </GroupElements>
+      </div>
+    );
+  };
+
   return (
     <div>
       <PageContainer>
@@ -112,98 +208,10 @@ export const ConfirmationPage = () => {
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
-            {showErrorPanel() ? (
-              <Alert
-                title={t('common.error')}
-                severity='danger'
-              >
-                <div>
-                  <p>{t('api_delegation.delegations_not_registered')}</p>
-                  <div className={classes.restartButton}>
-                    <Button
-                      variant='outline'
-                      color='danger'
-                      onClick={() => {
-                        navigate(
-                          '/' +
-                            ApiDelegationPath.OfferedApiDelegations +
-                            '/' +
-                            ApiDelegationPath.ChooseOrg,
-                        );
-                      }}
-                    >
-                      {t('common.restart')}
-                    </Button>
-                  </div>
-                </div>
-              </Alert>
-            ) : (
-              <div>
-                <h2 className={classes.listText}>
-                  {t('api_delegation.confirmation_page_content_top_text')}
-                </h2>
-                {delegableApiList}
-                {delegableOrgList}
-                <GroupElements>
-                  <Button
-                    variant={'outline'}
-                    fullWidth={isSm}
-                    onClick={() =>
-                      navigate(
-                        '/' +
-                          ApiDelegationPath.OfferedApiDelegations +
-                          '/' +
-                          ApiDelegationPath.ChooseApi,
-                      )
-                    }
-                  >
-                    {t('api_delegation.previous')}
-                  </Button>
-                  <Button
-                    onClick={handleConfirm}
-                    color={'success'}
-                    fullWidth={isSm}
-                  >
-                    {isProcessingDelegations && (
-                      <Spinner
-                        title={String(t('common.loading'))}
-                        size='small'
-                        variant='interaction'
-                      />
-                    )}
-                    {t('common.confirm')}
-                  </Button>
-                </GroupElements>
-              </div>
-            )}
+            {showErrorPanel() ? <>{errorAlert()}</> : <>{delegationContent()}</>}
           </PageContent>
         </Page>
       </PageContainer>
-      <Page
-        color={'dark'}
-        size={isSm ? 'small' : 'medium'}
-      >
-        <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-        <PageContainer>
-          <SummaryPage
-            delegableApis={chosenApis}
-            delegableOrgs={chosenOrgs}
-            restartProcessPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
-            }
-            pageHeaderText={t('api_delegation.give_access_to_new_api')}
-            topListText={String(t('api_delegation.confirmation_page_content_top_text'))}
-            bottomListText={String(t('api_delegation.confirmation_page_content_second_text'))}
-            bottomText={String(t('api_delegation.confirmation_page_content_bottom_text'))}
-            confirmationButtonDisabled={
-              isProcessingDelegations || chosenApis.length < 1 || chosenOrgs.length < 1
-            }
-            confirmationButtonLoading={isProcessingDelegations}
-            confirmationButtonClick={handleConfirm}
-            headerIcon={<ApiIcon />}
-          />
-        </PageContainer>
-      </Page>
     </div>
   );
 };
