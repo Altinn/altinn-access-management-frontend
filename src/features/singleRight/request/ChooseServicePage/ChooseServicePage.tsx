@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress } from '@digdir/design-system-react';
+import { Button, Ingress, Popover } from '@digdir/design-system-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
@@ -84,14 +84,27 @@ export const ChooseServicePage = () => {
             onUndo={onRemove}
           />
           <GroupElements>
-            <Button
-              variant='quiet'
-              color='danger'
-              fullWidth={isSm}
-              onClick={onCancel}
-            >
-              {t('common.cancel')}
-            </Button>
+            {delegableChosenServices.length > 0 ? (
+              <Popover
+                trigger={
+                  <Button
+                    variant='quiet'
+                    color='danger'
+                    fullWidth={isSm}
+                    onClick={onCancel}
+                  ></Button>
+                }
+              ></Popover>
+            ) : (
+              <Button
+                variant='quiet'
+                color='primary'
+                fullWidth={isSm}
+                onClick={onCancel}
+              >
+                {t('common.cancel')}
+              </Button>
+            )}
             <Button
               variant='filled'
               color='primary'

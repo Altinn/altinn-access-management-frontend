@@ -1,4 +1,4 @@
-import { Button, Ingress, Paragraph } from '@digdir/design-system-react';
+import { Button, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +40,7 @@ export const ReceiptPage = () => {
           <GroupElements>
             <Button
               color={'success'}
-              fullWidth={isSm}
+              size='medium'
             >
               {t('common.finished')}
             </Button>
@@ -51,7 +51,7 @@ export const ReceiptPage = () => {
                 );
               }}
               color={'primary'}
-              fullWidth={isSm}
+              size='medium'
             >
               {t('single_rights.give_more_rights')}
             </Button>

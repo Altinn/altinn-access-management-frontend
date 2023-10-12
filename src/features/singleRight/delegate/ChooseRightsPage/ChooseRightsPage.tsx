@@ -273,18 +273,6 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <GroupElements>
-        <Button
-          variant='outline'
-          color='primary'
-          fullWidth={isSm}
-          onClick={() => {
-            navigate(
-              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
-            );
-          }}
-        >
-          {t('common.previous')}
-        </Button>
         <Popover
           placement={'top'}
           open={popoverOpen}
@@ -293,11 +281,11 @@ export const ChooseRightsPage = () => {
             <Button
               variant='filled'
               color='primary'
-              fullWidth={isSm}
+              size='medium'
               disabled={selectedRights.length < 1}
               onClick={() => setPopoverOpen(!popoverOpen)}
             >
-              {t('common.complete')}
+              {t('common.finish_delegation')}
             </Button>
           }
           variant={'info'}
@@ -315,6 +303,18 @@ export const ChooseRightsPage = () => {
             </Button>
           </div>
         </Popover>
+        <Button
+          variant='outline'
+          color='primary'
+          size='medium'
+          onClick={() => {
+            navigate(
+              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
+            );
+          }}
+        >
+          {t('single_rights.add_more_services')}
+        </Button>
       </GroupElements>
     );
   };
