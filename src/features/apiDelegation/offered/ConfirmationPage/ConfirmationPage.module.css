@@ -1,0 +1,57 @@
+@media only screen and (max-width: 768px) {
+  .receiptMainButton {
+    margin-top: 40px;
+  }
+
+  .listText {
+    font-size: 20px;
+  }
+
+  .bottomListText {
+    font-size: 20px;
+    margin-top: 2.5rem;
+  }
+
+  .infoText {
+    font-size: 16px;
+  }
+}
+
+.receiptMainButton {
+  margin-top: 40px;
+}
+
+.navButtonContainer {
+  margin-top: 8rem;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 70px;
+}
+
+.previousButton {
+  display: flex;
+  margin-right: 3rem;
+}
+
+.confirmButton {
+  display: flex;
+}
+
+.infoText {
+  margin-top: 20px;
+  font-weight: 400;
+}
+
+.listText {
+  font-weight: 500;
+}
+
+.bottomListText {
+  font-weight: 500;
+  margin-top: 2.5rem;
+}
+
+.restartButton {
+  display: flex;
+  justify-content: center;
+}
