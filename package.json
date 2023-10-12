@@ -40,7 +40,7 @@
     "typescript-plugin-css-modules": "^5.0.0"
   },
   "devDependencies": {
-    "@digdir/design-system-tokens": "0.7.0",
+    "@digdir/design-system-tokens": "0.8.0",
     "@testing-library/cypress": "^10.0.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
