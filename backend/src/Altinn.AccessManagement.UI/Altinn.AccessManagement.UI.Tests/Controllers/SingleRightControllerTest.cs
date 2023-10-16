@@ -12,10 +12,10 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="SingleRightCotrollerTest"></see>
+    ///     Test class for <see cref="SingleRightControllerTest"></see>
     /// </summary>
-    [Collection("SingleRightCotrollerTest")]
-    public class SingleRightCotrollerTest : IClassFixture<CustomWebApplicationFactory<SingleRightController>>
+    [Collection("SingleRightControllerTest")]
+    public class SingleRightControllerTest : IClassFixture<CustomWebApplicationFactory<SingleRightController>>
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<SingleRightController> _factory;
@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public SingleRightCotrollerTest(CustomWebApplicationFactory<SingleRightController> factory)
+        public SingleRightControllerTest(CustomWebApplicationFactory<SingleRightController> factory)
         {
             _factory = factory;
             _client = SetupUtils.GetSingleRightTestClient(factory);

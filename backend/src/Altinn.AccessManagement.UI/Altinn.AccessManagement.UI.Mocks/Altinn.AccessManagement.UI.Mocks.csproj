@@ -7,21 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Data\**">
+    <None Include="Data\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\3225.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\322a.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\a3-app.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\a3-app2.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\appid-502.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\appid-503.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\appid-508.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\appid-509.json" />
-    <None Remove="Data\SingleRight\DelegationAccessCheckResponse\appid-510.json" />
+    </None>
   </ItemGroup>
 
   <ItemGroup>
