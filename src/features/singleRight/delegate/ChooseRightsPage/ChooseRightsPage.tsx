@@ -2,15 +2,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
-import {
-  Alert,
-  Button,
-  Chip,
-  Heading,
-  Ingress,
-  Paragraph,
-  Popover,
-} from '@digdir/design-system-react';
+import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +18,6 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
 import { useMediaQuery } from '@/resources/hooks';
 import { removeServiceResource, delegate } from '@/rtk/features/singleRights/singleRightsSlice';
-import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import {
   type DelegationInputDto,
   IdValuePair,
@@ -35,6 +26,8 @@ import {
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
+import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBar';
+import { type Right } from './RightsActionBarContent/RightsActionBar';
 import classes from './ChooseRightsPage.module.css';
 
 type Service = {
@@ -48,18 +41,11 @@ type Service = {
   rights: Right[];
 };
 
-type Right = {
-  action: string;
-  delegable: boolean;
-  checked: boolean;
-  resourceReference: IdValuePair[];
-};
-
 export const ChooseRightsPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [serviceStates, setServiceStates] = useState<Service[]>([]);
+  const [chosenServices, setChosenServices] = useState<Service[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [delegationCount, setDelegationCount] = useState(0);
   const [showProgressModal, setShowProgressModal] = useState(false);
@@ -72,11 +58,9 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
 
-  // TO DO:
-  // Ask Albert if should move Rights type and logic to RightsActionBar
-
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
+
     const sorted = delegable.sort((a, b) => {
       const isPartiallyDelegableA = a.status === 'PartiallyDelegable';
       const isPartiallyDelegableB = b.status === 'PartiallyDelegable';
@@ -114,7 +98,7 @@ export const ChooseRightsPage = () => {
 
   useEffect(() => {
     const initialized: Service[] = initializeDelegableServices();
-    setServiceStates(initialized);
+    setChosenServices(initialized);
     setDelegationCount(initialized.length);
   }, []);
 
@@ -123,24 +107,33 @@ export const ChooseRightsPage = () => {
       navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
   }, [processedDelegations]);
 
-  const onRemove = (identifier: string | undefined) => {
-    const newList = serviceStates.filter((s) => s.serviceIdentifier !== identifier);
+  const updateDelegationCount = (services: Service[]) => {
+    const numServicesToDelegate = services.filter(
+      (s) => s.rights.filter((r) => r.checked).length > 0,
+    ).length;
 
-    setServiceStates(newList);
+    setDelegationCount(numServicesToDelegate);
+  };
+
+  const onRemove = (identifier: string | undefined) => {
+    const newList = chosenServices.filter((s) => s.serviceIdentifier !== identifier);
+
+    setChosenServices(newList);
     setDelegationCount(newList.length);
 
     void dispatch(removeServiceResource(identifier));
   };
 
-  const handleToggleChecked = (serviceIdentifier: string, action: string) => {
-    const serviceStateCopy = [...serviceStates];
+  const toggleRightChecked = (serviceIdentifier: string, action: string) => {
+    const serviceStateCopy = [...chosenServices];
 
     for (const service of serviceStateCopy) {
       if (service.serviceIdentifier === serviceIdentifier) {
         for (const right of service.rights) {
           if (right.action === action) {
             right.checked = !right.checked;
-            setServiceStates(serviceStateCopy);
+            setChosenServices(serviceStateCopy);
+            updateDelegationCount(serviceStateCopy);
             return;
           }
         }
@@ -148,125 +141,28 @@ export const ChooseRightsPage = () => {
     }
   };
 
-  const postDelegations = () => {
-    console.log('serviceStates', serviceStates);
-
-    serviceStates.map((service) => {
-      const rightsToDelegate = service.rights
-        .filter((right) => right.checked)
-        .map((right) => new DelegationRequestDto(right.resourceReference, right.action));
-
-      if (rightsToDelegate.length > 0) {
-        const delegationInput: DelegationInputDto = {
-          // TODO: make adjustments to codeline below when we get GUID from altinn2
-          To: [new IdValuePair('urn:altinn:ssn', '50019992')],
-          Rights: rightsToDelegate,
-          serviceDto: new ServiceDto(service.title, service.serviceOwner),
-        };
-
-        console.log('delegation', delegationInput);
-        return dispatch(delegate(delegationInput));
-      } else {
-        return setDelegationCount(delegationCount - 1);
-      }
-    });
-  };
-
-  const onConfirm = () => {
-    setShowProgressModal(true);
-    setPopoverOpen(false);
-    void postDelegations();
-  };
-
-  const chooseRightsActionBars = () => {
-    // Delegable rights
-    return serviceStates?.map((service, serviceIndex) => {
-      const serviceResourceContent = (
-        <div className={classes.serviceResourceContent}>
-          <Paragraph>{service.description}</Paragraph>
-          <Paragraph>{service.rightDescription}</Paragraph>
-          <Paragraph>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
-          <Heading
-            size={'xxsmall'}
-            level={5}
-          >
-            {t('single_rights.choose_rights_chip_text')}
-          </Heading>
-          <div className={classes.chipContainer}>
-            {service.rights
-              .filter((right) => right.delegable === true)
-              .map((right, index: number) => {
-                return (
-                  <div key={index}>
-                    <Chip.Toggle
-                      checkmark
-                      selected={right.checked}
-                      onClick={() => {
-                        handleToggleChecked(service.serviceIdentifier, right.action);
-                      }}
-                    >
-                      {t(`common.${right.action}`)}
-                    </Chip.Toggle>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      );
-
-      // Non-delegable rights
-      const alertContainer = service.status === 'PartiallyDelegable' && (
-        <div className={classes.alertContainer}>
-          <Alert severity='warning'>
-            <Heading
-              size={'xsmall'}
-              level={4}
-              spacing
-            >
-              {t('single_rights.alert_partially_delegable_header')}
-            </Heading>
-            <Paragraph spacing>
-              {t(`${getSingleRightsErrorCodeTextKey(service.errorCode)}`)}
-            </Paragraph>
-            <Heading
-              size={'xxsmall'}
-              level={5}
-            >
-              {t('single_rights.you_cant_delegate_these_rights')}
-            </Heading>
-            <div className={classes.chipContainer}>
-              {service.rights
-                .filter((r) => r.delegable === false)
-                .map((r, index: number) => {
-                  return (
-                    <div key={index}>
-                      <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>
-                    </div>
-                  );
-                })}
-            </div>
-          </Alert>
-        </div>
-      );
-
-      return (
-        <RightsActionBar
-          key={service.serviceIdentifier}
-          title={service.title}
-          subtitle={service.serviceOwner}
-          color={service.status === 'Delegable' ? 'success' : 'warning'}
-          onRemoveClick={() => {
-            onRemove(service.serviceIdentifier);
-          }}
-          compact={isSm}
-          initialOpen={serviceIndex === 0}
-        >
-          {serviceResourceContent}
-          {alertContainer}
-        </RightsActionBar>
-      );
-    });
-  };
+  const chooseRightsActionBars = chosenServices?.map((service, serviceIndex) => (
+    <RightsActionBar
+      key={service.serviceIdentifier}
+      title={service.title}
+      subtitle={service.serviceOwner}
+      color={service.status === 'Delegable' ? 'success' : 'warning'}
+      onRemoveClick={() => {
+        onRemove(service.serviceIdentifier);
+      }}
+      compact={isSm}
+      defaultOpen={serviceIndex === 0}
+    >
+      <RightsActionBarContent
+        toggleRight={toggleRightChecked}
+        rights={service.rights}
+        serviceIdentifier={service.serviceIdentifier}
+        serviceDescription={service.description}
+        rightDescription={service.rightDescription}
+        errorCode={service.errorCode}
+      />
+    </RightsActionBar>
+  ));
 
   const navigationButtons = () => {
     return (
@@ -292,7 +188,7 @@ export const ChooseRightsPage = () => {
               variant='filled'
               color='primary'
               fullWidth={isSm}
-              //disabled={selectedRights.length < 1}
+              disabled={delegationCount < 1}
               onClick={() => setPopoverOpen(!popoverOpen)}
             >
               {t('common.complete')}
@@ -317,6 +213,33 @@ export const ChooseRightsPage = () => {
     );
   };
 
+  const onConfirm = () => {
+    updateDelegationCount(chosenServices);
+    setShowProgressModal(true);
+    setPopoverOpen(false);
+
+    void postDelegations();
+  };
+
+  const postDelegations = () => {
+    chosenServices.map((service) => {
+      const rightsToDelegate = service.rights
+        .filter((right) => right.checked)
+        .map((right) => new DelegationRequestDto(right.resourceReference, right.action));
+
+      if (rightsToDelegate.length > 0) {
+        const delegationInput: DelegationInputDto = {
+          // TODO: make adjustments to codeline below when we get GUID from altinn2
+          To: [new IdValuePair('urn:altinn:ssn', '50019992')],
+          Rights: rightsToDelegate,
+          serviceDto: new ServiceDto(service.title, service.serviceOwner),
+        };
+
+        return dispatch(delegate(delegationInput));
+      }
+    });
+  };
+
   return (
     <PageContainer>
       <Page color='light'>
@@ -328,7 +251,7 @@ export const ChooseRightsPage = () => {
           <div className={classes.secondaryText}>
             <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
           </div>
-          <div className={classes.serviceResources}>{chooseRightsActionBars()}</div>
+          <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
           <ProgressModal
             open={showProgressModal}
             loadingText={t('single_rights.processing_delegations')}

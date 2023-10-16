@@ -3,8 +3,12 @@
     "rightKey": "ttd-am-k6/read",
     "resource": [
       {
-        "id": "urn:altinn:resource",
-        "value": "appid-504"
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
       }
     ],
     "action": "read",
@@ -28,8 +32,12 @@
     "rightKey": "ttd-am-k6/write",
     "resource": [
       {
-        "id": "urn:altinn:resource",
-        "value": "appid-504"
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
       }
     ],
     "action": "write",
@@ -53,8 +61,12 @@
     "rightKey": "ttd-am-k6/sign",
     "resource": [
       {
-        "id": "urn:altinn:resource",
-        "value": "appid-504"
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
       }
     ],
     "action": "sign",
