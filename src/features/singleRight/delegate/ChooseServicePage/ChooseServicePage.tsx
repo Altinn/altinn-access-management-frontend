@@ -105,7 +105,7 @@ export const ChooseServicePage = () => {
             </Button>
             <Button
               variant='filled'
-              color='primary'
+              color='first'
               fullWidth={isSm}
               disabled={delegableChosenServices.length < 1}
               onClick={() => {

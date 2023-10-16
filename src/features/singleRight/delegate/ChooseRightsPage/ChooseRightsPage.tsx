@@ -275,7 +275,7 @@ export const ChooseRightsPage = () => {
       <GroupElements>
         <Button
           variant='outline'
-          color='primary'
+          color='first'
           fullWidth={isSm}
           onClick={() => {
             navigate(
@@ -292,7 +292,7 @@ export const ChooseRightsPage = () => {
           trigger={
             <Button
               variant='filled'
-              color='primary'
+              color='first'
               fullWidth={isSm}
               disabled={selectedRights.length < 1}
               onClick={() => setPopoverOpen(!popoverOpen)}

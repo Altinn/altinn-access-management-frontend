@@ -94,7 +94,7 @@ export const ChooseServicePage = () => {
             </Button>
             <Button
               variant='filled'
-              color='primary'
+              color='first'
               fullWidth={isSm}
             >
               {t('common.proceed')}

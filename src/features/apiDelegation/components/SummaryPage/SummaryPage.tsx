@@ -245,7 +245,7 @@ export const SummaryPage = ({
             ) : (
               <div className={classes.receiptMainButton}>
                 <Button
-                  color='primary'
+                  color='first'
                   variant='filled'
                   onClick={navigateToOverview}
                   fullWidth={isSm}
