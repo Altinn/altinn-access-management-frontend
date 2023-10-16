@@ -321,7 +321,10 @@ export const ChooseRightsPage = () => {
 
   return (
     <PageContainer>
-      <Page color='light'>
+      <Page
+        color='light'
+        size={isSm ? 'small' : 'medium'}
+      >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
           <Ingress>

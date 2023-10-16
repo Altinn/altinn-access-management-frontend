@@ -71,6 +71,7 @@ export const ResourceCollectionBar = ({
       collection={selectedResourcesActionBars}
       compact={compact}
       proceedToPath={proceedToPath}
+      disabledProceedButton={resources.length < 1}
     />
   );
 };
