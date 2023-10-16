@@ -36,23 +36,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Method that checks at least 3 of the potential responses matches at least 3 of the responses in the mocked
-        ///     response.
+        ///     Test case: DelegationAccessCheck checks the accesses of a standard resource
+        ///     Expected: DelegationAccessCheck returns the accesses of a standard resource
         /// </summary>
         [Fact]
-        public async Task DelegationAccessCheck_AllAccesses_valid_response()
+        public async Task DelegationAccessCheck_standardResource()
         {
             // Arrange
             string partyId = "999 999 999";
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, "appid-503.json");
 
-            IdValuePair attribute = new IdValuePair
-            {
-                Id = "urn:altinn:resource",
-                Value = "appid-503",
+            List<IdValuePair> resource = new List<IdValuePair>
+            { 
+                new IdValuePair
+                {
+                    Id = "urn:altinn:resource",
+                    Value = "appid-503",
+                }
             };
 
-            List<IdValuePair> resource = new List<IdValuePair>();
-            resource.Add(attribute);
             Right dto = new Right
             {
                 Resource = resource,
@@ -63,28 +66,41 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
-            int countMatches = CountMatches(actualResponses, "AllAccessesAppid503.json");
+            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(3, countMatches);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
+        /// <summary>
+        ///     Test case: DelegationAccessCheck checks the accesses of an A3 application
+        ///     Expected: DelegationAccessCheck returns the accesses of an A3 application
+        /// </summary>
         [Fact]
-        public async Task DelegationAccessCheck_NoAccesses_valid_response()
+        public async Task DelegationAccessCheck_app()
         {
             // Arrange
             string partyId = "999 999 999";
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, "a3-app.json");
 
-            IdValuePair attribute = new IdValuePair
+            List<IdValuePair> resource = new List<IdValuePair>
             {
-                Id = "urn:altinn:resource",
-                Value = "app_ttd_a3-app",
+                new IdValuePair
+                {
+                    Id = "urn:altinn:app",
+                    Value = "a3-app",
+
+                },
+                new IdValuePair
+                {
+                    Id = "urn:altinn:org",
+                    Value = "ttd",
+
+                },
             };
 
-            List<IdValuePair> resource = new List<IdValuePair>();
-            resource.Add(attribute);
             Right dto = new Right
             {
                 Resource = resource,
@@ -95,28 +111,41 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
-            int countMatches = CountMatches(actualResponses, "NoAccessesAppid504.json");
+            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(3, countMatches);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
+        /// <summary>
+        ///     Test case: DelegationAccessCheck checks the accesses of an A2 service
+        ///     Expected: DelegationAccessCheck returns the accesses of an A2 service
+        /// </summary>
         [Fact]
-        public async Task DelegationAccessCheck_OnlyRead_valid_response()
+        public async Task DelegationAccessCheck_service()
         {
             // Arrange
             string partyId = "999 999 999";
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, "3225.json");
 
-            IdValuePair attribute = new IdValuePair
+            List<IdValuePair> resource = new List<IdValuePair>
             {
-                Id = "urn:altinn:resource",
-                Value = "se_3225_1596",
+                new IdValuePair
+                {
+                    Id = "urn:altinn:servicecode",
+                    Value = "3225",
+
+                },
+                new IdValuePair
+                {
+                    Id = "urn:altinn:serviceeditioncode",
+                    Value = "1596",
+
+                },
             };
 
-            List<IdValuePair> resource = new List<IdValuePair>();
-            resource.Add(attribute);
             Right dto = new Right
             {
                 Resource = resource,
@@ -127,44 +156,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
-            int countMatches = CountMatches(actualResponses, "OnlyReadAppid505.json");
+            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(3, countMatches);
-        }
-
-        [Fact]
-        public async Task DelegationAccessCheck_ReadAndWrite_valid_response()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-
-            IdValuePair attribute = new IdValuePair
-            {
-                Id = "urn:altinn:resource",
-                Value = "app_ttd_a3-app2",
-            };
-
-            List<IdValuePair> resource = new List<IdValuePair>();
-            resource.Add(attribute);
-            Right dto = new Right
-            {
-                Resource = resource,
-            };
-
-            string jsonDto = JsonSerializer.Serialize(dto);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationResponseData> actualResponses = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
-            int countMatches = CountMatches(actualResponses, "ReadAndWriteAppid506.json");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(3, countMatches);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -254,7 +250,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 new IdValuePair
                 {
-                    Id = "urn:altinn:applicationid",
+                    Id = "urn:altinn:app",
                     Value = "a3-app2",
 
                 },
