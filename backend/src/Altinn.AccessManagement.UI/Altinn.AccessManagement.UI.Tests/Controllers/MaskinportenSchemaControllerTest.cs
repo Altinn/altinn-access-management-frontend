@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<MaskinportenSchemaDelegationFE> actualDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegationFE>>(responseContent, options);
-            AssertionUtil.AssertCollections(expectedDelegations, actualDelegations, AssertionUtil.AssertMaskinportenSchemaDelegationFEEqual);
+            AssertionUtil.AssertCollections(expectedDelegations, actualDelegations, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<MaskinportenSchemaDelegationFE> actualDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegationFE>>(responseContent, options);
-            AssertionUtil.AssertCollections(expectedDelegations, actualDelegations, AssertionUtil.AssertMaskinportenSchemaDelegationFEEqual);
+            AssertionUtil.AssertCollections(expectedDelegations, actualDelegations, AssertionUtil.AssertEqual);
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             DelegationOutput actualResponse = JsonSerializer.Deserialize<DelegationOutput>(responseContent, options);
-            AssertionUtil.AssertDelegationOutputEqual(expectedResponse, actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
