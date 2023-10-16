@@ -85,7 +85,7 @@ export const ChooseServicePage = () => {
           />
           <GroupElements>
             <Button
-              variant='quiet'
+              variant='tertiary'
               color='danger'
               fullWidth={isSm}
               onClick={onCancel}
@@ -93,8 +93,8 @@ export const ChooseServicePage = () => {
               {t('common.cancel')}
             </Button>
             <Button
-              variant='filled'
-              color='primary'
+              variant='primary'
+              color='first'
               fullWidth={isSm}
             >
               {t('common.proceed')}
