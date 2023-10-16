@@ -59,7 +59,7 @@ export const CompactDeletableListItem = ({
           <div className={classes.deleteSection}>
             {removeCallback && (
               <Button
-                variant={'quiet'}
+                variant={'tertiary'}
                 color={'danger'}
                 icon={<MinusCircleIcon />}
                 size='medium'

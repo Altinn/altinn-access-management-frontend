@@ -37,7 +37,7 @@ export const DelegationActionBar = ({
       {buttonType === 'add' && (
         <Button
           icon={<PlusCircleIcon />}
-          variant={'quiet'}
+          variant={'tertiary'}
           color={'success'}
           onClick={onActionButtonClick}
           aria-label={t('common.add') + ' ' + title}
@@ -47,7 +47,7 @@ export const DelegationActionBar = ({
       {buttonType === 'remove' && (
         <Button
           icon={<MinusCircleIcon />}
-          variant={'quiet'}
+          variant={'tertiary'}
           color={'danger'}
           onClick={onActionButtonClick}
           aria-label={t('common.remove') + ' ' + title}

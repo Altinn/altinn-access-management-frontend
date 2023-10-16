@@ -174,7 +174,7 @@ export const SummaryPage = ({
               <p>{t('api_delegation.delegations_not_registered')}</p>
               <div className={classes.restartButton}>
                 <Button
-                  variant='outline'
+                  variant='secondary'
                   color='danger'
                   onClick={() => {
                     navigate(restartProcessPath);
@@ -214,7 +214,7 @@ export const SummaryPage = ({
             {showNavigationButtons ? (
               <GroupElements>
                 <Button
-                  variant={'outline'}
+                  variant={'secondary'}
                   fullWidth={isSm}
                   onClick={() =>
                     navigate(
@@ -246,7 +246,7 @@ export const SummaryPage = ({
               <div className={classes.receiptMainButton}>
                 <Button
                   color='first'
-                  variant='filled'
+                  variant='primary'
                   onClick={navigateToOverview}
                   fullWidth={isSm}
                 >

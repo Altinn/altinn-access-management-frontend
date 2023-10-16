@@ -33,8 +33,8 @@ export const DeletableListItem = ({
     <div className={cn(classes.deleteSection)}>
       {item.isSoftDelete ? (
         <Button
-          variant={'quiet'}
-          color='secondary'
+          variant={'tertiary'}
+          color='second'
           onClick={softRestoreCallback}
           icon={<ArrowUndoIcon />}
           size='medium'
@@ -44,7 +44,7 @@ export const DeletableListItem = ({
         </Button>
       ) : (
         <Button
-          variant='quiet'
+          variant='tertiary'
           color='danger'
           icon={<MinusCircleIcon />}
           size='medium'

@@ -72,7 +72,7 @@ export const CollectionBar = ({
         actions={
           !compact && (
             <Button
-              variant='quiet'
+              variant='tertiary'
               size='small'
               icon={<ChevronRightDoubleCircleFillIcon />}
               color={color === 'dark' ? 'inverted' : undefined}
@@ -91,7 +91,7 @@ export const CollectionBar = ({
       {compact && (
         <Button
           className={classes.compactProceedButton}
-          variant='quiet'
+          variant='tertiary'
           size='small'
           icon={<ChevronRightDoubleIcon />}
           iconPlacement='right'
