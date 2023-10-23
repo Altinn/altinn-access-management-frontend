@@ -97,6 +97,7 @@ export const ChooseServicePage = () => {
               variant={'warning'}
               onOpenChange={() => setPopoverOpen(!popoverOpen)}
               open={popoverOpen}
+              placement={'top'}
               trigger={
                 <Button
                   variant='quiet'
