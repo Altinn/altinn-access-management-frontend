@@ -100,7 +100,7 @@ export const ChooseServicePage = () => {
               variant='filled'
               color='primary'
               disabled={delegableChosenServices.length < 1}
-              size='medium'
+              fullWidth
               onClick={() => {
                 navigate(
                   '/' +
@@ -119,11 +119,12 @@ export const ChooseServicePage = () => {
                   variant='quiet'
                   color={delegableChosenServices.length > 0 ? 'danger' : 'primary'}
                   onClick={() => setPopoverOpen(true)}
-                  size='medium'
+                  fullWidth
                 >
                   {t('common.cancel')}
                 </Button>
               }
+              onOpenChange={() => setPopoverOpen(!popoverOpen)}
               placement={'top'}
               open={popoverOpen}
             >

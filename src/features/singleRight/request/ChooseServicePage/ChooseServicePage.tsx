@@ -2,7 +2,8 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress, Popover } from '@digdir/design-system-react';
+import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
+import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
@@ -27,6 +28,7 @@ export const ChooseServicePage = () => {
   const reporteeName = useAppSelector((state) => state.userInfo.reporteeName);
   const userName = useAppSelector((state) => state.userInfo.personName);
   const requestee = reporteeName ? reporteeName : userName;
+  const [popoverOpen, setPopoverOpen] = useState(false);
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
@@ -84,27 +86,6 @@ export const ChooseServicePage = () => {
             onUndo={onRemove}
           />
           <GroupElements>
-            {delegableChosenServices.length > 0 ? (
-              <Popover
-                trigger={
-                  <Button
-                    variant='quiet'
-                    color='danger'
-                    fullWidth={isSm}
-                    onClick={onCancel}
-                  ></Button>
-                }
-              ></Popover>
-            ) : (
-              <Button
-                variant='quiet'
-                color='primary'
-                fullWidth={isSm}
-                onClick={onCancel}
-              >
-                {t('common.cancel')}
-              </Button>
-            )}
             <Button
               variant='filled'
               color='primary'
@@ -112,6 +93,37 @@ export const ChooseServicePage = () => {
             >
               {t('common.proceed')}
             </Button>
+            <Popover
+              variant={'warning'}
+              onOpenChange={() => setPopoverOpen(!popoverOpen)}
+              open={popoverOpen}
+              trigger={
+                <Button
+                  variant='quiet'
+                  color={delegableChosenServices.length > 0 ? 'danger' : 'primary'}
+                  fullWidth={isSm}
+                  onClick={onCancel}
+                >
+                  {t('common.cancel')}
+                </Button>
+              }
+            >
+              <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
+              <Button
+                onClick={onCancel}
+                color={'danger'}
+                variant={'filled'}
+              >
+                {t('common.yes')}
+              </Button>
+              <Button
+                onClick={() => setPopoverOpen(false)}
+                color={'danger'}
+                variant={'quiet'}
+              >
+                {t('single_rights.no_continue_delegating')}
+              </Button>
+            </Popover>
           </GroupElements>
         </PageContent>
       </Page>
