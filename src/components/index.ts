@@ -1,4 +1,4 @@
-export { CompactDeletableListItem } from './CompactDeletableListItem';
+export { CompactDeletableListItem, ListColor } from './CompactDeletableListItem';
 export { SummaryPage } from '../features/apiDelegation/components/SummaryPage';
 export { DeletableListItem } from './DeletableListItem';
 export { Line } from './Line';

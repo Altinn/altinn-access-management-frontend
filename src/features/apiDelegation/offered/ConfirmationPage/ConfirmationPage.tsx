@@ -25,7 +25,6 @@ import {
   PageContent,
   PageHeader,
 } from '@/components';
-import { SummaryPage } from '@/features/apiDelegation/components/SummaryPage';
 import type {
   ApiDelegation,
   DelegationRequest,
@@ -39,6 +38,8 @@ import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegab
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+
+import { ErrorAlert } from '../../components/ErrorAlert/ErrorAlert';
 
 import classes from './ConfirmationPage.module.css';
 
@@ -121,36 +122,9 @@ export const ConfirmationPage = () => {
     return !showTopSection() && !showBottomSection();
   };
 
-  const errorAlert = () => {
-    return (
-      <Alert severity='danger'>
-        <Heading
-          size='small'
-          level={2}
-        >
-          {t('common.an_error_has_occured')}
-        </Heading>
-        <Ingress>{t('api_delegation.delegations_not_registered')}</Ingress>
-        <div className={classes.restartButton}>
-          <Button
-            variant='outline'
-            color='danger'
-            onClick={() => {
-              navigate(
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
-              );
-            }}
-          >
-            {t('common.restart')}
-          </Button>
-        </div>
-      </Alert>
-    );
-  };
-
   const delegationContent = () => {
     return (
-      <div>
+      <>
         <Heading
           size='medium'
           level={2}
@@ -195,7 +169,7 @@ export const ConfirmationPage = () => {
             {t('common.confirm')}
           </Button>
         </GroupElements>
-      </div>
+      </>
     );
   };
 
@@ -208,7 +182,7 @@ export const ConfirmationPage = () => {
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
-            {showErrorPanel() ? <>{errorAlert()}</> : <>{delegationContent()}</>}
+            {showErrorPanel() ? <ErrorAlert /> : <>{delegationContent()}</>}
           </PageContent>
         </Page>
       </PageContainer>
