@@ -279,9 +279,9 @@ export const ChooseRightsPage = () => {
           onOpenChange={() => setPopoverOpen(!popoverOpen)}
           trigger={
             <Button
-              variant='filled'
-              color='primary'
-              size='medium'
+              variant='primary'
+              color='first'
+              fullWidth={isSm}
               disabled={selectedRights.length < 1}
               onClick={() => setPopoverOpen(!popoverOpen)}
             >
@@ -304,8 +304,8 @@ export const ChooseRightsPage = () => {
           </div>
         </Popover>
         <Button
-          variant='outline'
-          color='primary'
+          variant='secondary'
+          color='first'
           size='medium'
           onClick={() => {
             navigate(

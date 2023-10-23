@@ -87,8 +87,8 @@ export const ChooseServicePage = () => {
           />
           <GroupElements>
             <Button
-              variant='filled'
-              color='primary'
+              variant='primary'
+              color='first'
               fullWidth={isSm}
             >
               {t('common.proceed')}
@@ -100,8 +100,8 @@ export const ChooseServicePage = () => {
               placement={'top'}
               trigger={
                 <Button
-                  variant='quiet'
-                  color={delegableChosenServices.length > 0 ? 'danger' : 'primary'}
+                  variant='tertiary'
+                  color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
                   fullWidth={isSm}
                   onClick={onCancel}
                 >
@@ -113,14 +113,14 @@ export const ChooseServicePage = () => {
               <Button
                 onClick={onCancel}
                 color={'danger'}
-                variant={'filled'}
+                variant={'primary'}
               >
                 {t('common.yes')}
               </Button>
               <Button
                 onClick={() => setPopoverOpen(false)}
                 color={'danger'}
-                variant={'quiet'}
+                variant={'tertiary'}
               >
                 {t('single_rights.no_continue_delegating')}
               </Button>
