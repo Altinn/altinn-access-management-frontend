@@ -3,7 +3,7 @@ import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
@@ -33,7 +33,6 @@ export const ChooseServicePage = () => {
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
-  const ref = useRef<HTMLButtonElement | null>(null);
 
   const onAdd = (identifier: string, serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -65,18 +64,6 @@ export const ChooseServicePage = () => {
       encodeURIComponent(encodedUrl);
   };
 
-  const anchorRef = (
-    <Button
-      variant='tertiary'
-      color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
-      fullWidth={isSm}
-      onClick={() => setPopoverOpen(!popoverOpen)}
-      ref={ref}
-    >
-      {t('common.cancel')}
-    </Button>
-  );
-
   return (
     <PageContainer>
       <Page
@@ -107,17 +94,19 @@ export const ChooseServicePage = () => {
             >
               {t('common.proceed')}
             </Button>
-            {anchorRef}
             <Button
+              variant='tertiary'
+              color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
+              fullWidth={isSm}
+              onClick={() => setPopoverOpen(!popoverOpen)}
               ref={(ref) => setButtonRef(ref)}
-              onClick={() => setPopoverOpen(!open)}
             >
-              My trigger
+              {t('common.cancel')}
             </Button>
             <Popover
               variant={'warning'}
               placement='top'
-              anchorEl={ref}
+              anchorEl={buttonRef}
               open={open}
               onClose={() => setPopoverOpen(false)}
             >
