@@ -37,7 +37,7 @@
     "failed_lowercase": "failed",
     "finished": "Finished",
     "yes": "Yes",
-    "finish_delegation": "confirm_delegation"
+    "finish_delegation": "Confirm delegation"
   },
   "profile": {
     "received": "Received",
@@ -153,7 +153,7 @@
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the buttons below to remove them",
     "delegable_apis": "Delegable APIs",
     "cancel_popover_text": "Chosen services won't be delegated. Are you sure you want to cancel?",
-    "no_continue_delegating": "Nei, continue delegating",
+    "no_continue_delegating": "No, continue delegating",
     "add_more_services": "Add more services"
   }
 }

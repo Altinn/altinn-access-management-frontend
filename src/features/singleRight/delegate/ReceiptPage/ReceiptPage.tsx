@@ -39,8 +39,8 @@ export const ReceiptPage = () => {
           <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
           <GroupElements>
             <Button
-              color={'success'}
-              size='medium'
+              color={'first'}
+              fullWidth
             >
               {t('common.finished')}
             </Button>
@@ -50,8 +50,9 @@ export const ReceiptPage = () => {
                   '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
                 );
               }}
-              color={'primary'}
-              size='medium'
+              color={'first'}
+              variant={'secondary'}
+              fullWidth
             >
               {t('single_rights.give_more_rights')}
             </Button>
