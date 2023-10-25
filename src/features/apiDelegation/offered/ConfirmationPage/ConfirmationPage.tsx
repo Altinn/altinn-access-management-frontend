@@ -4,15 +4,7 @@ import * as React from 'react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
-import {
-  Alert,
-  Button,
-  Heading,
-  Ingress,
-  List,
-  Paragraph,
-  Spinner,
-} from '@digdir/design-system-react';
+import { Button, Heading, List, Paragraph, Spinner } from '@digdir/design-system-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';

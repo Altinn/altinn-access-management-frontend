@@ -2,17 +2,25 @@ import { Alert, Button, Heading, Ingress } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import cn from 'classnames';
 
 import { ApiDelegationPath } from '@/routes/paths';
 
 import classes from './ErrorAlert.module.css';
 
-export const ErrorAlert = () => {
+interface ErrorAlert {
+  spacingBottom: boolean;
+}
+
+export const ErrorAlert = ({ spacingBottom }: ErrorAlert) => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 
   return (
-    <Alert severity='danger'>
+    <Alert
+      severity='danger'
+      className={cn({ [classes.spacing]: spacingBottom })}
+    >
       <Heading
         size='small'
         level={2}

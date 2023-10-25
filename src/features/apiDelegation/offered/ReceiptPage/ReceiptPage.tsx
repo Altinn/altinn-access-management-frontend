@@ -1,24 +1,24 @@
 import { useTranslation } from 'react-i18next';
 import type { Key } from 'react';
-import { useEffect } from 'react';
 import * as React from 'react';
-import { Alert, Button, Heading, Ingress, List } from '@digdir/design-system-react';
+import { Button, Heading, List, Paragraph } from '@digdir/design-system-react';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
-import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import {
-  SummaryPage,
   PageContainer,
   Page,
   PageHeader,
   PageContent,
   CompactDeletableListItem,
+  GroupElements,
 } from '@/components';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
+import { useMediaQuery } from '@/resources/hooks';
 
 import { ErrorAlert } from '../../components/ErrorAlert/ErrorAlert';
 
@@ -33,13 +33,16 @@ export const ReceiptPage = () => {
   );
   const { t } = useTranslation('common');
   const dispatch = useAppDispatch();
+  const isSm = useMediaQuery('(max-width: 768px)');
+  const navigate = useNavigate();
 
   const failedDelegationContent = () => {
     return (
-      <div>
+      <>
         <Heading
           size='medium'
           level={2}
+          spacing
         >
           {t('api_delegation.failed_delegations')}
         </Heading>
@@ -57,16 +60,17 @@ export const ReceiptPage = () => {
             )}
           </List>
         </div>
-      </div>
+      </>
     );
   };
 
   const successfulDelegationsContent = () => {
     return (
-      <div>
+      <>
         <Heading
           size='medium'
           level={2}
+          spacing
         >
           {t('api_delegation.succesful_delegations')}
         </Heading>
@@ -81,15 +85,15 @@ export const ReceiptPage = () => {
             ),
           )}
         </List>
-      </div>
+      </>
     );
   };
 
   const delegatedContent = () => {
     return (
       <>
-        {showTopSection() && failedDelegationContent}
-        {showBottomSection() && successfulDelegationsContent}
+        {showTopSection() && failedDelegationContent()}
+        {showBottomSection() && successfulDelegationsContent()}
       </>
     );
   };
@@ -114,35 +118,32 @@ export const ReceiptPage = () => {
     return !showTopSection() && !showBottomSection();
   };
 
+  const navigateToOverview = () => {
+    dispatch(setOveviewToReload());
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
+  };
+
   return (
     <PageContainer>
       <Page color={successfulApiDelegations.length === 0 ? 'danger' : 'success'}>
-        <PageHeader>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-        <PageContent>{showErrorAlert() ? <ErrorAlert /> : delegatedContent()}</PageContent>
+        <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
+        <PageContent>
+          {showErrorAlert() ? <ErrorAlert spacingBottom /> : delegatedContent()}
+          <Paragraph spacing>
+            {successfulApiDelegations.length === 0
+              ? t('api_delegation.receipt_page_failed_text')
+              : t('api_delegation.receipt_page_bottom_text')}
+          </Paragraph>
+          <Button
+            color='primary'
+            variant='filled'
+            onClick={navigateToOverview}
+            fullWidth={isSm}
+          >
+            {t('api_delegation.receipt_page_main_button')}
+          </Button>
+        </PageContent>
       </Page>
-      <SummaryPage
-        failedDelegations={failedApiDelegations}
-        successfulDelegations={successfulApiDelegations}
-        restartProcessPath={
-          '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
-        }
-        pageHeaderText={String(t('api_delegation.give_access_to_new_api'))}
-        topListText={String(t('api_delegation.failed_delegations'))}
-        bottomListText={String(t('api_delegation.succesful_delegations'))}
-        failedDelegationText={
-          failedApiDelegations.length > 0
-            ? String(t('api_delegation.receipt_page_failed_text'))
-            : undefined
-        }
-        bottomText={
-          successfulApiDelegations.length > 0
-            ? String(t('api_delegation.receipt_page_bottom_text'))
-            : undefined
-        }
-        headerIcon={<ApiIcon />}
-        headerColor='success'
-        showNavigationButtons={false}
-      ></SummaryPage>
     </PageContainer>
   );
 };
