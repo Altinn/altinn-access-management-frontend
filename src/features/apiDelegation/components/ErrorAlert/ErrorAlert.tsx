@@ -9,10 +9,10 @@ import { ApiDelegationPath } from '@/routes/paths';
 import classes from './ErrorAlert.module.css';
 
 interface ErrorAlert {
-  spacingBottom: boolean;
+  spacingBottom?: boolean;
 }
 
-export const ErrorAlert = ({ spacingBottom }: ErrorAlert) => {
+export const ErrorAlert = ({ spacingBottom = false }: ErrorAlert) => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 

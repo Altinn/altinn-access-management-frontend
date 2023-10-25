@@ -14,7 +14,6 @@ import {
   PageHeader,
   PageContent,
   CompactDeletableListItem,
-  GroupElements,
 } from '@/components';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
