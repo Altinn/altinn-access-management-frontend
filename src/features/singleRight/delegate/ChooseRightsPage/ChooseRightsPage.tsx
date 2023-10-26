@@ -12,7 +12,7 @@ import {
   Popover,
 } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   GroupElements,
@@ -64,6 +64,7 @@ export const ChooseRightsPage = () => {
   const progressLabel = processedDelegations.length + '/' + delegationCount;
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const initialCheckedRightsList = delegableServices.flatMap(
     (ds) =>
@@ -274,6 +275,16 @@ export const ChooseRightsPage = () => {
     return (
       <GroupElements>
         <Button
+          variant='primary'
+          color='first'
+          fullWidth={isSm}
+          disabled={selectedRights.length < 1}
+          onClick={() => setPopoverOpen(!popoverOpen)}
+          ref={buttonRef}
+        >
+          {t('common.finish_delegation')}
+        </Button>
+        <Button
           variant='secondary'
           color='first'
           fullWidth={isSm}
@@ -283,24 +294,14 @@ export const ChooseRightsPage = () => {
             );
           }}
         >
-          {t('common.previous')}
+          {t('single_rights.add_more_services')}
         </Button>
         <Popover
-          placement={'top'}
-          open={popoverOpen}
-          onOpenChange={() => setPopoverOpen(!popoverOpen)}
-          trigger={
-            <Button
-              variant='primary'
-              color='first'
-              fullWidth={isSm}
-              disabled={selectedRights.length < 1}
-              onClick={() => setPopoverOpen(!popoverOpen)}
-            >
-              {t('common.complete')}
-            </Button>
-          }
           variant={'info'}
+          placement={'top'}
+          anchorEl={buttonRef.current}
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
         >
           <Paragraph>
             {t('single_rights.confirm_delegation_text', { name: 'ANNEMA FIGMA' })}
@@ -321,7 +322,7 @@ export const ChooseRightsPage = () => {
 
   return (
     <PageContainer>
-      <Page color='light'>
+      <Page color='dark'>
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
           <Ingress>
