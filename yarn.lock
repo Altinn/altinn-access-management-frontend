@@ -1607,13 +1607,13 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^18.0.28":
-  version: 18.2.31
-  resolution: "@types/react@npm:18.2.31"
+  version: 18.2.33
+  resolution: "@types/react@npm:18.2.33"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: b11be8e39174d3303e308461400889e353e422d22b01d09795b2c35b7b99d5351716503d9ec5c58e4c2c871249603fa52840d45a34fb5901dd7a26e06129c716
+  checksum: 75903c4d53898c69dd23d0b2730eac4676dc5ade15c25c793dec855f0d7c650cb823832bb1dd881efe8895724f15b06d4bf7081ea0b82391aa3059512ad49ccf
   languageName: node
   linkType: hard
 
@@ -1920,7 +1920,7 @@ __metadata:
     "@vitejs/plugin-react": ^4.0.0
     axios: ^1.3.4
     classnames: ^2.3.2
-    cypress: 13.3.0
+    cypress: 13.3.2
     cypress-real-events: ^1.10.0
     eslint: ^8.45.0
     eslint-config-prettier: ^9.0.0
@@ -2942,9 +2942,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.3.0":
-  version: 13.3.0
-  resolution: "cypress@npm:13.3.0"
+"cypress@npm:13.3.2":
+  version: 13.3.2
+  resolution: "cypress@npm:13.3.2"
   dependencies:
     "@cypress/request": ^3.0.0
     "@cypress/xvfb": ^1.2.4
@@ -2991,7 +2991,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 6ad11bd6aabccfaf8be78afff0e854c9c8ccc935704c41efe4d8e9412ccfcb652f23791931c3aa26fc41068eeeb739a51563308670c9dada91cb272d08227caf
+  checksum: eee7c06136dcf23c400e1042380b67a568d403677fccd835fa7f47868c382624aae272e1cb2b161d3216e2c5ab73e740e243d0f2c76721600d0270dbe50d2560
   languageName: node
   linkType: hard
 
@@ -5186,6 +5186,15 @@ __metadata:
   linkType: hard
 
 "is-core-module@npm:^2.11.0, is-core-module@npm:^2.12.1, is-core-module@npm:^2.13.0, is-core-module@npm:^2.13.1":
+  version: 2.13.1
+  resolution: "is-core-module@npm:2.13.1"
+  dependencies:
+    hasown: ^2.0.0
+  checksum: 256559ee8a9488af90e4bad16f5583c6d59e92f0742e9e8bb4331e758521ee86b810b93bae44f390766ffbc518a0488b18d9dab7da9a5ff997d499efc9403f7c
+  languageName: node
+  linkType: hard
+
+"is-core-module@npm:^2.13.1":
   version: 2.13.1
   resolution: "is-core-module@npm:2.13.1"
   dependencies:
