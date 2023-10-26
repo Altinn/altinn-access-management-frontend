@@ -116,8 +116,10 @@ export const ChooseServicePage = () => {
             <Button
               variant='tertiary'
               color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
-              fullWidth={isSm}
-              onClick={() => setPopoverOpen(!popoverOpen)}
+              size='medium'
+              onClick={
+                delegableChosenServices.length > 0 ? () => setPopoverOpen(!popoverOpen) : onCancel
+              }
               ref={buttonRef}
             >
               {t('common.cancel')}
@@ -136,6 +138,7 @@ export const ChooseServicePage = () => {
                     onClick={onCancel}
                     color={'danger'}
                     variant={'primary'}
+                    fullWidth
                   >
                     {t('common.yes')}
                   </Button>
