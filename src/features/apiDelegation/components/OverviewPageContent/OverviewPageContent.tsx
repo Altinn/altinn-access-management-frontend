@@ -174,7 +174,7 @@ export const OverviewPageContent = ({
       {layout === LayoutState.Offered && (
         <div className={classes.delegateNewButton}>
           <Button
-            variant='outline'
+            variant='secondary'
             onClick={goToStartDelegation}
             icon={<PlusIcon />}
             fullWidth={isSm}
@@ -210,7 +210,7 @@ export const OverviewPageContent = ({
             <div className={classes.editButton}>
               {!isEditable ? (
                 <Button
-                  variant='quiet'
+                  variant='tertiary'
                   icon={<PencilIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
@@ -219,7 +219,7 @@ export const OverviewPageContent = ({
                 </Button>
               ) : (
                 <Button
-                  variant='quiet'
+                  variant='tertiary'
                   icon={<XMarkOctagonIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
