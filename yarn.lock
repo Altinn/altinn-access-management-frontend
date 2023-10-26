@@ -386,9 +386,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:0.32.0":
-  version: 0.32.0
-  resolution: "@digdir/design-system-react@npm:0.32.0"
+"@digdir/design-system-react@npm:0.33.0":
+  version: 0.33.0
+  resolution: "@digdir/design-system-react@npm:0.33.0"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@digdir/design-system-tokens": ^0.8.1
@@ -398,7 +398,7 @@ __metadata:
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: ea341fbb61a74262a20206f6d170bfb8c0fdceace669fe09bd96869d4b59aa9bbcb67829e36e4c06545536f607bf1de57f4be52157305d24601ca92fba405316
+  checksum: c820db40ab30e902ad0fe1de3c57aa04a87c5780d2b7e6253b20c5a94737263061eeba0420ae0138ad73c391bdcda42550b0117b9be54b99ddc413bd488a980c
   languageName: node
   linkType: hard
 
@@ -1899,7 +1899,7 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@altinn/altinn-design-system": 0.29.1
-    "@digdir/design-system-react": 0.32.0
+    "@digdir/design-system-react": 0.33.0
     "@digdir/design-system-tokens": 0.8.1
     "@navikt/aksel-icons": ^5.0.3
     "@reduxjs/toolkit": ^1.9.5
