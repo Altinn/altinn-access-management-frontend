@@ -89,7 +89,6 @@ export const ChooseServicePage = () => {
             proceedToPath={
               '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
             }
-            disabledProceedClick={delegableChosenServices.length < 1}
           />
           <SearchSection
             onAdd={onAdd}
