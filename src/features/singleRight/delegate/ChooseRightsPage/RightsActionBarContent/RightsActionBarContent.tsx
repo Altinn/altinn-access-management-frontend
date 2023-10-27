@@ -59,8 +59,8 @@ export const RightsActionBarContent = ({
       </Heading>
       <div className={classes.chipContainer}>
         {rights
-          .filter((right) => right.delegable === true)
-          .map((right, index: number) => {
+          .filter((right: Right) => right.delegable === true)
+          .map((right: Right, index: number) => {
             return (
               <div key={index}>
                 <Chip.Toggle
@@ -98,8 +98,8 @@ export const RightsActionBarContent = ({
         </Heading>
         <div className={classes.chipContainer}>
           {rights
-            .filter((r) => r.delegable === false)
-            .map((r, index: number) => {
+            .filter((r: Right) => r.delegable === false)
+            .map((r: Right, index: number) => {
               return (
                 <div key={index}>
                   <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>

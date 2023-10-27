@@ -17,7 +17,11 @@ import {
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
 import { useMediaQuery } from '@/resources/hooks';
-import { removeServiceResource, delegate } from '@/rtk/features/singleRights/singleRightsSlice';
+import {
+  removeServiceResource,
+  delegate,
+  type ServiceWithStatus,
+} from '@/rtk/features/singleRights/singleRightsSlice';
 import {
   type DelegationInputDto,
   IdValuePair,
@@ -26,8 +30,8 @@ import {
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
-import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBar';
-import { type Right } from './RightsActionBarContent/RightsActionBar';
+import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
+import { type Right } from './RightsActionBarContent/RightsActionBarContent';
 import classes from './ChooseRightsPage.module.css';
 
 type Service = {
@@ -59,7 +63,9 @@ export const ChooseRightsPage = () => {
     Math.round((processedDelegations.length / delegationCount) * 100);
 
   const initializeDelegableServices = () => {
-    const delegable = servicesWithStatus.filter((s) => s.status !== 'NotDelegable');
+    const delegable = servicesWithStatus.filter(
+      (s: ServiceWithStatus) => s.status !== 'NotDelegable',
+    );
 
     const sorted = delegable.sort((a, b) => {
       const isPartiallyDelegableA = a.status === 'PartiallyDelegable';
@@ -109,14 +115,14 @@ export const ChooseRightsPage = () => {
 
   const updateDelegationCount = (services: Service[]) => {
     const numServicesToDelegate = services.filter(
-      (s) => s.rights.filter((r) => r.checked).length > 0,
+      (s: Service) => s.rights.filter((r) => r.checked).length > 0,
     ).length;
 
     setDelegationCount(numServicesToDelegate);
   };
 
   const onRemove = (identifier: string | undefined) => {
-    const newList = chosenServices.filter((s) => s.serviceIdentifier !== identifier);
+    const newList = chosenServices.filter((s: Service) => s.serviceIdentifier !== identifier);
 
     setChosenServices(newList);
     setDelegationCount(newList.length);
@@ -222,21 +228,19 @@ export const ChooseRightsPage = () => {
   };
 
   const postDelegations = () => {
-    chosenServices.map((service) => {
+    chosenServices.map((service: Service) => {
       const rightsToDelegate = service.rights
-        .filter((right) => right.checked)
-        .map((right) => new DelegationRequestDto(right.resourceReference, right.action));
+        .filter((right: Right) => right.checked)
+        .map((right: Right) => new DelegationRequestDto(right.resourceReference, right.action));
 
-      if (rightsToDelegate.length > 0) {
-        const delegationInput: DelegationInputDto = {
-          // TODO: make adjustments to codeline below when we get GUID from altinn2
-          To: [new IdValuePair('urn:altinn:ssn', '50019992')],
-          Rights: rightsToDelegate,
-          serviceDto: new ServiceDto(service.title, service.serviceOwner),
-        };
+      const delegationInput: DelegationInputDto = {
+        // TODO: make adjustments to codeline below when we get GUID from altinn2
+        To: [new IdValuePair('urn:altinn:ssn', '50019992')],
+        Rights: rightsToDelegate,
+        serviceDto: new ServiceDto(service.title, service.serviceOwner),
+      };
 
-        return dispatch(delegate(delegationInput));
-      }
+      return dispatch(delegate(delegationInput));
     });
   };
 
