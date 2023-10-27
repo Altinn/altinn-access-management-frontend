@@ -1,4 +1,4 @@
-import { Button, Paragraph } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +36,6 @@ export const ReceiptPage = () => {
           <div className={classes.actionBars}>
             <ActionBarSection />
           </div>
-          <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
           <GroupElements>
             <Button
               color={'first'}

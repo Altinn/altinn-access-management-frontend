@@ -21,9 +21,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, Right request)
         {
+
+            string resourceFileName = GetMockDataFilename(request.Resource);
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
-            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(dataPath, DetermineAccessLevel(request));
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(dataPath, resourceFileName + ".json");
 
             return Task.FromResult(expectedResponse);
         }
@@ -31,26 +33,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
         {
-            IdValuePair resource = delegation.Rights.First().Resource.First();
-
-            string resourceFileName;
-            switch (resource.Id)
-            {
-                case "urn:altinn:resource":
-                case "urn:altinn:servicecode":
-                case "urn:altinn:applicationid":
-                    resourceFileName = resource.Value;
-                    break;
-                case "urn:altinn:org":
-                case "urn:altinn:serviceeditioncode":
-                    resourceFileName = delegation.Rights.First().Resource[1].Value;
-                    break;
-                default:
-                    resourceFileName = "Unknown";
-                    break;
-            }
-
+            string resourceFileName = GetMockDataFilename(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "CreateDelegation");
+            
             try
             {
                 string data = Util.GetMockDataSerialized(dataPath, resourceFileName + ".json");
@@ -63,24 +48,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static string DetermineAccessLevel(Right request)
+        private static string GetMockDataFilename(List<IdValuePair> resourceReference)
         {
-            string value = request.Resource.FirstOrDefault().Value;
+            IdValuePair referencePart = resourceReference.First();
 
-            switch (value)
+            switch (referencePart.Id)
             {
-                case "app_ttd_a3-app":
-                    return "NoAccessesAppid504.json";
-                case "se_3225_1596":
-                    return "OnlyReadAppid505.json";
-                case "app_ttd_a3-app2":
-                    return "ReadAndWriteAppid506.json";
-                case "appid-503":
-                    return "AllAccessesAppid503.json";
-                case "appid-502":
-                    return "OneAccessAppid502.json";
+                case "urn:altinn:resource":
+                case "urn:altinn:servicecode":
+                case "urn:altinn:app":
+                    return referencePart.Value;
+                case "urn:altinn:org":
+                case "urn:altinn:serviceeditioncode":
+                    return resourceReference[1].Value;
                 default:
-                    return "AllAccessesAppid503.json";
+                    return "Unknown";
             }
         }
     }

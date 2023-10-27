@@ -32,6 +32,8 @@
     "read": "Read",
     "write": "Write",
     "sign": "Sign",
+    "delete": "Delete",
+    "instantiate": "Instantiate",
     "access": "Access to the whole service",
     "failed": "Failed",
     "failed_lowercase": "failed",

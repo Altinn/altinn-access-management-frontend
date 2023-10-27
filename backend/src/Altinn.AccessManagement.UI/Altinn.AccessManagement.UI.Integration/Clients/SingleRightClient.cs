@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"{partyId}/rights/delegation/userdelegationcheck";
+                string endpointUrl = $"{partyId}/rights/delegation/delegationcheck";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);

@@ -10,7 +10,6 @@ import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/c
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import {
   type DelegationAccessCheckDto,
   delegationAccessCheck,
@@ -38,10 +37,10 @@ export const ChooseServicePage = () => {
     void dispatch(resetProcessedDelegations());
   }, []);
 
-  const onAdd = (identifier: string, serviceResource: ServiceResource) => {
+  const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
       serviceResource,
-      resourceIdentifierDto: new ResourceIdentifierDto('urn:altinn:resource', identifier),
+      resourceReference: serviceResource.authorizationReference,
     };
 
     void dispatch(delegationAccessCheck(dto));

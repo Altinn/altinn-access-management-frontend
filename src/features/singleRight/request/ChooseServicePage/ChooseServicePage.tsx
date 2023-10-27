@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import {
   type DelegationAccessCheckDto,
   fetchRights,
@@ -34,10 +33,10 @@ export const ChooseServicePage = () => {
     state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
 
-  const onAdd = (identifier: string, serviceResource: ServiceResource) => {
+  const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
       serviceResource,
-      resourceIdentifierDto: new ResourceIdentifierDto('urn:altinn:resource', identifier),
+      resourceReference: serviceResource.authorizationReference,
     };
     dispatch(fetchRights(dto));
   };

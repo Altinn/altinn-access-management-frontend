@@ -32,6 +32,8 @@
     "read": "Lese",
     "write": "Skrive",
     "sign": "Signere",
+    "delete": "Slett",
+    "instantiate": "Instansier",
     "access": "Tilgang til hele tjenesten",
     "failed": "Feilet",
     "failed_lowercase": "feilet",

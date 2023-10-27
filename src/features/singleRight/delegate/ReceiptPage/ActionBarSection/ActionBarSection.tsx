@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ErrorMessage, Ingress } from '@digdir/design-system-react';
+import { ErrorMessage, Ingress, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -24,6 +24,7 @@ export const ActionBarSection = () => {
   const delegations = useAppSelector((state) => state.singleRightsSlice.processedDelegations);
   const [mostFailedIndex, setMostFailedIndex] = useState(-1);
   const [mostFailedDelegations, setMostFailedDelegations] = useState(-1);
+  const [hasSuccessfullDelegations, setHasSuccessfullDelegations] = useState(false);
 
   const firstSuccesfulIndex = delegations.findIndex((pd: ProcessedDelegation) => {
     const failedDelegations = pd.bffResponseList?.filter(
@@ -56,7 +57,11 @@ export const ActionBarSection = () => {
         (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.NotDelegated,
       );
 
-      const numFailedDelegations = failedDelegations?.length || 0;
+      if (!hasSuccessfullDelegations && successfulDelegations?.length > 0) {
+        setHasSuccessfullDelegations(true);
+      }
+
+      const numFailedDelegations = failedDelegations?.length ?? 0;
 
       const isRejectedDelegation = !!pd.bffResponseList?.find(
         (resp) => resp.reduxStatus === ReduxStatusResponse.Rejected,
@@ -117,7 +122,7 @@ export const ActionBarSection = () => {
       return {
         actionBar: (
           <div key={`receipt-action-bar-${index}`}>
-            {index === mostFailedIndex && failedDelegationIngress()}
+            {index === mostFailedIndex && mostFailedDelegations > 0 && failedDelegationIngress()}
             {index === firstSuccesfulIndex && successfulDelegationParagraph()}
             <ActionBar
               title={pd.meta.serviceDto.serviceTitle}
@@ -141,5 +146,12 @@ export const ActionBarSection = () => {
     .sort((a, b) => b.numFailedDelegations - a.numFailedDelegations)
     .map((item) => item.actionBar);
 
-  return actionBars;
+  return (
+    <>
+      {actionBars}
+      {hasSuccessfullDelegations && (
+        <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
+      )}
+    </>
+  );
 };

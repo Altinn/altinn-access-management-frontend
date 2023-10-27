@@ -28,8 +28,8 @@ export class DelegationRequestDto {
   Resource: IdValuePair[];
   Action: string;
 
-  constructor(resourceId: string, resourceValue: string, action: string) {
-    this.Resource = [{ id: resourceId, value: resourceValue }];
+  constructor(resource: IdValuePair[], action: string) {
+    this.Resource = resource;
     this.Action = action;
   }
 }

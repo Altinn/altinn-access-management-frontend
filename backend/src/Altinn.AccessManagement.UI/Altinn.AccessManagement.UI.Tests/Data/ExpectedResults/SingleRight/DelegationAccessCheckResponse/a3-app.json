@@ -1,0 +1,89 @@
+[
+  {
+    "rightKey": "ttd-am-k6/read",
+    "resource": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ],
+    "action": "read",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "ttd-am-k6/write",
+    "resource": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ],
+    "action": "write",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "ttd-am-k6/sign",
+    "resource": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ],
+    "action": "sign",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
