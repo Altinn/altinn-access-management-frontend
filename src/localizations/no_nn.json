@@ -37,7 +37,9 @@
     "access": "Tilgang til heile tenesta",
     "failed": "Feila",
     "failed_lowercase": "feila",
-    "finished": "Ferdig"
+    "finished": "Ferdig",
+    "yes": "Ja",
+    "finish_delegation": "Fullfør delegering"
   },
   "profile": {
     "received": "Mottekne",
@@ -113,7 +115,7 @@
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikkje delegera til eige organisasjonsnummer",
-    "own_orgnumber_delegation_paragraph": "Det er ikkje mogleg å delegera API til deg sjølv. Skriv inn eit anna organisasjonsnummer for å halda fram."
+    "own_orgnumber_delegation_paragraph": "Skriv inn eit anna organisasjonsnummer for å halda fram."
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettar",
@@ -151,6 +153,9 @@
     "these_rights_were_not_delegated": "Disse rettighetene kunne ikke delegeres:",
     "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:",
     "action_bar_adjust_rights_text": "Viss du vil avgrensa tilgangen til ein rett kan du klikka på knappana nedanfor for å fjerna dei",
-    "processing_delegations": "Prosesserer delegeringar"
+    "processing_delegations": "Prosesserer delegeringar",
+    "cancel_popover_text": "Valde tenester vil ikkje bli delegert. Er du sikker på at du vil avslutta?",
+    "no_continue_delegating": "Nei, hald fram med å delegera",
+    "add_more_services": "Legg til fleire tenester"
   }
 }

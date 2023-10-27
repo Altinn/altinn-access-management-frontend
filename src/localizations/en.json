@@ -37,7 +37,9 @@
     "access": "Access to the whole service",
     "failed": "Failed",
     "failed_lowercase": "failed",
-    "finished": "Finished"
+    "finished": "Finished",
+    "yes": "Yes",
+    "finish_delegation": "Confirm delegation"
   },
   "profile": {
     "received": "Received",
@@ -113,7 +115,7 @@
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice",
     "own_orgnumber_delegation_heading": "You can't delegate to your own organisation number",
-    "own_orgnumber_delegation_paragraph": "It isn't possible to delegate API to yourself. Write another organisation number to continue.",
+    "own_orgnumber_delegation_paragraph": "Search for another organisation number to continue."
   },
   "single_rights": {
     "delegate_single_rights": "Delegate single rights",
@@ -151,6 +153,9 @@
     "these_rights_were_not_delegated": "These rights couldn't be delegated:",
     "these_rights_were_delegated": "These rights were delegated:",
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the buttons below to remove them",
-    "delegable_apis": "Delegable APIs"
+    "delegable_apis": "Delegable APIs",
+    "cancel_popover_text": "Chosen services won't be delegated. Are you sure you want to cancel?",
+    "no_continue_delegating": "No, continue delegating",
+    "add_more_services": "Add more services"
   }
 }

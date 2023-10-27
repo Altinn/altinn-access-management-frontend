@@ -28,7 +28,7 @@ export const ReceiptPage = () => {
   return (
     <PageContainer>
       <Page
-        color='light'
+        color='dark'
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
@@ -38,8 +38,8 @@ export const ReceiptPage = () => {
           </div>
           <GroupElements>
             <Button
-              color={'success'}
-              fullWidth={isSm}
+              color={'first'}
+              fullWidth
             >
               {t('common.finished')}
             </Button>
@@ -49,8 +49,9 @@ export const ReceiptPage = () => {
                   '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
                 );
               }}
-              color={'primary'}
-              fullWidth={isSm}
+              color={'first'}
+              variant={'secondary'}
+              fullWidth
             >
               {t('single_rights.give_more_rights')}
             </Button>

@@ -66,7 +66,7 @@ export const ResourceActionBar = ({
 
   const addButton = (
     <Button
-      variant='quiet'
+      variant='tertiary'
       icon={<PlusCircleIcon title='add' />}
       size={compact ? 'large' : 'medium'}
       onClick={() => {
@@ -81,7 +81,7 @@ export const ResourceActionBar = ({
 
   const undoButton = (
     <Button
-      variant='quiet'
+      variant='tertiary'
       icon={<ArrowUndoIcon title={t('common.undo')} />}
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}

@@ -51,7 +51,7 @@ export const ResourceCollectionBar = ({
       color='success'
       actions={
         <Button
-          variant='quiet'
+          variant='tertiary'
           size={compact ? 'medium' : 'small'}
           onClick={() => {
             onRemove(resource.identifier);
@@ -71,6 +71,7 @@ export const ResourceCollectionBar = ({
       collection={selectedResourcesActionBars}
       compact={compact}
       proceedToPath={proceedToPath}
+      disabledProceedButton={resources.length < 1}
     />
   );
 };

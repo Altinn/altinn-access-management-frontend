@@ -124,8 +124,8 @@ export const Filter = ({
     <div className={classes.modalHeader}>
       <h3>{label}</h3>
       <Button
-        variant='quiet'
-        color='secondary'
+        variant='tertiary'
+        color='second'
         onClick={handleOpenOrClose}
         icon={<XMarkIcon aria-label={String(t('common.close'))} />}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
@@ -167,7 +167,7 @@ export const Filter = ({
           <Button
             className={classes.resetButton}
             size={fullScreenModal ? 'medium' : 'small'}
-            variant='quiet'
+            variant='tertiary'
             fullWidth={false}
             aria-disabled={checkedFilters.length === 0}
             onClick={checkedFilters.length === 0 ? undefined : handleReset}
