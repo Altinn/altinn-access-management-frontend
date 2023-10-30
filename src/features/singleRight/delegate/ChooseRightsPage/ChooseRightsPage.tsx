@@ -41,7 +41,7 @@ type Service = {
   status: string;
   title: string;
   serviceOwner: string;
-  errorCode?: string;
+  errorCodes?: string[];
   rights: Right[];
 };
 
@@ -89,13 +89,14 @@ export const ChooseRightsPage = () => {
           delegable: right.status === 'Delegable',
           checked: right.status === 'Delegable',
           resourceReference: right.resource,
+          errorCodes: right.details?.filter((d) => d.code !== undefined).map((d) => d.code),
         })) ?? [];
       return {
         serviceIdentifier: service.service?.identifier ?? '',
         description: service.service?.description ?? '',
         rightDescription: service.service?.rightDescription ?? '',
         status: String(service.status),
-        errorCode: service.errorCode,
+        errorCode: service.errorCodes,
         title: service.service?.title ?? '',
         serviceOwner: service.service?.resourceOwnerName ?? '',
         rights: rights,
@@ -148,7 +149,7 @@ export const ChooseRightsPage = () => {
     }
   };
 
-  const chooseRightsActionBars = chosenServices?.map((service, serviceIndex) => (
+  const chooseRightsActionBars = chosenServices?.map((service: Service, serviceIndex) => (
     <RightsActionBar
       key={service.serviceIdentifier}
       title={service.title}
@@ -166,7 +167,7 @@ export const ChooseRightsPage = () => {
         serviceIdentifier={service.serviceIdentifier}
         serviceDescription={service.description}
         rightDescription={service.rightDescription}
-        errorCode={service.errorCode}
+        errorCodes={service.rights}
       />
     </RightsActionBar>
   ));

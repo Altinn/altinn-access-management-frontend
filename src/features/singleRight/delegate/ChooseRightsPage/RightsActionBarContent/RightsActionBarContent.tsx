@@ -13,6 +13,7 @@ export type Right = {
   delegable: boolean;
   checked: boolean;
   resourceReference: IdValuePair[];
+  errorCodes: string[];
 };
 
 export interface RightsActionBarContentProps {
@@ -32,7 +33,7 @@ export interface RightsActionBarContentProps {
   serviceIdentifier: string;
 
   /** code representing the error if service contains rights that are not delegable */
-  errorCode?: string;
+  errorCodes?: string[];
 }
 
 export const RightsActionBarContent = ({
@@ -41,10 +42,12 @@ export const RightsActionBarContent = ({
   serviceDescription,
   rightDescription,
   serviceIdentifier,
-  errorCode,
+  errorCodes,
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation('common');
   const hasUndelegableRights = rights.some((r) => r.delegable === false);
+
+  console.log('errorCodes', rights);
 
   const serviceResourceContent = (
     <>
@@ -89,24 +92,27 @@ export const RightsActionBarContent = ({
         >
           {t('single_rights.alert_partially_delegable_header')}
         </Heading>
-        <Paragraph spacing>{t(`${getSingleRightsErrorCodeTextKey(errorCode)}`)}</Paragraph>
-        <Heading
-          size={'xxsmall'}
-          level={5}
-        >
-          {t('single_rights.you_cant_delegate_these_rights')}
-        </Heading>
-        <div className={classes.chipContainer}>
-          {rights
-            .filter((r: Right) => r.delegable === false)
-            .map((r: Right, index: number) => {
-              return (
-                <div key={index}>
-                  <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>
-                </div>
-              );
-            })}
-        </div>
+        <Paragraph spacing>{t('single_rights.you_cant_delegate_these_rights')}</Paragraph>
+        {rights
+          .filter((r: Right) => r.delegable === false)
+          .map((r: Right, index: number) => (
+            <div key={index}>
+              {r.errorCodes.map((errorCode, innerIndex) => (
+                <>
+                  <Heading
+                    size={'xxsmall'}
+                    level={5}
+                    key={innerIndex}
+                  >
+                    {t(`${getSingleRightsErrorCodeTextKey(errorCode)}`)}
+                  </Heading>
+                  <div key={index}>
+                    <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>
+                  </div>
+                </>
+              ))}
+            </div>
+          ))}
       </Alert>
     </div>
   );

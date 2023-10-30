@@ -54,6 +54,18 @@
             }
           ]
         }
+      },
+      {
+        "code": "MissingDelegationAccess",
+        "description": "The user does not have access through delegation(s) of the right",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
       }
     ]
   },
@@ -75,6 +87,18 @@
       {
         "code": "MissingSrrRightAccess",
         "description": "MissingSrrRightAccess",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      },
+      {
+        "code": "MissingDelegationAccess",
+        "description": "The user does not have access through delegation(s) of the right",
         "parameters": {
           "roleRequirementsMatches": [
             {

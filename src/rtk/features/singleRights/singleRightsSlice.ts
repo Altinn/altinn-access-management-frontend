@@ -30,7 +30,7 @@ export interface DelegationResponseData {
   resource: IdValuePair[];
   action: string;
   status: string;
-  details?: details;
+  details?: details[];
   reduxStatus: ReduxStatusResponse;
 }
 
@@ -43,7 +43,7 @@ export interface ServiceWithStatus {
   rightDelegationResults?: DelegationResponseData[];
   service?: ServiceResource;
   status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
-  errorCode?: string;
+  errorCodes?: string[];
 }
 
 interface details {
