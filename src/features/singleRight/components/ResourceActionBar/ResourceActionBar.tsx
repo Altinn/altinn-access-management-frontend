@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, ErrorMessage } from '@digdir/design-system-react';
+import { Button, ErrorMessage, Paragraph, Spinner } from '@digdir/design-system-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -41,10 +41,12 @@ export const ResourceActionBar = ({
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const previousStatus = usePrevious(status);
 
   useUpdate(() => {
+    setIsLoading(false);
     if (status === 'NotDelegable' && previousStatus !== undefined) {
       setOpen(true);
     }
@@ -64,10 +66,13 @@ export const ResourceActionBar = ({
 
   const addButton = (
     <Button
-      variant='quiet'
+      variant='tertiary'
       icon={<PlusCircleIcon title='add' />}
       size={compact ? 'large' : 'medium'}
-      onClick={onAddClick}
+      onClick={() => {
+        setIsLoading(true);
+        onAddClick?.();
+      }}
       iconPlacement='right'
     >
       {!compact && t('common.add')}
@@ -76,7 +81,7 @@ export const ResourceActionBar = ({
 
   const undoButton = (
     <Button
-      variant='quiet'
+      variant='tertiary'
       icon={<ArrowUndoIcon title={t('common.undo')} />}
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
@@ -84,6 +89,16 @@ export const ResourceActionBar = ({
     >
       {!compact && t('common.undo')}
     </Button>
+  );
+
+  const loadingText = (
+    <Paragraph className={classes.loadingText}>
+      <Spinner
+        title={t('common.loading')}
+        variant='interaction'
+      />
+      {!compact && t('common.loading')}
+    </Paragraph>
   );
 
   const notDelegableLabel = (
@@ -106,6 +121,9 @@ export const ResourceActionBar = ({
   );
 
   const action = () => {
+    if (isLoading) {
+      return loadingText;
+    }
     switch (status) {
       case 'Delegable':
       case 'PartiallyDelegable':

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { type ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import type {
   IdValuePair,
   DelegationInputDto,
@@ -22,7 +21,7 @@ export enum BFFDelegatedStatus {
 }
 
 export interface DelegationAccessCheckDto {
-  resourceIdentifierDto: ResourceIdentifierDto;
+  resourceReference: IdValuePair[];
   serviceResource: ServiceResource;
 }
 
@@ -78,10 +77,9 @@ export const delegationAccessCheck = createAsyncThunk(
     const altinnPartyId = getCookie('AltinnPartyId');
 
     return await axios
-      .post(
-        `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
-        dto.resourceIdentifierDto,
-      )
+      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`, {
+        resource: dto.resourceReference,
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -96,10 +94,9 @@ export const fetchRights = createAsyncThunk(
     const altinnPartyId = getCookie('AltinnPartyId');
     // TODO: Change to new fetchRights endpoint when available
     return await axios
-      .post(
-        `/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`,
-        dto.resourceIdentifierDto,
-      )
+      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`, {
+        resource: dto.resourceReference,
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);

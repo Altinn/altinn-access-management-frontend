@@ -32,11 +32,15 @@
     "read": "Lese",
     "write": "Skrive",
     "sign": "Signere",
+    "delete": "Slett",
+    "instantiate": "Instansier",
     "access": "Tilgang til hele tjenesten",
     "failed": "Feilet",
     "failed_lowercase": "feilet",
     "finished": "Ferdig",
-    "an_error_has_occured": "En feil har skjedd"
+    "an_error_has_occured": "En feil har skjedd",
+    "yes": "Ja",
+    "finish_delegation": "Fullfør delegering"
   },
   "profile": {
     "received": "Mottatte",
@@ -112,7 +116,7 @@
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
-    "own_orgnumber_delegation_paragraph": "Det er ikke mulig å delegere API til deg selv. Skriv inn et annet organisasjonsnummer for å fortsette."
+    "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette."
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettigheter",
@@ -150,6 +154,9 @@
     "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
     "some_failed_technical_problem": "Pga. Av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",
     "these_rights_were_not_delegated": "Disse rettighetene kunne ikke delegeres:",
-    "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:"
+    "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:",
+    "cancel_popover_text": "Valgte tjenester vil ikke bli delegert. Er du sikker på at du vil avslutte?",
+    "no_continue_delegating": "Nei, fortsett å delegere",
+    "add_more_services": "Legg til flere tjenester"
   }
 }

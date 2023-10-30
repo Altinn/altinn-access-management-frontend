@@ -24,7 +24,7 @@ import classes from './SearchSection.module.css';
 
 export interface SearchSectionParams {
   /** The callback function to be called when a service is selected. */
-  onAdd: (resourceIdentifier: string, resource: ServiceResource) => void;
+  onAdd: (resource: ServiceResource) => void;
 
   /** The callback function to be called when a undoing the selection choice of a service. */
   onUndo: (resourceIdentifier: string) => void;
@@ -168,7 +168,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         subtitle={resource.resourceOwnerName}
         status={status ?? 'Unchecked'}
         onAddClick={() => {
-          onAdd(resource.identifier, resource);
+          onAdd(resource);
         }}
         onRemoveClick={() => {
           onUndo(resource.identifier);

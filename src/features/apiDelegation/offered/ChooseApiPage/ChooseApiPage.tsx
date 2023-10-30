@@ -221,7 +221,7 @@ export const ChooseApiPage = () => {
           </div>
           <GroupElements>
             <Button
-              variant={'outline'}
+              variant={'secondary'}
               onClick={() =>
                 navigate(
                   '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,

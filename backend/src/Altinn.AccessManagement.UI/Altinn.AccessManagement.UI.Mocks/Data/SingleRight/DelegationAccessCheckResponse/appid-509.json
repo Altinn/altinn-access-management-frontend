@@ -4,15 +4,15 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "appid-505"
+        "value": "appid-509"
       }
     ],
     "action": "read",
     "status": "Delegable",
     "details": [
       {
-        "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
             {
@@ -29,15 +29,15 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "appid-505"
+        "value": "appid-509"
       }
     ],
     "action": "write",
-    "status": "NotDelegable",
+    "status": "Delegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
-        "description": "MissingSrrRightAccess",
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
             {
@@ -54,15 +54,15 @@
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "appid-505"
+        "value": "appid-509"
       }
     ],
     "action": "sign",
-    "status": "NotDelegable",
+    "status": "Delegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
-        "description": "MissingSrrRightAccess",
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
             {

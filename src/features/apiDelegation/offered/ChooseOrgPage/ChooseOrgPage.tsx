@@ -121,7 +121,7 @@ export const ChooseOrgPage = () => {
           actions={
             <Button
               icon={<PlusCircleIcon fontSize='3rem' />}
-              variant={'quiet'}
+              variant={'tertiary'}
               color={'success'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={t('common.add') + ' ' + org.orgName}
@@ -147,7 +147,7 @@ export const ChooseOrgPage = () => {
           actions={
             <Button
               icon={<MinusCircleIcon />}
-              variant={'quiet'}
+              variant={'tertiary'}
               color={'danger'}
               onClick={() => {
                 handleSoftRemove(org);
@@ -284,7 +284,7 @@ export const ChooseOrgPage = () => {
           )}
           <GroupElements>
             <Button
-              variant={'outline'}
+              variant={'secondary'}
               onClick={() =>
                 navigate(
                   '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview,

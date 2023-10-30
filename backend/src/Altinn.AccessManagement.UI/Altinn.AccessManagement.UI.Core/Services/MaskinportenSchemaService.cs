@@ -84,9 +84,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     delegationFE.ResourceTitle = resource.Title.GetValueOrDefault(languageCode, "nb");
                     delegationFE.ResourceType = resource.ResourceType;
-                    delegationFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority.Orgcode;
-                    delegationFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority.Organization;
-                    delegationFE.ResourceOwnerName = resource.HasCompetentAuthority.Name.GetValueOrDefault(languageCode, "nb");
+                    delegationFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority?.Orgcode;
+                    delegationFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority?.Organization;
+                    delegationFE.ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb");
                     delegationFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode, "nb");
                     delegationFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode, "nb");
                     delegationFE.ResourceReferences = resource.ResourceReferences;

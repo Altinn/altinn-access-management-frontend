@@ -1,4 +1,4 @@
-import { Button, Paragraph } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ export const ReceiptPage = () => {
   return (
     <PageContainer>
       <Page
-        color='light'
+        color='dark'
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
@@ -36,11 +36,10 @@ export const ReceiptPage = () => {
           <div className={classes.actionBars}>
             <ActionBarSection />
           </div>
-          <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
           <GroupElements>
             <Button
-              color={'success'}
-              fullWidth={isSm}
+              color={'first'}
+              fullWidth
             >
               {t('common.finished')}
             </Button>
@@ -50,8 +49,9 @@ export const ReceiptPage = () => {
                   '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
                 );
               }}
-              color={'primary'}
-              fullWidth={isSm}
+              color={'first'}
+              variant={'secondary'}
+              fullWidth
             >
               {t('single_rights.give_more_rights')}
             </Button>

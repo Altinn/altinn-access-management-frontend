@@ -11,18 +11,6 @@
   gap: var(--fds-spacing-2);
 }
 
-.serviceResourceContent {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.chipContainer {
-  display: flex;
-  gap: 5px;
-  margin-top: 15px;
-}
-
 .navigationContainer {
   margin-top: 40px;
 }
@@ -30,8 +18,4 @@
 .secondaryText {
   margin-top: 20px;
   margin-bottom: 40px;
-}
-
-.alertContainer {
-  margin-top: 30px;
 }

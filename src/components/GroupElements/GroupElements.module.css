@@ -7,7 +7,14 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .list {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
   .listItem {
-    flex: 1;
+    justify-content: center;
+    display: flex;
   }
 }

@@ -2,15 +2,14 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress } from '@digdir/design-system-react';
+import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { ResourceIdentifierDto } from '@/dataObjects/dtos/singleRights/ResourceIdentifierDto';
 import {
   type DelegationAccessCheckDto,
   delegationAccessCheck,
@@ -28,6 +27,8 @@ export const ChooseServicePage = () => {
   const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
   );
@@ -36,10 +37,10 @@ export const ChooseServicePage = () => {
     void dispatch(resetProcessedDelegations());
   }, []);
 
-  const onAdd = (identifier: string, serviceResource: ServiceResource) => {
+  const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
       serviceResource,
-      resourceIdentifierDto: new ResourceIdentifierDto('urn:altinn:resource', identifier),
+      resourceReference: serviceResource.authorizationReference,
     };
 
     void dispatch(delegationAccessCheck(dto));
@@ -70,7 +71,7 @@ export const ChooseServicePage = () => {
   return (
     <PageContainer>
       <Page
-        color='light'
+        color='dark'
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
@@ -87,7 +88,6 @@ export const ChooseServicePage = () => {
             proceedToPath={
               '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseRights
             }
-            disabledProceedClick={delegableChosenServices.length < 1}
           />
           <SearchSection
             onAdd={onAdd}
@@ -96,18 +96,10 @@ export const ChooseServicePage = () => {
 
           <GroupElements>
             <Button
-              variant='quiet'
-              color='danger'
-              fullWidth={isSm}
-              onClick={onCancel}
-            >
-              {t('common.cancel')}
-            </Button>
-            <Button
-              variant='filled'
-              color='primary'
-              fullWidth={isSm}
+              variant='primary'
+              color='first'
               disabled={delegableChosenServices.length < 1}
+              fullWidth
               onClick={() => {
                 navigate(
                   '/' +
@@ -119,6 +111,45 @@ export const ChooseServicePage = () => {
             >
               {t('common.proceed')}
             </Button>
+            <Button
+              variant='tertiary'
+              color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
+              size='medium'
+              onClick={
+                delegableChosenServices.length > 0 ? () => setPopoverOpen(!popoverOpen) : onCancel
+              }
+              ref={buttonRef}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Popover
+              variant={'warning'}
+              placement='top'
+              anchorEl={buttonRef.current}
+              open={popoverOpen}
+              onClose={() => setPopoverOpen(false)}
+            >
+              <Popover.Content>
+                <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
+                <GroupElements>
+                  <Button
+                    onClick={onCancel}
+                    color={'danger'}
+                    variant={'primary'}
+                    fullWidth
+                  >
+                    {t('common.yes')}
+                  </Button>
+                  <Button
+                    onClick={() => setPopoverOpen(false)}
+                    color={'danger'}
+                    variant={'tertiary'}
+                  >
+                    {t('single_rights.no_continue_delegating')}
+                  </Button>
+                </GroupElements>
+              </Popover.Content>
+            </Popover>
           </GroupElements>
         </PageContent>
       </Page>

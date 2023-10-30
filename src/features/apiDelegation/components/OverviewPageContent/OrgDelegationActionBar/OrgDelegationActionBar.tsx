@@ -43,8 +43,8 @@ export const OrgDelegationActionBar = ({
     <>
       {delegateToOrgCallback && (
         <Button
-          variant={'quiet'}
-          color={'primary'}
+          variant={'tertiary'}
+          color={'first'}
           icon={<PlusCircleIcon />}
           size={'medium'}
           onClick={delegateToOrgCallback}
@@ -56,8 +56,8 @@ export const OrgDelegationActionBar = ({
       {isEditable &&
         (organization.isAllSoftDeleted ? (
           <Button
-            variant={'quiet'}
-            color={'secondary'}
+            variant={'tertiary'}
+            color={'second'}
             size={'medium'}
             icon={<ArrowUndoIcon />}
             onClick={softRestoreAllCallback}
@@ -68,7 +68,7 @@ export const OrgDelegationActionBar = ({
         ) : (
           <div>
             <Button
-              variant={'quiet'}
+              variant={'tertiary'}
               color={'danger'}
               icon={<MinusCircleIcon />}
               size={'medium'}
