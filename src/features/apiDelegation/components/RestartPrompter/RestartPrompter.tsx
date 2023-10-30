@@ -6,13 +6,13 @@ import cn from 'classnames';
 
 import { ApiDelegationPath } from '@/routes/paths';
 
-import classes from './ErrorAlert.module.css';
+import classes from './RestartPrompter.module.css';
 
-interface ErrorAlert {
+interface RestartPrompterProps {
   spacingBottom?: boolean;
 }
 
-export const ErrorAlert = ({ spacingBottom = false }: ErrorAlert) => {
+export const RestartPrompter = ({ spacingBottom = false }: RestartPrompterProps) => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
 

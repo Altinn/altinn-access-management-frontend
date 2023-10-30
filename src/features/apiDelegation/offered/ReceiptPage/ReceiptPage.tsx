@@ -19,7 +19,7 @@ import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDele
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { useMediaQuery } from '@/resources/hooks';
 
-import { ErrorAlert } from '../../components/ErrorAlert/ErrorAlert';
+import { RestartPrompter } from '../../components/RestartPrompter/RestartPrompter';
 
 import classes from './ReceiptPage.module.css';
 
@@ -127,7 +127,7 @@ export const ReceiptPage = () => {
       <Page color={successfulApiDelegations.length === 0 ? 'danger' : 'success'}>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          {showErrorAlert() ? <ErrorAlert spacingBottom /> : delegatedContent()}
+          {showErrorAlert() ? <RestartPrompter spacingBottom /> : delegatedContent()}
           <Paragraph spacing>
             {successfulApiDelegations.length === 0
               ? t('api_delegation.receipt_page_failed_text')

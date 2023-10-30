@@ -31,7 +31,7 @@ import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/del
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
 
-import { ErrorAlert } from '../../components/ErrorAlert/ErrorAlert';
+import { RestartPrompter } from '../../components/RestartPrompter/RestartPrompter';
 
 import classes from './ConfirmationPage.module.css';
 
@@ -174,7 +174,7 @@ export const ConfirmationPage = () => {
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
-            {showErrorPanel() ? <ErrorAlert /> : <>{delegationContent()}</>}
+            {showErrorPanel() ? <RestartPrompter /> : <>{delegationContent()}</>}
           </PageContent>
         </Page>
       </PageContainer>
