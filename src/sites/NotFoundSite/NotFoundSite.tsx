@@ -4,7 +4,7 @@ import { useRouteError } from 'react-router-dom';
 import * as React from 'react';
 
 import { Page, PageContent, PageContainer } from '@/components';
-import SeagullIcon from '@/assets/Seagull.svg';
+import SeagullIcon from '@/assets/Seagull.svg?react';
 
 import classes from './NotFoundSite.module.css';
 
