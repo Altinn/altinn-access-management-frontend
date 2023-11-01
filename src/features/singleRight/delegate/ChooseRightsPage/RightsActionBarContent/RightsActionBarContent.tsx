@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
+import { RightsAlert } from '../RightsAlert/RightsAlert';
+
 import classes from './RightsActionBarContent.module.css';
 
 export type Right = {

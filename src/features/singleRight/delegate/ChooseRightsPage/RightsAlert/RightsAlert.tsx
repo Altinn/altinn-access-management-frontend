@@ -11,9 +11,16 @@ export interface RightsAlertProps {
   rights: Right[];
   key: number;
   toggleRight: (serviceIdentifier: string, action: string) => void;
+  serviceIdentifier: string;
 }
 
-export const RightsAlert = ({ errorCode, rights, key, toggleRight }: RightsAlertProps) => {
+export const RightsAlert = ({
+  errorCode,
+  rights,
+  key,
+  toggleRight,
+  serviceIdentifier,
+}: RightsAlertProps) => {
   const { t } = useTranslation('common');
 
   return (
