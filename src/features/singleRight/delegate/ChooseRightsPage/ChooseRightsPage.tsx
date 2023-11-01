@@ -132,7 +132,7 @@ export const ChooseRightsPage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
-  const toggleRightChecked = (serviceIdentifier: string, action: string) => {
+  const toggleRight = (serviceIdentifier: string, action: string) => {
     const serviceStateCopy = [...chosenServices];
 
     for (const service of serviceStateCopy) {
@@ -162,7 +162,7 @@ export const ChooseRightsPage = () => {
       defaultOpen={serviceIndex === 0}
     >
       <RightsActionBarContent
-        toggleRight={toggleRightChecked}
+        toggleRight={toggleRight}
         rights={service.rights}
         serviceIdentifier={service.serviceIdentifier}
         serviceDescription={service.description}
