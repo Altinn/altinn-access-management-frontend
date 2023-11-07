@@ -136,7 +136,8 @@ export const ConfirmationPage = () => {
         </Paragraph>
         <GroupElements>
           <Button
-            variant={'outline'}
+            color='first'
+            variant='secondary'
             fullWidth={isSm}
             onClick={() =>
               navigate(

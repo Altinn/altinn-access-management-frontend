@@ -134,8 +134,8 @@ export const ReceiptPage = () => {
               : t('api_delegation.receipt_page_bottom_text')}
           </Paragraph>
           <Button
-            color='primary'
-            variant='filled'
+            color='first'
+            variant='primary'
             onClick={navigateToOverview}
             fullWidth={isSm}
           >
