@@ -30,7 +30,7 @@ export interface DelegationResponseData {
   resource: IdValuePair[];
   action: string;
   status: string;
-  details?: details[];
+  details?: Details[];
   reduxStatus: ReduxStatusResponse;
 }
 
@@ -46,17 +46,17 @@ export interface ServiceWithStatus {
   errorCodes?: string[];
 }
 
-interface details {
+export interface Details {
   code?: string;
   description?: string;
-  parameters?: parameters[];
+  parameters?: parameters;
 }
 
 interface parameters {
-  roleRequirementsMatches: roleRequirementsMatches;
+  roleRequirementsMatches: { [key: string]: IdValuePair[] };
 }
 
-interface roleRequirementsMatches {
+export interface RoleRequirementsMatches {
   name: string;
   value: string;
 }
@@ -190,7 +190,7 @@ const singleRightSlice = createSlice({
           rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'Delegable',
-          errorCode: '',
+          errorCodes: [],
         };
 
         const hasNonDelegableRights = !!action.payload.find(
@@ -206,7 +206,7 @@ const singleRightSlice = createSlice({
             serviceWithStatus.status = 'PartiallyDelegable';
           } else {
             serviceWithStatus.status = 'NotDelegable';
-            serviceWithStatus.errorCode = action.payload[0].details[0].code;
+            serviceWithStatus.errorCodes?.push(action.payload[0].details[0].code);
           }
         }
 
@@ -219,7 +219,7 @@ const singleRightSlice = createSlice({
           rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: 'Delegable',
-          errorCode: '',
+          errorCodes: [],
         };
 
         if (serviceWithStatus) {

@@ -20,6 +20,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
         /// <summary>
         ///     Further details about the reason for the response.
         /// </summary>
-        public Parameters? Parameters { get; set; }
+        public Dictionary<string, List<IdValuePair>> Parameters { get; set; } = new Dictionary<string, List<IdValuePair>>();
     }
 }

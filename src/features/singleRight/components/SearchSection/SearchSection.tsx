@@ -156,10 +156,13 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const status = chosenServices.find(
       (selected: ServiceWithStatus) => selected.service?.title === resource.title,
     )?.status;
-    const errorCode = chosenServices.find(
+    const errorCodes = chosenServices.find(
       (selected: ServiceWithStatus) => selected.service?.title === resource.title,
-    )?.errorCode;
-    const errorCodeTextKey = getSingleRightsErrorCodeTextKey(errorCode);
+    )?.errorCodes;
+
+    const errorCodeTextKey = errorCodes
+      ? getSingleRightsErrorCodeTextKey(errorCodes[0])
+      : undefined;
 
     return (
       <ResourceActionBar
@@ -178,14 +181,15 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
-          {errorCode && (
+          {errorCodes && (
             <Alert
               severity='danger'
               elevated={false}
               className={classes.notDelegableAlert}
             >
               <Heading size='xsmall'>{t(`${errorCodeTextKey}_title`)}</Heading>
-              <Paragraph>{t(`${errorCodeTextKey}`)}</Paragraph>
+              <Paragraph>{t(`${errorCodeTextKey}`, { you: t('common.you_uppercase') })}</Paragraph>
+              <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
             </Alert>
           )}
           <Paragraph size='small'>{resource.description}</Paragraph>

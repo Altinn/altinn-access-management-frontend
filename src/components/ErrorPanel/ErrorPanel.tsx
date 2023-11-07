@@ -14,7 +14,11 @@ export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
   const { t } = useTranslation('common');
 
   const currentDate = new Date();
-  const date = `${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
+
+  const date = `${currentDate.getDate()}/${
+    // javascript is zero-indexed on getMonth
+    currentDate.getMonth() + 1
+  }/${currentDate.getFullYear()}`;
   const time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
   return (

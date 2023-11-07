@@ -30,8 +30,8 @@ import {
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
+import type { Right } from './RightsActionBarContent/RightsActionBarContent';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
-import { type Right } from './RightsActionBarContent/RightsActionBarContent';
 import classes from './ChooseRightsPage.module.css';
 
 type Service = {
@@ -83,14 +83,16 @@ export const ChooseRightsPage = () => {
     });
 
     return sorted.map((service) => {
-      const rights =
-        service.rightDelegationResults?.map((right) => ({
+      const rights: Right[] = (service.rightDelegationResults ?? []).map((right) => {
+        return {
           action: right.action,
           delegable: right.status === 'Delegable',
           checked: right.status === 'Delegable',
           resourceReference: right.resource,
-          errorCodes: right.details?.filter((d) => d.code !== undefined).map((d) => d.code),
-        })) ?? [];
+          details: right.details,
+        };
+      });
+
       return {
         serviceIdentifier: service.service?.identifier ?? '',
         description: service.service?.description ?? '',

@@ -2,11 +2,15 @@
 import * as React from 'react';
 import { Paragraph, Heading, Chip, Alert } from '@digdir/design-system-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 
 import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-
-import { RightsAlert } from '../RightsAlert/RightsAlert';
+import {
+  ErrorCode,
+  getSingleRightsErrorCodeTextKey,
+  prioritizeErrors,
+} from '@/resources/utils/errorCodeUtils';
+import type { Details } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import classes from './RightsActionBarContent.module.css';
 
@@ -15,7 +19,7 @@ export type Right = {
   delegable: boolean;
   checked: boolean;
   resourceReference: IdValuePair[];
-  errorCodes: string[];
+  details?: Details[];
 };
 
 export interface RightsActionBarContentProps {
@@ -33,9 +37,6 @@ export interface RightsActionBarContentProps {
 
   /** Unique identifier for the service the rights adhere to */
   serviceIdentifier: string;
-
-  /** code representing the error if service contains rights that are not delegable */
-  errorCodes?: string[];
 }
 
 export const RightsActionBarContent = ({
@@ -44,12 +45,44 @@ export const RightsActionBarContent = ({
   serviceDescription,
   rightDescription,
   serviceIdentifier,
-  errorCodes,
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation('common');
   const hasUndelegableRights = rights.some((r) => r.delegable === false);
+  const [actionList, setActionList] = useState<string[]>([]);
+  const [errorList, setErrorList] = useState<string[]>([]);
 
-  console.log('errorCodes', rights);
+  const createErrorList = () => {
+    const errors: string[] = [];
+    rights.map((right: Right) => {
+      if (right.delegable === false) {
+        right.details?.map((detail) => {
+          if (
+            Object.values(ErrorCode).includes(detail.code as ErrorCode) &&
+            detail.code !== undefined
+          ) {
+            errors.push(detail.code);
+          }
+        });
+      }
+    });
+
+    setErrorList(prioritizeErrors(errors));
+  };
+
+  const initializeActions = () => {
+    const initializedActions: string[] = [];
+    rights.map((right: Right) => {
+      if (right.delegable === false) {
+        initializedActions.push(right.action);
+      }
+    });
+    setActionList(initializedActions);
+  };
+
+  useEffect(() => {
+    initializeActions();
+    createErrorList();
+  }, [rights]);
 
   const serviceResourceContent = (
     <>
@@ -94,27 +127,27 @@ export const RightsActionBarContent = ({
         >
           {t('single_rights.alert_partially_delegable_header')}
         </Heading>
-        <Paragraph spacing>{t('single_rights.you_cant_delegate_these_rights')}</Paragraph>
-        {rights
-          .filter((r: Right) => r.delegable === false)
-          .map((r: Right, index: number) => (
-            <div key={index}>
-              {r.errorCodes.map((errorCode, innerIndex) => (
-                <>
-                  <Heading
-                    size={'xxsmall'}
-                    level={5}
-                    key={innerIndex}
-                  >
-                    {t(`${getSingleRightsErrorCodeTextKey(errorCode)}`)}
-                  </Heading>
-                  <div key={index}>
-                    <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>
-                  </div>
-                </>
-              ))}
-            </div>
-          ))}
+        <Paragraph spacing>
+          {t('single_rights.one_or_more_rights_is_undelegable', {
+            reason: t(`${getSingleRightsErrorCodeTextKey(errorList[0])}`, {
+              you: t('common.you_lowercase'),
+            }),
+          })}
+        </Paragraph>
+        <Paragraph spacing>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
+        <>
+          <Heading
+            size={'xxsmall'}
+            level={5}
+          >
+            {t('single_rights.you_cant_delegate_these_rights')}
+          </Heading>
+          <div className={classes.chipContainer}>
+            {actionList.map((action, index) => (
+              <Chip.Toggle key={index}>{t(`common.${action}`)}</Chip.Toggle>
+            ))}
+          </div>
+        </>
       </Alert>
     </div>
   );
