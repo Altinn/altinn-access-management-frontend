@@ -83,15 +83,13 @@ export const ChooseRightsPage = () => {
     });
 
     return sorted.map((service) => {
-      const rights: Right[] = (service.rightDelegationResults ?? []).map((right) => {
-        return {
+      const rights: Right[] =
+        service.rightDelegationResults?.map((right) => ({
           action: right.action,
           delegable: right.status === 'Delegable',
           checked: right.status === 'Delegable',
           resourceReference: right.resource,
-          details: right.details,
-        };
-      });
+        })) ?? [];
 
       return {
         serviceIdentifier: service.service?.identifier ?? '',
@@ -169,7 +167,6 @@ export const ChooseRightsPage = () => {
         serviceIdentifier={service.serviceIdentifier}
         serviceDescription={service.description}
         rightDescription={service.rightDescription}
-        errorCodes={service.rights}
       />
     </RightsActionBar>
   ));
