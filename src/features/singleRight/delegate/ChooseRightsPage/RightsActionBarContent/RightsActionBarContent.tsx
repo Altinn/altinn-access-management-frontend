@@ -15,6 +15,15 @@ export type Right = {
   resourceReference: IdValuePair[];
 };
 
+enum LocalizedAction {
+  Read = 'read',
+  Write = 'write',
+  Sign = 'sign',
+  Instantiate = 'instantiate',
+  Confirm = 'confirm',
+  Access = 'access',
+}
+
 export interface RightsActionBarContentProps {
   /** The callback function to be called when toggling a right. */
   toggleRight: (serviceIdentifier: string, action: string) => void;
@@ -61,19 +70,35 @@ export const RightsActionBarContent = ({
         {rights
           .filter((right: Right) => right.delegable === true)
           .map((right: Right, index: number) => {
-            return (
-              <div key={index}>
-                <Chip.Toggle
-                  checkmark
-                  selected={right.checked}
-                  onClick={() => {
-                    toggleRight(serviceIdentifier, right.action);
-                  }}
-                >
-                  {t(`common.${right.action}`)}
-                </Chip.Toggle>
-              </div>
-            );
+            if (Object.values(LocalizedAction).includes(right.action as LocalizedAction)) {
+              return (
+                <div key={index}>
+                  <Chip.Toggle
+                    checkmark
+                    selected={right.checked}
+                    onClick={() => {
+                      toggleRight(serviceIdentifier, right.action);
+                    }}
+                  >
+                    {t(`common.${right.action}`)}
+                  </Chip.Toggle>
+                </div>
+              );
+            } else {
+              return (
+                <div key={index}>
+                  <Chip.Toggle
+                    checkmark
+                    selected={right.checked}
+                    onClick={() => {
+                      toggleRight(serviceIdentifier, right.action);
+                    }}
+                  >
+                    {right.action}
+                  </Chip.Toggle>
+                </div>
+              );
+            }
           })}
       </div>
     </>
@@ -98,13 +123,21 @@ export const RightsActionBarContent = ({
         </Heading>
         <div className={classes.chipContainer}>
           {rights
-            .filter((r: Right) => r.delegable === false)
-            .map((r: Right, index: number) => {
-              return (
-                <div key={index}>
-                  <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>
-                </div>
-              );
+            .filter((right: Right) => right.delegable === false)
+            .map((right: Right, index: number) => {
+              if (Object.values(LocalizedAction).includes(right.action as LocalizedAction)) {
+                return (
+                  <div key={index}>
+                    <Chip.Toggle>{t(`common.${right.action}`)}</Chip.Toggle>
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={index}>
+                    <Chip.Toggle>{right.action}</Chip.Toggle>
+                  </div>
+                );
+              }
             })}
         </div>
       </Alert>
