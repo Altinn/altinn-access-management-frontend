@@ -20,6 +20,14 @@ export enum BFFDelegatedStatus {
   NotDelegated = 'NotDelegated',
 }
 
+export enum ServiceStatus {
+  Delegable = 'Delegable',
+  NotDelegable = 'NotDelegable',
+  PartiallyDelegable = 'PartiallyDelegable',
+  Unchecked = 'Unchecked',
+  Error = 'Error',
+}
+
 export interface DelegationAccessCheckDto {
   resourceReference: IdValuePair[];
   serviceResource: ServiceResource;
@@ -42,8 +50,9 @@ export interface ProcessedDelegation {
 export interface ServiceWithStatus {
   rightDelegationResults?: DelegationResponseData[];
   service?: ServiceResource;
-  status?: 'Delegable' | 'NotDelegable' | 'PartiallyDelegable';
+  status?: ServiceStatus;
   errorCode?: string;
+  isLoading?: boolean;
 }
 
 interface details {
@@ -185,40 +194,87 @@ const singleRightSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(delegationAccessCheck.pending, (state, action) => {
+        // Set loading state and prepare for receiving the response for the requested service
+        // Make changes to the array of checked services if the requested service is already present or add it as a new service if not
+
+        const serviceID = action.meta.arg.serviceResource.identifier;
+        let nextStateArray: ServiceWithStatus[];
+
+        if (
+          state.servicesWithStatus.some(
+            (s: ServiceWithStatus) => s.service?.identifier === serviceID,
+          )
+        ) {
+          nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
+            if (sws.service?.identifier === serviceID) {
+              sws.isLoading = true;
+            }
+            return sws;
+          });
+        } else {
+          const newServiceWithStatus: ServiceWithStatus = {
+            service: action.meta.arg.serviceResource,
+            isLoading: true,
+          };
+          nextStateArray = [...state.servicesWithStatus, newServiceWithStatus];
+        }
+
+        state.servicesWithStatus = nextStateArray;
+      })
+
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
-        const serviceWithStatus: ServiceWithStatus = {
-          rightDelegationResults: action.payload,
-          service: action.meta.arg.serviceResource,
-          status: 'Delegable',
-          errorCode: '',
-        };
+        const serviceID = action.meta.arg.serviceResource.identifier;
+        let status = ServiceStatus.Delegable;
+        let errorCode: string;
 
         const hasNonDelegableRights = !!action.payload.find(
-          (response: DelegationResponseData) => response.status === 'NotDelegable',
+          (response: DelegationResponseData) => response.status === ServiceStatus.NotDelegable,
         );
 
         if (hasNonDelegableRights) {
           const isDelegable = !!action.payload.find(
-            (response: DelegationResponseData) => response.status === 'Delegable',
+            (response: DelegationResponseData) => response.status === ServiceStatus.Delegable,
           );
 
           if (isDelegable) {
-            serviceWithStatus.status = 'PartiallyDelegable';
+            status = ServiceStatus.PartiallyDelegable;
           } else {
-            serviceWithStatus.status = 'NotDelegable';
-            serviceWithStatus.errorCode = action.payload[0].details[0].code;
+            status = ServiceStatus.NotDelegable;
+            errorCode = action.payload[0].details[0].code;
           }
         }
+        const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
+          if (sws.service?.identifier === serviceID) {
+            sws.rightDelegationResults = action.payload;
+            sws.isLoading = false;
+            sws.status = status;
+            sws.errorCode = errorCode;
+          }
+          return sws;
+        });
 
-        if (serviceWithStatus) {
-          state.servicesWithStatus.push(serviceWithStatus);
-        }
+        state.servicesWithStatus = nextStateArray;
       })
+
+      .addCase(delegationAccessCheck.rejected, (state, action) => {
+        const serviceID = action.meta.arg.serviceResource.identifier;
+        const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
+          if (sws.service?.identifier === serviceID) {
+            sws.isLoading = false;
+            sws.status = ServiceStatus.Error;
+            sws.errorCode = 'HTTPError';
+          }
+          return sws;
+        });
+        state.servicesWithStatus = nextStateArray;
+      })
+
       .addCase(fetchRights.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
           rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
-          status: 'Delegable',
+          status: ServiceStatus.Delegable,
           errorCode: '',
         };
 
@@ -226,6 +282,7 @@ const singleRightSlice = createSlice({
           state.servicesWithStatus.push(serviceWithStatus);
         }
       })
+
       .addCase(delegate.fulfilled, (state, action) => {
         const delegationInput = createSerializedMeta(action.meta.arg);
 
@@ -240,6 +297,7 @@ const singleRightSlice = createSlice({
         };
         state.processedDelegations.push(pushData);
       })
+
       .addCase(delegate.rejected, (state, action) => {
         const delegationInput = createSerializedMeta(action.meta.arg);
 

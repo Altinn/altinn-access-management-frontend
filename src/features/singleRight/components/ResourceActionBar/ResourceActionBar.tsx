@@ -8,13 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { ActionBar, type ActionBarProps } from '@/components';
 import { useUpdate } from '@/resources/hooks/useUpdate';
 import { usePrevious } from '@/resources/hooks';
+import { ServiceStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import classes from './ResourceActionBar.module.css';
 
 export interface ResourceActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children'> {
   /** Indicates the status of the ActionBar */
-  status: 'Delegable' | 'NotDelegable' | 'Unchecked' | 'PartiallyDelegable';
+  status: ServiceStatus;
 
   /** The callback function to be called when the add button is pressed. */
   onAddClick?: () => void;
@@ -27,37 +28,43 @@ export interface ResourceActionBarProps
 
   /** When true saves as much space as possible. Usually true for smaller screens */
   compact?: boolean;
+
+  /** Replaces the action with a pending spinner when true */
+  isLoading?: boolean;
 }
 
 export const ResourceActionBar = ({
   subtitle,
   title,
   children,
-  status = 'Unchecked',
+  status = ServiceStatus.Unchecked,
   errorText = undefined,
   onAddClick,
   onRemoveClick,
   compact = false,
+  isLoading = false,
 }: ResourceActionBarProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const previousStatus = usePrevious(status);
 
   useUpdate(() => {
-    setIsLoading(false);
-    if (status === 'NotDelegable' && previousStatus !== undefined) {
+    if (
+      (status === ServiceStatus.NotDelegable || status === ServiceStatus.Error) &&
+      previousStatus !== undefined
+    ) {
       setOpen(true);
     }
   }, [status]);
 
   const color = useMemo(() => {
     switch (status) {
-      case 'Delegable':
-      case 'PartiallyDelegable':
+      case ServiceStatus.Delegable:
+      case ServiceStatus.PartiallyDelegable:
         return 'success';
-      case 'NotDelegable':
+      case ServiceStatus.NotDelegable:
+      case ServiceStatus.Error:
         return 'danger';
       default:
         return 'neutral';
@@ -70,12 +77,11 @@ export const ResourceActionBar = ({
       icon={<PlusCircleIcon title='add' />}
       size={compact ? 'large' : 'medium'}
       onClick={() => {
-        setIsLoading(true);
         onAddClick?.();
       }}
       iconPlacement='right'
     >
-      {!compact && t('common.add')}
+      {!compact && (status === ServiceStatus.Error ? t('common.try_again') : t('common.add'))}
     </Button>
   );
 
@@ -125,10 +131,10 @@ export const ResourceActionBar = ({
       return loadingText;
     }
     switch (status) {
-      case 'Delegable':
-      case 'PartiallyDelegable':
+      case ServiceStatus.Delegable:
+      case ServiceStatus.PartiallyDelegable:
         return undoButton;
-      case 'NotDelegable':
+      case ServiceStatus.NotDelegable:
         return notDelegableLabel;
       default:
         return addButton;
