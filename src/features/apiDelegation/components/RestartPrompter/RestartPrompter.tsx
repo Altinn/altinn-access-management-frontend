@@ -30,8 +30,8 @@ export const RestartPrompter = ({ spacingBottom = false }: RestartPrompterProps)
       <Ingress>{t('api_delegation.delegations_not_registered')}</Ingress>
       <div className={classes.restartButton}>
         <Button
-          variant='outline'
-          color='danger'
+          variant='secondary'
+          color='first'
           onClick={() => {
             navigate(
               '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
