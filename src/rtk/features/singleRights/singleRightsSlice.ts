@@ -195,15 +195,18 @@ const singleRightSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(delegationAccessCheck.pending, (state, action) => {
+        // Set loading state and prepare for receiving the response for the requested service
+        // Make changes to the array of checked services if the requested service is already present or add it as a new service if not
+
         const serviceID = action.meta.arg.serviceResource.identifier;
-        let nextServicesWithStatus;
+        let nextStateArray;
 
         if (
           state.servicesWithStatus.some(
             (s: ServiceWithStatus) => s.service?.identifier === serviceID,
           )
         ) {
-          nextServicesWithStatus = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
+          nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
             if (sws.service?.identifier === serviceID) {
               sws.isLoading = true;
             }
@@ -214,10 +217,10 @@ const singleRightSlice = createSlice({
             service: action.meta.arg.serviceResource,
             isLoading: true,
           };
-          nextServicesWithStatus = [...state.servicesWithStatus, newServiceWithStatus];
+          nextStateArray = [...state.servicesWithStatus, newServiceWithStatus];
         }
 
-        state.servicesWithStatus = nextServicesWithStatus;
+        state.servicesWithStatus = nextStateArray;
       })
 
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
@@ -241,7 +244,7 @@ const singleRightSlice = createSlice({
             errorCode = action.payload[0].details[0].code;
           }
         }
-        const nextServicesWithStatus = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
+        const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
             sws.rightDelegationResults = action.payload;
             sws.isLoading = false;
@@ -251,12 +254,12 @@ const singleRightSlice = createSlice({
           return sws;
         });
 
-        state.servicesWithStatus = nextServicesWithStatus;
+        state.servicesWithStatus = nextStateArray;
       })
 
       .addCase(delegationAccessCheck.rejected, (state, action) => {
         const serviceID = action.meta.arg.serviceResource.identifier;
-        const nextServicesWithStatus = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
+        const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
             sws.isLoading = false;
             sws.status = ServiceStatus.Error;
@@ -264,7 +267,7 @@ const singleRightSlice = createSlice({
           }
           return sws;
         });
-        state.servicesWithStatus = nextServicesWithStatus;
+        state.servicesWithStatus = nextStateArray;
       })
 
       .addCase(fetchRights.fulfilled, (state, action) => {
