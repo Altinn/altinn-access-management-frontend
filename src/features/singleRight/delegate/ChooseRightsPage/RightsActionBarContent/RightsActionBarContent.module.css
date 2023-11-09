@@ -20,6 +20,7 @@
   display: flex;
   gap: 5px;
   padding-top: 15px;
+  flex-wrap: wrap;
 }
 
 .alertContainer {
