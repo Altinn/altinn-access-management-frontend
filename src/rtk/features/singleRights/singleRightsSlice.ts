@@ -199,7 +199,7 @@ const singleRightSlice = createSlice({
         // Make changes to the array of checked services if the requested service is already present or add it as a new service if not
 
         const serviceID = action.meta.arg.serviceResource.identifier;
-        let nextStateArray;
+        let nextStateArray: ServiceWithStatus[];
 
         if (
           state.servicesWithStatus.some(
