@@ -13,6 +13,7 @@ import {
   PageContent,
   PageHeader,
   ProgressModal,
+  RestartPrompter,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
@@ -252,21 +253,48 @@ export const ChooseRightsPage = () => {
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
+
         <PageContent>
-          <Ingress>
-            {t('single_rights.choose_rights_page_top_text', { name: 'ANNEMA FIGMA' })}
-          </Ingress>
-          <div className={classes.secondaryText}>
-            <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
-          </div>
-          <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
-          <ProgressModal
-            open={showProgressModal}
-            loadingText={t('single_rights.processing_delegations')}
-            progressValue={processedDelegationsRatio()}
-            progressLabel={progressLabel}
-          ></ProgressModal>
-          <div className={classes.navigationContainer}>{navigationButtons()}</div>
+          {servicesWithStatus.length < 1 ? (
+            <RestartPrompter
+              spacingBottom
+              button={
+                <Button
+                  variant='secondary'
+                  color='danger'
+                  onClick={() => {
+                    navigate(
+                      '/' +
+                        SingleRightPath.DelegateSingleRights +
+                        '/' +
+                        SingleRightPath.ChooseService,
+                    );
+                  }}
+                >
+                  {t('common.restart')}
+                </Button>
+              }
+              title={t('common.an_error_has_occured')}
+              ingress={t('api_delegation.delegations_not_registered')}
+            ></RestartPrompter>
+          ) : (
+            <>
+              <Ingress>
+                {t('single_rights.choose_rights_page_top_text', { name: 'ANNEMA FIGMA' })}
+              </Ingress>
+              <div className={classes.secondaryText}>
+                <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
+              </div>
+              <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
+              <ProgressModal
+                open={showProgressModal}
+                loadingText={t('single_rights.processing_delegations')}
+                progressValue={processedDelegationsRatio()}
+                progressLabel={progressLabel}
+              ></ProgressModal>
+              <div className={classes.navigationContainer}>{navigationButtons()}</div>
+            </>
+          )}
         </PageContent>
       </Page>
     </PageContainer>
