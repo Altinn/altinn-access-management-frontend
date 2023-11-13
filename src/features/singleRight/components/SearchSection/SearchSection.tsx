@@ -16,7 +16,10 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-import { type ServiceWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+import {
+  ServiceStatus,
+  type ServiceWithStatus,
+} from '@/rtk/features/singleRights/singleRightsSlice';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -153,9 +156,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
-    const status = chosenServices.find(
-      (selected: ServiceWithStatus) => selected.service?.title === resource.title,
-    )?.status;
     const errorCodes = chosenServices.find(
       (selected: ServiceWithStatus) => selected.service?.title === resource.title,
     )?.errorCodes;
@@ -163,20 +163,26 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const errorCodeTextKey = errorCodes
       ? getSingleRightsErrorCodeTextKey(errorCodes[0])
       : undefined;
+    const currentServiceWithStatus = chosenServices.find(
+      (selected: ServiceWithStatus) => selected.service?.identifier === resource.identifier,
+    );
+    const isLoading = currentServiceWithStatus?.isLoading;
+    const status = currentServiceWithStatus?.status;
+    const errorCode = currentServiceWithStatus?.errorCode;
 
     return (
       <ResourceActionBar
         key={resource.identifier ?? index}
         title={resource.title}
         subtitle={resource.resourceOwnerName}
-        status={status ?? 'Unchecked'}
+        status={status ?? ServiceStatus.Unchecked}
+        isLoading={isLoading}
         onAddClick={() => {
           onAdd(resource);
         }}
         onRemoveClick={() => {
           onUndo(resource.identifier);
         }}
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         errorText={t(`${errorCodeTextKey}_title`)}
         compact={isSm}
       >

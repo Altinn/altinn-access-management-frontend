@@ -2,20 +2,26 @@ export enum ErrorCode {
   MissingRoleAccess = 'MissingRoleAccess',
   MissingDelegationAccess = 'MissingDelegationAccess',
   MissingSrrRightAccess = 'MissingSrrRightAccess',
+  HTTPError = 'HTTPError',
   Unknown = 'Unknown',
 }
 
-export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) => {
-  if (errorCode === 'MissingRoleAccess') {
-    return 'single_rights.missing_role_access';
-  } else if (errorCode === 'MissingDelegationAccess') {
-    return 'single_rights.missing_delegation_access';
-  } else if (errorCode === 'Unknown') {
-    return 'single_rights.unknown';
-  } else if (errorCode === 'MissingSrrRightAccess') {
-    return 'single_rights.missing_srr_right_access';
-  } else if (errorCode === undefined) {
-    return undefined;
+export const getSingleRightsErrorCodeTextKey = (errorCode: ErrorCode | undefined) => {
+  switch (errorCode) {
+    case ErrorCode.MissingRoleAccess:
+      return 'single_rights.missing_role_access';
+    case ErrorCode.MissingDelegationAccess:
+      return 'single_rights.missing_delegation_access';
+    case ErrorCode.MissingSrrRightAccess:
+      return 'single_rights.missing_srr_right_access';
+    case ErrorCode.Unknown:
+      return 'single_rights.unknown';
+    case ErrorCode.HTTPError:
+      return 'single_rights.generic_error_try_again';
+    case undefined:
+      return undefined;
+    default:
+      return 'single_rights.new_error';
   }
 };
 

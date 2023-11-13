@@ -13,6 +13,7 @@ import {
   type DelegationAccessCheckDto,
   fetchRights,
   removeServiceResource,
+  ServiceStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -30,7 +31,9 @@ export const ChooseServicePage = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const delegableChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.servicesWithStatus.filter((s) => s.status !== 'NotDelegable'),
+    state.singleRightsSlice.servicesWithStatus.filter(
+      (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
+    ),
   );
 
   const onAdd = (serviceResource: ServiceResource) => {

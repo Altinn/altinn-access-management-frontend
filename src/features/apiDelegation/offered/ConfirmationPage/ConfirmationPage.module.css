@@ -51,7 +51,6 @@
   margin-top: 2.5rem;
 }
 
-.restartButton {
-  display: flex;
-  justify-content: center;
+.listContainer {
+  margin-bottom: 40px;
 }

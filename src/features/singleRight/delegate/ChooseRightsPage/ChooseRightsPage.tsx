@@ -21,6 +21,7 @@ import {
   removeServiceResource,
   delegate,
   type ServiceWithStatus,
+  ServiceStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import {
   type DelegationInputDto,
@@ -65,12 +66,13 @@ export const ChooseRightsPage = () => {
 
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter(
-      (s: ServiceWithStatus) => s.status !== 'NotDelegable',
+      (s: ServiceWithStatus) =>
+        s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
     );
 
-    const sorted = delegable.sort((a, b) => {
-      const isPartiallyDelegableA = a.status === 'PartiallyDelegable';
-      const isPartiallyDelegableB = b.status === 'PartiallyDelegable';
+    const sorted = delegable.sort((a: ServiceWithStatus, b: ServiceWithStatus) => {
+      const isPartiallyDelegableA = a.status === ServiceStatus.PartiallyDelegable;
+      const isPartiallyDelegableB = b.status === ServiceStatus.PartiallyDelegable;
 
       if (isPartiallyDelegableA && !isPartiallyDelegableB) {
         return -1;
@@ -86,8 +88,8 @@ export const ChooseRightsPage = () => {
       const rights: Right[] =
         service.rightDelegationResults?.map((right) => ({
           action: right.action,
-          delegable: right.status === 'Delegable',
-          checked: right.status === 'Delegable',
+          delegable: right.status === ServiceStatus.Delegable,
+          checked: right.status === ServiceStatus.Delegable,
           resourceReference: right.resource,
         })) ?? [];
 
@@ -154,7 +156,7 @@ export const ChooseRightsPage = () => {
       key={service.serviceIdentifier}
       title={service.title}
       subtitle={service.serviceOwner}
-      color={service.status === 'Delegable' ? 'success' : 'warning'}
+      color={service.status === ServiceStatus.Delegable ? 'success' : 'warning'}
       onRemoveClick={() => {
         onRemove(service.serviceIdentifier);
       }}
