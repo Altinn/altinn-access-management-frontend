@@ -10,7 +10,7 @@ import {
   getSingleRightsErrorCodeTextKey,
   prioritizeErrors,
 } from '@/resources/utils/errorCodeUtils';
-import type { Details } from '@/rtk/features/singleRights/singleRightsSlice';
+import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import classes from './RightsActionBarContent.module.css';
 
@@ -48,14 +48,13 @@ export const RightsActionBarContent = ({
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation('common');
   const hasUndelegableRights = rights.some((r) => r.delegable === false);
-  const [actionList, setActionList] = useState<string[]>([]);
   const [errorList, setErrorList] = useState<string[]>([]);
 
   const createErrorList = () => {
     const errors: string[] = [];
-    rights.map((right: Right) => {
+    rights.forEach((right: Right) => {
       if (right.delegable === false) {
-        right.details?.map((detail) => {
+        right.details?.forEach((detail) => {
           if (
             Object.values(ErrorCode).includes(detail.code as ErrorCode) &&
             detail.code !== undefined
@@ -65,22 +64,10 @@ export const RightsActionBarContent = ({
         });
       }
     });
-
     setErrorList(prioritizeErrors(errors));
   };
 
-  const initializeActions = () => {
-    const initializedActions: string[] = [];
-    rights.map((right: Right) => {
-      if (right.delegable === false) {
-        initializedActions.push(right.action);
-      }
-    });
-    setActionList(initializedActions);
-  };
-
   useEffect(() => {
-    initializeActions();
     createErrorList();
   }, [rights]);
 
@@ -143,9 +130,11 @@ export const RightsActionBarContent = ({
             {t('single_rights.you_cant_delegate_these_rights')}
           </Heading>
           <div className={classes.chipContainer}>
-            {actionList.map((action, index) => (
-              <Chip.Toggle key={index}>{t(`common.${action}`)}</Chip.Toggle>
-            ))}
+            {rights.map((right, index) => {
+              if (right.delegable === false) {
+                return <Chip.Toggle key={index}>{t(`common.${right.action}`)}</Chip.Toggle>;
+              }
+            })}
           </div>
         </>
       </Alert>

@@ -6,7 +6,7 @@ export enum ErrorCode {
   Unknown = 'Unknown',
 }
 
-export const getSingleRightsErrorCodeTextKey = (errorCode: ErrorCode | undefined) => {
+export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) => {
   switch (errorCode) {
     case ErrorCode.MissingRoleAccess:
       return 'single_rights.missing_role_access';
@@ -18,8 +18,6 @@ export const getSingleRightsErrorCodeTextKey = (errorCode: ErrorCode | undefined
       return 'single_rights.unknown';
     case ErrorCode.HTTPError:
       return 'single_rights.generic_error_try_again';
-    case undefined:
-      return undefined;
     default:
       return 'single_rights.new_error';
   }

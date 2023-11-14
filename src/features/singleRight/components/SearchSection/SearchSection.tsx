@@ -15,7 +15,10 @@ import {
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
-import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import {
+  getSingleRightsErrorCodeTextKey,
+  prioritizeErrors,
+} from '@/resources/utils/errorCodeUtils';
 import {
   ServiceStatus,
   type ServiceWithStatus,
@@ -156,19 +159,30 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
-    const errorCodes = chosenServices.find(
-      (selected: ServiceWithStatus) => selected.service?.title === resource.title,
-    )?.errorCodes;
+    const errorCodeTextKeyList =
+      chosenServices
+        .find(
+          (service: ServiceWithStatus) =>
+            service.service?.title === resource.title &&
+            service.status === ServiceStatus.NotDelegable,
+        )
+        ?.rightDelegationResults?.flatMap(
+          (result) => result.details?.map((detail) => detail.code) || [],
+        ) || [];
 
-    const errorCodeTextKey = errorCodes
-      ? getSingleRightsErrorCodeTextKey(errorCodes[0])
-      : undefined;
+    console.log('errorCodeTextKeyList');
+
+    let prioritizedErrorCodes: string[] = [];
+
+    if (errorCodeTextKeyList?.length > 0) {
+      prioritizedErrorCodes = prioritizeErrors(errorCodeTextKeyList);
+    }
+
     const currentServiceWithStatus = chosenServices.find(
       (selected: ServiceWithStatus) => selected.service?.identifier === resource.identifier,
     );
     const isLoading = currentServiceWithStatus?.isLoading;
     const status = currentServiceWithStatus?.status;
-    const errorCode = currentServiceWithStatus?.errorCode;
 
     return (
       <ResourceActionBar
@@ -183,18 +197,28 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         onRemoveClick={() => {
           onUndo(resource.identifier);
         }}
-        errorText={t(`${errorCodeTextKey}_title`)}
+        errorText={
+          prioritizedErrorCodes?.length > 0
+            ? t(`${getSingleRightsErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)
+            : undefined
+        }
         compact={isSm}
       >
         <div className={classes.serviceResourceContent}>
-          {errorCodes && (
+          {prioritizedErrorCodes?.length > 0 && (
             <Alert
               severity='danger'
               elevated={false}
               className={classes.notDelegableAlert}
             >
-              <Heading size='xsmall'>{t(`${errorCodeTextKey}_title`)}</Heading>
-              <Paragraph>{t(`${errorCodeTextKey}`, { you: t('common.you_uppercase') })}</Paragraph>
+              <Heading size='xsmall'>
+                {t(`${getSingleRightsErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)}
+              </Heading>
+              <Paragraph>
+                {t(`${getSingleRightsErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
+                  you: t('common.you_uppercase'),
+                })}
+              </Paragraph>
               <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
             </Alert>
           )}

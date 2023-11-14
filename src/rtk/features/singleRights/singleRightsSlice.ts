@@ -7,7 +7,6 @@ import type {
   DelegationInputDto,
   DelegationRequestDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 import { type ServiceResource } from './singleRightsApi';
 
@@ -51,7 +50,6 @@ export interface ProcessedDelegation {
 export interface ServiceWithStatus {
   rightDelegationResults?: DelegationResponseData[];
   service?: ServiceResource;
-  errorCodes?: string[];
   status?: ServiceStatus;
   isLoading?: boolean;
 }
@@ -229,11 +227,10 @@ const singleRightSlice = createSlice({
           rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
-          errorCodes: [],
         };
+
         const serviceID = action.meta.arg.serviceResource.identifier;
         let status = ServiceStatus.Delegable;
-        let errorCode: string;
 
         const hasNonDelegableRights = !!action.payload.find(
           (response: DelegationResponseData) => response.status === ServiceStatus.NotDelegable,
@@ -248,9 +245,7 @@ const singleRightSlice = createSlice({
             status = ServiceStatus.PartiallyDelegable;
           } else {
             serviceWithStatus.status = ServiceStatus.NotDelegable;
-            serviceWithStatus.errorCodes?.push(action.payload[0].details[0].code);
             status = ServiceStatus.NotDelegable;
-            errorCode = action.payload[0].details[0].code;
           }
         }
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
@@ -258,7 +253,6 @@ const singleRightSlice = createSlice({
             sws.rightDelegationResults = action.payload;
             sws.isLoading = false;
             sws.status = status;
-            sws.errorCodes?.push(errorCode);
           }
           return sws;
         });
@@ -272,8 +266,6 @@ const singleRightSlice = createSlice({
           if (sws.service?.identifier === serviceID) {
             sws.isLoading = false;
             sws.status = ServiceStatus.Error;
-            sws.errorCodes = [];
-            sws.errorCodes.push(ErrorCode.HTTPError);
           }
           return sws;
         });
@@ -285,7 +277,6 @@ const singleRightSlice = createSlice({
           rightDelegationResults: action.payload,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
-          errorCodes: [],
         };
 
         if (serviceWithStatus) {

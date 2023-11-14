@@ -91,6 +91,7 @@ export const ChooseRightsPage = () => {
           delegable: right.status === ServiceStatus.Delegable,
           checked: right.status === ServiceStatus.Delegable,
           resourceReference: right.resource,
+          details: right.details,
         })) ?? [];
 
       return {
