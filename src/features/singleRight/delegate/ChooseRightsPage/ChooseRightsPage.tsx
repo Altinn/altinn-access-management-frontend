@@ -258,10 +258,11 @@ export const ChooseRightsPage = () => {
           {servicesWithStatus.length < 1 ? (
             <RestartPrompter
               spacingBottom
+              severity={'warning'}
               button={
                 <Button
                   variant='secondary'
-                  color='danger'
+                  color='first'
                   onClick={() => {
                     navigate(
                       '/' +

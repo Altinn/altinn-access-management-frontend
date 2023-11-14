@@ -174,7 +174,7 @@ export const ChooseApiPage = () => {
                   {t('common.restart')}
                 </Button>
               }
-              title={t('common.an_error_has_occured')}
+              title={t('api_delegation.no_orgs_chosen')}
               ingress={t('api_delegation.delegations_not_registered')}
             />
           ) : (

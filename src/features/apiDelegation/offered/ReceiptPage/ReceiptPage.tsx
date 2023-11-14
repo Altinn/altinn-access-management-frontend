@@ -149,13 +149,15 @@ export const ReceiptPage = () => {
               ingress={t('api_delegation.delegations_not_registered')}
             />
           ) : (
-            delegatedContent()
+            <div>
+              {delegatedContent()}
+              <Paragraph spacing>
+                {successfulApiDelegations.length === 0
+                  ? t('api_delegation.receipt_page_failed_text')
+                  : t('api_delegation.receipt_page_bottom_text')}
+              </Paragraph>
+            </div>
           )}
-          <Paragraph spacing>
-            {successfulApiDelegations.length === 0
-              ? t('api_delegation.receipt_page_failed_text')
-              : t('api_delegation.receipt_page_bottom_text')}
-          </Paragraph>
           <Button
             color='first'
             variant='primary'
