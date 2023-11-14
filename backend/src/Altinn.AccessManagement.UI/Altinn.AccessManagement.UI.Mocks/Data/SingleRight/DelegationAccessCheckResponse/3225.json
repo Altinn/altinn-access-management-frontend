@@ -29,6 +29,35 @@
     ]
   },
   {
+    "rightKey": "ttd-am-k6/read",
+    "resource": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
+      }
+    ],
+    "action": "all-accesses-3325",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
     "rightKey": "ttd-am-k6/write",
     "resource": [
       {
@@ -70,6 +99,35 @@
       }
     ],
     "action": "sign",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingSrrRightAccess",
+        "description": "MissingSrrRightAccess",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "ttd-am-k6/sign",
+    "resource": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
+      }
+    ],
+    "action": "task-edit",
     "status": "NotDelegable",
     "details": [
       {

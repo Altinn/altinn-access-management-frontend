@@ -70,35 +70,24 @@ export const RightsActionBarContent = ({
         {rights
           .filter((right: Right) => right.delegable === true)
           .map((right: Right, index: number) => {
-            if (Object.values(LocalizedAction).includes(right.action as LocalizedAction)) {
-              return (
-                <div key={index}>
-                  <Chip.Toggle
-                    checkmark
-                    selected={right.checked}
-                    onClick={() => {
-                      toggleRight(serviceIdentifier, right.action);
-                    }}
-                  >
-                    {t(`common.${right.action}`)}
-                  </Chip.Toggle>
-                </div>
-              );
-            } else {
-              return (
-                <div key={index}>
-                  <Chip.Toggle
-                    checkmark
-                    selected={right.checked}
-                    onClick={() => {
-                      toggleRight(serviceIdentifier, right.action);
-                    }}
-                  >
-                    {right.action}
-                  </Chip.Toggle>
-                </div>
-              );
-            }
+            const actionText = Object.values(LocalizedAction).includes(
+              right.action as LocalizedAction,
+            )
+              ? t(`common.${right.action}`)
+              : right.action;
+            return (
+              <div key={index}>
+                <Chip.Toggle
+                  checkmark
+                  selected={right.checked}
+                  onClick={() => {
+                    toggleRight(serviceIdentifier, right.action);
+                  }}
+                >
+                  {actionText}
+                </Chip.Toggle>
+              </div>
+            );
           })}
       </div>
     </>
@@ -125,19 +114,24 @@ export const RightsActionBarContent = ({
           {rights
             .filter((right: Right) => right.delegable === false)
             .map((right: Right, index: number) => {
-              if (Object.values(LocalizedAction).includes(right.action as LocalizedAction)) {
-                return (
-                  <div key={index}>
-                    <Chip.Toggle>{t(`common.${right.action}`)}</Chip.Toggle>
-                  </div>
-                );
-              } else {
-                return (
-                  <div key={index}>
-                    <Chip.Toggle>{right.action}</Chip.Toggle>
-                  </div>
-                );
-              }
+              const actionText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.${right.action}`)
+                : right.action;
+              return (
+                <div key={index}>
+                  <Chip.Toggle
+                    checkmark
+                    selected={right.checked}
+                    onClick={() => {
+                      toggleRight(serviceIdentifier, right.action);
+                    }}
+                  >
+                    {actionText}
+                  </Chip.Toggle>
+                </div>
+              );
             })}
         </div>
       </Alert>
