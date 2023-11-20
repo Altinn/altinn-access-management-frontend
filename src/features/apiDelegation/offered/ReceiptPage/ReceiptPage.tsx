@@ -14,12 +14,11 @@ import {
   PageHeader,
   PageContent,
   CompactDeletableListItem,
+  RestartPrompter,
 } from '@/components';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { useMediaQuery } from '@/resources/hooks';
-
-import { RestartPrompter } from '../../components/RestartPrompter/RestartPrompter';
 
 import classes from './ReceiptPage.module.css';
 
@@ -127,12 +126,25 @@ export const ReceiptPage = () => {
       <Page color={successfulApiDelegations.length === 0 ? 'danger' : 'success'}>
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          {showErrorAlert() ? <RestartPrompter spacingBottom /> : delegatedContent()}
-          <Paragraph spacing>
-            {successfulApiDelegations.length === 0
-              ? t('api_delegation.receipt_page_failed_text')
-              : t('api_delegation.receipt_page_bottom_text')}
-          </Paragraph>
+          {showErrorAlert() ? (
+            <RestartPrompter
+              spacingBottom
+              restartPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+              }
+              title={t('common.an_error_has_occured')}
+              ingress={t('api_delegation.delegations_not_registered')}
+            />
+          ) : (
+            <div>
+              {delegatedContent()}
+              <Paragraph spacing>
+                {successfulApiDelegations.length === 0
+                  ? t('api_delegation.receipt_page_failed_text')
+                  : t('api_delegation.receipt_page_bottom_text')}
+              </Paragraph>
+            </div>
+          )}
           <Button
             color='first'
             variant='primary'

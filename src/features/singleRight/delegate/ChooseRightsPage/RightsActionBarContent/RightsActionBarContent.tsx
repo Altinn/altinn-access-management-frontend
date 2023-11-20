@@ -15,6 +15,15 @@ export type Right = {
   resourceReference: IdValuePair[];
 };
 
+enum LocalizedAction {
+  Read = 'read',
+  Write = 'write',
+  Sign = 'sign',
+  Instantiate = 'instantiate',
+  Confirm = 'confirm',
+  Access = 'access',
+}
+
 export interface RightsActionBarContentProps {
   /** The callback function to be called when toggling a right. */
   toggleRight: (serviceIdentifier: string, action: string) => void;
@@ -61,6 +70,11 @@ export const RightsActionBarContent = ({
         {rights
           .filter((right: Right) => right.delegable === true)
           .map((right: Right, index: number) => {
+            const actionText = Object.values(LocalizedAction).includes(
+              right.action as LocalizedAction,
+            )
+              ? t(`common.${right.action}`)
+              : right.action;
             return (
               <div key={index}>
                 <Chip.Toggle
@@ -70,7 +84,7 @@ export const RightsActionBarContent = ({
                     toggleRight(serviceIdentifier, right.action);
                   }}
                 >
-                  {t(`common.${right.action}`)}
+                  {actionText}
                 </Chip.Toggle>
               </div>
             );
@@ -98,11 +112,24 @@ export const RightsActionBarContent = ({
         </Heading>
         <div className={classes.chipContainer}>
           {rights
-            .filter((r: Right) => r.delegable === false)
-            .map((r: Right, index: number) => {
+            .filter((right: Right) => right.delegable === false)
+            .map((right: Right, index: number) => {
+              const actionText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.${right.action}`)
+                : right.action;
               return (
                 <div key={index}>
-                  <Chip.Toggle>{t(`common.${r.action}`)}</Chip.Toggle>
+                  <Chip.Toggle
+                    checkmark
+                    selected={right.checked}
+                    onClick={() => {
+                      toggleRight(serviceIdentifier, right.action);
+                    }}
+                  >
+                    {actionText}
+                  </Chip.Toggle>
                 </div>
               );
             })}
