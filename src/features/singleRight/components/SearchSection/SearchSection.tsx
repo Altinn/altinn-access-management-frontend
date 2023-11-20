@@ -159,6 +159,13 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   };
 
   const serviceResouces = resources?.map((resource: ServiceResource, index: number) => {
+    const currentServiceWithStatus = chosenServices.find(
+      (selected: ServiceWithStatus) => selected.service?.identifier === resource.identifier,
+    );
+
+    const isLoading = currentServiceWithStatus?.isLoading;
+    const status = currentServiceWithStatus?.status;
+
     const errorCodeTextKeyList =
       chosenServices
         .find(
@@ -170,19 +177,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           (result) => result.details?.map((detail) => detail.code) || [],
         ) || [];
 
-    console.log('errorCodeTextKeyList');
-
     let prioritizedErrorCodes: string[] = [];
 
     if (errorCodeTextKeyList?.length > 0) {
       prioritizedErrorCodes = prioritizeErrors(errorCodeTextKeyList);
     }
-
-    const currentServiceWithStatus = chosenServices.find(
-      (selected: ServiceWithStatus) => selected.service?.identifier === resource.identifier,
-    );
-    const isLoading = currentServiceWithStatus?.isLoading;
-    const status = currentServiceWithStatus?.status;
 
     return (
       <ResourceActionBar

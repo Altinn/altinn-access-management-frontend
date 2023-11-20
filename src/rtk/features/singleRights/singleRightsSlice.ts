@@ -25,7 +25,7 @@ export enum ServiceStatus {
   NotDelegable = 'NotDelegable',
   PartiallyDelegable = 'PartiallyDelegable',
   Unchecked = 'Unchecked',
-  Error = 'Error',
+  HTTPError = 'HTTPError',
 }
 
 export interface DelegationAccessCheckDto {
@@ -262,10 +262,11 @@ const singleRightSlice = createSlice({
 
       .addCase(delegationAccessCheck.rejected, (state, action) => {
         const serviceID = action.meta.arg.serviceResource.identifier;
+
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
             sws.isLoading = false;
-            sws.status = ServiceStatus.Error;
+            sws.status = ServiceStatus.HTTPError;
           }
           return sws;
         });
