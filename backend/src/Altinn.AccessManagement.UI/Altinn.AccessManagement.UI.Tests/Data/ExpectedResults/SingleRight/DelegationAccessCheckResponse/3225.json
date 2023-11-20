@@ -85,5 +85,63 @@
         }
       }
     ]
+  },
+  {
+    "rightKey": "ttd-am-k6/confirm",
+    "resource": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
+      }
+    ],
+    "action": "confirm",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingSrrRightAccess",
+        "description": "MissingSrrRightAccess",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "ttd-am-k6/instantiate",
+    "resource": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
+      }
+    ],
+    "action": "instantiate",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingSrrRightAccess",
+        "description": "MissingSrrRightAccess",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]
