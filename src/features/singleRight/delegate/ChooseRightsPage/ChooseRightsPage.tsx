@@ -258,26 +258,12 @@ export const ChooseRightsPage = () => {
           {servicesWithStatus.length < 1 ? (
             <RestartPrompter
               spacingBottom
-              severity={'warning'}
-              button={
-                <Button
-                  variant='secondary'
-                  color='first'
-                  onClick={() => {
-                    navigate(
-                      '/' +
-                        SingleRightPath.DelegateSingleRights +
-                        '/' +
-                        SingleRightPath.ChooseService,
-                    );
-                  }}
-                >
-                  {t('common.restart')}
-                </Button>
+              restartPath={
+                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService
               }
               title={t('common.an_error_has_occured')}
               ingress={t('api_delegation.delegations_not_registered')}
-            ></RestartPrompter>
+            />
           ) : (
             <>
               <Ingress>

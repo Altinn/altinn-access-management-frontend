@@ -1,7 +1,9 @@
 import type { AlertProps } from '@digdir/design-system-react';
-import { Alert, Heading, Ingress } from '@digdir/design-system-react';
+import { Alert, Button, Heading, Ingress } from '@digdir/design-system-react';
 import * as React from 'react';
 import cn from 'classnames';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import classes from './RestartPrompter.module.css';
 
@@ -9,23 +11,26 @@ interface RestartPrompterProps extends Pick<AlertProps, 'severity'> {
   /* Sets spacing on the bottom of the component */
   spacingBottom?: boolean;
 
-  /* Optional button that is displayed in the middle of the alert*/
-  button?: React.ReactNode;
-
   /* Title to be displayed */
   title: string;
 
-  /* optional ingress to be displayed */
+  /* Optional ingress to be displayed */
   ingress?: string;
+
+  /* The path to where your navigated */
+  restartPath: string;
 }
 
 export const RestartPrompter = ({
   spacingBottom = false,
-  button,
   title,
   ingress,
-  severity = 'danger',
+  severity = 'warning',
+  restartPath,
 }: RestartPrompterProps) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation('common');
+
   return (
     <Alert
       severity={severity}
@@ -38,7 +43,18 @@ export const RestartPrompter = ({
         {title}
       </Heading>
       {ingress && <Ingress>{ingress}</Ingress>}
-      <div className={classes.restartButton}>{button}</div>
+      <div className={classes.restartButton}>
+        <Button
+          variant='primary'
+          color='first'
+          size='medium'
+          onClick={() => {
+            navigate(restartPath);
+          }}
+        >
+          {t('common.restart')}
+        </Button>
+      </div>
     </Alert>
   );
 };

@@ -39,25 +39,12 @@ export const ReceiptPage = () => {
           {processedDelegations.length < 1 ? (
             <RestartPrompter
               spacingBottom
-              button={
-                <Button
-                  variant='secondary'
-                  color='danger'
-                  onClick={() => {
-                    navigate(
-                      '/' +
-                        SingleRightPath.DelegateSingleRights +
-                        '/' +
-                        SingleRightPath.ChooseService,
-                    );
-                  }}
-                >
-                  {t('common.restart')}
-                </Button>
+              restartPath={
+                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService
               }
               title={t('common.an_error_has_occured')}
               ingress={t('api_delegation.delegations_not_registered')}
-            ></RestartPrompter>
+            />
           ) : (
             <>
               <div className={classes.actionBars}>

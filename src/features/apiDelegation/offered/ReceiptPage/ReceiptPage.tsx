@@ -129,21 +129,8 @@ export const ReceiptPage = () => {
           {showErrorAlert() ? (
             <RestartPrompter
               spacingBottom
-              button={
-                <Button
-                  variant='secondary'
-                  color='danger'
-                  onClick={() => {
-                    navigate(
-                      '/' +
-                        ApiDelegationPath.OfferedApiDelegations +
-                        '/' +
-                        ApiDelegationPath.ChooseOrg,
-                    );
-                  }}
-                >
-                  {t('common.restart')}
-                </Button>
+              restartPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
               }
               title={t('common.an_error_has_occured')}
               ingress={t('api_delegation.delegations_not_registered')}
