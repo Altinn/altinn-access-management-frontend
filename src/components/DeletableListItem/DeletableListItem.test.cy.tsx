@@ -111,7 +111,7 @@ describe('DeletableListItem', () => {
     cy.get('[data-testid="list-item-texts"]').should(
       'have.css',
       'text-decoration',
-      'line-through solid rgb(0, 0, 0)',
+      'line-through solid rgb(30, 43, 60)',
     );
     cy.findByRole('button', { name: /undo/i }).should('exist');
   });
