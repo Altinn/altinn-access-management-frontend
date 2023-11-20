@@ -167,15 +167,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const status = currentServiceWithStatus?.status;
 
     const errorCodeTextKeyList =
-      chosenServices
-        .find(
-          (service: ServiceWithStatus) =>
-            service.service?.title === resource.title &&
-            service.status === ServiceStatus.NotDelegable,
-        )
-        ?.rightDelegationResults?.flatMap(
-          (result) => result.details?.map((detail) => detail.code) || [],
-        ) || [];
+      currentServiceWithStatus?.status === ServiceStatus.NotDelegable
+        ? currentServiceWithStatus.rightDelegationResults?.flatMap(
+            (result) => result.details?.map((detail) => detail.code) || [],
+          ) || []
+        : [];
 
     let prioritizedErrorCodes: string[] = [];
 
