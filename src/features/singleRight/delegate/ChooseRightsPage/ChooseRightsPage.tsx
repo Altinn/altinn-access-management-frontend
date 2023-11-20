@@ -232,7 +232,10 @@ export const ChooseRightsPage = () => {
   };
 
   const postDelegations = () => {
-    chosenServices.map((service: Service) => {
+    chosenServices.forEach((service: Service) => {
+      if(service?.rights?.forEach(right) => {
+
+      })
       const rightsToDelegate = service.rights
         .filter((right: Right) => right.checked)
         .map((right: Right) => new DelegationRequestDto(right.resourceReference, right.action));
