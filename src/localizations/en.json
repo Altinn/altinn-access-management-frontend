@@ -117,7 +117,8 @@
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice",
     "own_orgnumber_delegation_heading": "You can't delegate to your own organisation number",
-    "own_orgnumber_delegation_paragraph": "Search for another organisation number to continue."
+    "own_orgnumber_delegation_paragraph": "Search for another organisation number to continue.",
+    "no_orgs_chosen": "No chosen organisations"
   },
   "single_rights": {
     "delegate_single_rights": "Delegate single rights",
