@@ -167,8 +167,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const status = currentServiceWithStatus?.status;
 
     const errorCodeTextKeyList =
-      currentServiceWithStatus?.status === ServiceStatus.NotDelegable
-        ? currentServiceWithStatus.rightDelegationResults?.flatMap(
+      currentServiceWithStatus?.status === ServiceStatus.NotDelegable ||
+      currentServiceWithStatus?.status === ServiceStatus.HTTPError
+        ? currentServiceWithStatus.delegationResponseData?.flatMap(
             (result) => result.details?.map((detail) => detail.code) || [],
           ) || []
         : [];
@@ -223,6 +224,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
       </ResourceActionBar>
     );
   });
+
   return (
     <div className={classes.searchSection}>
       <div className={classes.searchInputs}>

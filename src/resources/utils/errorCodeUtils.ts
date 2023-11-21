@@ -25,6 +25,7 @@ export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) =
 
 export const prioritizeErrors = (errors: string[]) => {
   const priorityOrder: string[] = [
+    ErrorCode.HTTPError,
     ErrorCode.MissingRoleAccess,
     ErrorCode.MissingDelegationAccess,
     ErrorCode.MissingSrrRightAccess,

@@ -172,7 +172,7 @@ export const ChooseApiPage = () => {
             {t('api_delegation.new_api_content_text2')}
           </h3>
           {isSm && chosenApis.length > 0 && (
-            <div className={common.apiAccordions}>
+            <div>
               <h4>{t('api_delegation.chosen_apis')}</h4>
               <div className={classes.chosenApisContainer}>
                 <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
@@ -204,14 +204,14 @@ export const ChooseApiPage = () => {
             </div>
           </div>
           <div className={classes.pageContentActionBarsContainer}>
-            <div className={common.apiAccordions}>
+            <div>
               <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
               <div className={classes.delegableApisContainer}>
                 <div className={classes.actionBarWrapper}>{delegableApiActionBars()}</div>
               </div>
             </div>
             {!isSm && (
-              <div className={common.apiAccordions}>
+              <div>
                 <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.delegableApisContainer}>
                   <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>

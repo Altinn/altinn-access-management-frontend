@@ -86,7 +86,7 @@ export const ChooseRightsPage = () => {
 
     return sorted.map((service) => {
       const rights: Right[] =
-        service.rightDelegationResults?.map((right) => ({
+        service.delegationResponseData?.map((right) => ({
           action: right.action,
           delegable: right.status === ServiceStatus.Delegable,
           checked: right.status === ServiceStatus.Delegable,

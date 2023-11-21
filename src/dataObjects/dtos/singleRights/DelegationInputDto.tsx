@@ -16,7 +16,7 @@ export class ServiceDto {
 
 export class IdValuePair {
   id: string;
-  value: string;
+  value?: string;
 
   constructor(id: string, value: string) {
     this.id = id;
