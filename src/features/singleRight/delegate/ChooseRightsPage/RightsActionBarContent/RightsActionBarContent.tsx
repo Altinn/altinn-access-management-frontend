@@ -121,15 +121,7 @@ export const RightsActionBarContent = ({
                 : right.action;
               return (
                 <div key={index}>
-                  <Chip.Toggle
-                    checkmark
-                    selected={right.checked}
-                    onClick={() => {
-                      toggleRight(serviceIdentifier, right.action);
-                    }}
-                  >
-                    {actionText}
-                  </Chip.Toggle>
+                  <Chip.Toggle>{actionText}</Chip.Toggle>
                 </div>
               );
             })}
