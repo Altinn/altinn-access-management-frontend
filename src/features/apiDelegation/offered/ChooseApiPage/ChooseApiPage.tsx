@@ -1,5 +1,5 @@
 import { SearchField } from '@altinn/altinn-design-system';
-import { Button, List, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
@@ -14,6 +14,8 @@ import {
   ErrorPanel,
   GroupElements,
   RestartPrompter,
+  DelegationActionBar,
+  BorderedList,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -32,7 +34,6 @@ import {
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
-import { DelegationActionBar } from '@/components/DelegationActionBar';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -167,7 +168,7 @@ export const ChooseApiPage = () => {
           ) : (
             <div>
               <h3>{t('api_delegation.chosen_orgs')}:</h3>
-              <List borderStyle={'dashed'}>{chosenDelegableOrgs}</List>
+              <BorderedList borderStyle={'dashed'}>{chosenDelegableOrgs}</BorderedList>
             </div>
           )}
           <h3 className={classes.chooseApiSecondHeader}>

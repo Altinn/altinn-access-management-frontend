@@ -1,11 +1,10 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
-import { List } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
-import { DeletableListItem } from '@/components';
+import { DeletableListItem, BorderedList } from '@/components';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,14 +35,14 @@ describe('DeletableListItem', () => {
     };
 
     cy.mount(
-      <List>
+      <BorderedList>
         <DeletableListItem
           softDeleteCallback={() => null}
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
-      </List>,
+      </BorderedList>,
     );
     cy.findByRole('button', { name: /delete/i }).should('exist');
   });
@@ -67,14 +66,14 @@ describe('DeletableListItem', () => {
     };
 
     cy.mount(
-      <List>
+      <BorderedList>
         <DeletableListItem
           softDeleteCallback={() => null}
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={false}
         />
-      </List>,
+      </BorderedList>,
     );
     cy.findByRole('button', { name: /delete/i }).should('not.exist');
   });
@@ -98,14 +97,14 @@ describe('DeletableListItem', () => {
     };
 
     cy.mount(
-      <List>
+      <BorderedList>
         <DeletableListItem
           softDeleteCallback={() => null}
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
-      </List>,
+      </BorderedList>,
     );
 
     cy.get('[data-testid="list-item-texts"]').should(
@@ -141,14 +140,14 @@ describe('DeletableListItem', () => {
     const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
 
     cy.mount(
-      <List>
+      <BorderedList>
         <DeletableListItem
           softDeleteCallback={softDeleteSpy}
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
-      </List>,
+      </BorderedList>,
     );
 
     cy.findByRole('button', { name: /delete/i }).click();
@@ -180,14 +179,14 @@ describe('DeletableListItem', () => {
     const softRestoreSpy = cy.spy(softRestore).as('softRestoreSpy');
 
     cy.mount(
-      <List>
+      <BorderedList>
         <DeletableListItem
           softDeleteCallback={() => null}
           softRestoreCallback={softRestoreSpy}
           item={overviewOrg.apiList[0]}
           isEditable={true}
         />
-      </List>,
+      </BorderedList>,
     );
 
     cy.findByRole('button', { name: /undo/i }).click();

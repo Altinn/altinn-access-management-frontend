@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { Key } from 'react';
 import * as React from 'react';
-import { Button, Heading, List, Paragraph } from '@digdir/design-system-react';
+import { Button, Heading, Paragraph } from '@digdir/design-system-react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
@@ -15,6 +15,7 @@ import {
   PageContent,
   CompactDeletableListItem,
   RestartPrompter,
+  BorderedList,
 } from '@/components';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
@@ -44,20 +45,18 @@ export const ReceiptPage = () => {
         >
           {t('api_delegation.failed_delegations')}
         </Heading>
-        <div className={classes.listContainer}>
-          <List borderStyle='dashed'>
-            {failedApiDelegations?.map(
-              (apiDelegation: ApiDelegation, index: Key | null | undefined) => (
-                <CompactDeletableListItem
-                  key={index}
-                  contentColor={ListTextColor.error}
-                  middleText={apiDelegation.apiName}
-                  leftText={apiDelegation.orgName}
-                ></CompactDeletableListItem>
-              ),
-            )}
-          </List>
-        </div>
+        <BorderedList className={classes.list}>
+          {failedApiDelegations?.map(
+            (apiDelegation: ApiDelegation, index: Key | null | undefined) => (
+              <CompactDeletableListItem
+                key={index}
+                contentColor={ListTextColor.error}
+                middleText={apiDelegation.apiName}
+                leftText={apiDelegation.orgName}
+              ></CompactDeletableListItem>
+            ),
+          )}
+        </BorderedList>
       </>
     );
   };
@@ -72,7 +71,7 @@ export const ReceiptPage = () => {
         >
           {t('api_delegation.succesful_delegations')}
         </Heading>
-        <List borderStyle='dashed'>
+        <BorderedList className={classes.list}>
           {successfulApiDelegations?.map(
             (apiDelegation: ApiDelegation, index: Key | null | undefined) => (
               <CompactDeletableListItem
@@ -82,7 +81,7 @@ export const ReceiptPage = () => {
               ></CompactDeletableListItem>
             ),
           )}
-        </List>
+        </BorderedList>
       </>
     );
   };

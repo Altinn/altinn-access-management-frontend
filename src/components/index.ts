@@ -13,3 +13,4 @@ export { Dialog, DialogContent, type DialogProps } from './Dialog';
 export { ProgressModal } from './ProgressModal/ProgressModal';
 export { GroupElements } from './GroupElements/GroupElements';
 export { RestartPrompter } from './RestartPrompter/RestartPrompter';
+export * from './BorderedList';

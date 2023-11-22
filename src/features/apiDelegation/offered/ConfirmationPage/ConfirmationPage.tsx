@@ -4,7 +4,7 @@ import * as React from 'react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
-import { Button, Heading, List, Paragraph, Spinner } from '@digdir/design-system-react';
+import { Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -17,6 +17,7 @@ import {
   PageContent,
   PageHeader,
   RestartPrompter,
+  BorderedList,
 } from '@/components';
 import type {
   ApiDelegation,
@@ -69,25 +70,23 @@ export const ConfirmationPage = () => {
 
   const delegableApiList = () => {
     return (
-      <div className={classes.listContainer}>
-        <List borderStyle='dashed'>
-          {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
-            <CompactDeletableListItem
-              key={index}
-              startIcon={<CogIcon />}
-              removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
-              leftText={api.apiName}
-              middleText={api.orgName}
-            ></CompactDeletableListItem>
-          ))}
-        </List>
-      </div>
+      <BorderedList className={classes.list}>
+        {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
+          <CompactDeletableListItem
+            key={index}
+            startIcon={<CogIcon />}
+            removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
+            leftText={api.apiName}
+            middleText={api.orgName}
+          ></CompactDeletableListItem>
+        ))}
+      </BorderedList>
     );
   };
 
   const delegableOrgList = () => {
     return (
-      <List borderStyle='dashed'>
+      <BorderedList className={classes.list}>
         {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
           <CompactDeletableListItem
             key={index}
@@ -97,7 +96,7 @@ export const ConfirmationPage = () => {
             middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
           ></CompactDeletableListItem>
         ))}
-      </List>
+      </BorderedList>
     );
   };
 

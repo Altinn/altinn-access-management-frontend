@@ -51,6 +51,6 @@
   margin-top: 2.5rem;
 }
 
-.listContainer {
-  margin-bottom: 40px;
+.list {
+  margin-bottom: 40px !important;
 }

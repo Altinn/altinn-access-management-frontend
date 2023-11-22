@@ -1,0 +1,16 @@
+.borderedList {
+  --borderStyle: none;
+  margin-bottom: 0.5rem;
+  padding-left: 0;
+  border-top-color: #bcc7cc;
+  border-top-width: 1px;
+  border-top-style: var(--borderStyle);
+}
+
+.dashed {
+  --borderStyle: dashed;
+}
+
+.solid {
+  --borderStyle: solid;
+}
