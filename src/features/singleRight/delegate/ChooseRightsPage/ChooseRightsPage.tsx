@@ -232,19 +232,21 @@ export const ChooseRightsPage = () => {
   };
 
   const postDelegations = () => {
-    chosenServices.map((service: Service) => {
+    chosenServices.forEach((service: Service) => {
       const rightsToDelegate = service.rights
         .filter((right: Right) => right.checked)
         .map((right: Right) => new DelegationRequestDto(right.resourceReference, right.action));
 
-      const delegationInput: DelegationInputDto = {
-        // TODO: make adjustments to codeline below when we get GUID from altinn2
-        To: [new IdValuePair('urn:altinn:ssn', '50019992')],
-        Rights: rightsToDelegate,
-        serviceDto: new ServiceDto(service.title, service.serviceOwner),
-      };
+      if (rightsToDelegate.length > 0) {
+        const delegationInput: DelegationInputDto = {
+          // TODO: make adjustments to codeline below when we get GUID from altinn2
+          To: [new IdValuePair('urn:altinn:ssn', '50019992')],
+          Rights: rightsToDelegate,
+          serviceDto: new ServiceDto(service.title, service.serviceOwner),
+        };
 
-      return dispatch(delegate(delegationInput));
+        return dispatch(delegate(delegationInput));
+      }
     });
   };
 

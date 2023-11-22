@@ -17,7 +17,22 @@
           "value": "159b"
         }
       ],
-      "action": "read"
+      "action": "read",
+      "status": "NotDelegated",
+      "details": [
+        {
+          "code": "Unknown",
+          "description": "Unknown",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "urn:altinn:role",
+                "value": "DAGL"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "resource": [
@@ -30,7 +45,22 @@
           "value": "159b"
         }
       ],
-      "action": "write"
+      "action": "write",
+      "status": "NotDelegated",
+      "details": [
+        {
+          "code": "Unknown",
+          "description": "Unknown",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "urn:altinn:role",
+                "value": "DAGL"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "resource": [
@@ -43,7 +73,22 @@
           "value": "159b"
         }
       ],
-      "action": "sign"
+      "action": "sign",
+      "status": "NotDelegated",
+      "details": [
+        {
+          "code": "Unknown",
+          "description": "Unknown",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "urn:altinn:role",
+                "value": "DAGL"
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }
