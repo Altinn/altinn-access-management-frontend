@@ -33,22 +33,22 @@ export interface DelegationAccessCheckDto {
   serviceResource: ServiceResource;
 }
 
-export interface DelegationResponseData {
+export interface Right {
   rightKey?: string;
   resource: IdValuePair[];
   action?: string;
   status?: string;
   details?: Details[];
-  reduxStatus: ReduxStatusResponse;
+  reduxStatus?: ReduxStatusResponse;
 }
 
 export interface ProcessedDelegation {
   meta: DelegationInputDto;
-  bffResponseList?: DelegationResponseData[];
+  bffResponseList?: Right[];
 }
 
 export interface ServiceWithStatus {
-  delegationResponseData?: DelegationResponseData[];
+  rightList?: Right[];
   service?: ServiceResource;
   status?: ServiceStatus;
   isLoading?: boolean;
@@ -104,10 +104,10 @@ const createDelegationResponseData = (
   resourceValue?: string,
   action?: string,
   status?: string,
-  reduxStatus: ReduxStatusResponse,
+  reduxStatus?: ReduxStatusResponse,
   detailsCode?: string,
   detailsDescription?: string,
-): DelegationResponseData => {
+): Right => {
   return {
     resource: [{ id: resourceId, value: resourceValue }],
     action: action,
@@ -119,22 +119,6 @@ const createDelegationResponseData = (
       },
     ],
     reduxStatus,
-  };
-};
-
-const createHttpErrorDelegationResponseData = (
-  resourceId: string,
-  status: ServiceStatus,
-  detailsCode: string,
-): DelegationResponseData => {
-  return {
-    resource: [{ id: resourceId }],
-    status,
-    details: [
-      {
-        code: detailsCode,
-      },
-    ],
   };
 };
 
@@ -154,12 +138,6 @@ export const delegationAccessCheck = createAsyncThunk(
       });
   },
 );
-
-export const createHttpErrorDetails = () => {
-  return {
-    code: ServiceStatus.HTTPError,
-  };
-};
 
 export const fetchRights = createAsyncThunk(
   'singleRightSlice/fetchRights',
@@ -248,7 +226,7 @@ const singleRightSlice = createSlice({
 
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
-          delegationResponseData: action.payload,
+          rightList: action.payload,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
         };
@@ -257,12 +235,12 @@ const singleRightSlice = createSlice({
         let status = ServiceStatus.Delegable;
 
         const hasNonDelegableRights = !!action.payload.find(
-          (response: DelegationResponseData) => response.status === ServiceStatus.NotDelegable,
+          (response: Right) => response.status === ServiceStatus.NotDelegable,
         );
 
         if (hasNonDelegableRights) {
           const isDelegable = !!action.payload.find(
-            (response: DelegationResponseData) => response.status === ServiceStatus.Delegable,
+            (response: Right) => response.status === ServiceStatus.Delegable,
           );
 
           if (isDelegable) {
@@ -274,7 +252,7 @@ const singleRightSlice = createSlice({
         }
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
-            sws.delegationResponseData = action.payload;
+            sws.rightList = action.payload;
             sws.isLoading = false;
             sws.status = status;
           }
@@ -289,17 +267,20 @@ const singleRightSlice = createSlice({
 
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
-            const delegationResponseData = createHttpErrorDelegationResponseData(
-              action.meta.arg.serviceResource.identifier,
-              ServiceStatus.HTTPError,
-              ServiceStatus.HTTPError,
-            );
-
-            const delegationResponseList: DelegationResponseData[] = [];
-            delegationResponseList.push(delegationResponseData);
+            const delegationResponseList: Right[] = [
+              {
+                resource: [{ id: serviceID }],
+                status: ServiceStatus.HTTPError,
+                details: [
+                  {
+                    code: ServiceStatus.HTTPError,
+                  },
+                ],
+              },
+            ];
 
             sws.service.identifier = serviceID;
-            sws.delegationResponseData = delegationResponseList;
+            sws.rightList = delegationResponseList;
             sws.isLoading = false;
             sws.status = ServiceStatus.HTTPError;
           }
@@ -310,7 +291,7 @@ const singleRightSlice = createSlice({
 
       .addCase(fetchRights.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
-          delegationResponseData: action.payload,
+          rightList: action.payload,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
         };
@@ -323,9 +304,9 @@ const singleRightSlice = createSlice({
       .addCase(delegate.fulfilled, (state, action) => {
         const delegationInput = createSerializedMeta(action.meta.arg);
 
-        const bffResponseList: DelegationResponseData[] = action.payload.rightDelegationResults;
+        const bffResponseList: Right[] = action.payload.rightDelegationResults;
         bffResponseList.forEach(
-          (data: DelegationResponseData) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
+          (data: Right) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
         );
 
         const pushData: ProcessedDelegation = {
@@ -338,7 +319,7 @@ const singleRightSlice = createSlice({
       .addCase(delegate.rejected, (state, action) => {
         const delegationInput = createSerializedMeta(action.meta.arg);
 
-        const bffResponseList: DelegationResponseData[] = [];
+        const bffResponseList: Right[] = [];
 
         bffResponseList.push(
           createDelegationResponseData(

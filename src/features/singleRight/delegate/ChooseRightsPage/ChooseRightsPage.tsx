@@ -31,7 +31,7 @@ import {
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
-import type { Right } from './RightsActionBarContent/RightsActionBarContent';
+import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
 import classes from './ChooseRightsPage.module.css';
 
@@ -42,8 +42,7 @@ type Service = {
   status: string;
   title: string;
   serviceOwner: string;
-  errorCodes?: string[];
-  rights: Right[];
+  rights: ChipRight[];
 };
 
 export const ChooseRightsPage = () => {
@@ -84,9 +83,9 @@ export const ChooseRightsPage = () => {
       return a.service?.title.localeCompare(b.service?.title ?? '') ?? -1;
     });
 
-    return sorted.map((service) => {
-      const rights: Right[] =
-        service.delegationResponseData?.map((right) => ({
+    return sorted.map((service: ServiceWithStatus) => {
+      const rights: ChipRight[] =
+        service.rightList?.map((right) => ({
           action: right.action,
           delegable: right.status === ServiceStatus.Delegable,
           checked: right.status === ServiceStatus.Delegable,
@@ -99,7 +98,6 @@ export const ChooseRightsPage = () => {
         description: service.service?.description ?? '',
         rightDescription: service.service?.rightDescription ?? '',
         status: String(service.status),
-        errorCode: service.errorCodes,
         title: service.service?.title ?? '',
         serviceOwner: service.service?.resourceOwnerName ?? '',
         rights: rights,
@@ -234,8 +232,8 @@ export const ChooseRightsPage = () => {
   const postDelegations = () => {
     chosenServices.map((service: Service) => {
       const rightsToDelegate = service.rights
-        .filter((right: Right) => right.checked)
-        .map((right: Right) => new DelegationRequestDto(right.resourceReference, right.action));
+        .filter((right: ChipRight) => right.checked)
+        .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
 
       const delegationInput: DelegationInputDto = {
         // TODO: make adjustments to codeline below when we get GUID from altinn2

@@ -5,10 +5,7 @@ import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 
 import { useAppSelector } from '@/rtk/app/hooks';
-import type {
-  DelegationResponseData,
-  ProcessedDelegation,
-} from '@/rtk/features/singleRights/singleRightsSlice';
+import type { Right, ProcessedDelegation } from '@/rtk/features/singleRights/singleRightsSlice';
 import {
   BFFDelegatedStatus,
   ReduxStatusResponse,
@@ -28,7 +25,7 @@ export const ActionBarSection = () => {
 
   const firstSuccesfulIndex = delegations.findIndex((pd: ProcessedDelegation) => {
     const failedDelegations = pd.bffResponseList?.filter(
-      (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.Delegated,
+      (data: Right) => data.status !== BFFDelegatedStatus.Delegated,
     );
     return failedDelegations?.length === 0;
   });
@@ -36,7 +33,7 @@ export const ActionBarSection = () => {
   // logic for finding the delegation with the most failed Delegations
   delegations.forEach((pd: ProcessedDelegation, index) => {
     const failedDelegations = pd.bffResponseList?.filter(
-      (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.Delegated,
+      (data: Right) => data.status !== BFFDelegatedStatus.Delegated,
     );
 
     const numFailedDelegations = failedDelegations?.length || 0;
@@ -50,11 +47,11 @@ export const ActionBarSection = () => {
   const actionBars = delegations
     .map((pd: ProcessedDelegation, index: number) => {
       const failedDelegations = pd.bffResponseList?.filter(
-        (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.Delegated,
+        (data: Right) => data.status !== BFFDelegatedStatus.Delegated,
       );
 
       const successfulDelegations = pd.bffResponseList?.filter(
-        (data: DelegationResponseData) => data.status !== BFFDelegatedStatus.NotDelegated,
+        (data: Right) => data.status !== BFFDelegatedStatus.NotDelegated,
       );
 
       if (!hasSuccessfullDelegations && successfulDelegations?.length > 0) {

@@ -14,7 +14,7 @@ import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import classes from './RightsActionBarContent.module.css';
 
-export type Right = {
+export type ChipRight = {
   action: string;
   delegable: boolean;
   checked: boolean;
@@ -27,7 +27,7 @@ export interface RightsActionBarContentProps {
   toggleRight: (serviceIdentifier: string, action: string) => void;
 
   /** List of rights to be presented as toggle chips */
-  rights: Right[];
+  rights: ChipRight[];
 
   /** Description of the service */
   serviceDescription?: string;
@@ -52,7 +52,7 @@ export const RightsActionBarContent = ({
 
   const createErrorList = () => {
     const errors: string[] = [];
-    rights.forEach((right: Right) => {
+    rights.forEach((right: ChipRight) => {
       if (right.delegable === false) {
         right.details?.forEach((detail) => {
           if (
@@ -84,8 +84,8 @@ export const RightsActionBarContent = ({
       </Heading>
       <div className={classes.chipContainer}>
         {rights
-          .filter((right: Right) => right.delegable === true)
-          .map((right: Right, index: number) => {
+          .filter((right: ChipRight) => right.delegable === true)
+          .map((right: ChipRight, index: number) => {
             return (
               <div key={index}>
                 <Chip.Toggle
