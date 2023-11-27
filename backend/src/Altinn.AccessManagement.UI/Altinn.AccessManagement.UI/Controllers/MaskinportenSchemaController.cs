@@ -17,6 +17,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1")]
     public class MaskinportenSchemaController : ControllerBase
     {
         private readonly ILogger<MaskinportenSchemaController> _logger;
@@ -52,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/maskinportenschema/received")]
+        [Route("{party}/maskinportenschema/received")]
         public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetReceivedMaskinportenSchemaDelegations([FromRoute] string party)
         {
             try
@@ -82,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
+        [Route("{party}/maskinportenschema/offered")]
         public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetOfferedMaskinportenSchemaDelegations([FromRoute] string party)
         {
             try
@@ -112,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/maskinportenschema/received/revoke")]
+        [Route("{party}/maskinportenschema/received/revoke")]
         public async Task<ActionResult> RevokeReceivedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
         {
             try
@@ -143,7 +144,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered/revoke")]
+        [Route("{party}/maskinportenschema/offered/revoke")]
         public async Task<ActionResult> RevokeOfferedMaskinportenScopeDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegation delegation)
         {
             try
@@ -180,7 +181,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("accessmanagement/api/v1/{party}/maskinportenschema/offered")]
+        [Route("{party}/maskinportenschema/offered")]
         public async Task<ActionResult<DelegationOutput>> CreateMaskinportenDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
         {
             try
