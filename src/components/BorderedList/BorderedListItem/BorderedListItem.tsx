@@ -20,7 +20,7 @@ export const BorderedListItem = ({
   return (
     <List.Item
       className={cn(classes.borderedListItem, { [classes[borderStyle]]: borderStyle })}
-      style={{ listStyle: 'none', marginBottom: 0 }}
+      style={{ marginBottom: 0 }}
       {...rest}
     >
       {children}

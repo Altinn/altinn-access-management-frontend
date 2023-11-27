@@ -1,8 +1,9 @@
 .borderedListItem {
-  --borderStyle: none;
+  --borderStyle: dashed;
   border-bottom-color: #bcc7cc;
   border-bottom-width: 1px;
   border-bottom-style: var(--borderStyle);
+  list-style: none;
 }
 
 .dashed {

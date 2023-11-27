@@ -70,33 +70,37 @@ export const ConfirmationPage = () => {
 
   const delegableApiList = () => {
     return (
-      <BorderedList className={classes.list}>
-        {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
-          <CompactDeletableListItem
-            key={index}
-            startIcon={<CogIcon />}
-            removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
-            leftText={api.apiName}
-            middleText={api.orgName}
-          ></CompactDeletableListItem>
-        ))}
-      </BorderedList>
+      <div className={classes.listContainer}>
+        <BorderedList className={classes.list}>
+          {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
+            <CompactDeletableListItem
+              key={index}
+              startIcon={<CogIcon />}
+              removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
+              leftText={api.apiName}
+              middleText={api.orgName}
+            ></CompactDeletableListItem>
+          ))}
+        </BorderedList>
+      </div>
     );
   };
 
   const delegableOrgList = () => {
     return (
-      <BorderedList className={classes.list}>
-        {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
-          <CompactDeletableListItem
-            key={index}
-            startIcon={<Buldings3Icon />}
-            removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-            leftText={org.orgName}
-            middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
-          ></CompactDeletableListItem>
-        ))}
-      </BorderedList>
+      <div className={classes.listContainer}>
+        <BorderedList>
+          {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
+            <CompactDeletableListItem
+              key={index}
+              startIcon={<Buldings3Icon />}
+              removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
+              leftText={org.orgName}
+              middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
+            ></CompactDeletableListItem>
+          ))}
+        </BorderedList>
+      </div>
     );
   };
 

@@ -1,5 +1,5 @@
 .borderedList {
-  --borderStyle: none;
+  --borderStyle: dashed;
   margin-bottom: 0.5rem;
   padding-left: 0;
   border-top-color: #bcc7cc;
