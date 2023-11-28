@@ -119,7 +119,8 @@
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
-    "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette."
+    "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette.",
+    "no_orgs_chosen": "Ingen organisasjoner valgt"
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettigheter",

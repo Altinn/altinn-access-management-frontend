@@ -22,6 +22,15 @@ export type ChipRight = {
   details?: Details[];
 };
 
+enum LocalizedAction {
+  Read = 'read',
+  Write = 'write',
+  Sign = 'sign',
+  Instantiate = 'instantiate',
+  Confirm = 'confirm',
+  Access = 'access',
+}
+
 export interface RightsActionBarContentProps {
   /** The callback function to be called when toggling a right. */
   toggleRight: (serviceIdentifier: string, action: string) => void;
@@ -86,6 +95,11 @@ export const RightsActionBarContent = ({
         {rights
           .filter((right: ChipRight) => right.delegable === true)
           .map((right: ChipRight, index: number) => {
+            const actionText = Object.values(LocalizedAction).includes(
+              right.action as LocalizedAction,
+            )
+              ? t(`common.${right.action}`)
+              : right.action;
             return (
               <div key={index}>
                 <Chip.Toggle
@@ -95,7 +109,7 @@ export const RightsActionBarContent = ({
                     toggleRight(serviceIdentifier, right.action);
                   }}
                 >
-                  {t(`common.${right.action}`)}
+                  {actionText}
                 </Chip.Toggle>
               </div>
             );
@@ -130,11 +144,16 @@ export const RightsActionBarContent = ({
             {t('single_rights.you_cant_delegate_these_rights')}
           </Heading>
           <div className={classes.chipContainer}>
-            {rights.map((right, index) => {
-              if (right.delegable === false) {
-                return <Chip.Toggle key={index}>{t(`common.${right.action}`)}</Chip.Toggle>;
-              }
-            })}
+            {rights
+              .filter((right: ChipRight) => right.delegable === false)
+              .map((right: ChipRight, index: number) => {
+                const actionText = Object.values(LocalizedAction).includes(
+                  right.action as LocalizedAction,
+                )
+                  ? t(`common.${right.action}`)
+                  : right.action;
+                return <Chip.Toggle key={index}>{actionText}</Chip.Toggle>;
+              })}
           </div>
         </>
       </Alert>

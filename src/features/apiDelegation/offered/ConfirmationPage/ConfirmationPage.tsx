@@ -16,6 +16,7 @@ import {
   PageContainer,
   PageContent,
   PageHeader,
+  RestartPrompter,
 } from '@/components';
 import type {
   ApiDelegation,
@@ -30,8 +31,6 @@ import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegab
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
-
-import { RestartPrompter } from '../../components/RestartPrompter/RestartPrompter';
 
 import classes from './ConfirmationPage.module.css';
 
@@ -175,7 +174,18 @@ export const ConfirmationPage = () => {
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
-            {showErrorPanel() ? <RestartPrompter /> : <>{delegationContent()}</>}
+            {showErrorPanel() ? (
+              <RestartPrompter
+                spacingBottom
+                restartPath={
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+                }
+                title={t('common.an_error_has_occured')}
+                ingress={t('api_delegation.delegations_not_registered')}
+              />
+            ) : (
+              delegationContent()
+            )}
           </PageContent>
         </Page>
       </PageContainer>

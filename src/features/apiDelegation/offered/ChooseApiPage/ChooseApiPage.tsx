@@ -1,4 +1,4 @@
-import { PanelVariant, Panel, SearchField } from '@altinn/altinn-design-system';
+import { SearchField } from '@altinn/altinn-design-system';
 import { Button, List, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import {
   PageContainer,
   ErrorPanel,
   GroupElements,
+  RestartPrompter,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -155,13 +156,14 @@ export const ChooseApiPage = () => {
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
           {chosenDelegableOrgs.length < 1 ? (
-            <Panel
-              title={t('common.error')}
-              variant={PanelVariant.Warning}
-              forceMobileLayout={isSm}
-            >
-              {t('api_delegation.orgs_not_chosen_subtitle')}
-            </Panel>
+            <RestartPrompter
+              spacingBottom
+              restartPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+              }
+              title={t('common.an_error_has_occured')}
+              ingress={t('api_delegation.delegations_not_registered')}
+            />
           ) : (
             <div>
               <h3>{t('api_delegation.chosen_orgs')}:</h3>
