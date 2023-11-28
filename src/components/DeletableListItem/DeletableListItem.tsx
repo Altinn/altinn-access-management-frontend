@@ -1,4 +1,4 @@
-import { Button, ListItem } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -7,6 +7,7 @@ import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
 
+import { BorderedList } from '../BorderedList';
 import ScopeList from '../ScopeList/ScopeList';
 
 import classes from './DeletableListItem.module.css';
@@ -58,7 +59,7 @@ export const DeletableListItem = ({
   );
 
   return (
-    <ListItem>
+    <BorderedList.Item borderStyle='solid'>
       <div className={classes.listItem}>
         <div
           data-testid='list-item-texts'
@@ -80,6 +81,6 @@ export const DeletableListItem = ({
         </div>
         {isEditable && isEditableActions}
       </div>
-    </ListItem>
+    </BorderedList.Item>
   );
 };

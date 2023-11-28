@@ -105,7 +105,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <div className={classes.spinner}>
           <Spinner
             title={t('common.loading')}
-            size='1xLarge'
+            size='xlarge'
             variant='interaction'
           />
         </div>

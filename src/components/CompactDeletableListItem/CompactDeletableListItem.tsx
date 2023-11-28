@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { Button, ListItem } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
+
+import { BorderedList } from '../BorderedList';
 
 import classes from './CompactDeletableListItem.module.css';
 
@@ -30,7 +32,7 @@ export const CompactDeletableListItem = ({
   const { t } = useTranslation('common');
 
   return (
-    <ListItem>
+    <BorderedList.Item borderStyle='dashed'>
       <div
         className={classes.compactListItem}
         data-testid='compact-list-item'
@@ -82,6 +84,6 @@ export const CompactDeletableListItem = ({
           </div>
         </div>
       </div>
-    </ListItem>
+    </BorderedList.Item>
   );
 };

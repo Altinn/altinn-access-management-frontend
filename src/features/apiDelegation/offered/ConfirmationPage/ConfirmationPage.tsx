@@ -4,7 +4,7 @@ import * as React from 'react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
-import { Button, Heading, List, Paragraph, Spinner } from '@digdir/design-system-react';
+import { Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -17,6 +17,7 @@ import {
   PageContent,
   PageHeader,
   RestartPrompter,
+  BorderedList,
 } from '@/components';
 import type {
   ApiDelegation,
@@ -70,7 +71,7 @@ export const ConfirmationPage = () => {
   const delegableApiList = () => {
     return (
       <div className={classes.listContainer}>
-        <List borderStyle='dashed'>
+        <BorderedList className={classes.list}>
           {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
             <CompactDeletableListItem
               key={index}
@@ -80,24 +81,26 @@ export const ConfirmationPage = () => {
               middleText={api.orgName}
             ></CompactDeletableListItem>
           ))}
-        </List>
+        </BorderedList>
       </div>
     );
   };
 
   const delegableOrgList = () => {
     return (
-      <List borderStyle='dashed'>
-        {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
-          <CompactDeletableListItem
-            key={index}
-            startIcon={<Buldings3Icon />}
-            removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-            leftText={org.orgName}
-            middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
-          ></CompactDeletableListItem>
-        ))}
-      </List>
+      <div className={classes.listContainer}>
+        <BorderedList>
+          {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
+            <CompactDeletableListItem
+              key={index}
+              startIcon={<Buldings3Icon />}
+              removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
+              leftText={org.orgName}
+              middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
+            ></CompactDeletableListItem>
+          ))}
+        </BorderedList>
+      </div>
     );
   };
 
