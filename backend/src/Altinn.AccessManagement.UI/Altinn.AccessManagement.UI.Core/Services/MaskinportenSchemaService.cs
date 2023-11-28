@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -58,6 +59,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
             return await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegation);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<DelegationResponseData>> DelegationCheck(string party, Right right)
+        {
+            return await _maskinportenSchemaClient.DelegationCheck(party, right);
         }
 
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)

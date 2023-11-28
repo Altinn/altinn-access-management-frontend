@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -47,5 +48,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="delegation">delegation to be performed</param>
         /// <returns></returns>
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
+
+        /// <summary>
+        /// Does a delegation check based on partyId and the Right that the check is requested for
+        /// </summary>
+        /// <param name="party">party</param>
+        /// <param name="right">delegation to be performed</param>
+        /// <returns></returns>
+        public Task<List<DelegationResponseData>> DelegationCheck(string party, Right right);
     }
 }

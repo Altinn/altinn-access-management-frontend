@@ -1,8 +1,11 @@
 ﻿using System.Net;
+using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -128,6 +131,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+        }
+        
+        /// <inheritdoc />
+        public Task<List<DelegationResponseData>> DelegationCheck(string party, Right right)
+        {
+            List<DelegationResponseData> response = new List<DelegationResponseData>();
+            return Task.FromResult(response);
         }
 
         private static string GetDataPathForDelegations()
