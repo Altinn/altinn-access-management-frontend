@@ -41,7 +41,9 @@
     "finished": "Ferdig",
     "an_error_has_occured": "Ein feil har skjedd",
     "yes": "Ja",
-    "finish_delegation": "Fullfør delegering"
+    "finish_delegation": "Fullfør delegering",
+    "you_lowercase": "du",
+    "you_uppercase": "Du"
   },
   "profile": {
     "received": "Mottekne",
@@ -125,9 +127,9 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Du har ikkje nokon av dei nødvendige rollene for å delegere tjenesten. urn:altinn:rolecode:HADM, urn:altinn:location:garage, vil gi tilgang til å delegera den.",
-    "missing_delegation_access": "Du har ikkje dei nødvendige delegeringsrettane til å delegera tenesta",
-    "missing_srr_right_access": "Du har ikkje dei nødvendige SRR-rettigheitane",
+    "missing_role_access": "{{you}} har ikkje nokon av dei nødvendige rollene for å delegere tjenesten.",
+    "missing_delegation_access": "{{you}} har ikkje dei nødvendige delegeringsrettane til å delegera tenesta",
+    "missing_srr_right_access": "{{you}} har ikkje dei nødvendige SRR-rettigheitane. Avgivaren du delegerer på vegane av har ikkje tilgang til å delegera tenesta.",
     "unknown": "Uvisst",
     "new_error": "Dette er ein ny feil me ikkje har fått før. Vennlegast rapportar til Altinn ved å senda inn eit skjermbilete",
     "missing_role_access_title": "Mangler rolle",
@@ -150,7 +152,7 @@
     "choose_rights_page_secondary_text": "Dersom du ønskjer å tilpassa tilgangane, t.d. fjerne signeringsrett,  kan du klikka på pilen ved sida av tenesta for å opne den og tilpassa dette.",
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
-    "you_cant_delegate_these_rights": "Desse rettegheitane kan du ikkje delegera:",
+    "you_cant_delegate_these_rights": "Desse rettane kan du ikkje delegera:",
     "woops_something_went_wrong": "Oi, her var det noko som gjekk gale med ein eller fleire tenester. Desse er raude. Du kan prøva igjen seinare",
     "all_failed_techncal_problem_paragraph": "Eit teknisk problem har oppstått ved delegering av tenestene. Me tilrår at du startar delegeringsprosessen på nytt ved å gå til delegeringssida. Viss problemet held fram ber me deg kontakta brukarservice på telefon 75 00 60 00. Me beklagar!",
     "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
@@ -161,6 +163,8 @@
     "processing_delegations": "Prosesserer delegeringar",
     "cancel_popover_text": "Valde tenester vil ikkje bli delegert. Er du sikker på at du vil avslutta?",
     "no_continue_delegating": "Nei, hald fram med å delegera",
-    "add_more_services": "Legg til fleire tenester"
+    "add_more_services": "Legg til fleire tenester",
+    "ceo_or_main_admin_can_help": "Dagleg leiar eller hovudadministrator kan hjelpa deg med dette.",
+    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi {{reason}}"
   }
 }

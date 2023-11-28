@@ -51,7 +51,7 @@ export const ResourceActionBar = ({
 
   useUpdate(() => {
     if (
-      (status === ServiceStatus.NotDelegable || status === ServiceStatus.Error) &&
+      (status === ServiceStatus.NotDelegable || status === ServiceStatus.HTTPError) &&
       previousStatus !== undefined
     ) {
       setOpen(true);
@@ -64,7 +64,7 @@ export const ResourceActionBar = ({
       case ServiceStatus.PartiallyDelegable:
         return 'success';
       case ServiceStatus.NotDelegable:
-      case ServiceStatus.Error:
+      case ServiceStatus.HTTPError:
         return 'danger';
       default:
         return 'neutral';
@@ -81,7 +81,7 @@ export const ResourceActionBar = ({
       }}
       iconPlacement='right'
     >
-      {!compact && (status === ServiceStatus.Error ? t('common.try_again') : t('common.add'))}
+      {!compact && (status === ServiceStatus.HTTPError ? t('common.try_again') : t('common.add'))}
     </Button>
   );
 

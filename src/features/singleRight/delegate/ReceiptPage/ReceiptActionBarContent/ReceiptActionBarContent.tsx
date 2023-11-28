@@ -2,16 +2,16 @@ import { Alert, Chip, Heading, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { DelegationResponseData } from '@/rtk/features/singleRights/singleRightsSlice';
+import type { Right } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import classes from './ReceiptActionBarContent.module.css';
 
 export interface ReceiptActionBarContent {
   /** List of failed delegations */
-  failedDelegations: DelegationResponseData[] | undefined;
+  failedDelegations: Right[] | undefined;
 
   /** List of successful delegations */
-  successfulDelegations: DelegationResponseData[] | undefined;
+  successfulDelegations: Right[] | undefined;
 
   /** If there's http problems with the delegation */
   isRejectedDelegation: boolean | undefined;
@@ -61,7 +61,7 @@ export const ReceiptActionBarContent = ({
             </Heading>
             <div className={classes.chipContainer}>
               <Chip.Group size='small'>
-                {failedDelegations?.map((failedRight: DelegationResponseData, innerIndex) => {
+                {failedDelegations?.map((failedRight: Right, innerIndex) => {
                   return (
                     <Chip.Toggle key={`failed-${index}-${innerIndex}`}>
                       {t(`common.${failedRight.action}`)}
@@ -87,7 +87,7 @@ export const ReceiptActionBarContent = ({
         </Heading>
         <div className={classes.chipContainer}>
           <Chip.Group size='small'>
-            {successfulDelegations?.map((right: DelegationResponseData, innerIndex) => {
+            {successfulDelegations?.map((right: Right, innerIndex) => {
               return (
                 <Chip.Toggle
                   selected={true}

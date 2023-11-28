@@ -26,3 +26,7 @@
 .alertContainer {
   padding-top: 5px;
 }
+
+.alertErrorContainer {
+  margin-bottom: 35px;
+}

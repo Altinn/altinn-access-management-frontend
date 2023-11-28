@@ -32,8 +32,8 @@ import {
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
+import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
-import { type Right } from './RightsActionBarContent/RightsActionBarContent';
 import classes from './ChooseRightsPage.module.css';
 
 type Service = {
@@ -43,8 +43,7 @@ type Service = {
   status: string;
   title: string;
   serviceOwner: string;
-  errorCode?: string;
-  rights: Right[];
+  rights: ChipRight[];
 };
 
 export const ChooseRightsPage = () => {
@@ -85,20 +84,21 @@ export const ChooseRightsPage = () => {
       return a.service?.title.localeCompare(b.service?.title ?? '') ?? -1;
     });
 
-    return sorted.map((service) => {
-      const rights =
-        service.rightDelegationResults?.map((right) => ({
+    return sorted.map((service: ServiceWithStatus) => {
+      const rights: ChipRight[] =
+        service.rightList?.map((right) => ({
           action: right.action,
           delegable: right.status === ServiceStatus.Delegable,
           checked: right.status === ServiceStatus.Delegable,
           resourceReference: right.resource,
+          details: right.details,
         })) ?? [];
+
       return {
         serviceIdentifier: service.service?.identifier ?? '',
         description: service.service?.description ?? '',
         rightDescription: service.service?.rightDescription ?? '',
         status: String(service.status),
-        errorCode: service.errorCode,
         title: service.service?.title ?? '',
         serviceOwner: service.service?.resourceOwnerName ?? '',
         rights: rights,
@@ -134,7 +134,7 @@ export const ChooseRightsPage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
-  const toggleRightChecked = (serviceIdentifier: string, action: string) => {
+  const toggleRight = (serviceIdentifier: string, action: string) => {
     const serviceStateCopy = [...chosenServices];
 
     for (const service of serviceStateCopy) {
@@ -151,7 +151,7 @@ export const ChooseRightsPage = () => {
     }
   };
 
-  const chooseRightsActionBars = chosenServices?.map((service, serviceIndex) => (
+  const chooseRightsActionBars = chosenServices?.map((service: Service, serviceIndex) => (
     <RightsActionBar
       key={service.serviceIdentifier}
       title={service.title}
@@ -164,12 +164,11 @@ export const ChooseRightsPage = () => {
       defaultOpen={serviceIndex === 0}
     >
       <RightsActionBarContent
-        toggleRight={toggleRightChecked}
+        toggleRight={toggleRight}
         rights={service.rights}
         serviceIdentifier={service.serviceIdentifier}
         serviceDescription={service.description}
         rightDescription={service.rightDescription}
-        errorCode={service.errorCode}
       />
     </RightsActionBar>
   ));
@@ -234,8 +233,8 @@ export const ChooseRightsPage = () => {
   const postDelegations = () => {
     chosenServices.forEach((service: Service) => {
       const rightsToDelegate = service.rights
-        .filter((right: Right) => right.checked)
-        .map((right: Right) => new DelegationRequestDto(right.resourceReference, right.action));
+        .filter((right: ChipRight) => right.checked)
+        .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
 
       if (rightsToDelegate.length > 0) {
         const delegationInput: DelegationInputDto = {
