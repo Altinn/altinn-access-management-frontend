@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<SingleRightController> _factory;
-        private readonly string unitTestFolder;
+        private readonly string mockFolder;
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
@@ -31,8 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
-
+            mockFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, "appid-503.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -82,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, "a3-app.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -127,7 +126,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, "3225.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -174,7 +173,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "999 999 999";
             string toSsn = "50019992";
 
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
             DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "appid-503.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -243,7 +242,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "999 999 999";
             string toSsn = "50019992";
 
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
             DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "a3-app2.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -314,7 +313,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "999 999 999";
             string toSsn = "50019992";
 
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation");
             DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path, "3225.json");
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -441,7 +440,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         private int CountMatches(List<DelegationResponseData> actualResponses, string expectedResponseFileName)
         {
-            string path = Path.Combine(unitTestFolder, "Data", "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(mockFolder, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
             List<DelegationResponseData> expectedResponses = Util.GetMockData<List<DelegationResponseData>>(path, expectedResponseFileName);
             int countMatches = 0;

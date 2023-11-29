@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -17,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class MaskinportenSchemaClientMock : IMaskinportenSchemaClient
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly string mockFolder;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MaskinportenSchemaClientMock" /> class
@@ -26,6 +28,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ILogger<MaskinportenSchemaClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
+            mockFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaClientMock).Assembly.Location).LocalPath);
         }
 
         public Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
@@ -134,10 +137,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<List<DelegationResponseData>> DelegationCheck(string party, Right right)
+        public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
-            List<DelegationResponseData> response = new List<DelegationResponseData>();
-            return Task.FromResult(response);
+
+            string fullPath = Path.Combine(mockFolder, "Data", "MaskinportenSchema", "DelegationCheck", "scope-access-check", partyId + ".json");
+            
+            if (!File.Exists(fullPath))
+            {
+                throw new FileNotFoundException($"The file with path {fullPath} does not exist");
+            }
+
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
+
+            return Task.FromResult(expectedResponse);
         }
 
         private static string GetDataPathForDelegations()

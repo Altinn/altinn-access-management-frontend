@@ -1,28 +1,32 @@
-﻿using Altinn.AccessManagement.UI.Controllers;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Azure;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text.Json;
+using Azure.Core;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    /// Test class for <see cref="MaskinportenSchemaController"></see>
+    ///     Test class for <see cref="MaskinportenSchemaController"></see>
     /// </summary>
     [Collection("MaskinportenSchemaController Tests")]
     public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaController>>
     {
-        private readonly CustomWebApplicationFactory<MaskinportenSchemaController> _factory;
         private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<MaskinportenSchemaController> _factory;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly string unitTestFolder;
 
         /// <summary>
-        /// Constructor setting up factory, test client and dependencies
+        ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
         public MaskinportenSchemaControllerTest(CustomWebApplicationFactory<MaskinportenSchemaController> factory)
@@ -33,11 +37,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
         }
 
         /// <summary>
-        /// Test case: GetReceivedMaskinportenSchemaDelegations returns a list of delegations received by the reortee
-        /// Expected: GetReceivedMaskinportenSchemaDelegations returns a list of delegations
+        ///     Test case: GetReceivedMaskinportenSchemaDelegations returns a list of delegations received by the reortee
+        ///     Expected: GetReceivedMaskinportenSchemaDelegations returns a list of delegations
         /// </summary>
         [Fact]
         public async Task GetReceivedMaskinportenSchemaDelegations_Valid_CoveredBy()
@@ -46,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedInboundDelegationsForParty(50004219);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/50004219/maskinportenschema/received");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004219/maskinportenschema/received");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -57,8 +62,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetReceivedMaskinportenSchemaDelegations returns emptylist when there are no delegations for the reportee
-        /// Expected: GetReceivedMaskinportenSchemaDelegations returns empty list 
+        ///     Test case: GetReceivedMaskinportenSchemaDelegations returns emptylist when there are no delegations for the
+        ///     reportee
+        ///     Expected: GetReceivedMaskinportenSchemaDelegations returns empty list
         /// </summary>
         [Fact]
         public async Task GetReceivedMaskinportenSchemaDelegations_NoDelegations()
@@ -67,7 +73,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string expected = "[]";
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/50004223/maskinportenschema/received");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004223/maskinportenschema/received");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -83,8 +89,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetOfferedMaskinportenSchemaDelegations returns a list of delegations offered by the reportee
-        /// Expected: GetOfferedMaskinportenSchemaDelegations returns a list of delegations
+        ///     Test case: GetOfferedMaskinportenSchemaDelegations returns a list of delegations offered by the reportee
+        ///     Expected: GetOfferedMaskinportenSchemaDelegations returns a list of delegations
         /// </summary>
         [Fact]
         public async Task GetOfferedMaskinportenSchemaDelegations_Valid_OfferedBy()
@@ -93,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedOutboundDelegationsForParty(50004223);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/50004223/maskinportenschema/offered");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004223/maskinportenschema/offered");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -104,8 +110,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetOfferedMaskinportenSchemaDelegations returns emptylist when there are no delegations for the reportee
-        /// Expected: GetOfferedMaskinportenSchemaDelegations returns empty list 
+        ///     Test case: GetOfferedMaskinportenSchemaDelegations returns emptylist when there are no delegations for the reportee
+        ///     Expected: GetOfferedMaskinportenSchemaDelegations returns empty list
         /// </summary>
         [Fact]
         public async Task GetOfferedMaskinportenSchemaDelegations_NoDelegations()
@@ -114,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string expected = "[]";
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/50004219/maskinportenschema/offered");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004219/maskinportenschema/offered");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -123,10 +129,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: MaskinportenDelegation performed by authenticated user 20000490 for the reportee party 50005545 of the nav_aa_distribution maskinporten schema resource from the resource registry, to the organization 810418672
-        ///            In this case:
-        ///            - The user 20000490 is DAGL for the From unit 50005545
-        /// Expected: MaskinportenDelegation returns 200 OK with response body containing the expected delegated rights
+        ///     Test case: MaskinportenDelegation performed by authenticated user 20000490 for the reportee party 50005545 of the
+        ///     nav_aa_distribution maskinporten schema resource from the resource registry, to the organization 810418672
+        ///     In this case:
+        ///     - The user 20000490 is DAGL for the From unit 50005545
+        ///     Expected: MaskinportenDelegation returns 200 OK with response body containing the expected delegated rights
         /// </summary>
         [Fact]
         public async Task PostMaskinportenSchemaDelegation_DAGL_Success()
@@ -150,9 +157,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: RevokeOfferedMaskinportenScopeDelegation for the reportee party 50004222 of the nav_aa_distribution maskinporten schema resource from the resource registry,
-        ///            delegated to the organization 810418192
-        /// Expected: RevokeOfferedMaskinportenScopeDelegation returns 204 No Content
+        ///     Test case: RevokeOfferedMaskinportenScopeDelegation for the reportee party 50004222 of the nav_aa_distribution
+        ///     maskinporten schema resource from the resource registry,
+        ///     delegated to the organization 810418192
+        ///     Expected: RevokeOfferedMaskinportenScopeDelegation returns 204 No Content
         /// </summary>
         [Fact]
         public async Task RevokeOfferedMaskinportenScopeDelegation_Success()
@@ -169,22 +177,72 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: RevokeReceivedMaskinportenScopeDelegation for the reportee party 50004221 of the nav_aa_distribution maskinporten schema resource from the resource registry,
-        ///            which have received delegation from the organization 50004222
-        /// Expected: RevokeReceivedMaskinportenScopeDelegation returns 204 No Content
+        ///     Test case: RevokeReceivedMaskinportenScopeDelegation for the reportee party 50004221 of the nav_aa_distribution
+        ///     maskinporten schema resource from the resource registry,
+        ///     which have received delegation from the organization 50004222
+        ///     Expected: RevokeReceivedMaskinportenScopeDelegation returns 204 No Content
         /// </summary>
         [Fact]
         public async Task RevokeReceivedMaskinportenScopeDelegation_Success()
         {
             // Arrange
             string toParty = "50004219";
-            StreamContent requestContent = GetRequestContent("RevokeReceived", "nav_aa_distribution", $"810418672", $"p{toParty}");
+            StreamContent requestContent = GetRequestContent("RevokeReceived", "nav_aa_distribution", "810418672", $"p{toParty}");
 
             // Act
             HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{toParty}/maskinportenschema/received/revoke", requestContent);
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Tests if response says resource is delegable
+        ///     Expected: Response says resource is delegable
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_HasDelegableRights()
+        {
+            // Arrange
+            int reporteePartyId = 50005545;
+            string resourceId = "scope-access-schema";
+                
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, reporteePartyId + ".json");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(path, "request.json")));
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            
+            List<DelegationResponseData> actualResponse = JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, options);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+        
+        /// <summary>
+        ///     Test case: Tests if response says resource has insufficient access level
+        ///     Expected: Response says resource has insufficient access level
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InsufficientAccessLevel()
+        {
+            // Arrange
+            int reporteePartyId = 12345678;
+                
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, reporteePartyId + ".json");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(path, "request.json")));
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            
+            List<DelegationResponseData> actualResponse = JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, options);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         private static List<MaskinportenSchemaDelegationFE> GetExpectedOutboundDelegationsForParty(int offeredByPartyId)
