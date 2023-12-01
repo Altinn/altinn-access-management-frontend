@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Does a delegation check based on partyId and the Right that the check is requested for
         /// </summary>
         /// <param name="party">party</param>
-        /// <param name="right">delegation to be performed</param>
+        /// <param name="right">right to be checked</param>
         /// <returns></returns>
         public Task<List<DelegationResponseData>> DelegationCheck(string party, Right right);
     }
