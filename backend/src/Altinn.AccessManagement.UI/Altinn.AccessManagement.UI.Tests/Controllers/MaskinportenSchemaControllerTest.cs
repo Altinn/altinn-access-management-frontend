@@ -197,8 +197,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Tests if response says resource is delegable
-        ///     Expected: Response says resource is delegable
+        ///     Test case: Tests if resource is delegable
+        ///     Expected: Resource is delegable
         /// </summary>
         [Fact]
         public async Task DelegationCheck_HasDelegableRights()
@@ -222,8 +222,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
         
         /// <summary>
-        ///     Test case: Tests if response says resource has insufficient access level
-        ///     Expected: Response says resource has insufficient access level
+        ///     Test case: Tests if response has insufficient access level
+        ///     Expected: Resource has insufficient access level
         /// </summary>
         [Fact]
         public async Task DelegationCheck_InsufficientAccessLevel()

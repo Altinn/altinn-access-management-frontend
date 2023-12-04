@@ -215,18 +215,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for performing a query of what rights a user can delegate to others on behalf of a specified reportee and maskinporten schema.
+        /// Endpoint for performing a check if the user can delegate a maskinporten schema service to a specified reportee.
         /// </summary>
-        /// <param name="partyId">The reportee party</param>
-        /// <param name="right">Request model for user rights delegation check</param>
+        /// <param name="partyId">The reportee's party id</param>
+        /// <param name="request">Necessary info about the right that's going to be checked</param>
         [HttpPost]
         [Authorize]
         [Route("{partyId}/maskinportenschema/delegationcheck")]
-        public async Task<ActionResult<List<DelegationResponseData>>> DelegationCheck([FromRoute] string partyId, [FromBody] Right right)
+        public async Task<ActionResult<List<DelegationResponseData>>> DelegationCheck([FromRoute] string partyId, [FromBody] Right request)
         {
             try
             {
-                return await _maskinportenService.DelegationCheck(partyId, right);
+                return await _maskinportenService.DelegationCheck(partyId, request);
             }
             catch (Exception)
             {

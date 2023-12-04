@@ -62,9 +62,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> DelegationCheck(string party, Right right)
+        public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
-            return await _maskinportenSchemaClient.DelegationCheck(party, right);
+            return await _maskinportenSchemaClient.DelegationCheck(partyId, request);
         }
 
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)

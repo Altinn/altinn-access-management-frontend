@@ -50,11 +50,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
 
         /// <summary>
-        /// Does a delegation check based on partyId and the Right that the check is requested for
+        /// Endpoint for performing a check if the user can delegate a maskinporten schema service to a specified reportee.
         /// </summary>
-        /// <param name="party">party</param>
-        /// <param name="right">right to be checked</param>
-        /// <returns></returns>
-        public Task<List<DelegationResponseData>> DelegationCheck(string party, Right right);
+        /// <param name="partyId">The reportee's party id</param>
+        /// <param name="request">Necessary info about the right that's going to be checked</param>
+        public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request);
     }
 }

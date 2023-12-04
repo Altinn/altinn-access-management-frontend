@@ -3,7 +3,6 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
@@ -145,13 +144,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> DelegationCheck(string party, Right right)
+        public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
             try
             {
-                string endpointUrl = $"{party}/maskinportenschema/delegationcheck";
+                string endpointUrl = $"{partyId}/maskinportenschema/delegationcheck";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                StringContent requestBody = new StringContent(JsonSerializer.Serialize(right, _serializerOptions), Encoding.UTF8, "application/json");
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
                 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -169,7 +168,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // UserDelegationAccessCheck // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // MaskinportenSchemaClient // DelegationCheck // Exception");
                 throw;
             }
         }
