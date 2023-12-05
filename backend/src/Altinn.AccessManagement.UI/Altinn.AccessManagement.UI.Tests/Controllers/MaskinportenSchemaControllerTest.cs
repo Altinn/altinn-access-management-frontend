@@ -207,11 +207,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             int reporteePartyId = 50005545;
             string resourceId = "scope-access-schema";
                 
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
-            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, reporteePartyId + ".json");
+            string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
+            string fullPath = Path.Combine(folderPath, reporteePartyId + ".json");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(path, "request.json")));
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, "request.json")));
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -231,11 +232,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             int reporteePartyId = 12345678;
                 
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
-            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path, reporteePartyId + ".json");
+            string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
+            string fullPath = Path.Combine(folderPath, reporteePartyId + ".json");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(path, "request.json")));
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, "request.json")));
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert

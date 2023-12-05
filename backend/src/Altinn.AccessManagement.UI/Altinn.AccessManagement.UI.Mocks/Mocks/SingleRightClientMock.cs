@@ -21,11 +21,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, Right request)
         {
-
             string resourceFileName = GetMockDataFilename(request.Resource);
-            string dataPath = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse", resourceFileName+".json");
 
-            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(dataPath, resourceFileName + ".json");
+            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             return Task.FromResult(expectedResponse);
         }

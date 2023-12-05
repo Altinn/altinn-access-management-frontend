@@ -147,9 +147,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new FileNotFoundException($"The file with path {fullPath} does not exist");
             }
 
-            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
+            List<DelegationResponseData> mockedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
-            return Task.FromResult(expectedResponse);
+            return Task.FromResult(mockedResponse);
         }
 
         private static string GetDataPathForDelegations()
