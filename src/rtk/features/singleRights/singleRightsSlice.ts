@@ -305,7 +305,7 @@ const singleRightSlice = createSlice({
         const delegationInput = createSerializedMeta(action.meta.arg);
 
         const bffResponseList: Right[] = action.payload.rightDelegationResults;
-        bffResponseList.forEach(
+        bffResponseList?.forEach(
           (data: Right) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
         );
 

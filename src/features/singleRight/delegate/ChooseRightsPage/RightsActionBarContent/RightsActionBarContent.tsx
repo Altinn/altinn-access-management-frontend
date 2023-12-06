@@ -11,6 +11,7 @@ import {
   prioritizeErrors,
 } from '@/resources/utils/errorCodeUtils';
 import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
+import { LocalizedAction } from '@/resources/utils/localizedActions';
 
 import classes from './RightsActionBarContent.module.css';
 
@@ -21,15 +22,6 @@ export type ChipRight = {
   resourceReference: IdValuePair[];
   details?: Details[];
 };
-
-enum LocalizedAction {
-  Read = 'read',
-  Write = 'write',
-  Sign = 'sign',
-  Instantiate = 'instantiate',
-  Confirm = 'confirm',
-  Access = 'access',
-}
 
 export interface RightsActionBarContentProps {
   /** The callback function to be called when toggling a right. */
