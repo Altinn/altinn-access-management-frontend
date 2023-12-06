@@ -85,12 +85,6 @@ export const RightsActionBarContent = ({
       <Paragraph>{serviceDescription}</Paragraph>
       <Paragraph>{rightDescription}</Paragraph>
       <Paragraph>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
-      <Heading
-        size={'xxsmall'}
-        level={5}
-      >
-        {t('single_rights.choose_rights_chip_text')}
-      </Heading>
       <div className={classes.chipContainer}>
         {rights
           .filter((right: ChipRight) => right.delegable === true)

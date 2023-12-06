@@ -251,9 +251,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceControllerTest).Assembly.Location).LocalPath);
-            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "ResourceRegistry");
-            string filename = "resourceOwnersOrgList.json";
-            List<ResourceOwnerFE> expectedResult = Util.GetMockData<List<ResourceOwnerFE>>(path, filename);
+            string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "ResourceRegistry", "resourceOwnersOrgList.json");
+            List<ResourceOwnerFE> expectedResult = Util.GetMockData<List<ResourceOwnerFE>>(path);
 
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

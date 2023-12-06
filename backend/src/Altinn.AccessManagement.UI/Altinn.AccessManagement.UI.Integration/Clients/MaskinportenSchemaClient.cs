@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -140,6 +141,36 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
             return response;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
+        {
+            try
+            {
+                string endpointUrl = $"{partyId}/maskinportenschema/delegationcheck";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+                
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, _serializerOptions);
+                }
+                else
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
+
+                    throw error;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // MaskinportenSchemaClient // DelegationCheck // Exception");
+                throw;
+            }
         }
     }
 }

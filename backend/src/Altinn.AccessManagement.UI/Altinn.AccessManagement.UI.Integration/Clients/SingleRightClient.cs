@@ -7,7 +7,6 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -70,7 +69,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // UserDelegationAccessCheck // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // CheckDelegationAccess // Exception");
                 throw;
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -47,5 +48,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="delegation">delegation to be performed</param>
         /// <returns></returns>
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
+
+        /// <summary>
+        /// Endpoint for performing a check if the user can delegate a maskinporten schema service to a specified reportee.
+        /// </summary>
+        /// <param name="partyId">The reportee's party id</param>
+        /// <param name="request">Necessary info about the right that's going to be checked</param>
+        public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request);
     }
 }
