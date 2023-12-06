@@ -17,7 +17,7 @@
           "MinimumAuthenticationLevel": [
             {
               "Id": "urn:altinn:minimum-authenticationlevel",
-              "Value": "3"
+              "Value": "4"
             }
           ]
         }
