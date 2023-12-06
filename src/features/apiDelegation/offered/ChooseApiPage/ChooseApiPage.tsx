@@ -94,8 +94,8 @@ export const ChooseApiPage = () => {
       return (
         <div className={common.spinnerContainer}>
           <Spinner
-            title={String(t('common.loading'))}
-            size='large'
+            title={t('common.loading')}
+            variant='interaction'
           />
         </div>
       );

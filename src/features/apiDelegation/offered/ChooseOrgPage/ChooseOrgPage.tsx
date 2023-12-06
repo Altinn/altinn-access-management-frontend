@@ -242,8 +242,8 @@ export const ChooseOrgPage = () => {
           {viewLoading ? (
             <div className={common.spinnerContainer}>
               <Spinner
-                size='large'
-                title={String(t('common.loading'))}
+                title={t('common.loading')}
+                variant='interaction'
               />
             </div>
           ) : (
@@ -263,8 +263,8 @@ export const ChooseOrgPage = () => {
                   {searchLoading ? (
                     <div className={common.spinnerContainer}>
                       <Spinner
-                        size='large'
-                        title={String(t('common.loading'))}
+                        title={t('common.loading')}
+                        variant='interaction'
                       />
                     </div>
                   ) : (

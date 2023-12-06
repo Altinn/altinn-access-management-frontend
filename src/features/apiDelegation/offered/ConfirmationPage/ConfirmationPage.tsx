@@ -153,8 +153,7 @@ export const ConfirmationPage = () => {
           >
             {isProcessingDelegations && (
               <Spinner
-                title={String(t('common.loading'))}
-                size='small'
+                title={t('common.loading')}
                 variant='interaction'
               />
             )}

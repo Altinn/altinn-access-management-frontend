@@ -63,7 +63,10 @@ export const ProgressModal = ({
               <div className={classes.loadingText}>
                 <Paragraph>{loadingText}</Paragraph>
               </div>
-              <Spinner title={t('common.loading')} />
+              <Spinner
+                title={t('common.loading')}
+                variant='interaction'
+              />
             </div>
           )}
         </div>
