@@ -81,6 +81,10 @@ export const ChooseApiPage = () => {
     value: provider,
   }));
 
+  const delegationCheck = () => {
+    
+  }
+
   const delegableApiActionBars = () => {
     if (error.message) {
       return (

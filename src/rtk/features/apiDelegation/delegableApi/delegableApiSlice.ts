@@ -2,6 +2,9 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { type CustomError } from '@/dataObjects';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import type { Right } from '@/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent';
 
 export interface DelegableApi {
   id: string;
@@ -10,6 +13,8 @@ export interface DelegableApi {
   rightDescription: string;
   description?: string;
   scopes: string[];
+  isLoading: boolean;
+  errorCode: string;
 }
 
 export interface DelegableApiDto {
@@ -35,6 +40,11 @@ interface resourceReferenceDTO {
   reference: string;
   referenceType: string;
   referenceSource: string;
+}
+
+export interface DelegationCheckDto {
+  delegableApi: DelegableApi;
+  right: IdValuePair[];
 }
 
 const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
@@ -67,6 +77,25 @@ export const fetchDelegableApis = createAsyncThunk(
       console.error(error);
       return rejectWithValue(error);
     }
+  },
+);
+
+export const apiDelegationCheck = createAsyncThunk(
+  'delegableApi/apiDelegationCheck',
+  async (dto: DelegationCheckDto, { rejectWithValue }) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    const right = dto.right;
+
+    return await axios
+      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`, {
+        right,
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        return rejectWithValue(error);
+      });
   },
 );
 
@@ -208,6 +237,39 @@ const delegableApiSlice = createSlice({
           state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
+        }
+      })
+      .addCase(apiDelegationCheck.fulfilled, (state, action) => {
+        const dto: DelegationCheckDto = action.meta.arg;
+        const serviceId = dto.right[0].value;
+
+        const { delegableApiList } = state;
+        const { presentedApiList } = state;
+        const { delegableApiSearchPool } = state;
+
+        if (action.payload.status === 'Delegable') {
+          state.delegableApiList = delegableApiList.filter(
+            (delegableApi) => dto.delegableApi.id !== delegableApi.id,
+          );
+          state.presentedApiList = presentedApiList.filter(
+            (delegableApi) => dto.delegableApi.id !== delegableApi.id,
+          );
+          state.delegableApiSearchPool = delegableApiSearchPool.filter(
+            (delegableApi) => dto.delegableApi.id !== delegableApi.id,
+          );
+
+          state.chosenDelegableApiList.push(dto.delegableApi);
+        } else {
+          state.delegableApiList = delegableApiList.filter(
+            (delegableApi) => delegableApi.id !== action.payload.id,
+          );
+          state.presentedApiList = presentedApiList.filter(
+            (delegableApi) => delegableApi.id !== action.payload.id,
+          );
+          state.delegableApiSearchPool = delegableApiSearchPool.filter(
+            (delegableApi) => delegableApi.id !== action.payload.id,
+          );
+          state.chosenDelegableApiList.push(dto.delegableApi);
         }
       });
   },
