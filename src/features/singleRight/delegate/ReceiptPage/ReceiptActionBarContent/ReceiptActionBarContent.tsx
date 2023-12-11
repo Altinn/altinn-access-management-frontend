@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Right } from '@/rtk/features/singleRights/singleRightsSlice';
+import { LocalizedAction } from '@/resources/utils/localizedActions';
 
 import classes from './ReceiptActionBarContent.module.css';
 
@@ -62,10 +63,13 @@ export const ReceiptActionBarContent = ({
             <div className={classes.chipContainer}>
               <Chip.Group size='small'>
                 {failedDelegations?.map((failedRight: Right, innerIndex) => {
+                  const chipText = Object.values(LocalizedAction).includes(
+                    failedRight.action as LocalizedAction,
+                  )
+                    ? t(`common.${failedRight.action}`)
+                    : failedRight.action;
                   return (
-                    <Chip.Toggle key={`failed-${index}-${innerIndex}`}>
-                      {t(`common.${failedRight.action}`)}
-                    </Chip.Toggle>
+                    <Chip.Toggle key={`failed-${index}-${innerIndex}`}>{chipText}</Chip.Toggle>
                   );
                 })}
               </Chip.Group>
@@ -88,13 +92,18 @@ export const ReceiptActionBarContent = ({
         <div className={classes.chipContainer}>
           <Chip.Group size='small'>
             {successfulDelegations?.map((right: Right, innerIndex) => {
+              const chipText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.${right.action}`)
+                : right.action;
               return (
                 <Chip.Toggle
                   selected={true}
                   checkmark
                   key={`successful-${index}-${innerIndex}`}
                 >
-                  {t(`common.${right.action}`)}
+                  {chipText}
                 </Chip.Toggle>
               );
             })}

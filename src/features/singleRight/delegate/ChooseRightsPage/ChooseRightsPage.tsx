@@ -239,7 +239,7 @@ export const ChooseRightsPage = () => {
       if (rightsToDelegate.length > 0) {
         const delegationInput: DelegationInputDto = {
           // TODO: make adjustments to codeline below when we get GUID from altinn2
-          To: [new IdValuePair('urn:altinn:ssn', '50019992')],
+          To: [new IdValuePair('urn:altinn:organizationnumber', '313523497')],
           Rights: rightsToDelegate,
           serviceDto: new ServiceDto(service.title, service.serviceOwner),
         };
