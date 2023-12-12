@@ -133,6 +133,7 @@ export const ActionBarSection = () => {
                 successfulDelegations={successfulDelegations}
                 isRejectedDelegation={isRejectedDelegation}
                 index={index}
+                serviceType={pd.meta.serviceDto.serviceType}
               />
             </ActionBar>
           </div>

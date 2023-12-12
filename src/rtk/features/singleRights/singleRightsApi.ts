@@ -17,6 +17,7 @@ export interface ServiceResource {
   description?: string;
   resourceReferences: resourceReference[];
   authorizationReference: IdValuePair[];
+  resourceType: string;
 }
 
 export interface ResourceOwner {

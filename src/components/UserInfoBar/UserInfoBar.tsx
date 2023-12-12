@@ -17,8 +17,10 @@ export const UserInfoBar = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (userLoading || reporteeLoading) {
+    if (userLoading) {
       void dispatch(fetchUserInfo());
+    }
+    if (reporteeLoading) {
       void dispatch(fetchReportee());
     }
   }, []);
