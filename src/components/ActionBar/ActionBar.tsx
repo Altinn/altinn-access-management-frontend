@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useId, useState, forwardRef } from 'react';
+import { useId, useState, forwardRef, useEffect } from 'react';
 
 import type { ClickHandler } from './Context';
 import { ActionBarContext } from './Context';
@@ -97,6 +97,11 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
 
     const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
     const isOpen = open ?? internalOpen;
+
+    // Update internalopen if there are external changes to default
+    useEffect(() => {
+      setInternalOpen(defaultOpen);
+    }, [defaultOpen]);
 
     let toggleOpen: ClickHandler | undefined;
     if (!children) {
