@@ -147,7 +147,7 @@
     "confirm_delegation_text": "Confirm that you want to give these rights to {{name}}",
     "delegate_choose_service_page_top_text": "On this page, you can give {{name}} access to forms and services by choosing them from the list below. We recommend that you filter the services based on relevant owners or search for a specific service by name.",
     "request_choose_service_page_top_text": "On this page you, as {{name}}, can request access to forms and services by choosing them from the list below. We recommend that you filter the services based on relevant owners or search for a specific service by name.",
-    "choose_rights_page_top_text": "Choose which single rights you want to delegate to {{name}}.",
+    "choose_rights_page_top_text": "You're giving these rights to {{name}}.",
     "choose_rights_page_secondary_text": "If you want to adjust the accesses e.g. Remove write access, click the arrow to open the service to adjust this.",
     "chosen_services": "Chosen services",
     "alert_partially_delegable_header": "You don't have access to delegate the whole service",

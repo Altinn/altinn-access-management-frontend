@@ -147,7 +147,7 @@
     "confirm_delegation_text": "Stadfest at du vil gi desse rettane til {{name}}.",
     "delegate_choose_service_page_top_text": "Her kan du velja kva for skjema og tenester du vil delegere tilgang til {{name}}. Vi rår til å filtrere på skjemaeigar, og søkje med namn på tenesta.",
     "request_choose_service_page_top_text": "Her kan du be om fleire tilgangar til {{name}}. Vi rår til å filtrere på skjemaeigar, og søkje med namn på tenesta. Legg til ved å velja frå lista under.",
-    "choose_rights_page_top_text": "Her kan du velja kva enkeltrettar du vil gi delegera {{name}}.",
+    "choose_rights_page_top_text": "Du gjev desse rettane til {{name}}.",
     "choose_rights_page_secondary_text": "Dersom du ønskjer å tilpassa tilgangane, t.d. fjerne signeringsrett,  kan du klikka på pilen ved sida av tenesta for å opne den og tilpassa dette.",
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
