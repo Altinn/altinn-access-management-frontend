@@ -118,7 +118,8 @@
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
     "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette.",
-    "no_orgs_chosen": "Ingen organisasjoner valgt"
+    "no_orgs_chosen": "Ingen organisasjoner valgt",
+    "insufficient_access_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Klikk på knappen for å gå til innlogging og velg et høyere sikkerhetsnivå. Du må starte delegeringen på nytt. Du kan velge mellom følgende metoder:"
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettigheter",
@@ -126,7 +127,7 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Du har ikke noen av de nødvendige rollene for å delegere tjenesten. urn:altinn:rolecode:HADM, urn:altinn:location:garage, vil gi tilgang til å delegere den.",
+    "missing_role_access": "Du har ikke tilstrekkelig rettighet til å delegere denne tjenesten. Ta kontakt med din Hovedadministrator for å be om tilgang.",
     "missing_delegation_access": "Du har ikke de nødvendige delegeringsrettighetene til å delegere tjenesten",
     "missing_srr_right_access": "Du har ikke de nødvendige SRR-rettighetene",
     "unknown": "Uvisst",

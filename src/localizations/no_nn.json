@@ -118,7 +118,8 @@
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikkje delegera til eige organisasjonsnummer",
     "own_orgnumber_delegation_paragraph": "Skriv inn eit anna organisasjonsnummer for å halda fram.",
-    "no_orgs_chosen": "Ingen organisasjonar valde"
+    "no_orgs_chosen": "Ingen organisasjonar valde",
+    "insufficient_access_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Klikk på knappen for å gå til innlogging og velg et høyere sikkerhetsnivå. Du må starte delegeringen på nytt. Du kan velge mellom følgende metoder:"
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettar",
