@@ -42,7 +42,9 @@
     "finished": "Finished",
     "an_error_has_occured": "An error occured",
     "yes": "Yes",
-    "finish_delegation": "Confirm delegation"
+    "finish_delegation": "Confirm delegation",
+    "you_lowercase": "you",
+    "you_uppercase": "You"
   },
   "profile": {
     "received": "Received",
@@ -127,17 +129,17 @@
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
     "search_hits": "matches found:",
-    "missing_role_access": "You don't have any required role(s) for the reportee party. urn:altinn:rolecode:HADM, urn:altinn:location:garage, would give access to delegate the service.",
-    "missing_delegation_access": "You don't have the necessary delegation accesses to delegate this service.",
-    "missing_srr_right_access": "You don't have SRR right access to delegate",
+    "missing_role_access": "{{you}} don't have any required role(s) for the reportee party.",
+    "missing_delegation_access": "{{you}} don't have the necessary delegation accesses to delegate this service.",
+    "missing_srr_right_access": "{{you}} don't have SRR right access to delegate the service. The reportee you're trying to delegate for doesn't have delegation accesses.",
     "unknown": "Unknown",
     "new_error": "This is a new error that we haven't gotten before. Please report it to Altinn by sending in a screen shot.",
     "missing_role_access_title": "Mangler rolle",
     "missing_delegation_access_title": "Mangler delegeringsrettighet",
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
-    "generic_error_try_again_title": "Access check failed",
-    "generic_error_try_again": "This doesn't necessarily mean that you can't delegate the service, just that something failed on our end. Please attempt to add the service again. If the error persists, please contact the Service Desk.",
+    "generic_error_try_again_title": "Whoops, we stumbled on a technical error",
+    "generic_error_try_again": "Try adding the service again by clicking on the plus sign again. Contact Altinn Servicedesk if the problem persists.",
     "give_more_rights": "Give more rights",
     "has_received_these_rights": "{{name}} has received these rights:",
     "rights_are_valid_until_deletion": "The rights are valid until they're deleted or withdrawn",
@@ -162,6 +164,8 @@
     "delegable_apis": "Delegable APIs",
     "cancel_popover_text": "Chosen services won't be delegated. Are you sure you want to cancel?",
     "no_continue_delegating": "No, continue delegating",
-    "add_more_services": "Add more services"
+    "add_more_services": "Add more services",
+    "ceo_or_main_admin_can_help": "CEO or main administrator can help you with this.",
+    "one_or_more_rights_is_undelegable": "One or more rights on this service cant be delegated because of {{reason}}"
   }
 }

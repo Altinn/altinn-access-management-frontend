@@ -74,12 +74,22 @@
     "details": [
       {
         "code": "MissingSrrRightAccess",
-        "description": "MissingSrrRightAccess",
+        "description": "",
+        "parameters": {
+        }
+      },
+      {
+        "code": "MissingRoleAccess",
+        "description": "",
         "parameters": {
           "roleRequirementsMatches": [
             {
               "id": "urn:altinn:role",
               "value": "DAGL"
+            },
+            {
+              "id": "urn:altinn:role",
+              "value": "REGN"
             }
           ]
         }
@@ -105,12 +115,6 @@
         "code": "MissingSrrRightAccess",
         "description": "MissingSrrRightAccess",
         "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
         }
       }
     ]

@@ -41,7 +41,9 @@
     "finished": "Ferdig",
     "an_error_has_occured": "En feil har skjedd",
     "yes": "Ja",
-    "finish_delegation": "Fullfør delegering"
+    "finish_delegation": "Fullfør delegering",
+    "you_lowercase": "du",
+    "you_uppercase": "Du"
   },
   "profile": {
     "received": "Mottatte",
@@ -127,9 +129,9 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "Du har ikke tilstrekkelig rettighet til å delegere denne tjenesten. Ta kontakt med din Hovedadministrator for å be om tilgang.",
-    "missing_delegation_access": "Du har ikke de nødvendige delegeringsrettighetene til å delegere tjenesten",
-    "missing_srr_right_access": "Du har ikke de nødvendige SRR-rettighetene",
+    "missing_role_access": "{{you}} har ikke tilstrekkelig rettighet til å delegere denne tjenesten.",
+    "missing_delegation_access": "{{you}} har ikke tilstrekkelig rettighet til å delegere denne tjenesten.",
+    "missing_srr_right_access": "{{you}} har ikke nødvendige SRR-rettigheter for å delegere tjenesten. Avgiveren du delegerer på veiene av har ikke tilgang til å delegere tjenesten.",
     "unknown": "Uvisst",
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
     "missing_role_access_title": "Mangler rolle",
@@ -139,8 +141,8 @@
     "rights_are_valid_until_deletion": "Rettighetene er gyldige til de slettes eller trekkes tilbake",
     "unknown_title": "Ukjent feil",
     "new_error_title": "Ny feil",
-    "generic_error_try_again_title": "Klarte ikke å sjekke tilganger",
-    "generic_error_try_again": "Dette betyr ikke nødvendigvis at du ikke har lov til å delegere denne tjenesten, kun at noe feilet på veien. Vennligst prøv å legge til tjenesten på nytt eller ta kontakt med Altinn Servicedesk dersom feilen vedvarer.",
+    "generic_error_try_again_title": "Oj, det oppstod en teknisk feil",
+    "generic_error_try_again": "Prøv å legge til tjenesten på nytt ved å klikke på pluss-tegnet igjen. Ta kontakt med Altinn Servicedesk hvis problemet fortsetter.",
     "missing_delegable_right": "Mangler rettighet",
     "missing_srr_right_access_title": "Mangler SRR-rettighet",
     "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",
@@ -161,6 +163,8 @@
     "these_rights_were_delegated": "Disse rettighetene ble delegert til mottaker:",
     "cancel_popover_text": "Valgte tjenester vil ikke bli delegert. Er du sikker på at du vil avslutte?",
     "no_continue_delegating": "Nei, fortsett å delegere",
-    "add_more_services": "Legg til flere tjenester"
+    "add_more_services": "Legg til flere tjenester",
+    "ceo_or_main_admin_can_help": "Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
+    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi {{reason}}"
   }
 }

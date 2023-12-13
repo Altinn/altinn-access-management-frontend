@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, List } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -8,7 +8,7 @@ import { MinusCircleIcon, ArrowUndoIcon, PlusCircleIcon } from '@navikt/aksel-ic
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import { DeletableListItem, ActionBar } from '@/components';
+import { DeletableListItem, ActionBar, BorderedList } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './OrgDelegationActionBar.module.css';
@@ -135,7 +135,7 @@ export const OrgDelegationActionBar = ({
       }
     >
       <div className={classes.actionBarContent}>
-        <List borderStyle={'solid'}>{listItems}</List>
+        <BorderedList borderStyle={'solid'}>{listItems}</BorderedList>
       </div>
     </ActionBar>
   );

@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 HttpResponseMessage response = await _singleRightService.CreateDelegation(party, delegation);
 
-                if (response.StatusCode == HttpStatusCode.Created)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);

@@ -2,16 +2,17 @@ import { Alert, Chip, Heading, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { DelegationResponseData } from '@/rtk/features/singleRights/singleRightsSlice';
+import type { Right } from '@/rtk/features/singleRights/singleRightsSlice';
+import { LocalizedAction } from '@/resources/utils/localizedActions';
 
 import classes from './ReceiptActionBarContent.module.css';
 
 export interface ReceiptActionBarContent {
   /** List of failed delegations */
-  failedDelegations: DelegationResponseData[] | undefined;
+  failedDelegations: Right[] | undefined;
 
   /** List of successful delegations */
-  successfulDelegations: DelegationResponseData[] | undefined;
+  successfulDelegations: Right[] | undefined;
 
   /** If there's http problems with the delegation */
   isRejectedDelegation: boolean | undefined;
@@ -61,11 +62,14 @@ export const ReceiptActionBarContent = ({
             </Heading>
             <div className={classes.chipContainer}>
               <Chip.Group size='small'>
-                {failedDelegations?.map((failedRight: DelegationResponseData, innerIndex) => {
+                {failedDelegations?.map((failedRight: Right, innerIndex) => {
+                  const chipText = Object.values(LocalizedAction).includes(
+                    failedRight.action as LocalizedAction,
+                  )
+                    ? t(`common.${failedRight.action}`)
+                    : failedRight.action;
                   return (
-                    <Chip.Toggle key={`failed-${index}-${innerIndex}`}>
-                      {t(`common.${failedRight.action}`)}
-                    </Chip.Toggle>
+                    <Chip.Toggle key={`failed-${index}-${innerIndex}`}>{chipText}</Chip.Toggle>
                   );
                 })}
               </Chip.Group>
@@ -87,14 +91,19 @@ export const ReceiptActionBarContent = ({
         </Heading>
         <div className={classes.chipContainer}>
           <Chip.Group size='small'>
-            {successfulDelegations?.map((right: DelegationResponseData, innerIndex) => {
+            {successfulDelegations?.map((right: Right, innerIndex) => {
+              const chipText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.${right.action}`)
+                : right.action;
               return (
                 <Chip.Toggle
                   selected={true}
                   checkmark
                   key={`successful-${index}-${innerIndex}`}
                 >
-                  {t(`common.${right.action}`)}
+                  {chipText}
                 </Chip.Toggle>
               );
             })}

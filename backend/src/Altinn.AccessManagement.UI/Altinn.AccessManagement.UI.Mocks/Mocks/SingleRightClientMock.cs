@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string data = Util.GetMockDataSerialized(dataPath, resourceFileName + ".json");
                 return new HttpResponseMessage
-                    { StatusCode = HttpStatusCode.Created, Content = new StringContent(data) };
+                    { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) };
             }
             catch
             {

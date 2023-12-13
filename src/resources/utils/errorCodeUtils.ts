@@ -1,14 +1,22 @@
+export enum ErrorCode {
+  MissingRoleAccess = 'MissingRoleAccess',
+  MissingDelegationAccess = 'MissingDelegationAccess',
+  MissingSrrRightAccess = 'MissingSrrRightAccess',
+  HTTPError = 'HTTPError',
+  Unknown = 'Unknown',
+}
+
 export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) => {
   switch (errorCode) {
-    case 'MissingRoleAccess':
+    case ErrorCode.MissingRoleAccess:
       return 'single_rights.missing_role_access';
-    case 'MissingDelegationAccess':
+    case ErrorCode.MissingDelegationAccess:
       return 'single_rights.missing_delegation_access';
-    case 'MissingSrrRightAccess':
+    case ErrorCode.MissingSrrRightAccess:
       return 'single_rights.missing_srr_right_access';
-    case 'Unknown':
+    case ErrorCode.Unknown:
       return 'single_rights.unknown';
-    case 'HTTPError':
+    case ErrorCode.HTTPError:
       return 'single_rights.generic_error_try_again';
     case 'InsufficientAccessLevel':
       return 'api_delegation.insufficient_access_level';
@@ -17,4 +25,20 @@ export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) =
     default:
       return 'single_rights.new_error';
   }
+};
+
+export const prioritizeErrors = (errors: string[]) => {
+  const priorityOrder: string[] = [
+    ErrorCode.HTTPError,
+    ErrorCode.MissingRoleAccess,
+    ErrorCode.MissingDelegationAccess,
+    ErrorCode.MissingSrrRightAccess,
+    ErrorCode.Unknown,
+  ];
+
+  errors.sort((a, b) => {
+    return priorityOrder.indexOf(a) - priorityOrder.indexOf(b);
+  });
+
+  return errors;
 };

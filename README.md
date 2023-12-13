@@ -131,8 +131,6 @@ To add test data to the app, do the following:
 
 - Add the following to your hosts file. Path to file on mac: /private/etc/hosts. Path to file on Windows: c:\Windows\System32\Drivers\etc\hosts.
 ```#Subdomain for accessmanagement
-127.0.0.1 am.ui.local.altinn.cloud #ipv4
-0000:0000:0000:0000:0000:0000:0000:0001 am.ui.local.altinn.cloud #ipv6
 #
 # Host Database
 #

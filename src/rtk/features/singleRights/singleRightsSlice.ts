@@ -25,7 +25,7 @@ export enum ServiceStatus {
   NotDelegable = 'NotDelegable',
   PartiallyDelegable = 'PartiallyDelegable',
   Unchecked = 'Unchecked',
-  Error = 'Error',
+  HTTPError = 'HTTPError',
 }
 
 export interface DelegationAccessCheckDto {
@@ -33,39 +33,38 @@ export interface DelegationAccessCheckDto {
   serviceResource: ServiceResource;
 }
 
-export interface DelegationResponseData {
+export interface Right {
   rightKey?: string;
   resource: IdValuePair[];
-  action: string;
-  status: string;
-  details?: details;
-  reduxStatus: ReduxStatusResponse;
+  action?: string;
+  status?: string;
+  details?: Details[];
+  reduxStatus?: ReduxStatusResponse;
 }
 
 export interface ProcessedDelegation {
   meta: DelegationInputDto;
-  bffResponseList?: DelegationResponseData[];
+  bffResponseList?: Right[];
 }
 
 export interface ServiceWithStatus {
-  rightDelegationResults?: DelegationResponseData[];
+  rightList?: Right[];
   service?: ServiceResource;
   status?: ServiceStatus;
-  errorCode?: string;
   isLoading?: boolean;
 }
 
-interface details {
+export interface Details {
   code?: string;
   description?: string;
-  parameters?: parameters[];
+  parameters?: parameters;
 }
 
 interface parameters {
-  roleRequirementsMatches: roleRequirementsMatches;
+  roleRequirementsMatches: { [key: string]: IdValuePair[] };
 }
 
-interface roleRequirementsMatches {
+export interface RoleRequirementsMatches {
   name: string;
   value: string;
 }
@@ -78,6 +77,49 @@ interface sliceState {
 const initialState: sliceState = {
   servicesWithStatus: [],
   processedDelegations: [],
+};
+
+const createSerializedMeta = (meta: DelegationInputDto) => {
+  const To = [{ id: meta.To[0].id, value: meta.To[0].value }];
+
+  const Rights = meta.Rights.map((right: DelegationRequestDto) => ({
+    Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
+    Action: right.Action,
+  }));
+
+  const serviceDto = {
+    serviceTitle: meta.serviceDto.serviceTitle,
+    serviceOwner: meta.serviceDto.serviceOwner,
+  };
+
+  return {
+    To,
+    Rights,
+    serviceDto,
+  };
+};
+
+const createDelegationResponseData = (
+  resourceId: string,
+  resourceValue?: string,
+  action?: string,
+  status?: string,
+  reduxStatus?: ReduxStatusResponse,
+  detailsCode?: string,
+  detailsDescription?: string,
+): Right => {
+  return {
+    resource: [{ id: resourceId, value: resourceValue }],
+    action: action,
+    status: status,
+    details: [
+      {
+        code: detailsCode,
+        description: detailsDescription,
+      },
+    ],
+    reduxStatus,
+  };
 };
 
 export const delegationAccessCheck = createAsyncThunk(
@@ -135,47 +177,6 @@ export const delegate = createAsyncThunk(
   },
 );
 
-const createSerializedMeta = (meta: DelegationInputDto) => {
-  const To = [{ id: meta.To[0].id, value: meta.To[0].value }];
-
-  const Rights = meta.Rights.map((right: DelegationRequestDto) => ({
-    Resource: [{ id: right.Resource[0].id, value: right.Resource[0].value }],
-    Action: right.Action,
-  }));
-
-  const serviceDto = {
-    serviceTitle: meta.serviceDto.serviceTitle,
-    serviceOwner: meta.serviceDto.serviceOwner,
-  };
-
-  return {
-    To,
-    Rights,
-    serviceDto,
-  };
-};
-
-const createDelegationResponseData = (
-  resourceId: string,
-  resourceValue: string,
-  action: string,
-  status: string,
-  reduxStatus: ReduxStatusResponse,
-  detailsCode?: string,
-  detailsDescription?: string,
-): DelegationResponseData => {
-  return {
-    resource: [{ id: resourceId, value: resourceValue }],
-    action: action,
-    status: status,
-    details: {
-      code: detailsCode,
-      description: detailsDescription,
-    },
-    reduxStatus,
-  };
-};
-
 const singleRightSlice = createSlice({
   name: 'singleRightsSlice',
   initialState,
@@ -224,32 +225,36 @@ const singleRightSlice = createSlice({
       })
 
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
+        const serviceWithStatus: ServiceWithStatus = {
+          rightList: action.payload,
+          service: action.meta.arg.serviceResource,
+          status: ServiceStatus.Delegable,
+        };
+
         const serviceID = action.meta.arg.serviceResource.identifier;
         let status = ServiceStatus.Delegable;
-        let errorCode: string;
 
         const hasNonDelegableRights = !!action.payload.find(
-          (response: DelegationResponseData) => response.status === ServiceStatus.NotDelegable,
+          (response: Right) => response.status === ServiceStatus.NotDelegable,
         );
 
         if (hasNonDelegableRights) {
           const isDelegable = !!action.payload.find(
-            (response: DelegationResponseData) => response.status === ServiceStatus.Delegable,
+            (response: Right) => response.status === ServiceStatus.Delegable,
           );
 
           if (isDelegable) {
             status = ServiceStatus.PartiallyDelegable;
           } else {
+            serviceWithStatus.status = ServiceStatus.NotDelegable;
             status = ServiceStatus.NotDelegable;
-            errorCode = action.payload[0].details[0].code;
           }
         }
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
-            sws.rightDelegationResults = action.payload;
+            sws.rightList = action.payload;
             sws.isLoading = false;
             sws.status = status;
-            sws.errorCode = errorCode;
           }
           return sws;
         });
@@ -259,11 +264,25 @@ const singleRightSlice = createSlice({
 
       .addCase(delegationAccessCheck.rejected, (state, action) => {
         const serviceID = action.meta.arg.serviceResource.identifier;
+
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
+            const delegationResponseList: Right[] = [
+              {
+                resource: [{ id: serviceID }],
+                status: ServiceStatus.HTTPError,
+                details: [
+                  {
+                    code: ServiceStatus.HTTPError,
+                  },
+                ],
+              },
+            ];
+
+            sws.service.identifier = serviceID;
+            sws.rightList = delegationResponseList;
             sws.isLoading = false;
-            sws.status = ServiceStatus.Error;
-            sws.errorCode = 'HTTPError';
+            sws.status = ServiceStatus.HTTPError;
           }
           return sws;
         });
@@ -272,10 +291,9 @@ const singleRightSlice = createSlice({
 
       .addCase(fetchRights.fulfilled, (state, action) => {
         const serviceWithStatus: ServiceWithStatus = {
-          rightDelegationResults: action.payload,
+          rightList: action.payload,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
-          errorCode: '',
         };
 
         if (serviceWithStatus) {
@@ -286,9 +304,9 @@ const singleRightSlice = createSlice({
       .addCase(delegate.fulfilled, (state, action) => {
         const delegationInput = createSerializedMeta(action.meta.arg);
 
-        const bffResponseList: DelegationResponseData[] = action.payload.rightDelegationResults;
-        bffResponseList.forEach(
-          (data: DelegationResponseData) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
+        const bffResponseList: Right[] = action.payload.rightDelegationResults;
+        bffResponseList?.forEach(
+          (data: Right) => (data.reduxStatus = ReduxStatusResponse.Fulfilled),
         );
 
         const pushData: ProcessedDelegation = {
@@ -301,7 +319,7 @@ const singleRightSlice = createSlice({
       .addCase(delegate.rejected, (state, action) => {
         const delegationInput = createSerializedMeta(action.meta.arg);
 
-        const bffResponseList: DelegationResponseData[] = [];
+        const bffResponseList: Right[] = [];
 
         bffResponseList.push(
           createDelegationResponseData(
