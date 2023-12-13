@@ -1,8 +1,10 @@
-import { Button } from '@digdir/design-system-react';
+import { Button, Paragraph, Spinner } from '@digdir/design-system-react';
 import { useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+
+import { useMediaQuery } from '@/resources/hooks';
 
 import { ActionBar, type ActionBarProps } from '../ActionBar';
 import ScopeList from '../ScopeList/ScopeList';
@@ -17,6 +19,8 @@ export interface DelegationActionBarProps extends Pick<ActionBarProps, 'color'> 
   scopeList?: string[];
   buttonType: 'add' | 'remove';
   onActionButtonClick: () => void;
+  isLoading: boolean;
+  errorCode?: string;
 }
 
 export const DelegationActionBar = ({
@@ -28,22 +32,39 @@ export const DelegationActionBar = ({
   buttonType,
   onActionButtonClick,
   color = 'neutral',
+  isLoading,
+  errorCode = '',
 }: DelegationActionBarProps) => {
   const [open, setOpen] = useState(false);
+  const [actionBarColor, setActionBarColor] = useState(color);
   const { t } = useTranslation('common');
+
+  React.useEffect(() => {
+    if (errorCode !== '') {
+      setOpen(true);
+      setActionBarColor('danger');
+    }
+  }, [errorCode]);
 
   const actions = (
     <>
-      {buttonType === 'add' && (
-        <Button
-          icon={<PlusCircleIcon />}
-          variant={'tertiary'}
-          color={'success'}
-          onClick={onActionButtonClick}
-          aria-label={t('common.add') + ' ' + title}
-          size='large'
-        ></Button>
-      )}
+      {buttonType === 'add' &&
+        (isLoading === true ? (
+          <Spinner
+            title={t('common.loading')}
+            variant='interaction'
+            size='medium'
+          />
+        ) : (
+          <Button
+            icon={<PlusCircleIcon />}
+            variant={'tertiary'}
+            color={'success'}
+            onClick={onActionButtonClick}
+            aria-label={t('common.add') + ' ' + title}
+            size='large'
+          ></Button>
+        ))}
       {buttonType === 'remove' && (
         <Button
           icon={<MinusCircleIcon />}
@@ -63,7 +84,7 @@ export const DelegationActionBar = ({
       subtitle={subtitle}
       actions={actions}
       size='medium'
-      color={color}
+      color={actionBarColor}
       open={open}
       onClick={() => {
         setOpen(!open);

@@ -1,3 +1,5 @@
+import type { IdValuePair } from '../IdValuePair';
+
 export interface DelegationInputDto {
   To: IdValuePair[];
   Rights: DelegationRequestDto[];
@@ -11,16 +13,6 @@ export class ServiceDto {
   constructor(serviceTitle: string, serviceOwner: string) {
     this.serviceTitle = serviceTitle;
     this.serviceOwner = serviceOwner;
-  }
-}
-
-export class IdValuePair {
-  id: string;
-  value: string;
-
-  constructor(id: string, value: string) {
-    this.id = id;
-    this.value = value;
   }
 }
 

@@ -26,10 +26,10 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import {
   type DelegationInputDto,
-  IdValuePair,
   DelegationRequestDto,
   ServiceDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';

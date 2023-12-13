@@ -3,11 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { type CustomError } from '@/dataObjects';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import type { Right } from '@/features/singleRight/delegate/ChooseRightsPage/RightsActionBarContent/RightsActionBarContent';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 export interface DelegableApi {
-  id: string;
+  identifier: string;
   apiName: string;
   orgName: string;
   rightDescription: string;
@@ -15,6 +14,7 @@ export interface DelegableApi {
   scopes: string[];
   isLoading: boolean;
   errorCode: string;
+  authorizationReference: IdValuePair[];
 }
 
 export interface DelegableApiDto {
@@ -24,6 +24,7 @@ export interface DelegableApiDto {
   rightDescription: string;
   description?: string;
   resourceReferences?: resourceReferenceDTO[];
+  authorizationReference: IdValuePair[];
 }
 
 export interface DelegableApiWithPriority {
@@ -44,17 +45,18 @@ interface resourceReferenceDTO {
 
 export interface DelegationCheckDto {
   delegableApi: DelegableApi;
-  right: IdValuePair[];
+  right: IdValuePair;
 }
 
 const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
   const delegableApi: DelegableApi = {
-    id: obj.identifier,
+    identifier: obj.identifier,
     apiName: obj.title,
     orgName,
     rightDescription: obj.rightDescription,
     description: obj.description,
     scopes: [],
+    authorizationReference: obj.authorizationReference,
   };
   if (obj.resourceReferences) {
     for (const ref of obj.resourceReferences) {
@@ -85,12 +87,17 @@ export const apiDelegationCheck = createAsyncThunk(
   async (dto: DelegationCheckDto, { rejectWithValue }) => {
     const altinnPartyId = getCookie('AltinnPartyId');
 
-    const right = dto.right;
+    const right = {
+      resource: [
+        {
+          id: dto.right.id,
+          value: dto.right.value,
+        },
+      ],
+    };
 
     return await axios
-      .post(`/accessmanagement/api/v1/singleright/checkdelegationaccesses/${altinnPartyId}`, {
-        right,
-      })
+      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/delegationcheck`, right)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -126,22 +133,6 @@ const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
-    softAddApi: (state: SliceState, action) => {
-      const { delegableApiList } = state;
-      const { presentedApiList } = state;
-      const { delegableApiSearchPool } = state;
-      state.delegableApiList = delegableApiList.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
-      );
-      state.presentedApiList = presentedApiList.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
-      );
-      state.delegableApiSearchPool = delegableApiSearchPool.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
-      );
-
-      state.chosenDelegableApiList.push(action.payload);
-    },
     softRemoveApi: (state: SliceState, action) => {
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
@@ -149,7 +140,7 @@ const delegableApiSlice = createSlice({
 
       const { chosenDelegableApiList } = state;
       state.chosenDelegableApiList = chosenDelegableApiList.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
+        (delegableApi) => delegableApi.identifier !== action.payload.identifier,
       );
     },
     filter: (state: SliceState, action) => {
@@ -239,42 +230,65 @@ const delegableApiSlice = createSlice({
           state.error.message = 'Unknown error';
         }
       })
+      .addCase(apiDelegationCheck.pending, (state, action) => {
+        const apiIdentifier = action.meta.arg.right.value;
+
+        let nextStateArray: DelegableApi[];
+        if (state.presentedApiList.some((api: DelegableApi) => api.identifier === apiIdentifier)) {
+          nextStateArray = state.presentedApiList.map((api: DelegableApi) => {
+            if (api.identifier === apiIdentifier) {
+              api.isLoading = true;
+            }
+
+            return api;
+          });
+        } else {
+          const apiWithLoading: DelegableApi = action.meta.arg.delegableApi;
+
+          apiWithLoading.isLoading = true;
+
+          nextStateArray = [...state.presentedApiList, apiWithLoading];
+        }
+
+        state.presentedApiList = nextStateArray;
+      })
       .addCase(apiDelegationCheck.fulfilled, (state, action) => {
         const dto: DelegationCheckDto = action.meta.arg;
-        const serviceId = dto.right[0].value;
+        const apiIdentifier = dto.right.value;
 
         const { delegableApiList } = state;
         const { presentedApiList } = state;
         const { delegableApiSearchPool } = state;
 
-        if (action.payload.status === 'Delegable') {
+        if (action.payload[0].status === 'Delegable') {
           state.delegableApiList = delegableApiList.filter(
-            (delegableApi) => dto.delegableApi.id !== delegableApi.id,
+            (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
           );
           state.presentedApiList = presentedApiList.filter(
-            (delegableApi) => dto.delegableApi.id !== delegableApi.id,
+            (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
           );
           state.delegableApiSearchPool = delegableApiSearchPool.filter(
-            (delegableApi) => dto.delegableApi.id !== delegableApi.id,
+            (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
           );
 
           state.chosenDelegableApiList.push(dto.delegableApi);
         } else {
-          state.delegableApiList = delegableApiList.filter(
-            (delegableApi) => delegableApi.id !== action.payload.id,
-          );
+          const nextStateArray: DelegableApi[] = state.presentedApiList.map((api: DelegableApi) => {
+            if (api.identifier === apiIdentifier) {
+              api.isLoading = false;
+              api.errorCode = action.payload[0].details[0].code;
+            }
+            return api;
+          });
+
           state.presentedApiList = presentedApiList.filter(
-            (delegableApi) => delegableApi.id !== action.payload.id,
+            (delegableApi) => delegableApi.identifier !== action.payload[0].id,
           );
-          state.delegableApiSearchPool = delegableApiSearchPool.filter(
-            (delegableApi) => delegableApi.id !== action.payload.id,
-          );
-          state.chosenDelegableApiList.push(dto.delegableApi);
+          state.presentedApiList = nextStateArray;
         }
       });
   },
 });
 
 export default delegableApiSlice.reducer;
-export const { softAddApi, softRemoveApi, search, filter, resetDelegableApis } =
-  delegableApiSlice.actions;
+export const { softRemoveApi, search, filter, resetDelegableApis } = delegableApiSlice.actions;

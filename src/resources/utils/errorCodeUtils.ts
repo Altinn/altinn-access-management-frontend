@@ -10,6 +10,8 @@ export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) =
       return 'single_rights.unknown';
     case 'HTTPError':
       return 'single_rights.generic_error_try_again';
+    case 'InsufficientAccessLevel':
+      return 'api_delegation.insufficient_access_level';
     case undefined:
       return undefined;
     default:

@@ -57,7 +57,7 @@ export const ConfirmationPage = () => {
     for (const org of chosenOrgs) {
       for (const api of chosenApis) {
         const request: DelegationRequest = {
-          apiIdentifier: api.id,
+          apiIdentifier: api.identifier,
           apiName: api.apiName,
           orgName: org.orgName,
           orgNr: org.orgNr,

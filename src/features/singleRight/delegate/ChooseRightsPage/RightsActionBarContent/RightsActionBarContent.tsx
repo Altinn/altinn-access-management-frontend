@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Paragraph, Heading, Chip, Alert } from '@digdir/design-system-react';
 import { useTranslation } from 'react-i18next';
 
-import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
 import { getSingleRightsErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 import classes from './RightsActionBarContent.module.css';
 

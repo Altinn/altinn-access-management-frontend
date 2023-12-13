@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 interface PaginatedListDTO {
