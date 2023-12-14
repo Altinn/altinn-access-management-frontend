@@ -38,7 +38,7 @@ jobs:
       
       - name: split release version f.ex v2023.1 will be split into output0 v2023 and output1 1
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
-        uses: jungwinter/split@v2
+        uses: winterjung/split@v2
         id: split
         with:
           msg: "${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
@@ -46,7 +46,7 @@ jobs:
           
       - name: split 'v' and year f.ex v2023 will be split into output0 v and output1 2023
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
-        uses: jungwinter/split@v2
+        uses: winterjung/split@v2
         id: splitv
         with:
           msg: "${{steps.split.outputs._0}}"
