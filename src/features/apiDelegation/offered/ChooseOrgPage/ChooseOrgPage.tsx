@@ -122,7 +122,7 @@ export const ChooseOrgPage = () => {
             <Button
               icon={<PlusCircleIcon fontSize='3rem' />}
               variant={'tertiary'}
-              color={'success'}
+              color={'second'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={t('common.add') + ' ' + org.orgName}
               size='large'

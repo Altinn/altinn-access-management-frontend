@@ -15,10 +15,7 @@ import {
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
-import {
-  getSingleRightsErrorCodeTextKey,
-  prioritizeErrors,
-} from '@/resources/utils/errorCodeUtils';
+import { getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import {
   ServiceStatus,
   type ServiceWithStatus,
@@ -195,7 +192,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         }}
         errorText={
           prioritizedErrorCodes?.length > 0
-            ? t(`${getSingleRightsErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)
+            ? t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)
             : undefined
         }
         compact={isSm}
@@ -208,10 +205,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               className={classes.notDelegableAlert}
             >
               <Heading size='xsmall'>
-                {t(`${getSingleRightsErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)}
+                {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)}
               </Heading>
               <Paragraph>
-                {t(`${getSingleRightsErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
+                {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
                   you: t('common.you_uppercase'),
                 })}
               </Paragraph>

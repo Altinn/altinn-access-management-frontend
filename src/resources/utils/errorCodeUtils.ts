@@ -3,10 +3,11 @@ export enum ErrorCode {
   MissingDelegationAccess = 'MissingDelegationAccess',
   MissingSrrRightAccess = 'MissingSrrRightAccess',
   HTTPError = 'HTTPError',
+  InsufficientAuthenticationLevel = 'InsufficientAuthenticationLevel',
   Unknown = 'Unknown',
 }
 
-export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) => {
+export const getErrorCodeTextKey = (errorCode: string | undefined): string | undefined => {
   switch (errorCode) {
     case ErrorCode.MissingRoleAccess:
       return 'single_rights.missing_role_access';
@@ -18,8 +19,8 @@ export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) =
       return 'single_rights.unknown';
     case ErrorCode.HTTPError:
       return 'single_rights.generic_error_try_again';
-    case 'InsufficientAccessLevel':
-      return 'api_delegation.insufficient_access_level';
+    case ErrorCode.InsufficientAuthenticationLevel:
+      return 'api_delegation.insufficient_authentication_level';
     case undefined:
       return undefined;
     default:
@@ -27,7 +28,7 @@ export const getSingleRightsErrorCodeTextKey = (errorCode: string | undefined) =
   }
 };
 
-export const prioritizeErrors = (errors: string[]) => {
+export const prioritizeErrors = (errors: string[]): string[] => {
   const priorityOrder: string[] = [
     ErrorCode.HTTPError,
     ErrorCode.MissingRoleAccess,

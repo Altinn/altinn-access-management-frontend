@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { type CustomError } from '@/dataObjects';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 export interface DelegableApi {
   identifier: string;
@@ -13,7 +14,7 @@ export interface DelegableApi {
   description?: string;
   scopes: string[];
   isLoading: boolean;
-  errorCode: string;
+  errorCode: string | undefined;
   authorizationReference: IdValuePair[];
 }
 
@@ -57,6 +58,8 @@ const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
     description: obj.description,
     scopes: [],
     authorizationReference: obj.authorizationReference,
+    isLoading: false,
+    errorCode: '',
   };
   if (obj.resourceReferences) {
     for (const ref of obj.resourceReferences) {
@@ -281,11 +284,22 @@ const delegableApiSlice = createSlice({
             return api;
           });
 
-          state.presentedApiList = presentedApiList.filter(
-            (delegableApi) => delegableApi.identifier !== action.payload[0].id,
-          );
           state.presentedApiList = nextStateArray;
         }
+      })
+      .addCase(apiDelegationCheck.rejected, (state, action) => {
+        const dto: DelegationCheckDto = action.meta.arg;
+        const apiIdentifier = dto.right.value;
+
+        const nextStateArray: DelegableApi[] = state.presentedApiList.map((api: DelegableApi) => {
+          if (api.identifier === apiIdentifier) {
+            api.isLoading = false;
+            api.errorCode = ErrorCode.HTTPError;
+          }
+          return api;
+        });
+
+        state.presentedApiList = nextStateArray;
       });
   },
 });

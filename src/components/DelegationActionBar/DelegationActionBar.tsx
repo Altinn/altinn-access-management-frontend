@@ -1,10 +1,10 @@
-import { Button, Paragraph, Spinner } from '@digdir/design-system-react';
+import { Button, List, Paragraph, Spinner } from '@digdir/design-system-react';
 import { useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
-import { useMediaQuery } from '@/resources/hooks';
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 import { ActionBar, type ActionBarProps } from '../ActionBar';
 import ScopeList from '../ScopeList/ScopeList';
@@ -59,7 +59,7 @@ export const DelegationActionBar = ({
           <Button
             icon={<PlusCircleIcon />}
             variant={'tertiary'}
-            color={'success'}
+            color={'second'}
             onClick={onActionButtonClick}
             aria-label={t('common.add') + ' ' + title}
             size='large'
@@ -78,18 +78,8 @@ export const DelegationActionBar = ({
     </>
   );
 
-  return (
-    <ActionBar
-      title={<p className={classes.actionBarHeaderTitle}>{title}</p>}
-      subtitle={subtitle}
-      actions={actions}
-      size='medium'
-      color={actionBarColor}
-      open={open}
-      onClick={() => {
-        setOpen(!open);
-      }}
-    >
+  const content = () => {
+    return (
       <div className={classes.newApiAccordionContent}>
         {scopeList.length > 0 && (
           <div>
@@ -116,6 +106,56 @@ export const DelegationActionBar = ({
           <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
         )}
       </div>
+    );
+  };
+
+  const errorContent = () => {
+    if (errorCode === ErrorCode.InsufficientAuthenticationLevel) {
+      return (
+        <div className={classes.errorContent}>
+          <Paragraph spacing>{t(`${getErrorCodeTextKey(errorCode)}`)}</Paragraph>
+          <List>
+            <List.Item>{t('common.minid')}</List.Item>
+            <List.Item>{t('common.bankid')}</List.Item>
+            <List.Item>{t('common.commfides')}</List.Item>
+            <List.Item>{t('common.buypass')}</List.Item>
+          </List>
+        </div>
+      );
+    } else if (errorCode === ErrorCode.HTTPError) {
+      return (
+        <div className={classes.errorContent}>
+          <Paragraph>
+            {t(`${getErrorCodeTextKey(errorCode)}`, { you: t('common.you_uppercase') })}
+          </Paragraph>
+          <Paragraph></Paragraph>
+        </div>
+      );
+    } else {
+      return (
+        <div className={classes.errorContent}>
+          <Paragraph>
+            {t('single_rights.missing_role_access', { you: t('common.you_uppercase') })}{' '}
+            {t('single_rights.ceo_or_main_admin_can_help')}
+          </Paragraph>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <ActionBar
+      title={<p className={classes.actionBarHeaderTitle}>{title}</p>}
+      subtitle={subtitle}
+      actions={actions}
+      size='medium'
+      color={actionBarColor}
+      open={open}
+      onClick={() => {
+        setOpen(!open);
+      }}
+    >
+      {errorCode === '' ? content() : errorContent()}
     </ActionBar>
   );
 };
