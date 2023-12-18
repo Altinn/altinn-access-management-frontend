@@ -236,41 +236,25 @@ const delegableApiSlice = createSlice({
       .addCase(apiDelegationCheck.pending, (state, action) => {
         const apiIdentifier = action.meta.arg.right.value;
 
-        let nextStateArray: DelegableApi[];
-        if (state.presentedApiList.some((api: DelegableApi) => api.identifier === apiIdentifier)) {
-          nextStateArray = state.presentedApiList.map((api: DelegableApi) => {
-            if (api.identifier === apiIdentifier) {
-              api.isLoading = true;
-            }
-
-            return api;
-          });
-        } else {
-          const apiWithLoading: DelegableApi = action.meta.arg.delegableApi;
-
-          apiWithLoading.isLoading = true;
-
-          nextStateArray = [...state.presentedApiList, apiWithLoading];
-        }
-
-        state.presentedApiList = nextStateArray;
+        state.presentedApiList = state.presentedApiList.map((api: DelegableApi) => {
+          if (api.identifier === apiIdentifier) {
+            api.isLoading = true;
+          }
+          return api;
+        });
       })
       .addCase(apiDelegationCheck.fulfilled, (state, action) => {
         const dto: DelegationCheckDto = action.meta.arg;
         const apiIdentifier = dto.right.value;
 
-        const { delegableApiList } = state;
-        const { presentedApiList } = state;
-        const { delegableApiSearchPool } = state;
-
         if (action.payload[0].status === 'Delegable') {
-          state.delegableApiList = delegableApiList.filter(
+          state.delegableApiList = state.delegableApiList.filter(
             (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
           );
-          state.presentedApiList = presentedApiList.filter(
+          state.presentedApiList = state.presentedApiList.filter(
             (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
           );
-          state.delegableApiSearchPool = delegableApiSearchPool.filter(
+          state.delegableApiSearchPool = state.delegableApiSearchPool.filter(
             (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
           );
 
