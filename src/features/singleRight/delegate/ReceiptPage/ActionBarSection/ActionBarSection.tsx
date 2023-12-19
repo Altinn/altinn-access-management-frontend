@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ErrorMessage, Ingress, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import type { Right, ProcessedDelegation } from '@/rtk/features/singleRights/singleRightsSlice';
@@ -31,18 +31,24 @@ export const ActionBarSection = () => {
   });
 
   // logic for finding the delegation with the most failed Delegations
-  delegations.forEach((pd: ProcessedDelegation, index) => {
-    const failedDelegations = pd.bffResponseList?.filter(
-      (data: Right) => data.status !== BFFDelegatedStatus.Delegated,
-    );
+  useEffect(() => {
+    let currentMostFailedDelegations = mostFailedDelegations;
+    let currentMostFailedIndex = mostFailedIndex;
+    delegations.forEach((pd: ProcessedDelegation, index) => {
+      const failedDelegations = pd.bffResponseList?.filter(
+        (data: Right) => data.status !== BFFDelegatedStatus.Delegated,
+      );
 
-    const numFailedDelegations = failedDelegations?.length || 0;
+      const numFailedDelegations = failedDelegations?.length || 0;
 
-    if (numFailedDelegations > mostFailedDelegations) {
-      setMostFailedDelegations(numFailedDelegations);
-      setMostFailedIndex(index);
-    }
-  });
+      if (numFailedDelegations > currentMostFailedDelegations) {
+        currentMostFailedIndex = index;
+        currentMostFailedDelegations = numFailedDelegations;
+      }
+    });
+    setMostFailedDelegations(currentMostFailedDelegations);
+    setMostFailedIndex(currentMostFailedIndex);
+  }, []);
 
   const actionBars = delegations
     .map((pd: ProcessedDelegation, index: number) => {
