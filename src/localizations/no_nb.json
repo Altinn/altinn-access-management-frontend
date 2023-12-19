@@ -147,7 +147,7 @@
     "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",
     "delegate_choose_service_page_top_text": "Her kan du velge hvilke skjemaer og tjenester du vil delegere tilgang til {{name}}. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten.",
     "request_choose_service_page_top_text": "Her kan du be om flere tilganger til {{name}}. Vi anbefaler å filtrere på skjemaeier, og søke med navn på tjenesten. Legg til ved å velge fra listen under.",
-    "choose_rights_page_top_text": "Her kan du velge hvilke enkeltrettigheter du vil delegere til {{name}}.",
+    "choose_rights_page_top_text": "Du gir disse rettighetene til {{name}}.",
     "choose_rights_page_secondary_text": "Dersom du ønsker å tilpasse tilgangene, f.eks. Fjerne signeringsrettighet, kan du klikke på pilen for å åpne tjenesten og tilpasse dette",
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikke delegert hele tjenesten",
