@@ -2,10 +2,18 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
 import { FilterIcon } from '@navikt/aksel-icons';
-import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, Heading, Paragraph, Pagination, Spinner, Alert } from '@digdir/design-system-react';
+import {
+  Chip,
+  Heading,
+  Paragraph,
+  Pagination,
+  Spinner,
+  Alert,
+  Search,
+  Label,
+} from '@digdir/design-system-react';
 
 import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -231,13 +239,18 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     <div className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
-          <SearchField
+          <Label>{t('single_rights.search_label')}</Label>
+          <Search
             label={t('single_rights.search_label')}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setSearchString(event.target.value);
               setCurrentPage(1);
             }}
-          ></SearchField>
+            onClear={() => {
+              setSearchString('');
+              setCurrentPage(1);
+            }}
+          ></Search>
         </div>
         <Filter
           icon={<FilterIcon />}
