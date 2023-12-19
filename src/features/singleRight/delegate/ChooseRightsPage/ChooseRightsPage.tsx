@@ -42,6 +42,7 @@ type Service = {
   rightDescription: string;
   status: string;
   title: string;
+  type: string;
   serviceOwner: string;
   rights: ChipRight[];
 };
@@ -102,6 +103,7 @@ export const ChooseRightsPage = () => {
         title: service.service?.title ?? '',
         serviceOwner: service.service?.resourceOwnerName ?? '',
         rights: rights,
+        type: service.service?.resourceType ?? '',
       };
     });
   };
@@ -156,7 +158,11 @@ export const ChooseRightsPage = () => {
       key={service.serviceIdentifier}
       title={service.title}
       subtitle={service.serviceOwner}
-      color={service.status === ServiceStatus.Delegable ? 'success' : 'warning'}
+      color={
+        service.status === ServiceStatus.Delegable || service.type === 'AltinnApp'
+          ? 'success'
+          : 'warning'
+      }
       onRemoveClick={() => {
         onRemove(service.serviceIdentifier);
       }}
@@ -169,6 +175,7 @@ export const ChooseRightsPage = () => {
         serviceIdentifier={service.serviceIdentifier}
         serviceDescription={service.description}
         rightDescription={service.rightDescription}
+        serviceType={service.type}
       />
     </RightsActionBar>
   ));
@@ -241,7 +248,7 @@ export const ChooseRightsPage = () => {
           // TODO: make adjustments to codeline below when we get GUID from altinn2
           To: [new IdValuePair('urn:altinn:organizationnumber', '313523497')],
           Rights: rightsToDelegate,
-          serviceDto: new ServiceDto(service.title, service.serviceOwner),
+          serviceDto: new ServiceDto(service.title, service.serviceOwner, service.type),
         };
 
         return dispatch(delegate(delegationInput));

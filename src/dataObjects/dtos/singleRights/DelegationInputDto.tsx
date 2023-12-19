@@ -7,10 +7,12 @@ export interface DelegationInputDto {
 export class ServiceDto {
   serviceTitle: string;
   serviceOwner: string;
+  serviceType: string;
 
-  constructor(serviceTitle: string, serviceOwner: string) {
+  constructor(serviceTitle: string, serviceOwner: string, serviceType: string) {
     this.serviceTitle = serviceTitle;
     this.serviceOwner = serviceOwner;
+    this.serviceType = serviceType;
   }
 }
 

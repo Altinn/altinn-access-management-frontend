@@ -19,6 +19,9 @@ export interface ReceiptActionBarContent {
 
   /** Outer index used to create unique keys */
   index: number;
+
+  /** The type of service */
+  serviceType: string;
 }
 
 /**
@@ -38,6 +41,7 @@ export const ReceiptActionBarContent = ({
   successfulDelegations,
   isRejectedDelegation,
   index,
+  serviceType,
 }: ReceiptActionBarContent) => {
   const { t } = useTranslation();
 
@@ -91,22 +95,31 @@ export const ReceiptActionBarContent = ({
         </Heading>
         <div className={classes.chipContainer}>
           <Chip.Group size='small'>
-            {successfulDelegations?.map((right: Right, innerIndex) => {
-              const chipText = Object.values(LocalizedAction).includes(
-                right.action as LocalizedAction,
-              )
-                ? t(`common.${right.action}`)
-                : right.action;
-              return (
-                <Chip.Toggle
-                  selected={true}
-                  checkmark
-                  key={`successful-${index}-${innerIndex}`}
-                >
-                  {chipText}
-                </Chip.Toggle>
-              );
-            })}
+            {serviceType === 'AltinnApp' ? (
+              <Chip.Toggle
+                selected={true}
+                checkmark
+              >
+                {t('common.access')}
+              </Chip.Toggle>
+            ) : (
+              successfulDelegations?.map((right: Right, innerIndex) => {
+                const chipText = Object.values(LocalizedAction).includes(
+                  right.action as LocalizedAction,
+                )
+                  ? t(`common.${right.action}`)
+                  : right.action;
+                return (
+                  <Chip.Toggle
+                    selected={true}
+                    checkmark
+                    key={`successful-${index}-${innerIndex}`}
+                  >
+                    {chipText}
+                  </Chip.Toggle>
+                );
+              })
+            )}
           </Chip.Group>
         </div>
       </div>

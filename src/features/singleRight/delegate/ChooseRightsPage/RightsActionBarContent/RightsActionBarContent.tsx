@@ -38,6 +38,9 @@ export interface RightsActionBarContentProps {
 
   /** Unique identifier for the service the rights adhere to */
   serviceIdentifier: string;
+
+  /** The type of service */
+  serviceType: string;
 }
 
 export const RightsActionBarContent = ({
@@ -46,10 +49,13 @@ export const RightsActionBarContent = ({
   serviceDescription,
   rightDescription,
   serviceIdentifier,
+  serviceType,
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation('common');
-  const hasUndelegableRights = rights.some((r) => r.delegable === false);
+  const hasUndelegableRights =
+    rights.some((r) => r.delegable === false) && serviceType !== 'AltinnApp';
   const [errorList, setErrorList] = useState<string[]>([]);
+  const [altinnAppAccess, setAltinnAppAccess] = useState(true);
 
   const createErrorList = () => {
     const errors: string[] = [];
@@ -72,34 +78,55 @@ export const RightsActionBarContent = ({
     createErrorList();
   }, [rights]);
 
+  const toggleAllDelegableRights = () => {
+    rights.forEach((right: ChipRight) => {
+      if (right.delegable) {
+        toggleRight(serviceIdentifier, right.action);
+      }
+    });
+    setAltinnAppAccess(!altinnAppAccess);
+  };
+
   const serviceResourceContent = (
     <>
       <Paragraph>{serviceDescription}</Paragraph>
       <Paragraph>{rightDescription}</Paragraph>
       <Paragraph>{t('single_rights.action_bar_adjust_rights_text')}</Paragraph>
       <div className={classes.chipContainer}>
-        {rights
-          .filter((right: ChipRight) => right.delegable === true)
-          .map((right: ChipRight, index: number) => {
-            const actionText = Object.values(LocalizedAction).includes(
-              right.action as LocalizedAction,
-            )
-              ? t(`common.${right.action}`)
-              : right.action;
-            return (
-              <div key={index}>
-                <Chip.Toggle
-                  checkmark
-                  selected={right.checked}
-                  onClick={() => {
-                    toggleRight(serviceIdentifier, right.action);
-                  }}
-                >
-                  {actionText}
-                </Chip.Toggle>
-              </div>
-            );
-          })}
+        {serviceType === 'AltinnApp' ? (
+          <div>
+            <Chip.Toggle
+              checkmark
+              selected={altinnAppAccess}
+              onClick={toggleAllDelegableRights}
+            >
+              {t('common.access')}
+            </Chip.Toggle>
+          </div>
+        ) : (
+          rights
+            .filter((right: ChipRight) => right.delegable === true)
+            .map((right: ChipRight, index: number) => {
+              const actionText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.${right.action}`)
+                : right.action;
+              return (
+                <div key={index}>
+                  <Chip.Toggle
+                    checkmark
+                    selected={right.checked}
+                    onClick={() => {
+                      toggleRight(serviceIdentifier, right.action);
+                    }}
+                  >
+                    {actionText}
+                  </Chip.Toggle>
+                </div>
+              );
+            })
+        )}
       </div>
     </>
   );

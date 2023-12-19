@@ -36,7 +36,7 @@ export interface DelegationAccessCheckDto {
 export interface Right {
   rightKey?: string;
   resource: IdValuePair[];
-  action?: string;
+  action: string;
   status?: string;
   details?: Details[];
   reduxStatus?: ReduxStatusResponse;
@@ -90,6 +90,7 @@ const createSerializedMeta = (meta: DelegationInputDto) => {
   const serviceDto = {
     serviceTitle: meta.serviceDto.serviceTitle,
     serviceOwner: meta.serviceDto.serviceOwner,
+    serviceType: meta.serviceDto.serviceType,
   };
 
   return {
@@ -101,8 +102,8 @@ const createSerializedMeta = (meta: DelegationInputDto) => {
 
 const createDelegationResponseData = (
   resourceId: string,
+  action: string,
   resourceValue?: string,
-  action?: string,
   status?: string,
   reduxStatus?: ReduxStatusResponse,
   detailsCode?: string,
@@ -270,6 +271,7 @@ const singleRightSlice = createSlice({
             const delegationResponseList: Right[] = [
               {
                 resource: [{ id: serviceID }],
+                action: '',
                 status: ServiceStatus.HTTPError,
                 details: [
                   {
@@ -324,8 +326,8 @@ const singleRightSlice = createSlice({
         bffResponseList.push(
           createDelegationResponseData(
             delegationInput.Rights[0].Resource[0].id,
-            delegationInput.Rights[0].Resource[0].value,
             delegationInput.Rights[0].Action,
+            delegationInput.Rights[0].Resource[0].value,
             BFFDelegatedStatus.NotDelegated,
             ReduxStatusResponse.Rejected,
             action.error.code,
