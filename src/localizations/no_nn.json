@@ -152,7 +152,7 @@
     "chosen_services": "Valgte tjenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
     "you_cant_delegate_these_rights": "Desse rettane kan du ikkje delegera:",
-    "woops_something_went_wrong": "Oi, her var det noko som gjekk gale med ein eller fleire tenester. Desse er raude. Du kan prøva igjen seinare",
+    "woops_something_went_wrong_ingress": "Oi, her var det noko som gjekk gale med ein eller fleire tenester. Desse er raude. Du kan prøva igjen seinare",
     "all_failed_techncal_problem_paragraph": "Eit teknisk problem har oppstått ved delegering av tenestene. Me tilrår at du startar delegeringsprosessen på nytt ved å gå til delegeringssida. Viss problemet held fram ber me deg kontakta brukarservice på telefon 75 00 60 00. Me beklagar!",
     "woops_something_went_wrong_alert": "Oi! Noe gikk galt.",
     "some_failed_technical_problem": "Pga. Av en teknisk feil ble ikke alle rettighetene på tjenesten delegert. Vi anbefaler at du forsøker å delegere tjenesten på nytt.",
