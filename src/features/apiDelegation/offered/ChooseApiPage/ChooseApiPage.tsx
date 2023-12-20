@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   Page,
@@ -51,6 +51,7 @@ export const ChooseApiPage = () => {
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (loading) {
@@ -59,6 +60,11 @@ export const ChooseApiPage = () => {
     dispatch(filter([]));
     dispatch(search(''));
   }, []);
+
+  useEffect(() => {
+    const apiIdList = chosenApis.map((api: DelegableApi) => api.id).join('+');
+    setSearchParams(apiIdList);
+  }, [chosenApis]);
 
   function handleSearch(searchText: string) {
     setSearchString(searchText);
