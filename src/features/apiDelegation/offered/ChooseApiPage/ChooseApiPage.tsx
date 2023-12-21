@@ -51,7 +51,8 @@ export const ChooseApiPage = () => {
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
-  const [, setSearchParams] = useSearchParams();
+  const [params, setParams] = useSearchParams();
+  const [paramsLoading, setParamsLoading] = useState(true);
 
   useEffect(() => {
     if (loading) {
@@ -61,10 +62,47 @@ export const ChooseApiPage = () => {
     dispatch(search(''));
   }, []);
 
-  useEffect(() => {
+  const handleRemove = (api: DelegableApi) => {
+    dispatch(softRemoveApi(api));
+    dispatch(filter(filters));
+    dispatch(search(searchString));
     const apiIdList = chosenApis.map((api: DelegableApi) => api.id).join('+');
-    setSearchParams(apiIdList);
-  }, [chosenApis]);
+    console.log('apiIdList', apiIdList);
+    setParams(apiIdList);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      const apiIdList = chosenApis.map((api) => api.id).join('+');
+      setParams(apiIdList);
+    }
+  }, [chosenApis, setParams]);
+
+  useEffect(() => {
+    if (!loading && params.keys().next().value) {
+      addApisFromParams();
+    }
+  }, [delegableApis]);
+
+  const addApisFromParams = () => {
+    const apiParamsString = params.keys().next().value;
+    const paramsStringList = apiParamsString.split(' ');
+
+    delegableApis.forEach((api) => {
+      paramsStringList.forEach((param: string) => {
+        if (api.id === param) {
+          dispatch(softAddApi(api));
+        }
+      });
+    });
+    setParamsLoading(false);
+  };
+
+  const addApi = (api: DelegableApi) => {
+    dispatch(softAddApi(api));
+    const apiIdList = chosenApis.map((api: DelegableApi) => api.id).join('+');
+    setParams(apiIdList);
+  };
 
   function handleSearch(searchText: string) {
     setSearchString(searchText);
@@ -74,12 +112,6 @@ export const ChooseApiPage = () => {
   const handleFilterChange = (filterList: string[]) => {
     setFilters(filterList);
     dispatch(filter(filterList));
-    dispatch(search(searchString));
-  };
-
-  const handleRemove = (api: DelegableApi) => {
-    dispatch(softRemoveApi(api));
-    dispatch(filter(filters));
     dispatch(search(searchString));
   };
 
