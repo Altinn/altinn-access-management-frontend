@@ -52,7 +52,8 @@ export const ChooseApiPage = () => {
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-  const [paramsLoading, setParamsLoading] = useState(true);
+  const [apiParams, setApiParams] = useState('');
+  const urlApis = params.keys().next().value;
 
   useEffect(() => {
     if (loading) {
@@ -62,31 +63,20 @@ export const ChooseApiPage = () => {
     dispatch(search(''));
   }, []);
 
-  const handleRemove = (api: DelegableApi) => {
-    dispatch(softRemoveApi(api));
-    dispatch(filter(filters));
-    dispatch(search(searchString));
-    const apiIdList = chosenApis.map((api: DelegableApi) => api.id).join('+');
-    console.log('apiIdList', apiIdList);
-    setParams(apiIdList);
-  };
-
+  // for rendering the url on action
   useEffect(() => {
-    if (!loading) {
-      const apiIdList = chosenApis.map((api) => api.id).join('+');
-      setParams(apiIdList);
-    }
-  }, [chosenApis, setParams]);
+    setParams(urlApis);
+  }, [urlApis]);
 
+  // for adding apis based on url
   useEffect(() => {
-    if (!loading && params.keys().next().value) {
-      addApisFromParams();
+    if (!loading && urlApis) {
+      makeChosenApisFromParams();
     }
-  }, [delegableApis]);
+  }, [loading, urlApis, apiParams]);
 
-  const addApisFromParams = () => {
-    const apiParamsString = params.keys().next().value;
-    const paramsStringList = apiParamsString.split(' ');
+  const makeChosenApisFromParams = () => {
+    const paramsStringList = urlApis.split(' ');
 
     delegableApis.forEach((api) => {
       paramsStringList.forEach((param: string) => {
@@ -95,13 +85,29 @@ export const ChooseApiPage = () => {
         }
       });
     });
-    setParamsLoading(false);
   };
 
-  const addApi = (api: DelegableApi) => {
-    dispatch(softAddApi(api));
-    const apiIdList = chosenApis.map((api: DelegableApi) => api.id).join('+');
-    setParams(apiIdList);
+  const addApiToParams = (api: DelegableApi) => {
+    console.log('urlApis', urlApis);
+    const apiStates = apiParams ? apiParams + '+' + api.id : api.id;
+    setApiParams(apiStates);
+    setParams(apiStates);
+  };
+
+  const handleRemove = (api: DelegableApi) => {
+    removeApiFromParams(api);
+    dispatch(filter(filters));
+    dispatch(search(searchString));
+  };
+
+  const removeApiFromParams = (api: DelegableApi) => {
+    console.log('urlApis', urlApis);
+    const paramsStringList = urlApis.split(' ');
+    const removedText = removeText(urlApis, paramsStringList.length === 1 ? api.id : api.id + ' ');
+    setApiParams(removedText);
+    setParams(removedText);
+
+    dispatch(softRemoveApi(api));
   };
 
   function handleSearch(searchText: string) {
@@ -114,6 +120,9 @@ export const ChooseApiPage = () => {
     dispatch(filter(filterList));
     dispatch(search(searchString));
   };
+
+  const removeText = (originalText: string, textToRemove: string) =>
+    originalText.replace(textToRemove, '');
 
   const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
     label: provider,
@@ -149,7 +158,7 @@ export const ChooseApiPage = () => {
           bottomContentText={api.description}
           scopeList={api.scopes}
           buttonType={'add'}
-          onActionButtonClick={() => dispatch(softAddApi(api))}
+          onActionButtonClick={() => addApiToParams(api)}
           color={'neutral'}
         ></DelegationActionBar>
       );
