@@ -52,8 +52,6 @@ export const ChooseApiPage = () => {
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-  const [apiParams, setApiParams] = useState('');
-  const urlApis = params.keys().next().value;
 
   useEffect(() => {
     if (loading) {
@@ -63,35 +61,25 @@ export const ChooseApiPage = () => {
     dispatch(search(''));
   }, []);
 
-  // for rendering the url on action
   useEffect(() => {
-    setParams(urlApis);
-  }, [urlApis]);
-
-  // for adding apis based on url
-  useEffect(() => {
-    if (!loading && urlApis) {
+    if (!loading && params) {
       makeChosenApisFromParams();
     }
-  }, [loading, urlApis, apiParams]);
+  }, [loading, params]);
 
   const makeChosenApisFromParams = () => {
-    const paramsStringList = urlApis.split(' ');
-
-    delegableApis.forEach((api) => {
-      paramsStringList.forEach((param: string) => {
-        if (api.id === param) {
+    for (const key of params.keys()) {
+      delegableApis.forEach((api) => {
+        if (api.id === key) {
           dispatch(softAddApi(api));
         }
       });
-    });
+    }
   };
 
   const addApiToParams = (api: DelegableApi) => {
-    console.log('urlApis', urlApis);
-    const apiStates = apiParams ? apiParams + '+' + api.id : api.id;
-    setApiParams(apiStates);
-    setParams(apiStates);
+    params.append(api.id, '');
+    setParams(params);
   };
 
   const handleRemove = (api: DelegableApi) => {
@@ -101,12 +89,8 @@ export const ChooseApiPage = () => {
   };
 
   const removeApiFromParams = (api: DelegableApi) => {
-    console.log('urlApis', urlApis);
-    const paramsStringList = urlApis.split(' ');
-    const removedText = removeText(urlApis, paramsStringList.length === 1 ? api.id : api.id + ' ');
-    setApiParams(removedText);
-    setParams(removedText);
-
+    params.delete(api.id);
+    setParams(params);
     dispatch(softRemoveApi(api));
   };
 
@@ -120,9 +104,6 @@ export const ChooseApiPage = () => {
     dispatch(filter(filterList));
     dispatch(search(searchString));
   };
-
-  const removeText = (originalText: string, textToRemove: string) =>
-    originalText.replace(textToRemove, '');
 
   const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
     label: provider,
