@@ -4,12 +4,8 @@ import { Paragraph, Heading, Chip, Alert } from '@digdir/design-system-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
-import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
-import {
-  ErrorCode,
-  getSingleRightsErrorCodeTextKey,
-  prioritizeErrors,
-} from '@/resources/utils/errorCodeUtils';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 
@@ -143,7 +139,7 @@ export const RightsActionBarContent = ({
         </Heading>
         <Paragraph spacing>
           {t('single_rights.one_or_more_rights_is_undelegable', {
-            reason: t(`${getSingleRightsErrorCodeTextKey(errorList[0])}`, {
+            reason: t(`${getErrorCodeTextKey(errorList[0])}`, {
               you: t('common.you_lowercase'),
             }),
           })}

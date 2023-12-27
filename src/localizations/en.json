@@ -44,7 +44,11 @@
     "yes": "Yes",
     "finish_delegation": "Confirm delegation",
     "you_lowercase": "you",
-    "you_uppercase": "You"
+    "you_uppercase": "You",
+    "minid": "MinID",
+    "bankid": "BankID",
+    "commifides": "Commifides",
+    "buypass": "Buypass"
   },
   "profile": {
     "received": "Received",
@@ -103,7 +107,7 @@
     "additional_description": "Additional description",
     "data_retrieval_failed": "Something crashed, try refreshing the page.",
     "orgs_not_chosen_subtitle": "Couldn't retrieve chosen organisations. Please go to previous page to choose organisations by clicking previous button on the bottom to the right.",
-    "delegations_not_chosen": "Your choices were not registered. Please restart the delegation process.",
+    "delegations_not_registered": "Your choices were not registered. Please restart the delegation process.",
     "receipt_page_main_button": "To API-overview",
     "failed_delegations": "These API delegations went wrong and were therefore not assigned",
     "succesful_delegations": "These API delegations were successful",
@@ -121,14 +125,15 @@
     "api_delegation_choice": "API delegation choice",
     "own_orgnumber_delegation_heading": "You can't delegate to your own organisation number",
     "own_orgnumber_delegation_paragraph": "Search for another organisation number to continue.",
-    "no_orgs_chosen": "No chosen organisations"
+    "no_orgs_chosen": "No chosen organisations",
+    "insufficient_authentication_level": "You don't have secure enough login to delegate the service. Click on the button to go to login and choose a higher security level. You then have the start the delegation over. You can choose between the following:"
   },
   "single_rights": {
     "delegate_single_rights": "Delegate single rights",
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
     "search_hits": "matches found:",
-    "missing_role_access": "{{you}} don't have any required role(s) for the reportee party.",
+    "missing_role_access": "{{you}} don't have the required rights to delegate this service",
     "missing_delegation_access": "{{you}} don't have the necessary delegation accesses to delegate this service.",
     "missing_srr_right_access": "{{you}} don't have SRR right access to delegate the service. The reportee you're trying to delegate for doesn't have delegation accesses.",
     "unknown": "Unknown",

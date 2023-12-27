@@ -27,12 +27,15 @@ import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegab
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   fetchDelegableApis,
-  softAddApi,
   softRemoveApi,
   search,
   filter,
+  apiDelegationCheck,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type {
+  DelegableApi,
+  DelegationCheckDto,
+} from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
 
 import classes from './ChooseApiPage.module.css';
@@ -40,7 +43,7 @@ import classes from './ChooseApiPage.module.css';
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
   const [filters, setFilters] = useState<string[]>([]);
-  const delegableApis = useAppSelector((state) => state.delegableApi.presentedApiList);
+  const presentedApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
@@ -82,6 +85,13 @@ export const ChooseApiPage = () => {
     value: provider,
   }));
 
+  const delegationCheck = (api: DelegableApi) => {
+    const dto: DelegationCheckDto = {
+      delegableApi: api,
+    };
+    dispatch(apiDelegationCheck(dto));
+  };
+
   const delegableApiActionBars = () => {
     if (error.message) {
       return (
@@ -95,24 +105,26 @@ export const ChooseApiPage = () => {
       return (
         <div className={common.spinnerContainer}>
           <Spinner
-            title={String(t('common.loading'))}
-            size='large'
+            title={t('common.loading')}
+            variant='interaction'
           />
         </div>
       );
     }
-    return delegableApis.map((api: DelegableApi) => {
+    return presentedApis.map((api: DelegableApi) => {
       return (
         <DelegationActionBar
-          key={api.id}
+          key={api.identifier}
           title={api.apiName}
           subtitle={api.orgName}
           topContentText={api.rightDescription}
           bottomContentText={api.description}
           scopeList={api.scopes}
           buttonType={'add'}
-          onActionButtonClick={() => dispatch(softAddApi(api))}
+          onActionButtonClick={() => delegationCheck(api)}
           color={'neutral'}
+          isLoading={api.isLoading}
+          errorCode={api.errorCode}
         ></DelegationActionBar>
       );
     });
@@ -121,7 +133,7 @@ export const ChooseApiPage = () => {
   const chosenApiActionBars = chosenApis.map((api: DelegableApi) => {
     return (
       <DelegationActionBar
-        key={api.id}
+        key={api.identifier}
         title={api.apiName}
         subtitle={api.orgName}
         topContentText={api.rightDescription}
@@ -132,6 +144,7 @@ export const ChooseApiPage = () => {
           handleRemove(api);
         }}
         color={'success'}
+        errorCode={api.errorCode}
       ></DelegationActionBar>
     );
   });

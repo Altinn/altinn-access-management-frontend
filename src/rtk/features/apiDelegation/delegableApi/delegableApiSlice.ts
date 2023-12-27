@@ -2,14 +2,20 @@ import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { type CustomError } from '@/dataObjects';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 export interface DelegableApi {
-  id: string;
+  identifier: string;
   apiName: string;
   orgName: string;
   rightDescription: string;
   description?: string;
   scopes: string[];
+  isLoading: boolean;
+  errorCode: string | undefined;
+  authorizationReference: IdValuePair[];
 }
 
 export interface DelegableApiDto {
@@ -19,6 +25,7 @@ export interface DelegableApiDto {
   rightDescription: string;
   description?: string;
   resourceReferences?: resourceReferenceDTO[];
+  authorizationReference: IdValuePair[];
 }
 
 export interface DelegableApiWithPriority {
@@ -37,14 +44,21 @@ interface resourceReferenceDTO {
   referenceSource: string;
 }
 
+export interface DelegationCheckDto {
+  delegableApi: DelegableApi;
+}
+
 const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
   const delegableApi: DelegableApi = {
-    id: obj.identifier,
+    identifier: obj.identifier,
     apiName: obj.title,
     orgName,
     rightDescription: obj.rightDescription,
     description: obj.description,
     scopes: [],
+    authorizationReference: obj.authorizationReference,
+    isLoading: false,
+    errorCode: '',
   };
   if (obj.resourceReferences) {
     for (const ref of obj.resourceReferences) {
@@ -67,6 +81,30 @@ export const fetchDelegableApis = createAsyncThunk(
       console.error(error);
       return rejectWithValue(error);
     }
+  },
+);
+
+export const apiDelegationCheck = createAsyncThunk(
+  'delegableApi/apiDelegationCheck',
+  async (dto: DelegationCheckDto, { rejectWithValue }) => {
+    const altinnPartyId = getCookie('AltinnPartyId');
+
+    const right = {
+      resource: [
+        {
+          id: dto.delegableApi.authorizationReference[0].id,
+          value: dto.delegableApi.authorizationReference[0].value,
+        },
+      ],
+    };
+
+    return await axios
+      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/delegationcheck`, right)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error(error);
+        return rejectWithValue(error);
+      });
   },
 );
 
@@ -97,22 +135,6 @@ const delegableApiSlice = createSlice({
   name: 'delegableApi',
   initialState,
   reducers: {
-    softAddApi: (state: SliceState, action) => {
-      const { delegableApiList } = state;
-      const { presentedApiList } = state;
-      const { delegableApiSearchPool } = state;
-      state.delegableApiList = delegableApiList.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
-      );
-      state.presentedApiList = presentedApiList.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
-      );
-      state.delegableApiSearchPool = delegableApiSearchPool.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
-      );
-
-      state.chosenDelegableApiList.push(action.payload);
-    },
     softRemoveApi: (state: SliceState, action) => {
       state.delegableApiList.push(action.payload);
       state.presentedApiList.push(action.payload);
@@ -120,7 +142,7 @@ const delegableApiSlice = createSlice({
 
       const { chosenDelegableApiList } = state;
       state.chosenDelegableApiList = chosenDelegableApiList.filter(
-        (delegableApi) => delegableApi.id !== action.payload.id,
+        (delegableApi) => delegableApi.identifier !== action.payload.identifier,
       );
     },
     filter: (state: SliceState, action) => {
@@ -144,13 +166,13 @@ const delegableApiSlice = createSlice({
     search: (state: SliceState, action) => {
       const { delegableApiSearchPool } = state;
       const searchText = action.payload.trim().toLowerCase();
-      const seachWords = searchText ? searchText.split(' ') : [];
+      const searchWords = searchText ? searchText.split(' ') : [];
 
       const prioritizedApiList: DelegableApiWithPriority[] = [];
       if (searchText) {
         for (const api of delegableApiSearchPool) {
           let numMatches = 0;
-          for (const word of seachWords) {
+          for (const word of searchWords) {
             if (
               api.apiName.toLowerCase().includes(word) ||
               (api.description?.toLowerCase().includes(word) ??
@@ -209,10 +231,62 @@ const delegableApiSlice = createSlice({
         } else {
           state.error.message = 'Unknown error';
         }
+      })
+      .addCase(apiDelegationCheck.pending, (state, action) => {
+        const dto: DelegationCheckDto = action.meta.arg;
+        const apiIdentifier = dto.delegableApi.authorizationReference[0].value;
+
+        state.presentedApiList = state.presentedApiList.map((api: DelegableApi) => {
+          if (api.identifier === apiIdentifier) {
+            api.isLoading = true;
+          }
+          return api;
+        });
+      })
+      .addCase(apiDelegationCheck.fulfilled, (state, action) => {
+        const dto: DelegationCheckDto = action.meta.arg;
+        const apiIdentifier = dto.delegableApi.authorizationReference[0].value;
+
+        if (action.payload[0].status === 'Delegable') {
+          state.delegableApiList = state.delegableApiList.filter(
+            (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
+          );
+          state.presentedApiList = state.presentedApiList.filter(
+            (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
+          );
+          state.delegableApiSearchPool = state.delegableApiSearchPool.filter(
+            (delegableApi) => dto.delegableApi.identifier !== delegableApi.identifier,
+          );
+
+          state.chosenDelegableApiList.push(dto.delegableApi);
+        } else {
+          const nextStateArray: DelegableApi[] = state.presentedApiList.map((api: DelegableApi) => {
+            if (api.identifier === apiIdentifier) {
+              api.isLoading = false;
+              api.errorCode = action.payload[0].details[0].code;
+            }
+            return api;
+          });
+
+          state.delegableApiSearchPool = nextStateArray;
+        }
+      })
+      .addCase(apiDelegationCheck.rejected, (state, action) => {
+        const dto: DelegationCheckDto = action.meta.arg;
+        const apiIdentifier = dto.delegableApi.authorizationReference[0].value;
+
+        const nextStateArray: DelegableApi[] = state.presentedApiList.map((api: DelegableApi) => {
+          if (api.identifier === apiIdentifier) {
+            api.isLoading = false;
+            api.errorCode = ErrorCode.HTTPError;
+          }
+          return api;
+        });
+
+        state.presentedApiList = nextStateArray;
       });
   },
 });
 
 export default delegableApiSlice.reducer;
-export const { softAddApi, softRemoveApi, search, filter, resetDelegableApis } =
-  delegableApiSlice.actions;
+export const { softRemoveApi, search, filter, resetDelegableApis } = delegableApiSlice.actions;
