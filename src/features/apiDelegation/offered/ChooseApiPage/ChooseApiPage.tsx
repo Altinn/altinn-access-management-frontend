@@ -88,7 +88,6 @@ export const ChooseApiPage = () => {
   const delegationCheck = (api: DelegableApi) => {
     const dto: DelegationCheckDto = {
       delegableApi: api,
-      right: api.authorizationReference[0],
     };
     dispatch(apiDelegationCheck(dto));
   };

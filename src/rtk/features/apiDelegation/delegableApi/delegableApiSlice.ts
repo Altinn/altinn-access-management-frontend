@@ -46,7 +46,6 @@ interface resourceReferenceDTO {
 
 export interface DelegationCheckDto {
   delegableApi: DelegableApi;
-  right: IdValuePair;
 }
 
 const mapToDelegableApi = (obj: DelegableApiDto, orgName: string) => {
@@ -93,8 +92,8 @@ export const apiDelegationCheck = createAsyncThunk(
     const right = {
       resource: [
         {
-          id: dto.right.id,
-          value: dto.right.value,
+          id: dto.delegableApi.authorizationReference[0].id,
+          value: dto.delegableApi.authorizationReference[0].value,
         },
       ],
     };
@@ -167,13 +166,13 @@ const delegableApiSlice = createSlice({
     search: (state: SliceState, action) => {
       const { delegableApiSearchPool } = state;
       const searchText = action.payload.trim().toLowerCase();
-      const seachWords = searchText ? searchText.split(' ') : [];
+      const searchWords = searchText ? searchText.split(' ') : [];
 
       const prioritizedApiList: DelegableApiWithPriority[] = [];
       if (searchText) {
         for (const api of delegableApiSearchPool) {
           let numMatches = 0;
-          for (const word of seachWords) {
+          for (const word of searchWords) {
             if (
               api.apiName.toLowerCase().includes(word) ||
               (api.description?.toLowerCase().includes(word) ??
@@ -234,7 +233,8 @@ const delegableApiSlice = createSlice({
         }
       })
       .addCase(apiDelegationCheck.pending, (state, action) => {
-        const apiIdentifier = action.meta.arg.right.value;
+        const dto: DelegationCheckDto = action.meta.arg;
+        const apiIdentifier = dto.delegableApi.authorizationReference[0].value;
 
         state.presentedApiList = state.presentedApiList.map((api: DelegableApi) => {
           if (api.identifier === apiIdentifier) {
@@ -245,7 +245,7 @@ const delegableApiSlice = createSlice({
       })
       .addCase(apiDelegationCheck.fulfilled, (state, action) => {
         const dto: DelegationCheckDto = action.meta.arg;
-        const apiIdentifier = dto.right.value;
+        const apiIdentifier = dto.delegableApi.authorizationReference[0].value;
 
         if (action.payload[0].status === 'Delegable') {
           state.delegableApiList = state.delegableApiList.filter(
@@ -268,12 +268,12 @@ const delegableApiSlice = createSlice({
             return api;
           });
 
-          state.presentedApiList = nextStateArray;
+          state.delegableApiSearchPool = nextStateArray;
         }
       })
       .addCase(apiDelegationCheck.rejected, (state, action) => {
         const dto: DelegationCheckDto = action.meta.arg;
-        const apiIdentifier = dto.right.value;
+        const apiIdentifier = dto.delegableApi.authorizationReference[0].value;
 
         const nextStateArray: DelegableApi[] = state.presentedApiList.map((api: DelegableApi) => {
           if (api.identifier === apiIdentifier) {

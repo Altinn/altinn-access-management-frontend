@@ -1,5 +1,5 @@
 import { Button, List, Paragraph, Spinner } from '@digdir/design-system-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -19,7 +19,7 @@ export interface DelegationActionBarProps extends Pick<ActionBarProps, 'color'> 
   scopeList?: string[];
   buttonType: 'add' | 'remove';
   onActionButtonClick: () => void;
-  isLoading: boolean;
+  isLoading?: boolean;
   errorCode?: string;
 }
 
@@ -32,14 +32,14 @@ export const DelegationActionBar = ({
   buttonType,
   onActionButtonClick,
   color = 'neutral',
-  isLoading,
+  isLoading = false,
   errorCode = '',
 }: DelegationActionBarProps) => {
   const [open, setOpen] = useState(false);
   const [actionBarColor, setActionBarColor] = useState(color);
   const { t } = useTranslation('common');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (errorCode !== '') {
       setOpen(true);
       setActionBarColor('danger');
@@ -122,22 +122,22 @@ export const DelegationActionBar = ({
           </List>
         </div>
       );
-    } else if (errorCode === ErrorCode.HTTPError) {
-      return (
-        <div className={classes.errorContent}>
-          <Paragraph>
-            {t(`${getErrorCodeTextKey(errorCode)}`, { you: t('common.you_uppercase') })}
-          </Paragraph>
-          <Paragraph></Paragraph>
-        </div>
-      );
-    } else {
+    } else if (errorCode === ErrorCode.MissingRoleAccess) {
       return (
         <div className={classes.errorContent}>
           <Paragraph>
             {t('single_rights.missing_role_access', { you: t('common.you_uppercase') })}{' '}
             {t('single_rights.ceo_or_main_admin_can_help')}
           </Paragraph>
+        </div>
+      );
+    } else {
+      return (
+        <div className={classes.errorContent}>
+          <Paragraph>
+            {t(`${getErrorCodeTextKey(errorCode)}`, { you: t('common.you_uppercase') })}
+          </Paragraph>
+          <Paragraph></Paragraph>
         </div>
       );
     }

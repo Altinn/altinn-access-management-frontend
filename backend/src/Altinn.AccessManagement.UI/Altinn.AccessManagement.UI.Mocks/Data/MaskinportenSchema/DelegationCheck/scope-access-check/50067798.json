@@ -11,7 +11,7 @@
     "status": "NotDelegable",
     "details": [
       {
-        "code": "MissingRoleAccess",
+        "code": "InsufficientAuthenticationLevel",
         "description": "Authenticated user does not meet the required security level for resource. Minimum authentication level is 4",
         "parameters": {
           "MinimumAuthenticationLevel": [
