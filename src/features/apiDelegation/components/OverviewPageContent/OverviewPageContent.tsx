@@ -144,8 +144,8 @@ export const OverviewPageContent = ({
       return (
         <div className={classes.spinnerContainer}>
           <Spinner
-            title={String(t('common.loading'))}
-            size='large'
+            title={t('common.loading')}
+            variant='interaction'
           />
         </div>
       );

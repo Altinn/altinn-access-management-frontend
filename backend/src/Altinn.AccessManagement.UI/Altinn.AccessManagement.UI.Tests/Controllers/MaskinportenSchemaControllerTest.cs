@@ -204,7 +204,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DelegationCheck_HasDelegableRights()
         {
             // Arrange
-            int reporteePartyId = 50005545;
+            int reporteePartyId = 50076002;
             string resourceId = "scope-access-schema";
                 
             string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
@@ -230,7 +230,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DelegationCheck_InsufficientAccessLevel()
         {
             // Arrange
-            int reporteePartyId = 12345678;
+            int reporteePartyId = 50067798;
                 
             string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
             string fullPath = Path.Combine(folderPath, reporteePartyId + ".json");

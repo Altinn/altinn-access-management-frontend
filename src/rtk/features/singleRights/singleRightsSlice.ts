@@ -3,10 +3,10 @@ import axios from 'axios';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
-  IdValuePair,
   DelegationInputDto,
   DelegationRequestDto,
 } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 import { type ServiceResource } from './singleRightsApi';
 

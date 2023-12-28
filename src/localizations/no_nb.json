@@ -43,7 +43,11 @@
     "yes": "Ja",
     "finish_delegation": "Fullfør delegering",
     "you_lowercase": "du",
-    "you_uppercase": "Du"
+    "you_uppercase": "Du",
+    "minid": "MinID",
+    "bankid": "BankID",
+    "commifides": "Commifides",
+    "buypass": "Buypass"
   },
   "profile": {
     "received": "Mottatte",
@@ -120,7 +124,8 @@
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
     "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette.",
-    "no_orgs_chosen": "Ingen organisasjoner valgt"
+    "no_orgs_chosen": "Ingen organisasjoner valgt",
+    "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Klikk på knappen for å gå til innlogging og velg et høyere sikkerhetsnivå. Du må starte delegeringen på nytt. Du kan velge mellom følgende metoder:"
   },
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettigheter",
@@ -128,8 +133,8 @@
     "search_label": "Søk etter skjema og tjeneste",
     "filter_label": "Filtrer på tjenesteeier",
     "search_hits": "treff på søket:",
-    "missing_role_access": "{{you}} har ikke noen av de nødvendige rollene for å gjennomføre delegeringen.",
-    "missing_delegation_access": "{{you}} har ikke de nødvendige delegeringsrettighetene for å gjennomføre delegeringen.",
+    "missing_role_access": "{{you}} har ikke tilstrekkelig rettighet til å delegere denne tjenesten.",
+    "missing_delegation_access": "{{you}} har ikke tilstrekkelig rettighet til å delegere denne tjenesten.",
     "missing_srr_right_access": "{{you}} har ikke nødvendige SRR-rettigheter for å delegere tjenesten. Avgiveren du delegerer på veiene av har ikke tilgang til å delegere tjenesten.",
     "unknown": "Uvisst",
     "new_error": "Dette er en ny feil vi ikke har fått før. Vennligst rapporter til Altinn ved å sende inn et skjermbilde",
