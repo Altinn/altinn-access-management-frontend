@@ -51,7 +51,7 @@ export const ChooseApiPage = () => {
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
-  const [params, setParams] = useSearchParams();
+  const [urlParams, setUrlParams] = useSearchParams();
 
   useEffect(() => {
     if (loading) {
@@ -62,13 +62,13 @@ export const ChooseApiPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && params) {
+    if (!loading && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [loading, params]);
+  }, [loading, urlParams]);
 
   const makeChosenApisFromParams = () => {
-    for (const key of params.keys()) {
+    for (const key of urlParams.keys()) {
       presentedApis.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
           dispatch(apiDelegationCheck(api));
@@ -78,8 +78,8 @@ export const ChooseApiPage = () => {
   };
 
   const addApiToParams = (api: DelegableApi) => {
-    params.append(api.identifier, '');
-    setParams(params);
+    urlParams.append(api.identifier, '');
+    setUrlParams(urlParams);
   };
 
   const handleRemove = (api: DelegableApi) => {
@@ -89,8 +89,8 @@ export const ChooseApiPage = () => {
   };
 
   const removeApiFromParams = (api: DelegableApi) => {
-    params.delete(api.identifier);
-    setParams(params);
+    urlParams.delete(api.identifier);
+    setUrlParams(urlParams);
     dispatch(softRemoveApi(api));
   };
 
