@@ -2,7 +2,7 @@ import { SearchField } from '@altinn/altinn-design-system';
 import { Button, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
+import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,18 +13,13 @@ import {
   PageContainer,
   ErrorPanel,
   GroupElements,
-  RestartPrompter,
   DelegationActionBar,
-  BorderedList,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
-import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
-import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   fetchDelegableApis,
   softRemoveApi,

@@ -14,6 +14,7 @@ import {
   ActionBar,
   PageContainer,
   GroupElements,
+  RestartPrompter,
 } from '@/components';
 import {
   softAddOrg,
@@ -36,6 +37,7 @@ import classes from './ChooseOrgPage.module.css';
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
@@ -220,6 +222,16 @@ export const ChooseOrgPage = () => {
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
+          {chosenApis.length < 1 && (
+            <RestartPrompter
+              spacingBottom
+              restartPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
+              }
+              title={t('common.an_error_has_occured')}
+              ingress={t('api_delegation.delegations_not_registered')}
+            />
+          )}
           <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
           {isSm && chosenItems.length > 0 && (
             <div className={classes.chosenOrgs}>
