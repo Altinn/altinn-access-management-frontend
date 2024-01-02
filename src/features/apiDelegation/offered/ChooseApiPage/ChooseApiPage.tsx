@@ -84,6 +84,7 @@ export const ChooseApiPage = () => {
 
   const handleRemove = (api: DelegableApi) => {
     removeApiFromParams(api);
+    dispatch(softRemoveApi(api));
     dispatch(filter(filters));
     dispatch(search(searchString));
   };
@@ -91,7 +92,6 @@ export const ChooseApiPage = () => {
   const removeApiFromParams = (api: DelegableApi) => {
     urlParams.delete(api.identifier);
     setUrlParams(urlParams);
-    dispatch(softRemoveApi(api));
   };
 
   function handleSearch(searchText: string) {
