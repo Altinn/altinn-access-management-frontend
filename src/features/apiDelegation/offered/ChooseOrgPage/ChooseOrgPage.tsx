@@ -287,23 +287,26 @@ export const ChooseOrgPage = () => {
               variant={'secondary'}
               onClick={() =>
                 navigate(
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview,
-                )
-              }
-              fullWidth={isSm}
-            >
-              {t('common.cancel')}
-            </Button>
-            <Button
-              disabled={chosenOrgs.length === 0}
-              onClick={() =>
-                navigate(
                   '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
                 )
               }
               fullWidth={isSm}
             >
-              {t('api_delegation.next')}
+              {t('common.previous')}
+            </Button>
+            <Button
+              disabled={chosenOrgs.length === 0}
+              onClick={() =>
+                navigate(
+                  '/' +
+                    ApiDelegationPath.OfferedApiDelegations +
+                    '/' +
+                    ApiDelegationPath.Confirmation,
+                )
+              }
+              fullWidth={isSm}
+            >
+              {t('common.next')}
             </Button>
           </GroupElements>
         </PageContent>
