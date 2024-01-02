@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   Page,
@@ -32,10 +32,7 @@ import {
   filter,
   apiDelegationCheck,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import type {
-  DelegableApi,
-  DelegationCheckDto,
-} from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
 
 import classes from './ChooseApiPage.module.css';
@@ -54,6 +51,7 @@ export const ChooseApiPage = () => {
   const { t } = useTranslation('common');
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
+  const [urlParams, setUrlParams] = useSearchParams();
 
   useEffect(() => {
     if (loading) {
@@ -62,6 +60,39 @@ export const ChooseApiPage = () => {
     dispatch(filter([]));
     dispatch(search(''));
   }, []);
+
+  useEffect(() => {
+    if (!loading && urlParams) {
+      makeChosenApisFromParams();
+    }
+  }, [loading, urlParams]);
+
+  const makeChosenApisFromParams = () => {
+    for (const key of urlParams.keys()) {
+      presentedApis.forEach((api: DelegableApi) => {
+        if (api.identifier === key) {
+          dispatch(apiDelegationCheck(api));
+        }
+      });
+    }
+  };
+
+  const addApiToParams = (api: DelegableApi) => {
+    urlParams.append(api.identifier, '');
+    setUrlParams(urlParams);
+  };
+
+  const handleRemove = (api: DelegableApi) => {
+    removeApiFromParams(api);
+    dispatch(softRemoveApi(api));
+    dispatch(filter(filters));
+    dispatch(search(searchString));
+  };
+
+  const removeApiFromParams = (api: DelegableApi) => {
+    urlParams.delete(api.identifier);
+    setUrlParams(urlParams);
+  };
 
   function handleSearch(searchText: string) {
     setSearchString(searchText);
@@ -74,23 +105,10 @@ export const ChooseApiPage = () => {
     dispatch(search(searchString));
   };
 
-  const handleRemove = (api: DelegableApi) => {
-    dispatch(softRemoveApi(api));
-    dispatch(filter(filters));
-    dispatch(search(searchString));
-  };
-
   const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
     label: provider,
     value: provider,
   }));
-
-  const delegationCheck = (api: DelegableApi) => {
-    const dto: DelegationCheckDto = {
-      delegableApi: api,
-    };
-    dispatch(apiDelegationCheck(dto));
-  };
 
   const delegableApiActionBars = () => {
     if (error.message) {
@@ -121,7 +139,7 @@ export const ChooseApiPage = () => {
           bottomContentText={api.description}
           scopeList={api.scopes}
           buttonType={'add'}
-          onActionButtonClick={() => delegationCheck(api)}
+          onActionButtonClick={() => addApiToParams(api)}
           color={'neutral'}
           isLoading={api.isLoading}
           errorCode={api.errorCode}
