@@ -1,5 +1,13 @@
-import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
-import { SearchField, Panel, PanelVariant } from '@altinn/altinn-design-system';
+import {
+  Alert,
+  Button,
+  Heading,
+  Paragraph,
+  Spinner,
+  Search,
+  Label,
+} from '@digdir/design-system-react';
+import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -230,14 +238,18 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <div className={classes.searchSection}>
-            <SearchField
-              label={String(t('api_delegation.search_for_buisness'))}
-              value={searchString}
+            <Label>{t('api_delegation.search_for_buisness')}</Label>
+            <Search
+              label={t('api_delegation.search_for_buisness')}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 handleSearch(event.target.value);
               }}
-              aria-label={String(t('api_delegation.search_for_buisness'))}
-            ></SearchField>
+              value={searchString}
+              size='medium'
+              onClear={() => {
+                handleSearch('');
+              }}
+            ></Search>
           </div>
           {viewLoading ? (
             <div className={common.spinnerContainer}>

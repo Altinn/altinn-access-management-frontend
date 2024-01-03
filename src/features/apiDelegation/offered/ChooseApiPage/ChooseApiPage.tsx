@@ -1,5 +1,4 @@
-import { SearchField } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner, Search } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
@@ -34,6 +33,7 @@ import {
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
+import { debounce } from '@/resources/utils';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -148,6 +148,10 @@ export const ChooseApiPage = () => {
     );
   });
 
+  const debouncedSearch = debounce((searchString: string) => {
+    handleSearch(searchString);
+  }, 300);
+
   return (
     <PageContainer>
       <Page
@@ -184,13 +188,16 @@ export const ChooseApiPage = () => {
           )}
           <div className={classes.searchSection}>
             <div className={classes.searchField}>
-              <SearchField
-                value={searchString}
+              <Search
+                label={t('api_delegation.search_for_api')}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleSearch(event.target.value);
+                  debouncedSearch(event.target.value);
                 }}
-                aria-label={String(t('api_delegation.search_for_api'))}
-              ></SearchField>
+                size='medium'
+                onClear={() => {
+                  handleSearch('');
+                }}
+              ></Search>
             </div>
             <div className={classes.filter}>
               <Filter
