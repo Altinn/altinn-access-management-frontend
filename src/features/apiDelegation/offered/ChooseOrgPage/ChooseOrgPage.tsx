@@ -238,7 +238,7 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <div className={classes.searchSection}>
-            <Label>{t('api_delegation.search_for_buisness')}</Label>
+            <Label spacing>{t('api_delegation.search_for_buisness')}</Label>
             <Search
               label={t('api_delegation.search_for_buisness')}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
