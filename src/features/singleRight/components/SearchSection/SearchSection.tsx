@@ -31,6 +31,7 @@ import {
   ServiceStatus,
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { debounce } from '@/resources/utils';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -235,6 +236,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     );
   });
 
+  const debouncedSearch = debounce((searchString: string) => {
+    setSearchString(searchString);
+    setCurrentPage(1);
+  }, 300);
+
   return (
     <div className={classes.searchSection}>
       <div className={classes.searchInputs}>
@@ -243,9 +249,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <Search
             label={t('single_rights.search_label')}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchString(event.target.value);
-              setCurrentPage(1);
+              debouncedSearch(event.target.value);
             }}
+            size='medium'
             onClear={() => {
               setSearchString('');
               setCurrentPage(1);
@@ -253,6 +259,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           ></Search>
         </div>
         <Filter
+          className={classes.filter}
           icon={<FilterIcon />}
           label={t('single_rights.filter_label')}
           options={filterOptions}
