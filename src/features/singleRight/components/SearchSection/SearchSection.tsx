@@ -12,7 +12,6 @@ import {
   Spinner,
   Alert,
   Search,
-  Label,
 } from '@digdir/design-system-react';
 
 import { Filter } from '@/components';
@@ -245,9 +244,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     <div className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
-          <Label>{t('single_rights.search_label')}</Label>
           <Search
             label={t('single_rights.search_label')}
+            hideLabel={false}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               debouncedSearch(event.target.value);
             }}

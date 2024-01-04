@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Button,
-  Heading,
-  Paragraph,
-  Spinner,
-  Search,
-  Label,
-} from '@digdir/design-system-react';
+import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/design-system-react';
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -238,9 +230,9 @@ export const ChooseOrgPage = () => {
             </div>
           )}
           <div className={classes.searchSection}>
-            <Label spacing>{t('api_delegation.search_for_buisness')}</Label>
             <Search
               label={t('api_delegation.search_for_buisness')}
+              hideLabel={false}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 handleSearch(event.target.value);
               }}
