@@ -71,7 +71,7 @@ export const ConfirmationPage = () => {
   const delegableApiList = () => {
     return (
       <div className={classes.listContainer}>
-        <BorderedList className={classes.list}>
+        <BorderedList>
           {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
             <CompactDeletableListItem
               key={index}
@@ -143,7 +143,7 @@ export const ConfirmationPage = () => {
             fullWidth={isSm}
             onClick={() =>
               navigate(
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
               )
             }
           >
