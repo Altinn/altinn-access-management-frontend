@@ -1,5 +1,5 @@
 import { SearchField } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Skeleton, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -46,6 +46,7 @@ export const ChooseApiPage = () => {
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
+  const [delegationCheckLoading, setDelegationCheckLoading] = useState(true);
 
   useEffect(() => {
     if (loading) {
@@ -69,6 +70,7 @@ export const ChooseApiPage = () => {
         }
       });
     }
+    setDelegationCheckLoading(false);
   };
 
   const addApiToParams = (api: DelegableApi) => {
@@ -161,6 +163,19 @@ export const ChooseApiPage = () => {
     );
   });
 
+  const skeleton = () => {
+    const skeletonHeight = '66px';
+    return (
+      <>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+      </>
+    );
+  };
+
   return (
     <PageContainer>
       <Page
@@ -176,7 +191,9 @@ export const ChooseApiPage = () => {
             <div>
               <h4>{t('api_delegation.chosen_apis')}</h4>
               <div className={classes.chosenApisContainer}>
-                <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
+                <div className={classes.actionBarWrapper}>
+                  {delegationCheckLoading ? skeleton() : chosenApiActionBars}
+                </div>
               </div>
             </div>
           )}
@@ -208,14 +225,18 @@ export const ChooseApiPage = () => {
             <div>
               <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
               <div className={classes.delegableApisContainer}>
-                <div className={classes.actionBarWrapper}>{delegableApiActionBars()}</div>
+                <div className={classes.actionBarWrapper}>
+                  {delegationCheckLoading ? skeleton() : delegableApiActionBars()}
+                </div>
               </div>
             </div>
             {!isSm && (
               <div>
                 <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.delegableApisContainer}>
-                  <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
+                  <div className={classes.actionBarWrapper}>
+                    {delegationCheckLoading ? skeleton() : chosenApiActionBars}
+                  </div>
                 </div>
               </div>
             )}
