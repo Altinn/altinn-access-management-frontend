@@ -24,7 +24,7 @@
   cursor: pointer;
   font: inherit;
   text-align: left;
-  padding: 4px 0 4px 0;
+  padding: 4px 0;
 }
 
 .option:hover {
@@ -47,5 +47,5 @@
 }
 
 .searchField {
-  padding: 12px 0px 12px 0px;
+  padding: 12px 0px;
 }
