@@ -62,5 +62,8 @@
     "vite": "^4.2.2",
     "vite-plugin-svgr": "^4.1.0"
   },
+  "resolutions": {
+    "redux": "^5.0.0"
+  },
   "packageManager": "yarn@4.0.2"
 }
