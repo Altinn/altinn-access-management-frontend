@@ -86,8 +86,6 @@
     "buisness_search_info_title": "Ny virksomhet?",
     "buisness_search_info_content": "Søk etter virksomheten du ønsker å delegere til ved å fylle inn virksomhetens komplette 9-sifrede organisasjonsnummer",
     "businesses_going_to_get_access":"Virksomheter som skal få rettighet:",
-    "previous":"Forrige",
-    "next": "Neste",
     "add_new_business": "Legg til ny virksomhet",
     "card_title": "Programmerings\u00adgrensesnitt - API",
     "confirmation_page_content_top_text": "Du ønsker å gi rettigheter til følgende API:",

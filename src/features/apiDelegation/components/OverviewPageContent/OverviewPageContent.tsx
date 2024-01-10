@@ -80,7 +80,7 @@ export const OverviewPageContent = ({
 
   const goToStartDelegation = () => {
     dispatch(restoreAllSoftDeletedItems());
-    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg);
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi);
   };
 
   const handleSaveDisabled = () => {

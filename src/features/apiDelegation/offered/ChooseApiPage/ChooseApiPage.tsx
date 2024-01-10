@@ -2,7 +2,7 @@ import { SearchField } from '@altinn/altinn-design-system';
 import { Button, Spinner } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterIcon, Buldings3Icon } from '@navikt/aksel-icons';
+import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -13,18 +13,13 @@ import {
   PageContainer,
   ErrorPanel,
   GroupElements,
-  RestartPrompter,
   DelegationActionBar,
-  BorderedList,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
-import { CompactDeletableListItem } from '@/components/CompactDeletableListItem';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
-import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import {
   fetchDelegableApis,
   softRemoveApi,
@@ -42,7 +37,6 @@ export const ChooseApiPage = () => {
   const [filters, setFilters] = useState<string[]>([]);
   const presentedApis = useAppSelector((state) => state.delegableApi.presentedApiList);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const loading = useAppSelector((state) => state.delegableApi.loading);
   const error = useAppSelector((state) => state.delegableApi.error);
@@ -167,18 +161,6 @@ export const ChooseApiPage = () => {
     );
   });
 
-  const chosenDelegableOrgs = chosenOrgs.map((org: DelegableOrg) => {
-    return (
-      <CompactDeletableListItem
-        key={org.orgNr}
-        startIcon={<Buldings3Icon />}
-        removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-        leftText={org.orgName}
-        middleText={!isSm ? t('api_delegation.org_nr') + ' ' + org.orgNr : undefined}
-      ></CompactDeletableListItem>
-    );
-  });
-
   return (
     <PageContainer>
       <Page
@@ -187,21 +169,6 @@ export const ChooseApiPage = () => {
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          {chosenDelegableOrgs.length < 1 ? (
-            <RestartPrompter
-              spacingBottom
-              restartPath={
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
-              }
-              title={t('common.an_error_has_occured')}
-              ingress={t('api_delegation.delegations_not_registered')}
-            />
-          ) : (
-            <div>
-              <h3>{t('api_delegation.chosen_orgs')}:</h3>
-              <BorderedList borderStyle={'dashed'}>{chosenDelegableOrgs}</BorderedList>
-            </div>
-          )}
           <h3 className={classes.chooseApiSecondHeader}>
             {t('api_delegation.new_api_content_text2')}
           </h3>
@@ -258,26 +225,23 @@ export const ChooseApiPage = () => {
               variant={'secondary'}
               onClick={() =>
                 navigate(
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview,
                 )
               }
               fullWidth={isSm}
             >
-              {t('api_delegation.previous')}
+              {t('common.cancel')}
             </Button>
             <Button
-              disabled={chosenApis.length < 1 || chosenOrgs.length < 1}
+              disabled={chosenApis.length < 1}
               fullWidth={isSm}
               onClick={() =>
                 navigate(
-                  '/' +
-                    ApiDelegationPath.OfferedApiDelegations +
-                    '/' +
-                    ApiDelegationPath.Confirmation,
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
                 )
               }
             >
-              {t('api_delegation.next')}
+              {t('common.next')}
             </Button>
           </GroupElements>
         </PageContent>
