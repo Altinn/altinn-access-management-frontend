@@ -50,6 +50,19 @@
     "commifides": "Commifides",
     "buypass": "Buypass"
   },
+  "error_page": {
+    "not_found_site_type": "Error 404",
+    "not_found_site_header": "Oops! You have tried to reach a page we do not know",
+    "not_found_site_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",
+    "not_found_site_lower_text": "If this was not helpful you are free to contact Altinn support on telephone 75 00 60 00",
+    "go_to_inbox": "Go to inbox",
+    "go_to_profile": "Go to profile page",
+    "go_to_help": "Go to help page",
+    "find_and_submit_scheme": "Find and submit a new form",
+    "unknown_error_header": "Oops! An error seems to have occurred",
+    "unknown_error_description": "Please try reloading the page.",
+    "if_persistent_contact_service": "If the error persists, you can go to Altinn's help page or contact support at 75 00 60 00"
+  },
   "profile": {
     "received": "Received",
     "sent": "Sent",
@@ -111,13 +124,6 @@
     "succesful_delegations": "These API delegations were successful",
     "no_offered_delegations": "Your organisation hasn't delegated any APIs",
     "no_received_delegations": "Your organisation hasn't received any API delegations",
-    "not_found_site_type": "Error 404",
-    "not_found_site_header": "Oops! You have tried to reach a page we do not know",
-    "not_found_site_upper_text": "We do not know where you really intended to go, but perhaps you can find what you are looking for on some of these pages:",
-    "not_found_site_lower_text": "If this was not helpful you are free to contact Altinn support on telephone 75 00 60 00",
-    "go_to_inbox": "Go to inbox",
-    "go_to_profile": "Go to profile page",
-    "find_and_submit_scheme": "Find and submit a new form",
     "receipt_page_failed_text": "Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
     "api_delegation_choice": "API delegation choice",

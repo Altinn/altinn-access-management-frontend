@@ -7,7 +7,7 @@ import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/r
 import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
 import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
-import { NotFoundSite } from '@/sites/NotFoundSite';
+import { ErrorPage } from '@/sites/ErrorPage';
 import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
 import { ChooseServicePage as RequestChooseServicePage } from '@/features/singleRight/request/ChooseServicePage/ChooseServicePage';
 import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
@@ -19,76 +19,66 @@ export const Router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       path='/'
-      errorElement={<NotFoundSite />}
+      errorElement={<ErrorPage />}
     >
       <Route
         path={ApiDelegationPath.OfferedApiDelegations}
-        errorElement={<NotFoundSite />}
+        errorElement={<ErrorPage />}
       >
         <Route
           path={ApiDelegationPath.Overview}
           element={<OfferedOverviewPage />}
-          errorElement={<NotFoundSite />}
         />
         <Route
           path={ApiDelegationPath.ChooseOrg}
           element={<ChooseOrgPage />}
-          errorElement={<NotFoundSite />}
         />
         <Route
           path={ApiDelegationPath.ChooseApi}
           element={<ChooseApiPage />}
-          errorElement={<NotFoundSite />}
         />
         <Route
           path={ApiDelegationPath.Confirmation}
           element={<ConfirmationPage />}
-          errorElement={<NotFoundSite />}
         />
         <Route
           path={ApiDelegationPath.Receipt}
           element={<ReceiptPage />}
-          errorElement={<NotFoundSite />}
         />
       </Route>
       <Route
         path={ApiDelegationPath.ReceivedApiDelegations}
-        errorElement={<NotFoundSite />}
+        errorElement={<ErrorPage />}
       >
         <Route
           path={ApiDelegationPath.Overview}
           element={<ReceivedOverviewPage />}
-          errorElement={<NotFoundSite />}
         />
       </Route>
       <Route
         path={SingleRightPath.DelegateSingleRights}
-        errorElement={<NotFoundSite />}
+        errorElement={<ErrorPage />}
       >
         <Route
           path={SingleRightPath.ChooseService}
           element={<DelegateChooseServicePage />}
-          errorElement={<NotFoundSite />}
         />
         <Route
           path={SingleRightPath.ChooseRights}
           element={<ChooseRightsPage />}
-          errorElement={<NotFoundSite />}
         />
         <Route
           path={SingleRightPath.Receipt}
           element={<SingleRightReceiptPage />}
-          errorElement={<NotFoundSite />}
         />
       </Route>
       <Route
         path={SingleRightPath.RequestSingleRights}
-        errorElement={<NotFoundSite />}
+        errorElement={<ErrorPage />}
       >
         <Route
           path={SingleRightPath.ChooseService}
           element={<RequestChooseServicePage />}
-          errorElement={<NotFoundSite />}
         />
       </Route>
     </Route>,
