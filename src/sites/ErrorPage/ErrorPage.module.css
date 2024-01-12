@@ -1,11 +1,11 @@
-.notFoundSiteWrapper {
+.errorPageWrapper {
   margin-left: 40px;
   margin-right: 40px;
 }
 
 .errorMessage {
   font-size: 14px;
-  color: darkslategray;
+  color: darkslategray !important;
 }
 
 .contentText {
@@ -14,10 +14,16 @@
 
 .flexContainer {
   display: flex;
+  gap: 15px;
 }
 
 .leftContainer {
   flex: 3;
+}
+
+.rightContainer {
+  align-self: center;
+  padding-bottom: 40px;
 }
 
 .link {
