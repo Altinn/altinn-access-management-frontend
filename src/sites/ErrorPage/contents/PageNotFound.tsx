@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { Paragraph, Heading } from '@digdir/design-system-react';

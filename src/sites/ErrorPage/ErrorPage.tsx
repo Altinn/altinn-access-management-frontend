@@ -13,6 +13,7 @@ import classes from './ErrorPage.module.css';
 export const ErrorPage = () => {
   const { t } = useTranslation('common');
   const error: any = useRouteError();
+  const timestamp = new Date();
 
   const renderContent = () => {
     switch (error.status) {
@@ -31,7 +32,12 @@ export const ErrorPage = () => {
             <div className={classes.errorPageWrapper}>
               <Paragraph
                 size='small'
-                spacing
+                className={classes.errorMessage}
+              >
+                {t('common.time')}: {timestamp.toLocaleString('no-NO')}
+              </Paragraph>
+              <Paragraph
+                size='small'
                 className={classes.errorMessage}
               >
                 {t('common.error_status_code')}: {error.status}

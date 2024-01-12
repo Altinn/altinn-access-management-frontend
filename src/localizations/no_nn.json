@@ -56,11 +56,10 @@
     "not_found_site_lower_text": "Om dette ikkje var til hjelp kan du ta kontakt med Altinn brukarstøtte på telefon 75 00 60 00",
     "go_to_inbox": "Gå til innboks",
     "go_to_profile": "Gå til profilsida",
-    "go_to_help": "Gå til helpesida",
-    "find_and_submit_scheme": "Finne og sende inn nytt skjema",
-    "unknown_error_header": "Ojda! Det har visst skjedd en feil",
-    "unknown_error_description": "Vennligst prøv å laste inn siden på nytt.",
-    "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00"
+    "go_to_help": "Gå til hjelpesida",
+    "unknown_error_header": "Ojda! Det har visst skjedd ein feil",
+    "unknown_error_description": "Ver venleg og prøv å laste inn sida på nytt.",
+    "if_persistent_contact_service": "Viss feilen held fram kan du gå til Altinn sin hjelpeside eller kontakte brukarstøtte på telefon 75 00 60 00"
   },
   "profile": {
     "received": "Mottekne",
