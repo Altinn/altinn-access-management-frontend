@@ -71,3 +71,5 @@ export const singleRightsApi = createApi({
 });
 
 export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery } = singleRightsApi;
+
+export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;
