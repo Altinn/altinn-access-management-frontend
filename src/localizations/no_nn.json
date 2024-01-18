@@ -54,9 +54,7 @@
     "sent": "Sendt",
     "create_request": "Opprett ny førespurnad",
     "access_request": "Ber om tilgang",
-    "employees": "Tilsette",
     "clients": "Klientar",
-    "add_new_employee": "Legg til ny tilsett",
     "change_rights": "Endre rettar"
   },
   "api_delegation": {

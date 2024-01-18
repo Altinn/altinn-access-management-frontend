@@ -33,8 +33,5 @@
 }
 
 .errorContent {
-  margin-left: 50px;
-  margin-right: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px;
 }

@@ -5,7 +5,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
   DelegationInputDto,
   DelegationRequestDto,
-} from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+} from '@/dataObjects/dtos/resourceDelegation';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 import { type ServiceResource } from './singleRightsApi';

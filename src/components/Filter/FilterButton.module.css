@@ -37,7 +37,7 @@
 }
 
 .activeBadge {
-  background-color: var(--fds-semantic-surface-action-primary-active);
+  background-color: var(--fds-semantic-surface-action-second-default);
   border-radius: 50%;
   height: 18px;
   width: 18px;

@@ -22,13 +22,17 @@ import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import {
   fetchDelegableApis,
+  softAddApi,
   softRemoveApi,
   search,
   filter,
-  apiDelegationCheck,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
+import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegationApi';
+import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -48,6 +52,11 @@ export const ChooseApiPage = () => {
   const [urlParams, setUrlParams] = useSearchParams();
   const [delegationCheckLoading, setDelegationCheckLoading] = useState(true);
 
+  const partyId = getCookie('AltinnPartyId');
+
+  const [checkCanDelegate, { data: apiAccessResult, isLoading: isCheckingAccesses }] =
+    useDelegationCheckMutation();
+
   useEffect(() => {
     if (loading) {
       void fetchData();
@@ -60,13 +69,21 @@ export const ChooseApiPage = () => {
     if (!loading && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [loading, urlParams]);
+  }, [loading]);
 
   const makeChosenApisFromParams = () => {
     for (const key of urlParams.keys()) {
       presentedApis.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
-          dispatch(apiDelegationCheck(api));
+          const resourceRef: ResourceReference = { resource: api.authorizationReference };
+          checkCanDelegate({ partyId, resourceRef })
+            .unwrap()
+            .then((response: DelegationAccessResult) => {
+              if (response?.status === 'Delegable') {
+                addApiToParams(api);
+                dispatch(softAddApi(api));
+              }
+            });
         }
       });
     }
@@ -125,20 +142,23 @@ export const ChooseApiPage = () => {
         </div>
       );
     }
+
+    const prechosenApis = Array.from(urlParams.keys());
+
     return presentedApis.map((api: DelegableApi) => {
+      const initWithDelegationCheck = prechosenApis.includes(api.identifier);
       return (
         <DelegationActionBar
           key={api.identifier}
-          title={api.apiName}
-          subtitle={api.orgName}
-          topContentText={api.rightDescription}
-          bottomContentText={api.description}
           scopeList={api.scopes}
-          buttonType={'add'}
-          onActionButtonClick={() => addApiToParams(api)}
+          variant={'add'}
           color={'neutral'}
-          isLoading={api.isLoading}
-          errorCode={api.errorCode}
+          api={api}
+          onAdd={() => {
+            addApiToParams(api);
+            dispatch(softAddApi(api));
+          }}
+          initWithDelegationCheck={initWithDelegationCheck}
         ></DelegationActionBar>
       );
     });
@@ -148,17 +168,11 @@ export const ChooseApiPage = () => {
     return (
       <DelegationActionBar
         key={api.identifier}
-        title={api.apiName}
-        subtitle={api.orgName}
-        topContentText={api.rightDescription}
-        bottomContentText={api.description}
+        api={api}
         scopeList={api.scopes}
-        buttonType={'remove'}
-        onActionButtonClick={() => {
-          handleRemove(api);
-        }}
+        variant={'remove'}
         color={'success'}
-        errorCode={api.errorCode}
+        onRemove={() => handleRemove(api)}
       ></DelegationActionBar>
     );
   });
