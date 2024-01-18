@@ -33,7 +33,7 @@ export type DelegationAccessResult = {
   resource: IdValuePair[];
   action: string;
   status: string;
-  details: details;
+  details: details[];
 };
 
 type details = {

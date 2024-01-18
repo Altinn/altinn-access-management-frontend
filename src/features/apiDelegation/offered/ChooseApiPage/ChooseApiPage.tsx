@@ -80,7 +80,6 @@ export const ChooseApiPage = () => {
             .unwrap()
             .then((response: DelegationAccessResult) => {
               if (response?.status === 'Delegable') {
-                addApiToParams(api);
                 dispatch(softAddApi(api));
               }
             });

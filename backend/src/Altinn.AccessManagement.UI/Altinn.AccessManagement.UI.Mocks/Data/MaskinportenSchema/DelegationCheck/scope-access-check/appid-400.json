@@ -1,0 +1,27 @@
+[
+  {
+    "rightKey": "appid-136:ScopeAccess",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-136"
+      }
+    ],
+    "action": "ScopeAccess",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -46,7 +46,7 @@ export const DelegationActionBar = ({
   const [checkCanDelegate, { data: accessResult, error, isLoading: isUpdating }] =
     useDelegationCheckMutation();
 
-  const isNotDelegable = error || (accessResult && accessResult.status === 'notDelegable');
+  const isNotDelegable = error || (accessResult && accessResult.status === 'NotDelegable');
 
   useLayoutEffect(() => {
     if (initWithDelegationCheck) {
@@ -145,9 +145,12 @@ export const DelegationActionBar = ({
           <Paragraph spacing>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
         </Alert>
       );
-    } else if (accessResult?.details.code === ErrorCode.InsufficientAuthenticationLevel) {
+    } else if (accessResult?.details[0].code === ErrorCode.InsufficientAuthenticationLevel) {
       return (
-        <div className={classes.errorContent}>
+        <Alert
+          severity='danger'
+          className={classes.errorContent}
+        >
           <Paragraph spacing>
             {t(`${getErrorCodeTextKey(ErrorCode.InsufficientAuthenticationLevel)}`)}
           </Paragraph>
@@ -157,23 +160,29 @@ export const DelegationActionBar = ({
             <List.Item>{t('common.commfides')}</List.Item>
             <List.Item>{t('common.buypass')}</List.Item>
           </List>
-        </div>
+        </Alert>
       );
-    } else if (accessResult?.details.code === ErrorCode.MissingRoleAccess) {
+    } else if (accessResult?.details[0].code === ErrorCode.MissingRoleAccess) {
       return (
-        <div className={classes.errorContent}>
+        <Alert
+          severity='danger'
+          className={classes.errorContent}
+        >
           <Paragraph>
             {t('single_rights.missing_role_access', { you: t('common.you_uppercase') })}{' '}
             {t('single_rights.ceo_or_main_admin_can_help')}
           </Paragraph>
-        </div>
+        </Alert>
       );
     } else {
       return (
-        <div className={classes.errorContent}>
+        <Alert
+          severity='danger'
+          className={classes.errorContent}
+        >
           <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>
           <Paragraph></Paragraph>
-        </div>
+        </Alert>
       );
     }
   };
