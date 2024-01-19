@@ -49,6 +49,19 @@
     "commifides": "Commifides",
     "buypass": "Buypass"
   },
+  "error_page": {
+    "not_found_site_error_type": "Feil 404",
+    "not_found_site_header": "Oi! Du har prøvd å komme til en side vi ikke vet om",
+    "not_found_site_upper_text": "Vi vet ikke hvor du egentlig skulle, men kanskje du kan finne det du leter etter på noen av disse sidene:",
+    "not_found_site_lower_text": "Hvis dette ikke var til hjelp kan du ta kontakt med Altinn brukerstøtte på telefon 75 00 60 00",
+    "go_to_inbox": "Gå til innboks",
+    "go_to_profile": "Gå til profilsiden",
+    "go_to_help": "Gå til hjelpsiden",
+    "find_and_submit_scheme": "Finne og sende inn nytt skjema",
+    "unknown_error_header": "Ojda! Det har visst skjedd en feil",
+    "unknown_error_description": "Vennligst prøv å laste inn siden på nytt.",
+    "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00"
+  },
   "profile": {
     "received": "Mottatte",
     "sent": "Sendte",
@@ -107,13 +120,6 @@
     "succesful_delegations": "Disse api-delegeringene ble gitt",
     "no_offered_delegations": "Din virksomhet har ikke delegert noen API-tilganger",
     "no_received_delegations": "Din virksomhet har ikke blitt tildelt noen API-tilganger",
-    "not_found_site_error_type": "Feil 404",
-    "not_found_site_header": "Oi! Du har prøvd å komme til en side vi ikke vet om",
-    "not_found_site_upper_text": "Vi vet ikke hvor du egentlig skulle, men kanskje du kan finne det du leter etter på noen av disse sidene:",
-    "not_found_site_lower_text": "Hvis dette ikke var til hjelp kan du ta kontakt med Altinn brukerstøtte på telefon 75 00 60 00",
-    "go_to_inbox": "Gå til innboks",
-    "go_to_profile": "Gå til profilsiden",
-    "find_and_submit_scheme": "Finne og sende inn nytt skjema",
     "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slettes eller trekkes tilbake.",
     "receipt_page_failed_text": "Vennligst prøv igjen senere. Kontakt Altinn Servicedesk om feilen vedvarer.",
     "receipt_page_main_button": "Til totaloversikt",

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createLogger } from 'redux-logger';
+import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import delegableApiReducer from '../features/apiDelegation/delegableApi/delegableApiSlice';
 import overviewOrgReducer from '../features/apiDelegation/overviewOrg/overviewOrgSlice';
@@ -26,6 +27,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(logger, singleRightsApi.middleware, apiDelegationApi.middleware),
 });
+
+setupListeners(store.dispatch);
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>;

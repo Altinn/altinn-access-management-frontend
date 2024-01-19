@@ -143,7 +143,7 @@ export const ConfirmationPage = () => {
             fullWidth={isSm}
             onClick={() =>
               navigate(
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
               )
             }
           >
