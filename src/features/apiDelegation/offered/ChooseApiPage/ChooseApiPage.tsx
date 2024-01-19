@@ -51,7 +51,7 @@ export const ChooseApiPage = () => {
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
-  const [delegationCheckLoading, setDelegationCheckLoading] = useState(true);
+  const [showSkeleton, setShowSkeleton] = useState(true);
 
   const partyId = getCookie('AltinnPartyId');
 
@@ -72,21 +72,30 @@ export const ChooseApiPage = () => {
   }, [loading]);
 
   const makeChosenApisFromParams = () => {
+    const promises: Promise<void>[] = [];
+
     for (const key of urlParams.keys()) {
       presentedApis.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
           const resourceRef: ResourceReference = { resource: api.authorizationReference };
-          checkCanDelegate({ partyId, resourceRef })
+          const promise = checkCanDelegate({
+            partyId,
+            resourceRef,
+          })
             .unwrap()
             .then((response: DelegationAccessResult) => {
               if (response?.status === 'Delegable') {
                 dispatch(softAddApi(api));
               }
             });
+          promises.push(promise);
         }
       });
     }
-    setDelegationCheckLoading(false);
+
+    Promise.all(promises).then(() => {
+      setShowSkeleton(false);
+    });
   };
 
   const addApiToParams = (api: DelegableApi) => {
@@ -174,7 +183,7 @@ export const ChooseApiPage = () => {
     );
   });
 
-  const skeleton = () => {
+  const DelegableApiSkeleton = () => {
     const skeletonHeight = '66px';
     return (
       <>
@@ -185,6 +194,16 @@ export const ChooseApiPage = () => {
         <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
       </>
     );
+  };
+
+  const ChosenApiSkeleton = () => {
+    const skeletonHeight = '66px';
+    return Array.from(urlParams).map((_, index) => (
+      <Skeleton.Rectangle
+        key={index}
+        height={skeletonHeight}
+      ></Skeleton.Rectangle>
+    ));
   };
 
   return (
@@ -198,12 +217,12 @@ export const ChooseApiPage = () => {
           <h3 className={classes.chooseApiSecondHeader}>
             {t('api_delegation.new_api_content_text2')}
           </h3>
-          {isSm && chosenApis.length > 0 && (
+          {isSm && (chosenApis.length > 0 || urlParams.size > 0) && (
             <div>
               <h4>{t('api_delegation.chosen_apis')}</h4>
               <div className={classes.chosenApisContainer}>
                 <div className={classes.actionBarWrapper}>
-                  {delegationCheckLoading ? skeleton() : chosenApiActionBars}
+                  {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}
                 </div>
               </div>
             </div>
@@ -237,7 +256,7 @@ export const ChooseApiPage = () => {
               <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
               <div className={classes.delegableApisContainer}>
                 <div className={classes.actionBarWrapper}>
-                  {delegationCheckLoading ? skeleton() : delegableApiActionBars()}
+                  {showSkeleton ? DelegableApiSkeleton() : delegableApiActionBars()}
                 </div>
               </div>
             </div>
@@ -246,7 +265,7 @@ export const ChooseApiPage = () => {
                 <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.delegableApisContainer}>
                   <div className={classes.actionBarWrapper}>
-                    {delegationCheckLoading ? skeleton() : chosenApiActionBars}
+                    {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}
                   </div>
                 </div>
               </div>
