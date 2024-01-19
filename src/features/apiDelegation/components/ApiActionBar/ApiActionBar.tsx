@@ -1,40 +1,40 @@
-import { Button, List, Paragraph, Spinner, Alert } from '@digdir/design-system-react';
+import { Button, List, Paragraph, Spinner, Alert, Heading } from '@digdir/design-system-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { data, error } from 'cypress/types/jquery';
 
+import { ActionBar, type ActionBarProps } from '@/components';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import { type DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+import ScopeList from '@/components/ScopeList/ScopeList';
 
-import ScopeList from '../ScopeList/ScopeList';
-import { ActionBar, type ActionBarProps } from '../ActionBar';
+import classes from './ApiActionBar.module.css';
 
-import classes from './DelegationActionBar.module.css';
-
-export interface DelegationActionBarProps extends Pick<ActionBarProps, 'color'> {
-  scopeList?: string[];
+export interface ApiActionBarProps extends Pick<ActionBarProps, 'color'> {
+  /** Defines the functionality and behaviour of the actionbar, whether it is used to add a new api or to remove one that was previously added */
   variant: 'add' | 'remove';
+  /** Used when the variant equals 'add'. The callback that is triggered when the user clicks the add button, if they pass the delegationCheck. */
   onAdd?: () => void;
+  /** Used when the variant equals 'remove'. The callback that is triggered when the user clicks the remove button. */
   onRemove?: () => void;
+  /** The API to be represented */
   api: DelegableApi;
-  isAdded?: boolean;
+  /** Whether or not to run a delegationCheck on initialization. Used for deep links with pre-chosen API's */
   initWithDelegationCheck?: boolean;
 }
 
-export const DelegationActionBar = ({
-  scopeList = [''],
+export const ApiActionBar = ({
   variant,
   onAdd,
   onRemove,
   api,
   initWithDelegationCheck = false,
-}: DelegationActionBarProps) => {
+}: ApiActionBarProps) => {
   const [open, setOpen] = useState(false);
   const [actionBarColor, setActionBarColor] = useState<'success' | 'danger' | 'neutral'>(
     variant === 'remove' ? 'success' : 'neutral',
@@ -50,7 +50,6 @@ export const DelegationActionBar = ({
 
   useLayoutEffect(() => {
     if (initWithDelegationCheck) {
-      // Fetch cached data
       checkCanDelegate({ partyId, resourceRef });
     }
   }, []);
@@ -106,30 +105,48 @@ export const DelegationActionBar = ({
 
   const content = () => {
     return (
-      <div className={classes.newApiAccordionContent}>
-        {scopeList.length > 0 && (
+      <div className={classes.content}>
+        {api.scopes.length > 0 && (
           <div>
-            <h4 className={classes.h4Text}>{t('api_delegation.scopes')}:</h4>
-            <ScopeList scopeList={scopeList} />
+            <Heading
+              size='xxsmall'
+              level={4}
+              spacing
+            >
+              {t('api_delegation.scopes')}:
+            </Heading>
+            <ScopeList scopeList={api.scopes} />
           </div>
         )}
         {api.rightDescription && (
           <div>
-            <h4 className={classes.h4Text}>{t('api_delegation.description')}</h4>
-            <div className={classes.contentTexts}>{api.rightDescription}</div>
+            <Heading
+              size='xxsmall'
+              level={4}
+              spacing
+            >
+              {t('api_delegation.description')}
+            </Heading>
+            <Paragraph>{api.rightDescription}</Paragraph>
           </div>
         )}
         {api.rightDescription === undefined && (
-          <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
+          <Paragraph>{t('api_delegation.data_retrieval_failed')}</Paragraph>
         )}
         {api.description && (
           <div>
-            <h4 className={classes.h4Text}>{t('api_delegation.additional_description')}</h4>
-            <div className={classes.bottomContentTexts}>{api.description}</div>
+            <Heading
+              size='xxsmall'
+              level={4}
+              spacing
+            >
+              {t('api_delegation.additional_description')}
+            </Heading>
+            <Paragraph>{api.description}</Paragraph>
           </div>
         )}
         {api.description === undefined && (
-          <div className={classes.contentTexts}>{t('api_delegation.data_retrieval_failed')}</div>
+          <Paragraph>{t('api_delegation.data_retrieval_failed')}</Paragraph>
         )}
       </div>
     );

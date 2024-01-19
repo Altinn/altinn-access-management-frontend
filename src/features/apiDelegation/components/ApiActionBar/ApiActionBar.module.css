@@ -1,29 +1,16 @@
-.newApiAccordionContent {
+.content {
+  margin-top: 20px;
   margin-left: 50px;
   margin-right: 20px;
-}
-
-.h4Text {
-  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .scopeItems {
   word-break: break-word;
   margin: 10px;
-}
-
-.line {
-  margin-top: 25px;
-  margin-right: 5px;
-}
-
-.contentTexts {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.bottomContentTexts {
-  margin-bottom: 20px;
 }
 
 .actionBarHeaderTitle {

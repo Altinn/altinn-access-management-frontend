@@ -13,7 +13,6 @@ import {
   PageContainer,
   ErrorPanel,
   GroupElements,
-  DelegationActionBar,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -33,6 +32,8 @@ import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegati
 import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+
+import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -54,8 +55,7 @@ export const ChooseApiPage = () => {
 
   const partyId = getCookie('AltinnPartyId');
 
-  const [checkCanDelegate, { data: apiAccessResult, isLoading: isCheckingAccesses }] =
-    useDelegationCheckMutation();
+  const [checkCanDelegate] = useDelegationCheckMutation();
 
   useEffect(() => {
     if (loading) {
@@ -147,9 +147,8 @@ export const ChooseApiPage = () => {
     return presentedApis.map((api: DelegableApi) => {
       const initWithDelegationCheck = prechosenApis.includes(api.identifier);
       return (
-        <DelegationActionBar
+        <ApiActionBar
           key={api.identifier}
-          scopeList={api.scopes}
           variant={'add'}
           color={'neutral'}
           api={api}
@@ -158,21 +157,20 @@ export const ChooseApiPage = () => {
             dispatch(softAddApi(api));
           }}
           initWithDelegationCheck={initWithDelegationCheck}
-        ></DelegationActionBar>
+        ></ApiActionBar>
       );
     });
   };
 
   const chosenApiActionBars = chosenApis.map((api: DelegableApi) => {
     return (
-      <DelegationActionBar
+      <ApiActionBar
         key={api.identifier}
         api={api}
-        scopeList={api.scopes}
         variant={'remove'}
         color={'success'}
         onRemove={() => handleRemove(api)}
-      ></DelegationActionBar>
+      ></ApiActionBar>
     );
   });
 
