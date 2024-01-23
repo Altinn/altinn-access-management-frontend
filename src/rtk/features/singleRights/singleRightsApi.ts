@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { IdValuePair } from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 interface PaginatedListDTO {
@@ -17,6 +17,7 @@ export interface ServiceResource {
   description?: string;
   resourceReferences: resourceReference[];
   authorizationReference: IdValuePair[];
+  resourceType: string;
 }
 
 export interface ResourceOwner {
@@ -70,3 +71,5 @@ export const singleRightsApi = createApi({
 });
 
 export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery } = singleRightsApi;
+
+export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

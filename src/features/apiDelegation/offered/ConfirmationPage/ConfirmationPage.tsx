@@ -58,7 +58,7 @@ export const ConfirmationPage = () => {
     for (const org of chosenOrgs) {
       for (const api of chosenApis) {
         const request: DelegationRequest = {
-          apiIdentifier: api.id,
+          apiIdentifier: api.identifier,
           apiName: api.apiName,
           orgName: org.orgName,
           orgNr: org.orgNr,
@@ -71,7 +71,7 @@ export const ConfirmationPage = () => {
   const delegableApiList = () => {
     return (
       <div className={classes.listContainer}>
-        <BorderedList className={classes.list}>
+        <BorderedList>
           {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
             <CompactDeletableListItem
               key={index}
@@ -143,11 +143,11 @@ export const ConfirmationPage = () => {
             fullWidth={isSm}
             onClick={() =>
               navigate(
-                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
               )
             }
           >
-            {t('api_delegation.previous')}
+            {t('common.previous')}
           </Button>
           <Button
             onClick={handleConfirm}
@@ -156,8 +156,7 @@ export const ConfirmationPage = () => {
           >
             {isProcessingDelegations && (
               <Spinner
-                title={String(t('common.loading'))}
-                size='small'
+                title={t('common.loading')}
                 variant='interaction'
               />
             )}
@@ -181,7 +180,7 @@ export const ConfirmationPage = () => {
               <RestartPrompter
                 spacingBottom
                 restartPath={
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg
+                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
                 }
                 title={t('common.an_error_has_occured')}
                 ingress={t('api_delegation.delegations_not_registered')}

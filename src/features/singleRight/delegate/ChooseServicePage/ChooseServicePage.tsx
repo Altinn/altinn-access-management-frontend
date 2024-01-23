@@ -96,7 +96,6 @@ export const ChooseServicePage = () => {
             onAdd={onAdd}
             onUndo={onRemove}
           />
-
           <GroupElements>
             <Button
               variant='primary'
