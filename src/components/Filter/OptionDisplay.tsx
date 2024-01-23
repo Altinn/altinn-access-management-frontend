@@ -113,7 +113,7 @@ export const OptionDisplay = ({
             onChange={() => {
               handleSelection(option.value);
             }}
-            size={compact ? 'xsmall' : 'small'}
+            size={compact ? 'small' : 'medium'}
             value={option.value}
             checked={isSelected}
           >

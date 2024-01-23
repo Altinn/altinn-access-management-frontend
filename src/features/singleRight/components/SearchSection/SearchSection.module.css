@@ -88,4 +88,8 @@
   .notDelegableAlert {
     margin-bottom: 30px;
   }
+
+  .filter {
+    padding-bottom: 5px;
+  }
 }

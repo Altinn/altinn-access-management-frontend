@@ -11,20 +11,20 @@
   display: flex;
   align-items: start;
   flex-direction: column;
-  border-left: 1px solid var(--fds-semantic-border-neutral-divider);
-  border-right: 1px solid var(--fds-semantic-border-neutral-divider);
-  border-top: 1px solid var(--fds-semantic-border-neutral-divider);
+  border-left: 1px solid var(--fds-semantic-border-divider-default);
+  border-right: 1px solid var(--fds-semantic-border-divider-default);
+  border-top: 1px solid var(--fds-semantic-border-divider-default);
 }
 
 .option {
   width: 100%;
   border: none;
-  border-bottom: 1px solid var(--fds-semantic-border-neutral-divider);
+  border-bottom: 1px solid var(--fds-semantic-border-divider-default);
   background-color: var(--fds-semantic-background-default);
   cursor: pointer;
   font: inherit;
   text-align: left;
-  padding: 0;
+  padding: 4px 0;
 }
 
 .option:hover {
@@ -47,5 +47,5 @@
 }
 
 .searchField {
-  padding: 12px 0px 12px 0px;
+  padding: 12px 0px;
 }
