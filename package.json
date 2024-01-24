@@ -19,7 +19,7 @@
   "dependencies": {
     "@altinn/altinn-design-system": "0.30.0",
     "@digdir/design-system-react": "0.42.0",
-    "@digdir/design-system-tokens": "0.11.0",
+    "@digdir/design-system-tokens": "0.12.0",
     "@navikt/aksel-icons": "^5.12.2",
     "@reduxjs/toolkit": "^2.0.0",
     "@tanstack/react-query": "^4.32.6",

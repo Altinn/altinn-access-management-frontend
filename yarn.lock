@@ -402,10 +402,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:0.11.0, @digdir/design-system-tokens@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@digdir/design-system-tokens@npm:0.11.0"
-  checksum: 2151fbaa32c4c933f18b6f8be56e982d6920c76856ce91ad3267f7a64dc8c5b00cc5fbe746fb30709128c640eb4edd3c72a6ce2cd36dec72031fc3d1fa8ce1d7
+"@digdir/design-system-tokens@npm:0.12.0":
+  version: 0.12.0
+  resolution: "@digdir/design-system-tokens@npm:0.12.0"
+  checksum: cbc1056850bdf8d66cb66cbca23e15be5f6f065b9a4881f41ba67175a47c8ffb9fbe612ef3e5fa7583c6f4ec7204c7b72162dbf5328a3ccad1ea4f837fb2431b
   languageName: node
   linkType: hard
 
@@ -413,6 +413,13 @@ __metadata:
   version: 0.1.7
   resolution: "@digdir/design-system-tokens@npm:0.1.7"
   checksum: 319bc8c5d0f6150e4ffdd3fa0ff0a5bbe3458af7e9b02dd47908c3affa938fede2b53356748b43dff72b4957c30473ef83c71962860398a702a76f314fbc4d3f
+  languageName: node
+  linkType: hard
+
+"@digdir/design-system-tokens@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "@digdir/design-system-tokens@npm:0.11.0"
+  checksum: 2151fbaa32c4c933f18b6f8be56e982d6920c76856ce91ad3267f7a64dc8c5b00cc5fbe746fb30709128c640eb4edd3c72a6ce2cd36dec72031fc3d1fa8ce1d7
   languageName: node
   linkType: hard
 
@@ -1899,7 +1906,7 @@ __metadata:
   dependencies:
     "@altinn/altinn-design-system": "npm:0.30.0"
     "@digdir/design-system-react": "npm:0.42.0"
-    "@digdir/design-system-tokens": "npm:0.11.0"
+    "@digdir/design-system-tokens": "npm:0.12.0"
     "@navikt/aksel-icons": "npm:^5.12.2"
     "@reduxjs/toolkit": "npm:^2.0.0"
     "@tanstack/react-query": "npm:^4.32.6"
