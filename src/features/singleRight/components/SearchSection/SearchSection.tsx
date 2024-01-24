@@ -2,10 +2,17 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import * as React from 'react';
 import { FilterIcon } from '@navikt/aksel-icons';
-import { SearchField } from '@altinn/altinn-design-system';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Chip, Heading, Paragraph, Pagination, Spinner, Alert } from '@digdir/design-system-react';
+import {
+  Chip,
+  Heading,
+  Paragraph,
+  Pagination,
+  Spinner,
+  Alert,
+  Search,
+} from '@digdir/design-system-react';
 
 import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -20,6 +27,7 @@ import {
   ServiceStatus,
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
+import { debounce } from '@/resources/utils';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -224,19 +232,30 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     );
   });
 
+  const debouncedSearch = debounce((searchString: string) => {
+    setSearchString(searchString);
+    setCurrentPage(1);
+  }, 300);
+
   return (
     <div className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
-          <SearchField
+          <Search
             label={t('single_rights.search_label')}
+            hideLabel={false}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchString(event.target.value);
+              debouncedSearch(event.target.value);
+            }}
+            size='medium'
+            onClear={() => {
+              setSearchString('');
               setCurrentPage(1);
             }}
-          ></SearchField>
+          ></Search>
         </div>
         <Filter
+          className={classes.filter}
           icon={<FilterIcon />}
           label={t('single_rights.filter_label')}
           options={filterOptions}

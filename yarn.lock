@@ -386,20 +386,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:0.45.0":
-  version: 0.45.0
-  resolution: "@digdir/design-system-react@npm:0.45.0"
+"@digdir/design-system-react@npm:0.47.0":
+  version: 0.47.0
+  resolution: "@digdir/design-system-react@npm:0.47.0"
   dependencies:
     "@altinn/figma-design-tokens": "npm:^6.0.1"
     "@digdir/design-system-tokens": "npm:^0.12.0"
     "@floating-ui/react": "npm:0.26.4"
     "@navikt/aksel-icons": "npm:^5.12.2"
     "@radix-ui/react-slot": "npm:^1.0.2"
+    "@tanstack/react-virtual": "npm:^3.0.1"
     react-number-format: "npm:5.3.1"
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: f7453fda46e0eda49af25a2278cc2d99a51f9c48b5e2980c2b595bd24dea9659984de1b24729da95a99861a215fad2c59f36b3466cfae907fb9f5544772c8b78
+  checksum: ac94a901fc551184f55fa9ad02f1fb51e7c87d162a4af73ed65f03207ba85fe3e3b642a611280eaf1fbdb683d9855332fbf4bb5f1d42e5318fc4b56a5a29716e
   languageName: node
   linkType: hard
 
@@ -774,7 +775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^5.12.2, @navikt/aksel-icons@npm:^5.12.5":
+"@navikt/aksel-icons@npm:^5.12.2, @navikt/aksel-icons@npm:^5.15.1":
   version: 5.15.1
   resolution: "@navikt/aksel-icons@npm:5.15.1"
   checksum: 889973bfa76ee8ca2f6e0a8cce604e04a801868e484b428eaebeb582323e7056f99176f47ff6a6ee7c4ba90b0964003fb6f511b88668ca1cd7a11d53dcc6b1e6
@@ -1260,12 +1261,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@reduxjs/toolkit@npm:2.0.1"
+"@reduxjs/toolkit@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@reduxjs/toolkit@npm:2.1.0"
   dependencies:
     immer: "npm:^10.0.3"
-    redux: "npm:^5.0.0"
+    redux: "npm:^5.0.1"
     redux-thunk: "npm:^3.1.0"
     reselect: "npm:^5.0.1"
   peerDependencies:
@@ -1276,7 +1277,7 @@ __metadata:
       optional: true
     react-redux:
       optional: true
-  checksum: a385264a2c584e863f3d469d11edeae26f262c68fca6b0b7603479c7f68302b9388e07f2570e67bb84870c174fa300fccb03d392859b7cc154a9b100fcd2bb63
+  checksum: 5f0cb39771595282e366931a55121676fb113d131343ebc42ecf2b96ffaf17691ce40032018e1aa75fbe72e347c4fd22601a6737d3906b9a618c0a60e096a2a9
   languageName: node
   linkType: hard
 
@@ -1453,6 +1454,25 @@ __metadata:
     react-native:
       optional: true
   checksum: 764b860c3ac8d254fc6b07e01054a0f58058644d59626c724b213293fbf1e31c198cbb26e4c32c0d16dcaec0353c0ae19147d9c667675b31f8cea1d64f1ff4ac
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-virtual@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "@tanstack/react-virtual@npm:3.0.2"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.0.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 3794940cac5e17aa390905fc8e3c058e5a2570e54dc594c6c701622b3bcbec2e9551a769df3ae0210f33affa648c9935f65ee3c59373b8595bb7edaa474d516d
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@tanstack/virtual-core@npm:3.0.0"
+  checksum: 667941444b70773a8fc37b907718fcdbcf90b15660f427b06d6c140b72eea636d8609a8ba5ee3d2cb363066a8085fbf5b804fd08d5cfefd432cf1a14fa7c2355
   languageName: node
   linkType: hard
 
@@ -1906,10 +1926,10 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@altinn/altinn-design-system": "npm:0.30.0"
-    "@digdir/design-system-react": "npm:0.45.0"
+    "@digdir/design-system-react": "npm:0.47.0"
     "@digdir/design-system-tokens": "npm:0.12.0"
-    "@navikt/aksel-icons": "npm:^5.12.5"
-    "@reduxjs/toolkit": "npm:^2.0.0"
+    "@navikt/aksel-icons": "npm:^5.15.1"
+    "@reduxjs/toolkit": "npm:^2.1.0"
     "@tanstack/react-query": "npm:^4.32.6"
     "@testing-library/cypress": "npm:^10.0.0"
     "@types/react": "npm:^18.0.28"

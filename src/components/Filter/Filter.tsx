@@ -35,6 +35,8 @@ export interface FilterProps {
   fullScreenModal?: boolean;
   /** The ARIA label for the close button in modal view */
   closeButtonAriaLabel?: string;
+  /** className used for external styling of the filter button*/
+  className?: string;
 }
 
 /**
@@ -77,6 +79,7 @@ export const Filter = ({
   icon,
   values,
   searchable,
+  className,
   fullScreenModal = false,
   closeButtonAriaLabel,
   onApply,
@@ -139,6 +142,7 @@ export const Filter = ({
       aria-labelledby={filterButtonID}
       trigger={
         <FilterButton
+          className={className}
           id={filterButtonID}
           onClick={handleOpenOrClose}
           iconLeft={icon}
