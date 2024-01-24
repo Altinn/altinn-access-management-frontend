@@ -55,7 +55,7 @@ export const ChooseApiPage = () => {
 
   const partyId = getCookie('AltinnPartyId');
 
-  const [checkCanDelegate] = useDelegationCheckMutation();
+  const [delegationCheck] = useDelegationCheckMutation();
 
   useEffect(() => {
     if (loading) {
@@ -78,7 +78,7 @@ export const ChooseApiPage = () => {
       presentedApis.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
           const resourceRef: ResourceReference = { resource: api.authorizationReference };
-          const promise = checkCanDelegate({
+          const promise = delegationCheck({
             partyId,
             resourceRef,
           })

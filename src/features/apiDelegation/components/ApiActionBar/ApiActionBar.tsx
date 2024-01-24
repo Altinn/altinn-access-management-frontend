@@ -43,14 +43,13 @@ export const ApiActionBar = ({
   const resourceRef: ResourceReference = { resource: api.authorizationReference };
   const partyId = getCookie('AltinnPartyId');
 
-  const [checkCanDelegate, { data: accessResult, error, isLoading: isUpdating }] =
-    useDelegationCheckMutation();
+  const [delegationCheck, { data: accessResult, error, isLoading }] = useDelegationCheckMutation();
 
   const isNotDelegable = error || (accessResult && accessResult.status === 'NotDelegable');
 
   useLayoutEffect(() => {
     if (initWithDelegationCheck) {
-      checkCanDelegate({ partyId, resourceRef });
+      delegationCheck({ partyId, resourceRef });
     }
   }, []);
 
@@ -62,7 +61,7 @@ export const ApiActionBar = ({
   }, [isNotDelegable]);
 
   const onAddClick = () => {
-    checkCanDelegate({ partyId, resourceRef })
+    delegationCheck({ partyId, resourceRef })
       .unwrap()
       .then((response: DelegationAccessResult) => {
         if (response?.status === 'Delegable') {
@@ -74,7 +73,7 @@ export const ApiActionBar = ({
   const actions = (
     <>
       {variant === 'add' &&
-        (isUpdating === true ? (
+        (isLoading === true ? (
           <Spinner
             title={t('common.loading')}
             variant='interaction'

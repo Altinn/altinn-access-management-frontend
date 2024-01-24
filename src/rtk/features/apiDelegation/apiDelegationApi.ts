@@ -36,7 +36,7 @@ export const apiDelegationApi = createApi({
       transformResponse: (response: DelegationAccessResult[]) => {
         return response[0];
       },
-      transformErrorResponse: (response: { status: string | number }, meta, arg) => {
+      transformErrorResponse: (response: { status: string | number }) => {
         return response.status;
       },
     }),
