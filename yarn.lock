@@ -386,9 +386,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:0.46.1":
-  version: 0.46.1
-  resolution: "@digdir/design-system-react@npm:0.46.1"
+"@digdir/design-system-react@npm:0.47.0":
+  version: 0.47.0
+  resolution: "@digdir/design-system-react@npm:0.47.0"
   dependencies:
     "@altinn/figma-design-tokens": "npm:^6.0.1"
     "@digdir/design-system-tokens": "npm:^0.12.0"
@@ -400,14 +400,14 @@ __metadata:
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: d3d131e129ea25f4a60870d2a5022defe59c46e35a5137082fc1a121fd32d2980e2861e04ff9824a7bf5c824a091f793193c4c0e09dc33fb340371fb58af1517
+  checksum: ac94a901fc551184f55fa9ad02f1fb51e7c87d162a4af73ed65f03207ba85fe3e3b642a611280eaf1fbdb683d9855332fbf4bb5f1d42e5318fc4b56a5a29716e
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:0.11.0":
-  version: 0.11.0
-  resolution: "@digdir/design-system-tokens@npm:0.11.0"
-  checksum: 2151fbaa32c4c933f18b6f8be56e982d6920c76856ce91ad3267f7a64dc8c5b00cc5fbe746fb30709128c640eb4edd3c72a6ce2cd36dec72031fc3d1fa8ce1d7
+"@digdir/design-system-tokens@npm:0.12.0, @digdir/design-system-tokens@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@digdir/design-system-tokens@npm:0.12.0"
+  checksum: cbc1056850bdf8d66cb66cbca23e15be5f6f065b9a4881f41ba67175a47c8ffb9fbe612ef3e5fa7583c6f4ec7204c7b72162dbf5328a3ccad1ea4f837fb2431b
   languageName: node
   linkType: hard
 
@@ -415,13 +415,6 @@ __metadata:
   version: 0.1.7
   resolution: "@digdir/design-system-tokens@npm:0.1.7"
   checksum: 319bc8c5d0f6150e4ffdd3fa0ff0a5bbe3458af7e9b02dd47908c3affa938fede2b53356748b43dff72b4957c30473ef83c71962860398a702a76f314fbc4d3f
-  languageName: node
-  linkType: hard
-
-"@digdir/design-system-tokens@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@digdir/design-system-tokens@npm:0.12.0"
-  checksum: cbc1056850bdf8d66cb66cbca23e15be5f6f065b9a4881f41ba67175a47c8ffb9fbe612ef3e5fa7583c6f4ec7204c7b72162dbf5328a3ccad1ea4f837fb2431b
   languageName: node
   linkType: hard
 
@@ -779,6 +772,13 @@ __metadata:
   version: 5.12.2
   resolution: "@navikt/aksel-icons@npm:5.12.2"
   checksum: 3458af6d88726a6572f8de01fed89da627e15cf81e7dc21a6f26cae52b137d9f2025efcdea22582cb985ab42c50cf963385bac3435c51d5af42ad1e5bf26d775
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^5.15.1":
+  version: 5.15.1
+  resolution: "@navikt/aksel-icons@npm:5.15.1"
+  checksum: 889973bfa76ee8ca2f6e0a8cce604e04a801868e484b428eaebeb582323e7056f99176f47ff6a6ee7c4ba90b0964003fb6f511b88668ca1cd7a11d53dcc6b1e6
   languageName: node
   linkType: hard
 
@@ -1261,12 +1261,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@reduxjs/toolkit@npm:2.0.1"
+"@reduxjs/toolkit@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@reduxjs/toolkit@npm:2.1.0"
   dependencies:
     immer: "npm:^10.0.3"
-    redux: "npm:^5.0.0"
+    redux: "npm:^5.0.1"
     redux-thunk: "npm:^3.1.0"
     reselect: "npm:^5.0.1"
   peerDependencies:
@@ -1277,7 +1277,7 @@ __metadata:
       optional: true
     react-redux:
       optional: true
-  checksum: a385264a2c584e863f3d469d11edeae26f262c68fca6b0b7603479c7f68302b9388e07f2570e67bb84870c174fa300fccb03d392859b7cc154a9b100fcd2bb63
+  checksum: 5f0cb39771595282e366931a55121676fb113d131343ebc42ecf2b96ffaf17691ce40032018e1aa75fbe72e347c4fd22601a6737d3906b9a618c0a60e096a2a9
   languageName: node
   linkType: hard
 
@@ -1926,10 +1926,10 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@altinn/altinn-design-system": "npm:0.30.0"
-    "@digdir/design-system-react": "npm:0.46.1"
-    "@digdir/design-system-tokens": "npm:0.11.0"
-    "@navikt/aksel-icons": "npm:^5.12.2"
-    "@reduxjs/toolkit": "npm:^2.0.0"
+    "@digdir/design-system-react": "npm:0.47.0"
+    "@digdir/design-system-tokens": "npm:0.12.0"
+    "@navikt/aksel-icons": "npm:^5.15.1"
+    "@reduxjs/toolkit": "npm:^2.1.0"
     "@tanstack/react-query": "npm:^4.32.6"
     "@testing-library/cypress": "npm:^10.0.0"
     "@types/react": "npm:^18.0.28"
