@@ -28,7 +28,7 @@ import {
   type DelegationInputDto,
   DelegationRequestDto,
   ServiceDto,
-} from '@/dataObjects/dtos/singleRights/DelegationInputDto';
+} from '@/dataObjects/dtos/resourceDelegation';
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';

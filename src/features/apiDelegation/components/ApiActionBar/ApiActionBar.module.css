@@ -1,0 +1,24 @@
+.content {
+  margin-top: 20px;
+  margin-left: 50px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scopeItems {
+  word-break: break-word;
+  margin: 10px;
+}
+
+.actionBarHeaderTitle {
+  font-weight: 500;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}
+
+.errorContent {
+  margin: 20px;
+}

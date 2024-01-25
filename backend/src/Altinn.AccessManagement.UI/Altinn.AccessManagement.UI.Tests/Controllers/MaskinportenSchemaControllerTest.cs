@@ -205,14 +205,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             int reporteePartyId = 50076002;
-            string resourceId = "scope-access-schema";
+            string resourceId = "default";
                 
             string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
-            string fullPath = Path.Combine(folderPath, reporteePartyId + ".json");
+            string fullPath = Path.Combine(folderPath, resourceId + ".json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, "request.json")));
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, $"request-{resourceId}.json")));
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -231,13 +231,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             int reporteePartyId = 50067798;
-                
+            string resourceId = "appid-136";
+
+
             string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
-            string fullPath = Path.Combine(folderPath, reporteePartyId + ".json");
+            string fullPath = Path.Combine(folderPath, resourceId + ".json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, "request.json")));
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, $"request-{resourceId}.json")));
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert

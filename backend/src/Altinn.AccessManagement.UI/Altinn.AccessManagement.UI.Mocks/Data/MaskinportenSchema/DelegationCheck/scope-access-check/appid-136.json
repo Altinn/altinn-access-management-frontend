@@ -1,10 +1,10 @@
 [
   {
-    "rightKey": "scope-access-schema:ScopeAccess",
+    "rightKey": "appid-136:ScopeAccess",
     "resource": [
       {
         "id": "urn:altinn:resource",
-        "value": "scope-access-schema"
+        "value": "appid-136"
       }
     ],
     "action": "ScopeAccess",

@@ -69,9 +69,7 @@
     "create_request": "Make new request",
     "delete": "Delete",
     "access_request": "Requests access",
-    "employees": "Employees",
     "clients": "Clients",
-    "add_new_employee": "Add new employee",
     "change_rights": "Edit client rights"
   },
   "api_delegation": {

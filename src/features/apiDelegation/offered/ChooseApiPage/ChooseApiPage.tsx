@@ -1,4 +1,4 @@
-import { Button, Spinner, Search } from '@digdir/design-system-react';
+import { Button, Spinner, Search, Skeleton } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -12,7 +12,6 @@ import {
   PageContainer,
   ErrorPanel,
   GroupElements,
-  DelegationActionBar,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -21,14 +20,20 @@ import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import {
   fetchDelegableApis,
+  softAddApi,
   softRemoveApi,
   search,
   filter,
-  apiDelegationCheck,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
 import { debounce } from '@/resources/utils';
+import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegationApi';
+import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+
+import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
 
@@ -46,6 +51,11 @@ export const ChooseApiPage = () => {
   const fetchData = async () => await dispatch(fetchDelegableApis());
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  const partyId = getCookie('AltinnPartyId');
+
+  const [delegationCheck] = useDelegationCheckMutation();
 
   useEffect(() => {
     if (loading) {
@@ -59,16 +69,33 @@ export const ChooseApiPage = () => {
     if (!loading && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [loading, urlParams]);
+  }, [loading]);
 
   const makeChosenApisFromParams = () => {
+    const promises: Promise<void>[] = [];
+
     for (const key of urlParams.keys()) {
       presentedApis.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
-          dispatch(apiDelegationCheck(api));
+          const resourceRef: ResourceReference = { resource: api.authorizationReference };
+          const promise = delegationCheck({
+            partyId,
+            resourceRef,
+          })
+            .unwrap()
+            .then((response: DelegationAccessResult) => {
+              if (response?.status === 'Delegable') {
+                dispatch(softAddApi(api));
+              }
+            });
+          promises.push(promise);
         }
       });
     }
+
+    Promise.all(promises).then(() => {
+      setShowSkeleton(false);
+    });
   };
 
   const addApiToParams = (api: DelegableApi) => {
@@ -123,43 +150,61 @@ export const ChooseApiPage = () => {
         </div>
       );
     }
+
+    const prechosenApis = Array.from(urlParams.keys());
+
     return presentedApis.map((api: DelegableApi) => {
+      const initWithDelegationCheck = prechosenApis.includes(api.identifier);
       return (
-        <DelegationActionBar
+        <ApiActionBar
           key={api.identifier}
-          title={api.apiName}
-          subtitle={api.orgName}
-          topContentText={api.rightDescription}
-          bottomContentText={api.description}
-          scopeList={api.scopes}
-          buttonType={'add'}
-          onActionButtonClick={() => addApiToParams(api)}
+          variant={'add'}
           color={'neutral'}
-          isLoading={api.isLoading}
-          errorCode={api.errorCode}
-        ></DelegationActionBar>
+          api={api}
+          onAdd={() => {
+            addApiToParams(api);
+            dispatch(softAddApi(api));
+          }}
+          initWithDelegationCheck={initWithDelegationCheck}
+        ></ApiActionBar>
       );
     });
   };
 
   const chosenApiActionBars = chosenApis.map((api: DelegableApi) => {
     return (
-      <DelegationActionBar
+      <ApiActionBar
         key={api.identifier}
-        title={api.apiName}
-        subtitle={api.orgName}
-        topContentText={api.rightDescription}
-        bottomContentText={api.description}
-        scopeList={api.scopes}
-        buttonType={'remove'}
-        onActionButtonClick={() => {
-          handleRemove(api);
-        }}
+        api={api}
+        variant={'remove'}
         color={'success'}
-        errorCode={api.errorCode}
-      ></DelegationActionBar>
+        onRemove={() => handleRemove(api)}
+      ></ApiActionBar>
     );
   });
+
+  const DelegableApiSkeleton = () => {
+    const skeletonHeight = '66px';
+    return (
+      <>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+      </>
+    );
+  };
+
+  const ChosenApiSkeleton = () => {
+    const skeletonHeight = '66px';
+    return Array.from(urlParams).map((_, index) => (
+      <Skeleton.Rectangle
+        key={index}
+        height={skeletonHeight}
+      ></Skeleton.Rectangle>
+    ));
+  };
 
   const debouncedSearch = debounce((searchString: string) => {
     handleSearch(searchString);
@@ -176,11 +221,13 @@ export const ChooseApiPage = () => {
           <h3 className={classes.chooseApiSecondHeader}>
             {t('api_delegation.new_api_content_text2')}
           </h3>
-          {isSm && chosenApis.length > 0 && (
+          {isSm && (chosenApis.length > 0 || urlParams.size > 0) && (
             <div>
               <h4>{t('api_delegation.chosen_apis')}</h4>
               <div className={classes.chosenApisContainer}>
-                <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
+                <div className={classes.actionBarWrapper}>
+                  {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}
+                </div>
               </div>
             </div>
           )}
@@ -215,14 +262,18 @@ export const ChooseApiPage = () => {
             <div>
               <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
               <div className={classes.delegableApisContainer}>
-                <div className={classes.actionBarWrapper}>{delegableApiActionBars()}</div>
+                <div className={classes.actionBarWrapper}>
+                  {showSkeleton ? DelegableApiSkeleton() : delegableApiActionBars()}
+                </div>
               </div>
             </div>
             {!isSm && (
               <div>
                 <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
                 <div className={classes.delegableApisContainer}>
-                  <div className={classes.actionBarWrapper}>{chosenApiActionBars}</div>
+                  <div className={classes.actionBarWrapper}>
+                    {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}
+                  </div>
                 </div>
               </div>
             )}
