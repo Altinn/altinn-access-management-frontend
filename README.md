@@ -130,7 +130,12 @@ To add test data to the app, do the following:
      ```
 
 - Add the following to your hosts file. Path to file on mac: /private/etc/hosts. Path to file on Windows: c:\Windows\System32\Drivers\etc\hosts.
+On mac you need to edit and save hosts-file using nano.
+
 ```#Subdomain for accessmanagement
+#Subdomain for accessmanagement
+127.0.0.1 am.ui.local.altinn.cloud #ipv4
+0000:0000:0000:0000:0000:0000:0000:0001 am.ui.local.altinn.cloud #ipv6
 #
 # Host Database
 #
@@ -140,10 +145,11 @@ To add test data to the app, do the following:
 127.0.0.1    localhost #ipv4
 0000:0000:0000:0000:0000:0000:0000:0001 localhost #ipv6
 255.255.255.255    broadcasthost
-# Added by Docker Desktop
-# To allow the same kube context to work on the host and the container:
 127.0.0.1 kubernetes.docker.internal #ipv4
 0000:0000:0000:0000:0000:0000:0000:0001 kubernetes.docker.internal #ipv6
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+127.0.0.1 kubernetes.docker.internal
 # End of section
    ```
 
