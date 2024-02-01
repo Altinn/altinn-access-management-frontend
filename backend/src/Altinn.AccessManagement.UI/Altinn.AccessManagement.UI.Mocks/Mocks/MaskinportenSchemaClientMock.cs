@@ -139,8 +139,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
+            string resourceId = request.Resource[0].Value;
+            string filename;
+            switch (resourceId)
+            {
+                case "appid-400":
+                case "appid-136":
+                    filename = resourceId;
+                    break;
+                default:
+                    filename = "default";
+                    break;
+            }
 
-            string fullPath = Path.Combine(mockFolder, "Data", "MaskinportenSchema", "DelegationCheck", "scope-access-check", partyId + ".json");
+            string fullPath = Path.Combine(mockFolder, "Data", "MaskinportenSchema", "DelegationCheck", "scope-access-check", filename + ".json");
             
             if (!File.Exists(fullPath))
             {

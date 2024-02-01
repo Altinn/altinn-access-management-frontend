@@ -1,4 +1,4 @@
-import type { IdValuePair } from '../IdValuePair';
+import type { IdValuePair } from './IdValuePair';
 
 export interface DelegationInputDto {
   To: IdValuePair[];
@@ -27,3 +27,17 @@ export class DelegationRequestDto {
     this.Action = action;
   }
 }
+
+export type DelegationAccessResult = {
+  rightKey: 'string';
+  resource: IdValuePair[];
+  action: string;
+  status: string;
+  details: details[];
+};
+
+type details = {
+  code: string;
+  description: string;
+  parameters: IdValuePair;
+};
