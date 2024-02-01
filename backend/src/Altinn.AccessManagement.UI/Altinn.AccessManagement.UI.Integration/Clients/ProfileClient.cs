@@ -82,5 +82,41 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             return null;
         }
+
+        /// <inheritdoc/>
+        public async Task<UserProfile> GetUserProfileByUUID(Guid uuid)
+        {
+            try
+            {
+                string endpointUrl = $"users/byuuid/{uuid}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    };
+                    options.Converters.Add(new JsonStringEnumConverter());
+                    UserProfile userProfile = JsonSerializer.Deserialize<UserProfile>(responseContent, options);
+                    return userProfile;
+                }
+                else
+                {
+                    _logger.LogError($"Getting user profile information from platform failed with statuscode {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // GetUserProfile // Exception");
+                throw;
+            }
+
+            return null;
+        }
     }
 }

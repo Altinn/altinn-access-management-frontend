@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -116,6 +117,36 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetPartyByUUID failed to fetch reportee information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving a user by uuid
+        /// </summary>
+        /// <param name="uuid">The uuid for the user to look up</param>
+        /// <returns>Party information</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("user/{uuid}")]
+        public async Task<ActionResult<UserProfile>> GetUserByUUID(Guid uuid)
+        {
+            try
+            {
+                UserProfile user = await _lookupService.GetUserByUUID(uuid);
+
+                if (user != null)
+                {
+                    return user;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetUserByUUID failed to fetch reportee information");
                 return StatusCode(500);
             }
         }

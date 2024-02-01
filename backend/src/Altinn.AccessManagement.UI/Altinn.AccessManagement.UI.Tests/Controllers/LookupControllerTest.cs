@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Enums;
 using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.JwtCookie;
@@ -133,6 +134,54 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Guid lookupUUID = new Guid("0b74b132-cd8c-44ba-8818-a8d0cf4401bc");
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an authenticated user is able to lookup a user based on uuid
+        /// </summary>
+        [Fact]
+        public async Task GetUserByUUID_Success()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+            Guid lookupUUID = new Guid("cd772c20-f780-43f6-819f-2d9f23fc0a1a");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            UserProfile actualUser = await response.Content.ReadAsAsync<UserProfile>();
+            Assert.Equal(lookupUUID, actualUser.UserUuid);
+            Assert.Equal(20004938, actualUser.UserId);
+            Assert.Equal(50019992, actualUser.PartyId);
+            Assert.Equal(PartyType.Person, actualUser.Party.PartyTypeName);
+            Assert.Equal("JARLE GJERSTAD", actualUser.Party.Name);
+        }
+
+        /// <summary>
+        /// Assert that a request for a non-existant userUUID yields a 404 response
+        /// </summary>
+        [Fact]
+        public async Task GetUserByUUID_NotFound()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+            Guid lookupUUID = new Guid("0b74b132-cd8c-44ba-8818-a8d0cf4401bc"); // non-existent partyUUID
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an un-authenticated user gets 401 response
+        /// </summary>
+        [Fact]
+        public async Task GetUserByUUID_Unauthenticated_401()
+        {
+            Guid lookupUUID = new Guid("cd772c20-f780-43f6-819f-2d9f23fc0a1a");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/user/{lookupUUID}");
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }

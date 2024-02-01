@@ -450,6 +450,33 @@
     "IsDeleted": false,
     "OnlyHierarchyElementWithNoAccess": false,
     "ChildParties": null
+  },
+  {
+    "PartyId": 50019992,
+    "PartyUuid": "cd772c20-f780-43f6-819f-2d9f23fc0a1a",
+    "PartyTypeName": 1,
+    "OrgNumber": null,
+    "Ssn": "09026102194",
+    "UnitType": null,
+    "Name": "JARLE GJERSTAD",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
+  },
+  {
+    "PartyId": 50707389,
+    "PartyUuid": "e2960363-a057-4bb6-a032-6073f9792093",
+    "PartyTypeName": 1,
+    "OrgNumber": null,
+    "Ssn": "19895199357",
+    "UnitType": null,
+    "Name": "INTELLIGENT ALBATROSS",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
   }
-
 ]

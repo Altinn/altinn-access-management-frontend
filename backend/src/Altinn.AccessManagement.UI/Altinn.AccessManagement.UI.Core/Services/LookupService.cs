@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -11,16 +12,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
     { 
         private readonly ILookupClient _lookupClient;
         private readonly IRegisterClient _registerClient;
+        private readonly IProfileClient _profileClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupService"/> class.
         /// </summary>
         /// <param name="lookupClient">handler for profile client</param>
         /// <param name="registerClient">Client wrapper for platform register</param>
-        public LookupService(ILookupClient lookupClient, IRegisterClient registerClient)
+        public LookupService(ILookupClient lookupClient, IRegisterClient registerClient, IProfileClient profileClient)
         {
             _lookupClient = lookupClient;
             _registerClient = registerClient;
+            _profileClient = profileClient;
         }
 
         /// <inheritdoc/>        
@@ -41,6 +44,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             List<Party> partyList = await _registerClient.GetPartyListByUUID(new List<Guid>() { uuid });
             return partyList?.FirstOrDefault();
+        }
+
+        /// <inheritdoc/>        
+        public async Task<UserProfile> GetUserByUUID(Guid uuid)
+        {
+            UserProfile user = await _profileClient.GetUserProfileByUUID(uuid);
+            return user;
         }
     }
 }

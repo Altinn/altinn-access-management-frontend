@@ -1,0 +1,125 @@
+[
+  {
+    "UserId": 20004938,
+    "UserUuid": "cd772c20-f780-43f6-819f-2d9f23fc0a1a",
+    "UserName": "JarleErKul",
+    "PhoneNumber": "90001337",
+    "Email": "1337@altinnstudiotestusers.com",
+    "PartyId": 50019992,
+    "Party": {
+      "PartyId": 50019992,
+      "PartyUuid": "cd772c20-f780-43f6-819f-2d9f23fc0a1a",
+      "PartyTypeName": 1,
+      "OrgNumber": null,
+      "Ssn": "09026102194",
+      "UnitType": null,
+      "Name": "JARLE GJERSTAD",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "Person": null,
+      "Organisation": null,
+      "ChildParties": null
+    },
+    "UserType": 1,
+    "ProfileSettingPreference": {
+      "Language": "nb"
+    }
+  },
+  {
+    "UserId": 20020252,
+    "UserUuid": "e2960363-a057-4bb6-a032-6073f9792093",
+    "UserName": "Albatross4Ever",
+    "PhoneNumber": "90001337",
+    "Email": "1337@altinnstudiotestusers.com",
+    "PartyId": 50707389,
+    "Party": {
+      "PartyId": 50707389,
+      "PartyUuid": "e2960363-a057-4bb6-a032-6073f9792093",
+      "PartyTypeName": 1,
+      "OrgNumber": null,
+      "Ssn": "19895199357",
+      "UnitType": null,
+      "Name": "INTELLIGENT ALBATROSS",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "Person": null,
+      "Organisation": null,
+      "ChildParties": null
+    },
+    "UserType": 1,
+    "ProfileSettingPreference": {
+      "Language": "nb"
+    }
+  },
+  {
+    "UserId": 20020251,
+    "UserUuid": "64684267-9b38-43f6-b6d6-af8750b5aef6",
+    "UserName": "Sveinern",
+    "PhoneNumber": "90001337",
+    "Email": "1337@altinnstudiotestusers.com",
+    "PartyId": 50707387,
+    "Party": {
+      "PartyId": 50707387,
+      "PartyUuid": "64684267-9b38-43f6-b6d6-af8750b5aef6",
+      "PartyTypeName": 1,
+      "OrgNumber": null,
+      "Ssn": "12345678911",
+      "UnitType": null,
+      "Name": "Svein Selvregistrert",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "Person": null,
+      "Organisation": null,
+      "ChildParties": null
+    },
+    "UserType": 2,
+    "ProfileSettingPreference": {
+      "Language": "nb"
+    }
+  },
+  {
+    "UserId": 20006478,
+    "UserUUID": "e364d125-572e-4569-a7b4-b9acfcef1f9a",
+    "UserType": 3,
+    "UserName": "SeleniumTest2021Mai10_ikkeSlett",
+    "ExternalIdentity": "",
+    "PhoneNumber": null,
+    "Email": null,
+    "PartyId": 50066480,
+    "Party": {
+      "PartyTypeName": 2,
+      "SSN": "",
+      "OrgNumber": "910514318",
+      "Person": null,
+      "Organization": {
+        "OrgNumber": "910514318",
+        "Name": "KYSTBASEN ÅGOTNES OG ILSENG",
+        "UnitType": "ASA",
+        "TelephoneNumber": "12345678",
+        "MobileNumber": "99999999",
+        "FaxNumber": "12345679",
+        "EMailAddress": "test@test.test",
+        "InternetAddress": null,
+        "MailingAddress": "Markalléen 19",
+        "MailingPostalCode": "1368",
+        "MailingPostalCity": "STABEKK",
+        "BusinessAddress": "Markalléen 19",
+        "BusinessPostalCode": "1368",
+        "BusinessPostalCity": "STABEKK",
+        "UnitStatus": "N"
+      },
+      "PartyId": 50066480,
+      "PartyUUID": "ec061efa-4c2a-4dbd-87f5-bcb59cdeaf91",
+      "UnitType": "ASA",
+      "Name": "KYSTBASEN ÅGOTNES OG ILSENG",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "ChildParties": null
+    },
+    "ProfileSettingPreference": {
+      "Language": "nb",
+      "PreSelectedPartyId": 0,
+      "DoNotPromptForParty": false
+    }
+  }
+]

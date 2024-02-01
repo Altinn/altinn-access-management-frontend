@@ -27,20 +27,36 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public async Task<UserProfile> GetUserProfile(int userId)
         {
             UserProfile profile = null;
-            string path = GetDataPathForProfile();
+            string path = GetDataPathForProfiles();
             if (File.Exists(path))
             {
                 string content = File.ReadAllText(path);
-                profile = (UserProfile)JsonSerializer.Deserialize(content, typeof(UserProfile), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                List<UserProfile> allProfiles = (List<UserProfile>)JsonSerializer.Deserialize(content, typeof(List<UserProfile>), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                profile = allProfiles.FirstOrDefault(p => p.UserId == userId);
             }
 
             return await Task.FromResult(profile);
         }
 
-        private static string GetDataPathForProfile()
+        /// <inheritdoc />
+        public async Task<UserProfile> GetUserProfileByUUID(Guid uuid)
+        {
+            UserProfile profile = null;
+            string path = GetDataPathForProfiles();
+            if (File.Exists(path))
+            {
+                string content = File.ReadAllText(path);
+                List<UserProfile> allProfiles = (List<UserProfile>)JsonSerializer.Deserialize(content, typeof(List<UserProfile>), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                profile = allProfiles.FirstOrDefault(p => p.UserUuid == uuid);
+            }
+
+            return await Task.FromResult(profile);
+        }
+
+        private static string GetDataPathForProfiles()
         {
             string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(mockClientFolder, "Data", "Profile", "userprofile.json");
+            return Path.Combine(mockClientFolder, "Data", "Profile", "userprofiles.json");
         }
     }
 }

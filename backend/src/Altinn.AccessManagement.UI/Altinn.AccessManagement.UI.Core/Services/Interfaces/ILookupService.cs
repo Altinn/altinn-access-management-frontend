@@ -1,4 +1,5 @@
-﻿using Altinn.Platform.Register.Models;
+﻿using Altinn.Platform.Profile.Models;
+using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -29,5 +30,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="uuid">The uuid of the party</param>
         /// <returns>Party that corresponds to uuid parameter</returns>
         Task<Party> GetPartyByUUID(Guid uuid);
+
+        /// <summary>
+        /// Gets a UserProfile based on provided uuid
+        /// </summary>
+        /// <param name="uuid">The uuid of the user</param>
+        /// <returns>The user profile that corresponds to the uuid parameter</returns>
+        Task<UserProfile> GetUserByUUID(Guid uuid);
     }
 }
