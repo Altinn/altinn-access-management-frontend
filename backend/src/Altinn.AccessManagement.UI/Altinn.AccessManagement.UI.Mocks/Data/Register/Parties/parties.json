@@ -386,6 +386,7 @@
       "BusinessPostalCity": "By"
     },
     "PartyId": 50067798,
+    "PartyUuid": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf",
     "UnitType": "AS",
     "Name": "VIKESÅ OG ÅLVUNDFJORD",
     "IsDeleted": false,
@@ -414,8 +415,38 @@
       "BusinessPostalCity": "Oslo"
     },
     "PartyId": 50067799,
+    "PartyUuid": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
     "UnitType": "AS",
     "Name": "Digitaliseringsdirektoratet",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "ChildParties": null
+  },
+  {
+    "PartyTypeName": 2,
+    "SSN": "",
+    "OrgNumber": "313523497",
+    "Person": null,
+    "Organization": {
+      "OrgNumber": "313523497",
+      "Name": "RAKRYGGET UNG TIGER AS",
+      "UnitType": "AS",
+      "TelephoneNumber": "12345678",
+      "MobileNumber": "92010000",
+      "FaxNumber": "92110000",
+      "EMailAddress": "central@vikesaa.no",
+      "InternetAddress": "http://vikesaa.no",
+      "MailingAddress": "Albatross Gate 1",
+      "MailingPostalCode": "0170",
+      "MailingPostalCity": "Oslo",
+      "BusinessAddress": "Albetross Gate 1",
+      "BusinessPostalCode": "0170",
+      "BusinessPostalCity": "By"
+    },
+    "PartyId": 51317934,
+    "PartyUuid": "f7237f59-178b-4f25-8ffe-017e611effdb",
+    "UnitType": "AS",
+    "Name": "RAKRYGGET UNG TIGER AS",
     "IsDeleted": false,
     "OnlyHierarchyElementWithNoAccess": false,
     "ChildParties": null

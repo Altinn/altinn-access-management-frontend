@@ -15,5 +15,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Party information
         /// </returns>
         Task<Party> GetPartyForOrganization(string organizationNumber);
+
+        /// <summary>
+        /// Looks up party information for a list of uuids
+        /// </summary>
+        /// <param name="uuidList">The list of uuids to be looked up</param>
+        /// <returns>
+        /// A list of party information corresponding to the provided uuids
+        /// </returns>
+        Task<List<Party>> GetPartyListByUUID(List<Guid> uuidList);
     }
 }

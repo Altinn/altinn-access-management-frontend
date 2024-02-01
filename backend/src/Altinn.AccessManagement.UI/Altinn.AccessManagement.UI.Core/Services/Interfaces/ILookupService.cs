@@ -22,5 +22,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <returns>Party that corresponds to partyId parameter if it's in the users reporteelist</returns>
         Task<Party> GetPartyFromReporteeListIfExists(int partyId);
+
+        /// <summary>
+        /// Gets a Party based on provided uuid
+        /// </summary>
+        /// <param name="uuid">The uuid of the party</param>
+        /// <returns>Party that corresponds to uuid parameter</returns>
+        Task<Party> GetPartyByUUID(Guid uuid);
     }
 }

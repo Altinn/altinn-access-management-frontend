@@ -81,5 +81,34 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<List<Party>> GetPartyListByUUID(List<Guid> uuidList)
+        {
+            try
+            {
+                string endpointUrl = $"parties/partylistbyuuid";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(uuidList, _serializerOptions), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return JsonSerializer.Deserialize<List<Party>>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyForOrganization // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyForOrganization // Exception");
+                throw;
+            }
+        }
     }
 }

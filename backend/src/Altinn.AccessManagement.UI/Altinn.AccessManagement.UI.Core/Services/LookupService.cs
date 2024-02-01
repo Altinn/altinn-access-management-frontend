@@ -32,8 +32,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>        
         public async Task<Party> GetPartyFromReporteeListIfExists(int partyId)
         {
-            Party partyInfo = await _lookupClient.GetPartyFromReporteeListIfExists(partyId);
+            Party partyInfo = await _lookupClient.GetPartyFromReporteeListIfExists(partyId);    
             return partyInfo;
+        }
+
+        /// <inheritdoc/>        
+        public async Task<Party> GetPartyByUUID(Guid uuid)
+        {
+            List<Party> partyList = await _registerClient.GetPartyListByUUID(new List<Guid>() { uuid });
+            return partyList?.FirstOrDefault();
         }
     }
 }

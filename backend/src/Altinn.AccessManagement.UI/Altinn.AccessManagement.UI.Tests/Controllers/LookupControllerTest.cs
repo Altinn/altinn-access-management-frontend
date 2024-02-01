@@ -89,5 +89,52 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
+
+        /// <summary>
+        /// Assert that an authenticated user is able to lookup a party based on uuid
+        /// </summary>
+        [Fact]
+        public async Task GetPartyByUUID_Success()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+            Guid lookupUUID = new Guid("b4c3ba12-7e87-4ae1-84f8-426b1decfacf");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Party actualParty = await response.Content.ReadAsAsync<Party>();
+            Assert.Equal(lookupUUID, actualParty.PartyUuid);
+            Assert.Equal(50067798, actualParty.PartyId);
+            Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
+            Assert.Equal("VIKESÅ OG ÅLVUNDFJORD", actualParty.Name);
+        }
+
+        /// <summary>
+        /// Assert that a request for a non-existant partyUUID yields a 404 response
+        /// </summary>
+        [Fact]
+        public async Task GetPartyByUUID_NotFound()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
+            Guid lookupUUID = new Guid("0b74b132-cd8c-44ba-8818-a8d0cf4401bc"); // non-existent partyUUID
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that an un-authenticated user gets 401 response
+        /// </summary>
+        [Fact]
+        public async Task GetPartyByUUID_Unauthenticated_401()
+        {
+            Guid lookupUUID = new Guid("0b74b132-cd8c-44ba-8818-a8d0cf4401bc");
+
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }
