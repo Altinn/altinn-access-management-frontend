@@ -188,6 +188,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return MapOrgListToResourceOwnerFe(orgList, languageCode);
         }
+        
+        /// <inheritdoc />
+        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[]? resourceOwnerFilters, string searchString)
+        {
+            try
+            {
+                List<ServiceResource> resources = await _resourceRegistryClient.GetResourceList();
+                List<ServiceResource> resourceList =
+                    resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible);
+                List<ServiceResourceFE> resourcesFE =
+                    MapResourceToFrontendModel(resourceList, languageCode);
+
+                List<ServiceResourceFE> filteredresources =
+                    FilterResourceList(resourcesFE, resourceOwnerFilters);
+                return SearchInResourceList(filteredresources, searchString);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//MaskinportenSchemaService // Search failed", ex);
+                throw;
+            }
+        }
 
         private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
         {

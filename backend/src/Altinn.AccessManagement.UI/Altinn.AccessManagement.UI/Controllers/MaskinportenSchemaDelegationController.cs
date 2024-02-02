@@ -17,28 +17,28 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    ///     Controller responsible for all operations for managing delegations
+    ///     Controller responsible for all operations for managing maskinportenscehma delegations
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     [Route("accessmanagement/api/v1")]
-    public class MaskinportenSchemaController : ControllerBase
+    public class MaskinportenSchemaDelegationController : ControllerBase
     {
         private readonly IMaskinportenSchemaService _maskinportenService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<MaskinportenSchemaController> _logger;
+        private readonly ILogger<MaskinportenSchemaDelegationController> _logger;
         private readonly IProfileService _profileService;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaController" /> class.
+        ///     Initializes a new instance of the <see cref="MaskinportenSchemaDelegationController" /> class.
         /// </summary>
         /// <param name="logger">the handler for logger service</param>
         /// <param name="maskinportenServicesService">The service implementation for handling maskinporten schema delegations</param>
         /// <param name="profileService">The service implementation for user profile operations</param>
         /// <param name="httpContextAccessor">Accessor for httpcontext</param>
-        public MaskinportenSchemaController(
-            ILogger<MaskinportenSchemaController> logger,
+        public MaskinportenSchemaDelegationController(
+            ILogger<MaskinportenSchemaDelegationController> logger,
             IMaskinportenSchemaService maskinportenServicesService,
             IProfileService profileService,
             IHttpContextAccessor httpContextAccessor)
@@ -233,35 +233,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception)
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
-            }
-        }
-        
-        /// <summary>
-        ///     Search through all delegable service resources and returns matches
-        /// </summary>
-        /// <returns>Paginated search results</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("paginatedSearch")]
-        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
-        {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _profileService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
-
-            try
-            {
-                return await _resourceService.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
-            }
-            catch (HttpStatusException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
     }

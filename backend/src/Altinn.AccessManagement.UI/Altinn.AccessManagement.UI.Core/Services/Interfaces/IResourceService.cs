@@ -16,6 +16,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <returns>the resources that match the filters and search string corresponding to the provided page</returns>
         Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int resultsPerPage);
+        
+        /// <summary>
+        ///     Searches through all maskinporten schema services and returns matches
+        /// </summary>
+        /// <returns>Paginated search results</returns>
+        public Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[]? resourceOwnerFilters, string searchString);
 
         /// <summary>
         ///     Gets a list of Resources from ResourceRegister

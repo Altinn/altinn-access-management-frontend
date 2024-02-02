@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    ///     Controller to update AccessManagement with resources existing i ResourceRegister.
+    ///     Controller for CRUD-operations related to the ResourceRegister.
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
@@ -91,6 +91,35 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 return await _resourceService.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+        
+        /// <summary>
+        ///     Searches through all delegable maskinportenScehma services and returns matches based on the provided search string and filters
+        /// </summary>
+        /// <returns>search results</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("maskinportenschema/search")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> Search([FromQuery] PaginatedSearchParams parameters)
+        {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+
+            try
+            {
+                return await _resourceService.MaskinportenschemaSearch(languageCode, parameters.ROFilters, parameters.SearchString);
             }
             catch (HttpStatusException ex)
             {

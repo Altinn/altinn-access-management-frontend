@@ -5,6 +5,8 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -14,13 +16,13 @@ using Azure.Core;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="MaskinportenSchemaController"></see>
+    ///     Test class for <see cref="MaskinportenSchemaDelegationController"></see>
     /// </summary>
     [Collection("MaskinportenSchemaController Tests")]
-    public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaController>>
+    public class MaskinportenSchemaDelegationControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaDelegationController>>
     {
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<MaskinportenSchemaController> _factory;
+        private readonly CustomWebApplicationFactory<MaskinportenSchemaDelegationController> _factory;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string unitTestFolder;
@@ -29,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public MaskinportenSchemaControllerTest(CustomWebApplicationFactory<MaskinportenSchemaController> factory)
+        public MaskinportenSchemaDelegationControllerTest(CustomWebApplicationFactory<MaskinportenSchemaDelegationController> factory)
         {
             _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
@@ -37,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
+            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaDelegationControllerTest).Assembly.Location).LocalPath);
         }
 
         /// <summary>
