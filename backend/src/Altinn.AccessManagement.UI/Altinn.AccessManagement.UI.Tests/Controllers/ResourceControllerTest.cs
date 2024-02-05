@@ -257,9 +257,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string path = Path.Combine(mockFolder, "Data", "ResourceRegistry", "resourcesfe.json");
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
-
-
+            
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search");
 
@@ -286,7 +286,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?ROFilters={roFilters[0]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -346,13 +346,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(filteredExpectedResult, actualResources, AssertionUtil.AssertEqual);
-        }
-
-        private static List<ServiceResourceFE> GetExpectedResources(ResourceType resourceType)
-        {
-            List<ServiceResourceFE> resources = new List<ServiceResourceFE>();
-            resources = TestDataUtil.GetExpectedResources(resourceType);
-            return resources;
         }
 
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)
