@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import {
@@ -13,11 +13,10 @@ import {
   PageContent,
   PageHeader,
   ProgressModal,
-  RestartPrompter,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
-import { useMediaQuery } from '@/resources/hooks';
+import { useFetchNameFromUUID, useMediaQuery } from '@/resources/hooks';
 import {
   removeServiceResource,
   delegate,
@@ -51,6 +50,7 @@ export const ChooseRightsPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [urlParams] = useSearchParams();
   const [chosenServices, setChosenServices] = useState<Service[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [delegationCount, setDelegationCount] = useState(0);
@@ -64,6 +64,11 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
+    urlParams.get('userUUID') ?? undefined,
+    urlParams.get('partyUUID') ?? undefined,
+  );
 
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter(
@@ -116,7 +121,7 @@ export const ChooseRightsPage = () => {
 
   useEffect(() => {
     processedDelegationsRatio() === 100 &&
-      navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
+      navigate(`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.Receipt}?${urlParams}`);
   }, [processedDelegations]);
 
   const updateDelegationCount = (services: Service[]) => {
@@ -199,7 +204,7 @@ export const ChooseRightsPage = () => {
           fullWidth={isSm}
           onClick={() => {
             navigate(
-              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
+              `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,
             );
           }}
         >
@@ -213,7 +218,7 @@ export const ChooseRightsPage = () => {
           onClose={() => setPopoverOpen(false)}
         >
           <Paragraph>
-            {t('single_rights.confirm_delegation_text', { name: 'ANNEMA FIGMA' })}
+            {t('single_rights.confirm_delegation_text', { name: recipientName })}
           </Paragraph>
           <div className={classes.popoverButtonContainer}>
             <Button
@@ -265,33 +270,20 @@ export const ChooseRightsPage = () => {
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
 
         <PageContent>
-          {servicesWithStatus.length < 1 ? (
-            <RestartPrompter
-              spacingBottom
-              restartPath={
-                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService
-              }
-              title={t('common.an_error_has_occured')}
-              ingress={t('api_delegation.delegations_not_registered')}
-            />
-          ) : (
-            <>
-              <Ingress>
-                {t('single_rights.choose_rights_page_top_text', { name: 'ANNEMA FIGMA' })}
-              </Ingress>
-              <div className={classes.secondaryText}>
-                <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
-              </div>
-              <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
-              <ProgressModal
-                open={showProgressModal}
-                loadingText={t('single_rights.processing_delegations')}
-                progressValue={processedDelegationsRatio()}
-                progressLabel={progressLabel}
-              ></ProgressModal>
-              <div className={classes.navigationContainer}>{navigationButtons()}</div>
-            </>
-          )}
+          <Ingress>
+            {t('single_rights.choose_rights_page_top_text', { name: recipientName })}
+          </Ingress>
+          <div className={classes.secondaryText}>
+            <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
+          </div>
+          <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
+          <ProgressModal
+            open={showProgressModal}
+            loadingText={t('single_rights.processing_delegations')}
+            progressValue={processedDelegationsRatio()}
+            progressLabel={progressLabel}
+          ></ProgressModal>
+          <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>
       </Page>
     </PageContainer>

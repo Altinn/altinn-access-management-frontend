@@ -1,13 +1,13 @@
 import { Button } from '@digdir/design-system-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 
 import { SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
-import { useMediaQuery } from '@/resources/hooks';
+import { useFetchNameFromUUID, useMediaQuery } from '@/resources/hooks';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GroupElements } from '@/components/GroupElements/GroupElements';
@@ -19,9 +19,15 @@ export const ReceiptPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
+  const [urlParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const processedDelegations = useAppSelector(
     (state) => state.singleRightsSlice.processedDelegations,
+  );
+
+  const [recipientName] = useFetchNameFromUUID(
+    urlParams.get('userUUID') ?? undefined,
+    urlParams.get('partyUUID') ?? undefined,
   );
 
   useEffect(() => {
@@ -39,16 +45,14 @@ export const ReceiptPage = () => {
           {processedDelegations.length < 1 ? (
             <RestartPrompter
               spacingBottom
-              restartPath={
-                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService
-              }
+              restartPath={`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`}
               title={t('common.an_error_has_occured')}
               ingress={t('api_delegation.delegations_not_registered')}
             />
           ) : (
             <>
               <div className={classes.actionBars}>
-                <ActionBarSection />
+                <ActionBarSection recipientName={String(recipientName)} />
               </div>
               <GroupElements>
                 <Button
@@ -60,10 +64,7 @@ export const ReceiptPage = () => {
                 <Button
                   onClick={() => {
                     navigate(
-                      '/' +
-                        SingleRightPath.DelegateSingleRights +
-                        '/' +
-                        SingleRightPath.ChooseService,
+                      `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,
                     );
                   }}
                   color={'first'}

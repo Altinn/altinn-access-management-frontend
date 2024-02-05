@@ -16,7 +16,11 @@ import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActio
 
 import classes from './ActionBarSection.module.css';
 
-export const ActionBarSection = () => {
+type ActionBarSectionProps = {
+  recipientName: string;
+};
+
+export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
   const { t } = useTranslation();
   const delegations = useAppSelector((state) => state.singleRightsSlice.processedDelegations);
   const [mostFailedIndex, setMostFailedIndex] = useState(-1);
@@ -117,7 +121,7 @@ export const ActionBarSection = () => {
             spacing
             level={2}
           >
-            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
+            {t('single_rights.has_received_these_rights', { name: recipientName })}
           </Ingress>
         );
       };

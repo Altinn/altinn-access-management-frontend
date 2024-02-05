@@ -4,16 +4,11 @@ import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Ingress, Heading, Paragraph, Popover } from '@digdir/design-system-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
-import { useMediaQuery } from '@/resources/hooks';
+import { useMediaQuery, useFetchNameFromUUID } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import {
-  UserType,
-  useGetUserByUUIDQuery,
-  useGetPartyByUUIDQuery,
-} from '@/rtk/features/lookup/lookupApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
   type DelegationAccessCheckDto,
@@ -33,11 +28,10 @@ export const ChooseServicePage = () => {
   const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
+  const [urlParams] = useSearchParams();
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [userUUID, setUserUUID] = useState<string | null>(null);
   const [partyUUID, setPartyUUID] = useState<string | null>(null);
-  const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
-  const [recipientError, setRecipientError] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
@@ -45,56 +39,16 @@ export const ChooseServicePage = () => {
     ),
   );
 
-  const {
-    data: user,
-    error: getUserError,
-    isLoading: getUserIsLoading,
-  } = useGetUserByUUIDQuery(userUUID ?? '');
-  const {
-    data: party,
-    error: getPartyError,
-    isLoading: getPartyIsLoading,
-  } = useGetPartyByUUIDQuery(partyUUID ?? '');
-
-  const [urlParams] = useSearchParams();
-
   useLayoutEffect(() => {
     void dispatch(resetProcessedDelegations());
     setUserUUID(urlParams.get('userUUID'));
     setPartyUUID(urlParams.get('partyUUID'));
   }, []);
 
-  useEffect(() => {
-    if (userUUID && !getUserIsLoading) {
-      if (getUserError) {
-        setRecipientError(true);
-      } else {
-        switch (user?.userType) {
-          case UserType.SSNIdentified:
-            // Recipient is a person
-            setRecipientName(user.party.name);
-            break;
-          case UserType.EnterpriseIdentified:
-            // Recipient is an enterprize user
-            setRecipientName(`${user.userName} (${user.party.orgNumber})`);
-            break;
-          default:
-            // Recipient is null or is of a type that cannot be delegated to
-            setRecipientError(true);
-        }
-      }
-    } else if (partyUUID && !getPartyIsLoading) {
-      // Fetch party from getParty query
-      if (getPartyError) {
-        setRecipientError(true);
-      } else {
-        setRecipientName(`${party?.name} (${party?.orgNumber})`);
-      }
-    } else if (!getUserIsLoading && !getPartyIsLoading) {
-      // No UUID given -> Display Error
-      setRecipientError(true);
-    }
-  }, [getUserIsLoading, getPartyIsLoading]);
+  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
+    userUUID ?? undefined,
+    partyUUID ?? undefined,
+  );
 
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -170,7 +124,7 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          {recipientError ? (
+          {!isLoading && recipientError ? (
             recipientErrorAlert()
           ) : (
             <>
