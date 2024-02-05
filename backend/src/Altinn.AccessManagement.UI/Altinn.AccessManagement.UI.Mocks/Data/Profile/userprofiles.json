@@ -27,14 +27,14 @@
   },
   {
     "UserId": 20020252,
-    "UserUuid": "e2960363-a057-4bb6-a032-6073f9792093",
+    "UserUuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
     "UserName": "Albatross4Ever",
     "PhoneNumber": "90001337",
     "Email": "1337@altinnstudiotestusers.com",
     "PartyId": 50707389,
     "Party": {
       "PartyId": 50707389,
-      "PartyUuid": "e2960363-a057-4bb6-a032-6073f9792093",
+      "PartyUuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
       "PartyTypeName": 1,
       "OrgNumber": null,
       "Ssn": "19895199357",

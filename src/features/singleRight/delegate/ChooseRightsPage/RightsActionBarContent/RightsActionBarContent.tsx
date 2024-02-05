@@ -111,6 +111,7 @@ export const RightsActionBarContent = ({
               return (
                 <div key={index}>
                   <Chip.Toggle
+                    size='small'
                     checkmark
                     selected={right.checked}
                     onClick={() => {
@@ -161,7 +162,14 @@ export const RightsActionBarContent = ({
                 )
                   ? t(`common.${right.action}`)
                   : right.action;
-                return <Chip.Toggle key={index}>{actionText}</Chip.Toggle>;
+                return (
+                  <Chip.Toggle
+                    size='small'
+                    key={index}
+                  >
+                    {actionText}
+                  </Chip.Toggle>
+                );
               })}
           </div>
         </>
