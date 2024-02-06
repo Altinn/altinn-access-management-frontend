@@ -20,7 +20,6 @@ import {
   type OverviewOrg,
   type DeletionRequest,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import { resetDelegableApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
@@ -58,7 +57,6 @@ export const OverviewPageContent = ({
       void fetchData();
     }
     handleSaveDisabled();
-    dispatch(resetDelegableApis());
     dispatch(resetDelegableOrgs());
     dispatch(resetDelegationRequests());
   }, [overviewOrgs, error]);

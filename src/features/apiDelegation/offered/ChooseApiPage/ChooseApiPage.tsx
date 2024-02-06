@@ -19,17 +19,17 @@ import ApiIcon from '@/assets/Api.svg?react';
 import { useMediaQuery } from '@/resources/hooks';
 import common from '@/resources/css/Common.module.css';
 import {
-  fetchDelegableApis,
   softAddApi,
   softRemoveApi,
-  search,
-  filter,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
 import { debounce } from '@/resources/utils';
 import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegationApi';
-import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
+import {
+  useDelegationCheckMutation,
+  useSearchQuery,
+} from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
 
@@ -39,43 +39,36 @@ import classes from './ChooseApiPage.module.css';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const [filters, setFilters] = useState<string[]>([]);
-  const presentedApis = useAppSelector((state) => state.delegableApi.presentedApiList);
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
-  const loading = useAppSelector((state) => state.delegableApi.loading);
-  const error = useAppSelector((state) => state.delegableApi.error);
   const isSm = useMediaQuery('(max-width: 768px)');
-  const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
-  const fetchData = async () => await dispatch(fetchDelegableApis());
+  const partyId = getCookie('AltinnPartyId');
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
-  const [showSkeleton, setShowSkeleton] = useState(true);
 
-  const partyId = getCookie('AltinnPartyId');
-
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
+  const dispatch = useAppDispatch();
   const [delegationCheck] = useDelegationCheckMutation();
 
-  useEffect(() => {
-    if (loading) {
-      void fetchData();
-    }
-    dispatch(filter([]));
-    dispatch(search(''));
-  }, []);
+  const {
+    data: searchResults,
+    error,
+    isFetching,
+  } = useSearchQuery({ searchString, ROfilters: filters });
 
   useEffect(() => {
-    if (!loading && urlParams) {
+    if (!isFetching && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [loading]);
+  }, [isFetching]);
 
   const makeChosenApisFromParams = () => {
     const promises: Promise<void>[] = [];
 
     for (const key of urlParams.keys()) {
-      presentedApis.forEach((api: DelegableApi) => {
+      searchResults?.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
           const resourceRef: ResourceReference = { resource: api.authorizationReference };
           const promise = delegationCheck({
@@ -106,8 +99,6 @@ export const ChooseApiPage = () => {
   const handleRemove = (api: DelegableApi) => {
     removeApiFromParams(api);
     dispatch(softRemoveApi(api));
-    dispatch(filter(filters));
-    dispatch(search(searchString));
   };
 
   const removeApiFromParams = (api: DelegableApi) => {
@@ -115,15 +106,8 @@ export const ChooseApiPage = () => {
     setUrlParams(urlParams);
   };
 
-  function handleSearch(searchText: string) {
-    setSearchString(searchText);
-    dispatch(search(searchText));
-  }
-
   const handleFilterChange = (filterList: string[]) => {
     setFilters(filterList);
-    dispatch(filter(filterList));
-    dispatch(search(searchString));
   };
 
   const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
@@ -132,15 +116,15 @@ export const ChooseApiPage = () => {
   }));
 
   const delegableApiActionBars = () => {
-    if (error.message) {
+    if (error?.message) {
       return (
         <ErrorPanel
           title={t('api_delegation.data_retrieval_failed')}
-          message={error.message}
-          statusCode={error.statusCode}
+          message={error?.message}
+          statusCode={error?.statusCode}
         ></ErrorPanel>
       );
-    } else if (loading) {
+    } else if (isFetching) {
       return (
         <div className={common.spinnerContainer}>
           <Spinner
@@ -153,7 +137,11 @@ export const ChooseApiPage = () => {
 
     const prechosenApis = Array.from(urlParams.keys());
 
-    return presentedApis.map((api: DelegableApi) => {
+    const unchosenApis = searchResults?.filter(
+      (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
+    );
+
+    return unchosenApis?.map((api: DelegableApi) => {
       const initWithDelegationCheck = prechosenApis.includes(api.identifier);
       return (
         <ApiActionBar
@@ -207,7 +195,7 @@ export const ChooseApiPage = () => {
   };
 
   const debouncedSearch = debounce((searchString: string) => {
-    handleSearch(searchString);
+    setSearchString(searchString);
   }, 300);
 
   return (
@@ -236,11 +224,11 @@ export const ChooseApiPage = () => {
               <Search
                 label={t('api_delegation.search_for_api')}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  debouncedSearch(event.target.value);
+                  setSearchString(event.target.value);
                 }}
                 size='medium'
                 onClear={() => {
-                  handleSearch('');
+                  debouncedSearch('');
                 }}
               ></Search>
             </div>
