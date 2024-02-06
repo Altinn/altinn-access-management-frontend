@@ -98,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetPartyByUUID_Success()
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("b4c3ba12-7e87-4ae1-84f8-426b1decfacf");
+            Guid lookupUUID = new Guid("f7237f59-178b-4f25-8ffe-017e611effdb");
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
 
@@ -106,9 +106,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Party actualParty = await response.Content.ReadAsAsync<Party>();
             Assert.Equal(lookupUUID, actualParty.PartyUuid);
-            Assert.Equal(50067798, actualParty.PartyId);
+            Assert.Equal(51317934, actualParty.PartyId);
             Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
-            Assert.Equal("VIKESÅ OG ÅLVUNDFJORD", actualParty.Name);
+            Assert.Equal("RAKRYGGET UNG TIGER AS", actualParty.Name);
         }
 
         /// <summary>
