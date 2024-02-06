@@ -10,7 +10,8 @@ module.exports = {
   },
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    "cypress/globals": true
   },
   extends: [
     'plugin:react/recommended',
@@ -23,9 +24,12 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
+    "plugin:cypress/recommended",
+    "plugin:prettier/recommended"
+    
   ],
   overrides: [],
-  plugins: ['react'],
+  plugins: ['react' & 'cypress'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-bind': 'off',
@@ -35,6 +39,7 @@ module.exports = {
     "@typescript-eslint/strict-boolean-expressions": 0,
     "@typescript-eslint/triple-slash-reference": "off",
     "@typescript-eslint/no-namespace": "off",
+    "eol-last": "error",
     "@typescript-eslint/no-invalid-void-type": 0,
     'import/order': [
       'warn',
