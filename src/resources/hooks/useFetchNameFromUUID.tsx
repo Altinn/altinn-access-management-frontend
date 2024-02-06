@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   UserType,
@@ -10,9 +11,11 @@ import { useUpdate } from './useUpdate';
 
 // Used for fetching recipient name from userUUID or partyUUID
 export const useFetchNameFromUUID = (
-  userUUID?: string,
-  partyUUID?: string,
+  userUUID: string | null,
+  partyUUID: string | null,
 ): [name: string | undefined, error: boolean, isLoading: boolean] => {
+  const { t } = useTranslation('common');
+
   const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
   const [error, setError] = useState(false);
   const {
@@ -42,23 +45,22 @@ export const useFetchNameFromUUID = (
           case UserType.EnterpriseIdentified:
             // Recipient is an enterprize user
             setError(false);
-            setRecipientName(`${user.userName} (${user.party.orgNumber})`);
+            setRecipientName(`${user.userName}, ${t('common.org_nr')} ${user.party.orgNumber}`);
             break;
           default:
-            // Recipient is null or is of a type that cannot be delegated to
+            // Recipient is of a type that cannot be delegated to
             setError(true);
         }
       }
     } else if (partyUUID && !getPartyIsLoading) {
-      // Fetch party from getParty query
       if (getPartyError) {
         setError(true);
       } else {
         setError(false);
-        setRecipientName(`${party?.name} (${party?.orgNumber})`);
+        setRecipientName(`${party?.name}, ${t('common.org_nr')} ${party?.orgNumber}`);
       }
     } else if (!isLoading) {
-      // No UUID given -> Display Error
+      // No UUID given
       setError(true);
     }
   }, [user, party, getUserIsLoading, getPartyIsLoading]);

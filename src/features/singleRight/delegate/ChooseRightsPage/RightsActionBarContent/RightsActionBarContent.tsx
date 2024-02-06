@@ -92,6 +92,7 @@ export const RightsActionBarContent = ({
         {serviceType === 'AltinnApp' ? (
           <div>
             <Chip.Toggle
+              size='small'
               checkmark
               selected={altinnAppAccess}
               onClick={toggleAllDelegableRights}

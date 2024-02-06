@@ -22,6 +22,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
+import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -45,10 +46,7 @@ export const ChooseServicePage = () => {
     setPartyUUID(urlParams.get('partyUUID'));
   }, []);
 
-  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
-    userUUID ?? undefined,
-    partyUUID ?? undefined,
-  );
+  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(userUUID, partyUUID);
 
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -81,41 +79,6 @@ export const ChooseServicePage = () => {
       encodeURIComponent(encodedUrl);
   };
 
-  const recipientErrorAlert = () => {
-    if (!userUUID && !partyUUID) {
-      return (
-        <Alert severity='danger'>
-          <Heading
-            level={3}
-            size='small'
-          >
-            Mottaker mangler
-          </Heading>
-          <Paragraph>
-            Mottaker for delegeringen mangler. Vennligst gå tilbake til Profilsiden og velg mottaker
-            for delegeringen
-          </Paragraph>
-        </Alert>
-      );
-    } else {
-      return (
-        <Alert severity='danger'>
-          <Heading
-            level={3}
-            size='small'
-          >
-            Kan ikke delegere til mottaker
-          </Heading>
-          <Paragraph>
-            Oppgitt mottaker kan ikke delegeres til. Vennligst gå tilbake til Profilsiden og velg en
-            annen. Mottaker må være en organisasjon, eller virksomhetsbruker, eller en person
-            registrert med fødselsnummer. Selvregistrerte brukere kan ikke delegeres til.
-          </Paragraph>
-        </Alert>
-      );
-    }
-  };
-
   return (
     <PageContainer>
       <Page
@@ -125,7 +88,10 @@ export const ChooseServicePage = () => {
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
           {!isLoading && recipientError ? (
-            recipientErrorAlert()
+            <RecipientErrorAlert
+              userUUID={userUUID}
+              partyUUID={partyUUID}
+            />
           ) : (
             <>
               <Ingress spacing>

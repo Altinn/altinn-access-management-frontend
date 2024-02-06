@@ -47,7 +47,8 @@
     "minid": "MinID",
     "bankid": "BankID",
     "commfides": "Commfides",
-    "buypass": "Buypass"
+    "buypass": "Buypass",
+    "org_nr": "Org.nr."
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -82,7 +83,6 @@
     "you_have_delegated_accesses": "Du har tidlegare delegert desse tilgangane:",
     "you_have_received_accesses": "Du har motteke desse tilgangane:",
     "api_panel_content": "Her kan du styra tilgang til APIer sikra gjennom",
-    "org_nr": "Org.nr.",
     "edit_accesses": "Rediger tilgangar",
     "api_overview_text": "Her finn du oversikt over dei API-tilgangane verksemda di har delegert til andre verksemder.",
     "api_received_overview_text": "Her finner du oversikt over dei API-tilgangane verksemda di har fått av andre verksemder.",
@@ -170,6 +170,10 @@
     "no_continue_delegating": "Nei, hald fram med å delegera",
     "add_more_services": "Legg til fleire tenester",
     "ceo_or_main_admin_can_help": "Dagleg leiar eller hovudadministrator kan hjelpa deg med dette.",
-    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi {{reason}}"
+    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi {{reason}}",
+    "missing_recipient_error_title": "Mottakar manglar",
+    "missing_recipient_error_message": "Mottakar for delegasjonen manglar. Ver venleg og gå tilbake til profilsida og vel kven du ønskjer å delegere til.",
+    "faulty_recipient_error_title": "Kan ikkje delegere til mottakar",
+    "faulty_recipient_error_message": "Oppgjeven mottakar kan ikkje delegere til. Ver venleg og gå tilbake til profilsida og vel ein annan. Mottakar må vere ein organisasjon, ein verksemdsbrukar, eller ein person registrert med fødselsnummer. Sjølvregistrerte brukarar kan ikkje delegere til."
   }
 }

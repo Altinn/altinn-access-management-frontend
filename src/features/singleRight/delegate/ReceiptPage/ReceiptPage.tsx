@@ -26,8 +26,8 @@ export const ReceiptPage = () => {
   );
 
   const [recipientName] = useFetchNameFromUUID(
-    urlParams.get('userUUID') ?? undefined,
-    urlParams.get('partyUUID') ?? undefined,
+    urlParams.get('userUUID'),
+    urlParams.get('partyUUID'),
   );
 
   useEffect(() => {

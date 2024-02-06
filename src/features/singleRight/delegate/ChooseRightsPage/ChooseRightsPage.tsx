@@ -30,6 +30,8 @@ import {
 } from '@/dataObjects/dtos/resourceDelegation';
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
+import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
+
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
@@ -66,8 +68,8 @@ export const ChooseRightsPage = () => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
-    urlParams.get('userUUID') ?? undefined,
-    urlParams.get('partyUUID') ?? undefined,
+    urlParams.get('userUUID'),
+    urlParams.get('partyUUID'),
   );
 
   const initializeDelegableServices = () => {
@@ -270,20 +272,29 @@ export const ChooseRightsPage = () => {
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
 
         <PageContent>
-          <Ingress>
-            {t('single_rights.choose_rights_page_top_text', { name: recipientName })}
-          </Ingress>
-          <div className={classes.secondaryText}>
-            <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
-          </div>
-          <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
-          <ProgressModal
-            open={showProgressModal}
-            loadingText={t('single_rights.processing_delegations')}
-            progressValue={processedDelegationsRatio()}
-            progressLabel={progressLabel}
-          ></ProgressModal>
-          <div className={classes.navigationContainer}>{navigationButtons()}</div>
+          {!isLoading && recipientError ? (
+            <RecipientErrorAlert
+              userUUID={urlParams.get('userUUID')}
+              partyUUID={urlParams.get('partyUUID')}
+            />
+          ) : (
+            <>
+              <Ingress>
+                {t('single_rights.choose_rights_page_top_text', { name: recipientName })}
+              </Ingress>
+              <div className={classes.secondaryText}>
+                <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
+              </div>
+              <div className={classes.serviceResources}>{chooseRightsActionBars}</div>
+              <ProgressModal
+                open={showProgressModal}
+                loadingText={t('single_rights.processing_delegations')}
+                progressValue={processedDelegationsRatio()}
+                progressLabel={progressLabel}
+              ></ProgressModal>
+              <div className={classes.navigationContainer}>{navigationButtons()}</div>
+            </>
+          )}
         </PageContent>
       </Page>
     </PageContainer>
