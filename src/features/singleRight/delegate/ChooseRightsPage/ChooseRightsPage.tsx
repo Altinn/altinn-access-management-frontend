@@ -245,6 +245,21 @@ export const ChooseRightsPage = () => {
   };
 
   const postDelegations = () => {
+    const userUUID = urlParams.get('userUUID');
+    const partyUUID = urlParams.get('partyUUID');
+    let recipient: IdValuePair[];
+
+    if (userUUID && userUUID === partyUUID) {
+      // Recipient is a person
+      recipient = [new IdValuePair('urn:altinn:person:uuid', userUUID)];
+    } else if (userUUID) {
+      // Recipient is an enterprize user
+      recipient = [new IdValuePair('urn:altinn:enterpriseuser:uuid', userUUID)];
+    } else if (partyUUID) {
+      // Recipient is an organization
+      recipient = [new IdValuePair('urn:altinn:organization:uuid', partyUUID)];
+    }
+
     chosenServices.forEach((service: Service) => {
       const rightsToDelegate = service.rights
         .filter((right: ChipRight) => right.checked)
@@ -252,8 +267,7 @@ export const ChooseRightsPage = () => {
 
       if (rightsToDelegate.length > 0) {
         const delegationInput: DelegationInputDto = {
-          // TODO: make adjustments to codeline below when we get GUID from altinn2
-          To: [new IdValuePair('urn:altinn:organizationnumber', '313523497')],
+          To: recipient,
           Rights: rightsToDelegate,
           serviceDto: new ServiceDto(service.title, service.serviceOwner, service.type),
         };
