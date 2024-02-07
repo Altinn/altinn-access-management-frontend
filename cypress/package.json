@@ -1,5 +1,5 @@
 {
-    "name": "cypresstest",
+    "name": "cypress",
     "version": "1.0.0",
     "description": "cypress end-to-end tests",
     "main": "index.js",
@@ -7,7 +7,8 @@
         "check": "prettier -c src/**/*.js",
         "format": "prettier -w src/**/*.js",
         "cy:open": "cypress open --env environment=%npm_config_env%",
-        "test": "cypress run --env environment=%EnvironmentToRunTests% --spec src/cypress/e2e/*.js"
+        "test": "cypress run --env environment=%EnvironmentToRunTests% --spec src/cypress/e2e/*.js",
+        "lint": "eslint ."
     },
     "devDependencies": {
         "cypress": "^13.6.0",
