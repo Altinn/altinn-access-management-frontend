@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 /// <reference types='cypress' />
 import { login } from '../../pageObjects/login';
 import * as pins from '../../src/fixtures/pin.json';

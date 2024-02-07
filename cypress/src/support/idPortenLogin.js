@@ -54,19 +54,19 @@ Cypress.Commands.add('loginWithMinIDNew', (ssn, reportee) => {
         { args: sentArgs },
         // ...and receive them at the other end here!
         ({ minid_ssn, password, sms }) => {
-          cy.get('.w-full.p-4', { includeShadowDom: true })
-            //.find('.relative', { includeShadowDom: true })
-            .type(minid_ssn);
+          cy.get('#pid', { includeShadowDom: true })
+            .find('.w-full.p-4', { includeShadowDom: true })
+            .type(minid_ssn, { force: true });
 
           cy.get('#password', { includeShadowDom: true })
-            .find('.relative', { includeShadowDom: true })
-            .type(password);
+            .find('.w-full.p-4', { includeShadowDom: true })
+            .type(password, { force: true });
 
           cy.get('#submit-button', { includeShadowDom: true }).click();
 
           cy.get('#otc', { includeShadowDom: true })
             .find('.mb-5', { includeShadowDom: true })
-            .type(sms);
+            .type(sms, { force: true });
 
           cy.get('#submit-button', { includeShadowDom: true }).click();
         },

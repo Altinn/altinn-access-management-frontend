@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 /// <reference types="cypress" />
 
-const { defineConfig } = require('cypress');
 const path = require('path');
+
+const { defineConfig } = require('cypress');
 const fs = require('fs-extra');
 const downloadsPath = path.join('downloads');
 

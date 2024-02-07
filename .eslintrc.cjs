@@ -29,7 +29,7 @@ module.exports = {
     
   ],
   overrides: [],
-  plugins: ['react' & 'cypress'],
+  plugins: ['react' , 'cypress'],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-no-bind': 'off',

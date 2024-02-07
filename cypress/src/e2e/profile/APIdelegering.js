@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types='cypress' />
 import { otherWithRights } from '../../../pageObjects/profile3/other-with-rights';
 import { apiDelegering } from '../../../pageObjects/profile3/APIadministration';
@@ -441,5 +442,16 @@ describe('API delegering tests', () => {
     cy.selectLanguage('bokmål');
 
     cy.get(apiDelegering.apiAdministrationPanel).should('be.visible');
+  });
+  it('Verify when user does not have access to delegate an API', () => {
+    cy.get(apiDelegering.apiAdministrationPanel, { timeout: 6000 }).should('be.visible').click();
+    cy.contains('Gi og fjerne API tilganger', { timeout: 6000 }).should('be.visible').click();
+    cy.contains('Deleger nytt API').click();
+    cy.get('h1').should('contain', 'Gi tilgang til nytt API');
+    cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 })
+      .eq(1)
+      .type('Maskinporten Schema - AM - K6 - NUF');
+    cy.get('*[class^="_actionBarActions_"]').first().click();
+    cy.get('*[class^="fds-alert-icon-"]').should('have.text', 'Feil');
   });
 });
