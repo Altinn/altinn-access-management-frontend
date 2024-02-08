@@ -122,7 +122,7 @@ jobs:
       - id: version
         uses: battila7/get-version-action@v2
       - name: Add Version tag to Docker Image
-        uses: shrink/actions-docker-registry-tag@v3
+        uses: shrink/actions-docker-registry-tag@v4
         with:
           registry: ${{ env.REGISTRY }}
           repository: '${{ env.IMAGE_NAME }}'
