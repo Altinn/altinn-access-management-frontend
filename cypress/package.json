@@ -29,6 +29,5 @@
         "dayjs": "^1.11.5",
         "get-ssl-certificate": "^2.3.3"
     },
-    "author": "",
     "license": "ISC"
 }
