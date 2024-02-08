@@ -12,7 +12,7 @@ These instructions will get you run the end to end tests on test environments.
 Run the below command to open cypress with the environment, to run installation tests 
 
 ```cmd
-    npm run cy:open --env=at22
+    yarn cy:open --env environment=at22
     
 ```
 
