@@ -1,0 +1,33 @@
+{
+    "name": "cypress",
+    "version": "1.0.0",
+    "description": "cypress end-to-end tests",
+    "main": "index.js",
+    "scripts": {
+        "check": "prettier -c src/**/*.js",
+        "format": "prettier -w src/**/*.js",
+        "cy:open": "cypress open --env environment=%yarn_config_env%",
+        "test": "cypress run --env environment=%EnvironmentToRunTests% --spec src/cypress/e2e/*.js",
+        "lint": "eslint ."
+    },
+    "devDependencies": {
+        "cypress": "^13.6.4",
+        "cypress-file-upload": "^5.0.8",
+        "cypress-grep": "^2.14.0",
+        "cypress-iframe": "^1.0.1",
+        "cypress-multi-reporters": "^1.6.1",
+        "cypress-parallel": "^0.1.10",
+        "cypress-react-app-actions": "^1.0.2",
+        "cypress-recurse": "^1.35.2",
+        "cypress-wait-until": "^1.7.2",
+        "fs-extra": "^9.1.0",
+        "junit-report-merger": "^2.2.3",
+        "mocha-junit-reporter": "^2.1.0",
+        "pdf-parse": "^1.1.1"
+    },
+    "dependencies": {
+        "dayjs": "^1.11.5",
+        "get-ssl-certificate": "^2.3.3"
+    },
+    "license": "ISC"
+}
