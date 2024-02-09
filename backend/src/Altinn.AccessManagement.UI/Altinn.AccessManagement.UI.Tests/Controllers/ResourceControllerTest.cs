@@ -247,6 +247,37 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             }
         }
         
+        [Fact]
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchema()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<ResourceType> relevantResourceTypes = new List<ResourceType>
+            {
+                ResourceType.MaskinportenSchema
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}");
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<ResourceOwnerFE> actualResources = JsonSerializer.Deserialize<List<ResourceOwnerFE>>(await response.Content.ReadAsStringAsync(), options);
+        }
+        
+        [Fact]
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemaAndAltinn2Service()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            
+        }
+        
         /// <summary>
         ///     Test case: Search for maskinporten schemas (no search string or filters)
         ///     Expected: Search returns a list of all maskinporten schemas for the authenticated users selected language
@@ -347,38 +378,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(filteredExpectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-
-        [Fact]
-        public async Task GetResourceOwners_resourceTypeMaskinPortenSchema()
-        {
-            // Arrange
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            List<ResourceType> relevantResourceTypes = new List<ResourceType>
-            {
-                ResourceType.MaskinportenSchema
-            };
-
-            // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?&{relevantResourceTypes}");
-            
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
         
-        [Fact]
-        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemaAndAltinn2Service()
-        {
-            // Arrange
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
-            
-        }
-        
-        
-
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)
         {
             HttpContext httpContext = new DefaultHttpContext();

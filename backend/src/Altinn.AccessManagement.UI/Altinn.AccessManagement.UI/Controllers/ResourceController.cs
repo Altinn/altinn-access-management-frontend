@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of resource owners</returns>
         [HttpGet]
         [Authorize]
-        [Route("resourceowners")]
+        [Route("getresourceowners")]
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
@@ -127,7 +127,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("maskinportenschema/search")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> Search([FromQuery] PaginatedSearchParams parameters)
+        public async Task<ActionResult<List<ServiceResourceFE>>> Search([FromQuery] ApiSearchParams parameters)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);

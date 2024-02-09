@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -34,6 +35,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         /// <inheritdoc />
         public Task<List<ServiceResource>> GetResources()
+        {
+            List<ServiceResource> resources = new List<ServiceResource>();
+
+            string path = GetDataPathForResources();
+
+            if (File.Exists(path))
+            {
+
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+
+                string content = File.ReadAllText(path);
+                resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
+
+            }
+            return Task.FromResult(resources);
+        }
+        
+        /// <inheritdoc />
+        public Task<List<ServiceResource>> GetResources(ResourceType resourceType)
         {
             List<ServiceResource> resources = new List<ServiceResource>();
 
