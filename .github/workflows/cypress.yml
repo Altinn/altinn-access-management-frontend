@@ -39,5 +39,4 @@ jobs:
           working-directory: cypress 
           project: cypress
           browser: chrome
-          build: yarn build
           start: yarn test
