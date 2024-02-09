@@ -348,6 +348,37 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AssertionUtil.AssertCollections(filteredExpectedResult, actualResources, AssertionUtil.AssertEqual);
         }
 
+        [Fact]
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchema()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<ResourceType> relevantResourceTypes = new List<ResourceType>
+            {
+                ResourceType.MaskinportenSchema
+            };
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?&{relevantResourceTypes}");
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+        
+        [Fact]
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemaAndAltinn2Service()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            
+        }
+        
+        
+
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)
         {
             HttpContext httpContext = new DefaultHttpContext();

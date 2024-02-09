@@ -58,6 +58,22 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return await _resourceService.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
+        
+        /// <summary>
+        ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
+        /// </summary>
+        /// <returns>List of resource owners</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("resourceowners")]
+        public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
+        {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile user = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUser(user);
+
+            return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
+        }
 
         /// <summary>
         ///     Gets list of all resource owners

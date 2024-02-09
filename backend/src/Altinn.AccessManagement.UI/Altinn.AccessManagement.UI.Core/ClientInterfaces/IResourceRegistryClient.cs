@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+﻿using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -26,6 +27,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>The resource full list of all resources if exists</returns>
         Task<List<ServiceResource>> GetResourceList();
+        
+        /// <summary>
+        ///     Integration point for retrieving list of resources for the given resource type
+        /// </summary>
+        /// <returns>The resource full list of all resources if exists</returns>
+        Task<List<ServiceResource>> GetResourceList(ResourceType resourceType);
 
         /// <summary>
         ///     Gets list of all resource owners

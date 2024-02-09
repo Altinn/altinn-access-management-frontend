@@ -57,5 +57,11 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <returns>Simplified list of resource owners for frontend</returns>
         Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode);
+
+        /// <summary>
+        ///     Gets list of resource owners for given resource type
+        /// </summary>
+        /// <returns>Simplified list of resource owners for frontend</returns>
+        Task<List<ResourceOwnerFE>> GetResourceOwners(List<ResourceType> relevantResourceTypeList, string languageCode);
     }
 }

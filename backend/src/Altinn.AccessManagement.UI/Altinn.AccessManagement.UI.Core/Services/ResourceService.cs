@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
-using System.Transactions;
+﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
@@ -168,6 +166,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return resource;
         }
+        
+        /// <inheritdoc />
+        public async Task<List<ResourceOwnerFE>> GetResourceOwners(string languageCode, ResourceType resourceType)
+        {
+            List<ServiceResource> resources = await GetResources();
+
+            OrgList orgList = new OrgList();
+            try
+            {
+                orgList = await _resourceRegistryClient.GetAllResourceOwners();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//ResourceService //GetResourceOwners failed, exception: {Ex}", ex);
+            }
+
+            return MapOrgListToResourceOwnerFe(orgList, languageCode);
+        }
 
         /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode)
@@ -194,7 +210,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             try
             {
-                List<ServiceResource> resources = await _resourceRegistryClient.GetResourceList();
+                List<ServiceResource> resources = await _resourceRegistryClient.GetResourceList(ResourceType.MaskinportenSchema);
                 List<ServiceResource> resourceList =
                     resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible);
                 List<ServiceResourceFE> resourcesFE =
@@ -206,7 +222,32 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//MaskinportenSchemaService // Search failed", ex);
+                _logger.LogError("//ResourceService // MaskinportenschemaSearch failed", ex);
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ResourceOwnerFE>> GetResourceOwners(List<ResourceType> relevantResourceTypeList, string languageCode)
+        {
+            try
+            {
+                List<ServiceResource> resources = await GetResources();
+
+                var resourceOwnerList = resources
+                    .Where(sr => sr.HasCompetentAuthority != null 
+                                 && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
+                                 && relevantResourceTypeList.Contains(sr.ResourceType))
+                    .Select(sr => new ResourceOwnerFE(
+                        sr.HasCompetentAuthority.Name[languageCode],
+                        sr.HasCompetentAuthority.Organization))
+                    .ToList();
+
+                return resourceOwnerList;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("//ResourceService // GetResourceOwnerList failed", ex);
                 throw;
             }
         }
@@ -340,7 +381,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         status: resource.Status,
                         resourceReferences: resource.ResourceReferences,
                         resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.OrganizationNumber,
                         rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                         description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                         visible: resource.Visible,
@@ -354,6 +395,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return resourceList;
+        }
+
+        private List<ResourceOwnerFE> MakeResourceOwnerListFromResources(List<ServiceResource> resources, List<ResourceType> relevantResourceTypes, string languageCode)
+        {
+            var resourceOwnerList = resources
+                .Where(sr => sr.HasCompetentAuthority != null 
+                             && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
+                             && relevantResourceTypes.Contains(sr.ResourceType))
+                .Select(sr => new ResourceOwnerFE(
+                    sr.HasCompetentAuthority.Name[languageCode],
+                    sr.HasCompetentAuthority.OrganizationNumber))
+                .ToList();
+
+            return resourceOwnerList;
         }
     }
 }
