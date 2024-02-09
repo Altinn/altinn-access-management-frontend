@@ -1,6 +1,7 @@
 name: Cypress e2e tests
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       environment:
