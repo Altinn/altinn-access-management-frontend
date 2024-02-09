@@ -30,7 +30,7 @@ jobs:
       - name: Substitute package.json Variables
         run: sed -i 's\%EnvironmentToRunTests%\at22\g' cypress/package.json
       - name: list file
-        run: cypress/package.json
+        run: cat cypress/package.json
       - name: Cypress run
         uses: cypress-io/github-action@v3
         env:
