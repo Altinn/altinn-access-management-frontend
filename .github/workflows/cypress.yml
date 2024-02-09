@@ -32,10 +32,7 @@ jobs:
       - name: list file
         run: cat cypress/package.json
       - name: Cypress run
-        uses: cypress-io/github-action@v3
-        env:
-          EnvironmentToRunTests: at21
+        uses: cypress-io/github-action@v6
         with:
           working-directory: cypress 
-          browser: chrome
           start: yarn test
