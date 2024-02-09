@@ -30,7 +30,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v3
         env:
-          EnvironmentToRunTests: ${{ inputs.environment }}
+          EnvironmentToRunTests: at21
         with:
           project: cypress
           browser: chrome
