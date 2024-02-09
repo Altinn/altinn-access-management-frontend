@@ -31,9 +31,8 @@ jobs:
         run: sed -i 's\%EnvironmentToRunTests%\at22\g' cypress/package.json
       - name: list file
         run: cat cypress/package.json
-      - name: install dependencies
-        working-directory: cypress
-        run: yarn install
+      - name: Set Display
+        run: export DISPLAY=:99.0
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
