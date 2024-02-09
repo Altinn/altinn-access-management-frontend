@@ -146,6 +146,8 @@
     "new_error_title": "New error",
     "generic_error_try_again_title": "Whoops, we stumbled on a technical error",
     "generic_error_try_again": "Try adding the service again by clicking on the plus sign again. Contact Altinn Servicedesk if the problem persists.",
+    "unauthorized_for_party_title": "Manglar delegasjonstilgang",
+    "unauthorized_for_party": "Du kan ikkje delegere tenester for valde aktør. Om du meinte å delegere på vegner av nokon andre, vennlegst gå til profilen og vel denne aktøren frå avgjevarlista.",
     "give_more_rights": "Give more rights",
     "has_received_these_rights": "{{name}} has received these rights:",
     "rights_are_valid_until_deletion": "The rights are valid until they're deleted or withdrawn",

@@ -51,7 +51,9 @@ export const ResourceActionBar = ({
 
   useUpdate(() => {
     if (
-      (status === ServiceStatus.NotDelegable || status === ServiceStatus.HTTPError) &&
+      (status === ServiceStatus.NotDelegable ||
+        status === ServiceStatus.HTTPError ||
+        status === ServiceStatus.Unauthorized) &&
       previousStatus !== undefined
     ) {
       setOpen(true);
@@ -65,6 +67,7 @@ export const ResourceActionBar = ({
         return 'success';
       case ServiceStatus.NotDelegable:
       case ServiceStatus.HTTPError:
+      case ServiceStatus.Unauthorized:
         return 'danger';
       default:
         return 'neutral';
@@ -135,6 +138,7 @@ export const ResourceActionBar = ({
       case ServiceStatus.PartiallyDelegable:
         return undoButton;
       case ServiceStatus.NotDelegable:
+      case ServiceStatus.Unauthorized:
         return notDelegableLabel;
       default:
         return addButton;

@@ -43,10 +43,28 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                return await _singleRightService.CheckDelegationAccess(partyId, request);
+                HttpResponseMessage response = await _singleRightService.CheckDelegationAccess(partyId, request);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, _serializerOptions);
+                }
+
+                if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, response.StatusCode == HttpStatusCode.BadRequest ? "Bad request" : "Unauthorized from backend", detail: responseContent));
+                }
+                else
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
