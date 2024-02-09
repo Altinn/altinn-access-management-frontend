@@ -7,7 +7,7 @@
         "check": "prettier -c src/**/*.js",
         "format": "prettier -w src/**/*.js",
         "cy:open": "cypress open --env environment=%yarn_config_env%",
-        "test": "cypress run --env environment=%EnvironmentToRunTests% --spec src/cypress/e2e/*.js",
+        "test": "cypress run --env environment=%EnvironmentToRunTests% --spec src/e2e/**/*.js",
         "lint": "eslint ."
     },
     "devDependencies": {
