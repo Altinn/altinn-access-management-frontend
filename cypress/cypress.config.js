@@ -42,8 +42,8 @@ module.exports = defineConfig({
         const pathToConfigFile = path.resolve('src/config', `${file}.json`);
         return fs.readJson(pathToConfigFile);
       }
-      var actual = config.env.environment.substr(0, 4);
-      var file = actual || 'at24';
+      // var actual = config.env.environment.substr(0, 4);
+      var file = 'at21';
       return getConfigurationByFile(file);
     },
   },
