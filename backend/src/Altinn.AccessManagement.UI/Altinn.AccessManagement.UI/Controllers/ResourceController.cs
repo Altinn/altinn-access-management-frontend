@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of resource owners</returns>
         [HttpGet]
         [Authorize]
-        [Route("getresourceowners")]
+        [Route("getResourceowners")]
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);

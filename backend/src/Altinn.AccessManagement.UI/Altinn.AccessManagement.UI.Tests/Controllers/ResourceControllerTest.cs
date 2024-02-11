@@ -248,7 +248,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
         
         [Fact]
-        public async Task GetResourceOwners_resourceTypeMaskinPortenSchema()
+        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemAndAltinn2Service()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
@@ -256,26 +256,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ResourceType> relevantResourceTypes = new List<ResourceType>
             {
+                ResourceType.Altinn2Service,
                 ResourceType.MaskinportenSchema
             };
 
+            List<ResourceOwnerFE> expectedResult = new List<ResourceOwnerFE>
+            {
+                new ResourceOwnerFE("Skatteetaten", "974761076"),
+                new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
+                new ResourceOwnerFE("BLOMSTERFINN", "994598759"),
+                new ResourceOwnerFE("NARNIA", "777777777"),
+                new ResourceOwnerFE("Testdepartementet", "123456789"),
+            };
+
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/getResourceowners?relevantResourceTypes={relevantResourceTypes[0]}&relevantResourceTypes={relevantResourceTypes[1]}");
             
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<ResourceOwnerFE> actualResources = JsonSerializer.Deserialize<List<ResourceOwnerFE>>(await response.Content.ReadAsStringAsync(), options);
-        }
-        
-        [Fact]
-        public async Task GetResourceOwners_resourceTypeMaskinPortenSchemaAndAltinn2Service()
-        {
-            // Arrange
-            string token = PrincipalUtil.GetToken(1337, 501337);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
-            
+            List<ResourceOwnerFE> actualResult = JsonSerializer.Deserialize<List<ResourceOwnerFE>>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertEqual(expectedResult, actualResult);
         }
         
         /// <summary>

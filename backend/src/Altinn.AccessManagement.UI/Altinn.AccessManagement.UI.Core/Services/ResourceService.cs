@@ -174,10 +174,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 List<ServiceResource> resources = await GetResources();
 
+                // Filter resources based on criteria and remove duplicates based on OrganisationName
                 var resourceOwnerList = resources
                     .Where(sr => sr.HasCompetentAuthority != null 
                                  && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
+                    .GroupBy(sr => sr.HasCompetentAuthority.Name[languageCode]) // Group by OrganisationName
+                    .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
                     .Select(sr => new ResourceOwnerFE(
                         sr.HasCompetentAuthority.Name[languageCode],
                         sr.HasCompetentAuthority.Organization))
@@ -185,9 +188,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 return resourceOwnerList;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError("//ResourceService // GetResourceOwnerList failed", ex);
+                _logger.LogError("//ResourceService // GetResourceOwners failed", ex);
                 throw;
             }
         }
