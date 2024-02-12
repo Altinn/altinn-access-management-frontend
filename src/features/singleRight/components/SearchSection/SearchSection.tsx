@@ -173,6 +173,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
 
     const errorCodeTextKeyList =
       currentServiceWithStatus?.status === ServiceStatus.NotDelegable ||
+      currentServiceWithStatus?.status === ServiceStatus.Unauthorized ||
       currentServiceWithStatus?.status === ServiceStatus.HTTPError
         ? currentServiceWithStatus.rightList?.flatMap(
             (result) => result.details?.map((detail) => detail.code) || [],
@@ -220,9 +221,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                   you: t('common.you_uppercase'),
                 })}
               </Paragraph>
-              {prioritizedErrorCodes[0] !== ServiceStatus.HTTPError && (
-                <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
-              )}
+              {prioritizedErrorCodes[0] !== ServiceStatus.HTTPError &&
+                prioritizedErrorCodes[0] !== ServiceStatus.Unauthorized && (
+                  <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
+                )}
             </Alert>
           )}
           <Paragraph size='small'>{resource.description}</Paragraph>

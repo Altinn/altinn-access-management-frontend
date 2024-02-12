@@ -147,6 +147,8 @@
     "new_error_title": "Ny feil",
     "generic_error_try_again_title": "Oj, det oppstod ein teknisk feil",
     "generic_error_try_again": "Prøv å legge til tenesta på nytt ved å klikke på pluss-teiknet igjen. Ta kontakt med Altinn Servicedesk om problemet held fram.",
+    "unauthorized_for_party_title": "Manglar delegasjonstilgang",
+    "unauthorized_for_party": "Du kan ikkje delegere tenester for valde aktør. Om du meinte å delegere på vegner av nokon andre, vennlegst gå til profilen og vel denne aktøren frå avgjevarlista.",
     "missing_delegable_right": "Manglar rett",
     "missing_srr_right_access_title": "Manglar SRR-rettegheit",
     "complete_delegation": "Fullfør delegering",

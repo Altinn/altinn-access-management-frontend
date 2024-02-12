@@ -19,14 +19,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, Right request)
+        public async Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Right request)
         {
             string resourceFileName = GetMockDataFilename(request.Resource);
-            string path = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse", resourceFileName+".json");
+            string path = Path.Combine(localPath, "Data", "SingleRight", "DelegationAccessCheckResponse");
 
-            List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
-
-            return Task.FromResult(expectedResponse);
+            return await GetMockedHttpResponse(path, resourceFileName);
         }
 
         /// <inheritdoc />
@@ -34,17 +32,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             string resourceFileName = GetMockDataFilename(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "CreateDelegation");
-            
-            try
-            {
-                string data = Util.GetMockDataSerialized(dataPath, resourceFileName + ".json");
-                return new HttpResponseMessage
-                    { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) };
-            }
-            catch
-            {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
+
+            return await GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
         private static string GetMockDataFilename(List<IdValuePair> resourceReference)
@@ -62,6 +51,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return resourceReference[1].Value;
                 default:
                     return "Unknown";
+            }
+        }
+
+        private static async Task<HttpResponseMessage> GetMockedHttpResponse(string path,  string resourceFileName)
+        {
+            try
+            {
+                string data = Util.GetMockDataSerialized(path, resourceFileName + ".json");
+                return new HttpResponseMessage
+                { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) };
+            }
+            catch
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
         }
     }
