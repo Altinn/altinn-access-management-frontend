@@ -1,7 +1,7 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Enums
 {
     /// <summary>
-    /// Enum representation of the different types of resources supported by the resource registry
+    /// Enum representation of the different types of resources supported by the resource registry. The specific values represents their binary value.
     /// </summary>
     [Flags]
     public enum ResourceType
