@@ -32,6 +32,11 @@ import {
 } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+import type { ResourceOwner } from '@/rtk/features/resourceOwner/resourceOwnerApi';
+import {
+  ResourceType,
+  useGetResourceOwnersQuery,
+} from '@/rtk/features/resourceOwner/resourceOwnerApi';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 
@@ -48,15 +53,19 @@ export const ChooseApiPage = () => {
   const [urlParams, setUrlParams] = useSearchParams();
 
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
-  const apiProviders = useAppSelector((state) => state.delegableApi.apiProviders);
   const dispatch = useAppDispatch();
   const [delegationCheck] = useDelegationCheckMutation();
+  const resourceTypeList: ResourceType[] = [ResourceType.MaskinportenSchema];
 
   const {
     data: searchResults,
     error,
     isFetching,
   } = useSearchQuery({ searchString, ROfilters: filters });
+
+  const { data: apiProviders } = useGetResourceOwnersQuery({
+    resourceTypeList,
+  });
 
   useEffect(() => {
     if (!isFetching && urlParams) {
@@ -110,10 +119,12 @@ export const ChooseApiPage = () => {
     setFilters(filterList);
   };
 
-  const filterOptions: FilterOption[] = apiProviders.map((provider: string) => ({
-    label: provider,
-    value: provider,
-  }));
+  const filterOptions: FilterOption[] | undefined = apiProviders?.map(
+    (provider: ResourceOwner) => ({
+      label: provider.organisationName,
+      value: provider.organisationNumber,
+    }),
+  );
 
   const delegableApiActionBars = () => {
     if (error?.message) {
