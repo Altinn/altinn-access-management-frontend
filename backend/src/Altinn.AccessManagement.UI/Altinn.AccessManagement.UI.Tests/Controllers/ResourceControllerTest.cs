@@ -45,6 +45,30 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _resourceService = new ResourceService();
             mockFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
         }
+        
+        /// <summary>
+        ///     Test case: GetResources returns a list of resources
+        ///     Expected: GetResources returns a list of resources with language filtered for the authenticated users selected
+        ///     language
+        /// </summary>
+        [Fact]
+        public async Task GetMaskinportenResources_valid()
+        {
+            // Arrange
+            List<ServiceResourceFE> expectedResources = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
+
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/maskinportenschema");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertCollections(expectedResources, actualResources, AssertionUtil.AssertEqual);
+        }
 
         /// <summary>
         ///     Test case: PaginatedSearch with pagination (no search string or filters)
@@ -289,7 +313,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string path = Path.Combine(mockFolder, "Data", "ResourceRegistry", "resourcesfe.json");
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
             
             // Act
@@ -307,7 +330,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: Search returns a list of all maskinporten schemas for the authenticated users selected language matching the provided filters
         /// </summary>
         [Fact]
-        public async Task MaskinportenschemaSearch_filterSet_ReturnsMatch()
+        public async Task MaskinportenschemaSearch_filterSet_ReturnsMatches()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
@@ -333,7 +356,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     for the authenticated users selected language
         /// </summary>
         [Fact]
-        public async Task MaskinportenschemaSearch_searchStringSet_ReturnsMatch()
+        public async Task MaskinportenschemaSearch_searchStringSet_ReturnsMatches()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);
@@ -357,7 +380,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: Returns a list of maskinporten schemas matching the provided filters and search string with correct chosen language
         /// </summary>
         [Fact]
-        public async Task MaskinportenschemaSearch_searchStringAndFilterSet_ReturnsMatch()
+        public async Task MaskinportenschemaSearch_searchStringAndFilterSet_ReturnsMatches()
         {
             // Arrange
             string token = PrincipalUtil.GetToken(1337, 501337);

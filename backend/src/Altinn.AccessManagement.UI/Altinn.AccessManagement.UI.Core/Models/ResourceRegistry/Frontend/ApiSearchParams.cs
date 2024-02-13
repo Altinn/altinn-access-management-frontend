@@ -1,7 +1,7 @@
 namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 /// <summary>
-/// Search parameters for api search
+/// Filter and search parameters for api search
 /// </summary>
 public class ApiSearchParams
 {

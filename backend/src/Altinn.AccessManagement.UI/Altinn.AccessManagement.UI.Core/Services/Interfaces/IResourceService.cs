@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         ///     Searches through all maskinporten schema services and returns matches
         /// </summary>
-        /// <returns>Paginated search results</returns>
+        /// <returns>List of resource owners</returns>
         public Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[]? resourceOwnerFilters, string searchString);
 
         /// <summary>

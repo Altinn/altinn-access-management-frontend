@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>List of resource owners</returns>
         [HttpGet]
         [Authorize]
-        [Route("getResourceowners")]
+        [Route("getResourceOwners")]
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
@@ -121,9 +121,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
         
         /// <summary>
-        ///     Searches through all delegable maskinportenScehma services and returns matches based on the provided search string and filters
+        ///     Searches through all delegable maskinportenschema services and returns matches based on the provided search string and filters
         /// </summary>
-        /// <returns>search results</returns>
+        /// <returns>list of maskinportenschemas</returns>
         [HttpGet]
         [Authorize]
         [Route("maskinportenschema/search")]

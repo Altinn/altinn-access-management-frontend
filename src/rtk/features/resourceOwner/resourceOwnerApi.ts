@@ -41,7 +41,7 @@ export const resourceOwnerApi = createApi({
         for (const type of resourceTypeList) {
           resourceTypesUrl = resourceTypesUrl + `&relevantResourceTypes=${type}`;
         }
-        return `resources/getResourceowners?${resourceTypesUrl}`;
+        return `resources/getResourceOwners?${resourceTypesUrl}`;
       },
     }),
   }),

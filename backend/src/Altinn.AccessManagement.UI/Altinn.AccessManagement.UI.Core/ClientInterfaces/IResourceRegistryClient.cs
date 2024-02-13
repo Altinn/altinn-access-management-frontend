@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<ServiceResource>> GetResources();
         
         /// <summary>
-        ///     Integration point for retrieving the list of resources with the resource <param name="resourceType"></param> 
+        ///     Integration point for retrieving the list of resources for the given <param name="resourceType"></param> 
         /// </summary>
         /// <returns>The resource list if exists</returns>
         Task<List<ServiceResource>> GetResources(ResourceType resourceType);

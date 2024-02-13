@@ -221,13 +221,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
             try
             {
                 List<ServiceResource> resources = await _resourceRegistryClient.GetResources(ResourceType.MaskinportenSchema);
-                List<ServiceResource> resourceList =
-                    resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible);
-                List<ServiceResourceFE> resourcesFE =
-                    MapResourceToFrontendModel(resourceList, languageCode);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable);
+                List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
-                List<ServiceResourceFE> filteredresources =
-                    FilterResourceList(resourcesFE, resourceOwnerFilters);
+                List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
                 return SearchInResourceList(filteredresources, searchString);
             }
             catch (Exception ex)
