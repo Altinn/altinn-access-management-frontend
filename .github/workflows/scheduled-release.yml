@@ -122,7 +122,7 @@ jobs:
       - id: version
         uses: battila7/get-version-action@v2
       - name: Add Version tag to Docker Image
-        uses: shrink/actions-docker-registry-tag@v3
+        uses: shrink/actions-docker-registry-tag@v4
         with:
           registry: ${{ env.REGISTRY }}
           repository: '${{ env.IMAGE_NAME }}'
@@ -139,7 +139,7 @@ jobs:
     timeout-minutes: 60
     steps:
       # Drafts your next Release notes as Pull Requests are merged into "master"
-      - uses: release-drafter/release-drafter@v5
+      - uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 import * as React from 'react';
 import { mount } from 'cypress/react18';
 // eslint-disable-next-line import/no-unresolved

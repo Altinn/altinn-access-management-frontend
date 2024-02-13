@@ -149,6 +149,8 @@
     "new_error_title": "Ny feil",
     "generic_error_try_again_title": "Oj, det oppstod en teknisk feil",
     "generic_error_try_again": "Prøv å legge til tjenesten på nytt ved å klikke på pluss-tegnet igjen. Ta kontakt med Altinn Servicedesk hvis problemet fortsetter.",
+    "unauthorized_for_party_title": "Mangler delegeringstilgang",
+    "unauthorized_for_party": "Du kan ikke delegere tjenester for valgte aktør. Dersom du mente å delegere på vegne av noen andre, vennligst gå til profilen og velg denne aktøren fra avgiverlisten.",
     "missing_delegable_right": "Mangler rettighet",
     "missing_srr_right_access_title": "Mangler SRR-rettighet",
     "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",
