@@ -83,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<Party>> GetPartyListByUUID(List<Guid> uuidList)
+        public async Task<List<Party>> GetPartyList(List<Guid> uuidList)
         {
             try
             {

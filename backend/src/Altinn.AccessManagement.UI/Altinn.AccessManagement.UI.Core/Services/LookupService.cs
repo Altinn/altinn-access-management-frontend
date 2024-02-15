@@ -42,14 +42,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>        
         public async Task<Party> GetPartyByUUID(Guid uuid)
         {
-            List<Party> partyList = await _registerClient.GetPartyListByUUID(new List<Guid>() { uuid });
+            // We fetch the party using the partyList endpoint because it has better performance than the one ment for singular party queries.
+            // However, since we only ask for one uuid, we will still only get one party back.
+            List<Party> partyList = await _registerClient.GetPartyList(new List<Guid>() { uuid });
             return partyList?.FirstOrDefault();
         }
 
         /// <inheritdoc/>        
         public async Task<UserProfile> GetUserByUUID(Guid uuid)
         {
-            UserProfile user = await _profileClient.GetUserProfileByUUID(uuid);
+            UserProfile user = await _profileClient.GetUserProfile(uuid);
             return user;
         }
     }

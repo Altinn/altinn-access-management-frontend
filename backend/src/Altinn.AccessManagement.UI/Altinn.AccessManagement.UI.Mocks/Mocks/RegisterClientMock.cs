@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<List<Party>> GetPartyListByUUID(List<Guid> uuidList)
+        public Task<List<Party>> GetPartyList(List<Guid> uuidList)
         {
             Party party = null;
             string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");

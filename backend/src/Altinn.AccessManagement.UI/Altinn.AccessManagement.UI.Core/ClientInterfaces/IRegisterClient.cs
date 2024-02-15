@@ -23,6 +23,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <returns>
         /// A list of party information corresponding to the provided uuids
         /// </returns>
-        Task<List<Party>> GetPartyListByUUID(List<Guid> uuidList);
+        Task<List<Party>> GetPartyList(List<Guid> uuidList);
     }
 }
