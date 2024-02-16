@@ -94,13 +94,39 @@ namespace Altinn.AccessManagement.UI.Controllers
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile user = await _profileService.GetUserProfile(userId);
             AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
+            string languageCode = GetAltinnPersistenceCookieValue();
+            if (languageCode == string.Empty)
+            {
+                languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
+            }
 
             HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
             });
+        }
+        
+        private string GetAltinnPersistenceCookieValue()
+        {
+            var cookieValue = HttpContext.Request.Cookies["altinnPersistentContext"];
+
+            if (cookieValue.Contains("UL1033"))
+            {
+                return "en";
+            }
+
+            if (cookieValue.Contains("UL1044"))
+            {
+                return "no_nb";
+            }
+
+            if (cookieValue.Contains("UL2068"))
+            {
+                return "no_nn";
+            }
+            
+            return string.Empty;
         }
 
         private async Task<bool> ShouldShowAppView()
