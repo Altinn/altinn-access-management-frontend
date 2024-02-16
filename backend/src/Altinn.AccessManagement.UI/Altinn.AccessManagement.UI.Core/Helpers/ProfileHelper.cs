@@ -48,10 +48,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         return "no_nb";
                 }
             }
-            else
-            {
-                return "no_nb";
-            }
+            
+            return "no_nb";
         }
     }
 }
