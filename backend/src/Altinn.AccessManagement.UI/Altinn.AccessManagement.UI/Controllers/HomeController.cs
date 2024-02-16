@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile user = await _profileService.GetUserProfile(userId);
             AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = GetLanguageFromAltinnPersistence();
+            string languageCode = GetAltinnPersistenceCookieValue();
             if (languageCode == string.Empty)
             {
                 languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
@@ -107,7 +107,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             });
         }
         
-        private string GetLanguageFromAltinnPersistence()
+        private string GetAltinnPersistenceCookieValue()
         {
             var cookieValue = HttpContext.Request.Cookies["altinnPersistentContext"];
 
