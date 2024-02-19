@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"{partyId}/rights/delegation/delegationcheck";
+                string endpointUrl = $"internal/{partyId}/rights/delegation/delegationcheck";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
         {
-            string endpointUrl = $"{party}/rights/delegation/offered";
+            string endpointUrl = $"internal/{party}/rights/delegation/offered";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
