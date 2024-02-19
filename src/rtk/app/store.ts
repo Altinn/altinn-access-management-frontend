@@ -10,6 +10,7 @@ import userInfoReducer from '../features/userInfo/userInfoSlice';
 import { singleRightsApi } from '../features/singleRights/singleRightsApi';
 import singleRightsReducer from '../features/singleRights/singleRightsSlice';
 import { apiDelegationApi } from '../features/apiDelegation/apiDelegationApi';
+import { lookupApi } from '../features/lookup/lookupApi';
 
 const logger = createLogger();
 
@@ -21,11 +22,17 @@ const store = configureStore({
     delegationRequest: delegationRequestReducer,
     userInfo: userInfoReducer,
     singleRightsSlice: singleRightsReducer,
+    [lookupApi.reducerPath]: lookupApi.reducer,
     [singleRightsApi.reducerPath]: singleRightsApi.reducer,
     [apiDelegationApi.reducerPath]: apiDelegationApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(logger, singleRightsApi.middleware, apiDelegationApi.middleware),
+    getDefaultMiddleware().concat(
+      logger,
+      lookupApi.middleware,
+      singleRightsApi.middleware,
+      apiDelegationApi.middleware,
+    ),
 });
 
 setupListeners(store.dispatch);

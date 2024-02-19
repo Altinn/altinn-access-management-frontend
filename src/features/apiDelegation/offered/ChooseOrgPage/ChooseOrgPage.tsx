@@ -119,7 +119,7 @@ export const ChooseOrgPage = () => {
         <ActionBar
           key={org.orgNr}
           title={org.orgName}
-          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
               icon={<PlusCircleIcon fontSize='3rem' />}
@@ -145,7 +145,7 @@ export const ChooseOrgPage = () => {
         <ActionBar
           key={index}
           title={org.orgName}
-          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
               icon={<MinusCircleIcon />}
