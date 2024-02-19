@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
-                string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+                string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
                 return await _maskinportenService.GetReceivedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
-                string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+                string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
                 return await _maskinportenService.GetOfferedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)
