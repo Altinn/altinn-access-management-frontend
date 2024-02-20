@@ -267,7 +267,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ResourceOwnerFE> actualResult = await response.Content.ReadAsAsync<List<ResourceOwnerFE>>();
             for (int i = 0; i < expectedResult.Count; i++)
             {
-                Assert.Equal(expectedResult[i], actualResult[i]);
+                Assert.Equal(expectedResult[i], actualResult[i]);@
             }
         }
         
@@ -352,7 +352,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         
         /// <summary>
         ///     Test case: Search for maskinporten schemas with search
-        ///     Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered
+        ///     Expected: Search returns a list of resources matching the filters in paginated form with language filtered
         ///     for the authenticated users selected language
         /// </summary>
         [Fact]

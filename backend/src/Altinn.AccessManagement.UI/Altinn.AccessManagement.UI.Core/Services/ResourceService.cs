@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .Where(sr => sr.HasCompetentAuthority != null 
                                  && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
-                    .GroupBy(sr => sr.HasCompetentAuthority.Name[languageCode]) // Group by OrganisationName
+                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode)
                     .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
                     .Select(sr => new ResourceOwnerFE(
                         sr.HasCompetentAuthority.Name[languageCode],

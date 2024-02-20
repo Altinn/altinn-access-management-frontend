@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { type CustomError } from '@/dataObjects';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 export interface DelegableApi {
@@ -16,20 +15,11 @@ export interface DelegableApi {
 }
 
 export interface SliceState {
-  loading: boolean;
-  chosenDelegableApiList: DelegableApi[];
-  apiProviders: string[];
-  error: CustomError;
+  chosenApis: DelegableApi[];
 }
 
 const initialState: SliceState = {
-  loading: true,
-  apiProviders: [''],
-  chosenDelegableApiList: [],
-  error: {
-    message: '',
-    statusCode: '',
-  },
+  chosenApis: [],
 };
 
 const delegableApiSlice = createSlice({
@@ -37,16 +27,17 @@ const delegableApiSlice = createSlice({
   initialState,
   reducers: {
     softAddApi: (state: SliceState, action) => {
-      state.chosenDelegableApiList.push(action.payload);
+      state.chosenApis.push(action.payload);
     },
     softRemoveApi: (state: SliceState, action) => {
-      const { chosenDelegableApiList } = state;
-      state.chosenDelegableApiList = chosenDelegableApiList.filter(
+      const { chosenApis: chosenDelegableApiList } = state;
+      state.chosenApis = chosenDelegableApiList.filter(
         (delegableApi) => delegableApi.identifier !== action.payload.identifier,
       );
     },
+    resetChosenApis: () => initialState,
   },
 });
 
 export default delegableApiSlice.reducer;
-export const { softAddApi, softRemoveApi } = delegableApiSlice.actions;
+export const { softAddApi, softRemoveApi, resetChosenApis } = delegableApiSlice.actions;

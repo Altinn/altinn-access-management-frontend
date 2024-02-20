@@ -23,6 +23,7 @@ import {
 import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
+import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { LayoutState } from '../LayoutState';
 
@@ -59,6 +60,7 @@ export const OverviewPageContent = ({
     handleSaveDisabled();
     dispatch(resetDelegableOrgs());
     dispatch(resetDelegationRequests());
+    dispatch(resetChosenApis());
   }, [overviewOrgs, error]);
 
   switch (layout) {

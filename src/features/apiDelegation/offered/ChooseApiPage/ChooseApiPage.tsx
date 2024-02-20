@@ -52,7 +52,7 @@ export const ChooseApiPage = () => {
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
 
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const dispatch = useAppDispatch();
   const [delegationCheck] = useDelegationCheckMutation();
   const resourceTypeList: ResourceType[] = [ResourceType.MaskinportenSchema];
@@ -235,7 +235,7 @@ export const ChooseApiPage = () => {
               <Search
                 label={t('api_delegation.search_for_api')}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setSearchString(event.target.value);
+                  debouncedSearch(event.target.value);
                 }}
                 size='medium'
                 onClear={() => {

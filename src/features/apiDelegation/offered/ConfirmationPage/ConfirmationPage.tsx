@@ -36,7 +36,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import classes from './ConfirmationPage.module.css';
 
 export const ConfirmationPage = () => {
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const loading = useAppSelector((state) => state.delegationRequest.loading);
   const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
