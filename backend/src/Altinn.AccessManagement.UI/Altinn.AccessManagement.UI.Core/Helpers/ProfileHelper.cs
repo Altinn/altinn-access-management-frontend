@@ -67,6 +67,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         {
             var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
 
+            if (cookieValue == null)
+            {
+                return string.Empty;
+            }
+
             if (cookieValue.Contains("UL=1033"))
             {
                 return "en";
@@ -89,6 +94,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         {
             var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
 
+            if (cookieValue == null)
+            {
+                return string.Empty;
+            }
+            
             if (cookieValue.Contains("UL=1033"))
             {
                 return "en";
