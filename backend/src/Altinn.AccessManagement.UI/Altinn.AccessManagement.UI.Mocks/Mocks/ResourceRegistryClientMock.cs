@@ -22,13 +22,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
-            ServiceResource resource = null;
             string resourcesPath = GetResourcePath(resourceId);
-            if (File.Exists(resourcesPath))
-            {
-                string content = File.ReadAllText(resourcesPath);
-                resource = (ServiceResource)JsonSerializer.Deserialize(content, typeof(ServiceResource), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            }
+            ServiceResource resource = Util.GetMockData<ServiceResource>(resourcesPath);
 
             return await Task.FromResult(resource);
         }
@@ -36,45 +31,23 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<ServiceResource>> GetResources()
         {
-            List<ServiceResource> resources = new List<ServiceResource>();
-
             string path = GetDataPathForResources();
 
-            if (File.Exists(path))
-            {
+            List<ServiceResource> resources = Util.GetMockData<List<ServiceResource>>(path);
 
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-
-                string content = File.ReadAllText(path);
-                resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
-
-            }
             return Task.FromResult(resources);
         }
         
         /// <inheritdoc />
-        public Task<List<ServiceResource>> GetResources(ResourceType resourceType)
+        public Task<List<ServiceResource>> GetMaskinportenSchemas()
         {
-            List<ServiceResource> resources = new List<ServiceResource>();
 
             string path = GetDataPathForResources();
 
-            if (File.Exists(path))
-            {
-
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-
-                string content = File.ReadAllText(path);
-                resources = JsonSerializer.Deserialize<List<ServiceResource>>(content, options);
-
-            }
-            return Task.FromResult(resources);
+            List<ServiceResource> resources = Util.GetMockData<List<ServiceResource>>(path);
+            
+            List<ServiceResource> maskinPortenSchemas = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable);
+            return Task.FromResult(maskinPortenSchemas);
         }
 
         /// <inheritdoc />

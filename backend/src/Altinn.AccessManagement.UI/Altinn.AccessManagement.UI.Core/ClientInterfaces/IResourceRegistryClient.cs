@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<ServiceResource> GetResource(string resourceId);
 
         /// <summary>
-        ///     Integration point for retrieving a list of resources
+        /// Integration point for retrieving a list of resources. Weird enough it's not possible to filter on AltinnApp or GenericAccessResource for this endpoint
         /// </summary>
         /// <returns>The resource list if exists</returns>
         Task<List<ServiceResource>> GetResources();
@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     Integration point for retrieving the list of resources for the given <param name="resourceType"></param> 
         /// </summary>
         /// <returns>The resource list if exists</returns>
-        Task<List<ServiceResource>> GetResources(ResourceType resourceType);
+        Task<List<ServiceResource>> GetMaskinportenSchemas();
 
         /// <summary>
         ///     Integration point for retrieving the full list of resources

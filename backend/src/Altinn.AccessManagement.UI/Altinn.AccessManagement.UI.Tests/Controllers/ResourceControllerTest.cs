@@ -267,7 +267,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ResourceOwnerFE> actualResult = await response.Content.ReadAsAsync<List<ResourceOwnerFE>>();
             for (int i = 0; i < expectedResult.Count; i++)
             {
-                Assert.Equal(expectedResult[i], actualResult[i]);@
+                Assert.Equal(expectedResult[i], actualResult[i]);
             }
         }
         

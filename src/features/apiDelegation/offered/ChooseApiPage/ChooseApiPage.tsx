@@ -239,7 +239,7 @@ export const ChooseApiPage = () => {
                 }}
                 size='medium'
                 onClear={() => {
-                  debouncedSearch('');
+                  setSearchString('');
                 }}
               ></Search>
             </div>
