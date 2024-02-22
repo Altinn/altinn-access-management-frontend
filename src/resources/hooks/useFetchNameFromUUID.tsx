@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -6,8 +6,6 @@ import {
   useGetPartyByUUIDQuery,
   useGetUserByUUIDQuery,
 } from '@/rtk/features/lookup/lookupApi';
-
-import { useUpdate } from './useUpdate';
 
 // Used for fetching recipient name from userUUID or partyUUID
 export const useFetchNameFromUUID = (
@@ -18,20 +16,33 @@ export const useFetchNameFromUUID = (
 
   const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
   const [error, setError] = useState(false);
+  const [skipUser, setSkipUser] = useState(userUUID === null);
+  const [skipParty, setSkipParty] = useState(partyUUID === null);
+
+  useEffect(() => {
+    if (userUUID) {
+      setSkipUser(false);
+      setSkipParty(true);
+    } else if (partyUUID) {
+      setSkipParty(false);
+      setSkipUser(true);
+    }
+  }, [userUUID, partyUUID]);
+
   const {
     data: user,
     error: getUserError,
     isLoading: getUserIsLoading,
-  } = useGetUserByUUIDQuery(userUUID ?? '');
+  } = useGetUserByUUIDQuery(userUUID ?? '', { skip: skipUser });
   const {
     data: party,
     error: getPartyError,
     isLoading: getPartyIsLoading,
-  } = useGetPartyByUUIDQuery(partyUUID ?? '');
+  } = useGetPartyByUUIDQuery(partyUUID ?? '', { skip: skipParty });
 
   const isLoading = getUserIsLoading || getPartyIsLoading;
 
-  useUpdate(() => {
+  useEffect(() => {
     if (userUUID && !getUserIsLoading) {
       if (getUserError) {
         setError(true);
@@ -63,7 +74,7 @@ export const useFetchNameFromUUID = (
       // No UUID given
       setError(true);
     }
-  }, [user, party, getUserIsLoading, getPartyIsLoading]);
+  }, [user, party, getUserIsLoading, getPartyIsLoading, getUserError, getPartyError]);
 
   return [recipientName, error, isLoading];
 };
