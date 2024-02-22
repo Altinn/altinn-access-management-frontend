@@ -16,13 +16,13 @@ using Azure.Core;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="MaskinportenSchemaDelegationController"></see>
+    ///     Test class for <see cref="MaskinportenSchemaController"></see>
     /// </summary>
     [Collection("MaskinportenSchemaController Tests")]
-    public class MaskinportenSchemaDelegationControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaDelegationController>>
+    public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaController>>
     {
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<MaskinportenSchemaDelegationController> _factory;
+        private readonly CustomWebApplicationFactory<MaskinportenSchemaController> _factory;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string unitTestFolder;
@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public MaskinportenSchemaDelegationControllerTest(CustomWebApplicationFactory<MaskinportenSchemaDelegationController> factory)
+        public MaskinportenSchemaControllerTest(CustomWebApplicationFactory<MaskinportenSchemaController> factory)
         {
             _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaDelegationControllerTest).Assembly.Location).LocalPath);
+            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
         }
 
         /// <summary>

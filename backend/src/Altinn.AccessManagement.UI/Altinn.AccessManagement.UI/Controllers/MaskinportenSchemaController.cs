@@ -5,8 +5,6 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -22,23 +20,23 @@ namespace Altinn.AccessManagement.UI.Controllers
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     [Route("accessmanagement/api/v1")]
-    public class MaskinportenSchemaDelegationController : ControllerBase
+    public class MaskinportenSchemaController : ControllerBase
     {
         private readonly IMaskinportenSchemaService _maskinportenService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<MaskinportenSchemaDelegationController> _logger;
+        private readonly ILogger<MaskinportenSchemaController> _logger;
         private readonly IProfileService _profileService;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaDelegationController" /> class.
+        ///     Initializes a new instance of the <see cref="MaskinportenSchemaController" /> class.
         /// </summary>
         /// <param name="logger">the handler for logger service</param>
         /// <param name="maskinportenServicesService">The service implementation for handling maskinporten schema delegations</param>
         /// <param name="profileService">The service implementation for user profile operations</param>
         /// <param name="httpContextAccessor">Accessor for httpcontext</param>
-        public MaskinportenSchemaDelegationController(
-            ILogger<MaskinportenSchemaDelegationController> logger,
+        public MaskinportenSchemaController(
+            ILogger<MaskinportenSchemaController> logger,
             IMaskinportenSchemaService maskinportenServicesService,
             IProfileService profileService,
             IHttpContextAccessor httpContextAccessor)
