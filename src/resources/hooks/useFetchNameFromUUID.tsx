@@ -16,29 +16,17 @@ export const useFetchNameFromUUID = (
 
   const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
   const [error, setError] = useState(false);
-  const [skipUser, setSkipUser] = useState(userUUID === null);
-  const [skipParty, setSkipParty] = useState(partyUUID === null);
-
-  useEffect(() => {
-    if (userUUID) {
-      setSkipUser(false);
-      setSkipParty(true);
-    } else if (partyUUID) {
-      setSkipParty(false);
-      setSkipUser(true);
-    }
-  }, [userUUID, partyUUID]);
 
   const {
     data: user,
     error: getUserError,
     isLoading: getUserIsLoading,
-  } = useGetUserByUUIDQuery(userUUID ?? '', { skip: skipUser });
+  } = useGetUserByUUIDQuery(userUUID ?? '', { skip: userUUID === null });
   const {
     data: party,
     error: getPartyError,
     isLoading: getPartyIsLoading,
-  } = useGetPartyByUUIDQuery(partyUUID ?? '', { skip: skipParty });
+  } = useGetPartyByUUIDQuery(partyUUID ?? '', { skip: partyUUID === null || userUUID !== null });
 
   const isLoading = getUserIsLoading || getPartyIsLoading;
 
