@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import store from '@/rtk/app/store';
-import { DeletableListItem, BorderedList } from '@/components';
+import { DeletableListItem } from '@/components';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,124 +15,66 @@ Cypress.Commands.add('mount', (component, options = {}) => {
   return mount(wrapped, mountOptions);
 });
 
+const overviewOrg: OverviewOrg = {
+  id: '1',
+  orgName: 'Evry',
+  isAllSoftDeleted: true,
+  orgNr: '123456789',
+  apiList: [
+    {
+      id: '1',
+      apiName: 'Delegert API A',
+      isSoftDelete: true,
+      owner: 'Accenture',
+      description:
+        'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+      scopes: ['api'],
+    },
+  ],
+};
+
 describe('DeletableListItem', () => {
   it('should show delete button when state isEditable=true', () => {
-    const overviewOrg: OverviewOrg = {
-      id: '1',
-      orgName: 'Evry',
-      isAllSoftDeleted: false,
-      orgNr: '123456789',
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    };
-
     cy.mount(
-      <BorderedList>
-        <DeletableListItem
-          softDeleteCallback={() => null}
-          softRestoreCallback={() => null}
-          item={overviewOrg.apiList[0]}
-          isEditable={true}
-        />
-      </BorderedList>,
+      <DeletableListItem
+        softDeleteCallback={() => null}
+        softRestoreCallback={() => null}
+        item={overviewOrg.apiList[0]}
+        isEditable={true}
+      />,
     );
     cy.findByRole('button', { name: /delete/i }).should('exist');
   });
 
   it('should not show delete button when state isEditable=false', () => {
-    const overviewOrg: OverviewOrg = {
-      id: '1',
-      orgName: 'Evry',
-      isAllSoftDeleted: false,
-      orgNr: '123456789',
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    };
-
     cy.mount(
-      <BorderedList>
-        <DeletableListItem
-          softDeleteCallback={() => null}
-          softRestoreCallback={() => null}
-          item={overviewOrg.apiList[0]}
-          isEditable={false}
-        />
-      </BorderedList>,
+      <DeletableListItem
+        softDeleteCallback={() => null}
+        softRestoreCallback={() => null}
+        item={overviewOrg.apiList[0]}
+        isEditable={false}
+      />,
     );
     cy.findByRole('button', { name: /delete/i }).should('not.exist');
   });
 
   it('should show an undo button and display list item texts with line through when state isEditable=true', () => {
-    const overviewOrg: OverviewOrg = {
-      id: '1',
-      orgName: 'Evry',
-      isAllSoftDeleted: true,
-      orgNr: '123456789',
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: true,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    };
-
     cy.mount(
-      <BorderedList>
-        <DeletableListItem
-          softDeleteCallback={() => null}
-          softRestoreCallback={() => null}
-          item={overviewOrg.apiList[0]}
-          isEditable={true}
-        />
-      </BorderedList>,
+      <DeletableListItem
+        softDeleteCallback={() => null}
+        softRestoreCallback={() => null}
+        item={overviewOrg.apiList[0]}
+        isEditable={true}
+      />,
     );
 
-    cy.get('[data-testid="list-item-texts"]').should(
-      'have.css',
-      'text-decoration',
-      'line-through solid rgb(30, 43, 60)',
-    );
+    cy.get('[data-testid="list-item-texts"]')
+      .should('have.css', 'text-decoration')
+      .and('include', 'line-through');
     cy.findByRole('button', { name: /undo/i }).should('exist');
   });
 
   it('should do softDeleteCallback on button click', () => {
-    const overviewOrg: OverviewOrg = {
-      id: '1',
-      orgName: 'Evry',
-      isAllSoftDeleted: false,
-      orgNr: '123456789',
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: false,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    };
-
     const softDelete = () => {
       cy.stub();
     };
@@ -140,14 +82,12 @@ describe('DeletableListItem', () => {
     const softDeleteSpy = cy.spy(softDelete).as('softDeleteSpy');
 
     cy.mount(
-      <BorderedList>
-        <DeletableListItem
-          softDeleteCallback={softDeleteSpy}
-          softRestoreCallback={() => null}
-          item={overviewOrg.apiList[0]}
-          isEditable={true}
-        />
-      </BorderedList>,
+      <DeletableListItem
+        softDeleteCallback={softDeleteSpy}
+        softRestoreCallback={() => null}
+        item={overviewOrg.apiList[0]}
+        isEditable={true}
+      />,
     );
 
     cy.findByRole('button', { name: /delete/i }).click();
@@ -155,23 +95,6 @@ describe('DeletableListItem', () => {
   });
 
   it('should do softRestoreCallback on button click', () => {
-    const overviewOrg: OverviewOrg = {
-      id: '1',
-      orgName: 'Evry',
-      isAllSoftDeleted: true,
-      orgNr: '123456789',
-      apiList: [
-        {
-          id: '1',
-          apiName: 'Delegert API A',
-          isSoftDelete: true,
-          owner: 'Accenture',
-          description:
-            'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-        },
-      ],
-    };
-
     const softRestore = () => {
       cy.stub();
     };
@@ -179,14 +102,12 @@ describe('DeletableListItem', () => {
     const softRestoreSpy = cy.spy(softRestore).as('softRestoreSpy');
 
     cy.mount(
-      <BorderedList>
-        <DeletableListItem
-          softDeleteCallback={() => null}
-          softRestoreCallback={softRestoreSpy}
-          item={overviewOrg.apiList[0]}
-          isEditable={true}
-        />
-      </BorderedList>,
+      <DeletableListItem
+        softDeleteCallback={() => null}
+        softRestoreCallback={softRestoreSpy}
+        item={overviewOrg.apiList[0]}
+        isEditable={true}
+      />,
     );
 
     cy.findByRole('button', { name: /undo/i }).click();

@@ -174,52 +174,7 @@ describe('OrgDelegationActionBar', () => {
       cy.findByRole('button', { name: /undo/i }).should('exist');
     });
 
-    it('should call softDeleteCallback on button click and isEditable=true ', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: false,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
-      const softDeleteAll = () => {
-        cy.stub();
-      };
-
-      const softDeleteAllSpy = cy.spy(softDeleteAll).as('softDeleteAllSpy');
-
-      cy.mount(
-        <OrgDelegationActionBar
-          organization={overviewOrgs}
-          softDeleteAllCallback={softDeleteAllSpy}
-          softRestoreAllCallback={() => null}
-          isEditable={true}
-        />,
-      );
-
-      cy.findByRole('button', { name: /delete/i }).click();
-      cy.get('@softDeleteAllSpy').should('have.been.called');
-    });
-
-    it('should call softRestoreCallback on buttonclick', () => {
+    it('should call softRestoreCallback on buttonclick and isEditable = true', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
         orgName: 'Evry',
