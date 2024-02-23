@@ -31,8 +31,6 @@ export const ChooseServicePage = () => {
   const dispatch = useAppDispatch();
   const [urlParams] = useSearchParams();
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [userUUID, setUserUUID] = useState<string | null>(null);
-  const [partyUUID, setPartyUUID] = useState<string | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
@@ -42,11 +40,12 @@ export const ChooseServicePage = () => {
 
   useLayoutEffect(() => {
     void dispatch(resetProcessedDelegations());
-    setUserUUID(urlParams.get('userUUID'));
-    setPartyUUID(urlParams.get('partyUUID'));
   }, []);
 
-  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(userUUID, partyUUID);
+  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
+    urlParams.get('userUUID'),
+    urlParams.get('partyUUID'),
+  );
 
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -89,8 +88,8 @@ export const ChooseServicePage = () => {
         <PageContent>
           {!isLoading && recipientError ? (
             <RecipientErrorAlert
-              userUUID={userUUID}
-              partyUUID={partyUUID}
+              userUUID={urlParams.get('userUUID')}
+              partyUUID={urlParams.get('partyUUID')}
             />
           ) : (
             <>
