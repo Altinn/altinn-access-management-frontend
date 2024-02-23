@@ -22,3 +22,7 @@
 .errorContent {
   margin: 20px;
 }
+
+.actionButton {
+  padding: 0;
+}

@@ -176,10 +176,10 @@ export const OverviewPageContent = ({
           <Button
             variant='secondary'
             onClick={goToStartDelegation}
-            icon={<PlusIcon />}
             fullWidth={isSm}
             size='medium'
           >
+            <PlusIcon />
             {t('api_delegation.delegate_new_org')}
           </Button>
         </div>

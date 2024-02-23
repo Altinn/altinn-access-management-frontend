@@ -70,12 +70,12 @@ export const OrgDelegationActionBar = ({
             <Button
               variant={'tertiary'}
               color={'danger'}
-              icon={<MinusCircleIcon />}
               size={'medium'}
               onClick={handleSoftDeleteAll}
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
             >
               {!isSm && t('api_delegation.delete')}
+              <MinusCircleIcon />
             </Button>
           </div>
         ))}
