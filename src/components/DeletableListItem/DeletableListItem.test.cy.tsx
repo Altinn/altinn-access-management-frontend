@@ -33,13 +33,43 @@ const overviewOrg: OverviewOrg = {
   ],
 };
 
+const softDeletedOverviewOrg: OverviewOrg = {
+  id: '1',
+  orgName: 'Evry',
+  isAllSoftDeleted: true,
+  orgNr: '123456789',
+  apiList: [
+    {
+      id: '1',
+      apiName: 'Delegert API A',
+      isSoftDelete: false,
+      owner: 'Accenture',
+      description:
+        'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+      scopes: ['api'],
+    },
+  ],
+};
+
 describe('DeletableListItem', () => {
-  it('should show delete button when state isEditable=true', () => {
+  it('should show undo button when state isEditable=true and isSoftDelete=true', () => {
     cy.mount(
       <DeletableListItem
         softDeleteCallback={() => null}
         softRestoreCallback={() => null}
         item={overviewOrg.apiList[0]}
+        isEditable={true}
+      />,
+    );
+    cy.findByRole('button', { name: /undo/i }).should('exist');
+  });
+
+  it('should show delete button when state isEditable=true and isSoftDelete=true', () => {
+    cy.mount(
+      <DeletableListItem
+        softDeleteCallback={() => null}
+        softRestoreCallback={() => null}
+        item={softDeletedOverviewOrg.apiList[0]}
         isEditable={true}
       />,
     );
@@ -85,7 +115,7 @@ describe('DeletableListItem', () => {
       <DeletableListItem
         softDeleteCallback={softDeleteSpy}
         softRestoreCallback={() => null}
-        item={overviewOrg.apiList[0]}
+        item={softDeletedOverviewOrg.apiList[0]}
         isEditable={true}
       />,
     );
