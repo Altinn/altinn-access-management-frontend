@@ -123,26 +123,25 @@ export const ChooseServicePage = () => {
                 >
                   {t('common.proceed')}
                 </Button>
-                <Button
-                  variant='tertiary'
-                  color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
-                  size='medium'
-                  onClick={
-                    delegableChosenServices.length > 0
-                      ? () => setPopoverOpen(!popoverOpen)
-                      : onCancel
-                  }
-                  ref={buttonRef}
-                >
-                  {t('common.cancel')}
-                </Button>
                 <Popover
                   variant={'warning'}
                   placement='top'
-                  anchorEl={buttonRef.current}
                   open={popoverOpen}
                   onClose={() => setPopoverOpen(false)}
                 >
+                  <Popover.Trigger
+                    variant='tertiary'
+                    color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
+                    size='medium'
+                    onClick={
+                      delegableChosenServices.length > 0
+                        ? () => setPopoverOpen(!popoverOpen)
+                        : onCancel
+                    }
+                    ref={buttonRef}
+                  >
+                    {t('common.cancel')}
+                  </Popover.Trigger>
                   <Popover.Content>
                     <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
                     <GroupElements>

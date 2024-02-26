@@ -45,12 +45,11 @@ export const OrgDelegationActionBar = ({
         <Button
           variant={'tertiary'}
           color={'first'}
-          icon={<PlusCircleIcon />}
           size={'medium'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
-          {t('api_delegation.delegate_new_api')}
+          <PlusCircleIcon /> {t('api_delegation.delegate_new_api')}
         </Button>
       )}
       {isEditable &&
@@ -59,11 +58,11 @@ export const OrgDelegationActionBar = ({
             variant={'tertiary'}
             color={'second'}
             size={'medium'}
-            icon={<ArrowUndoIcon />}
             onClick={softRestoreAllCallback}
             aria-label={String(t('common.undo')) + ' ' + organization.orgName}
+            className={classes.softButton}
           >
-            {!isSm && t('common.undo')}
+            <ArrowUndoIcon /> {!isSm && t('common.undo')}
           </Button>
         ) : (
           <div>

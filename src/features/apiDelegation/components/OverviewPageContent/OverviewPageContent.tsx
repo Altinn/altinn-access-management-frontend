@@ -211,20 +211,18 @@ export const OverviewPageContent = ({
               {!isEditable ? (
                 <Button
                   variant='tertiary'
-                  icon={<PencilIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
                 >
-                  {t('api_delegation.edit_accesses')}
+                  <PencilIcon /> {t('api_delegation.edit_accesses')}
                 </Button>
               ) : (
                 <Button
                   variant='tertiary'
-                  icon={<XMarkOctagonIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
                 >
-                  {t('common.cancel')}
+                  <XMarkOctagonIcon /> {t('common.cancel')}
                 </Button>
               )}
             </div>
