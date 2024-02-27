@@ -8,13 +8,21 @@ import {
 } from '@/rtk/features/lookup/lookupApi';
 
 // Used for fetching recipient name from userUUID or partyUUID
-export const useFetchNameFromUUID = (
+export const useFetchRecipientInfo = (
   userUUID: string | null,
   partyUUID: string | null,
-): [name: string | undefined, error: boolean, isLoading: boolean] => {
+): {
+  name: string | undefined;
+  userID: string;
+  partyID: string;
+  error: boolean;
+  isLoading: boolean;
+} => {
   const { t } = useTranslation('common');
 
   const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
+  const [userID, setUserID] = useState('');
+  const [partyID, setParyID] = useState('');
   const [error, setError] = useState(false);
 
   const {
@@ -32,9 +40,11 @@ export const useFetchNameFromUUID = (
 
   useEffect(() => {
     if (userUUID && !getUserIsLoading) {
-      if (getUserError) {
+      if (getUserError || !user) {
         setError(true);
       } else {
+        setUserID(user.userId);
+        setParyID(String(user.party.partyId));
         switch (user?.userType) {
           case UserType.SSNIdentified:
             // Recipient is a person
@@ -52,10 +62,11 @@ export const useFetchNameFromUUID = (
         }
       }
     } else if (partyUUID && !getPartyIsLoading) {
-      if (getPartyError) {
+      if (getPartyError || !party) {
         setError(true);
       } else {
         setError(false);
+        setParyID(String(party.partyId));
         setRecipientName(`${party?.name}, ${t('common.org_nr')} ${party?.orgNumber}`);
       }
     } else if (!isLoading) {
@@ -64,5 +75,5 @@ export const useFetchNameFromUUID = (
     }
   }, [user, party, getUserIsLoading, getPartyIsLoading, getUserError, getPartyError]);
 
-  return [recipientName, error, isLoading];
+  return { name: recipientName, userID, partyID, error, isLoading };
 };

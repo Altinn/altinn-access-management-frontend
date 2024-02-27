@@ -5,12 +5,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 
-import { SingleRightPath } from '@/routes/paths';
+import { GeneralPath, SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
-import { useFetchNameFromUUID, useMediaQuery } from '@/resources/hooks';
+import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GroupElements } from '@/components/GroupElements/GroupElements';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import classes from './ReceiptPage.module.css';
 import { ActionBarSection } from './ActionBarSection/ActionBarSection';
@@ -25,14 +26,20 @@ export const ReceiptPage = () => {
     (state) => state.singleRightsSlice.processedDelegations,
   );
 
-  const [recipientName] = useFetchNameFromUUID(
-    urlParams.get('userUUID'),
-    urlParams.get('partyUUID'),
-  );
+  const {
+    name: recipientName,
+    userID,
+    partyID,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   useEffect(() => {
     void dispatch(resetServicesWithStatus());
   }, []);
+
+  const redirectToProfile = () => {
+    const cleanHostname = window.location.hostname.replace('am.ui.', '');
+    window.location.href = `https://${cleanHostname}/${GeneralPath.Profile}?R=${getCookie('AltinnPartyId')}&lm=${encodeURIComponent(`/ui/AccessManagement/ServicesAvailableForActor/?userID=${userID ? userID : 0}&partyID=${partyID}`)}`;
+  };
 
   return (
     <PageContainer>
@@ -56,6 +63,7 @@ export const ReceiptPage = () => {
               </div>
               <GroupElements>
                 <Button
+                  onClick={redirectToProfile}
                   color={'first'}
                   fullWidth
                 >

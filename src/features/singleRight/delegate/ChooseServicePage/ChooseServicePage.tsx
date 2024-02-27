@@ -7,7 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLayoutEffect, useRef, useState } from 'react';
 
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
-import { useMediaQuery, useFetchNameFromUUID } from '@/resources/hooks';
+import { useMediaQuery, useFetchRecipientInfo } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
@@ -42,10 +42,11 @@ export const ChooseServicePage = () => {
     void dispatch(resetProcessedDelegations());
   }, []);
 
-  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
-    urlParams.get('userUUID'),
-    urlParams.get('partyUUID'),
-  );
+  const {
+    name: recipientName,
+    error: recipientError,
+    isLoading,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
