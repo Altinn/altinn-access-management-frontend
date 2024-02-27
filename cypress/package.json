@@ -16,7 +16,7 @@
         "cypress-grep": "^2.14.0",
         "cypress-iframe": "^1.0.1",
         "cypress-multi-reporters": "^1.6.1",
-        "cypress-parallel": "^0.1.10",
+        "cypress-parallel": "^0.14.0",
         "cypress-react-app-actions": "^1.0.2",
         "cypress-recurse": "^1.35.2",
         "cypress-wait-until": "^1.7.2",
