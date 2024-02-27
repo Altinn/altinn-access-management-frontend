@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   GroupElements,
@@ -65,7 +65,6 @@ export const ChooseRightsPage = () => {
   const progressLabel = processedDelegations.length + '/' + delegationCount;
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
     urlParams.get('userUUID'),
@@ -202,7 +201,6 @@ export const ChooseRightsPage = () => {
             fullWidth={isSm}
             disabled={delegationCount < 1}
             onClick={() => setPopoverOpen(!popoverOpen)}
-            ref={buttonRef}
           >
             {t('common.finish_delegation')}
           </Popover.Trigger>
@@ -233,26 +231,6 @@ export const ChooseRightsPage = () => {
         >
           {t('single_rights.add_more_services')}
         </Button>
-        <Popover
-          variant={'info'}
-          placement={'top'}
-          anchorEl={buttonRef.current}
-          open={popoverOpen}
-          onClose={() => setPopoverOpen(false)}
-        >
-          <Paragraph>
-            {t('single_rights.confirm_delegation_text', { name: recipientName })}
-          </Paragraph>
-          <div className={classes.popoverButtonContainer}>
-            <Button
-              onClick={() => {
-                onConfirm();
-              }}
-            >
-              {t('common.confirm')}
-            </Button>
-          </div>
-        </Popover>
       </GroupElements>
     );
   };
