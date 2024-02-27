@@ -279,7 +279,7 @@ export const ChooseOrgPage = () => {
                   </h4>
                 )}
                 {infoPanel()}
-                <div className={classes.actionBarScrollContainer}>
+                <div>
                   {searchLoading ? (
                     <div className={common.spinnerContainer}>
                       <Spinner
