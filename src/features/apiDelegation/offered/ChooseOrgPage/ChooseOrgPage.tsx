@@ -122,13 +122,15 @@ export const ChooseOrgPage = () => {
           subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
-              icon={<PlusCircleIcon fontSize='3rem' />}
               variant={'tertiary'}
               color={'second'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={t('common.add') + ' ' + org.orgName}
               size='large'
-            ></Button>
+              className={classes.actionButton}
+            >
+              <PlusCircleIcon fontSize='3rem' />
+            </Button>
           }
           color={'neutral'}
         />
@@ -148,7 +150,6 @@ export const ChooseOrgPage = () => {
           subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
-              icon={<MinusCircleIcon />}
               variant={'tertiary'}
               color={'danger'}
               onClick={() => {
@@ -156,7 +157,10 @@ export const ChooseOrgPage = () => {
               }}
               aria-label={t('common.remove') + ' ' + org.orgName}
               size='large'
-            ></Button>
+              className={classes.actionButton}
+            >
+              <MinusCircleIcon />
+            </Button>
           }
           color={'success'}
         />

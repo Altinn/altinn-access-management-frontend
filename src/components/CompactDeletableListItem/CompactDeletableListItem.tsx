@@ -63,9 +63,9 @@ export const CompactDeletableListItem = ({
               <Button
                 variant={'tertiary'}
                 color={'danger'}
-                icon={<MinusCircleIcon />}
                 size='medium'
                 onClick={removeCallback}
+                className={classes.actionButton}
                 aria-label={
                   t('common.remove') +
                   ' ' +
@@ -78,7 +78,7 @@ export const CompactDeletableListItem = ({
                   middleText
                 }
               >
-                {t('common.remove')}
+                <MinusCircleIcon /> {t('common.remove')}
               </Button>
             )}
           </div>

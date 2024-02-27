@@ -19,12 +19,12 @@ export const BorderedList = ({
   ...rest
 }: BorderedListProps) => {
   return (
-    <List
+    <List.Root
       className={cn(classes.borderedList, { [classes[borderStyle]]: borderStyle }, className)}
       style={{ paddingLeft: 0 }}
       {...rest}
     >
       {children}
-    </List>
+    </List.Root>
   );
 };

@@ -56,9 +56,8 @@ export const ResourceCollectionBar = ({
           onClick={() => {
             onRemove(resource.identifier);
           }}
-          icon={compact && <MinusCircleIcon title={t('common.remove')} />}
         >
-          {!compact && t('common.remove')}
+          {!compact ? t('common.remove') : <MinusCircleIcon title={t('common.remove')} />}
         </Button>
       }
     ></ActionBar>

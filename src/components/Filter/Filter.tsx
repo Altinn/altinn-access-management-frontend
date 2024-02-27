@@ -130,10 +130,11 @@ export const Filter = ({
         variant='tertiary'
         color='second'
         onClick={handleOpenOrClose}
-        icon={<XMarkIcon aria-label={String(t('common.close'))} />}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
         size='medium'
-      />
+      >
+        <XMarkIcon aria-label={String(t('common.close'))} />
+      </Button>
     </div>
   );
 

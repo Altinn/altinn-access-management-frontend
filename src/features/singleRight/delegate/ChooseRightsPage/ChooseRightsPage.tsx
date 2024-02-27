@@ -190,16 +190,37 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <GroupElements>
-        <Button
-          variant='primary'
-          color='first'
-          fullWidth={isSm}
-          disabled={delegationCount < 1}
-          onClick={() => setPopoverOpen(!popoverOpen)}
-          ref={buttonRef}
+        <Popover
+          variant={'info'}
+          placement={'top'}
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
         >
-          {t('common.finish_delegation')}
-        </Button>
+          <Popover.Trigger
+            variant='primary'
+            color='first'
+            fullWidth={isSm}
+            disabled={delegationCount < 1}
+            onClick={() => setPopoverOpen(!popoverOpen)}
+            ref={buttonRef}
+          >
+            {t('common.finish_delegation')}
+          </Popover.Trigger>
+          <Popover.Content>
+            <Paragraph>
+              {t('single_rights.confirm_delegation_text', { name: recipientName })}
+            </Paragraph>
+            <div className={classes.popoverButtonContainer}>
+              <Button
+                onClick={() => {
+                  onConfirm();
+                }}
+              >
+                {t('common.confirm')}
+              </Button>
+            </div>
+          </Popover.Content>
+        </Popover>
         <Button
           variant='secondary'
           color='first'

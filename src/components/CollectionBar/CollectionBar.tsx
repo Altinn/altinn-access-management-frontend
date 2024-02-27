@@ -74,12 +74,11 @@ export const CollectionBar = ({
             <Button
               variant='tertiary'
               size='small'
-              icon={<ChevronRightDoubleCircleFillIcon />}
               color={color === 'dark' ? 'inverted' : undefined}
               onClick={proceedClick}
               disabled={disabledProceedButton}
             >
-              {t('common.proceed')}
+              <ChevronRightDoubleCircleFillIcon /> {t('common.proceed')}
             </Button>
           )
         }
