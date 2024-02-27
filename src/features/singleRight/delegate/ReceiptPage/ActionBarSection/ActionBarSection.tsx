@@ -3,6 +3,7 @@ import { ErrorMessage, Ingress, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
+import cn from 'classnames';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import type { Right, ProcessedDelegation } from '@/rtk/features/singleRights/singleRightsSlice';
@@ -114,10 +115,10 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         );
       };
 
-      const successfulDelegationParagraph = () => {
+      const successfulDelegationParagraph = (extraSpacing: boolean) => {
         return (
           <Ingress
-            className={classes.successText}
+            className={cn(extraSpacing && classes.successText)}
             spacing
             level={2}
           >
@@ -130,7 +131,8 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         actionBar: (
           <div key={`receipt-action-bar-${index}`}>
             {index === mostFailedIndex && mostFailedDelegations > 0 && failedDelegationIngress()}
-            {index === firstSuccesfulIndex && successfulDelegationParagraph()}
+            {index === firstSuccesfulIndex &&
+              successfulDelegationParagraph(mostFailedDelegations > 0)}
             <ActionBar
               title={pd.meta.serviceDto.serviceTitle}
               subtitle={pd.meta.serviceDto.serviceOwner}
