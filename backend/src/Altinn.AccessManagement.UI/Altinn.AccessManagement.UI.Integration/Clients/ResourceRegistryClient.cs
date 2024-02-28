@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             try
             {
-                // Weird enough it's not possible to filter on AltinnApp or GenericAccessResource for this endpoint
+                // It's not possible to filter on AltinnApp or Altinn2Service for this endpoint
                 string endpointUrl = "resource/search";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
@@ -166,8 +166,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             List<ServiceResource> resources = new List<ServiceResource>();
             
-            // Weird enough it's not possible to filter on AltinnApp or GenericAccessResource for this endpoint
-            string endpointUrl = $"search?ResourceType={(int)ResourceType.MaskinportenSchema}";
+            // Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
+            string endpointUrl = $"resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)

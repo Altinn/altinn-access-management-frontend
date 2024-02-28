@@ -46,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             List<ServiceResource> resources = Util.GetMockData<List<ServiceResource>>(path);
             
-            List<ServiceResource> maskinPortenSchemas = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable);
+            List<ServiceResource> maskinPortenSchemas = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema);
             return Task.FromResult(maskinPortenSchemas);
         }
 

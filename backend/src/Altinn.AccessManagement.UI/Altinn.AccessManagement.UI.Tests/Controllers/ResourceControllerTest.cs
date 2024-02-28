@@ -352,7 +352,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         
         /// <summary>
         ///     Test case: Search for maskinporten schemas with search
-        ///     Expected: Search returns a list of resources matching the filters in paginated form with language filtered
+        ///     Expected: Search returns a list of resources matching the filters and with language filtered
         ///     for the authenticated users selected language
         /// </summary>
         [Fact]
