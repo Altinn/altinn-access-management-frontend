@@ -800,10 +800,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^5.12.2, @navikt/aksel-icons@npm:^5.15.1":
+"@navikt/aksel-icons@npm:^5.12.2":
   version: 5.18.3
   resolution: "@navikt/aksel-icons@npm:5.18.3"
   checksum: 10/de01c59ade08d8c4dc54db77131eff8f29f6a1d25e9dfb031bb6280dc853d51a686ae78b845ff2a7d3dc0291f568ec3714076325ccbd65ed829041e300bbd65b
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "@navikt/aksel-icons@npm:6.1.0"
+  checksum: 10/3fa19f5c63d68c82423c465fba859b5faef28fabaa4b33c88b41f6461c5e020b8e90a4c57d89f7d07607c3fdea33b8f9f606d044f653a69fc81f26b6b891cf5c
   languageName: node
   linkType: hard
 
@@ -2024,7 +2031,7 @@ __metadata:
     "@altinn/altinn-design-system": "npm:0.30.0"
     "@digdir/design-system-react": "npm:0.47.0"
     "@digdir/design-system-tokens": "npm:0.13.0"
-    "@navikt/aksel-icons": "npm:^5.15.1"
+    "@navikt/aksel-icons": "npm:^6.0.0"
     "@reduxjs/toolkit": "npm:^2.1.0"
     "@tanstack/react-query": "npm:^4.32.6"
     "@testing-library/cypress": "npm:^10.0.0"
