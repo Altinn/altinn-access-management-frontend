@@ -6,7 +6,7 @@ using Altinn.Platform.Register.Models;
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <summary>
-    /// Service that integrates with platform clients to lookup . Processes and maps the required data to the frontend model
+    /// Service that integrates with platform clients to lookup processes and maps the required data to the frontend model
     /// </summary>
     public class LookupService : ILookupService
     { 

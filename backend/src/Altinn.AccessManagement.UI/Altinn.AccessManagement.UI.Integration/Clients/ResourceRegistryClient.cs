@@ -8,7 +8,6 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -21,7 +20,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     public class ResourceRegistryClient : IResourceRegistryClient
     {
         private readonly HttpClient _httpClient;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<IResourceRegistryClient> _logger;
 
         /// <summary>
@@ -29,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
-        public ResourceRegistryClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceRegistryClient> logger, IHttpContextAccessor httpContextAccessor)
+        public ResourceRegistryClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceRegistryClient> logger)
         {
             PlatformSettings platformSettings = settings.Value;
             _httpClient = httpClient;
@@ -38,7 +36,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _logger = logger;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <inheritdoc />
@@ -68,6 +65,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             try
             {
+                // It's not possible to filter on AltinnApp or Altinn2Service for this endpoint
                 string endpointUrl = "resource/search";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
@@ -125,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <summary>
-        ///     Get resource list
+        ///     Gets all resources no matter if it's an AltinnApp or GenericAccessResource
         /// </summary>
         /// <returns>List of all resources</returns>
         public async Task<List<ServiceResource>> GetResourceList()
@@ -161,16 +159,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <summary>
-        ///     Get resources of a given type
+        ///     Gets all MaskinportenSchemas
         /// </summary>
-        /// <param name="resourceType"> the resource type</param>
-        /// <returns></returns>
-        public async Task<List<ServiceResource>> GetResources(ResourceType resourceType)
+        /// <returns>MaskinportenSchemas</returns>
+        public async Task<List<ServiceResource>> GetMaskinportenSchemas()
         {
             List<ServiceResource> resources = new List<ServiceResource>();
-            ResourceSearch resourceSearch = new ResourceSearch();
-            resourceSearch.ResourceType = resourceType;
-            string endpointUrl = $"search?ResourceType={(int)resourceType}";
+            
+            // Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
+            string endpointUrl = $"resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
             if (response.StatusCode == HttpStatusCode.OK)
