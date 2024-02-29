@@ -16,7 +16,7 @@ import {
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
-import { useFetchNameFromUUID, useMediaQuery } from '@/resources/hooks';
+import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import {
   removeServiceResource,
   delegate,
@@ -67,10 +67,11 @@ export const ChooseRightsPage = () => {
     Math.round((processedDelegations.length / delegationCount) * 100);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
-    urlParams.get('userUUID'),
-    urlParams.get('partyUUID'),
-  );
+  const {
+    name: recipientName,
+    error: recipientError,
+    isLoading,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter(
