@@ -13,7 +13,7 @@
     "devDependencies": {
         "cypress": "^13.6.4",
         "cypress-file-upload": "^5.0.8",
-        "cypress-grep": "^2.14.0",
+        "cypress-grep": "^3.0.0",
         "cypress-iframe": "^1.0.1",
         "cypress-multi-reporters": "^1.6.1",
         "cypress-parallel": "^0.14.0",
