@@ -96,7 +96,7 @@ export const ConfirmationPage = () => {
               startIcon={<Buldings3Icon />}
               removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
               leftText={org.orgName}
-              middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
+              middleText={t('common.org_nr') + ' ' + org.orgNr}
             ></CompactDeletableListItem>
           ))}
         </BorderedList>
