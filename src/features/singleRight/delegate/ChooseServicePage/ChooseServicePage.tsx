@@ -17,8 +17,8 @@ import {
   resetProcessedDelegations,
   ServiceStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
-import { GeneralPath, SingleRightPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { SingleRightPath } from '@/routes/paths';
+import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
@@ -45,6 +45,8 @@ export const ChooseServicePage = () => {
   const {
     name: recipientName,
     error: recipientError,
+    userID,
+    partyID,
     isLoading,
   } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
@@ -59,24 +61,6 @@ export const ChooseServicePage = () => {
 
   const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
-  };
-
-  const onCancel = () => {
-    const cleanHostname = window.location.hostname.replace('am.ui.', '');
-    const partyId = getCookie('AltinnPartyId');
-    const encodedUrl = `ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=${partyId}`;
-
-    window.location.href =
-      'https://' +
-      cleanHostname +
-      '/' +
-      String(GeneralPath.Altinn2SingleRights) +
-      '?userID=' +
-      getCookie('AltinnUserId') +
-      '&amp;' +
-      'partyID=' +
-      getCookie('AltinnPartyId') +
-      encodeURIComponent(encodedUrl);
   };
 
   return (
@@ -130,7 +114,7 @@ export const ChooseServicePage = () => {
                   onClick={
                     delegableChosenServices.length > 0
                       ? () => setPopoverOpen(!popoverOpen)
-                      : onCancel
+                      : () => redirectToSevicesAvailableForUser(userID, partyID)
                   }
                   ref={buttonRef}
                 >
@@ -147,7 +131,7 @@ export const ChooseServicePage = () => {
                     <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
                     <GroupElements>
                       <Button
-                        onClick={onCancel}
+                        onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                         color={'danger'}
                         variant={'primary'}
                         fullWidth

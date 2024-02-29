@@ -5,13 +5,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 
-import { GeneralPath, SingleRightPath } from '@/routes/paths';
+import { SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
 import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GroupElements } from '@/components/GroupElements/GroupElements';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 
 import classes from './ReceiptPage.module.css';
 import { ActionBarSection } from './ActionBarSection/ActionBarSection';
@@ -36,11 +36,6 @@ export const ReceiptPage = () => {
     void dispatch(resetServicesWithStatus());
   }, []);
 
-  const redirectToProfile = () => {
-    const cleanHostname = window.location.hostname.replace('am.ui.', '');
-    window.location.href = `https://${cleanHostname}/${GeneralPath.Profile}?R=${getCookie('AltinnPartyId')}&lm=${encodeURIComponent(`/ui/AccessManagement/ServicesAvailableForActor/?userID=${userID ? userID : 0}&partyID=${partyID}`)}`;
-  };
-
   return (
     <PageContainer>
       <Page
@@ -63,7 +58,7 @@ export const ReceiptPage = () => {
               </div>
               <GroupElements>
                 <Button
-                  onClick={redirectToProfile}
+                  onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                   color={'first'}
                   fullWidth
                 >

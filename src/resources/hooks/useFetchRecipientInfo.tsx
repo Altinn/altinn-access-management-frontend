@@ -22,7 +22,7 @@ export const useFetchRecipientInfo = (
 
   const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
   const [userID, setUserID] = useState('');
-  const [partyID, setParyID] = useState('');
+  const [partyID, setPartyID] = useState('');
   const [error, setError] = useState(false);
 
   const {
@@ -44,7 +44,7 @@ export const useFetchRecipientInfo = (
         setError(true);
       } else {
         setUserID(user.userId);
-        setParyID(String(user.party.partyId));
+        setPartyID(String(user.party.partyId));
         switch (user?.userType) {
           case UserType.SSNIdentified:
             // Recipient is a person
@@ -66,7 +66,7 @@ export const useFetchRecipientInfo = (
         setError(true);
       } else {
         setError(false);
-        setParyID(String(party.partyId));
+        setPartyID(String(party.partyId));
         setRecipientName(`${party?.name}, ${t('common.org_nr')} ${party?.orgNumber}`);
       }
     } else if (!isLoading) {
