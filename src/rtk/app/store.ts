@@ -28,7 +28,14 @@ const store = configureStore({
     [apiDelegationApi.reducerPath]: apiDelegationApi.reducer,
     [resourceOwnerApi.reducerPath]: resourceOwnerApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      logger,
+      lookupApi.middleware,
+      singleRightsApi.middleware,
+      apiDelegationApi.middleware,
+      resourceOwnerApi.middleware,
+    ),
 });
 
 setupListeners(store.dispatch);
