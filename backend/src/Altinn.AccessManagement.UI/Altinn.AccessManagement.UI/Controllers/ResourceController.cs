@@ -69,8 +69,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile user = await _profileService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUser(user);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
 
             return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
         }
@@ -131,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile userProfile = await _profileService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
 
             try
             {
