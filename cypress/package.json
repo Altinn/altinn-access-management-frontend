@@ -19,7 +19,7 @@
         "cypress-parallel": "^0.14.0",
         "cypress-react-app-actions": "^1.0.2",
         "cypress-recurse": "^1.35.2",
-        "cypress-wait-until": "^1.7.2",
+        "cypress-wait-until": "^3.0.0",
         "fs-extra": "^9.1.0",
         "junit-report-merger": "^2.2.3",
         "mocha-junit-reporter": "^2.1.0",

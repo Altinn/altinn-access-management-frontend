@@ -3151,10 +3151,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-wait-until@npm:^1.7.2":
-  version: 1.7.2
-  resolution: "cypress-wait-until@npm:1.7.2"
-  checksum: 10/4ae625bfdad3757799ce997c4b513ca0de0ac0c8441e096ef4342ccd2731f9fe182ef59f18b5b7138c11cb1c57a998657e91270d3bcb74e2af794de97c33d8e8
+"cypress-wait-until@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "cypress-wait-until@npm:3.0.1"
+  checksum: 10/87e1799e55b08f7866659d22cf3a9bd34d7c6dd49ef3f74972b593ace9772a221ee3c549b8f7cc235049f3667fa46f9b6b35514ecb5d866d3b00403eb5297455
   languageName: node
   linkType: hard
 
@@ -3274,7 +3274,7 @@ __metadata:
     cypress-parallel: "npm:^0.14.0"
     cypress-react-app-actions: "npm:^1.0.2"
     cypress-recurse: "npm:^1.35.2"
-    cypress-wait-until: "npm:^1.7.2"
+    cypress-wait-until: "npm:^3.0.0"
     dayjs: "npm:^1.11.5"
     fs-extra: "npm:^9.1.0"
     get-ssl-certificate: "npm:^2.3.3"
