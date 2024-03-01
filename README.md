@@ -154,14 +154,15 @@ On mac you need to edit and save hosts-file using nano.
    ```
 
 ## Set up database: 
-  Download [PostgreSQL](https://www.postgresql.org/download/). USE INSTALLER, NOT HOMEBREW ON MAC. (Currently using 14 in deploy environments, but 15 works locally if you need those extra features 15 gives you)
-- Install database server (choose your own admin password and save it some place you can find it again)
-- Start PG admin
-- Create the following users by right clicking Login/Group Roles (with privileges for authorizationdb):
+  Download [PostgreSQL](https://www.postgresql.org/download/). USE INSTALLER, NOT HOMEBREW ON MAC. (Currently using 14 in deploy environments, but 15 works locally if you need those extra features 15 gives you). Run stackbuilder and download all packages when being prompted.
+<img width="1254" alt="image" src="https://github.com/Altinn/altinn-access-management-frontend/assets/31471142/bd1f6ec6-91bb-411b-8746-df5fe8272fbf">
+
+- Open pgAdmin 4
+- Create the following users by right clicking PostgreSQL 14 and clicking create user group or by scrolling down and right clickking Login/Group Roles (with privileges for authorizationdb):
   1. Name: platform_authorization_admin (superuser, canlogin). Set password as Password.
   2. Name: platform_authorization (canlogin). Set password as Password.
-- Create database and call it authorizationdb and set owner to platform_authorization_admin.
-- Create schema delegations in authorizationdb
+- Create database with name: authorizationdb by right clicking on databases and choosing "Create database" and set owner to platform_authorization_admin in properties.
+- Create schema delegation in authorizationdb
 - Set platform_authorization_admin as owner
 
 ### Run backend and frontend
