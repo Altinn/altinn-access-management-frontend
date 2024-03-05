@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { XMarkIcon } from '@navikt/aksel-icons';
 
-import { GeneralPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { redirectToProfile } from '@/resources/utils';
 
 import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
 
@@ -15,12 +14,6 @@ export interface PageContainerProps {
 
 export const PageContainer = ({ children }: PageContainerProps) => {
   const { t } = useTranslation('common');
-
-  const redirectToProfile = () => {
-    const cleanHostname = window.location.hostname.replace('am.ui.', '');
-    window.location.href =
-      'https://' + cleanHostname + '/' + GeneralPath.Profile + '?R=' + getCookie('AltinnPartyId');
-  };
 
   return (
     <div className={classes.pageMargin}>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useId, type ReactNode } from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/design-system-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import { FilterButton } from './FilterButton';
 
 export interface FilterProps {
   /** The provided filter options, defined in values and labels */
-  options: FilterOption[];
+  options: FilterOption[] | undefined;
   /**  The label that will be displayed on the filter button */
   label: string;
   /** The label for the apply button inside the popover */
@@ -37,6 +37,8 @@ export interface FilterProps {
   closeButtonAriaLabel?: string;
   /** className used for external styling of the filter button*/
   className?: string;
+  /** shows loading spinner */
+  isLoading?: boolean;
 }
 
 /**
@@ -68,6 +70,7 @@ export interface FilterProps {
  * @property {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters
  * @property {string} [closeButtonAriaLabel] - The ARIA label for the close button in modal view
  * @property {function} [onApply] - Callback function that will be called when filters are applied
+ * @property {function} [isLoading] - Shows loading spinner
  * @returns {React.ReactNode} Rendered component
  */
 
@@ -83,6 +86,7 @@ export const Filter = ({
   fullScreenModal = false,
   closeButtonAriaLabel,
   onApply,
+  isLoading,
 }: FilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(values ?? []);
@@ -160,35 +164,47 @@ export const Filter = ({
     >
       <div className={classes.popoverContent}>
         {fullScreenModal && modalHeader()}
-        <div className={cn(classes.optionSection, { [classes.modal]: fullScreenModal })}>
-          <OptionDisplay
-            options={options}
-            onValueChange={setCheckedFilters}
-            values={checkedFilters}
-            searchable={searchable}
-            compact={!fullScreenModal}
-          />
-        </div>
-        <div className={cn(classes.filterActions, { [classes.modal]: fullScreenModal })}>
-          <Button
-            className={classes.resetButton}
-            size={fullScreenModal ? 'medium' : 'small'}
-            variant='tertiary'
-            fullWidth={false}
-            aria-disabled={checkedFilters.length === 0}
-            onClick={checkedFilters.length === 0 ? undefined : handleReset}
-          >
-            {resetButtonLabel}
-          </Button>
-          <Button
-            size={fullScreenModal ? 'medium' : 'small'}
-            onClick={hasChanges ? handleOpenOrClose : undefined}
-            aria-disabled={!hasChanges}
-            fullWidth={fullScreenModal}
-          >
-            {applyButtonLabel}
-          </Button>
-        </div>
+        {isLoading || options === undefined ? (
+          <div className={classes.loadingContainer}>
+            <Spinner
+              title={t('common.loading')}
+              variant='interaction'
+              size='medium'
+            />
+          </div>
+        ) : (
+          <>
+            <div className={cn(classes.optionSection, { [classes.modal]: fullScreenModal })}>
+              <OptionDisplay
+                options={options}
+                onValueChange={setCheckedFilters}
+                values={checkedFilters}
+                searchable={searchable}
+                compact={!fullScreenModal}
+              />
+            </div>
+            <div className={cn(classes.filterActions, { [classes.modal]: fullScreenModal })}>
+              <Button
+                className={classes.resetButton}
+                size={fullScreenModal ? 'medium' : 'small'}
+                variant='tertiary'
+                fullWidth={false}
+                aria-disabled={checkedFilters.length === 0}
+                onClick={checkedFilters.length === 0 ? undefined : handleReset}
+              >
+                {resetButtonLabel}
+              </Button>
+              <Button
+                size={fullScreenModal ? 'medium' : 'small'}
+                onClick={hasChanges ? handleOpenOrClose : undefined}
+                aria-disabled={!hasChanges}
+                fullWidth={fullScreenModal}
+              >
+                {applyButtonLabel}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </Floatover>
   );

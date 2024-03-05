@@ -136,14 +136,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Title, actual.Title);
             Assert.Equal(expected.Description, actual.Description);
             Assert.Equal(expected.RightDescription, actual.RightDescription);
+            Assert.Equal(expected.Delegable, actual.Delegable);
+            Assert.Equal(expected.Visible, actual.Visible);
+            Assert.Equal(expected.ResourceOwnerName, actual.ResourceOwnerName);
+            Assert.Equal(expected.ResourceOwnerOrgNumber, actual.ResourceOwnerOrgNumber);
             Assert.Equal(expected.Homepage, actual.Homepage);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.Spatial, actual.Spatial);
-            AssertEqual(expected.ContactPoints, actual.ContactPoints);
-            AssertEqual(expected.ResourceReferences, actual.ResourceReferences);
-            Assert.Equal(expected.Delegable, actual.Delegable);
-            Assert.Equal(expected.Visible, actual.Visible);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
+            AssertCollections(expected.AuthorizationReference, actual.AuthorizationReference, AssertEqual);
+            AssertEqual(expected.ContactPoints, actual.ContactPoints);
+            Assert.Equal(expected.Spatial, actual.Spatial);
+            Assert.Equal(expected.ResourceReferences.Count, actual.ResourceReferences.Count);
+            AssertEqual(expected.ResourceReferences, actual.ResourceReferences);
         }
 
         /// <summary>
@@ -181,7 +186,23 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.Equal(expected[i].Telephone, actual[i].Telephone);
                 Assert.Equal(expected[i].ContactPage, actual[i].ContactPage);
             }
+        }
+        
+        /// <summary>
+        ///     Assert that two Lists of <see cref="ResourceOwnerFE" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(List<ResourceOwnerFE> expected, List<ResourceOwnerFE> actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
 
+            for (int i = 0; i < actual.Count; i++)
+            {
+                Assert.Equal(expected[i].OrganisationName, actual[i].OrganisationName);
+                Assert.Equal(expected[i].OrganisationNumber, actual[i].OrganisationNumber);
+            }
         }
 
         /// <summary>

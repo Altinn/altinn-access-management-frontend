@@ -112,7 +112,7 @@ export const ApiActionBar = ({
   const content = () => {
     return (
       <div className={classes.content}>
-        {api.scopes.length > 0 && (
+        {api.scopes?.length > 0 && (
           <div>
             <Heading
               size='xxsmall'

@@ -16,7 +16,7 @@ import {
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
-import { useFetchNameFromUUID, useMediaQuery } from '@/resources/hooks';
+import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import {
   removeServiceResource,
   delegate,
@@ -66,10 +66,11 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
 
-  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
-    urlParams.get('userUUID'),
-    urlParams.get('partyUUID'),
-  );
+  const {
+    name: recipientName,
+    error: recipientError,
+    isLoading,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter(
@@ -259,7 +260,10 @@ export const ChooseRightsPage = () => {
       recipient = [new IdValuePair('urn:altinn:organization:uuid', partyUUID)];
     }
 
-    chosenServices.forEach((service: Service) => {
+    // TODO: OBS! This is a temporary solution for sequential delegations, which is needed due to a weakness in Altinn 2. When this is fixed, we can go back to paralell delegations
+    // Post delegations synchroneously using recursive method
+    const syncPostDelegations = (servicesToPost: Service[]) => {
+      const service = servicesToPost[0];
       const rightsToDelegate = service.rights
         .filter((right: ChipRight) => right.checked)
         .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
@@ -271,9 +275,19 @@ export const ChooseRightsPage = () => {
           serviceDto: new ServiceDto(service.title, service.serviceOwner, service.type),
         };
 
-        return dispatch(delegate(delegationInput));
+        dispatch(delegate(delegationInput)).then(() => {
+          if (servicesToPost.length > 1) {
+            syncPostDelegations(servicesToPost.slice(1));
+          }
+        });
+      } else {
+        if (servicesToPost.length > 1) {
+          syncPostDelegations(servicesToPost.slice(1));
+        }
       }
-    });
+    };
+
+    syncPostDelegations(chosenServices);
   };
 
   return (
