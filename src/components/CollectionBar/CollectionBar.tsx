@@ -92,12 +92,10 @@ export const CollectionBar = ({
           className={classes.compactProceedButton}
           variant='tertiary'
           size='small'
-          icon={<ChevronRightDoubleIcon />}
-          iconPlacement='right'
           onClick={proceedClick}
           disabled={disabledProceedButton}
         >
-          {t('common.proceed')}
+          {t('common.proceed')} <ChevronRightDoubleIcon />
         </Button>
       )}
     </>

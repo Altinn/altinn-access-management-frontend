@@ -128,6 +128,7 @@ export const ChooseOrgPage = () => {
               aria-label={t('common.add') + ' ' + org.orgName}
               size='large'
               className={classes.actionButton}
+              icon={true}
             >
               <PlusCircleIcon fontSize='3rem' />
             </Button>
@@ -158,6 +159,7 @@ export const ChooseOrgPage = () => {
               aria-label={t('common.remove') + ' ' + org.orgName}
               size='large'
               className={classes.actionButton}
+              icon={true}
             >
               <MinusCircleIcon />
             </Button>

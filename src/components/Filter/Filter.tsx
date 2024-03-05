@@ -132,6 +132,7 @@ export const Filter = ({
         onClick={handleOpenOrClose}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
         size='medium'
+        icon={true}
       >
         <XMarkIcon aria-label={String(t('common.close'))} />
       </Button>

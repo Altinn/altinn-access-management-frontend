@@ -81,10 +81,10 @@ export const ResourceActionBar = ({
       onClick={() => {
         onAddClick?.();
       }}
-      iconPlacement='right'
+      icon={compact}
     >
-      <PlusCircleIcon title='add' />
       {!compact && (status === ServiceStatus.HTTPError ? t('common.try_again') : t('common.add'))}
+      <PlusCircleIcon title='add' />
     </Button>
   );
 
@@ -93,10 +93,9 @@ export const ResourceActionBar = ({
       variant='tertiary'
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
-      iconPlacement='right'
+      icon={compact}
     >
-      <ArrowUndoIcon title={t('common.undo')} />
-      {!compact && t('common.undo')}
+      {!compact && t('common.undo')} <ArrowUndoIcon title={t('common.undo')} />
     </Button>
   );
 

@@ -178,6 +178,7 @@ export const OverviewPageContent = ({
             onClick={goToStartDelegation}
             fullWidth={isSm}
             size='medium'
+            icon={isSm}
           >
             <PlusIcon /> {t('api_delegation.delegate_new_org')}
           </Button>
@@ -212,6 +213,7 @@ export const OverviewPageContent = ({
                   variant='tertiary'
                   onClick={handleSetIsEditable}
                   size='medium'
+                  icon={isSm}
                 >
                   <PencilIcon /> {t('api_delegation.edit_accesses')}
                 </Button>
@@ -220,6 +222,7 @@ export const OverviewPageContent = ({
                   variant='tertiary'
                   onClick={handleSetIsEditable}
                   size='medium'
+                  icon={isSm}
                 >
                   <XMarkOctagonIcon /> {t('common.cancel')}
                 </Button>

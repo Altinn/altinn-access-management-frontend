@@ -87,6 +87,7 @@ export const ApiActionBar = ({
             aria-label={t('common.add') + ' ' + api.apiName}
             size='large'
             className={classes.actionButton}
+            icon={true}
           >
             <PlusCircleIcon />
           </Button>
@@ -99,6 +100,7 @@ export const ApiActionBar = ({
           aria-label={t('common.remove') + ' ' + api.apiName}
           size='large'
           className={classes.actionButton}
+          icon={true}
         >
           <MinusCircleIcon />
         </Button>

@@ -76,6 +76,7 @@ export const ChooseApiPage = () => {
 
     for (const key of urlParams.keys()) {
       presentedApis.forEach((api: DelegableApi) => {
+        console.log('makeChosenApisFromParams', api);
         if (api.identifier === key) {
           const resourceRef: ResourceReference = { resource: api.authorizationReference };
           const promise = delegationCheck({
