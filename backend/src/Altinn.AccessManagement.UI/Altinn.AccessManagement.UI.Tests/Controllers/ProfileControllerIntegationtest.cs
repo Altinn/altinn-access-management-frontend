@@ -26,11 +26,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// Integrationtests of ProfileController
     /// </summary>
     [Collection("ProfileController integrationtests")]
-    public partial class ProfileControllerIntegationtest: IClassFixture<CustomWebApplicationFactory<ProfileController>>
+    public partial class ProfileControllerIntegationtest : IClassFixture<CustomWebApplicationFactory<ProfileController>>
     {
         private readonly CustomWebApplicationFactory<ProfileController> _factory;
         private readonly Mock<ILogger<ProfileClient>> _logger;
-        
+
         /// <summary>
         /// Integration test of ProfileController
         /// </summary>
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
                     services.AddSingleton<IKeyVaultService, KeyVaultServiceMock>();
-                    services.AddSingleton(typeof(ILogger<ProfileClient>),  _logger.Object);
+                    services.AddSingleton(typeof(ILogger<ProfileClient>), _logger.Object);
                     services.AddHttpClient<IProfileClient, ProfileClient>().AddHttpMessageHandler<MessageHandlerMock>();
                     services.AddSingleton<MessageHandlerMock>(handler);
                     services.AddSingleton<IPDP, PdpPermitMock>();
@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var client = GetClient(userId, handler);
 
             var response = await client.GetAsync("accessmanagement/api/v1/profile/user");
-            
+
             Assert.Equal(expectedStatusCode, response.StatusCode);
             var userProfileResult = await response.Content.ReadAsAsync<UserProfile>();
             Assert.Equivalent(userProfile, userProfileResult);
@@ -97,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 $"Getting user profile information from platform failed with statuscode {expectedStatusCode}";
             var userProfile = new UserProfile { UserId = userId };
             var handler = new MessageHandlerMock(expectedStatusCode, JsonContent.Create(userProfile));
-            
+
             _logger.Setup(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
             var client = GetClient(userId, handler);
 
@@ -112,12 +112,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                 Times.Once);
-            
+
             // Verify errormessage
             var loggedErrorMessages = _logger.Invocations
                 .Where(x => (LogLevel)x.Arguments[0] == LogLevel.Error)
                 .Select(x => x.Arguments[2].ToString()).First();
-            
+
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal(expectedErrorMessage, loggedErrorMessages);
         }

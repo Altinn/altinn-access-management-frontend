@@ -187,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.Equal(expected[i].ContactPage, actual[i].ContactPage);
             }
         }
-        
+
         /// <summary>
         ///     Assert that two Lists of <see cref="ResourceOwnerFE" /> have the same property in the same positions.
         /// </summary>

@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/authentication/refresh");
             string expectedCookie = "AltinnStudioRuntime";
             string actualCookie = response.Headers.GetValues("Set-Cookie").FirstOrDefault();
-            
+
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains(expectedCookie, actualCookie);
@@ -162,6 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// Test case: Refresh returns refreshed token for a valid cookie and antiforgerytoken
         /// Expected: Refresh returns refreshed token
         /// </summary>
+        [Fact]
         public async Task Refresh_ValidCookieAndMissingAntiForgeryToken()
         {
             // Arrange

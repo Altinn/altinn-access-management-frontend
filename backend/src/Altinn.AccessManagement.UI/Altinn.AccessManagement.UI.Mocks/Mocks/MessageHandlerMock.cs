@@ -1,13 +1,10 @@
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks;
 
-    /// <summary>
-    /// Class for mocking http responses when testing
-    /// </summary>
+/// <summary>
+/// Class for mocking http responses when testing
+/// </summary>
 public class MessageHandlerMock : DelegatingHandler
 {
     private readonly HttpStatusCode _expectedResponseStatus;
@@ -28,6 +25,6 @@ public class MessageHandlerMock : DelegatingHandler
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         return Task.FromResult<HttpResponseMessage>(new HttpResponseMessage()
-            { StatusCode = _expectedResponseStatus, Content = _httpContent });
+        { StatusCode = _expectedResponseStatus, Content = _httpContent });
     }
 }

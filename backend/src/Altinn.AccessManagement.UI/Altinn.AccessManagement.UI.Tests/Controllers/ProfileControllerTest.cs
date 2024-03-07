@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     services.AddSingleton<IPDP, PdpPermitMock>();
                 });
             }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-            
+
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return httpClient;
@@ -76,7 +76,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 Party = new Party(),
                 ProfileSettingPreference = new ProfileSettingPreference
                 {
-                    DoNotPromptForParty = false, Language = "Norwegian", LanguageType = "NB", PreSelectedPartyId = 1
+                    DoNotPromptForParty = false,
+                    Language = "Norwegian",
+                    LanguageType = "NB",
+                    PreSelectedPartyId = 1
                 }
             };
         }
@@ -87,11 +90,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetUser_UserFound_ReturnsUserProfile()
         {
-            const int userId = 1234;                            
-            SetupProfileClientMock(GetUserProfile(userId));                  
+            const int userId = 1234;
+            SetupProfileClientMock(GetUserProfile(userId));
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -106,13 +109,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetUser_UserIdNotSet_ReturnsBadRequest()
         {
-            const int userId = 0;                                                                     
-            SetupProfileClientMock(GetUserProfile(userId));                                                           
-            var token = PrincipalUtil.GetToken(userId, 1234, 2);                                         
+            const int userId = 0;
+            SetupProfileClientMock(GetUserProfile(userId));
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
-            
+
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
@@ -122,12 +125,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetUser_UserNotFoundByProfoileService_ReturnsNotFound()
         {
-            const int userId = 1234;                                                                     
-            SetupProfileClientMock(null);                                                           
-            var token = PrincipalUtil.GetToken(userId, 1234, 2); 
-            
+            const int userId = 1234;
+            SetupProfileClientMock(null);
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -144,7 +147,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             Mock.Get(_profileClient).Setup(m => m.GetUserProfile(It.IsAny<int>()))
                 .Throws(new Exception("Something failed"));
-            
+
             var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);

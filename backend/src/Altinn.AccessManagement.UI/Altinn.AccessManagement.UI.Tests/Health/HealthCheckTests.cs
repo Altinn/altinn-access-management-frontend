@@ -1,6 +1,5 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Health;
-using Altinn.AccessManagement.UI.Tests;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 

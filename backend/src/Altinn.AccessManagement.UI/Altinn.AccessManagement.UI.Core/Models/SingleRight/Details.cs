@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
 {
     /// <summary>
@@ -10,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
         /// <summary>
         ///     The detail code of the response.
         /// </summary>
-        public string? Code { get; set; }
+        public DetailCode Code { get; set; }
 
         /// <summary>
         ///     Info about details for the response.

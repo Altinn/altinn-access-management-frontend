@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-            
+
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return httpClient;
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// </summary>
         [Fact]
         public async Task GetPartyForOrganization_Success()
-        {             
+        {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
             string lookupOrgNo = "810418672";
 

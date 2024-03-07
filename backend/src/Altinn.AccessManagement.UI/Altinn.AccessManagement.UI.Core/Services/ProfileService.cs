@@ -1,7 +1,4 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
 using Microsoft.Extensions.Logging;
@@ -25,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="profileClient">handler for profile client</param>
         public ProfileService(
             ILogger<IMaskinportenSchemaService> logger,
-            IMaskinportenSchemaClient delegationsClient,           
+            IMaskinportenSchemaClient delegationsClient,
             IProfileClient profileClient)
         {
             _logger = logger;
@@ -37,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<UserProfile> GetUserProfile(int userId)
         {
             UserProfile userProfile = await _profileClient.GetUserProfile(userId);
-            return userProfile;           
+            return userProfile;
         }
     }
 }

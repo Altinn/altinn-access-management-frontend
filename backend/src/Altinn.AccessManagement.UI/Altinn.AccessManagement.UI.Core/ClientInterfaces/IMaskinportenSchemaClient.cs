@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="delegation">delegation to be revoked</param>
         /// <returns></returns>
         Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
-        
+
         /// <summary>
         /// Endpoint for performing a check if the user can delegate a maskinporten schema service to a specified reportee.
         /// </summary>

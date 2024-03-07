@@ -1,7 +1,4 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-
-namespace Altinn.AccessManagement.UI.Middleware
+namespace Altinn.AccessManagement.UI.Middlewares
 {
     /// <summary>
     /// Middleware for sending security headers in response.
@@ -32,10 +29,10 @@ namespace Altinn.AccessManagement.UI.Middleware
         /// <returns></returns>
         public Task Invoke(HttpContext context)
         {
-            context.Response.Headers.Add("X-Frame-Options", "deny");
-            context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.Add("X-XSS-Protection", "0");
-            context.Response.Headers.Add("Referer-Policy", "no-referer");
+            context.Response.Headers.Append("X-Frame-Options", "deny");
+            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Append("X-XSS-Protection", "0");
+            context.Response.Headers.Append("Referer-Policy", "no-referer");
 
             return _next(context);
         }

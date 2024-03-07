@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
-            { 
+            {
                 new IdValuePair
                 {
                     Id = "urn:altinn:resource",

@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
                 {
-                    HttpOnly = false,// Make this cookie readable by Javascript.
+                    HttpOnly = false, // Make this cookie readable by Javascript.
                 });
             }
             else
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
                 {
                     Secure = true,
-                    HttpOnly = false,// Make this cookie readable by Javascript.
+                    HttpOnly = false, // Make this cookie readable by Javascript.
                 });
             }
 

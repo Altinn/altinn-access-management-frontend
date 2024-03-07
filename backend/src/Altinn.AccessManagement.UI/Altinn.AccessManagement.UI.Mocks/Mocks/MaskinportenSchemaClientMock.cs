@@ -1,8 +1,6 @@
 ﻿using System.Net;
-using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -130,12 +128,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string content = File.ReadAllText(path);
                 return Task.FromResult(new HttpResponseMessage
-                    { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
+                { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
         }
-        
+
         /// <inheritdoc />
         public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
@@ -153,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             string fullPath = Path.Combine(mockFolder, "Data", "MaskinportenSchema", "DelegationCheck", "scope-access-check", filename + ".json");
-            
+
             if (!File.Exists(fullPath))
             {
                 throw new FileNotFoundException($"The file with path {fullPath} does not exist");

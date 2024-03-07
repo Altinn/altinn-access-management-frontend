@@ -1,6 +1,4 @@
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {

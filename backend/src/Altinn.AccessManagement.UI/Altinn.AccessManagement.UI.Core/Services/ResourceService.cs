@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int resultsPerPage)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[] ? resourceOwnerFilters, string? searchString, int page, int resultsPerPage)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return resource;
         }
-        
+
         /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetResourceOwners(List<ResourceType> relevantResourceTypeList, string languageCode)
         {
@@ -176,7 +176,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 // Filter resources based on criteria and remove duplicates based on OrganisationName
                 var resourceOwnerList = resources
-                    .Where(sr => sr.HasCompetentAuthority != null 
+                    .Where(sr => sr.HasCompetentAuthority != null
                                  && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
                     .GroupBy(sr => sr.HasCompetentAuthority.Orgcode)
@@ -214,9 +214,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return MapOrgListToResourceOwnerFe(orgList, languageCode);
         }
-        
+
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[]? resourceOwnerFilters, string searchString)
+        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[] ? resourceOwnerFilters, string searchString)
         {
             try
             {

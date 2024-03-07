@@ -1,17 +1,12 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Azure.Core;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -208,7 +203,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             int reporteePartyId = 50076002;
             string resourceId = "default";
-                
+
             string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
             string fullPath = Path.Combine(folderPath, resourceId + ".json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
@@ -219,11 +214,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             List<DelegationResponseData> actualResponse = JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, options);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
-        
+
         /// <summary>
         ///     Test case: Tests if response has insufficient access level
         ///     Expected: Resource has insufficient access level
@@ -246,7 +241,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             List<DelegationResponseData> actualResponse = JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, options);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }

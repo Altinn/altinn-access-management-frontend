@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return await _resourceService.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
-        
+
         /// <summary>
         ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
         /// </summary>
@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
-        
+
         /// <summary>
         ///     Searches through all delegable maskinportenschema services and returns matches based on the provided search string and filters
         /// </summary>

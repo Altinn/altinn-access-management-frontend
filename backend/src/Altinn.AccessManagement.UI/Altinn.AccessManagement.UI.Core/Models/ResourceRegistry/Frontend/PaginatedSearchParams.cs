@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
+﻿namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
 {
     /// <summary>
     /// Model representation of the query marameters used in search

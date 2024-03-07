@@ -24,8 +24,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Initializes a new instance of the <see cref="AuthenticationController"/> class
         /// </summary>
         public AuthenticationController(
-            IAuthenticationClient authenticationClient, 
-            IOptions<GeneralSettings> settings, 
+            IAuthenticationClient authenticationClient,
+            IOptions<GeneralSettings> settings,
             IOptions<PlatformSettings> platformSettings,
             IOptions<GeneralSettings> generalSettings,
             ILogger<AuthenticationController> logger)

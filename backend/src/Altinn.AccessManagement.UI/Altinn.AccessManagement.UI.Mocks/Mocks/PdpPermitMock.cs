@@ -7,7 +7,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks;
 /// <summary>
 /// tmp
 /// </summary>
-public class PdpPermitMock: IPDP
+public class PdpPermitMock : IPDP
 {
     /// <inheritdoc/>
     public Task<XacmlJsonResponse> GetDecisionForRequest(XacmlJsonRequestRoot xacmlJsonRequest)

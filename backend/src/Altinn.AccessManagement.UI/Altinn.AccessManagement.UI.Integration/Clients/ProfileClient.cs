@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Platform.Profile.Models;
+using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -36,11 +37,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             ILogger<ProfileClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
-            IAccessTokenProvider accessTokenProvider) 
+            IAccessTokenProvider accessTokenProvider)
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiProfileEndpoint);            
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiProfileEndpoint);
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;

@@ -1,0 +1,339 @@
+openapi: 3.0.1
+info:
+  title: altinn-platform-register
+  description: Altinn Platform Register
+  version: v1
+servers:
+  - url: https://platform.at22.altinn.cloud/register/api/v1
+paths:
+  /parties/lookup:
+    post:
+      tags:
+        - Parties
+      summary: Perform a lookup/search for a specific party by using one of the provided ids.
+      description: Perform a lookup/search for a specific party by using one of the provided ids.
+      operationId: post-parties-lookup
+      requestBody:
+        description: The lookup criteria. One and only one of the properties must be a valid value.
+        content:
+          application/json:
+            example:
+              ssn: string
+              orgNo: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json: { }
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+  '/parties/{partyId}':
+    get:
+      tags:
+        - Parties
+      summary: Gets the party for a given party id.
+      description: Gets the party for a given party id.
+      operationId: get-parties-partyid
+      parameters:
+        - name: partyId
+          in: path
+          description: Format - int32. The party id.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json: { }
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  '/organizations/{orgNr}':
+    get:
+      tags:
+        - Organizations
+      summary: Gets the organization information for a given organization number.
+      description: Gets the organization information for a given organization number.
+      operationId: get-organizations-orgnr
+      parameters:
+        - name: orgNr
+          in: path
+          description: The organization number to retrieve information about.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                orgNumber: string
+                name: string
+                unitType: string
+                telephoneNumber: string
+                mobileNumber: string
+                faxNumber: string
+                eMailAddress: string
+                internetAddress: string
+                mailingAddress: string
+                mailingPostalCode: string
+                mailingPostalCity: string
+                businessAddress: string
+                businessPostalCode: string
+                businessPostalCity: string
+                unitStatus: string
+        '404':
+          description: Not Found
+  /persons:
+    get:
+      tags:
+        - Persons
+      summary: Gets the Altinn.Platform.Register.Models.Person with the given national identity number.
+      description: "This endpoint can be used to retrieve the person object for an identified person. The service\r\nwill track the number of failed lookup attempts and block further requests if the number of failed\r\nlookups have exceeded a configurable number. The user will be prevented from performing new searches\r\nfor a configurable number of seconds."
+      operationId: get-persons
+      parameters:
+        - name: X-Ai-NationalIdentityNumber
+          in: header
+          description: The unique national identity number of the person.
+          required: true
+          schema:
+            type: string
+        - name: X-Ai-LastName
+          in: header
+          description: "The last name of the person. This must match the last name of the identified person.\r\nThe value is assumed to be base64 encoded from an UTF-8 string."
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                ssn: string
+                name: string
+                firstName: string
+                middleName: string
+                lastName: string
+                telephoneNumber: string
+                mobileNumber: string
+                mailingAddress: string
+                mailingPostalCode: string
+                mailingPostalCity: string
+                addressMunicipalNumber: string
+                addressMunicipalName: string
+                addressStreetName: string
+                addressHouseNumber: string
+                addressHouseLetter: string
+                addressPostalCode: string
+                addressCity: string
+                dateOfDeath: string
+        '400':
+          description: Bad Request
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /parties/partylist:
+    post:
+      tags:
+        - Parties
+      summary: Gets the party list for the list of party ids.
+      description: Gets the party list for the list of party ids.
+      operationId: post-parties-partylist
+      parameters:
+        - name: fetchSubUnits
+          in: query
+          description: flag indicating whether subunits should be included
+          schema:
+            type: boolean
+            default: false
+      requestBody:
+        description: List of partyIds for parties to retrieve.
+        content:
+          application/json:
+            example:
+              - 0
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json: { }
+  /parties/partylistbyuuid:
+    post:
+      tags:
+        - Parties
+      summary: Gets the party list for the list of party uuids.
+      description: Gets the party list for the list of party uuids.
+      operationId: post-parties-partylistbyuuid
+      parameters:
+        - name: fetchSubUnits
+          in: query
+          description: flag indicating whether subunits should be included
+          schema:
+            type: boolean
+            default: false
+      requestBody:
+        description: List of partyUuids for parties to retrieve.
+        content:
+          application/json:
+            example:
+              - string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json: { }
+  '/parties/byuuid/{partyUuid}':
+    get:
+      tags:
+        - Parties
+      summary: Gets the party for a given party uuid.
+      description: Gets the party for a given party uuid.
+      operationId: get-parties-byuuid-partyuuid
+      parameters:
+        - name: partyUuid
+          in: path
+          description: Format - uuid. The party uuid.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json: { }
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+  /parties/nameslookup:
+    post:
+      tags:
+        - Parties
+      summary: Perform a name lookup for the list of parties for the provided ids.
+      description: Perform a name lookup for the list of parties for the provided ids.
+      operationId: post-parties-nameslookup
+      requestBody:
+        description: 'A list of lookup criteria. For each criteria, one and only one of the properties must be a valid value.'
+        content:
+          application/json:
+            example:
+              parties:
+                - ssn: string
+                  orgNo: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                partyNames:
+                  - ssn: string
+                    orgNo: string
+                    name: string
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+components:
+  schemas:
+    PartyInput:
+      type: object
+      properties:
+        ssn:
+          type: string
+          description: national identifier
+        orgNo:
+          type: string
+          description: organization number
+
+
+
+    Organization:
+      type: object
+      properties:
+        OrgNumber:
+          type: string
+          description: Identifier
+        Name:
+          type: string
+          description: Name of the organization
+        UnitType:
+          type: string
+          description: Unit Type
+    
+    Person:
+      type: object
+      properties:
+        SSN:
+          type: string
+          description: Identifier
+        Name:
+          type: string
+          description: Name of the person
+        FirstName:
+          type: string
+          description: Firstname
+
+    ProfileSettingPreference:
+      type: object
+      properties:
+        Language:
+          type: string
+        PreSelectedPartyId:
+          type: integer
+        DoNotPromptForParty:
+          type: boolean
+
+    Party:
+      type: object
+      properties:
+        PartyId:
+          type: integer
+          description: the party ID
+        PartyUuid:
+          type: string
+          format: uuid
+        PartyTypeName:
+          type: string
+          enum:
+            - Person
+            - Organisation
+            - SelfIdentified
+            - SubUnit
+            - BankruptcyEstate
+        OrgNumber:
+          type: string
+          description: parties org number
+        SSN:
+          type: string
+          description: parties ssn
+        UnitType:
+          type: string
+          description: set unit type
+        Name:
+          type: string
+          description: name of the party
+        IsDeleted:
+          type: boolean
+          description: if party is deleted
+        OnlyHierarchyElementWithNoAccess:
+          type: boolean
+          description: docs
+        Person:
+          type: object
+          $ref: "#/components/schemas/Person"
+        Organization:
+          type: object
+          $ref: "#/components/schemas/Organization"
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+x-ms-export-notes:
+  - 'Definitions/body parameters are not exported since this API references multiple schemas with OpenAPI components as opposed to one. Schemas referenced: 5ec273071363180d0c615986,62177fdd4634610c8c72d347,63cfb2f60a232314844c500f,65b7cfcc0a23231764f6295a,65c6372f0a23230eec2cde83'

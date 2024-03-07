@@ -13,5 +13,5 @@ public class ApiSearchParams
     /// <summary>
     /// List of Resource Owners to be used for filtering (owner's org number)
     /// </summary>
-    public string[]? ROFilters { get; set; }
+    public string[] ? ROFilters { get; set; }
 }

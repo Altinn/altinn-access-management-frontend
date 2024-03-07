@@ -165,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<List<ServiceResource>> GetMaskinportenSchemas()
         {
             List<ServiceResource> resources = new List<ServiceResource>();
-            
+
             // Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
             string endpointUrl = $"resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
 

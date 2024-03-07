@@ -1,0 +1,1405 @@
+openapi: 3.0.1
+info:
+  title: altinn-platform-resourceregistry
+  description: Altinn Platform ResourceRegistry
+  version: v1
+servers:
+  - url: https://platform.at22.altinn.cloud/resourceregistry/api/v1
+paths:
+  '/resource/{id}/policy':
+    put:
+      tags:
+        - Resource
+      summary: "Creates or overwrites the existing XACML policy for the resource, if it pass all validation checks.\r\nThe XACML policy must define at least a subject and resource, and will be used to restrict access for the resource."
+      description: "Creates or overwrites the existing XACML policy for the resource, if it pass all validation checks.\r\nThe XACML policy must define at least a subject and resource, and will be used to restrict access for the resource."
+      operationId: put-resource-id-policy
+      parameters:
+        - name: id
+          in: path
+          description: The resource identifier to store the policy for
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                policyFile:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Resource
+      summary: "Creates or overwrites the existing XACML policy for the resource, if it pass all validation checks.\r\nThe XACML policy must define at least a subject and resource, and will be used to restrict access for the resource."
+      description: "Creates or overwrites the existing XACML policy for the resource, if it pass all validation checks.\r\nThe XACML policy must define at least a subject and resource, and will be used to restrict access for the resource."
+      operationId: post-resource-id-policy
+      parameters:
+        - name: id
+          in: path
+          description: The resource identifier to store the policy for
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                policyFile:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - Resource
+      summary: Returns the XACML policy for a resource in resource registry.
+      description: Returns the XACML policy for a resource in resource registry.
+      operationId: get-resource-id-policy
+      parameters:
+        - name: id
+          in: path
+          description: Resource Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /resource:
+    put:
+      tags:
+        - Resource
+      summary: /resource - PUT
+      operationId: put-resource
+      requestBody:
+        content:
+          application/json:
+            example:
+              identifier: string
+              title: { }
+              description: { }
+              rightDescription: { }
+              homepage: string
+              status: string
+              validFrom: string
+              validTo: string
+              isPartOf: string
+              isPublicService: true
+              thematicArea: string
+              resourceReference:
+                referenceSource: 0
+                reference: string
+                referenceType: 0
+              isComplete: true
+              hasCompetentAuthority:
+                organization: string
+                orgcode: string
+              keywords:
+                - word: string
+                  language: string
+              sector:
+                - string
+              resourceType: 0
+      responses:
+        '200':
+          description: Success
+    post:
+      tags:
+        - Resource
+      summary: Creates a service resource in the resource registry if it pass all validation checks
+      description: Creates a service resource in the resource registry if it pass all validation checks
+      operationId: post-resource
+      requestBody:
+        description: Service resource model to create in the resource registry
+        content:
+          application/json:
+            example:
+              identifier: string
+              version: string
+              title: { }
+              description: { }
+              rightDescription: { }
+              homepage: string
+              status: string
+              spatial:
+                - string
+              contactPoints:
+                - category: string
+                  email: string
+                  telephone: string
+                  contactPage: string
+              produces:
+                - string
+              isPartOf: string
+              thematicAreas:
+                - string
+              resourceReferences:
+                - referenceSource: 0
+                  reference: string
+                  referenceType: 0
+              delegable: true
+              visible: true
+              hasCompetentAuthority:
+                organization: string
+                orgcode: string
+                name: { }
+              keywords:
+                - word: string
+                  language: string
+              limitedByRRR: true
+              selfIdentifiedUserEnabled: true
+              enterpriseUserEnabled: true
+              resourceType: 0
+              availableForType:
+                - PrivatePerson
+              authorizationReference:
+                - id: string
+                  value: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /resource/Search:
+    get:
+      tags:
+        - Resource
+      summary: Allows for searching for resources in the resource registry
+      description: Allows for searching for resources in the resource registry
+      operationId: get-resource-search
+      parameters:
+        - name: Id
+          in: query
+          schema:
+            type: string
+        - name: Title
+          in: query
+          schema:
+            type: string
+        - name: Description
+          in: query
+          schema:
+            type: string
+        - name: ResourceType
+          in: query
+          description: Format - int32.
+          schema:
+            enum:
+              - 0
+              - 1
+              - 2
+              - 4
+              - 8
+              - 16
+            type: integer
+        - name: Keyword
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                - identifier: string
+                  version: string
+                  title: { }
+                  description: { }
+                  rightDescription: { }
+                  homepage: string
+                  status: string
+                  spatial:
+                    - string
+                  contactPoints:
+                    - category: string
+                      email: string
+                      telephone: string
+                      contactPage: string
+                  produces:
+                    - string
+                  isPartOf: string
+                  thematicAreas:
+                    - string
+                  resourceReferences:
+                    - referenceSource: 0
+                      reference: string
+                      referenceType: 0
+                  delegable: true
+                  visible: true
+                  hasCompetentAuthority:
+                    organization: string
+                    orgcode: string
+                    name: { }
+                  keywords:
+                    - word: string
+                      language: string
+                  limitedByRRR: true
+                  selfIdentifiedUserEnabled: true
+                  enterpriseUserEnabled: true
+                  resourceType: 0
+                  availableForType:
+                    - PrivatePerson
+                  authorizationReference:
+                    - id: string
+                      value: string
+  '/resource/{id}':
+    delete:
+      tags:
+        - Resource
+      summary: Deletes a resource from the resource registry
+      description: Deletes a resource from the resource registry
+      operationId: delete-resource-id
+      parameters:
+        - name: id
+          in: path
+          description: The resource identifier to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - Resource
+      summary: Gets a single resource by its resource identifier if it exists in the resource registry
+      description: Gets a single resource by its resource identifier if it exists in the resource registry
+      operationId: get-resource-id
+      parameters:
+        - name: id
+          in: path
+          description: The resource identifier to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                identifier: string
+                version: string
+                title: { }
+                description: { }
+                rightDescription: { }
+                homepage: string
+                status: string
+                spatial:
+                  - string
+                contactPoints:
+                  - category: string
+                    email: string
+                    telephone: string
+                    contactPage: string
+                produces:
+                  - string
+                isPartOf: string
+                thematicAreas:
+                  - string
+                resourceReferences:
+                  - referenceSource: 0
+                    reference: string
+                    referenceType: 0
+                delegable: true
+                visible: true
+                hasCompetentAuthority:
+                  organization: string
+                  orgcode: string
+                  name: { }
+                keywords:
+                  - word: string
+                    language: string
+                limitedByRRR: true
+                selfIdentifiedUserEnabled: true
+                enterpriseUserEnabled: true
+                resourceType: 0
+                availableForType:
+                  - PrivatePerson
+                authorizationReference:
+                  - id: string
+                    value: string
+    put:
+      tags:
+        - Resource
+      summary: Updates a service resource in the resource registry if it pass all validation checks
+      description: Updates a service resource in the resource registry if it pass all validation checks
+      operationId: put-resource-id
+      parameters:
+        - name: id
+          in: path
+          description: Resource ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Service resource model for update in the resource registry
+        content:
+          application/json:
+            example:
+              identifier: string
+              version: string
+              title: { }
+              description: { }
+              rightDescription: { }
+              homepage: string
+              status: string
+              spatial:
+                - string
+              contactPoints:
+                - category: string
+                  email: string
+                  telephone: string
+                  contactPage: string
+              produces:
+                - string
+              isPartOf: string
+              thematicAreas:
+                - string
+              resourceReferences:
+                - referenceSource: 0
+                  reference: string
+                  referenceType: 0
+              delegable: true
+              visible: true
+              hasCompetentAuthority:
+                organization: string
+                orgcode: string
+                name: { }
+              keywords:
+                - word: string
+                  language: string
+              limitedByRRR: true
+              selfIdentifiedUserEnabled: true
+              enterpriseUserEnabled: true
+              resourceType: 0
+              availableForType:
+                - PrivatePerson
+              authorizationReference:
+                - id: string
+                  value: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /resource/orgs:
+    get:
+      tags:
+        - ResourceOwner
+      summary: Endpoint to get the org list from CDN
+      description: Endpoint to get the org list from CDN
+      operationId: get-resource-orgs
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                orgs: { }
+  /resource/export:
+    get:
+      tags:
+        - Resource
+      summary: List of all resources
+      description: List of all resources
+      operationId: get-resource-export
+      responses:
+        '200':
+          description: Success
+          content:
+            application/xml+rdf:
+              example: <ResourceExportGet200ApplicationXml-rdfResponse>string</ResourceExportGet200ApplicationXml-rdfResponse>
+  /resource/resourcelist:
+    get:
+      tags:
+        - Resource
+      summary: List of all resources
+      description: List of all resources
+      operationId: get-resource-resourcelist
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                - identifier: string
+                  version: string
+                  title: { }
+                  description: { }
+                  rightDescription: { }
+                  homepage: string
+                  status: string
+                  spatial:
+                    - string
+                  contactPoints:
+                    - category: string
+                      email: string
+                      telephone: string
+                      contactPage: string
+                  produces:
+                    - string
+                  isPartOf: string
+                  thematicAreas:
+                    - string
+                  resourceReferences:
+                    - referenceSource: 0
+                      reference: string
+                      referenceType: 0
+                  delegable: true
+                  visible: true
+                  hasCompetentAuthority:
+                    organization: string
+                    orgcode: string
+                    name: { }
+                  keywords:
+                    - word: string
+                      language: string
+                  limitedByRRR: true
+                  selfIdentifiedUserEnabled: true
+                  enterpriseUserEnabled: true
+                  resourceType: 0
+                  availableForType:
+                    - PrivatePerson
+                  authorizationReference:
+                    - id: string
+                      value: string
+  /altinn2export/policy:
+    get:
+      tags:
+        - Altinn2Export
+      summary: Returns a Service Resources based on Altinn 2 ServiceMetadata for a service
+      description: Returns a Service Resources based on Altinn 2 ServiceMetadata for a service
+      operationId: get-altinn2export-policy
+      parameters:
+        - name: serviceCode
+          in: query
+          schema:
+            type: string
+        - name: serviceEditionCode
+          in: query
+          description: Format - int32.
+          schema:
+            type: integer
+        - name: resourceIdentifier
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  '/access-lists/{owner}/{identifier}/members':
+    put:
+      tags:
+        - Access List Members
+      summary: Replace access list members.
+      description: This effectively overwrites all members with the ones included in the request. It should not be used for lists with more than 100 members.
+      operationId: put-access-lists-owner-identifier-members
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The new members-list
+        content:
+          application/json:
+            example:
+              data:
+                - urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                data:
+                  - id: urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+                    since: string
+                    identifiers:
+                      partyId: string
+                      organizationNumber: '123456789'
+                links:
+                  next: /foo/bar/bat?page=2
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Access List Members
+      summary: Add new members to an access list.
+      description: 'This method is idempotent, meaning that if a member already exists, it will not be added again.'
+      operationId: post-access-lists-owner-identifier-members
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The new members-list
+        content:
+          application/json:
+            example:
+              data:
+                - urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                data:
+                  - id: urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+                    since: string
+                    identifiers:
+                      partyId: string
+                      organizationNumber: '123456789'
+                links:
+                  next: /foo/bar/bat?page=2
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - Access List Members
+      summary: Get access list members.
+      description: Get access list members.
+      operationId: get-access-lists-owner-identifier-members
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                data:
+                  - id: urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+                    since: string
+                    identifiers:
+                      partyId: string
+                      organizationNumber: '123456789'
+                links:
+                  next: /foo/bar/bat?page=2
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    delete:
+      tags:
+        - Access List Members
+      summary: Remove members from an access list if they exist.
+      description: 'This method is idempotent, meaning that if a member does not exist, it will not be removed.'
+      operationId: delete-access-lists-owner-identifier-members
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The new members-list
+        content:
+          application/json:
+            example:
+              data:
+                - urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                data:
+                  - id: urn:altinn:party:e458014d-4d4f-49a1-96d5-a869d95e8715
+                    since: string
+                    identifiers:
+                      partyId: string
+                      organizationNumber: '123456789'
+                links:
+                  next: /foo/bar/bat?page=2
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /altinn2export/resource:
+    get:
+      tags:
+        - Altinn2Export
+      summary: Returns a Service Resources based on Altinn 2 ServiceMetadata for a service
+      description: Returns a Service Resources based on Altinn 2 ServiceMetadata for a service
+      operationId: get-altinn2export-resource
+      parameters:
+        - name: serviceCode
+          in: query
+          schema:
+            type: string
+        - name: serviceEditionCode
+          in: query
+          description: Format - int32.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                identifier: string
+                version: string
+                title: { }
+                description: { }
+                rightDescription: { }
+                homepage: string
+                status: string
+                spatial:
+                  - string
+                contactPoints:
+                  - category: string
+                    email: string
+                    telephone: string
+                    contactPage: string
+                produces:
+                  - string
+                isPartOf: string
+                thematicAreas:
+                  - string
+                resourceReferences:
+                  - referenceSource: 0
+                    reference: string
+                    referenceType: 0
+                delegable: true
+                visible: true
+                hasCompetentAuthority:
+                  organization: string
+                  orgcode: string
+                  name: { }
+                keywords:
+                  - word: string
+                    language: string
+                limitedByRRR: true
+                selfIdentifiedUserEnabled: true
+                enterpriseUserEnabled: true
+                resourceType: 0
+                availableForType:
+                  - PrivatePerson
+                authorizationReference:
+                  - id: string
+                    value: string
+  /resource/findforsubjects:
+    post:
+      tags:
+        - Resource
+      summary: Returns a list of Subject resources. For each which subject and then a list of all resources that are connected.
+      description: Returns a list of Subject resources. For each which subject and then a list of all resources that are connected.
+      operationId: post-resource-findforsubjects
+      requestBody:
+        description: List of subjects for resource information is needed
+        content:
+          application/json:
+            example:
+              - string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                - subject:
+                    type: string
+                    value: string
+                    urn: string
+                  resources:
+                    - type: string
+                      value: string
+                      urn: string
+  '/resource/{id}/policy/subjects':
+    get:
+      tags:
+        - Resource
+      summary: Returns the XACML policy for a resource in resource registry.
+      description: Returns the XACML policy for a resource in resource registry.
+      operationId: get-resource-id-policy-subjects
+      parameters:
+        - name: id
+          in: path
+          description: Resource Id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                - type: string
+                  value: string
+                  urn: string
+  '/access-lists/{owner}/{identifier}':
+    put:
+      tags:
+        - Access List
+      summary: Create or update an access list.
+      description: Create or update an access list.
+      operationId: put-access-lists-owner-identifier
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+        - name: If-Match
+          in: header
+          description: If-Match header
+          schema:
+            type: string
+        - name: If-None-Match
+          in: header
+          description: If-None-Match header
+          schema:
+            type: string
+        - name: If-Modified-Since
+          in: header
+          description: If-Modified-Since header
+          schema:
+            type: string
+        - name: If-Unmodified-Since
+          in: header
+          description: If-Unmodified-Since header
+          schema:
+            type: string
+      requestBody:
+        description: Information about the access list
+        content:
+          application/json:
+            example:
+              name: string
+              description: string
+      responses:
+        '200':
+          description: Success
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                identifier: godkjente-banker
+                name: Godkjente banker
+                description: En liste over godkjente banker
+                createdAt: string
+                updatedAt: string
+                resourceConnections:
+                  - resourceIdentifier: string
+                    actions:
+                      - string
+                    createdAt: string
+                    updatedAt: string
+        '404':
+          description: Not Found
+        '412':
+          description: Precondition Failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    patch:
+      tags:
+        - Access List
+      summary: Update an access list.
+      description: Update an access list.
+      operationId: patch-access-lists-owner-identifier
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The patch document containing what to update
+        content:
+          application/json-patch+json:
+            example:
+              - op: add
+                path: /foo/bar
+                value: { }
+          application/json:
+            example:
+              - op: add
+                path: /foo/bar
+                value: { }
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                identifier: godkjente-banker
+                name: Godkjente banker
+                description: En liste over godkjente banker
+                createdAt: string
+                updatedAt: string
+                resourceConnections:
+                  - resourceIdentifier: string
+                    actions:
+                      - string
+                    createdAt: string
+                    updatedAt: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    delete:
+      tags:
+        - Access List
+      summary: Deletes an access list by owner and identifier.
+      description: Deletes an access list by owner and identifier.
+      operationId: delete-access-lists-owner-identifier
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+        - name: If-Match
+          in: header
+          description: If-Match header
+          schema:
+            type: string
+        - name: If-None-Match
+          in: header
+          description: If-None-Match header
+          schema:
+            type: string
+        - name: If-Modified-Since
+          in: header
+          description: If-Modified-Since header
+          schema:
+            type: string
+        - name: If-Unmodified-Since
+          in: header
+          description: If-Unmodified-Since header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The list was deleted
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                identifier: godkjente-banker
+                name: Godkjente banker
+                description: En liste over godkjente banker
+                createdAt: string
+                updatedAt: string
+                resourceConnections:
+                  - resourceIdentifier: string
+                    actions:
+                      - string
+                    createdAt: string
+                    updatedAt: string
+        '204':
+          description: The access list did not exist or was already deleted
+        '404':
+          description: Not Found
+        '412':
+          description: Precondition Failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    get:
+      tags:
+        - Access List
+      summary: Gets an access list by owner and identifier.
+      description: Gets an access list by owner and identifier.
+      operationId: get-access-lists-owner-identifier
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: What additional information to include in the response
+          schema:
+            type: array
+        - name: If-Match
+          in: header
+          description: If-Match header
+          schema:
+            type: string
+        - name: If-None-Match
+          in: header
+          description: If-None-Match header
+          schema:
+            type: string
+        - name: If-Modified-Since
+          in: header
+          description: If-Modified-Since header
+          schema:
+            type: string
+        - name: If-Unmodified-Since
+          in: header
+          description: If-Unmodified-Since header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                identifier: godkjente-banker
+                name: Godkjente banker
+                description: En liste over godkjente banker
+                createdAt: string
+                updatedAt: string
+                resourceConnections:
+                  - resourceIdentifier: string
+                    actions:
+                      - string
+                    createdAt: string
+                    updatedAt: string
+        '404':
+          description: Not Found
+        '412':
+          description: Precondition Failed
+        '304':
+          description: Not Modified
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  '/access-lists/{owner}/{identifier}/resource-connections/{resourceIdentifier}':
+    put:
+      tags:
+        - Access List Resource Connections
+      summary: Creates or update a resource connection to an access list.
+      description: 'This method is idempotent, meaning that if a resource connection already exists, it will be updated.'
+      operationId: put-access-lists-owner-identifier-resource-connections-resourceidentifier
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+        - name: resourceIdentifier
+          in: path
+          description: The resource identifier
+          required: true
+          schema:
+            type: string
+        - name: If-Match
+          in: header
+          description: If-Match header
+          schema:
+            type: string
+        - name: If-None-Match
+          in: header
+          description: If-None-Match header
+          schema:
+            type: string
+        - name: If-Modified-Since
+          in: header
+          description: If-Modified-Since header
+          schema:
+            type: string
+        - name: If-Unmodified-Since
+          in: header
+          description: If-Unmodified-Since header
+          schema:
+            type: string
+      requestBody:
+        description: The resource connection info
+        content:
+          application/json:
+            example:
+              actions:
+                - string
+      responses:
+        '200':
+          description: Success
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                resourceIdentifier: string
+                actions:
+                  - string
+                createdAt: string
+                updatedAt: string
+        '404':
+          description: Not Found
+        '412':
+          description: Precondition Failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+    delete:
+      tags:
+        - Access List Resource Connections
+      summary: Removes a resource connection from an access list if it exists.
+      description: 'This method is idempotent, meaning that if a resource connection does not exist, it will not be removed.'
+      operationId: delete-access-lists-owner-identifier-resource-connections-resourceidentifier
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+        - name: resourceIdentifier
+          in: path
+          description: The resource identifier
+          required: true
+          schema:
+            type: string
+        - name: If-Match
+          in: header
+          description: If-Match header
+          schema:
+            type: string
+        - name: If-None-Match
+          in: header
+          description: If-None-Match header
+          schema:
+            type: string
+        - name: If-Modified-Since
+          in: header
+          description: If-Modified-Since header
+          schema:
+            type: string
+        - name: If-Unmodified-Since
+          in: header
+          description: If-Unmodified-Since header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The resource connection was removed
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                resourceIdentifier: string
+                actions:
+                  - string
+                createdAt: string
+                updatedAt: string
+        '204':
+          description: The resource connection did not exist
+        '404':
+          description: Not Found
+        '412':
+          description: Precondition Failed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  '/access-lists/{owner}':
+    get:
+      tags:
+        - Access List
+      summary: Get all access lists for a given resource owner.
+      description: Get all access lists for a given resource owner.
+      operationId: access-lists-get-by-owner
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Optional continuation token
+          schema:
+            type: string
+        - name: include
+          in: query
+          description: What additional information to include in the response
+          schema:
+            type: array
+        - name: resource
+          in: query
+          description: "Optional resource identifier. Required if include has flag Altinn.ResourceRegistry.Core.AccessLists.AccessListIncludes.ResourceConnections\r\nset. This is used to filter the resource connections included in the access lists to only the provided resource."
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                data:
+                  - identifier: godkjente-banker
+                    name: Godkjente banker
+                    description: En liste over godkjente banker
+                    createdAt: string
+                    updatedAt: string
+                    resourceConnections:
+                      - resourceIdentifier: string
+                        actions:
+                          - string
+                        createdAt: string
+                        updatedAt: string
+                links:
+                  next: /foo/bar/bat?page=2
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  '/access-lists/{owner}/{identifier}/resource-connections':
+    get:
+      tags:
+        - Access List Resource Connections
+      summary: Get all resource connections for an access list.
+      description: Get all resource connections for an access list.
+      operationId: access-lists-get-resource-connections
+      parameters:
+        - name: owner
+          in: path
+          description: The resource owner
+          required: true
+          schema:
+            type: string
+        - name: identifier
+          in: path
+          description: The resource owner-unique identifier
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: Optional continuation token
+          schema:
+            type: string
+        - name: If-Match
+          in: header
+          description: If-Match header
+          schema:
+            type: string
+        - name: If-None-Match
+          in: header
+          description: If-None-Match header
+          schema:
+            type: string
+        - name: If-Modified-Since
+          in: header
+          description: If-Modified-Since header
+          schema:
+            type: string
+        - name: If-Unmodified-Since
+          in: header
+          description: If-Unmodified-Since header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                data:
+                  - resourceIdentifier: string
+                    actions:
+                      - string
+                    createdAt: string
+                    updatedAt: string
+                links:
+                  next: /foo/bar/bat?page=2
+        '404':
+          description: Not Found
+        '412':
+          description: Precondition Failed
+        '304':
+          description: Not Modified
+          headers:
+            ETag:
+              description: The version tag of the resource
+              schema:
+                type: string
+            Last-Modified:
+              description: The last modified date of the resource
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - { }
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+x-ms-export-notes:
+  - 'Definitions/body parameters are not exported since this API references multiple schemas with OpenAPI components as opposed to one. Schemas referenced: 633d691501234e14fc215aad,63e124430a232310b0c862f4,64a2c6780a23230c7c7da3ce,65b8b7ea0a23231764f62abd,65b904880a23231764f62c03,65d5c96a0a23230eec2cf674'

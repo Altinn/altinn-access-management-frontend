@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
     /// <summary>

@@ -126,7 +126,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NoContent();
                 }
-                
+
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
@@ -155,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NoContent();
                 }
-                
+
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();

@@ -1,0 +1,224 @@
+openapi: 3.0.1
+info:
+  title: altinn-platform-profile
+  description: Altinn Platform Profile
+  version: v1
+paths:
+  '/users/{userID}':
+    get:
+      tags:
+        - Users
+      summary: Gets the user profile for a given user id
+      description: Gets the user profile for a given user id
+      operationId: get-users-userid
+      parameters:
+        - name: userID
+          in: path
+          description: Format - int32. The user id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+        '404':
+          description: Not Found
+  /users/current:
+    get:
+      tags:
+        - Users
+      summary: Gets the current user based on the request context
+      description: Gets the current user based on the request context
+      operationId: get-users-current
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+        '404':
+          description: Not Found
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Gets the user profile for a given SSN
+      description: Gets the user profile for a given SSN
+      operationId: post-users
+      requestBody:
+        description: The user's social security number
+        content:
+          application/json:
+            example: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json: { }
+        '404':
+          description: Not Found
+  '/users/byuuid/{userUuid}':
+    get:
+      tags:
+        - Users
+      summary: Gets the user profile for a given user uuid
+      description: Gets the user profile for a given user uuid
+      operationId: get-users-byuuid-useruuid
+      parameters:
+        - name: userUuid
+          in: path
+          description: Format - uuid. The user uuid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+            
+        '404':
+          description: Not Found
+components:
+  schemas:
+    Organization:
+      type: object
+      properties:
+        OrgNumber:
+          type: string
+          description: Identifier
+        Name:
+          type: string
+          description: Name of the organization
+        UnitType:
+          type: string
+          description: Unit Type
+    
+    Person:
+      type: object
+      properties:
+        SSN:
+          type: string
+          description: Identifier
+        Name:
+          type: string
+          description: Name of the person
+        FirstName:
+          type: string
+          description: Firstname
+
+    ProfileSettingPreference:
+      type: object
+      properties:
+        Language:
+          type: string
+        PreSelectedPartyId:
+          type: integer
+        DoNotPromptForParty:
+          type: boolean
+
+    Party:
+      type: object
+      properties:
+        PartyId:
+          type: integer
+          description: the party ID
+        PartyUuid:
+          type: string
+          format: uuid
+        PartyTypeName:
+          type: string
+          enum:
+            - Person
+            - Organisation
+            - SelfIdentified
+            - SubUnit
+            - BankruptcyEstate
+        OrgNumber:
+          type: string
+          description: parties org number
+        SSN:
+          type: string
+          description: parties ssn
+        UnitType:
+          type: string
+          description: set unit type
+        Name:
+          type: string
+          description: name of the party
+        IsDeleted:
+          type: boolean
+          description: if party is deleted
+        OnlyHierarchyElementWithNoAccess:
+          type: boolean
+          description: docs
+        Person:
+          type: object
+          $ref: "#/components/schemas/Person"
+        Organization:
+          type: object
+          $ref: "#/components/schemas/Organization"
+
+    User:
+      type: object
+      properties:
+        UserId:
+          type: integer
+          description: ID of the user.
+        UserUuid:
+          type: string
+          format: uuid
+          description: UUID of the user
+        UserName:
+          type: string
+          description: the username
+        ExternalIdentity:
+          type: string
+          description: External Identity
+        PhoneNumber:
+          type: string
+          description: the phone number
+        Email:
+          type: string
+          description: the email address
+        PartyId:
+          type: integer
+          description: the party ID
+        Party:
+          type: object
+          $ref: "#/components/schemas/Party"
+        UserType:
+          type: string
+          enum:
+            - None
+            - SSNIdentified
+            - SelfIdentified
+            - EnterpriseIdentified
+            - AgencyUser
+            - PSAN
+            - PSA
+        ProfileSettingPreference:
+          type: object
+          $ref: "#/components/schemas/ProfileSettingPreference"
+
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+x-ms-export-notes:
+  - 'Definitions/body parameters are not exported since this API references multiple schemas with OpenAPI components as opposed to one. Schemas referenced: 5eb172081363180d0c615920,65b7cf940a23231764f6294e'
