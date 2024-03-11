@@ -3301,7 +3301,7 @@ __metadata:
     cypress-recurse: "npm:^1.35.2"
     cypress-wait-until: "npm:^3.0.0"
     dayjs: "npm:^1.11.5"
-    fs-extra: "npm:^9.1.0"
+    fs-extra: "npm:^11.0.0"
     get-ssl-certificate: "npm:^2.3.3"
     junit-report-merger: "npm:^2.2.3"
     mocha-junit-reporter: "npm:^2.1.0"
@@ -4878,6 +4878,17 @@ __metadata:
     jsonfile: "npm:^6.0.1"
     universalify: "npm:^2.0.0"
   checksum: 10/05ce2c3b59049bcb7b52001acd000e44b3c4af4ec1f8839f383ef41ec0048e3cfa7fd8a637b1bddfefad319145db89be91f4b7c1db2908205d38bf91e7d1d3b7
+  languageName: node
+  linkType: hard
+
+"fs-extra@npm:^11.0.0":
+  version: 11.2.0
+  resolution: "fs-extra@npm:11.2.0"
+  dependencies:
+    graceful-fs: "npm:^4.2.0"
+    jsonfile: "npm:^6.0.1"
+    universalify: "npm:^2.0.0"
+  checksum: 10/0579bf6726a4cd054d4aa308f10b483f52478bb16284f32cf60b4ce0542063d551fca1a08a2af365e35db21a3fa5a06cf2a6ed614004b4368982bc754cb816b3
   languageName: node
   linkType: hard
 
