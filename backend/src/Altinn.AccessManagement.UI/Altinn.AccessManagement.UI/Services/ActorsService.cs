@@ -15,12 +15,12 @@ public interface IActorsService
 
 public class ActorsService(
         IIntegrations integrations,
-        IMapper<ProfileUserModel, UserModel> userMapper,
+        IMapper<ProfileUserProfileModel, UserModel> userMapper,
         IMapper<RegisterPartyModel, OrganizationModel> organizationMapper) : IActorsService
 {
     private IIntegrations Integrations { get; } = integrations;
 
-    private IMapper<ProfileUserModel, UserModel> UserMapper { get; } = userMapper;
+    private IMapper<ProfileUserProfileModel, UserModel> UserMapper { get; } = userMapper;
 
     private IMapper<RegisterPartyModel, OrganizationModel> OrganizationMapper { get; } = organizationMapper;
 

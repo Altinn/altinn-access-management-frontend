@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-using Altinn.AccessManagement.UI.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Controllers
@@ -12,10 +10,8 @@ namespace Altinn.AccessManagement.UI.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     [AllowAnonymous]
     [Route("accessmanagement/api/v1")]
-    public class ErrorController(IErrorsService service) : ControllerBase
+    public class ErrorController() : ControllerBase
     {
-        private IErrorsService Service { get; } = service;
-
         /// <summary>
         /// Create a response with a new <see cref="ProblemDetails"/> instance with limited information.
         /// </summary>

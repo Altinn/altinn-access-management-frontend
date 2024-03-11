@@ -27,11 +27,11 @@ public class RegisterIntegration(RequestComposer request, IOptions<Appsettings> 
                 Request.WithHeaderAcceptJson,
                 Request.WithBodyJson<RegisterPartyInputModel>(new() { OrgNo = organizationNumber })
             )
-            .LogRequest()
+            .LogRoute()
             .Send();
 
         return await respone
-            .Assert(respone.ThrowIfNotOk)
+            .Assert(respone.ThrowIfNotSuccessful)
             .LogResponse()
             .DeserializeAsync<RegisterPartyModel>();
     }
@@ -45,11 +45,11 @@ public class RegisterIntegration(RequestComposer request, IOptions<Appsettings> 
             Request.WithHeaderAcceptJson,
             Request.WithBodyJson(uuids)
         )
-        .LogRequest()
+        .LogRoute()
         .Send();
 
         return await response
-            .Assert(response.ThrowIfNotOk)
+            .Assert(response.ThrowIfNotSuccessful)
             .LogResponse()
             .DeserializeAsync<IEnumerable<RegisterPartyModel>>();
     }

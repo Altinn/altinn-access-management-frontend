@@ -3,7 +3,7 @@ namespace Altinn.AccessManagement.UI.Integrations.Client;
 /// <summary>
 /// Integration exception.
 /// </summary>
-public class IntegrationException(HttpResponseMessage response): Exception
+public class IntegrationException(HttpResponseMessage response) : Exception
 {
     /// <summary>
     /// HTTP response.

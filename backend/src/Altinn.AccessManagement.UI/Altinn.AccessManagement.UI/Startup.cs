@@ -20,6 +20,13 @@ namespace Altinn.AccessManagement.UI;
 
 public static class Startup
 {
+    public static async Task Start(string[] args) => await WebApplication
+        .CreateBuilder(args)
+        .ConfigureServices()
+        .Build()
+        .ConfigureMiddlewares()
+        .StartAsync();
+
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         builder.AddAppsettings();
@@ -58,7 +65,7 @@ public static class Startup
 
     private static void AddMappers(this WebApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<IMapper<ProfileUserModel, UserModel>, ActorsMapper>();
+        builder.Services.AddSingleton<IMapper<ProfileUserProfileModel, UserModel>, ActorsMapper>();
     }
 
     private static void AddDefaults(this WebApplicationBuilder builder)
@@ -129,7 +136,7 @@ public static class Startup
             });
     }
 
-    public static WebApplication ConfigureMiddlewares(WebApplication app)
+    public static WebApplication ConfigureMiddlewares(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
         {

@@ -23,10 +23,6 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj" />
-        <ProjectReference Include="..\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
         <None Update="appsettings.test.json">
@@ -49,5 +45,9 @@
         <None Include="Data\**">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.csproj" />
+      <ProjectReference Include="..\..\src\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj" />
     </ItemGroup>
 </Project>

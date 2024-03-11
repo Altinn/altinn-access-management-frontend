@@ -1,0 +1,430 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Altinn Profile",
+    "version": "v1"
+  },
+  "paths": {
+    "/profile/api/v1/users/{userID}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Gets the user profile for a given user id",
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "description": "The user id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/profile/api/v1/users/byuuid/{userUuid}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Gets the user profile for a given user uuid",
+        "parameters": [
+          {
+            "name": "userUuid",
+            "in": "path",
+            "description": "The user uuid",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/profile/api/v1/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Gets the current user based on the request context",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/profile/api/v1/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Gets the user profile for a given SSN",
+        "requestBody": {
+          "description": "The user's social security number",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "orgNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitType": {
+            "type": "string",
+            "nullable": true
+          },
+          "telephoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "faxNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "eMailAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "internetAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailingAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailingPostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailingPostalCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessPostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessPostalCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitStatus": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Party": {
+        "type": "object",
+        "properties": {
+          "partyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "partyUuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "partyTypeName": {
+            "$ref": "#/components/schemas/PartyType"
+          },
+          "orgNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "ssn": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitType": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "onlyHierarchyElementWithNoAccess": {
+            "type": "boolean"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "organization": {
+            "$ref": "#/components/schemas/Organization"
+          },
+          "childParties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PartyType": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "Person": {
+        "type": "object",
+        "properties": {
+          "ssn": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "telephoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailingAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailingPostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailingPostalCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressMunicipalNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressMunicipalName": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressStreetName": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressHouseNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressHouseLetter": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressPostalCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "addressCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfDeath": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProfileSettingPreference": {
+        "type": "object",
+        "properties": {
+          "languageType": {
+            "type": "string",
+            "nullable": true,
+            "writeOnly": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "preSelectedPartyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "doNotPromptForParty": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userUuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "externalIdentity": {
+            "type": "string",
+            "nullable": true
+          },
+          "isReserved": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "partyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "party": {
+            "$ref": "#/components/schemas/Party"
+          },
+          "userType": {
+            "$ref": "#/components/schemas/UserType"
+          },
+          "profileSettingPreference": {
+            "$ref": "#/components/schemas/ProfileSettingPreference"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      }
+    }
+  }
+}

@@ -2,10 +2,9 @@ using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
+using Altinn.AccessManagement.UI.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.UI.Integration.Configuration;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 
@@ -14,19 +13,15 @@ namespace Altinn.AccessManagement.UI.Integrations.Client;
 /// <summary>
 /// Builds a HTTP request.
 /// </summary>
-public class RequestComposer(ILogger logger, IMemoryCache cache, HttpClient client, IHttpContextAccessor httpContextAccessor, IAccessTokenProvider accessTokenProvider, IOptions<PlatformSettings> platformSettings)
+public partial class RequestComposer(IServiceProvider services, IHttpContextAccessor httpContextAccessor, IAccessTokenProvider accessTokenProvider, IOptions<Appsettings> appsettings)
 {
-    private ILogger Logger { get; } = logger;
-
-    private IMemoryCache Cache { get; } = cache;
-
-    private HttpClient Client { get; } = client;
+    private IServiceProvider Provider { get; } = services;
 
     private IHttpContextAccessor HttpContextAccessor { get; } = httpContextAccessor;
 
     private IAccessTokenProvider AccessTokenProvider { get; } = accessTokenProvider;
 
-    private IOptions<PlatformSettings> PlatformSettings { get; } = platformSettings;
+    private IOptions<Appsettings> Appsettings { get; } = appsettings;
 
     /// <summary>
     /// Creates a new <see cref="RequestSender"/>.
@@ -40,11 +35,12 @@ public class RequestComposer(ILogger logger, IMemoryCache cache, HttpClient clie
             action(request);
         }
 
-        return new RequestSender(Logger, Client, request, Cache, HttpContextAccessor);
+        return Provider.GetRequiredService<RequestSender>()
+            .SetRequest(request);
     }
 
     /// <summary>
-    /// Serializes the given parameter body and writes it to the payload of the
+    /// Serializes the given parameter body and writes it to the payload of the request.
     /// request.
     /// </summary>
     /// <param name="body">Object to serialize.</param>
@@ -95,7 +91,7 @@ public class RequestComposer(ILogger logger, IMemoryCache cache, HttpClient clie
     /// <param name="message">request.</param>
     public void WithAccessToken(HttpRequestMessage message)
     {
-        string token = JwtTokenUtil.GetTokenFromContext(HttpContextAccessor.HttpContext, PlatformSettings.Value.JwtCookieName);
+        string token = JwtTokenUtil.GetTokenFromContext(HttpContextAccessor.HttpContext, Appsettings.Value.PlatformSettings.JwtCookieName);
         message.Headers.Add(HeaderNames.Authorization, $"Bearer {token}");
     }
 

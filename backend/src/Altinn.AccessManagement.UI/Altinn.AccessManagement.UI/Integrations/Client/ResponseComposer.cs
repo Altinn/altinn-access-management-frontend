@@ -6,15 +6,21 @@ namespace Altinn.AccessManagement.UI.Integrations.Client;
 /// <summary>
 /// Handles a HTTP response.
 /// </summary>
-public class ResponseComposer(ILogger logger, HttpResponseMessage message)
+public partial class ResponseComposer(ILogger<ResponseComposer> logger)
 {
     private ILogger Logger { get; } = logger;
 
-    private HttpResponseMessage Response { get; } = message;
+    private HttpResponseMessage Response { get; set; } = new();
 
     public ResponseComposer LogResponse()
     {
-        Logger.LogInformation("Log response here");
+        Log.Response(Logger, Response.RequestMessage.Method, Response.RequestMessage.RequestUri, Response.StatusCode, Response.Content);
+        return this;
+    }
+
+    public ResponseComposer SetResponse(HttpResponseMessage response)
+    {
+        Response = response;
         return this;
     }
 
@@ -41,11 +47,17 @@ public class ResponseComposer(ILogger logger, HttpResponseMessage message)
         }
     };
 
-    public void ThrowIfNotOk(HttpResponseMessage response)
+    public void ThrowIfNotSuccessful(HttpResponseMessage response)
     {
         if (!response.IsSuccessStatusCode)
         {
             throw new IntegrationException(response);
         }
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(1, LogLevel.Information, "Received HTTP response {verb}: {route} {statuscode}\n\n\n{body}")]
+        public static partial void Response(ILogger logger, HttpMethod verb, Uri route, HttpStatusCode statuscode, HttpContent body);
     }
 }

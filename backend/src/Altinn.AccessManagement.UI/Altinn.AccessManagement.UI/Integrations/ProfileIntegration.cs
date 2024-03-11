@@ -7,9 +7,9 @@ namespace Altinn.AccessManagement.UI.Integrations;
 
 public interface IProfileIntegration
 {
-    Task<ProfileUserModel> Get(int party);
+    Task<ProfileUserProfileModel> Get(int party);
 
-    Task<ProfileUserModel> Get(Guid uuid);
+    Task<ProfileUserProfileModel> Get(Guid uuid);
 }
 
 /// <summary>
@@ -22,35 +22,35 @@ public class ProfileIntegration(RequestComposer request, IOptions<Appsettings> o
 
     private IOptions<Appsettings> Appsettings { get; } = options;
 
-    public async Task<ProfileUserModel> Get(int party)
+    public async Task<ProfileUserProfileModel> Get(int party)
     {
         var response = await Request.New(
             Request.WithAccessToken,
             Request.WithMethod(HttpMethod.Get),
             Request.WithRoute(Appsettings.Value.PlatformSettings.ApiProfileEndpoint, "users", party)
         )
-        .LogRequest()
+        .LogRoute()
         .Send();
 
         return await response
         .LogResponse()
-        .Assert(response.ThrowIfNotOk)
-        .DeserializeAsync<ProfileUserModel>();
+        .Assert(response.ThrowIfNotSuccessful)
+        .DeserializeAsync<ProfileUserProfileModel>();
     }
 
-    public async Task<ProfileUserModel> Get(Guid uuid)
+    public async Task<ProfileUserProfileModel> Get(Guid uuid)
     {
         var response = await Request.New(
             Request.WithAccessToken,
             Request.WithMethod(HttpMethod.Get),
             Request.WithRoute(Appsettings.Value.PlatformSettings.ApiProfileEndpoint, "users", "byuuid", uuid)
         )
-        .LogRequest()
+        .LogRoute()
         .Send();
 
         return await response
         .LogResponse()
-        .Assert(response.ThrowIfNotOk)
-        .DeserializeAsync<ProfileUserModel>();
+        .Assert(response.ThrowIfNotSuccessful)
+        .DeserializeAsync<ProfileUserProfileModel>();
     }
 }
