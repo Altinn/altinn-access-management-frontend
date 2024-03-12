@@ -1,7 +1,6 @@
 using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -54,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static async Task<HttpResponseMessage> GetMockedHttpResponse(string path,  string resourceFileName)
+        private static async Task<HttpResponseMessage> GetMockedHttpResponse(string path, string resourceFileName)
         {
             try
             {

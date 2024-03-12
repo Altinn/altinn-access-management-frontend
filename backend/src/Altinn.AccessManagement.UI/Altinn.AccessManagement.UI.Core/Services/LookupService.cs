@@ -9,7 +9,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// Service that integrates with platform clients to lookup processes and maps the required data to the frontend model
     /// </summary>
     public class LookupService : ILookupService
-    { 
+    {
         private readonly ILookupClient _lookupClient;
         private readonly IRegisterClient _registerClient;
         private readonly IProfileClient _profileClient;
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>        
         public async Task<Party> GetPartyFromReporteeListIfExists(int partyId)
         {
-            Party partyInfo = await _lookupClient.GetPartyFromReporteeListIfExists(partyId);    
+            Party partyInfo = await _lookupClient.GetPartyFromReporteeListIfExists(partyId);
             return partyInfo;
         }
 

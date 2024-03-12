@@ -36,11 +36,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             ILogger<ProfileClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
-            IAccessTokenProvider accessTokenProvider) 
+            IAccessTokenProvider accessTokenProvider)
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiProfileEndpoint);            
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiProfileEndpoint);
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;

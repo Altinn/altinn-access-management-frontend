@@ -12,5 +12,4 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common
     /// <param name="AdditionalProp2">Extra prop that says something about the error</param>
     /// <param name="AdditionalProp3">Extra prop that says something about the error</param>
     public record HttpErrorResponse(string Type, string Title, int Status, string Instance, string Detail, string AdditionalProp1, string AdditionalProp2, string AdditionalProp3);
-
 }

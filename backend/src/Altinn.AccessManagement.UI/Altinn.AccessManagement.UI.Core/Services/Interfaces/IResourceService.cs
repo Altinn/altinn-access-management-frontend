@@ -1,7 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -16,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <returns>the resources that match the filters and search string corresponding to the provided page</returns>
         Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int resultsPerPage);
-        
+
         /// <summary>
         ///     Searches through all maskinporten schema services and returns matches
         /// </summary>

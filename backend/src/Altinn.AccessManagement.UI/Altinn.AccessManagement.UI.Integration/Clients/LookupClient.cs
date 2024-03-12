@@ -4,9 +4,7 @@ using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
-using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -70,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 _logger.LogError(ex, "AccessManagement.UI // LookupClient // GetPartyFromReporteeListIfExists // Exception");
                 throw;
-            }            
+            }
         }
     }
 }

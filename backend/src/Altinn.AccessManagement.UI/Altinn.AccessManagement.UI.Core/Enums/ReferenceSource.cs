@@ -7,7 +7,7 @@ namespace Altinn.AccessManagement.UI.Core.Enums
     /// </summary>
     public enum ReferenceSource : int
     {
-        [EnumMember(Value = "Default")]    
+        [EnumMember(Value = "Default")]
         Default = 0,
 
         [EnumMember(Value = "Altinn1")]

@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [Route("reportee/{partyId}")]
         public async Task<ActionResult<Party>> GetPartyFromReporteeListIfExists(int partyId)
-        {           
+        {
             try
             {
                 Party party = await _lookupService.GetPartyFromReporteeListIfExists(partyId);

@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     Attribute id and value for the party delegating the rights
         /// </summary>
         public List<IdValuePair> From { get; set; }
-        
+
         /// <summary>
         ///     Gets or sets a set of Attribute Id and Attribute Value for the single entity receiving rights
         /// </summary>

@@ -1,5 +1,3 @@
-using System;
-using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 
 using Microsoft.AspNetCore.Authentication.Cookies;

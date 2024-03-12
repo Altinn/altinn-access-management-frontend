@@ -1,10 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Azure;
-using Azure.Identity;
-using Azure.Security.KeyVault.Certificates;
-using Azure.Security.KeyVault.Secrets;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {

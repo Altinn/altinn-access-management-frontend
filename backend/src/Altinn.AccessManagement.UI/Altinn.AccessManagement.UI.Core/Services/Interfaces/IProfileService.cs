@@ -1,5 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.Platform.Profile.Models;
+﻿using Altinn.Platform.Profile.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {

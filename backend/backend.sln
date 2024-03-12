@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9E7F5B6E-C549-4A9B-96F5-7DF82632888C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Altinn.AccessManagement.UI", "Altinn.AccessManagement.UI", "{0DDECA39-3D81-4CED-85D9-2CA47343A1ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altinn.AccessManagement.UI", "src\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.csproj", "{85B55E92-C46D-49FC-B463-931DADE512CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altinn.AccessManagement.UI.Core", "src\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj", "{4EB2FE42-3BCC-442B-914B-4040C5694B2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altinn.AccessManagement.UI.Integration", "src\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.Integration\Altinn.AccessManagement.UI.Integration.csproj", "{C8D56263-62EA-424A-BF91-80FA88AC7832}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altinn.AccessManagement.UI.Mocks", "src\Altinn.AccessManagement.UI\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj", "{8DC7D431-DE24-48FA-8E68-14F2EEB48DEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C5EBC06E-759A-4DA6-9483-5D001E0838B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altinn.AccessManagement.UI.Tests", "tests\Altinn.AccessManagement.UI.Tests\Altinn.AccessManagement.UI.Tests.csproj", "{B27349E7-C677-4EFD-A9BF-C5B3EE28846C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{85B55E92-C46D-49FC-B463-931DADE512CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85B55E92-C46D-49FC-B463-931DADE512CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85B55E92-C46D-49FC-B463-931DADE512CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85B55E92-C46D-49FC-B463-931DADE512CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EB2FE42-3BCC-442B-914B-4040C5694B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB2FE42-3BCC-442B-914B-4040C5694B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB2FE42-3BCC-442B-914B-4040C5694B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB2FE42-3BCC-442B-914B-4040C5694B2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8D56263-62EA-424A-BF91-80FA88AC7832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8D56263-62EA-424A-BF91-80FA88AC7832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8D56263-62EA-424A-BF91-80FA88AC7832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8D56263-62EA-424A-BF91-80FA88AC7832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DC7D431-DE24-48FA-8E68-14F2EEB48DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC7D431-DE24-48FA-8E68-14F2EEB48DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC7D431-DE24-48FA-8E68-14F2EEB48DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC7D431-DE24-48FA-8E68-14F2EEB48DEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B27349E7-C677-4EFD-A9BF-C5B3EE28846C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B27349E7-C677-4EFD-A9BF-C5B3EE28846C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B27349E7-C677-4EFD-A9BF-C5B3EE28846C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B27349E7-C677-4EFD-A9BF-C5B3EE28846C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0DDECA39-3D81-4CED-85D9-2CA47343A1ED} = {9E7F5B6E-C549-4A9B-96F5-7DF82632888C}
+		{85B55E92-C46D-49FC-B463-931DADE512CA} = {0DDECA39-3D81-4CED-85D9-2CA47343A1ED}
+		{4EB2FE42-3BCC-442B-914B-4040C5694B2C} = {0DDECA39-3D81-4CED-85D9-2CA47343A1ED}
+		{C8D56263-62EA-424A-BF91-80FA88AC7832} = {0DDECA39-3D81-4CED-85D9-2CA47343A1ED}
+		{8DC7D431-DE24-48FA-8E68-14F2EEB48DEA} = {0DDECA39-3D81-4CED-85D9-2CA47343A1ED}
+		{B27349E7-C677-4EFD-A9BF-C5B3EE28846C} = {C5EBC06E-759A-4DA6-9483-5D001E0838B8}
+	EndGlobalSection
+EndGlobal

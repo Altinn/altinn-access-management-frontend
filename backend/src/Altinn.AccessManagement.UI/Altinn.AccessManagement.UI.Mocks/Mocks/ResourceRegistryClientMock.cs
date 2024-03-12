@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
@@ -37,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return Task.FromResult(resources);
         }
-        
+
         /// <inheritdoc />
         public Task<List<ServiceResource>> GetMaskinportenSchemas()
         {
@@ -45,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string path = GetDataPathForResources();
 
             List<ServiceResource> resources = Util.GetMockData<List<ServiceResource>>(path);
-            
+
             List<ServiceResource> maskinPortenSchemas = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema);
             return Task.FromResult(maskinPortenSchemas);
         }

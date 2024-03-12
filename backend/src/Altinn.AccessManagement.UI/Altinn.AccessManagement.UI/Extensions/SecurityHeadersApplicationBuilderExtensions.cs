@@ -1,5 +1,4 @@
-using Altinn.AccessManagement.UI.Middleware;
-using Microsoft.AspNetCore.Builder;
+using Altinn.AccessManagement.UI.Middlewares;
 
 namespace Altinn.AccessManagement.UI.Extensions
 {

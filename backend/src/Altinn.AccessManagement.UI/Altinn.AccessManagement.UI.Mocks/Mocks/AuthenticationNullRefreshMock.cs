@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Mocks.Utils;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {

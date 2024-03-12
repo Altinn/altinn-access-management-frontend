@@ -10,7 +10,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     [AllowAnonymous]
     [Route("accessmanagement/api/v1")]
-    public class ErrorController : ControllerBase
+    public class ErrorController() : ControllerBase
     {
         /// <summary>
         /// Create a response with a new <see cref="ProblemDetails"/> instance with limited information.
@@ -21,6 +21,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </remarks>
         /// <returns>A new <see cref="ObjectResult"/> instance.</returns>
         [Route("error")]
-        public IActionResult Error() => Problem();
+        public ActionResult<ProblemDetails> Error() => Problem();
     }
 }

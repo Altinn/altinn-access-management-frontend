@@ -1,7 +1,5 @@
 ﻿using System.Text;
-using System.Threading.Tasks;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.AccessManagement.UI.Mocks.Utils;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {

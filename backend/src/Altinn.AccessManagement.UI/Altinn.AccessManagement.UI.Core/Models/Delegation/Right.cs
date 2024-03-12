@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.Models
 {
