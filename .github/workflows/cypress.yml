@@ -23,6 +23,7 @@ on:
 
 jobs:
   install:
+    name: Run Cypress Tests
     runs-on: ubuntu-22.04
     container:
       image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
@@ -36,7 +37,11 @@ jobs:
         run: cat cypress/package.json
       - name: Cypress run
         uses: cypress-io/github-action@v6
+        env:
+          environment: at22
         with:
-          working-directory: cypress 
-          start: yarn run test
+          spec: src/e2e/**/*.js
+          env: environment=at22
+          working-directory: cypress
           browser: chrome
+          
