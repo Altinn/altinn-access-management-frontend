@@ -45,8 +45,9 @@ module.exports = defineConfig({
       }
 
       console.log(config);
-      var actual =  config.env.environment.substr(0, 4);
-      var file = Cypress.env('environment') || 'at24';
+      var actual = config.env.environment.substr(0, 4);
+      console.log(actual);
+      var file = actual || 'at24';
       return getConfigurationByFile(file);
     },
   },
