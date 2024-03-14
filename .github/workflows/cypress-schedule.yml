@@ -13,7 +13,3 @@ jobs:
     uses: './cypress-template.yml'
     with:
       environment: ${{ matrix.environment }}
-
-  
-
-      
