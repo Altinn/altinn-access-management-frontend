@@ -1,7 +1,6 @@
 name: Cypress End-to-End Tests
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       environment:
@@ -35,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           spec: src/e2e/**/*.js
-          env: environment=at22
+          env: environment=${{ inputs.environment }}
           working-directory: cypress
           browser: chrome
           
