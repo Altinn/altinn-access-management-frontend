@@ -22,7 +22,7 @@ on:
         description: Environment
 
 jobs:
-  install:
+  run:
     name: Run Cypress Tests
     runs-on: ubuntu-22.04
     container:
@@ -31,10 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Substitute package.json Variables
-        run: sed -i 's\%EnvironmentToRunTests%\at22\g' cypress/package.json
-      - name: Cat package.json
-        run: cat cypress/package.json
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
