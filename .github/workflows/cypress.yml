@@ -32,6 +32,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Substitute package.json Variables
         run: sed -i 's\%EnvironmentToRunTests%\at22\g' cypress/package.json
+      - name: Cat package.json
+        run: cypress/package.json
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
