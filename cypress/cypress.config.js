@@ -6,6 +6,7 @@ const path = require('path');
 
 const { defineConfig } = require('cypress');
 const fs = require('fs-extra');
+const cypress = require('cypress');
 const downloadsPath = path.join('downloads');
 
 module.exports = defineConfig({
@@ -43,9 +44,9 @@ module.exports = defineConfig({
         return fs.readJson(pathToConfigFile);
       }
 
-      console.log(config);
-      var actual = config.env.environment.substr(0, 4);
-      var file = actual || 'at24';
+      console.log(Cypress.env('environment'));
+      var actual =  config.env.environment.substr(0, 4);
+      var file = Cypress.env('environment') || 'at24';
       return getConfigurationByFile(file);
     },
   },
