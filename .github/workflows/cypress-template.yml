@@ -1,5 +1,7 @@
 name: Cypress End-to-End Tests
 
+run-name: ${{ inputs.environment }} Cypress End-to-End Tests
+
 on:
   workflow_dispatch:
     inputs:
