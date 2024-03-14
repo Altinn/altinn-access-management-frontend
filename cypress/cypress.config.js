@@ -44,7 +44,6 @@ module.exports = defineConfig({
         return fs.readJson(pathToConfigFile);
       }
 
-      console.log(Cypress.env('environment'));
       console.log(config);
       var actual =  config.env.environment.substr(0, 4);
       var file = Cypress.env('environment') || 'at24';
