@@ -11,3 +11,5 @@ jobs:
       matrix:
         environment: [at21, at22, at23, at24, tt02]
     uses: './.github/workflows/cypress-template.yml'
+    with:
+      environment: ${{ matrix.environment }}
