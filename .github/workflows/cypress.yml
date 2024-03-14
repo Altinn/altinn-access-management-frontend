@@ -1,7 +1,6 @@
 name: Cypress End-to-End Tests
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       environment:
