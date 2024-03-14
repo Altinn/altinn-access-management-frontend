@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1/lookup/")]
     public class LookupController : ControllerBase
     {
         private readonly ILogger _logger;
@@ -36,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/lookup/org/{orgNummer}")]
+        [Route("org/{orgNummer}")]
         public async Task<ActionResult<Party>> GetOrganisation(string orgNummer)
         {
             try
@@ -66,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>Reportee if party is in authenticated users reporteelist</returns>
         [HttpGet]
         [Authorize]
-        [Route("accessmanagement/api/v1/lookup/reportee/{partyId}")]
+        [Route("reportee/{partyId}")]
         public async Task<ActionResult<Party>> GetPartyFromReporteeListIfExists(int partyId)
         {           
             try
@@ -85,6 +87,66 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving a party by uuid
+        /// </summary>
+        /// <param name="uuid">The uuid for the party to look up</param>
+        /// <returns>Party information</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("party/{uuid}")]
+        public async Task<ActionResult<Party>> GetPartyByUUID(Guid uuid)
+        {
+            try
+            {
+                Party party = await _lookupService.GetPartyByUUID(uuid);
+
+                if (party != null)
+                {
+                    return party;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetPartyByUUID failed to fetch reportee information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving a user by uuid
+        /// </summary>
+        /// <param name="uuid">The uuid for the user to look up</param>
+        /// <returns>Party information</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("user/{uuid}")]
+        public async Task<ActionResult<UserProfile>> GetUserByUUID(Guid uuid)
+        {
+            try
+            {
+                UserProfile user = await _lookupService.GetUserByUUID(uuid);
+
+                if (user != null)
+                {
+                    return user;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetUserByUUID failed to fetch reportee information");
                 return StatusCode(500);
             }
         }

@@ -47,7 +47,8 @@
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
-    "buypass": "Buypass"
+    "buypass": "Buypass",
+    "org_nr": "Org.nr."
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -84,7 +85,6 @@
     "you_have_delegated_accesses": "Du har tidligere delegert disse tilgangene:",
     "you_have_received_accesses": "Du har mottatt disse tilgangene:",
     "api_panel_content": "Her kan du styre tilgang til APIer sikret gjennom",
-    "org_nr": "Org.nr.",
     "edit_accesses": "Rediger tilganger",
     "api_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter.",
     "api_received_overview_text": "Her finner du oversikt over de API-tilganger din virksomhet har blitt tildelt av andre virksomheter.",
@@ -149,6 +149,8 @@
     "new_error_title": "Ny feil",
     "generic_error_try_again_title": "Oj, det oppstod en teknisk feil",
     "generic_error_try_again": "Prøv å legge til tjenesten på nytt ved å klikke på pluss-tegnet igjen. Ta kontakt med Altinn Servicedesk hvis problemet fortsetter.",
+    "unauthorized_for_party_title": "Mangler delegeringstilgang",
+    "unauthorized_for_party": "Du kan ikke delegere tjenester for valgte aktør. Dersom du mente å delegere på vegne av noen andre, vennligst gå til profilen og velg denne aktøren fra avgiverlisten.",
     "missing_delegable_right": "Mangler rettighet",
     "missing_srr_right_access_title": "Mangler SRR-rettighet",
     "confirm_delegation_text": "Bekreft at du vil gi disse rettighetene til {{name}}.",
@@ -171,6 +173,10 @@
     "no_continue_delegating": "Nei, fortsett å delegere",
     "add_more_services": "Legg til flere tjenester",
     "ceo_or_main_admin_can_help": "Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
-    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi {{reason}}"
+    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi {{reason}}",
+    "missing_recipient_error_title": "Mottaker mangler",
+    "missing_recipient_error_message": "Mottaker for delegeringen mangler. Vennligst gå tilbake til profilsiden og velg hvem du ønsker å delegere til.",
+    "faulty_recipient_error_title": "Kan ikke delegere til mottaker",
+    "faulty_recipient_error_message": "Oppgitt mottaker kan ikke delegeres til. Vennligst gå tilbake til profilsiden og velg en annen. Mottaker må være en organisasjon, en virksomhetsbruker, eller en person registrert med fødselsnummer. Selvregistrerte brukere kan ikke delegeres til."
   }
 }

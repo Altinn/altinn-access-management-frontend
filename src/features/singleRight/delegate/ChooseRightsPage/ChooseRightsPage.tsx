@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import {
@@ -13,11 +13,10 @@ import {
   PageContent,
   PageHeader,
   ProgressModal,
-  RestartPrompter,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
-import { useMediaQuery } from '@/resources/hooks';
+import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import {
   removeServiceResource,
   delegate,
@@ -30,6 +29,8 @@ import {
   ServiceDto,
 } from '@/dataObjects/dtos/resourceDelegation';
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+
+import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
 import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
@@ -51,6 +52,7 @@ export const ChooseRightsPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [urlParams] = useSearchParams();
   const [chosenServices, setChosenServices] = useState<Service[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [delegationCount, setDelegationCount] = useState(0);
@@ -64,6 +66,12 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const {
+    name: recipientName,
+    error: recipientError,
+    isLoading,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter(
@@ -116,7 +124,7 @@ export const ChooseRightsPage = () => {
 
   useEffect(() => {
     processedDelegationsRatio() === 100 &&
-      navigate('/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.Receipt);
+      navigate(`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.Receipt}?${urlParams}`);
   }, [processedDelegations]);
 
   const updateDelegationCount = (services: Service[]) => {
@@ -199,7 +207,7 @@ export const ChooseRightsPage = () => {
           fullWidth={isSm}
           onClick={() => {
             navigate(
-              '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService,
+              `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,
             );
           }}
         >
@@ -213,7 +221,7 @@ export const ChooseRightsPage = () => {
           onClose={() => setPopoverOpen(false)}
         >
           <Paragraph>
-            {t('single_rights.confirm_delegation_text', { name: 'ANNEMA FIGMA' })}
+            {t('single_rights.confirm_delegation_text', { name: recipientName })}
           </Paragraph>
           <div className={classes.popoverButtonContainer}>
             <Button
@@ -238,22 +246,49 @@ export const ChooseRightsPage = () => {
   };
 
   const postDelegations = () => {
-    chosenServices.forEach((service: Service) => {
+    const userUUID = urlParams.get('userUUID');
+    const partyUUID = urlParams.get('partyUUID');
+    let recipient: IdValuePair[];
+
+    if (userUUID && userUUID === partyUUID) {
+      // Recipient is a person
+      recipient = [new IdValuePair('urn:altinn:person:uuid', userUUID)];
+    } else if (userUUID) {
+      // Recipient is an enterprize user
+      recipient = [new IdValuePair('urn:altinn:enterpriseuser:uuid', userUUID)];
+    } else if (partyUUID) {
+      // Recipient is an organization
+      recipient = [new IdValuePair('urn:altinn:organization:uuid', partyUUID)];
+    }
+
+    // TODO: OBS! This is a temporary solution for sequential delegations, which is needed due to a weakness in Altinn 2. When this is fixed, we can go back to paralell delegations
+    // Post delegations synchroneously using recursive method
+    const syncPostDelegations = (servicesToPost: Service[]) => {
+      const service = servicesToPost[0];
       const rightsToDelegate = service.rights
         .filter((right: ChipRight) => right.checked)
         .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
 
       if (rightsToDelegate.length > 0) {
         const delegationInput: DelegationInputDto = {
-          // TODO: make adjustments to codeline below when we get GUID from altinn2
-          To: [new IdValuePair('urn:altinn:organizationnumber', '313523497')],
+          To: recipient,
           Rights: rightsToDelegate,
           serviceDto: new ServiceDto(service.title, service.serviceOwner, service.type),
         };
 
-        return dispatch(delegate(delegationInput));
+        dispatch(delegate(delegationInput)).then(() => {
+          if (servicesToPost.length > 1) {
+            syncPostDelegations(servicesToPost.slice(1));
+          }
+        });
+      } else {
+        if (servicesToPost.length > 1) {
+          syncPostDelegations(servicesToPost.slice(1));
+        }
       }
-    });
+    };
+
+    syncPostDelegations(chosenServices);
   };
 
   return (
@@ -265,19 +300,15 @@ export const ChooseRightsPage = () => {
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
 
         <PageContent>
-          {servicesWithStatus.length < 1 ? (
-            <RestartPrompter
-              spacingBottom
-              restartPath={
-                '/' + SingleRightPath.DelegateSingleRights + '/' + SingleRightPath.ChooseService
-              }
-              title={t('common.an_error_has_occured')}
-              ingress={t('api_delegation.delegations_not_registered')}
+          {!isLoading && recipientError ? (
+            <RecipientErrorAlert
+              userUUID={urlParams.get('userUUID')}
+              partyUUID={urlParams.get('partyUUID')}
             />
           ) : (
             <>
               <Ingress>
-                {t('single_rights.choose_rights_page_top_text', { name: 'ANNEMA FIGMA' })}
+                {t('single_rights.choose_rights_page_top_text', { name: recipientName })}
               </Ingress>
               <div className={classes.secondaryText}>
                 <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>

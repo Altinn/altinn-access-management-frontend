@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    ///     Controller responsible for all operations for managing delegations
+    ///     Controller responsible for all operations for managing maskinportenscehma delegations
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
-                string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+                string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
                 return await _maskinportenService.GetReceivedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile userProfile = await _profileService.GetUserProfile(userId);
-                string languageCode = ProfileHelper.GetLanguageCodeForUser(userProfile);
+                string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
                 return await _maskinportenService.GetOfferedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)

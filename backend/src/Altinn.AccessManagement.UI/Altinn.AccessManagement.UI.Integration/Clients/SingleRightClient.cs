@@ -45,27 +45,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> CheckDelegationAccess(string partyId, Right request)
+        public async Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Right request)
         {
             try
             {
-                string endpointUrl = $"{partyId}/rights/delegation/delegationcheck";
+                string endpointUrl = $"internal/{partyId}/rights/delegation/delegationcheck";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
 
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, _serializerOptions);
-                }
-                else
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-
-                    throw error;
-                }
+                return response;
             }
             catch (Exception ex)
             {
@@ -77,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
         {
-            string endpointUrl = $"{party}/rights/delegation/offered";
+            string endpointUrl = $"internal/{party}/rights/delegation/offered";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);

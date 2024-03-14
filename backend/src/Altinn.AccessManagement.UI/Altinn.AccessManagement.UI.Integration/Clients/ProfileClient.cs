@@ -50,29 +50,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<UserProfile> GetUserProfile(int userId)
         {
+            UserProfile userProfile = null;
             try
             {
                 string endpointUrl = $"users/{userId}";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                var accessToken = await _accessTokenProvider.GetAccessToken();
-
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                    };
-                    options.Converters.Add(new JsonStringEnumConverter());
-                    UserProfile userProfile = JsonSerializer.Deserialize<UserProfile>(responseContent, options);
-                    return userProfile;
-                }
-                else
-                {
-                    _logger.LogError($"Getting user profile information from platform failed with statuscode {response.StatusCode}");
-                }
+                userProfile = await GetUserProfileFromEndpoint(endpointUrl);
             }
             catch (Exception ex)
             {
@@ -80,7 +62,50 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
 
-            return null;
+            return userProfile;
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserProfile> GetUserProfile(Guid uuid)
+        {
+            UserProfile userProfile = null;
+            try
+            {
+                string endpointUrl = $"users/byuuid/{uuid}";
+                userProfile = await GetUserProfileFromEndpoint(endpointUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ProfileClient // GetUserProfile // Exception");
+                throw;
+            }
+
+            return userProfile;
+        }
+
+        private async Task<UserProfile> GetUserProfileFromEndpoint(string endpointUrl)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var accessToken = await _accessTokenProvider.GetAccessToken();
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                options.Converters.Add(new JsonStringEnumConverter());
+                UserProfile userProfile = JsonSerializer.Deserialize<UserProfile>(responseContent, options);
+                return userProfile;
+            }
+            else
+            {
+                _logger.LogError($"Getting user profile information from platform failed with statuscode {response.StatusCode}");
+                return null;
+            }
         }
     }
 }

@@ -3,6 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import type { ResourceOwner } from '../resourceOwner/resourceOwnerApi';
+
 interface PaginatedListDTO {
   page: number;
   numEntriesTotal: number;
@@ -18,11 +20,6 @@ export interface ServiceResource {
   resourceReferences: resourceReference[];
   authorizationReference: IdValuePair[];
   resourceType: string;
-}
-
-export interface ResourceOwner {
-  organisationName: string;
-  organisationNumber: string;
 }
 
 interface resourceReference {

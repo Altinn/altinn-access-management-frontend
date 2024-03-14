@@ -83,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return View();
             }
 
-            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}");
+            string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{Request.QueryString}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
 
             return Redirect(redirectUrl);
@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile user = await _profileService.GetUserProfile(userId);
             AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
+            string languageCode = ProfileHelper.GetStandardLanguageCodeIsoStandard(user, HttpContext);
 
             HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {

@@ -26,6 +26,7 @@ export enum ServiceStatus {
   PartiallyDelegable = 'PartiallyDelegable',
   Unchecked = 'Unchecked',
   HTTPError = 'HTTPError',
+  Unauthorized = `Unauthorized`,
 }
 
 export interface DelegationAccessCheckDto {
@@ -265,17 +266,21 @@ const singleRightSlice = createSlice({
 
       .addCase(delegationAccessCheck.rejected, (state, action) => {
         const serviceID = action.meta.arg.serviceResource.identifier;
+        const errorCode =
+          action.payload.response.status === 401
+            ? ServiceStatus.Unauthorized
+            : ServiceStatus.HTTPError;
 
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
             const delegationResponseList: Right[] = [
               {
-                resource: [{ id: serviceID }],
+                resource: action.meta.arg.resourceReference,
                 action: '',
-                status: ServiceStatus.HTTPError,
+                status: errorCode,
                 details: [
                   {
-                    code: ServiceStatus.HTTPError,
+                    code: errorCode,
                   },
                 ],
               },
@@ -284,7 +289,7 @@ const singleRightSlice = createSlice({
             sws.service.identifier = serviceID;
             sws.rightList = delegationResponseList;
             sws.isLoading = false;
-            sws.status = ServiceStatus.HTTPError;
+            sws.status = errorCode;
           }
           return sws;
         });

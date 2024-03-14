@@ -1,4 +1,4 @@
-name: Cypress e2e tests
+name: Cypress End-to-End Tests
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Substitute package.json Variables
-        run: sed -i 's\%EnvironmentToRunTests%\at22\g' cypress/package.json
+        run: sed -i 's\%EnvironmentToRunTests%\${{ inputs.environment }}\g' cypress/package.json
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:

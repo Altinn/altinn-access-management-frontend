@@ -48,7 +48,8 @@
     "minid": "MinID",
     "bankid": "BankID",
     "commifides": "Commifides",
-    "buypass": "Buypass"
+    "buypass": "Buypass",
+    "org_nr": "Org.no."
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -85,7 +86,6 @@
     "you_have_delegated_accesses": "You have earlier delegated these accesses:",
     "you_have_received_accesses": "You have received these accesses:",
     "api_panel_content": "Here you can control access to APIs secured through",
-    "org_nr": "Org.no.",
     "edit_accesses": "Edit accesses",
     "api_overview_text": "Here you'll find an overview over the API-accesses your organisation has delegated to other organisations",
     "api_received_overview_text": "Here you'll find an overview over the API-accesses your organisation has been granted by other organisations",
@@ -146,6 +146,8 @@
     "new_error_title": "New error",
     "generic_error_try_again_title": "Whoops, we stumbled on a technical error",
     "generic_error_try_again": "Try adding the service again by clicking on the plus sign again. Contact Altinn Servicedesk if the problem persists.",
+    "unauthorized_for_party_title": "Manglar delegasjonstilgang",
+    "unauthorized_for_party": "Du kan ikkje delegere tenester for valde aktør. Om du meinte å delegere på vegner av nokon andre, vennlegst gå til profilen og vel denne aktøren frå avgjevarlista.",
     "give_more_rights": "Give more rights",
     "has_received_these_rights": "{{name}} has received these rights:",
     "rights_are_valid_until_deletion": "The rights are valid until they're deleted or withdrawn",
@@ -172,6 +174,10 @@
     "no_continue_delegating": "No, continue delegating",
     "add_more_services": "Add more services",
     "ceo_or_main_admin_can_help": "CEO or main administrator can help you with this.",
-    "one_or_more_rights_is_undelegable": "One or more rights on this service cant be delegated because of {{reason}}"
+    "one_or_more_rights_is_undelegable": "One or more rights on this service cant be delegated because of {{reason}}",
+    "missing_recipient_error_title": "Recipient missing",
+    "missing_recipient_error_message": "The recipient for the delegation is missing. Please go back to the profile page and select who you wish to delegate to.",
+    "faulty_recipient_error_title": "Cannot delegate to recipient",
+    "faulty_recipient_error_message": "The given recipient cannot be delegated to. Please go back to the profile page and select another. The recipient must be an organization, a business user, or a person registered with a birth number. Self-registered users cannot be delegated to."
   }
 }
