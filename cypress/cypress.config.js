@@ -6,7 +6,6 @@ const path = require('path');
 
 const { defineConfig } = require('cypress');
 const fs = require('fs-extra');
-const cypress = require('cypress');
 const downloadsPath = path.join('downloads');
 
 module.exports = defineConfig({
