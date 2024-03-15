@@ -3,7 +3,7 @@
 # Setup environment 🚀
 ## Step 1: Getting started 
 
-To run or build the frontend, you'll need to download [Node](https://nodejs.org/) and [Yarn](https://yarnpkg.com/getting-started/install). After that is done simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment.
+To run or build the frontend, you'll need to download [Node minimum v21 ](https://nodejs.org/) and [Yarn v4](https://yarnpkg.com/getting-started/install). After that is done simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment.
 
 PS: To actually see anything on the local environment port you'll need to follow the guide until step 3.
 
@@ -91,7 +91,7 @@ On mac you need to edit and save hosts-file, we recommend to use vs code for mac
 # Setup backend:
 
 ## Step 4: Set up database: 
-  Download [PostgreSQL](https://www.postgresql.org/download/). USE INSTALLER, NOT HOMEBREW ON MAC. (Currently using 14 in deploy environments, but 15 works locally if you need those extra features 15 gives you). Run stackbuilder and download all packages when being prompted.
+  Download [PostgreSQL v14](https://www.postgresql.org/download/). (on Mac, use installer and not homebrew). Run stackbuilder and download all packages when being prompted.
 <img width="1254" alt="image" src="https://github.com/Altinn/altinn-access-management-frontend/assets/31471142/bd1f6ec6-91bb-411b-8746-df5fe8272fbf">
 
 - Open pgAdmin 4
@@ -151,9 +151,9 @@ Based on the branch name, this action adds a label to the pull request. The conf
 [build-and-analyze-backend](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/build-and-analyze-backend.yml) action is triggered for pull requests with backend change. This action builds, runs the unit tests for backend and analyzes the backend code.
 
 ## Deploy
-Code is continously integrated and deployed to all testing environments (AT environments). [build-publish-deploy-via-ghcr](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/build-publish-deploy-via-ghcr.yml) is triggered when a pull request is merged into  main branch.
+Code is continously integrated and deployed to AT environments. Pipeline: build-publish-deploy-via-ghcr is triggered when a pull request is merged into  main branch.
 On each run, the code is built, packaged and published to Github Container registry as [altinn-access-management-frontend](https://github.com/Altinn/altinn-access-management-frontend/pkgs/container/altinn-access-management-frontend). Each image is tagged with the github commit sha. The package is then deployed to an azure container app in testing environment.
-The environment variables, secrets for the action are setup in the repository settings.
+The environment variables and secrets for the action are setup in the repository settings.
 
 ## Release
 The application has a release every wednesday. [scheduled-release](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/scheduled-release.yml) action is triggered every wednesday 00.00. This action drafts a release, tags the latest package with the release version, f.ex this package has a release version [v2023.1](https://github.com/Altinn/altinn-access-management-frontend/pkgs/container/altinn-access-management-frontend/88857835?tag=14685620a8aaf7b867b5a346155ca09ef9c34f3d).
@@ -186,7 +186,7 @@ The components can be placed 2 ways, either:
 ```
 If the component's only reusable within a specific feature
 features\
-  fetureName\
+  featureName\
     components\
     - ComponentName.test.tsx (unit tests)
     - index.ts (public interface for the component)
@@ -212,7 +212,6 @@ Start with these names for your branch depending on what your branch includes.
   - chore/
   - dependencies/
   - documentation/
-  - enhancement/
   - feat/single-rights/issue-number
   - feat/api-delegations/issue-number
   - feat/general/issue-number       (When it's not related to any features of the features above or relates to both)
@@ -224,7 +223,7 @@ Use [PascalCase](https://techterms.com/definition/pascalcase) for component file
 ### Code style
 
 We use [eslint](https://eslint.org/), [prettier](https://prettier.io/), typescript, and automatically set up git hooks to enforce
-these on commits. To avoid confusion, it is recommended to set this up your IDE.
+these on commits. To avoid confusion, it is recommended to set this up in your IDE.
 
 ### Visual Studio Code
 
@@ -237,10 +236,10 @@ Configure your IDE to run `eslint --fix` on save (prettier will also reformat yo
 
 ### CSS
 
-We use standard camelCase for classnames to enable linking of the stylesheets directly, improving simplicity in the process. Instead of using [BEM naming convention](http://getbem.com/naming/), we separate each Element and Modifier into separate names and use regular css (eks: `.accordion.open`) to access the combination.
+We use standard camelCase for classnames to enable linking of the stylesheets directly and improving simplicity in the process. We separate each Element and Modifier into separate names and use regular css (eks: `.accordion.open`) to access the combination.
 
 ## Common problems in VS code
 1. Sometimes it's needed to restart eslint for it to work properly. E.g. When switching branches, eslint hangs sometimes. To fix this problem in vs code: Do the hot key for workbench.action.quickNaviagtePreviousInFilePicker and run command 'restart eslint server' or restart vs code.
-2. It's a common problem when writing reducers in rtk; invalid typescript-errors, prettier and lint-errors occur saying e.g. ',' is missing when in reality it's not. My suggestion is to restart vs code or ignore the error(if it's still possible to run the code). 
+2. It's a common problem when writing reducers in rtk; invalid typescript-errors, prettier and lint-errors occurs. To fix this you could try to restart vs code or ignore the error. 
 
 
