@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile user = await _profileService.GetUserProfile(userId);
             AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = ProfileHelper.GetStandardLanguageCodeForUser(user);
+            string languageCode = ProfileHelper.GetStandardLanguageCodeIsoStandard(user, HttpContext);
 
             HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
             {

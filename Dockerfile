@@ -15,7 +15,7 @@ RUN dotnet build src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altin
 RUN dotnet publish src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj -c Release -o /app_output
 
 # Building the final image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.1-alpine3.18 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.3-alpine3.18 AS final
 EXPOSE 80
 #EXPOSE 443
 WORKDIR /app
@@ -30,5 +30,5 @@ COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/acce
 COPY --from=generate-accessmanagement-frontend /build/src/localizations ./wwwroot/accessmanagement/localizations
 COPY --from=generate-accessmanagement-frontend /build/dist/manifest.json ./wwwroot/accessmanagement
 
-
+RUN mkdir /tmp/logtelemetry
 ENTRYPOINT ["dotnet", "Altinn.AccessManagement.UI.dll"]

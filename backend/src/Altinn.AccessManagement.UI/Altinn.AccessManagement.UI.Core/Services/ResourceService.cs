@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
-using System.Transactions;
+﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
@@ -168,6 +166,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return resource;
         }
+        
+        /// <inheritdoc />
+        public async Task<List<ResourceOwnerFE>> GetResourceOwners(List<ResourceType> relevantResourceTypeList, string languageCode)
+        {
+            try
+            {
+                List<ServiceResource> resources = await GetResources();
+
+                // Filter resources based on criteria and remove duplicates based on OrganisationName
+                var resourceOwnerList = resources
+                    .Where(sr => sr.HasCompetentAuthority != null 
+                                 && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
+                                 && relevantResourceTypeList.Contains(sr.ResourceType))
+                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode)
+                    .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
+                    .Select(sr => new ResourceOwnerFE(
+                        sr.HasCompetentAuthority.Name[languageCode],
+                        sr.HasCompetentAuthority.Organization))
+                    .ToList();
+
+                return resourceOwnerList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//ResourceService // GetResourceOwners failed", ex);
+                throw;
+            }
+        }
 
         /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetAllResourceOwners(string languageCode)
@@ -187,6 +213,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return MapOrgListToResourceOwnerFe(orgList, languageCode);
+        }
+        
+        /// <inheritdoc />
+        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[]? resourceOwnerFilters, string searchString)
+        {
+            try
+            {
+                List<ServiceResource> resources = await _resourceRegistryClient.GetMaskinportenSchemas();
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable);
+                List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
+
+                List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
+                return SearchInResourceList(filteredresources, searchString);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("//ResourceService // MaskinportenschemaSearch failed", ex);
+                throw;
+            }
         }
 
         private List<ResourceOwnerFE> MapOrgListToResourceOwnerFe(OrgList orgList, string languageCode)
@@ -286,7 +331,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (string word in searchWords)
                 {
-                    if (StringUtils.NotNullAndContains(res.Title, word) || StringUtils.NotNullAndContains(res.Description, word) || StringUtils.NotNullAndContains(res.RightDescription, word))
+                    if (StringUtils.NotNullAndContains(res.Title, word) || StringUtils.NotNullAndContains(res.Description, word) || StringUtils.NotNullAndContains(res.RightDescription, word) || StringUtils.NotNullAndContains(res.ResourceOwnerName, word))
                     {
                         numMatches++;
                     }

@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Altinn.App.Common" Version="6.0.2" />
-    <PackageReference Include="Altinn.Common.PEP" Version="1.3.0" />
+    <PackageReference Include="Altinn.Common.PEP" Version="3.0.0" />
     <PackageReference Include="JWTCookieAuthentication" Version="4.0.1" />
   </ItemGroup>
 

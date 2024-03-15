@@ -92,6 +92,7 @@ export const RightsActionBarContent = ({
         {serviceType === 'AltinnApp' ? (
           <div>
             <Chip.Toggle
+              size='small'
               checkmark
               selected={altinnAppAccess}
               onClick={toggleAllDelegableRights}
@@ -111,6 +112,7 @@ export const RightsActionBarContent = ({
               return (
                 <div key={index}>
                   <Chip.Toggle
+                    size='small'
                     checkmark
                     selected={right.checked}
                     onClick={() => {
@@ -161,7 +163,14 @@ export const RightsActionBarContent = ({
                 )
                   ? t(`common.${right.action}`)
                   : right.action;
-                return <Chip.Toggle key={index}>{actionText}</Chip.Toggle>;
+                return (
+                  <Chip.Toggle
+                    size='small'
+                    key={index}
+                  >
+                    {actionText}
+                  </Chip.Toggle>
+                );
               })}
           </div>
         </>

@@ -1,6 +1,18 @@
-name: Cypress e2e tests
+name: Cypress End-to-End Tests
 
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        type: choice
+        required: true
+        options:
+          - at21
+          - at22
+          - at23
+          - at24
+          - tt02
   workflow_call:
     inputs:
       environment:
@@ -9,18 +21,20 @@ on:
         description: Environment
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
+  run:
+    name: Run Cypress Tests
+    runs-on: ubuntu-22.04
+    container:
+      image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+      options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Cypress run
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@v6
         with:
-          project: cypress
+          spec: src/e2e/**/*.js
+          env: environment=${{ inputs.environment }}
+          working-directory: cypress
           browser: chrome
-          build: yarn build
-          start: yarn test
-          wait-on: "http://localhost:3000"
-
-# EnvironmentToRunTests
+          

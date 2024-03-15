@@ -37,7 +37,7 @@ import classes from './ChooseOrgPage.module.css';
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
@@ -119,7 +119,7 @@ export const ChooseOrgPage = () => {
         <ActionBar
           key={org.orgNr}
           title={org.orgName}
-          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
               icon={<PlusCircleIcon fontSize='3rem' />}
@@ -145,7 +145,7 @@ export const ChooseOrgPage = () => {
         <ActionBar
           key={index}
           title={org.orgName}
-          subtitle={t('api_delegation.org_nr') + ' ' + org.orgNr}
+          subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
               icon={<MinusCircleIcon />}

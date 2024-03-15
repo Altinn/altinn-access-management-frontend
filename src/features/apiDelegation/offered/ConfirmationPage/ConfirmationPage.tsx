@@ -36,7 +36,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import classes from './ConfirmationPage.module.css';
 
 export const ConfirmationPage = () => {
-  const chosenApis = useAppSelector((state) => state.delegableApi.chosenDelegableApiList);
+  const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
   const loading = useAppSelector((state) => state.delegationRequest.loading);
   const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
@@ -96,7 +96,7 @@ export const ConfirmationPage = () => {
               startIcon={<Buldings3Icon />}
               removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
               leftText={org.orgName}
-              middleText={t('api_delegation.org_nr') + ' ' + org.orgNr}
+              middleText={t('common.org_nr') + ' ' + org.orgNr}
             ></CompactDeletableListItem>
           ))}
         </BorderedList>

@@ -3,6 +3,7 @@ import { ErrorMessage, Ingress, Paragraph } from '@digdir/design-system-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
+import cn from 'classnames';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import type { Right, ProcessedDelegation } from '@/rtk/features/singleRights/singleRightsSlice';
@@ -16,7 +17,11 @@ import { ReceiptActionBarContent } from '../ReceiptActionBarContent/ReceiptActio
 
 import classes from './ActionBarSection.module.css';
 
-export const ActionBarSection = () => {
+type ActionBarSectionProps = {
+  recipientName: string;
+};
+
+export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
   const { t } = useTranslation();
   const delegations = useAppSelector((state) => state.singleRightsSlice.processedDelegations);
   const [mostFailedIndex, setMostFailedIndex] = useState(-1);
@@ -110,14 +115,14 @@ export const ActionBarSection = () => {
         );
       };
 
-      const successfulDelegationParagraph = () => {
+      const successfulDelegationParagraph = (extraSpacing: boolean) => {
         return (
           <Ingress
-            className={classes.successText}
+            className={cn(extraSpacing && classes.successText)}
             spacing
             level={2}
           >
-            {t('single_rights.has_received_these_rights', { name: 'ANNEMA FIGMA' })}
+            {t('single_rights.has_received_these_rights', { name: recipientName })}
           </Ingress>
         );
       };
@@ -126,7 +131,8 @@ export const ActionBarSection = () => {
         actionBar: (
           <div key={`receipt-action-bar-${index}`}>
             {index === mostFailedIndex && mostFailedDelegations > 0 && failedDelegationIngress()}
-            {index === firstSuccesfulIndex && successfulDelegationParagraph()}
+            {index === firstSuccesfulIndex &&
+              successfulDelegationParagraph(mostFailedDelegations > 0)}
             <ActionBar
               title={pd.meta.serviceDto.serviceTitle}
               subtitle={pd.meta.serviceDto.serviceOwner}

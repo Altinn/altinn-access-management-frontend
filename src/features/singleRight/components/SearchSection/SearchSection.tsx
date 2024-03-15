@@ -22,7 +22,7 @@ import {
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppSelector } from '@/rtk/app/hooks';
-import { getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
+import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import {
   ServiceStatus,
   type ServiceWithStatus,
@@ -176,7 +176,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
       currentServiceWithStatus?.status === ServiceStatus.Unauthorized ||
       currentServiceWithStatus?.status === ServiceStatus.HTTPError
         ? currentServiceWithStatus.rightList?.flatMap(
-            (result) => result.details?.map((detail) => detail.code) || [],
+            (result) =>
+              result.details
+                ?.filter((detail) => Object.values(ErrorCode).includes(detail.code as ErrorCode))
+                .map((detail) => detail.code) || [],
           ) || []
         : [];
 

@@ -12,5 +12,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <returns>users preferred settings</returns>
         Task<UserProfile> GetUserProfile(int userId);
+
+        /// <summary>
+        /// Gets the user's profile settings from altinn profile
+        /// </summary>
+        /// <returns>users profile settings</returns>
+        Task<UserProfile> GetUserProfile(Guid uuid);
     }
 }
