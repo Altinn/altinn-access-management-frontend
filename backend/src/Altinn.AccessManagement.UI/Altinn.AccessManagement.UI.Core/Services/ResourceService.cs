@@ -331,7 +331,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (string word in searchWords)
                 {
-                    if (StringUtils.NotNullAndContains(res.Title, word) || StringUtils.NotNullAndContains(res.Description, word) || StringUtils.NotNullAndContains(res.RightDescription, word))
+                    if (StringUtils.NotNullAndContains(res.Title, word) || StringUtils.NotNullAndContains(res.Description, word) || StringUtils.NotNullAndContains(res.RightDescription, word) || StringUtils.NotNullAndContains(res.ResourceOwnerName, word))
                     {
                         numMatches++;
                     }
