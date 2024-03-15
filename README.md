@@ -11,7 +11,11 @@ PS: To actually see anything on the local environment port you'll need to follow
 
 To add test data to the app, do the following:
 
-- Clone following [repo](https://github.com/Altinn/app-localtest). You have completed this step when you have localtest running locally through the command `dotnet run`. Remember to checkout branches: Albert-LocalTest or feature/accessmanagement-subdomain(commit 9ba9110e7934c4628076450d92bf829df8413619).
+- Clone following [repo](https://github.com/Altinn/app-localtest) and checkout branch feature/accessmanagement-subdomain(and for windows it's important to checkout commit 9ba9110e7934c4628076450d92bf829df8413619). Also remember to follow readme in that branch (Because localtest for podman doesn't work yet). You have completed this step when you can run localtest.
+- Sometimes the docker command isn't recognized on computer, if so try to run this command:
+```bash
+   export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+```
 
 ### If readme in localTest doesn't setup things correctly, try the steps below:
 
@@ -81,7 +85,8 @@ On mac you need to edit and save hosts-file, we recommend to use vs code for mac
 - Run solution
 - Go to http://local.altinn.cloud/
 - Select user and continue
-- To see single rights, go to url: http://am.ui.local.altinn.cloud/accessmanagement/ui/delegate-single-rights/choose-service
+- To see single rights feature, go to url: http://am.ui.local.altinn.cloud/accessmanagement/ui/delegate-single-rights/choose-service
+- Paths to other parts of the application can be found on: src/routes/paths
 
 # Setup backend:
 
