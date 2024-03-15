@@ -79,10 +79,12 @@ export const ChooseApiPage = () => {
     for (const key of urlParams.keys()) {
       searchResults?.forEach((api: DelegableApi) => {
         if (api.identifier === key) {
-          const resourceRef: ResourceReference = { resource: api.authorizationReference };
+          const authorizationReference: ResourceReference = {
+            resource: api.authorizationReference,
+          };
           const promise = delegationCheck({
             partyId,
-            resourceRef,
+            resourceRef: authorizationReference,
           })
             .unwrap()
             .then((response: DelegationAccessResult) => {

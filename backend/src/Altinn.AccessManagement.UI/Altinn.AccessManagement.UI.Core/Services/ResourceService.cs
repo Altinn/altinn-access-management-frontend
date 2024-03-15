@@ -221,7 +221,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             try
             {
                 List<ServiceResource> resources = await _resourceRegistryClient.GetMaskinportenSchemas();
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema && r.Visible && r.Delegable && r.ResourceReferences != null);
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);

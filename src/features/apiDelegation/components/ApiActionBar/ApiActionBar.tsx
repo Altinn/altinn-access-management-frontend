@@ -35,13 +35,12 @@ export const ApiActionBar = ({
   api,
   initWithDelegationCheck = false,
 }: ApiActionBarProps) => {
-  console.log('api', api);
   const [open, setOpen] = useState(false);
   const [actionBarColor, setActionBarColor] = useState<'success' | 'danger' | 'neutral'>(
     variant === 'remove' ? 'success' : 'neutral',
   );
   const { t } = useTranslation('common');
-  const resourceRef: ResourceReference = { resource: api.authorizationReference };
+  const authorizationReference: ResourceReference = { resource: api.authorizationReference };
   const partyId = getCookie('AltinnPartyId');
 
   const [delegationCheck, { data: accessResult, error, isLoading }] = useDelegationCheckMutation();
@@ -50,7 +49,7 @@ export const ApiActionBar = ({
 
   useLayoutEffect(() => {
     if (initWithDelegationCheck) {
-      delegationCheck({ partyId, resourceRef });
+      delegationCheck({ partyId, resourceRef: authorizationReference });
     }
   }, []);
 
@@ -62,7 +61,7 @@ export const ApiActionBar = ({
   }, [isNotDelegable]);
 
   const onAddClick = () => {
-    delegationCheck({ partyId, resourceRef })
+    delegationCheck({ partyId, resourceRef: authorizationReference })
       .unwrap()
       .then((response: DelegationAccessResult) => {
         if (response?.status === 'Delegable') {
