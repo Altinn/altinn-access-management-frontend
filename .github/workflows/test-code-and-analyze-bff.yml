@@ -1,4 +1,4 @@
-name: Code test and analysis
+name: Test code and analyze BFF
 on:
   push:
     branches: [ main ]

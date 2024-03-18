@@ -7,7 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLayoutEffect, useState } from 'react';
 
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
-import { useMediaQuery, useFetchNameFromUUID } from '@/resources/hooks';
+import { useMediaQuery, useFetchRecipientInfo } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import {
@@ -17,8 +17,8 @@ import {
   resetProcessedDelegations,
   ServiceStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
-import { GeneralPath, SingleRightPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { SingleRightPath } from '@/routes/paths';
+import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
@@ -41,10 +41,13 @@ export const ChooseServicePage = () => {
     void dispatch(resetProcessedDelegations());
   }, []);
 
-  const [recipientName, recipientError, isLoading] = useFetchNameFromUUID(
-    urlParams.get('userUUID'),
-    urlParams.get('partyUUID'),
-  );
+  const {
+    name: recipientName,
+    error: recipientError,
+    userID,
+    partyID,
+    isLoading,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -57,24 +60,6 @@ export const ChooseServicePage = () => {
 
   const onRemove = (identifier: string | undefined) => {
     void dispatch(removeServiceResource(identifier));
-  };
-
-  const onCancel = () => {
-    const cleanHostname = window.location.hostname.replace('am.ui.', '');
-    const partyId = getCookie('AltinnPartyId');
-    const encodedUrl = `ui/AccessManagement/ServicesAvailableForActor?userID=&amp;partyID=${partyId}`;
-
-    window.location.href =
-      'https://' +
-      cleanHostname +
-      '/' +
-      String(GeneralPath.Altinn2SingleRights) +
-      '?userID=' +
-      getCookie('AltinnUserId') +
-      '&amp;' +
-      'partyID=' +
-      getCookie('AltinnPartyId') +
-      encodeURIComponent(encodedUrl);
   };
 
   return (
@@ -134,7 +119,7 @@ export const ChooseServicePage = () => {
                     onClick={
                       delegableChosenServices.length > 0
                         ? () => setPopoverOpen(!popoverOpen)
-                        : onCancel
+                        : oncancel
                     }
                   >
                     {t('common.cancel')}
@@ -143,7 +128,7 @@ export const ChooseServicePage = () => {
                     <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
                     <GroupElements>
                       <Button
-                        onClick={onCancel}
+                        onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                         color={'danger'}
                         variant={'primary'}
                         fullWidth

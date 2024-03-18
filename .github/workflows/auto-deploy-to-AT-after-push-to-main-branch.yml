@@ -1,4 +1,4 @@
-name: Build Push to ghcr and deploy to AT
+name: Auto deploy to AT after push to main branch
 on:
   push:
     branches: [main]

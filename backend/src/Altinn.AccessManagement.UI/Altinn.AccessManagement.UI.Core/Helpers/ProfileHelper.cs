@@ -11,10 +11,10 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     public static class ProfileHelper
     {
         /// <summary>
-        /// Gets the users language preference in Altinn format
+        /// Gets the users language preference in Altinn format, mostly used for getting correct language code for backend
         /// </summary>
         /// <param name="userProfile">the logged in user profile</param>
-        /// <returns>the logged in users language preference in Altinn format</returns>
+        /// <returns>the logged in users language preference in Altinn format(en, no, nb)</returns>
         public static string GetLanguageCodeForUserAltinnStandard(UserProfile userProfile, HttpContext httpContext)
         {
             string languageCookieValue = GetAltinnPersistenceCookieValueAltinnStandard(httpContext);
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Gets the standard language code in ISO format
         /// </summary>
-        /// <returns>the logged in users language on ISO format</returns>
+        /// <returns>the logged in users language on ISO format (no_nb, no_nn, en)</returns>
         public static string GetStandardLanguageCodeIsoStandard(UserProfile userProfile, HttpContext httpContext)
         {
             string languageCookieValue = GetAltinnPersistenceCookieValueIsoStandard(httpContext);

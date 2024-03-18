@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.AccessManagement.UI.Controllers
 {
     /// <summary>
-    ///     Controller to update AccessManagement with resources existing i ResourceRegister.
+    ///     Controller for CRUD-operations related to the ResourceRegister.
     /// </summary>
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
@@ -58,6 +58,22 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return await _resourceService.GetResources(ResourceType.MaskinportenSchema, languageCode);
         }
+        
+        /// <summary>
+        ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
+        /// </summary>
+        /// <returns>List of resource owners</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("getResourceOwners")]
+        public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
+        {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+
+            return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
+        }
 
         /// <summary>
         ///     Gets list of all resource owners
@@ -91,6 +107,35 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 return await _resourceService.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+        
+        /// <summary>
+        ///     Searches through all delegable maskinportenschema services and returns matches based on the provided search string and filters
+        /// </summary>
+        /// <returns>list of maskinportenschemas</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("maskinportenschema/search")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> Search([FromQuery] ApiSearchParams parameters)
+        {
+            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+
+            try
+            {
+                return await _resourceService.MaskinportenschemaSearch(languageCode, parameters.ROFilters, parameters.SearchString);
             }
             catch (HttpStatusException ex)
             {

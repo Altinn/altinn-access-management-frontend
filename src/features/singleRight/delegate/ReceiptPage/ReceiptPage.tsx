@@ -7,10 +7,11 @@ import { useEffect } from 'react';
 
 import { SingleRightPath } from '@/routes/paths';
 import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
-import { useFetchNameFromUUID, useMediaQuery } from '@/resources/hooks';
+import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GroupElements } from '@/components/GroupElements/GroupElements';
+import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 
 import classes from './ReceiptPage.module.css';
 import { ActionBarSection } from './ActionBarSection/ActionBarSection';
@@ -25,10 +26,11 @@ export const ReceiptPage = () => {
     (state) => state.singleRightsSlice.processedDelegations,
   );
 
-  const [recipientName] = useFetchNameFromUUID(
-    urlParams.get('userUUID'),
-    urlParams.get('partyUUID'),
-  );
+  const {
+    name: recipientName,
+    userID,
+    partyID,
+  } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
 
   useEffect(() => {
     void dispatch(resetServicesWithStatus());
@@ -56,6 +58,7 @@ export const ReceiptPage = () => {
               </div>
               <GroupElements>
                 <Button
+                  onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                   color={'first'}
                   fullWidth
                 >
