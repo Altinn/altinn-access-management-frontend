@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   GroupElements,
@@ -65,7 +65,6 @@ export const ChooseRightsPage = () => {
   const progressLabel = processedDelegations.length + '/' + delegationCount;
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const {
     name: recipientName,
@@ -191,16 +190,36 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <GroupElements>
-        <Button
-          variant='primary'
-          color='first'
-          fullWidth={isSm}
-          disabled={delegationCount < 1}
-          onClick={() => setPopoverOpen(!popoverOpen)}
-          ref={buttonRef}
+        <Popover
+          variant={'info'}
+          placement={'top'}
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
         >
-          {t('common.finish_delegation')}
-        </Button>
+          <Popover.Trigger
+            variant='primary'
+            color='first'
+            fullWidth={isSm}
+            disabled={delegationCount < 1}
+            onClick={() => setPopoverOpen(!popoverOpen)}
+          >
+            {t('common.finish_delegation')}
+          </Popover.Trigger>
+          <Popover.Content>
+            <Paragraph>
+              {t('single_rights.confirm_delegation_text', { name: recipientName })}
+            </Paragraph>
+            <div className={classes.popoverButtonContainer}>
+              <Button
+                onClick={() => {
+                  onConfirm();
+                }}
+              >
+                {t('common.confirm')}
+              </Button>
+            </div>
+          </Popover.Content>
+        </Popover>
         <Button
           variant='secondary'
           color='first'
@@ -213,26 +232,6 @@ export const ChooseRightsPage = () => {
         >
           {t('single_rights.add_more_services')}
         </Button>
-        <Popover
-          variant={'info'}
-          placement={'top'}
-          anchorEl={buttonRef.current}
-          open={popoverOpen}
-          onClose={() => setPopoverOpen(false)}
-        >
-          <Paragraph>
-            {t('single_rights.confirm_delegation_text', { name: recipientName })}
-          </Paragraph>
-          <div className={classes.popoverButtonContainer}>
-            <Button
-              onClick={() => {
-                onConfirm();
-              }}
-            >
-              {t('common.confirm')}
-            </Button>
-          </div>
-        </Popover>
       </GroupElements>
     );
   };

@@ -19,6 +19,10 @@
   margin-bottom: 5px;
 }
 
+.actionButton {
+  padding: 0;
+}
+
 .errorContent {
   margin: 20px;
 }
