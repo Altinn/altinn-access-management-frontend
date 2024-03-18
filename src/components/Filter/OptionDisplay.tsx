@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Checkbox } from '@digdir/design-system-react';
-import { SearchField } from '@altinn/altinn-design-system';
+import { Checkbox, Paragraph, Search } from '@digdir/design-system-react';
 import { useTranslation } from 'react-i18next';
 
 import { arraysEqual } from '@/resources/utils';
@@ -97,29 +96,22 @@ export const OptionDisplay = ({
         tabIndex={-1}
       >
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <div
-          className={classes.propagationStopper}
-          tabIndex={-1}
-          onClick={(event) => {
-            event.stopPropagation();
+        <Checkbox
+          className={classes.optionCheckbox}
+          onChange={() => {
+            handleSelection(option.value);
           }}
-          onKeyDown={(event) => {
-            if (event.key !== 'Escape') {
-              event.stopPropagation();
-            }
-          }}
+          size={compact ? 'small' : 'medium'}
+          value={option.value}
+          checked={isSelected}
+          aria-label={option.label}
+        ></Checkbox>
+        <Paragraph
+          className={classes.optionLabel}
+          size={compact ? 'small' : 'medium'}
         >
-          <Checkbox
-            onChange={() => {
-              handleSelection(option.value);
-            }}
-            size={compact ? 'small' : 'medium'}
-            value={option.value}
-            checked={isSelected}
-          >
-            {option.label}
-          </Checkbox>
-        </div>
+          {option.label}
+        </Paragraph>
       </button>
     );
   });
@@ -128,10 +120,15 @@ export const OptionDisplay = ({
     <div className={classes.optionDisplay}>
       {searchable && (
         <div className={classes.searchField}>
-          <SearchField
-            aria-label={String(t('common.search'))}
+          <Search
+            size='small'
+            label={String(t('common.search'))}
+            hideLabel
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               handleSearch(event.target.value);
+            }}
+            onClear={() => {
+              handleSearch('');
             }}
           />
         </div>

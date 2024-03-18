@@ -71,7 +71,7 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          {!isLoading && recipientError ? (
+          {!isLoading && false ? (
             <RecipientErrorAlert
               userUUID={urlParams.get('userUUID')}
               partyUUID={urlParams.get('partyUUID')}
