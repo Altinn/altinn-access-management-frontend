@@ -66,6 +66,7 @@ export const CompactDeletableListItem = ({
                 size='medium'
                 onClick={removeCallback}
                 className={classes.actionButton}
+                icon={true}
                 aria-label={
                   t('common.remove') +
                   ' ' +
