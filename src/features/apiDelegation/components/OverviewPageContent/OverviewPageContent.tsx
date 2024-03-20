@@ -1,5 +1,6 @@
 import { Panel } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/designsystemet-react';
+import '@digdir/designsystemet-css';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
