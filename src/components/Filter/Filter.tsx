@@ -138,7 +138,10 @@ export const Filter = ({
         size='medium'
         icon={true}
       >
-        <XMarkIcon aria-label={String(t('common.close'))} />
+        <XMarkIcon
+          aria-label={String(t('common.close'))}
+          fontSize={'1.5rem'}
+        />
       </Button>
     </div>
   );

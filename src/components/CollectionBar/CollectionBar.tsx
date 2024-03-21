@@ -78,7 +78,7 @@ export const CollectionBar = ({
               onClick={proceedClick}
               disabled={disabledProceedButton}
             >
-              <ChevronRightDoubleCircleFillIcon /> {t('common.proceed')}
+              <ChevronRightDoubleCircleFillIcon fontSize={'1.5rem'} /> {t('common.proceed')}
             </Button>
           )
         }
@@ -95,7 +95,7 @@ export const CollectionBar = ({
           onClick={proceedClick}
           disabled={disabledProceedButton}
         >
-          {t('common.proceed')} <ChevronRightDoubleIcon />
+          {t('common.proceed')} <ChevronRightDoubleIcon fontSize={'1.5rem'} />
         </Button>
       )}
     </>

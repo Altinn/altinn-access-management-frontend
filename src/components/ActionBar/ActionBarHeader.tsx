@@ -3,7 +3,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Paragraph } from '@digdir/design-system-react';
+import { Paragraph } from '@digdir/designsystemet-react';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
@@ -62,7 +62,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               </div>
               <div className={classes.actionBarTexts}>
                 <Paragraph
-                  as={renderAsElem}
                   size={headingSize}
                   className={classes.title}
                 >
@@ -70,7 +69,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 </Paragraph>
                 {subtitle && (
                   <Paragraph
-                    as='div'
                     size='xsmall'
                     className={classes.subtitle}
                   >
@@ -96,7 +94,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               </Paragraph>
               {subtitle && (
                 <Paragraph
-                  as='div'
                   size='xsmall'
                   className={classes.subtitle}
                 >

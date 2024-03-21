@@ -90,7 +90,7 @@ export const ApiActionBar = ({
             className={classes.actionButton}
             icon={true}
           >
-            <PlusCircleIcon />
+            <PlusCircleIcon fontSize={'1.5rem'} />
           </Button>
         ))}
       {variant === 'remove' && (
@@ -103,7 +103,7 @@ export const ApiActionBar = ({
           className={classes.actionButton}
           icon={true}
         >
-          <MinusCircleIcon />
+          <MinusCircleIcon fontSize={'1.5rem'} />
         </Button>
       )}
     </>

@@ -33,7 +33,11 @@ export const RightsActionBar = ({
       onClick={onRemoveClick}
       icon={compact}
     >
-      {!compact && t('common.remove')} <MinusCircleIcon title={t('common.remove')} />
+      {!compact && t('common.remove')}{' '}
+      <MinusCircleIcon
+        fontSize={'1.5rem'}
+        title={t('common.remove')}
+      />
     </Button>
   );
 

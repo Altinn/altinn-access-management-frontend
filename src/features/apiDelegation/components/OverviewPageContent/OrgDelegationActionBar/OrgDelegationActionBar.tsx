@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import '@digdir/designsystemet-css';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
@@ -50,7 +51,7 @@ export const OrgDelegationActionBar = ({
           aria-label={String(t('api_delegation.delegate_new_api'))}
           icon={isSm}
         >
-          <PlusCircleIcon /> {t('api_delegation.delegate_new_api')}
+          <PlusCircleIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_api')}
         </Button>
       )}
       {isEditable &&
@@ -63,7 +64,7 @@ export const OrgDelegationActionBar = ({
             aria-label={String(t('common.undo')) + ' ' + organization.orgName}
             icon={isSm}
           >
-            <ArrowUndoIcon />
+            <ArrowUndoIcon fontSize='1.5rem' />
             {!isSm && t('common.undo')}
           </Button>
         ) : (
@@ -76,7 +77,7 @@ export const OrgDelegationActionBar = ({
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
               icon={isSm}
             >
-              <MinusCircleIcon /> {!isSm && t('api_delegation.delete')}
+              <MinusCircleIcon fontSize='1.5rem' /> {!isSm && t('api_delegation.delete')}
             </Button>
           </div>
         ))}

@@ -41,7 +41,7 @@ export const DeletableListItem = ({
           size='medium'
           aria-label={String(t('common.undo')) + ' ' + item.apiName}
         >
-          <ArrowUndoIcon /> {!isSm && t('common.undo')}
+          <ArrowUndoIcon fontSize={'1.5rem'} /> {!isSm && t('common.undo')}
         </Button>
       ) : (
         <Button
@@ -52,7 +52,7 @@ export const DeletableListItem = ({
           onClick={softDeleteCallback}
           aria-label={String(t('api_delegation.delete') + ' ' + item.apiName)}
         >
-          <MinusCircleIcon /> {!isSm && t('api_delegation.delete')}
+          <MinusCircleIcon fontSize={'1.5rem'} /> {!isSm && t('api_delegation.delete')}
         </Button>
       )}
     </div>

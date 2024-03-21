@@ -161,7 +161,7 @@ export const ChooseOrgPage = () => {
               className={classes.actionButton}
               icon={true}
             >
-              <MinusCircleIcon />
+              <MinusCircleIcon fontSize={'1.5rem'} />
             </Button>
           }
           color={'success'}

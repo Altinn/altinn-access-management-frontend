@@ -181,7 +181,7 @@ export const OverviewPageContent = ({
             size='medium'
             icon={isSm}
           >
-            <PlusIcon /> {t('api_delegation.delegate_new_org')}
+            <PlusIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_org')}
           </Button>
         </div>
       )}
@@ -216,7 +216,7 @@ export const OverviewPageContent = ({
                   size='medium'
                   icon={isSm}
                 >
-                  <PencilIcon /> {t('api_delegation.edit_accesses')}
+                  <PencilIcon fontSize={'1.5rem'} /> {t('api_delegation.edit_accesses')}
                 </Button>
               ) : (
                 <Button
@@ -225,7 +225,7 @@ export const OverviewPageContent = ({
                   size='medium'
                   icon={isSm}
                 >
-                  <XMarkOctagonIcon /> {t('common.cancel')}
+                  <XMarkOctagonIcon fontSize='1.5rem' /> {t('common.cancel')}
                 </Button>
               )}
             </div>
