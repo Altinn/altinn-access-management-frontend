@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
@@ -66,7 +66,7 @@ export const CompactDeletableListItem = ({
                 size='medium'
                 onClick={removeCallback}
                 className={classes.actionButton}
-                icon={true}
+                icon={false}
                 aria-label={
                   t('common.remove') +
                   ' ' +

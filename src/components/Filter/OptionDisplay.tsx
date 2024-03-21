@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Checkbox } from '@digdir/design-system-react';
+import { Checkbox } from '@digdir/designsystemet-react';
 import { SearchField } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 

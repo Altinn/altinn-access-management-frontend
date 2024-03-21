@@ -1,4 +1,4 @@
-import { Button, List, Paragraph, Spinner, Alert, Heading } from '@digdir/design-system-react';
+import { Button, List, Paragraph, Spinner, Alert, Heading } from '@digdir/designsystemet-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -90,7 +90,7 @@ export const ApiActionBar = ({
             className={classes.actionButton}
             icon={true}
           >
-            <PlusCircleIcon fontSize={'1.5rem'} />
+            <PlusCircleIcon fontSize={'2rem'} />
           </Button>
         ))}
       {variant === 'remove' && (
@@ -103,7 +103,7 @@ export const ApiActionBar = ({
           className={classes.actionButton}
           icon={true}
         >
-          <MinusCircleIcon fontSize={'1.5rem'} />
+          <MinusCircleIcon fontSize={'2rem'} />
         </Button>
       )}
     </>

@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/design-system-react';
+import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/designsystemet-react';
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -130,7 +130,7 @@ export const ChooseOrgPage = () => {
               className={classes.actionButton}
               icon={true}
             >
-              <PlusCircleIcon fontSize='3rem' />
+              <PlusCircleIcon fontSize='2rem' />
             </Button>
           }
           color={'neutral'}
@@ -161,7 +161,7 @@ export const ChooseOrgPage = () => {
               className={classes.actionButton}
               icon={true}
             >
-              <MinusCircleIcon fontSize={'1.5rem'} />
+              <MinusCircleIcon fontSize={'2rem'} />
             </Button>
           }
           color={'success'}
@@ -244,7 +244,7 @@ export const ChooseOrgPage = () => {
               <h4 className={classes.chosenOrgsHeader}>
                 {t('api_delegation.businesses_going_to_get_access')}
               </h4>
-              <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
+              {chosenItems}
             </div>
           )}
           <div className={classes.searchSection}>
@@ -299,7 +299,7 @@ export const ChooseOrgPage = () => {
                   <h4 className={classes.chosenOrgsHeader}>
                     {t('api_delegation.businesses_going_to_get_access')}
                   </h4>
-                  <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
+                  {chosenItems}
                 </div>
               )}
             </div>
@@ -317,7 +317,7 @@ export const ChooseOrgPage = () => {
               {t('common.previous')}
             </Button>
             <Button
-              disabled={chosenOrgs.length === 0}
+              disabled={chosenOrgs.length === 0 || chosenApis.length === 0}
               onClick={() =>
                 navigate(
                   '/' +

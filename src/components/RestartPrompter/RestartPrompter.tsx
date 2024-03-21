@@ -1,5 +1,5 @@
 import type { AlertProps } from '@digdir/design-system-react';
-import { Alert, Button, Heading, Ingress } from '@digdir/design-system-react';
+import { Alert, Button, Heading, Ingress } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';

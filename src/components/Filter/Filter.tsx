@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useId, type ReactNode } from 'react';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
