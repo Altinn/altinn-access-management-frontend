@@ -3,8 +3,8 @@ name: 'Continuous Integration: Backend'
 on:
   push:
     # branches: [ main ]
-    paths:
-      - backend/**
+    # paths:
+    #   - backend/**
 
   pull_request:
     types: [opened, synchronize, reopened]
