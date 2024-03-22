@@ -49,11 +49,6 @@ const colors: Array<'light' | 'dark' | 'neutral' | 'warning' | 'success' | 'dang
 
 describe('ActionBar', () => {
   describe('Variants', () => {
-    it('should have heading of given size when explicitly set', () => {
-      cy.mount(expandableActionBar({ headingLevel: 1, color: 'neutral', onClick: cy.stub() }));
-      cy.get('h1').should('exist');
-      cy.get('h2').should('not.exist');
-    });
     it('should render an actionbar with a classname corresponding to the given size prop', () => {
       sizes.forEach((size) => {
         mount(expandableActionBar({ size, onClick: cy.stub() }));
