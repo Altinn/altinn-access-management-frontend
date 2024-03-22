@@ -2,9 +2,9 @@ name: 'Continuous Integration: Frontend'
 
 on:
   push:
-    # branches: [ main ]
-    # paths-ignore:
-    #   - backend/**
+    branches: [ main ]
+    paths-ignore:
+      - backend/**
 
   pull_request:
     types: [opened, synchronize, reopened]
