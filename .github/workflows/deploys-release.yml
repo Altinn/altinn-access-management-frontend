@@ -31,7 +31,7 @@ jobs:
   deploys-release-to-prod:
     needs: deploys-release-to-tt02
     name: 'Deploys Release to Prod'
-    uses: './.github/workflows/-templatedeploy-container.yml'
+    uses: './.github/workflows/template-deploy-container.yml'
     with:
       environment: prod
       tag: ${{ github.ref_name }}
