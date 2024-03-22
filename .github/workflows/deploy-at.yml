@@ -1,6 +1,6 @@
 name: 'Deploy: AT'
 
-run-name: 'AT environments: ${{ github.ref_name }}'
+run-name: 'AT environments: ${{ github.sha }}'
 
 on:
   push:
