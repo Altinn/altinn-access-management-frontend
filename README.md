@@ -5,6 +5,7 @@
   [![Continuous Integration: Backend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml)
   [![Continuous Integration: Frontend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml)
 </div>
+
 # Frontend for access management
 
 ## Getting started 🚀
