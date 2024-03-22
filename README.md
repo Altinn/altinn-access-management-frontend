@@ -1,3 +1,10 @@
+<div align="center">
+
+  [![Deploy: AT](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-at.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-at.yml)
+  [![Deploy: Release](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-release.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-release.yml)
+  [![Continuous Integration: Backend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml)
+  [![Continuous Integration: Frontend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml)
+</div>
 # Frontend for access management
 
 ## Getting started 🚀
