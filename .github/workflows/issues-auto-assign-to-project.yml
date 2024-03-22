@@ -1,4 +1,4 @@
-name: Auto assign issues to projects
+name: 'Issues: Auto assign to project'
 
 on:
   issues:

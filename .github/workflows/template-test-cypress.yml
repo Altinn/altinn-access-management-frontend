@@ -1,18 +1,4 @@
-name: Cypress End-to-End Tests
-
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: Environment
-        type: choice
-        required: true
-        options:
-          - at21
-          - at22
-          - at23
-          - at24
-          - tt02
   workflow_call:
     inputs:
       environment:
@@ -22,7 +8,7 @@ on:
 
 jobs:
   run:
-    name: Run Cypress Tests
+    name: 'End to End Tests'
     runs-on: ubuntu-22.04
     container:
       image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
@@ -30,7 +16,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Cypress run
+      - name: Run Tests
         uses: cypress-io/github-action@v6
         with:
           spec: src/e2e/**/*.js
