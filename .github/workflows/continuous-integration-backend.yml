@@ -2,7 +2,7 @@ name: 'Continuous Integration: Backend'
 
 on:
   push:
-    branches: [ main ]
+    # branches: [ main ]
     paths:
       - backend/**
 
