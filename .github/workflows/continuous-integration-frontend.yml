@@ -2,9 +2,9 @@ name: 'Continuous Integration: Frontend'
 
 on:
   push:
-    branches: [ main ]
-    paths-ignore:
-      - backend/**
+    # branches: [ main ]
+    # paths-ignore:
+    #   - backend/**
 
   pull_request:
     types: [opened, synchronize, reopened]
@@ -14,4 +14,4 @@ on:
 jobs:
   ci:
     name: 'Continous Integration'
-    uses: './templates/build-and-test-frontend-template.yml'
+    uses: './.github/workflows/build-and-test-frontend-template.yml'
