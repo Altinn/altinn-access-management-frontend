@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
+import { Button, Ingress, Paragraph, Popover } from '@digdir/designsystemet-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLayoutEffect, useState } from 'react';
 

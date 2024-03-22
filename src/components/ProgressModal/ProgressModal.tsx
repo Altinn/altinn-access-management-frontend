@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CircularProgress } from '@altinn/altinn-design-system';
-import { Paragraph, Spinner } from '@digdir/design-system-react';
+import { Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 

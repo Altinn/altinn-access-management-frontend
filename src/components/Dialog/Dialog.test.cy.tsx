@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 import * as React from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 
 import store from '@/rtk/app/store';
 import { Dialog, DialogContent, type DialogProps } from '@/components';

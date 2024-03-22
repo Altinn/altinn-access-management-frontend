@@ -1,4 +1,4 @@
-import type { AlertProps } from '@digdir/design-system-react';
+import type { AlertProps } from '@digdir/designsystemet-react';
 import { Alert, Button, Heading, Ingress } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';

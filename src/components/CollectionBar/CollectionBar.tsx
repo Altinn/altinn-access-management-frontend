@@ -5,7 +5,7 @@ import {
   FilesFillIcon,
   ChevronRightDoubleIcon,
 } from '@navikt/aksel-icons';
-import { Button, Paragraph } from '@digdir/design-system-react';
+import { Button, Paragraph } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
 
@@ -95,7 +95,7 @@ export const CollectionBar = ({
           onClick={proceedClick}
           disabled={disabledProceedButton}
         >
-          {t('common.proceed')} <ChevronRightDoubleIcon fontSize={'1.5rem'} />
+          {t('common.proceed')} <ChevronRightDoubleIcon fontSize={'1.2rem'} />
         </Button>
       )}
     </>
