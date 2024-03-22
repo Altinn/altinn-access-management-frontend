@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [at21, at22, at23, at24, tt02]
+        environment: [AT21, AT22, AT23, AT24, TT02]
     uses: './.github/workflows/template-test-cypress.yml'
     with:
       environment: ${{ matrix.environment }}
