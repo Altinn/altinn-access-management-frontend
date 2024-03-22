@@ -3,7 +3,6 @@ name: 'Tests: Cypress Schedule'
 run-name: End-to-End Tests
 
 on:
-  push:
   schedule:
     - cron:  '0 5 * * *' # every day at 05:00 UTC
 
