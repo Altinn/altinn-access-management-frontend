@@ -1,0 +1,37 @@
+name: 'Deploys: Release'
+
+run-name: ${{ github.ref_name }}
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-push-container:
+    name: 'Build and Push Container'
+    uses: './templates/build-and-push-container-template.yml'
+    with:
+      tag: ${{ github.ref_name }}
+
+  deploys-release-to-tt02:
+    needs: build-and-push-container
+    name: 'Deploys release TT02'
+    uses: './templates/deploy-container-template.yml'
+    with:
+      environment: tt02
+      tag: ${{ github.ref_name }}
+  
+  cypress-release-to-tt02:
+    needs: deploys-release-to-tt02
+    name: 'Cypress tests TT02'
+    uses: './templates/test-cypress-template.yml'
+    with:
+      environment: tt02
+
+  deploys-release-to-prod:
+    needs: deploys-release-to-tt02
+    name: 'Deploys Release to Prod'
+    uses: './templates/deploy-container-template.yml'
+    with:
+      environment: prod
+      tag: ${{ github.ref_name }}

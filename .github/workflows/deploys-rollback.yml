@@ -1,0 +1,25 @@
+name: 'Deploys: Rollback'
+
+run-name: '${{ inputs.environment }}: ${{ inputs.tag }}'
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: 'Select Environment'
+        required: true
+      tag:
+        type: string
+        description: 'Enter Tag'
+        required: true
+
+jobs:
+  deploys-release-to-selected-environment:
+    name: 'Deploys container'
+    uses: './templates/deploy-container-template.yml'
+    with:
+      environment: ${{ inputs.environment }}
+      release: ${{ inputs.tag }}
+  
+  

@@ -55,7 +55,6 @@ jobs:
       with:
         inlineScript: >
           az config set extension.use_dynamic_install=yes_without_prompt
-
           az containerapp update \
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
@@ -84,7 +83,6 @@ jobs:
       with:
         inlineScript: >
           az config set extension.use_dynamic_install=yes_without_prompt
-
           az containerapp update \
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \

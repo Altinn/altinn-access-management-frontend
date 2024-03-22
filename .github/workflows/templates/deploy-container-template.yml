@@ -1,0 +1,50 @@
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+        description: 'Environment'
+      tag:
+        type: string
+        required: true
+        description: 'Container Tag'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: altinn/altinn-access-management-frontend
+  CONTAINER_APP_CONTAINER_NAME: altinnaccessmanagementui
+
+jobs:
+  deploy:
+    name: Deploy
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    steps:
+    - uses: docker/login-action@v3
+      name: GitHub CR Login
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: azure/login@v1
+      name: Azure Login
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - uses: azure/CLI@v1
+      name: Deploy
+      with:
+        inlineScript: >
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az containerapp update \
+            --name ${{ vars.CONTAINER_APP_NAME }} \
+            --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} \
+            --resource-group ${{ vars.CONTAINER_APP_RESOURCE_GROUP_NAME }} \
+            --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
