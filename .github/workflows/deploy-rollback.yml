@@ -18,6 +18,7 @@ jobs:
   deploy-release-to-selected-environment:
     name: 'Environment (${{ inputs.environment }})'
     uses: './.github/workflows/template-deploy-container.yml'
+    secrets: inherit
     with:
       environment: ${{ inputs.environment }}
       release: ${{ inputs.tag }}

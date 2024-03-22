@@ -1,3 +1,5 @@
+name: template-deploy-container.yml
+
 on:
   workflow_call:
     inputs:
