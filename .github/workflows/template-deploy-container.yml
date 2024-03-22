@@ -17,7 +17,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploying Container
+    name: Deploy Container
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
@@ -38,7 +38,7 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - uses: azure/CLI@v1
-      name: Deploy
+      name: Update Container App
       with:
         inlineScript: >
           az config set extension.use_dynamic_install=yes_without_prompt

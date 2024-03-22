@@ -14,7 +14,7 @@ jobs:
       tag: ${{ github.ref_name }}
 
   deploy-release-to-tt02:
-    name: 'TT02'
+    name: 'Environment (TT02)'
     needs: containerize
     uses: './.github/workflows/template-deploy-container.yml'
     with:
@@ -29,7 +29,7 @@ jobs:
       environment: tt02
 
   deploys-release-to-prod:
-    name: 'Prod'
+    name: 'Environment (Prod)'
     needs: deploy-release-to-tt02
     uses: './.github/workflows/template-deploy-container.yml'
     with:
