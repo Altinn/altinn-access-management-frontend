@@ -41,6 +41,7 @@
 
 .option:hover > .optionLabel {
   color: var(--fds-semantic-text-action-hover) !important;
+  cursor: pointer;
 }
 
 .option:active {

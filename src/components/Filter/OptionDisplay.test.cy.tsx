@@ -35,9 +35,11 @@ describe('OptionDisplay', () => {
     renderOptionDisplay({ values: checked });
     for (let i = 0; i < options.length; i++) {
       if (checked.includes(options[i].value)) {
-        cy.contains('div', `${options[i].label}`).find('[type=checkbox]').should('be.checked');
+        cy.contains('button', `${options[i].label}`).find('[type=checkbox]').should('be.checked');
       } else {
-        cy.contains('div', `${options[i].label}`).find('[type=checkbox]').should('not.be.checked');
+        cy.contains('button', `${options[i].label}`)
+          .find('[type=checkbox]')
+          .should('not.be.checked');
       }
     }
   });
@@ -55,8 +57,8 @@ describe('OptionDisplay', () => {
   it('only displays options that match the search string when one is entered', () => {
     renderOptionDisplay({ searchable: true });
     cy.get('input:visible').type('breakfast');
-    cy.contains('label', 'Breakfast').should('exist');
-    cy.contains('label', 'English breakfast').should('exist');
-    cy.contains('label', 'Apples').should('not.exist');
+    cy.contains('button', 'Breakfast').should('exist');
+    cy.contains('button', 'English breakfast').should('exist');
+    cy.contains('button', 'Apples').should('not.exist');
   });
 });
