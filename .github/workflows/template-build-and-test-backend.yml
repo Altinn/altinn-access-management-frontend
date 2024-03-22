@@ -1,3 +1,5 @@
+name: template-build-and-test-backend.yml
+
 on:
   workflow_call:
 
