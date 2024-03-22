@@ -434,6 +434,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@digdir/designsystemet-css@npm:^0.2.2":
+  version: 0.2.3
+  resolution: "@digdir/designsystemet-css@npm:0.2.3"
+  dependencies:
+    "@digdir/designsystemet-react": "npm:^0.55.0"
+  checksum: 10/f1da70f3219cdf0cec5e2db98e71ee58231861e477bbb31575cf3da8ef1a3bb738ba7243304a9321b4d7b457a9c73d355bd0bcdcfb64d150e3523ec4067c042b
+  languageName: node
+  linkType: hard
+
 "@digdir/designsystemet-react@npm:^0.53.1":
   version: 0.53.1
   resolution: "@digdir/designsystemet-react@npm:0.53.1"
@@ -446,6 +455,36 @@ __metadata:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
   checksum: 10/8ba5ce2e16c93ac8b4303f1abe104f93bbecab354b7c4e664921de45e7e9b5d27288e63b3893f099a46c6256f7f33c372873864a18ab69784308f1389ef615dd
+  languageName: node
+  linkType: hard
+
+"@digdir/designsystemet-react@npm:^0.54.0":
+  version: 0.54.0
+  resolution: "@digdir/designsystemet-react@npm:0.54.0"
+  dependencies:
+    "@floating-ui/react": "npm:0.26.4"
+    "@navikt/aksel-icons": "npm:^5.12.2"
+    "@radix-ui/react-slot": "npm:^1.0.2"
+    "@tanstack/react-virtual": "npm:^3.0.1"
+  peerDependencies:
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: 10/8531abfa45f292b7dbc2cff38254c5e1896ba1a96c47520f31c6e164e3467d778e96b6e57088400989f9559f3858ec544c88e0f30a7d5adfbd7ddea85e742d22
+  languageName: node
+  linkType: hard
+
+"@digdir/designsystemet-react@npm:^0.55.0":
+  version: 0.55.0
+  resolution: "@digdir/designsystemet-react@npm:0.55.0"
+  dependencies:
+    "@floating-ui/react": "npm:0.26.4"
+    "@navikt/aksel-icons": "npm:^5.12.2"
+    "@radix-ui/react-slot": "npm:^1.0.2"
+    "@tanstack/react-virtual": "npm:^3.0.1"
+  peerDependencies:
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: 10/36bd8d02b21f2553bca4a1909c5e6653d1525b5130278eecee53e6476740273a691e96c276c1f8b2466533b4071246d6f1451faa73351226f3e478c044326d13
   languageName: node
   linkType: hard
 
@@ -1991,6 +2030,8 @@ __metadata:
     "@altinn/altinn-design-system": "npm:0.30.0"
     "@digdir/design-system-react": "npm:0.53.1"
     "@digdir/design-system-tokens": "npm:0.13.0"
+    "@digdir/designsystemet-css": "npm:^0.2.2"
+    "@digdir/designsystemet-react": "npm:^0.54.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@reduxjs/toolkit": "npm:^2.1.0"
     "@tanstack/react-query": "npm:^4.32.6"
