@@ -14,4 +14,4 @@ on:
 jobs:
   ci:
     name: 'Continous Integration'
-    uses: './.github/workflows/template-build-and-test-backend-template.yml'
+    uses: './template-build-and-test-backend.yml'
