@@ -1,4 +1,4 @@
-name: 'Deploys: Release'
+name: 'Deploy: Release'
 
 run-name: ${{ github.ref_name }}
 

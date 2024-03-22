@@ -1,4 +1,4 @@
-name: 'Deploys: Rollback'
+name: 'Deploy: Rollback'
 
 run-name: '${{ inputs.environment }}: ${{ inputs.tag }}'
 
