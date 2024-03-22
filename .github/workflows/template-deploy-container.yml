@@ -39,10 +39,10 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    - uses: azure/CLI@v1
+    - uses: azure/CLI@v2
       name: Update Container App
       with:
-        inlineScript: >
+        inlineScript: |
           az config set extension.use_dynamic_install=yes_without_prompt
           az containerapp update \
             --name ${{ vars.CONTAINER_APP_NAME }} \
