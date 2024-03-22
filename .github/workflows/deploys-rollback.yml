@@ -17,7 +17,7 @@ on:
 jobs:
   deploys-release-to-selected-environment:
     name: 'Deploys container'
-    uses: './templates/deploy-container-template.yml'
+    uses: './.github/workflows/template-deploy-container.yml'
     with:
       environment: ${{ inputs.environment }}
       release: ${{ inputs.tag }}

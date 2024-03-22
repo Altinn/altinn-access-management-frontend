@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-push-container:
     name: 'Build and Push Container'
-    uses: './templates/build-and-push-container.yml'
+    uses: './.github/workflows/template-build-and-push-container.yml'
     with:
       tag: ${{ github.sha }}
 
@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         environment: [AT21, AT22, AT23, AT24]
-    uses: './templates/deploy-container-template.yml'
+    uses: './.github/workflows/template-deploy-container.yml'
     with:
       environment: ${{ matrix.environment }}
       tag: ${{ github.sha }}
@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         environment: [AT21, AT22, AT23, AT24]
-    uses: './templates/test-cypress-template.yml'
+    uses: './.github/workflows/template-test-cypress.yml'
     with:
       environment: ${{ matrix.environment }}
  
