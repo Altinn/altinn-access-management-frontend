@@ -6,6 +6,8 @@ import cn from 'classnames';
 import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
+import { useMediaQuery } from '@/resources/hooks';
+
 import { BorderedList } from '../BorderedList';
 
 import classes from './CompactDeletableListItem.module.css';
@@ -30,6 +32,7 @@ export const CompactDeletableListItem = ({
   contentColor = ListTextColor.primary,
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   return (
     <BorderedList.Item borderStyle='dashed'>
@@ -66,7 +69,7 @@ export const CompactDeletableListItem = ({
                 size='medium'
                 onClick={removeCallback}
                 className={classes.actionButton}
-                icon={false}
+                icon={isSm}
                 aria-label={
                   t('common.remove') +
                   ' ' +
