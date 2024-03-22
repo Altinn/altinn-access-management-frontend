@@ -7,15 +7,15 @@ on:
     # branches: [main]
 
 jobs:
-  build-and-push-container:
-    name: 'Build and Push Container'
+  containerize:
+    name: 'Containerize'
     uses: './.github/workflows/template-build-and-push-container.yml'
     with:
       tag: ${{ github.sha }}
 
-  deploys-main:
-    name: 'Deploys Main'
-    needs: build-and-push-container
+  deploy-main:
+    name: 'Environment'
+    needs: containerize
     strategy:
       fail-fast: false
       matrix:
@@ -26,8 +26,8 @@ jobs:
       tag: ${{ github.sha }}
 
   cypress-main:
-    name: 'Cypress Tests'
-    needs: deploys-main
+    name: 'Cypress'
+    needs: deploy-main
     strategy:
       fail-fast: false
       matrix:

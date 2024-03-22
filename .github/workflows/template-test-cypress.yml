@@ -8,7 +8,7 @@ on:
 
 jobs:
   run:
-    name: Run Tests
+    name: 'End to End Tests'
     runs-on: ubuntu-22.04
     container:
       image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1

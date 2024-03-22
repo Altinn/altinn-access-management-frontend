@@ -15,8 +15,8 @@ on:
         required: true
 
 jobs:
-  deploys-release-to-selected-environment:
-    name: 'Deploys container'
+  deploy-release-to-selected-environment:
+    name: 'Environment (${{ inputs.environment }})'
     uses: './.github/workflows/template-deploy-container.yml'
     with:
       environment: ${{ inputs.environment }}

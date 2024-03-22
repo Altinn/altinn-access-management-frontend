@@ -17,7 +17,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploying Container
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
