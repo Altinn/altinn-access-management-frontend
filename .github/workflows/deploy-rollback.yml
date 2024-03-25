@@ -11,7 +11,7 @@ on:
         required: true
       tag:
         type: string
-        description: 'Enter Tag'
+        description: 'Enter Container Tag'
         required: true
 
 jobs:
@@ -21,6 +21,6 @@ jobs:
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
-      release: ${{ inputs.tag }}
+      tag: ${{ inputs.tag }}
   
   
