@@ -15,4 +15,5 @@ on:
 jobs:
   ci:
     name: 'Continous Integration'
+    secrets: inherit
     uses: './.github/workflows/template-build-and-test-backend.yml'
