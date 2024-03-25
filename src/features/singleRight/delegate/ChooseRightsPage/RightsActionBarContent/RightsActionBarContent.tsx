@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Paragraph, Heading, Chip, Alert } from '@digdir/design-system-react';
+import { Paragraph, Heading, Chip, Alert } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ErrorMessage, Ingress, Paragraph } from '@digdir/design-system-react';
+import { ErrorMessage, Ingress, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';

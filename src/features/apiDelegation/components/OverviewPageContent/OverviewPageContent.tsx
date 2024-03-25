@@ -1,5 +1,5 @@
 import { Panel } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -176,11 +176,11 @@ export const OverviewPageContent = ({
           <Button
             variant='secondary'
             onClick={goToStartDelegation}
-            icon={<PlusIcon />}
             fullWidth={isSm}
             size='medium'
+            icon={isSm}
           >
-            {t('api_delegation.delegate_new_org')}
+            <PlusIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_org')}
           </Button>
         </div>
       )}
@@ -211,20 +211,20 @@ export const OverviewPageContent = ({
               {!isEditable ? (
                 <Button
                   variant='tertiary'
-                  icon={<PencilIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
+                  icon={isSm}
                 >
-                  {t('api_delegation.edit_accesses')}
+                  <PencilIcon fontSize={'1.5rem'} /> {t('api_delegation.edit_accesses')}
                 </Button>
               ) : (
                 <Button
                   variant='tertiary'
-                  icon={<XMarkOctagonIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
+                  icon={isSm}
                 >
-                  {t('common.cancel')}
+                  <XMarkOctagonIcon fontSize='1.5rem' /> {t('common.cancel')}
                 </Button>
               )}
             </div>

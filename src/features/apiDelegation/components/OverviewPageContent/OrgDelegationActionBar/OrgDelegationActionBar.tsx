@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -45,12 +45,12 @@ export const OrgDelegationActionBar = ({
         <Button
           variant={'tertiary'}
           color={'first'}
-          icon={<PlusCircleIcon />}
           size={'medium'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
+          icon={isSm}
         >
-          {t('api_delegation.delegate_new_api')}
+          <PlusCircleIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_api')}
         </Button>
       )}
       {isEditable &&
@@ -59,10 +59,11 @@ export const OrgDelegationActionBar = ({
             variant={'tertiary'}
             color={'second'}
             size={'medium'}
-            icon={<ArrowUndoIcon />}
             onClick={softRestoreAllCallback}
             aria-label={String(t('common.undo')) + ' ' + organization.orgName}
+            icon={isSm}
           >
+            <ArrowUndoIcon fontSize='1.5rem' />
             {!isSm && t('common.undo')}
           </Button>
         ) : (
@@ -70,12 +71,12 @@ export const OrgDelegationActionBar = ({
             <Button
               variant={'tertiary'}
               color={'danger'}
-              icon={<MinusCircleIcon />}
               size={'medium'}
               onClick={handleSoftDeleteAll}
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
+              icon={isSm}
             >
-              {!isSm && t('api_delegation.delete')}
+              <MinusCircleIcon fontSize='1.5rem' /> {!isSm && t('api_delegation.delete')}
             </Button>
           </div>
         ))}

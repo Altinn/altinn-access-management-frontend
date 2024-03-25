@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { useRouteError } from 'react-router-dom';
 import * as React from 'react';
-import { Paragraph } from '@digdir/design-system-react';
+import { Paragraph } from '@digdir/designsystemet-react';
 
 import { Page, PageContent, PageContainer } from '@/components';
 

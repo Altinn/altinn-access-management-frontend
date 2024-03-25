@@ -22,7 +22,7 @@ export interface GroupElementsProps {
 export const GroupElements = ({ children }: GroupElementsProps) => {
   return (
     <ul className={classes.list}>
-      {children.map((child: React.ReactNode, index: number) => (
+      {children?.map((child: React.ReactNode, index: number) => (
         <li
           className={classes.listItem}
           key={`element-${index}`}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useId, type ReactNode } from 'react';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -134,10 +134,15 @@ export const Filter = ({
         variant='tertiary'
         color='second'
         onClick={handleOpenOrClose}
-        icon={<XMarkIcon aria-label={String(t('common.close'))} />}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
         size='medium'
-      />
+        icon={true}
+      >
+        <XMarkIcon
+          aria-label={String(t('common.close'))}
+          fontSize={'1.5rem'}
+        />
+      </Button>
     </div>
   );
 

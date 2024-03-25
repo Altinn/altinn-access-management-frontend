@@ -15,7 +15,7 @@
 }
 
 .actionBarContent {
-  padding: 10px 0 10px 10px;
+  padding: 10px 10px 10px 20px;
 }
 
 .actionBarText__softDelete {
@@ -34,4 +34,8 @@
 
 .additionalText {
   margin-right: 10px;
+}
+
+.softButton {
+  padding: 0;
 }

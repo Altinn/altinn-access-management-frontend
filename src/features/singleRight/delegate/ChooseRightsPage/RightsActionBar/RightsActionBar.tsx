@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -29,12 +29,15 @@ export const RightsActionBar = ({
   const removeButton = (
     <Button
       variant='tertiary'
-      icon={<MinusCircleIcon title={t('common.remove')} />}
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
-      iconPlacement='right'
+      icon={compact}
     >
-      {!compact && t('common.remove')}
+      {!compact && t('common.remove')}{' '}
+      <MinusCircleIcon
+        fontSize={'2rem'}
+        title={t('common.remove')}
+      />
     </Button>
   );
 

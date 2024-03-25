@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
+
+import { useMediaQuery } from '@/resources/hooks';
 
 import { BorderedList } from '../BorderedList';
 
@@ -30,6 +32,7 @@ export const CompactDeletableListItem = ({
   contentColor = ListTextColor.primary,
 }: CompactDeletableListItemProps) => {
   const { t } = useTranslation('common');
+  const isSm = useMediaQuery('(max-width: 768px)');
 
   return (
     <BorderedList.Item borderStyle='dashed'>
@@ -63,9 +66,10 @@ export const CompactDeletableListItem = ({
               <Button
                 variant={'tertiary'}
                 color={'danger'}
-                icon={<MinusCircleIcon />}
                 size='medium'
                 onClick={removeCallback}
+                className={classes.actionButton}
+                icon={isSm}
                 aria-label={
                   t('common.remove') +
                   ' ' +
@@ -78,7 +82,7 @@ export const CompactDeletableListItem = ({
                   middleText
                 }
               >
-                {t('common.remove')}
+                <MinusCircleIcon fontSize={'1.5rem'} /> {t('common.remove')}
               </Button>
             )}
           </div>

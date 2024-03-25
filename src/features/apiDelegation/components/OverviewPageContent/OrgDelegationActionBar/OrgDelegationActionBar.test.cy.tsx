@@ -174,7 +174,7 @@ describe('OrgDelegationActionBar', () => {
       cy.findByRole('button', { name: /undo/i }).should('exist');
     });
 
-    it('should call softDeleteCallback on button click and isEditable=true ', () => {
+    it('should call softDeleteAllCallback on buttonclick when isEditable=true ', () => {
       const overviewOrgs: OverviewOrg = {
         id: '1',
         orgName: 'Evry',
