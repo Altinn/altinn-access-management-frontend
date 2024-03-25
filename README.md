@@ -3,7 +3,9 @@
 # Setup environment 🚀
 ## Step 1: Getting started 
 
-To run or build the frontend, you'll need to download [Node minimum v21 ](https://nodejs.org/). Download yarn via corepack (don't download yarn globally, it will give you problems at some point). After that is done simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment.
+- To run or build the frontend, you'll need to download [Node minimum v21 ](https://nodejs.org/).
+- Enable corepack on your machine and download yarn via corepack (don't download yarn globally, it will give you problems at some later point). Follow this [guide](https://yarnpkg.com/getting-started/install) to download yarn. 
+- After that is done simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment.
 
 PS: To actually see anything on the local environment port you'll need to follow the guide until step 3.
 
