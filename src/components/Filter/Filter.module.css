@@ -1,14 +1,19 @@
-.popoverContent {
+.content {
   box-sizing: border-box;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 16px 15px 6px 15px;
+  padding: 16px 15px 4px 15px;
+}
+
+.content .modal {
+  padding-top: 6px;
 }
 
 .modalHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .optionSection {
@@ -22,18 +27,10 @@
 }
 
 .filterActions {
-  --actionsFlexDirections: row;
   display: flex;
   justify-content: center;
-  flex-direction: var(--actionsFlexDirections);
-  padding: 15px 0 15px 0;
+  padding: 14px 0 14px 0;
   gap: 10px;
-}
-
-.filterActions.modal {
-  --actionsFlexDirections: column;
-  gap: 10px;
-  align-items: center;
 }
 
 .resetButton {
