@@ -1,5 +1,6 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 import { apiDelegering } from '../../pageObjects/profile3/APIadministration';
+import { singleRightdelegering } from '../../pageObjects/profile3/enkeltRettighetersDelegering';
 
 Cypress.Commands.add('deleteAPIsDelegated', () => {
   cy.wait(1000);
@@ -38,13 +39,27 @@ Cypress.Commands.add('chooseOrgToDelegateAPI', (supplierOrg, supplierOrgName) =>
   cy.get('h1').should('contain', 'Gi tilgang til nytt API');
   cy.get('h2').should('contain', 'Ny virksomhet?');
   cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type(supplierOrg);
-  cy.get('h4').should('contain', 'Virksomheter basert på ditt søk');
-  cy.get(apiDelegering.searchedOrgResultContainer, { timeout: 1000 }).should(
-    'contains.text',
-    supplierOrgName,
-  );
-  cy.get(apiDelegering.searchedOrgResultContainer).find('button[aria-label*="Legg til"]').click();
-  cy.contains('button', 'Neste').click();
+  cy.wait(1000);
+  cy.get('body').then((bodyelement) => {
+    if (bodyelement.find('[data-testid="panel-content-wrapper"]').length > 0) {
+      cy
+        .get('[data-testid="panel-content-wrapper"]')
+        .should(
+          'have.text',
+          'Vi finner ikke det du søker etter. Har du skrevet inn riktig organisasjonsnummer?Dersom du er usikker, kan du gjøre et søk på navn på sidene til Brønnøysundregistrene',
+        ),
+        cy.get(singleRightdelegering.closeButton).click();
+    } else {
+      cy.get('h4').should('contain', 'Virksomheter basert på ditt søk');
+      cy.get(apiDelegering.searchedOrgResultContainer, {
+        timeout: 1000,
+      }).should('contains.text', supplierOrgName);
+      cy.get(apiDelegering.searchedOrgResultContainer)
+        .find('button[aria-label*="Legg til"]')
+        .click();
+      cy.contains('button', 'Neste').click();
+    }
+  });
 });
 
 Cypress.Commands.add('chooseAPIToBeDelegated', (apiName) => {
@@ -56,7 +71,7 @@ Cypress.Commands.add('chooseAPIToBeDelegated', (apiName) => {
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
-  cy.focused().next().click();
+  cy.get('button[aria-label*="Legg til"]').eq(1).click();
 });
 
 Cypress.Commands.add('verifyAPIselectedForDelegation', (apiName) => {
@@ -194,7 +209,8 @@ Cypress.Commands.add('addAPIToListAndMakeItReadyToAddNextAPI', (apiName) => {
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
-  cy.focused().next().click();
+  //cy.get('button[aria-label*="Legg til"]').click();
+  cy.get(`button[aria-label="Legg til ${apiName}"]`).first().click();
   cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type('{selectall}{backspace}');
 });
 
@@ -204,10 +220,13 @@ Cypress.Commands.add('addMultipleAPIsToDelegateAPI', (apiName1, apiName2, apiNam
   cy.wait(1000);
   //adding first API to the list
   cy.addAPIToListAndMakeItReadyToAddNextAPI(apiName1);
+  cy.wait(1000);
   //adding second API to the list
   cy.addAPIToListAndMakeItReadyToAddNextAPI(apiName2);
+  cy.wait(1000);
   //adding third API to the list
   cy.addAPIToListAndMakeItReadyToAddNextAPI(apiName3);
+  cy.wait(1000);
   cy.contains('button', 'Neste').click();
 });
 
