@@ -33,7 +33,7 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       name: Azure Login
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
