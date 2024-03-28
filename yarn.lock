@@ -404,21 +404,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:0.47.0":
-  version: 0.47.0
-  resolution: "@digdir/design-system-react@npm:0.47.0"
+"@digdir/design-system-react@npm:0.53.3":
+  version: 0.53.3
+  resolution: "@digdir/design-system-react@npm:0.53.3"
   dependencies:
     "@altinn/figma-design-tokens": "npm:^6.0.1"
-    "@digdir/design-system-tokens": "npm:^0.12.0"
+    "@digdir/designsystemet-react": "npm:^0.55.0"
     "@floating-ui/react": "npm:0.26.4"
     "@navikt/aksel-icons": "npm:^5.12.2"
-    "@radix-ui/react-slot": "npm:^1.0.2"
-    "@tanstack/react-virtual": "npm:^3.0.1"
     react-number-format: "npm:5.3.1"
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: 10/ac94a901fc551184f55fa9ad02f1fb51e7c87d162a4af73ed65f03207ba85fe3e3b642a611280eaf1fbdb683d9855332fbf4bb5f1d42e5318fc4b56a5a29716e
+  checksum: 10/50f9aa0e5be056d391ad7ffce3327e861e0f142880b9094485ec841ba3c4c699a7731834a9794420c8549f69538b5c21e178efc26c99206bd49a021cfee15cbd
   languageName: node
   linkType: hard
 
@@ -436,10 +434,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@digdir/design-system-tokens@npm:0.12.0"
-  checksum: 10/cbc1056850bdf8d66cb66cbca23e15be5f6f065b9a4881f41ba67175a47c8ffb9fbe612ef3e5fa7583c6f4ec7204c7b72162dbf5328a3ccad1ea4f837fb2431b
+"@digdir/designsystemet-react@npm:^0.55.0":
+  version: 0.55.0
+  resolution: "@digdir/designsystemet-react@npm:0.55.0"
+  dependencies:
+    "@floating-ui/react": "npm:0.26.4"
+    "@navikt/aksel-icons": "npm:^5.12.2"
+    "@radix-ui/react-slot": "npm:^1.0.2"
+    "@tanstack/react-virtual": "npm:^3.0.1"
+  peerDependencies:
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: 10/36bd8d02b21f2553bca4a1909c5e6653d1525b5130278eecee53e6476740273a691e96c276c1f8b2466533b4071246d6f1451faa73351226f3e478c044326d13
   languageName: node
   linkType: hard
 
@@ -1983,7 +1989,7 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@altinn/altinn-design-system": "npm:0.30.0"
-    "@digdir/design-system-react": "npm:0.47.0"
+    "@digdir/design-system-react": "npm:0.53.3"
     "@digdir/design-system-tokens": "npm:0.13.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@reduxjs/toolkit": "npm:^2.1.0"
