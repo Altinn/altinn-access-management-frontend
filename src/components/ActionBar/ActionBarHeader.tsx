@@ -3,7 +3,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
@@ -17,18 +17,39 @@ export type ActionBarHeaderProps = Pick<
 >;
 
 export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderProps>(
-  ({ additionalText, subtitle, title, actions }, ref) => {
+  ({ additionalText, headingLevel, subtitle, title, actions }, ref) => {
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
+
+    /*     let renderAsElem: React.ElementType = <h4></h4>;
 
     let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
     switch (size) {
       case 'large':
+        renderAsElem = headingLevel ? `h${headingLevel}` : 'h3';
         headingSize = 'large';
         break;
       case 'medium':
+        renderAsElem = headingLevel ? `h${headingLevel}` : 'h4';
         headingSize = 'small';
         break;
       case 'small':
+        renderAsElem = headingLevel ? `h${headingLevel}` : 'h5';
+        headingSize = 'xsmall';
+        break;
+    } */
+
+    let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
+    switch (size) {
+      case 'large':
+        headingLevel ? headingLevel : 3;
+        headingSize = 'large';
+        break;
+      case 'medium':
+        headingLevel ? headingLevel : 4;
+        headingSize = 'small';
+        break;
+      case 'small':
+        headingLevel ? headingLevel : 5;
         headingSize = 'xsmall';
         break;
     }
@@ -57,12 +78,13 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 <ActionBarIcon />
               </div>
               <div className={classes.actionBarTexts}>
-                <Paragraph
+                <Heading
+                  level={headingLevel}
                   size={headingSize}
                   className={classes.title}
                 >
-                  {title}
-                </Paragraph>
+                  <Paragraph size={headingSize}>{title}</Paragraph>
+                </Heading>
                 {subtitle && (
                   <Paragraph
                     size='xsmall'
@@ -81,12 +103,13 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             data-testid='action-bar'
           >
             <div className={classes.actionBarTexts}>
-              <Paragraph
+              <Heading
+                level={headingLevel}
                 size={headingSize}
                 className={classes.title}
               >
-                {title}
-              </Paragraph>
+                <Paragraph size={headingSize}>{title}</Paragraph>
+              </Heading>
               {subtitle && (
                 <Paragraph
                   size='xsmall'
