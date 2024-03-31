@@ -3,7 +3,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Paragraph } from '@digdir/designsystemet-react';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
@@ -13,43 +13,22 @@ import { type ActionBarProps } from './ActionBar';
 
 export type ActionBarHeaderProps = Pick<
   ActionBarProps,
-  'headingLevel' | 'title' | 'subtitle' | 'additionalText' | 'actions'
+  'title' | 'subtitle' | 'additionalText' | 'actions'
 >;
 
 export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderProps>(
-  ({ additionalText, headingLevel, subtitle, title, actions }, ref) => {
+  ({ additionalText, subtitle, title, actions }, ref) => {
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
 
-    /*     let renderAsElem: React.ElementType = <h4></h4>;
-
     let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
     switch (size) {
       case 'large':
-        renderAsElem = headingLevel ? `h${headingLevel}` : 'h3';
         headingSize = 'large';
         break;
       case 'medium':
-        renderAsElem = headingLevel ? `h${headingLevel}` : 'h4';
         headingSize = 'small';
         break;
       case 'small':
-        renderAsElem = headingLevel ? `h${headingLevel}` : 'h5';
-        headingSize = 'xsmall';
-        break;
-    } */
-
-    let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
-    switch (size) {
-      case 'large':
-        headingLevel ? headingLevel : 3;
-        headingSize = 'large';
-        break;
-      case 'medium':
-        headingLevel ? headingLevel : 4;
-        headingSize = 'small';
-        break;
-      case 'small':
-        headingLevel ? headingLevel : 5;
         headingSize = 'xsmall';
         break;
     }
@@ -69,7 +48,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             type='button'
             onClick={toggleOpen}
             id={headerId}
-            data-testid='action-bar'
             aria-expanded={open}
             aria-controls={contentId}
           >
@@ -78,13 +56,12 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 <ActionBarIcon />
               </div>
               <div className={classes.actionBarTexts}>
-                <Heading
-                  level={headingLevel}
-                  size={headingSize}
+                <Paragraph
                   className={classes.title}
+                  size={headingSize}
                 >
-                  <Paragraph size={headingSize}>{title}</Paragraph>
-                </Heading>
+                  {title}
+                </Paragraph>
                 {subtitle && (
                   <Paragraph
                     size='xsmall'
@@ -97,21 +74,17 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             </div>
           </button>
         ) : (
-          <div
-            className={cn(classes.actionBarHeader)}
-            id={headerId}
-            data-testid='action-bar'
-          >
+          <div className={cn(classes.actionBarHeader)}>
             <div className={classes.actionBarTexts}>
-              <Heading
-                level={headingLevel}
+              <Paragraph
                 size={headingSize}
                 className={classes.title}
               >
-                <Paragraph size={headingSize}>{title}</Paragraph>
-              </Heading>
+                {title}
+              </Paragraph>
               {subtitle && (
                 <Paragraph
+                  as='div'
                   size='xsmall'
                   className={classes.subtitle}
                 >

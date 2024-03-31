@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useId, useState, forwardRef, useEffect } from 'react';
+import { Heading } from '@digdir/designsystemet-react';
 
 import type { ClickHandler } from './Context';
 import { ActionBarContext } from './Context';
@@ -98,6 +99,22 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
     const isOpen = open ?? internalOpen;
 
+    let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
+    switch (size) {
+      case 'large':
+        headingLevel ? headingLevel : 3;
+        headingSize = 'large';
+        break;
+      case 'medium':
+        headingLevel ? headingLevel : 4;
+        headingSize = 'small';
+        break;
+      case 'small':
+        headingLevel ? headingLevel : 5;
+        headingSize = 'xsmall';
+        break;
+    }
+
     // Update internalopen if there are external changes to default
     useEffect(() => {
       setInternalOpen(defaultOpen);
@@ -113,7 +130,13 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     }
 
     return (
-      <div ref={ref}>
+      <Heading
+        level={headingLevel}
+        size={headingSize}
+        id={headerId}
+        data-testid='action-bar'
+        ref={ref}
+      >
         <ActionBarContext.Provider
           value={{
             toggleOpen,
@@ -128,12 +151,11 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
             title={title}
             subtitle={subtitle}
             additionalText={additionalText}
-            headingLevel={headingLevel}
             actions={actions}
           ></ActionBarHeader>
           <ActionBarContent>{children}</ActionBarContent>
         </ActionBarContext.Provider>
-      </div>
+      </Heading>
     );
   },
 );

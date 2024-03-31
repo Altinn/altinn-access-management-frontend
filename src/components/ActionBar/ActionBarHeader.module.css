@@ -182,6 +182,7 @@
   justify-content: center;
 }
 
+.title,
 .subtitle {
   color: var(--text-color) !important;
 }

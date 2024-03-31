@@ -220,6 +220,7 @@ export const ApiActionBar = ({
       size='medium'
       color={actionBarColor}
       open={open}
+      headingLevel={5}
       onClick={() => {
         setOpen(!open);
       }}

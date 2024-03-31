@@ -120,6 +120,7 @@ export const ChooseOrgPage = () => {
           key={org.orgNr}
           title={org.orgName}
           subtitle={t('common.org_nr') + ' ' + org.orgNr}
+          headingLevel={5}
           actions={
             <Button
               variant={'tertiary'}
