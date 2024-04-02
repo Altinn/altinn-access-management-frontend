@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return Task.FromResult(resources);
         }
-        
+
         /// <inheritdoc />
         public Task<List<ServiceResource>> GetMaskinportenSchemas()
         {
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string path = GetDataPathForResources();
 
             List<ServiceResource> resources = Util.GetMockData<List<ServiceResource>>(path);
-            
+
             List<ServiceResource> maskinPortenSchemas = resources.FindAll(r => r.ResourceType == ResourceType.MaskinportenSchema);
             return Task.FromResult(maskinPortenSchemas);
         }
@@ -59,24 +59,27 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<OrgList> GetAllResourceOwners()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            string path = Path.Combine(unitTestFolder, "Data", "ResourceRegistry", "resourceowners.json");
+            string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            if (!string.IsNullOrEmpty(folder))
+            {
+                string path = Path.Combine(folder, "Data", "ResourceRegistry", "resourceowners.json");
+                OrgList orgList = Util.GetMockData<OrgList>(path);
+                return Task.FromResult(orgList);
+            }
 
-            OrgList orgList = Util.GetMockData<OrgList>(path);
-
-            return Task.FromResult(orgList);
+            return Task.FromResult<OrgList>(null);
         }
 
         private static string GetResourcePath(string resourceRegistryId)
         {
-            string mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(mockClientFolder, "Data", "ResourceRegistry", $"{resourceRegistryId}", "resource.json");
+            string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return Path.Combine(folder, "Data", "ResourceRegistry", $"{resourceRegistryId}", "resource.json");
         }
 
         private static string GetDataPathForResources()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(mockClientFolder, "Data", "ResourceRegistry", "resources.json");
+            string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return Path.Combine(folder, "Data", "ResourceRegistry", "resources.json");
         }
     }
 }
