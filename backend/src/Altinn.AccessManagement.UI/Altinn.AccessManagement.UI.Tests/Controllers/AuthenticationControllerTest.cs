@@ -162,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// Test case: Refresh returns refreshed token for a valid cookie and antiforgerytoken
         /// Expected: Refresh returns refreshed token
         /// </summary>
-        [Fact(Skip = "")]
+        [Fact(Skip = "???")]
         public async Task Refresh_ValidCookieAndMissingAntiForgeryToken()
         {
             // Arrange
