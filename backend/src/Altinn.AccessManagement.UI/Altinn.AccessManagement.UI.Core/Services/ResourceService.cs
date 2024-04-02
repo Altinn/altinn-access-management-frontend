@@ -176,7 +176,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 // Filter resources based on criteria and remove duplicates based on OrganisationName
                 var resourceOwnerList = resources
-                    .Where(sr => sr.HasCompetentAuthority != null 
+                    .Where(sr => sr.HasCompetentAuthority != null && sr.HasCompetentAuthority.Name != null
                                  && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
                     .GroupBy(sr => sr.HasCompetentAuthority.Orgcode)
