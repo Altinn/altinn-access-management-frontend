@@ -13,7 +13,7 @@ PS: To actually see anything on the local environment port you'll need to follow
 
 To add test data to the app, do the following:
 
-- Clone following [repo](https://github.com/Altinn/app-localtest) and checkout branch feature/accessmanagement-subdomain(and for windows it's important to checkout commit 9ba9110e7934c4628076450d92bf829df8413619). Also remember to follow readme in that branch (Because localtest for podman doesn't work yet). You have completed this step when you can run localtest.
+- Clone following [repo](https://github.com/Altinn/app-localtest) and checkout branch feature/accessmanagement-subdomain. Also remember to follow readme in that branch (Because localtest for podman doesn't work yet). You have completed this step when you can run localtest.
 - Sometimes the docker command isn't recognized on computer, if so try to run this command:
 ```bash
    export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
