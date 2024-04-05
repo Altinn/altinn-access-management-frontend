@@ -110,25 +110,27 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     }
 
     return (
-      <ActionBarContext.Provider
-        value={{
-          toggleOpen,
-          open: isOpen,
-          headerId,
-          contentId,
-          color,
-          size,
-        }}
-      >
-        <ActionBarHeader
-          title={title}
-          subtitle={subtitle}
-          additionalText={additionalText}
-          actions={actions}
-          headingLevel={headingLevel}
-        ></ActionBarHeader>
-        <ActionBarContent>{children}</ActionBarContent>
-      </ActionBarContext.Provider>
+      <div>
+        <ActionBarContext.Provider
+          value={{
+            toggleOpen,
+            open: isOpen,
+            headerId,
+            contentId,
+            color,
+            size,
+          }}
+        >
+          <ActionBarHeader
+            title={title}
+            subtitle={subtitle}
+            additionalText={additionalText}
+            actions={actions}
+            headingLevel={headingLevel}
+          ></ActionBarHeader>
+          <ActionBarContent>{children}</ActionBarContent>
+        </ActionBarContext.Provider>
+      </div>
     );
   },
 );

@@ -41,7 +41,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
         level={headingLevel}
         size={size}
         ref={ref}
-        id={headerId}
         className={cn(classes.actionBar, classes[color], classes[size], {
           [classes.subtitle]: subtitle,
           [classes.open]: open,
