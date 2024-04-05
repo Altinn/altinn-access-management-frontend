@@ -23,10 +23,6 @@
   }
 }
 
-.actionButton {
-  padding: 0;
-}
-
 .baseListItemContent {
   display: flex;
   flex: 1;
