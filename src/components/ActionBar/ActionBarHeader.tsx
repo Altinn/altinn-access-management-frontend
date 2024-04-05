@@ -23,15 +23,15 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
     let paragraphSize: 'small' | 'medium' | 'large' | 'xsmall';
     switch (size) {
       case 'large':
-        headingLevel ? headingLevel : 3;
+        headingLevel = headingLevel || 3;
         paragraphSize = 'large';
         break;
       case 'medium':
-        headingLevel ? headingLevel : 4;
+        headingLevel = headingLevel || 4;
         paragraphSize = 'small';
         break;
       case 'small':
-        headingLevel ? headingLevel : 5;
+        headingLevel = headingLevel || 5;
         paragraphSize = 'xsmall';
         break;
     }

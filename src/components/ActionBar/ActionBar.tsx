@@ -87,6 +87,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     defaultOpen = false,
     subtitle,
     title,
+    headingLevel,
   }) => {
     const headerId = useId();
     const contentId = useId();
@@ -124,6 +125,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
           subtitle={subtitle}
           additionalText={additionalText}
           actions={actions}
+          headingLevel={headingLevel}
         ></ActionBarHeader>
         <ActionBarContent>{children}</ActionBarContent>
       </ActionBarContext.Provider>
