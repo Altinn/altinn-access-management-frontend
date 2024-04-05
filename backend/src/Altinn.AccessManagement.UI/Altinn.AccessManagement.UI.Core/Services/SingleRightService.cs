@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ISingleRightClient _singleRightClient;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SingleRightMockClient" /> class
+        ///     Initializes a new instance of the <see cref="SingleRightService" /> class
         /// </summary>
         public SingleRightService(ISingleRightClient singleRightClient)
         {
@@ -29,6 +29,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
         {
             return await _singleRightClient.CreateDelegation(party, delegation);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user)
+        {
+            return await _singleRightClient.ClearAccessCasheOnUser(party, user);
         }
     }
 }

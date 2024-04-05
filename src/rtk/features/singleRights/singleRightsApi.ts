@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 
 import type { ResourceOwner } from '../resourceOwner/resourceOwnerApi';
 
@@ -41,12 +42,9 @@ export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
   baseQuery: fetchBaseQuery({
     baseUrl,
-    prepareHeaders: (headers: Headers): Headers => {
-      const token = getCookie('XSRF-TOKEN');
-      if (typeof token === 'string') {
-        headers.set('X-XSRF-TOKEN', token);
-      }
-
+    prepareHeaders: (headers) => {
+      headers.set('content-type', 'application/json; charset=utf-8');
+      headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
       return headers;
     },
   }),
@@ -64,9 +62,22 @@ export const singleRightsApi = createApi({
     getResourceOwners: builder.query<ResourceOwner[], void>({
       query: () => 'resources/resourceowners',
     }),
+    clearAccessCashe: builder.mutation<void, { party: string; user: BaseAttribute }>({
+      query({ party, user }) {
+        return {
+          url: `singleright/${party}/accesscache/clear`,
+          method: 'PUT',
+          body: JSON.stringify(user),
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetPaginatedSearchQuery, useGetResourceOwnersQuery } = singleRightsApi;
+export const {
+  useGetPaginatedSearchQuery,
+  useGetResourceOwnersQuery,
+  useClearAccessCasheMutation,
+} = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

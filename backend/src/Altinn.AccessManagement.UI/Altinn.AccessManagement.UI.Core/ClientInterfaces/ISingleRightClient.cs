@@ -32,5 +32,22 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </param>
         /// <returns></returns>
         Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation);
+
+        /// <summary>
+        ///     Clears cashed accesses of the user
+        /// </summary>
+        /// <param name="party">
+        ///     The party from which the rights have been given (delegator)
+        /// </param>
+        /// <param name="user">
+        ///     The uuid identifier of the user (delegation recipient) to clear access cashe on
+        ///     Example: 
+        ///     {
+        ///     "type": "urn:altinn:person:uuid",
+        ///     "value": "00000000-0000-0000-0000-000000000000"
+        ///     }
+        /// </param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user);
     }
 }

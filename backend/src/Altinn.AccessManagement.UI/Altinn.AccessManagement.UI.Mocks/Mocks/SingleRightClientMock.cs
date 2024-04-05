@@ -1,8 +1,12 @@
 using System.Net;
+using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -34,6 +38,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string dataPath = Path.Combine(localPath, "Data", "SingleRight", "CreateDelegation");
 
             return await GetMockedHttpResponse(dataPath, resourceFileName);
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user)
+        {
+            return Task.FromResult(new HttpResponseMessage
+            { StatusCode = HttpStatusCode.OK });
         }
 
         private static string GetMockDataFilename(List<IdValuePair> resourceReference)
