@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import type { CollectionBarProps } from '@/components';
 import { ActionBar, CollectionBar } from '@/components';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getButtonIconSize } from '@/resources/utils';
 
 export interface ResourceCollectionBarProps
   extends Pick<CollectionBarProps, 'proceedToPath' | 'compact'> {
@@ -62,7 +63,7 @@ export const ResourceCollectionBar = ({
             t('common.remove')
           ) : (
             <MinusCircleIcon
-              fontSize={'1.5rem'}
+              fontSize={getButtonIconSize(!compact)}
               title={t('common.remove')}
             />
           )}

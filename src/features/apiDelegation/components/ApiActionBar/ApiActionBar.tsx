@@ -12,6 +12,7 @@ import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegati
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
 import ScopeList from '@/components/ScopeList/ScopeList';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ApiActionBar.module.css';
 
@@ -87,10 +88,9 @@ export const ApiActionBar = ({
             onClick={onAddClick}
             aria-label={t('common.add') + ' ' + api.apiName}
             size='large'
-            className={classes.actionButton}
-            icon={true}
+            icon
           >
-            <PlusCircleIcon fontSize={'2rem'} />
+            <PlusCircleIcon fontSize={getButtonIconSize(false)} />
           </Button>
         ))}
       {variant === 'remove' && (
@@ -101,9 +101,9 @@ export const ApiActionBar = ({
           aria-label={t('common.remove') + ' ' + api.apiName}
           size='large'
           className={classes.actionButton}
-          icon={true}
+          icon
         >
-          <MinusCircleIcon fontSize={'2rem'} />
+          <MinusCircleIcon fontSize={getButtonIconSize(false)} />
         </Button>
       )}
     </>

@@ -5,6 +5,7 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
+import { getButtonIconSize } from '@/resources/utils';
 
 export interface RightsActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children' | 'color' | 'defaultOpen'> {
@@ -35,7 +36,7 @@ export const RightsActionBar = ({
     >
       {!compact && t('common.remove')}{' '}
       <MinusCircleIcon
-        fontSize={'2rem'}
+        fontSize={getButtonIconSize(!compact)}
         title={t('common.remove')}
       />
     </Button>

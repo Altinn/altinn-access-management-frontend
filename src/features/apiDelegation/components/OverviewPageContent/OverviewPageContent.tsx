@@ -24,6 +24,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
 import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { getButtonIconSize } from '@/resources/utils';
 
 import { LayoutState } from '../LayoutState';
 
@@ -178,9 +179,8 @@ export const OverviewPageContent = ({
             onClick={goToStartDelegation}
             fullWidth={isSm}
             size='medium'
-            icon={isSm}
           >
-            <PlusIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_org')}
+            <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_org')}
           </Button>
         </div>
       )}
@@ -213,18 +213,17 @@ export const OverviewPageContent = ({
                   variant='tertiary'
                   onClick={handleSetIsEditable}
                   size='medium'
-                  icon={isSm}
                 >
-                  <PencilIcon fontSize={'1.5rem'} /> {t('api_delegation.edit_accesses')}
+                  <PencilIcon fontSize={getButtonIconSize(true)} />{' '}
+                  {t('api_delegation.edit_accesses')}
                 </Button>
               ) : (
                 <Button
                   variant='tertiary'
                   onClick={handleSetIsEditable}
                   size='medium'
-                  icon={isSm}
                 >
-                  <XMarkOctagonIcon fontSize='1.5rem' /> {t('common.cancel')}
+                  <XMarkOctagonIcon fontSize={getButtonIconSize(true)} /> {t('common.cancel')}
                 </Button>
               )}
             </div>

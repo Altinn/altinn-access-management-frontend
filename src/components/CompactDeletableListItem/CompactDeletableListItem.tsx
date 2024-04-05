@@ -7,6 +7,7 @@ import * as React from 'react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import { BorderedList } from '../BorderedList';
 
@@ -68,7 +69,6 @@ export const CompactDeletableListItem = ({
                 color={'danger'}
                 size='medium'
                 onClick={removeCallback}
-                className={classes.actionButton}
                 icon={isSm}
                 aria-label={
                   t('common.remove') +
@@ -82,7 +82,8 @@ export const CompactDeletableListItem = ({
                   middleText
                 }
               >
-                <MinusCircleIcon fontSize={'1.5rem'} /> {t('common.remove')}
+                <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />{' '}
+                {!isSm && t('common.remove')}
               </Button>
             )}
           </div>

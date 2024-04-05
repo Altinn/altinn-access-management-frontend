@@ -9,6 +9,7 @@ import { ActionBar, type ActionBarProps } from '@/components';
 import { useUpdate } from '@/resources/hooks/useUpdate';
 import { usePrevious } from '@/resources/hooks';
 import { ServiceStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ResourceActionBar.module.css';
 
@@ -86,7 +87,7 @@ export const ResourceActionBar = ({
       {!compact && (status === ServiceStatus.HTTPError ? t('common.try_again') : t('common.add'))}
       <PlusCircleIcon
         title='add'
-        fontSize='2rem'
+        fontSize={getButtonIconSize(!compact)}
       />
     </Button>
   );
@@ -101,7 +102,7 @@ export const ResourceActionBar = ({
       {!compact && t('common.undo')}{' '}
       <ArrowUndoIcon
         title={t('common.undo')}
-        fontSize='2rem'
+        fontSize={getButtonIconSize(!compact)}
       />
     </Button>
   );
@@ -128,7 +129,7 @@ export const ResourceActionBar = ({
       <ErrorMessage>
         <ExclamationmarkTriangleIcon
           className={classes.notDelegableIcon}
-          fontSize='2rem'
+          fontSize={getButtonIconSize(!compact)}
           aria-label={errorText}
         />
       </ErrorMessage>

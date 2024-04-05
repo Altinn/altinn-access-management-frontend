@@ -31,6 +31,7 @@ import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ChooseOrgPage.module.css';
 
@@ -131,7 +132,7 @@ export const ChooseOrgPage = () => {
               className={classes.actionButton}
               icon={true}
             >
-              <PlusCircleIcon fontSize='2rem' />
+              <PlusCircleIcon fontSize={getButtonIconSize(false)} />
             </Button>
           }
           color={'neutral'}
@@ -162,7 +163,7 @@ export const ChooseOrgPage = () => {
               className={classes.actionButton}
               icon={true}
             >
-              <MinusCircleIcon fontSize={'2rem'} />
+              <MinusCircleIcon fontSize={getButtonIconSize(false)} />
             </Button>
           }
           color={'success'}

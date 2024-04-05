@@ -6,6 +6,7 @@ import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 
 import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import { BorderedList } from '../BorderedList';
 import ScopeList from '../ScopeList/ScopeList';
@@ -41,7 +42,7 @@ export const DeletableListItem = ({
           size='medium'
           aria-label={String(t('common.undo')) + ' ' + item.apiName}
         >
-          <ArrowUndoIcon fontSize={'1.5rem'} /> {!isSm && t('common.undo')}
+          <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} /> {!isSm && t('common.undo')}
         </Button>
       ) : (
         <Button
@@ -52,7 +53,8 @@ export const DeletableListItem = ({
           onClick={softDeleteCallback}
           aria-label={String(t('api_delegation.delete') + ' ' + item.apiName)}
         >
-          <MinusCircleIcon fontSize={'1.5rem'} /> {!isSm && t('api_delegation.delete')}
+          <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />{' '}
+          {!isSm && t('api_delegation.delete')}
         </Button>
       )}
     </div>

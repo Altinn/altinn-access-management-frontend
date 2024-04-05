@@ -10,6 +10,7 @@ import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOr
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { DeletableListItem, ActionBar, BorderedList } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './OrgDelegationActionBar.module.css';
 
@@ -63,7 +64,7 @@ export const OrgDelegationActionBar = ({
             aria-label={String(t('common.undo')) + ' ' + organization.orgName}
             icon={isSm}
           >
-            <ArrowUndoIcon fontSize='1.5rem' />
+            <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} />
             {!isSm && t('common.undo')}
           </Button>
         ) : (
@@ -76,7 +77,8 @@ export const OrgDelegationActionBar = ({
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
               icon={isSm}
             >
-              <MinusCircleIcon fontSize='1.5rem' /> {!isSm && t('api_delegation.delete')}
+              <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
+              {!isSm && t('api_delegation.delete')}
             </Button>
           </div>
         ))}
@@ -96,7 +98,7 @@ export const OrgDelegationActionBar = ({
 
   return (
     <ActionBar
-      headingLevel={3}
+      headingLevel={4}
       onClick={() => {
         setOpen(!open);
       }}
