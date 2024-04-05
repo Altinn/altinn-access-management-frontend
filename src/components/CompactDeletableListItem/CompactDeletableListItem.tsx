@@ -82,7 +82,7 @@ export const CompactDeletableListItem = ({
                   middleText
                 }
               >
-                <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />{' '}
+                <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
                 {!isSm && t('common.remove')}
               </Button>
             )}
