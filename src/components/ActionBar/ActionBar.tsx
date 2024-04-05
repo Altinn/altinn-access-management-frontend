@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useId, useState, forwardRef, useEffect } from 'react';
-import { Heading } from '@digdir/designsystemet-react';
 
 import type { ClickHandler } from './Context';
 import { ActionBarContext } from './Context';
@@ -77,43 +76,23 @@ export interface ActionBarProps {
  */
 
 export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
-  (
-    {
-      actions,
-      additionalText,
-      children,
-      color = 'neutral',
-      size = 'medium',
-      onClick,
-      open,
-      defaultOpen = false,
-      subtitle,
-      title,
-      headingLevel,
-    },
-    ref,
-  ) => {
+  ({
+    actions,
+    additionalText,
+    children,
+    color = 'neutral',
+    size = 'medium',
+    onClick,
+    open,
+    defaultOpen = false,
+    subtitle,
+    title,
+  }) => {
     const headerId = useId();
     const contentId = useId();
 
     const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
     const isOpen = open ?? internalOpen;
-
-    let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
-    switch (size) {
-      case 'large':
-        headingLevel ? headingLevel : 3;
-        headingSize = 'large';
-        break;
-      case 'medium':
-        headingLevel ? headingLevel : 4;
-        headingSize = 'small';
-        break;
-      case 'small':
-        headingLevel ? headingLevel : 5;
-        headingSize = 'xsmall';
-        break;
-    }
 
     // Update internalopen if there are external changes to default
     useEffect(() => {
@@ -130,32 +109,24 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     }
 
     return (
-      <Heading
-        level={headingLevel}
-        size={headingSize}
-        id={headerId}
-        data-testid='action-bar'
-        ref={ref}
+      <ActionBarContext.Provider
+        value={{
+          toggleOpen,
+          open: isOpen,
+          headerId,
+          contentId,
+          color,
+          size,
+        }}
       >
-        <ActionBarContext.Provider
-          value={{
-            toggleOpen,
-            open: isOpen,
-            headerId,
-            contentId,
-            color,
-            size,
-          }}
-        >
-          <ActionBarHeader
-            title={title}
-            subtitle={subtitle}
-            additionalText={additionalText}
-            actions={actions}
-          ></ActionBarHeader>
-          <ActionBarContent>{children}</ActionBarContent>
-        </ActionBarContext.Provider>
-      </Heading>
+        <ActionBarHeader
+          title={title}
+          subtitle={subtitle}
+          additionalText={additionalText}
+          actions={actions}
+        ></ActionBarHeader>
+        <ActionBarContent>{children}</ActionBarContent>
+      </ActionBarContext.Provider>
     );
   },
 );
