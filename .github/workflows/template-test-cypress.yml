@@ -1,0 +1,28 @@
+name: template-test-cypress.yml
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+        description: Environment
+
+jobs:
+  run:
+    name: 'End to End Tests'
+    runs-on: ubuntu-22.04
+    container:
+      image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Tests
+        uses: cypress-io/github-action@v6
+        with:
+          spec: src/e2e/**/*.js
+          env: environment=${{ inputs.environment }}
+          working-directory: cypress
+          browser: chrome
+          
