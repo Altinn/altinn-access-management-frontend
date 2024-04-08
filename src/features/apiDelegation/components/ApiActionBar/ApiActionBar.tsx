@@ -36,7 +36,6 @@ export const ApiActionBar = ({
   api,
   initWithDelegationCheck = false,
 }: ApiActionBarProps) => {
-  console.log('api', api);
   const [open, setOpen] = useState(false);
   const [actionBarColor, setActionBarColor] = useState<'success' | 'danger' | 'neutral'>(
     variant === 'remove' ? 'success' : 'neutral',
