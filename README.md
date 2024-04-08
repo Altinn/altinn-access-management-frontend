@@ -1,3 +1,11 @@
+## Deploy statuses
+
+- [![Deploy: AT](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-at.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-at.yml)
+- [![Deploy: Release](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-release.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-release.yml)
+- [![Continuous Integration: Backend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml)
+- [![Continuous Integration: Frontend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml)
+
+
 # Frontend for access management
 
 # Setup environment 🚀
@@ -143,15 +151,6 @@ To create a distributable bundle, run `yarn build`. Environment variables set at
 ## Pull Request Labels
 [pr-labeler](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/pr-labeler.yml) action is triggered for each pull request. 
 Based on the branch name, this action adds a label to the pull request. The configuration for the labels can be found [here](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/pr-labeler.yml).
-
-## Build
-
-<div align="center">
-  [![Deploy: AT](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-at.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-at.yml)
-  [![Deploy: Release](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-release.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/deploy-release.yml)
-  [![Continuous Integration: Backend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-backend.yml)
-  [![Continuous Integration: Frontend](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml/badge.svg)](https://github.com/Altinn/altinn-access-management-frontend/actions/workflows/continuous-integration-frontend.yml)
-</div>
 
 ## Release
 The application has a release every wednesday. [scheduled-release](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/scheduled-release.yml) action is triggered every wednesday 00.00. This action drafts a release, tags the latest package with the release version, f.ex this package has a release version [v2023.1](https://github.com/Altinn/altinn-access-management-frontend/pkgs/container/altinn-access-management-frontend/88857835?tag=14685620a8aaf7b867b5a346155ca09ef9c34f3d).
