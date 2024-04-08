@@ -76,19 +76,22 @@ export interface ActionBarProps {
  */
 
 export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
-  ({
-    actions,
-    additionalText,
-    children,
-    color = 'neutral',
-    size = 'medium',
-    onClick,
-    open,
-    defaultOpen = false,
-    subtitle,
-    title,
-    headingLevel,
-  }) => {
+  (
+    {
+      actions,
+      additionalText,
+      children,
+      color = 'neutral',
+      size = 'medium',
+      onClick,
+      open,
+      defaultOpen = false,
+      subtitle,
+      title,
+      headingLevel,
+    },
+    ref,
+  ) => {
     const headerId = useId();
     const contentId = useId();
 
@@ -110,7 +113,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     }
 
     return (
-      <div>
+      <div ref={ref}>
         <ActionBarContext.Provider
           value={{
             toggleOpen,
