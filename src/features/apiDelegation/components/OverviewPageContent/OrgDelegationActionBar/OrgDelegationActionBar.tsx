@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -10,6 +10,7 @@ import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOr
 import { useAppDispatch } from '@/rtk/app/hooks';
 import { DeletableListItem, ActionBar, BorderedList } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './OrgDelegationActionBar.module.css';
 
@@ -45,12 +46,11 @@ export const OrgDelegationActionBar = ({
         <Button
           variant={'tertiary'}
           color={'first'}
-          icon={<PlusCircleIcon />}
           size={'medium'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
         >
-          {t('api_delegation.delegate_new_api')}
+          <PlusCircleIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_api')}
         </Button>
       )}
       {isEditable &&
@@ -59,10 +59,11 @@ export const OrgDelegationActionBar = ({
             variant={'tertiary'}
             color={'second'}
             size={'medium'}
-            icon={<ArrowUndoIcon />}
             onClick={softRestoreAllCallback}
             aria-label={String(t('common.undo')) + ' ' + organization.orgName}
+            icon={isSm}
           >
+            <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} />
             {!isSm && t('common.undo')}
           </Button>
         ) : (
@@ -70,11 +71,12 @@ export const OrgDelegationActionBar = ({
             <Button
               variant={'tertiary'}
               color={'danger'}
-              icon={<MinusCircleIcon />}
               size={'medium'}
               onClick={handleSoftDeleteAll}
               aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
+              icon={isSm}
             >
+              <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
               {!isSm && t('api_delegation.delete')}
             </Button>
           </div>

@@ -1,5 +1,5 @@
 import { Panel } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/design-system-react';
+import { Button, Spinner } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +24,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
 import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import { getButtonIconSize } from '@/resources/utils';
 
 import { LayoutState } from '../LayoutState';
 
@@ -176,11 +177,10 @@ export const OverviewPageContent = ({
           <Button
             variant='secondary'
             onClick={goToStartDelegation}
-            icon={<PlusIcon />}
             fullWidth={isSm}
             size='medium'
           >
-            {t('api_delegation.delegate_new_org')}
+            <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_org')}
           </Button>
         </div>
       )}
@@ -211,20 +211,19 @@ export const OverviewPageContent = ({
               {!isEditable ? (
                 <Button
                   variant='tertiary'
-                  icon={<PencilIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
                 >
+                  <PencilIcon fontSize={getButtonIconSize(true)} />{' '}
                   {t('api_delegation.edit_accesses')}
                 </Button>
               ) : (
                 <Button
                   variant='tertiary'
-                  icon={<XMarkOctagonIcon />}
                   onClick={handleSetIsEditable}
                   size='medium'
                 >
-                  {t('common.cancel')}
+                  <XMarkOctagonIcon fontSize={getButtonIconSize(true)} /> {t('common.cancel')}
                 </Button>
               )}
             </div>
