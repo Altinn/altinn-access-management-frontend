@@ -49,7 +49,6 @@ export const OrgDelegationActionBar = ({
           size={'medium'}
           onClick={delegateToOrgCallback}
           aria-label={String(t('api_delegation.delegate_new_api'))}
-          icon={isSm}
         >
           <PlusCircleIcon fontSize='1.5rem' /> {t('api_delegation.delegate_new_api')}
         </Button>
