@@ -98,7 +98,7 @@ export const OrgDelegationActionBar = ({
 
   return (
     <ActionBar
-      headingLevel={4}
+      headingLevel={3}
       onClick={() => {
         setOpen(!open);
       }}
