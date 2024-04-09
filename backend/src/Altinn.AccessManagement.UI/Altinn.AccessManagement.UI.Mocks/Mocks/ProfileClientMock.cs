@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
@@ -39,24 +40,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<UserProfile> GetUserProfile(Guid uuid)
+        public Task<UserProfile> GetUserProfile(Guid uuid)
         {
-            UserProfile profile = null;
             string path = GetDataPathForProfiles();
             if (File.Exists(path))
             {
                 string content = File.ReadAllText(path);
                 List<UserProfile> allProfiles = (List<UserProfile>)JsonSerializer.Deserialize(content, typeof(List<UserProfile>), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                profile = allProfiles.FirstOrDefault(p => p.UserUuid == uuid);
+
+                return Task.FromResult(allProfiles.FirstOrDefault(p => p.UserUuid == uuid));
             }
 
-            return await Task.FromResult(profile);
+            return Task.FromResult<UserProfile>(null);
         }
 
         private static string GetDataPathForProfiles()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(mockClientFolder, "Data", "Profile", "userprofiles.json");
+            string folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            return Path.Combine(folder, "Data", "Profile", "userprofiles.json");
         }
     }
 }

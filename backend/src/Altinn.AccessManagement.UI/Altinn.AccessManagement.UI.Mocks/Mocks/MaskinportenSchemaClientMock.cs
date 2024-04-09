@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
-                delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
+                delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
 
                 if (!string.IsNullOrEmpty(party))
                 {
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
-                delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
+                delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
 
                 if (!string.IsNullOrEmpty(party))
                 {
@@ -80,8 +80,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
-                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
-
+                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
                 foreach (MaskinportenSchemaDelegation d in delegations)
                 {
                     if (d.CoveredByPartyId.ToString() == party &&
@@ -105,8 +104,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
-                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options);
 
+                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
                 foreach (MaskinportenSchemaDelegation d in delegations)
                 {
                     if (d.OfferedByPartyId.ToString() == party &&
@@ -130,12 +129,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string content = File.ReadAllText(path);
                 return Task.FromResult(new HttpResponseMessage
-                    { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
+                { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
         }
-        
+
         /// <inheritdoc />
         public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
@@ -153,7 +152,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             string fullPath = Path.Combine(mockFolder, "Data", "MaskinportenSchema", "DelegationCheck", "scope-access-check", filename + ".json");
-            
+
             if (!File.Exists(fullPath))
             {
                 throw new FileNotFoundException($"The file with path {fullPath} does not exist");
@@ -166,14 +165,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private static string GetDataPathForDelegations()
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return Path.Combine(mockClientFolder, "Data", "MaskinportenSchema");
+            var folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            if (!string.IsNullOrEmpty(folder))
+            {
+                return Path.Combine(folder, "Data", "MaskinportenSchema");
+            }
+
+            return string.Empty;
         }
 
         private static string GetDataPathForDelegationOutput(string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
         {
-            string? mockClientFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            return $"{mockClientFolder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";
+            var folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
+            if (!string.IsNullOrEmpty(folder))
+            {
+                return $"{folder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";
+            }
+
+            return string.Empty;
         }
     }
 }
