@@ -1,5 +1,5 @@
-import type { ListItemProps } from '@digdir/design-system-react';
-import { List } from '@digdir/design-system-react';
+import type { ListItemProps } from '@digdir/designsystemet-react';
+import { List } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import * as React from 'react';
 

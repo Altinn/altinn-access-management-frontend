@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { Key } from 'react';
 import * as React from 'react';
-import { Button, Heading, Paragraph } from '@digdir/design-system-react';
+import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';

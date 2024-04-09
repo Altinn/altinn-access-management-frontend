@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { CollectionBarProps } from '@/components';
 import { ActionBar, CollectionBar } from '@/components';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getButtonIconSize } from '@/resources/utils';
 
 export interface ResourceCollectionBarProps
   extends Pick<CollectionBarProps, 'proceedToPath' | 'compact'> {
@@ -56,9 +57,16 @@ export const ResourceCollectionBar = ({
           onClick={() => {
             onRemove(resource.identifier);
           }}
-          icon={compact && <MinusCircleIcon title={t('common.remove')} />}
+          icon={compact}
         >
-          {!compact && t('common.remove')}
+          {!compact ? (
+            t('common.remove')
+          ) : (
+            <MinusCircleIcon
+              fontSize={getButtonIconSize(!compact)}
+              title={t('common.remove')}
+            />
+          )}
         </Button>
       }
     ></ActionBar>

@@ -1,6 +1,5 @@
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
-import { List } from '@digdir/design-system-react';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
@@ -18,25 +17,21 @@ Cypress.Commands.add('mount', (component, options = {}) => {
 describe('CompactDeletableListItem', () => {
   it('should not show delete button when removeCallback is not set', () => {
     cy.mount(
-      <List>
-        <CompactDeletableListItem
-          leftText={'Api'}
-          middleText={'Skattetaten'}
-        />
-      </List>,
+      <CompactDeletableListItem
+        leftText={'Api'}
+        middleText={'Skattetaten'}
+      />,
     );
     cy.findByRole('button', { name: /delete/i }).should('not.exist');
   });
 
   it('should show delete button when removeCallback has value ', () => {
     cy.mount(
-      <List>
-        <CompactDeletableListItem
-          removeCallback={() => null}
-          leftText={'Api'}
-          middleText={'Skattetaten'}
-        />
-      </List>,
+      <CompactDeletableListItem
+        removeCallback={() => null}
+        leftText={'Api'}
+        middleText={'Skattetaten'}
+      />,
     );
     cy.findByRole('button', { name: /remove/i }).should('exist');
   });
@@ -49,13 +44,11 @@ describe('CompactDeletableListItem', () => {
     const softRemoveSpy = cy.spy(softRemove).as('softRemoveSpy');
 
     cy.mount(
-      <List>
-        <CompactDeletableListItem
-          removeCallback={softRemoveSpy}
-          leftText={'Api'}
-          middleText={'Org'}
-        />
-      </List>,
+      <CompactDeletableListItem
+        removeCallback={softRemoveSpy}
+        leftText={'Api'}
+        middleText={'Org'}
+      />,
     );
   });
 });

@@ -128,8 +128,8 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
             title={title}
             subtitle={subtitle}
             additionalText={additionalText}
-            headingLevel={headingLevel}
             actions={actions}
+            headingLevel={headingLevel}
           ></ActionBarHeader>
           <ActionBarContent>{children}</ActionBarContent>
         </ActionBarContext.Provider>
