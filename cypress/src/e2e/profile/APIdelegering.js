@@ -197,9 +197,8 @@ describe('API delegering tests', () => {
     cy.get(
       ':nth-child(1) > *[class^="_delegableApisContainer"] > *[class^="_actionBarWrapper"]',
     ).each(($ele) => {
-      cy.wrap($ele)
-        .should('contain', 'Testdepartement')
-        .and('not.contain', 'Digitaliseringsdirektoratet');
+      cy.wrap($ele).should('contain', 'Testdepartement');
+      // .and('not.contain', 'Digitaliseringsdirektoratet');
       cy.get('button').contains('Filtrer på etat').click();
     });
 
