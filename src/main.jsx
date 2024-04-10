@@ -16,6 +16,7 @@ import { getConfig } from '../config';
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
 
+import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
 
 /**

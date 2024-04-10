@@ -26,6 +26,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         ///     Initializes a new instance of the <see cref="ResourceRegistryClient" /> classß
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
+        /// <param name="httpClient">Http client</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
         public ResourceRegistryClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceRegistryClient> logger)
         {
@@ -41,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
-            ServiceResource? result = null;
+            ServiceResource result = null;
             string endpointUrl = $"resource/{resourceId}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
@@ -128,8 +129,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <returns>List of all resources</returns>
         public async Task<List<ServiceResource>> GetResourceList()
         {
-            List<ServiceResource> resources = null;
-
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -154,8 +153,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // ResourceRegistryClient // ResourceList // Exception");
                 throw;
             }
-
-            return resources;
         }
 
         /// <summary>
@@ -165,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         public async Task<List<ServiceResource>> GetMaskinportenSchemas()
         {
             List<ServiceResource> resources = new List<ServiceResource>();
-            
+
             // Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
             string endpointUrl = $"resource/search?ResourceType={(int)ResourceType.MaskinportenSchema}";
 

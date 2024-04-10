@@ -3,7 +3,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Paragraph } from '@digdir/design-system-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
@@ -13,38 +13,39 @@ import { type ActionBarProps } from './ActionBar';
 
 export type ActionBarHeaderProps = Pick<
   ActionBarProps,
-  'headingLevel' | 'title' | 'subtitle' | 'additionalText' | 'actions'
+  'title' | 'subtitle' | 'additionalText' | 'actions' | 'headingLevel'
 >;
 
 export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderProps>(
-  ({ additionalText, headingLevel, subtitle, title, actions }, ref) => {
+  ({ additionalText, subtitle, title, actions, headingLevel }, ref) => {
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
 
-    let renderAsElem: React.ElementType;
-    let headingSize: 'small' | 'medium' | 'large' | 'xsmall';
+    let paragraphSize: 'small' | 'medium' | 'large' | 'xsmall';
     switch (size) {
       case 'large':
-        renderAsElem = headingLevel ? `h${headingLevel}` : 'h3';
-        headingSize = 'large';
+        headingLevel = headingLevel || 3;
+        paragraphSize = 'large';
         break;
       case 'medium':
-        renderAsElem = headingLevel ? `h${headingLevel}` : 'h4';
-        headingSize = 'small';
+        headingLevel = headingLevel || 4;
+        paragraphSize = 'small';
         break;
       case 'small':
-        renderAsElem = headingLevel ? `h${headingLevel}` : 'h5';
-        headingSize = 'xsmall';
+        headingLevel = headingLevel || 5;
+        paragraphSize = 'xsmall';
         break;
     }
 
     return (
-      <div
+      <Heading
+        level={headingLevel}
+        size={size}
+        ref={ref}
         className={cn(classes.actionBar, classes[color], classes[size], {
           [classes.subtitle]: subtitle,
           [classes.open]: open,
           [classes.clickable]: toggleOpen,
         })}
-        ref={ref}
       >
         {toggleOpen ? (
           <button
@@ -52,9 +53,9 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             type='button'
             onClick={toggleOpen}
             id={headerId}
-            data-testid='action-bar'
             aria-expanded={open}
             aria-controls={contentId}
+            data-testid='action-bar'
           >
             <div className={classes.actionBarButtonContainer}>
               <div className={cn(classes.actionBarIcon, classes[size])}>
@@ -62,15 +63,13 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               </div>
               <div className={classes.actionBarTexts}>
                 <Paragraph
-                  as={renderAsElem}
-                  size={headingSize}
                   className={classes.title}
+                  size={paragraphSize}
                 >
                   {title}
                 </Paragraph>
                 {subtitle && (
                   <Paragraph
-                    as='div'
                     size='xsmall'
                     className={classes.subtitle}
                   >
@@ -81,15 +80,10 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             </div>
           </button>
         ) : (
-          <div
-            className={cn(classes.actionBarHeader)}
-            id={headerId}
-            data-testid='action-bar'
-          >
+          <div className={cn(classes.actionBarHeader)}>
             <div className={classes.actionBarTexts}>
               <Paragraph
-                as={renderAsElem}
-                size={headingSize}
+                size={paragraphSize}
                 className={classes.title}
               >
                 {title}
@@ -122,7 +116,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             <ActionBarActions>{actions}</ActionBarActions>
           </div>
         )}
-      </div>
+      </Heading>
     );
   },
 );

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { Paragraph, Heading } from '@digdir/design-system-react';
+import { Paragraph, Heading } from '@digdir/designsystemet-react';
 
 import SeagullIcon from '@/assets/Seagull.svg?react';
 

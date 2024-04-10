@@ -12,7 +12,7 @@ import {
   Spinner,
   Alert,
   Search,
-} from '@digdir/design-system-react';
+} from '@digdir/designsystemet-react';
 
 import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';

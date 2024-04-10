@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ISingleRightClient _singleRightClient;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SingleRightService" /> class
+        /// Initializes a new instance of the <see cref="SingleRightService" /> class.
         /// </summary>
         public SingleRightService(ISingleRightClient singleRightClient)
         {

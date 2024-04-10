@@ -65,17 +65,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static async Task<HttpResponseMessage> GetMockedHttpResponse(string path,  string resourceFileName)
+        private static Task<HttpResponseMessage> GetMockedHttpResponse(string path, string resourceFileName)
         {
             try
             {
                 string data = Util.GetMockDataSerialized(path, resourceFileName + ".json");
-                return new HttpResponseMessage
-                { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) };
+                return Task.FromResult(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) });
             }
             catch
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
         }
     }
