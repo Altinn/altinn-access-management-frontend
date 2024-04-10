@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user)
+        public Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
             return Task.FromResult(new HttpResponseMessage
             { StatusCode = HttpStatusCode.OK });

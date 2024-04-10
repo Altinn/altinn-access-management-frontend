@@ -62,7 +62,7 @@ export const singleRightsApi = createApi({
     getResourceOwners: builder.query<ResourceOwner[], void>({
       query: () => 'resources/resourceowners',
     }),
-    clearAccessCashe: builder.mutation<void, { party: string; user: BaseAttribute }>({
+    clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
         return {
           url: `singleright/${party}/accesscache/clear`,
@@ -77,7 +77,7 @@ export const singleRightsApi = createApi({
 export const {
   useGetPaginatedSearchQuery,
   useGetResourceOwnersQuery,
-  useClearAccessCasheMutation,
+  useClearAccessCacheMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

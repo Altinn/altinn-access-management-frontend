@@ -74,11 +74,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user)
+        public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
             string endpointUrl = $"internal/{party}/accesscache/clear";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(user, _serializerOptions), Encoding.UTF8, "application/json");
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(recipient, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PutAsync(token, endpointUrl, requestBody);
             return response;
         }

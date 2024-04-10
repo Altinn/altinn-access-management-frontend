@@ -108,18 +108,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for clearing cash on accesses of the given user on behalf of the provided party
+        ///     Endpoint for clearing cash on accesses of the given recipient on behalf of the provided party
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPut]
         [Authorize]
         [Route("{party}/accesscache/clear")]
-        public async Task<IActionResult> ClearAccessCashe([FromRoute] string party, [FromBody] BaseAttribute user)
+        public async Task<IActionResult> ClearAccessCache([FromRoute] string party, [FromBody] BaseAttribute recipient)
         {
             try
             {
-                HttpResponseMessage response = await _singleRightService.ClearAccessCasheOnUser(party, user);
+                HttpResponseMessage response = await _singleRightService.ClearAccessCacheOnRecipient(party, recipient);
 
                 if (!response.IsSuccessStatusCode)
                 {

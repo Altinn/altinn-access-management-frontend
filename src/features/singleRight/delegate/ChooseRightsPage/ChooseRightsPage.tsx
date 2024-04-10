@@ -29,7 +29,7 @@ import {
   ServiceDto,
 } from '@/dataObjects/dtos/resourceDelegation';
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
-import { useClearAccessCasheMutation } from '@/rtk/features/singleRights/singleRightsApi';
+import { useClearAccessCacheMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 
@@ -69,7 +69,7 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [clearAccessCashe] = useClearAccessCasheMutation();
+  const [clearAccessCashe] = useClearAccessCacheMutation();
 
   const {
     name: recipientName,

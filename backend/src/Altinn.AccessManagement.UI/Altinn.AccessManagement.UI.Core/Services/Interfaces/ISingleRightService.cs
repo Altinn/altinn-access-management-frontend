@@ -32,15 +32,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation);
 
         /// <summary>
-        ///     Clears cashed acesses of a user
+        ///     Clears cached acesses of a delegation recipient
         /// </summary>
         /// <param name="party">
         ///     The party from which the rights have been given (delegator)
         /// </param>
-        /// <param name="user">
-        ///     The uuid identifier of the user (delegation recipient) to clear access cashe on
+        /// <param name="recipient">
+        ///     The uuid identifier of the recipient (delegation recipient) to clear access cache on
         /// </param>
         /// <returns></returns>
-        Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user);
+        Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient);
     }
 }

@@ -32,9 +32,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> ClearAccessCasheOnUser(string party, BaseAttribute user)
+        public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
-            return await _singleRightClient.ClearAccessCasheOnUser(party, user);
+            return await _singleRightClient.ClearAccessCacheOnRecipient(party, recipient);
         }
     }
 }

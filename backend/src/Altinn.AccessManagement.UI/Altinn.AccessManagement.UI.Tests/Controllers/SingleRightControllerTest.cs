@@ -440,33 +440,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: ClearAccessCashe accepts correct input and returns ok
-        ///     Expected: ClearAccessCashe returns OK
+        ///     Test case: ClearAccessCache accepts correct input and returns ok
+        ///     Expected: ClearAccessCache returns OK
         /// </summary>
         [Fact]
-        public async Task ClearAccessCashe_returnsOk()
+        public async Task ClearAccessCache_returnsOk()
         {
             // Arrange
             string partyId = "999 999 999";
             string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
 
-            List<IdValuePair> resource = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:resource",
-                    Value = "Nonexistent",
-
-                },
-            };
-
-            BaseAttribute user = new BaseAttribute
+            BaseAttribute recipient = new BaseAttribute
             {
                     Type = "urn:altinn:person:uuid",
                     Value = userUUID,
             };
 
-            string jsonDto = JsonSerializer.Serialize(user);
+            string jsonDto = JsonSerializer.Serialize(recipient);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
             // Act
