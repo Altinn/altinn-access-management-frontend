@@ -30,5 +30,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _singleRightClient.CreateDelegation(party, delegation);
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
+        {
+            return await _singleRightClient.ClearAccessCacheOnRecipient(party, recipient);
+        }
     }
 }

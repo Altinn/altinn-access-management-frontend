@@ -439,6 +439,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        ///     Test case: ClearAccessCache accepts correct input and returns ok
+        ///     Expected: ClearAccessCache returns OK
+        /// </summary>
+        [Fact]
+        public async Task ClearAccessCache_returnsOk()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            BaseAttribute recipient = new BaseAttribute
+            {
+                    Type = "urn:altinn:person:uuid",
+                    Value = userUUID,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(recipient);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/{partyId}/accesscache/clear", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
         private int CountMatches(List<DelegationResponseData> actualResponses, string expectedResponseFileName)
         {
             string path = Path.Combine(mockFolder, "Data", "SingleRight", "DelegationAccessCheckResponse", expectedResponseFileName);
