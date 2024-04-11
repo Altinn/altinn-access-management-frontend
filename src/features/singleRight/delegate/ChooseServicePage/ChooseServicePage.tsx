@@ -119,7 +119,7 @@ export const ChooseServicePage = () => {
                     onClick={
                       delegableChosenServices.length > 0
                         ? () => setPopoverOpen(!popoverOpen)
-                        : oncancel
+                        : () => redirectToSevicesAvailableForUser(userID, partyID)
                     }
                   >
                     {t('common.cancel')}
