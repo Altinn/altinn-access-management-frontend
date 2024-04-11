@@ -106,5 +106,33 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
+
+        /// <summary>
+        ///     Endpoint for clearing cash on accesses of the given recipient on behalf of the provided party
+        /// </summary>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("{party}/accesscache/clear")]
+        public async Task<IActionResult> ClearAccessCache([FromRoute] string party, [FromBody] BaseAttribute recipient)
+        {
+            try
+            {
+                HttpResponseMessage response = await _singleRightService.ClearAccessCacheOnRecipient(party, recipient);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int)response.StatusCode, detail: $"Could not complete the request. Reason: {response.ReasonPhrase}"));
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
     }
 }

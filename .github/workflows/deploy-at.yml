@@ -1,0 +1,39 @@
+name: 'Deploy: AT'
+
+run-name: 'AT environments: ${{ github.sha }}'
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  containerize:
+    name: 'Containerize'
+    uses: './.github/workflows/template-build-and-push-container.yml'
+    with:
+      tag: ${{ github.sha }}
+
+  deploy-main:
+    name: 'Environment'
+    needs: containerize
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [AT21, AT22, AT23, AT24]
+    uses: './.github/workflows/template-deploy-container.yml'
+    secrets: inherit
+    with:
+      environment: ${{ matrix.environment }}
+      tag: ${{ github.sha }}
+
+  cypress-main:
+    name: 'Cypress'
+    needs: deploy-main
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [AT21, AT22, AT23, AT24]
+    uses: './.github/workflows/template-test-cypress.yml'
+    with:
+      environment: ${{ matrix.environment }}
+ 

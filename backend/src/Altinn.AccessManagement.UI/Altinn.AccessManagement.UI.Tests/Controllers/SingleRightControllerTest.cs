@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
@@ -47,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
-            { 
+            {
                 new IdValuePair
                 {
                     Id = "urn:altinn:resource",
@@ -65,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
+            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<DelegationResponseData>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -113,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
+            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<DelegationResponseData>>();
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
@@ -155,7 +156,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/checkdelegationaccesses/{partyId}", content);
-            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadAsAsync<List<DelegationResponseData>>();
+            List<DelegationResponseData> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<DelegationResponseData>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -224,7 +225,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
-            DelegationOutput actualResponse = await httpResponse.Content.ReadAsAsync<DelegationOutput>();
+            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -295,7 +296,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
-            DelegationOutput actualResponse = await httpResponse.Content.ReadAsAsync<DelegationOutput>();
+            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -366,7 +367,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
-            DelegationOutput actualResponse = await httpResponse.Content.ReadAsAsync<DelegationOutput>();
+            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -436,6 +437,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: ClearAccessCache accepts correct input and returns ok
+        ///     Expected: ClearAccessCache returns OK
+        /// </summary>
+        [Fact]
+        public async Task ClearAccessCache_returnsOk()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            BaseAttribute recipient = new BaseAttribute
+            {
+                    Type = "urn:altinn:person:uuid",
+                    Value = userUUID,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(recipient);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/{partyId}/accesscache/clear", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
         private int CountMatches(List<DelegationResponseData> actualResponses, string expectedResponseFileName)

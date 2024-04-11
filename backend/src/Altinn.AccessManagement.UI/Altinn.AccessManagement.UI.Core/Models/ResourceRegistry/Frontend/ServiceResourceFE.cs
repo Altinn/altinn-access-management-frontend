@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// The homepage
         /// </summary>
-        public string? Homepage { get; set; }
+        public string Homepage { get; set; }
 
         /// <summary>
         /// The status
@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// spatial coverage
         /// This property represents that area(s) a Public Service is likely to be available only within, typically the area(s) covered by a particular public authority.
         /// </summary>
-        public List<string>? Spatial { get; set; }
+        public List<string> Spatial { get; set; }
 
         /// <summary>
         /// List of possible contact points
@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// List of autorizationReference attributes to reference this resource in authorization API
         /// </summary>
-        public List<IdValuePair>? AuthorizationReference { get; set; }
+        public List<IdValuePair> AuthorizationReference { get; set; }
 
         /// <summary>
         /// Parameterless constructor
@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, List<IdValuePair> authorizationReference, string? homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
+        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, List<IdValuePair> authorizationReference, string homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true)
         {
             Identifier = identifier;
             Title = title;

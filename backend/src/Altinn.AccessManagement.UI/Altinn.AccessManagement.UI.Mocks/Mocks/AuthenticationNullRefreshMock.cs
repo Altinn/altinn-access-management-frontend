@@ -10,9 +10,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class AuthenticationNullRefreshMock : IAuthenticationClient
     {
         /// <inheritdoc/>
-        public async Task<string> RefreshToken()
+        public Task<string> RefreshToken()
         {
-            return null;
+            return Task.FromResult<string>(null);
         }
     }
 }

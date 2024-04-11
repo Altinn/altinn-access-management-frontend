@@ -43,7 +43,7 @@ module.exports = defineConfig({
         return fs.readJson(pathToConfigFile);
       }
 
-      var actual = config.env.environment.substr(0, 4);
+      var actual = config.env.environment.substr(0, 4).toLowerCase();
       var file = actual || 'at24';
       return getConfigurationByFile(file);
     },

@@ -1,35 +1,39 @@
-name: Test code and analyze BFF
+name: template-build-and-test-backend.yml
+
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'backend/**'
-  pull_request:
-    branches: [ main ]
-    types: [opened, synchronize, reopened]
-    paths:
-      - 'backend/**'
-  workflow_dispatch:
+  workflow_call:
+
+env:
+  dotnet_version: 8.0.x
+
 jobs:   
-  build-and-test:
-    name: Build and Test
+  build:
+    name: Build
     if: ((github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) || github.event_name == 'push') && github.repository_owner == 'Altinn' && github.actor != 'dependabot[bot]' 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set inotify watchers
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Set inotify instances
-        run: echo fs.inotify.max_user_instances=8192 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Setup .NET
+        name: 'Checkout Repository'
+      - uses: actions/setup-dotnet@v4
+        name: Install .NET ${{ env.dotnet_version }}
+        with:
+          dotnet-version: ${{ env.dotnet_version }}
+      - name: Build
+        run: dotnet build backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln -v m -warnaserror
+  
+  test:
+    name: Test
+    if: ((github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) || github.event_name == 'push') && github.repository_owner == 'Altinn' && github.actor != 'dependabot[bot]' 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install .NET ${{ env.dotnet_version }}
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
-      - name: Build & Test
-        run: |
-           dotnet build backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln -v m
-           dotnet test backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln -v m
+          dotnet-version: ${{ env.dotnet_version }}
+      - name: Test
+        run: dotnet build backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln -v m
+  
   analyze:
     name: Analyze
     if: ((github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) || github.event_name == 'push') && github.repository_owner == 'Altinn' && github.actor != 'dependabot[bot]' 

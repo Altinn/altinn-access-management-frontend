@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -45,7 +46,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _resourceService = new ResourceService();
             mockFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
         }
-        
+
         /// <summary>
         ///     Test case: GetResources returns a list of resources
         ///     Expected: GetResources returns a list of resources with language filtered for the authenticated users selected
@@ -264,13 +265,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            List<ResourceOwnerFE> actualResult = await response.Content.ReadAsAsync<List<ResourceOwnerFE>>();
+            List<ResourceOwnerFE> actualResult = await response.Content.ReadFromJsonAsync<List<ResourceOwnerFE>>();
             for (int i = 0; i < expectedResult.Count; i++)
             {
                 Assert.Equal(expectedResult[i], actualResult[i]);
             }
         }
-        
+
         [Fact]
         public async Task GetResourceOwners_resourceTypeMaskinPortenSchemAndAltinn2Service()
         {
@@ -295,14 +296,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/getResourceowners?relevantResourceTypes={relevantResourceTypes[0]}&relevantResourceTypes={relevantResourceTypes[1]}");
-            
+
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<ResourceOwnerFE> actualResult = JsonSerializer.Deserialize<List<ResourceOwnerFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertEqual(expectedResult, actualResult);
         }
-        
+
         /// <summary>
         ///     Test case: Search for maskinporten schemas (no search string or filters)
         ///     Expected: Search returns a list of all maskinporten schemas for the authenticated users selected language
@@ -314,7 +315,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
-            
+
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search");
 
@@ -324,7 +325,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-        
+
         /// <summary>
         ///     Test case: Search for maskinporten schemas with filters
         ///     Expected: Search returns a list of all maskinporten schemas for the authenticated users selected language matching the provided filters
@@ -336,7 +337,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             // NARNIA
-            string[] roFilters = { "777777777"};
+            string[] roFilters = { "777777777" };
 
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
 
@@ -349,7 +350,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-        
+
         /// <summary>
         ///     Test case: Search for maskinporten schemas with search
         ///     Expected: Search returns a list of resources matching the filters and with language filtered
@@ -374,7 +375,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-        
+
         /// <summary>
         ///     Test case: Search for maskinporten schemas with search and filter
         ///     Expected: Returns a list of maskinporten schemas matching the provided filters and search string with correct chosen language
@@ -387,12 +388,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string searchString = "det magiske klesskapet";
             // PÅFUNNSETATEN and NARNIA
-            string[] roFilters = { "130000000", "777777777"};
-            
+            string[] roFilters = { "130000000", "777777777" };
+
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
 
             List<ServiceResourceFE> filteredExpectedResult = expectedResult.FindAll(r => r.Title.ToLower().Contains(searchString));
-            
+
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
 
@@ -402,7 +403,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<List<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(filteredExpectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-        
+
         private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)
         {
             HttpContext httpContext = new DefaultHttpContext();

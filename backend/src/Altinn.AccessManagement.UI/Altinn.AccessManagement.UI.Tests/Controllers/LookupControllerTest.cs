@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
@@ -52,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-            
+
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return httpClient;
@@ -63,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// </summary>
         [Fact]
         public async Task GetPartyForOrganization_Success()
-        {             
+        {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
             string lookupOrgNo = "810418672";
 
@@ -71,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Party actualParty = await response.Content.ReadAsAsync<Party>();
+            Party actualParty = await response.Content.ReadFromJsonAsync<Party>();
             Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
             Assert.Equal(50004222, actualParty.PartyId);
             Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
@@ -104,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Party actualParty = await response.Content.ReadAsAsync<Party>();
+            Party actualParty = await response.Content.ReadFromJsonAsync<Party>();
             Assert.Equal(lookupUUID, actualParty.PartyUuid);
             Assert.Equal(51317934, actualParty.PartyId);
             Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
@@ -151,7 +152,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            UserProfile actualUser = await response.Content.ReadAsAsync<UserProfile>();
+            UserProfile actualUser = await response.Content.ReadFromJsonAsync<UserProfile>();
             Assert.Equal(lookupUUID, actualUser.UserUuid);
             Assert.Equal(20004938, actualUser.UserId);
             Assert.Equal(50019992, actualUser.PartyId);

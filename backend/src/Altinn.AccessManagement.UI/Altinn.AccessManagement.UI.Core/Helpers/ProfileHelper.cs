@@ -13,7 +13,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Gets the users language preference in Altinn format, mostly used for getting correct language code for backend
         /// </summary>
-        /// <param name="userProfile">the logged in user profile</param>
+        /// <param name="userProfile">the logged in user profile.</param>
+        /// <param name="httpContext">Http client.</param>
         /// <returns>the logged in users language preference in Altinn format(en, no, nb)</returns>
         public static string GetLanguageCodeForUserAltinnStandard(UserProfile userProfile, HttpContext httpContext)
         {
@@ -23,12 +24,12 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 return languageCookieValue;
             }
-            
+
             if (userProfile != null)
             {
                 return userProfile.ProfileSettingPreference.Language;
             }
-            
+
             return "nb";
         }
 
@@ -44,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 return languageCookieValue;
             }
-            
+
             if (userProfile != null)
             {
                 switch (userProfile.ProfileSettingPreference?.Language)
@@ -59,10 +60,10 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                         return "no_nb";
                 }
             }
-            
+
             return "no_nb";
         }
-        
+
         private static string GetAltinnPersistenceCookieValueAltinnStandard(HttpContext httpContext)
         {
             var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
@@ -86,10 +87,10 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 return "nn";
             }
-            
+
             return string.Empty;
         }
-        
+
         private static string GetAltinnPersistenceCookieValueIsoStandard(HttpContext httpContext)
         {
             var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
@@ -98,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 return string.Empty;
             }
-            
+
             if (cookieValue.Contains("UL=1033"))
             {
                 return "en";
@@ -113,7 +114,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 return "no_nn";
             }
-            
+
             return string.Empty;
         }
     }
