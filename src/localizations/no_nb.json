@@ -177,6 +177,8 @@
     "missing_recipient_error_title": "Mottaker mangler",
     "missing_recipient_error_message": "Mottaker for delegeringen mangler. Vennligst gå tilbake til profilsiden og velg hvem du ønsker å delegere til.",
     "faulty_recipient_error_title": "Kan ikke delegere til mottaker",
-    "faulty_recipient_error_message": "Oppgitt mottaker kan ikke delegeres til. Vennligst gå tilbake til profilsiden og velg en annen. Mottaker må være en organisasjon, en virksomhetsbruker, eller en person registrert med fødselsnummer. Selvregistrerte brukere kan ikke delegeres til."
+    "faulty_recipient_error_message": "Oppgitt mottaker kan ikke delegeres til. Vennligst gå tilbake til profilsiden og velg en annen. Mottaker må være en organisasjon, en virksomhetsbruker, eller en person registrert med fødselsnummer. Selvregistrerte brukere kan ikke delegeres til.",
+    "no_resources chosen": "Ingen valgte tjenester",
+    "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenster er blitt valgt. Vennligst start delegeringen på nytt"
   }
 }
