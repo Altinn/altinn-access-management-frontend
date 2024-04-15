@@ -139,7 +139,7 @@
     "unknown": "Uvisst",
     "new_error": "Dette er ein ny feil me ikkje har fått før. Vennlegast rapportar til Altinn ved å senda inn eit skjermbilete",
     "missing_role_access_title": "Manglar rolle",
-    "missing_delegation_access_title": "Manglar delegeringsrettighet",
+    "missing_delegation_access_title": "Manglar delegeringsrettigheit",
     "give_more_rights": "Gi fleire rettar",
     "has_received_these_rights": "{{name}} har fått desse rettane:",
     "rights_are_valid_until_deletion": "Rettane er gyldige til dei er sletta eller blir trekte tilbake",
