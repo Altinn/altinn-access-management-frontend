@@ -131,7 +131,7 @@
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettar",
     "search_label": "Søk etter skjema og teneste",
-    "filter_label": "Filtrer på tjenesteeigar",
+    "filter_label": "Filtrer på tenesteeigar",
     "search_hits": "treff på søket:",
     "missing_role_access": "{{you}} har ikkje tilstrekkeleg rett til å delegera denne tenesta.",
     "missing_delegation_access": "{{you}} har ikkje dei nødvendige delegeringsrettane til å delegera tenesta",
