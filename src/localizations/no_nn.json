@@ -157,7 +157,7 @@
     "request_choose_service_page_top_text": "Her kan du be om fleire tilgangar til {{name}}. Vi rår til å filtrere på skjemaeigar, og søkje med namn på tenesta. Legg til ved å velja frå lista under.",
     "choose_rights_page_top_text": "Du gjev desse rettane til {{name}}.",
     "choose_rights_page_secondary_text": "Dersom du ønskjer å tilpassa tilgangane, t.d. fjerne signeringsrett,  kan du klikka på pilen ved sida av tenesta for å opne den og tilpassa dette.",
-    "chosen_services": "Valde tjenester",
+    "chosen_services": "Valde tenester",
     "alert_partially_delegable_header": "Du får ikkje delegert heile tenesta",
     "you_cant_delegate_these_rights": "Desse rettane kan du ikkje delegera:",
     "woops_something_went_wrong_ingress": "Oi, her var det noko som gjekk gale med ein eller fleire tenester. Desse er raude. Du kan prøva igjen seinare",
