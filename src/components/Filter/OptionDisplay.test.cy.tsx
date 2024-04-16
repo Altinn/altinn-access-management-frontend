@@ -46,17 +46,17 @@ describe('OptionDisplay', () => {
 
   it('displays search field when search is enabled', () => {
     renderOptionDisplay({ searchable: true });
-    cy.get('input').should('be.visible');
+    cy.get('[type=search]').should('be.visible');
   });
 
   it('does not display search field when search is disabled', () => {
     renderOptionDisplay({ searchable: false });
-    cy.get('input').should('not.be.visible');
+    cy.get('[type=search]').should('not.exist');
   });
 
   it('only displays options that match the search string when one is entered', () => {
     renderOptionDisplay({ searchable: true });
-    cy.get('input:visible').type('breakfast');
+    cy.get('[type=search]').type('breakfast');
     cy.contains('button', 'Breakfast').should('exist');
     cy.contains('button', 'English breakfast').should('exist');
     cy.contains('button', 'Apples').should('not.exist');

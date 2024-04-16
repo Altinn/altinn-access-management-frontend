@@ -254,7 +254,7 @@ describe(
         />,
       );
       cy.get('button').contains('Filter').click();
-      cy.get('input').should('be.visible');
+      cy.get('[type=search]').should('be.visible');
     });
 
     it('does not display search field when search is disabled', () => {
@@ -265,7 +265,7 @@ describe(
         />,
       );
       cy.get('button').contains('Filter').click();
-      cy.get('input').should('not.be.visible');
+      cy.get('[type=search]').should('not.exist');
     });
 
     it('adjusts options when they are changed externally', () => {
