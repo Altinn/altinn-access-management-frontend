@@ -30,7 +30,6 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
-      logger,
       lookupApi.middleware,
       singleRightsApi.middleware,
       apiDelegationApi.middleware,

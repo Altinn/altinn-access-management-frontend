@@ -231,28 +231,34 @@ const singleRightSlice = createSlice({
       })
 
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
-        const rightList: Right[] = action.payload.filter((right: Right) => {
-          return right.status !== ServiceStatus.NotDelegable;
-        });
+        let rightList: Right[] = action.payload;
 
         const serviceWithStatus: ServiceWithStatus = {
-          rightList: rightList,
+          rightList: action.payload,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
         };
 
+        if (serviceWithStatus.service?.resourceType === ServiceType.AltinnApp) {
+          rightList = action.payload.filter((right: Right) => {
+            return right.status !== ServiceStatus.NotDelegable;
+          });
+        }
+
         const serviceID = action.meta.arg.serviceResource.identifier;
         let status = ServiceStatus.Delegable;
 
-        const hasNonDelegableRights = !!action.payload.find(
-          (response: Right) => response.status === ServiceStatus.NotDelegable,
+        const hasNonDelegableRights = !action.payload.every(
+          (response: Right) => response.status !== ServiceStatus.NotDelegable,
         );
 
         if (hasNonDelegableRights) {
-          const isDelegable = !!action.payload.find(
-            (response: Right) => response.status === ServiceStatus.Delegable,
-          );
+          const isDelegable =
+            serviceWithStatus.rightList?.some(
+              (response: Right) => response.status === ServiceStatus.Delegable,
+            ) ?? false;
 
+          console.log('isDelegable', isDelegable);
           if (isDelegable) {
             status = ServiceStatus.PartiallyDelegable;
           } else {
@@ -260,7 +266,6 @@ const singleRightSlice = createSlice({
             status = ServiceStatus.NotDelegable;
           }
         }
-        console.log('serviceWithStatus', serviceWithStatus);
 
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
@@ -270,6 +275,8 @@ const singleRightSlice = createSlice({
           }
           return sws;
         });
+
+        console.log('nextStateArray', nextStateArray);
 
         state.servicesWithStatus = nextStateArray;
       })

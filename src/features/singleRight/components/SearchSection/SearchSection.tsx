@@ -170,6 +170,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
 
     const isLoading = currentServiceWithStatus?.isLoading;
     const status = currentServiceWithStatus?.status;
+    console.log('status', status);
 
     const errorCodeTextKeyList =
       currentServiceWithStatus?.status === ServiceStatus.NotDelegable ||

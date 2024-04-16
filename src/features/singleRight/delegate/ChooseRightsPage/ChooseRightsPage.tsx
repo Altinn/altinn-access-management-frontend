@@ -170,7 +170,6 @@ export const ChooseRightsPage = () => {
           updateDelegationCount(serviceStateCopy);
         }
       }
-      console.log('service', service);
     }
   };
 

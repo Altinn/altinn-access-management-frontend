@@ -7,7 +7,7 @@
  * @returns {Function} A new function that delays the invocation of the input function.
  *
  * @example
- * debounce(() => console.log('Hello, world!'), 500);
+ * debounce(() => display('Hello, world!'), 500);
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
