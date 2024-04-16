@@ -18,6 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     Gets or sets the set of Attribute Id and Attribute Value for a specific action, to identify the action this right
         ///     applies to
         /// </summary>
-        public string? Action { get; set; }
+        public string Action { get; set; }
     }
 }

@@ -123,7 +123,7 @@ void ConfigureLogging(ILoggingBuilder logging)
         // Add application insights https://docs.microsoft.com/en-us/azure/azure-monitor/app/ilogger
         logging.AddApplicationInsights(
             configureTelemetryConfiguration: config => config.ConnectionString = applicationInsightsConnectionString,
-            configureApplicationInsightsLoggerOptions: options => {});
+            configureApplicationInsightsLoggerOptions: options => { });
 
         // Optional: Apply filters to control what logs are sent to Application Insights.
         // The following configures LogLevel Information or above to be sent to
@@ -286,7 +286,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     {
         services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel
-            { StorageFolder = "/tmp/logtelemetry" });
+        { StorageFolder = "/tmp/logtelemetry" });
         services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
         {
             ConnectionString = applicationInsightsConnectionString,

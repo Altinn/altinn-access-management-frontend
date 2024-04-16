@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ActionBar, type ActionBarProps } from '@/components';
+import { getButtonIconSize } from '@/resources/utils';
 
 export interface RightsActionBarProps
   extends Pick<ActionBarProps, 'subtitle' | 'title' | 'children' | 'color' | 'defaultOpen'> {
@@ -29,12 +30,15 @@ export const RightsActionBar = ({
   const removeButton = (
     <Button
       variant='tertiary'
-      icon={<MinusCircleIcon title={t('common.remove')} />}
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
-      iconPlacement='right'
+      icon={compact}
     >
-      {!compact && t('common.remove')}
+      {!compact && t('common.remove')}{' '}
+      <MinusCircleIcon
+        fontSize={getButtonIconSize(!compact)}
+        title={t('common.remove')}
+      />
     </Button>
   );
 

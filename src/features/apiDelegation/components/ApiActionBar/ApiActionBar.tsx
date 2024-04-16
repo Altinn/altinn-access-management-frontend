@@ -1,4 +1,4 @@
-import { Button, List, Paragraph, Spinner, Alert, Heading } from '@digdir/design-system-react';
+import { Button, List, Paragraph, Spinner, Alert, Heading } from '@digdir/designsystemet-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegati
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
 import ScopeList from '@/components/ScopeList/ScopeList';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ApiActionBar.module.css';
 
@@ -81,23 +82,28 @@ export const ApiActionBar = ({
           />
         ) : (
           <Button
-            icon={<PlusCircleIcon />}
             variant={'tertiary'}
             color={'second'}
             onClick={onAddClick}
             aria-label={t('common.add') + ' ' + api.apiName}
             size='large'
-          ></Button>
+            icon
+          >
+            <PlusCircleIcon fontSize={getButtonIconSize(false)} />
+          </Button>
         ))}
       {variant === 'remove' && (
         <Button
-          icon={<MinusCircleIcon />}
           variant={'tertiary'}
           color={'danger'}
           onClick={onRemove}
           aria-label={t('common.remove') + ' ' + api.apiName}
           size='large'
-        ></Button>
+          className={classes.actionButton}
+          icon
+        >
+          <MinusCircleIcon fontSize={getButtonIconSize(false)} />
+        </Button>
       )}
     </>
   );
@@ -170,12 +176,14 @@ export const ApiActionBar = ({
           <Paragraph spacing>
             {t(`${getErrorCodeTextKey(ErrorCode.InsufficientAuthenticationLevel)}`)}
           </Paragraph>
-          <List>
-            <List.Item>{t('common.minid')}</List.Item>
-            <List.Item>{t('common.bankid')}</List.Item>
-            <List.Item>{t('common.commfides')}</List.Item>
-            <List.Item>{t('common.buypass')}</List.Item>
-          </List>
+          <List.Root>
+            <List.Unordered>
+              <List.Item>{t('common.minid')}</List.Item>
+              <List.Item>{t('common.bankid')}</List.Item>
+              <List.Item>{t('common.commfides')}</List.Item>
+              <List.Item>{t('common.buypass')}</List.Item>
+            </List.Unordered>
+          </List.Root>
         </Alert>
       );
     } else if (accessResult?.details[0].code === ErrorCode.MissingRoleAccess) {
@@ -211,6 +219,7 @@ export const ApiActionBar = ({
       size='medium'
       color={actionBarColor}
       open={open}
+      headingLevel={5}
       onClick={() => {
         setOpen(!open);
       }}

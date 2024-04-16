@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, ErrorMessage, Paragraph, Spinner } from '@digdir/design-system-react';
+import { Button, ErrorMessage, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import { ActionBar, type ActionBarProps } from '@/components';
 import { useUpdate } from '@/resources/hooks/useUpdate';
 import { usePrevious } from '@/resources/hooks';
 import { ServiceStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ResourceActionBar.module.css';
 
@@ -77,26 +78,32 @@ export const ResourceActionBar = ({
   const addButton = (
     <Button
       variant='tertiary'
-      icon={<PlusCircleIcon title='add' />}
       size={compact ? 'large' : 'medium'}
       onClick={() => {
         onAddClick?.();
       }}
-      iconPlacement='right'
+      icon={compact}
     >
       {!compact && (status === ServiceStatus.HTTPError ? t('common.try_again') : t('common.add'))}
+      <PlusCircleIcon
+        title='add'
+        fontSize={getButtonIconSize(!compact)}
+      />
     </Button>
   );
 
   const undoButton = (
     <Button
       variant='tertiary'
-      icon={<ArrowUndoIcon title={t('common.undo')} />}
       size={compact ? 'large' : 'medium'}
       onClick={onRemoveClick}
-      iconPlacement='right'
+      icon={compact}
     >
-      {!compact && t('common.undo')}
+      {!compact && t('common.undo')}{' '}
+      <ArrowUndoIcon
+        title={t('common.undo')}
+        fontSize={getButtonIconSize(!compact)}
+      />
     </Button>
   );
 
@@ -122,7 +129,7 @@ export const ResourceActionBar = ({
       <ErrorMessage>
         <ExclamationmarkTriangleIcon
           className={classes.notDelegableIcon}
-          fontSize='1.5rem'
+          fontSize={getButtonIconSize(!compact)}
           aria-label={errorText}
         />
       </ErrorMessage>

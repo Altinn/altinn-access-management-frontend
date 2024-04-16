@@ -3,14 +3,13 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Altinn.Platform.Models" Version="1.5.0" />
 		<PackageReference Include="JWTCookieAuthentication" Version="4.0.1" />
-		<PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
@@ -21,7 +20,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
+		<ProjectReference
+			Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'=='Debug'">
 		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
@@ -32,6 +32,6 @@
 		<CodeAnalysisRuleSet>$(SolutionDir)Altinn3.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <Optimize>True</Optimize>
+		<Optimize>True</Optimize>
 	</PropertyGroup>
 </Project>

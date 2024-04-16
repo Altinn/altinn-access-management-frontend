@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[]? resourceOwnerFilters, string? searchString, int page, int resultsPerPage)
+        public async Task<PaginatedList<ServiceResourceFE>> GetPaginatedSearchResults(string languageCode, string[] resourceOwnerFilters, string searchString, int page, int resultsPerPage)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceAdministrationPoint //GetResources by resourcetype failed to fetch resources", ex);
+                _logger.LogError("//ResourceAdministrationPoint // GetResources by resourcetype failed to fetch resources {ex}", ex);
                 throw;
             }
         }
@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceService //GetResources by resourcetype failed to fetch resources", ex);
+                _logger.LogError("//ResourceService //GetResources by resourcetype failed to fetch resources {ex}", ex);
                 throw;
             }
         }
@@ -141,7 +141,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceService //GetResources by resource id failed to fetch resources", ex);
+                _logger.LogError("//ResourceService //GetResources by resource id failed to fetch resources {ex}", ex);
                 throw;
             }
 
@@ -166,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return resource;
         }
-        
+
         /// <inheritdoc />
         public async Task<List<ResourceOwnerFE>> GetResourceOwners(List<ResourceType> relevantResourceTypeList, string languageCode)
         {
@@ -190,7 +190,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceService // GetResourceOwners failed", ex);
+                _logger.LogError("//ResourceService // GetResourceOwners failed {ex}", ex);
                 throw;
             }
         }
@@ -214,9 +214,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return MapOrgListToResourceOwnerFe(orgList, languageCode);
         }
-        
+
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[]? resourceOwnerFilters, string searchString)
+        public async Task<List<ServiceResourceFE>> MaskinportenschemaSearch(string languageCode, string[] resourceOwnerFilters, string searchString)
         {
             try
             {
@@ -229,7 +229,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("//ResourceService // MaskinportenschemaSearch failed", ex);
+                _logger.LogError("//ResourceService // MaskinportenschemaSearch failed {ex}", ex);
                 throw;
             }
         }
@@ -315,7 +315,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         ///     List of resources containing at least one word from the search string, ordered by the number of word
         ///     occurences found. Returns the full list of resources if the search string is null or empty.
         /// </returns>
-        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string? searchString)
+        private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString)
         {
             if (searchString.IsNullOrEmpty())
             {
@@ -352,7 +352,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
         {
             List<ServiceResourceFE> resourceList = new List<ServiceResourceFE>();
-            foreach (ServiceResource? resource in resources)
+            foreach (ServiceResource resource in resources)
             {
                 if (resource != null)
                 {

@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/design-system-react';
+import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/designsystemet-react';
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,7 @@ import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ChooseOrgPage.module.css';
 
@@ -120,15 +121,18 @@ export const ChooseOrgPage = () => {
           key={org.orgNr}
           title={org.orgName}
           subtitle={t('common.org_nr') + ' ' + org.orgNr}
+          headingLevel={5}
           actions={
             <Button
-              icon={<PlusCircleIcon fontSize='3rem' />}
               variant={'tertiary'}
               color={'second'}
               onClick={() => dispatch(softAddOrg(org))}
               aria-label={t('common.add') + ' ' + org.orgName}
               size='large'
-            ></Button>
+              icon={true}
+            >
+              <PlusCircleIcon fontSize={getButtonIconSize(false)} />
+            </Button>
           }
           color={'neutral'}
         />
@@ -148,7 +152,6 @@ export const ChooseOrgPage = () => {
           subtitle={t('common.org_nr') + ' ' + org.orgNr}
           actions={
             <Button
-              icon={<MinusCircleIcon />}
               variant={'tertiary'}
               color={'danger'}
               onClick={() => {
@@ -156,7 +159,11 @@ export const ChooseOrgPage = () => {
               }}
               aria-label={t('common.remove') + ' ' + org.orgName}
               size='large'
-            ></Button>
+              className={classes.actionButton}
+              icon={true}
+            >
+              <MinusCircleIcon fontSize={getButtonIconSize(false)} />
+            </Button>
           }
           color={'success'}
         />
@@ -238,7 +245,7 @@ export const ChooseOrgPage = () => {
               <h4 className={classes.chosenOrgsHeader}>
                 {t('api_delegation.businesses_going_to_get_access')}
               </h4>
-              <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
+              {chosenItems}
             </div>
           )}
           <div className={classes.searchSection}>
@@ -275,7 +282,7 @@ export const ChooseOrgPage = () => {
                   </h4>
                 )}
                 {infoPanel()}
-                <div className={classes.actionBarScrollContainer}>
+                <div>
                   {searchLoading ? (
                     <div className={common.spinnerContainer}>
                       <Spinner
@@ -293,7 +300,7 @@ export const ChooseOrgPage = () => {
                   <h4 className={classes.chosenOrgsHeader}>
                     {t('api_delegation.businesses_going_to_get_access')}
                   </h4>
-                  <div className={classes.actionBarScrollContainer}>{chosenItems}</div>
+                  {chosenItems}
                 </div>
               )}
             </div>
@@ -311,7 +318,7 @@ export const ChooseOrgPage = () => {
               {t('common.previous')}
             </Button>
             <Button
-              disabled={chosenOrgs.length === 0}
+              disabled={chosenOrgs.length === 0 || chosenApis.length === 0}
               onClick={() =>
                 navigate(
                   '/' +

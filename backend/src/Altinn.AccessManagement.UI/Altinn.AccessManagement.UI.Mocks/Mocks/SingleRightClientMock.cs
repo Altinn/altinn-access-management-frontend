@@ -1,8 +1,12 @@
 using System.Net;
+using System.Text;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -36,6 +40,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
+        {
+            return Task.FromResult(new HttpResponseMessage
+            { StatusCode = HttpStatusCode.OK });
+        }
+
         private static string GetMockDataFilename(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();
@@ -54,17 +65,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static async Task<HttpResponseMessage> GetMockedHttpResponse(string path,  string resourceFileName)
+        private static Task<HttpResponseMessage> GetMockedHttpResponse(string path, string resourceFileName)
         {
             try
             {
                 string data = Util.GetMockDataSerialized(path, resourceFileName + ".json");
-                return new HttpResponseMessage
-                { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) };
+                return Task.FromResult(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) });
             }
             catch
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
         }
     }

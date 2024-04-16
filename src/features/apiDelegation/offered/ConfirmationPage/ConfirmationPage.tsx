@@ -4,7 +4,7 @@ import * as React from 'react';
 import type { Key } from 'react';
 import { useEffect, useState } from 'react';
 import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Paragraph, Spinner } from '@digdir/design-system-react';
+import { Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';

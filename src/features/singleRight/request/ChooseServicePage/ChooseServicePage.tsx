@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
-import { useRef, useState } from 'react';
+import { Button, Ingress, Paragraph, Popover } from '@digdir/designsystemet-react';
+import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
@@ -29,7 +29,6 @@ export const ChooseServicePage = () => {
   const userName = useAppSelector((state) => state.userInfo.personName);
   const requestee = reporteeName ? reporteeName : userName;
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
       (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
@@ -96,24 +95,22 @@ export const ChooseServicePage = () => {
             >
               {t('common.proceed')}
             </Button>
-            <Button
-              variant='tertiary'
-              color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
-              size='medium'
-              onClick={
-                delegableChosenServices.length > 0 ? () => setPopoverOpen(!popoverOpen) : onCancel
-              }
-              ref={buttonRef}
-            >
-              {t('common.cancel')}
-            </Button>
             <Popover
               variant={'warning'}
               placement='top'
-              anchorEl={buttonRef.current}
               open={popoverOpen}
               onClose={() => setPopoverOpen(false)}
             >
+              <Popover.Trigger
+                variant='tertiary'
+                color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
+                size='medium'
+                onClick={
+                  delegableChosenServices.length > 0 ? () => setPopoverOpen(!popoverOpen) : onCancel
+                }
+              >
+                {t('common.cancel')}
+              </Popover.Trigger>
               <Popover.Content>
                 <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
                 <GroupElements>

@@ -1,4 +1,4 @@
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
@@ -6,6 +6,7 @@ import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 
 import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { getButtonIconSize } from '@/resources/utils';
 
 import { BorderedList } from '../BorderedList';
 import ScopeList from '../ScopeList/ScopeList';
@@ -37,21 +38,22 @@ export const DeletableListItem = ({
           variant={'tertiary'}
           color='second'
           onClick={softRestoreCallback}
-          icon={<ArrowUndoIcon />}
+          icon={isSm}
           size='medium'
           aria-label={String(t('common.undo')) + ' ' + item.apiName}
         >
-          {!isSm && t('common.undo')}
+          <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} /> {!isSm && t('common.undo')}
         </Button>
       ) : (
         <Button
           variant='tertiary'
           color='danger'
-          icon={<MinusCircleIcon />}
+          icon={isSm}
           size='medium'
           onClick={softDeleteCallback}
           aria-label={String(t('api_delegation.delete') + ' ' + item.apiName)}
         >
+          <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />{' '}
           {!isSm && t('api_delegation.delete')}
         </Button>
       )}

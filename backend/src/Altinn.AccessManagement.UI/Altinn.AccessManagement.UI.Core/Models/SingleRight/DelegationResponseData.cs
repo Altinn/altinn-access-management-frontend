@@ -28,6 +28,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
         /// <summary>
         ///     The reason for the response.
         /// </summary>
-        public List<Details>? Details { get; set; }
+        public List<Details> Details { get; set; }
     }
 }

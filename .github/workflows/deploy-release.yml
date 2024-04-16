@@ -21,7 +21,7 @@ jobs:
     with:
       environment: tt02
       tag: ${{ github.ref_name }}
-  
+
   cypress-release-to-tt02:
     name: 'Cypress'
     needs: deploy-release-to-tt02

@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
-import { Button, Ingress, Paragraph, Popover } from '@digdir/design-system-react';
+import { Button, Ingress, Paragraph, Popover } from '@digdir/designsystemet-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   GroupElements,
@@ -29,6 +29,9 @@ import {
   ServiceDto,
 } from '@/dataObjects/dtos/resourceDelegation';
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import { useClearAccessCacheMutation } from '@/rtk/features/singleRights/singleRightsApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
@@ -65,7 +68,7 @@ export const ChooseRightsPage = () => {
   const progressLabel = processedDelegations.length + '/' + delegationCount;
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [clearAccessCashe] = useClearAccessCacheMutation();
 
   const {
     name: recipientName,
@@ -191,16 +194,36 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <GroupElements>
-        <Button
-          variant='primary'
-          color='first'
-          fullWidth={isSm}
-          disabled={delegationCount < 1}
-          onClick={() => setPopoverOpen(!popoverOpen)}
-          ref={buttonRef}
+        <Popover
+          variant={'info'}
+          placement={'top'}
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
         >
-          {t('common.finish_delegation')}
-        </Button>
+          <Popover.Trigger
+            variant='primary'
+            color='first'
+            fullWidth={isSm}
+            disabled={delegationCount < 1}
+            onClick={() => setPopoverOpen(!popoverOpen)}
+          >
+            {t('common.finish_delegation')}
+          </Popover.Trigger>
+          <Popover.Content>
+            <Paragraph>
+              {t('single_rights.confirm_delegation_text', { name: recipientName })}
+            </Paragraph>
+            <div className={classes.popoverButtonContainer}>
+              <Button
+                onClick={() => {
+                  onConfirm();
+                }}
+              >
+                {t('common.confirm')}
+              </Button>
+            </div>
+          </Popover.Content>
+        </Popover>
         <Button
           variant='secondary'
           color='first'
@@ -213,26 +236,6 @@ export const ChooseRightsPage = () => {
         >
           {t('single_rights.add_more_services')}
         </Button>
-        <Popover
-          variant={'info'}
-          placement={'top'}
-          anchorEl={buttonRef.current}
-          open={popoverOpen}
-          onClose={() => setPopoverOpen(false)}
-        >
-          <Paragraph>
-            {t('single_rights.confirm_delegation_text', { name: recipientName })}
-          </Paragraph>
-          <div className={classes.popoverButtonContainer}>
-            <Button
-              onClick={() => {
-                onConfirm();
-              }}
-            >
-              {t('common.confirm')}
-            </Button>
-          </div>
-        </Popover>
       </GroupElements>
     );
   };
@@ -246,6 +249,7 @@ export const ChooseRightsPage = () => {
   };
 
   const postDelegations = () => {
+    const partyId = getCookie('AltinnPartyId');
     const userUUID = urlParams.get('userUUID');
     const partyUUID = urlParams.get('partyUUID');
     let recipient: IdValuePair[];
@@ -259,30 +263,38 @@ export const ChooseRightsPage = () => {
     } else if (partyUUID) {
       // Recipient is an organization
       recipient = [new IdValuePair('urn:altinn:organization:uuid', partyUUID)];
+    } else {
+      throw new Error('Neither userUUID nor partyUUID are defined');
     }
 
     // TODO: OBS! This is a temporary solution for sequential delegations, which is needed due to a weakness in Altinn 2. When this is fixed, we can go back to paralell delegations
     // Post delegations synchroneously using recursive method
     const syncPostDelegations = (servicesToPost: Service[]) => {
-      const service = servicesToPost[0];
-      const rightsToDelegate = service.rights
-        .filter((right: ChipRight) => right.checked)
-        .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
-
-      if (rightsToDelegate.length > 0) {
-        const delegationInput: DelegationInputDto = {
-          To: recipient,
-          Rights: rightsToDelegate,
-          serviceDto: new ServiceDto(service.title, service.serviceOwner, service.type),
-        };
-
-        dispatch(delegate(delegationInput)).then(() => {
-          if (servicesToPost.length > 1) {
-            syncPostDelegations(servicesToPost.slice(1));
-          }
+      if (servicesToPost.length === 0) {
+        // End recursion
+        clearAccessCashe({
+          party: partyId,
+          user: new BaseAttribute(recipient[0].id, recipient[0].value), // In time BaseAttriute will take over from IdValuePair. But until then we need to use both,
         });
       } else {
-        if (servicesToPost.length > 1) {
+        const service = servicesToPost[0];
+        const rightsToDelegate = service.rights
+          .filter((right: ChipRight) => right.checked)
+          .map(
+            (right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action),
+          );
+
+        if (rightsToDelegate.length > 0) {
+          const delegationInput: DelegationInputDto = {
+            To: recipient,
+            Rights: rightsToDelegate,
+            serviceDto: new ServiceDto(service.title, service.serviceOwner, service.type),
+          };
+
+          dispatch(delegate(delegationInput)).then(() => {
+            syncPostDelegations(servicesToPost.slice(1));
+          });
+        } else {
           syncPostDelegations(servicesToPost.slice(1));
         }
       }

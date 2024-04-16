@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Paragraph, Heading, Chip, Alert } from '@digdir/design-system-react';
+import { Paragraph, Heading, Chip, Alert } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
@@ -107,7 +107,7 @@ export const RightsActionBarContent = ({
               const actionText = Object.values(LocalizedAction).includes(
                 right.action as LocalizedAction,
               )
-                ? t(`common.${right.action}`)
+                ? t(`common.action_${right.action}`)
                 : right.action;
               return (
                 <div key={index}>
