@@ -184,6 +184,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .Select(sr => new ResourceOwnerFE(
                         sr.HasCompetentAuthority.Name[languageCode],
                         sr.HasCompetentAuthority.Organization))
+                    .OrderBy(resorceOwner => resorceOwner.OrganisationName) // Order alphabetically
                     .ToList();
 
                 return resourceOwnerList;
@@ -212,7 +213,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 _logger.LogError("//ResourceService //GetAllResourceOwners failed, exception: {Ex}", ex);
             }
 
-            return MapOrgListToResourceOwnerFe(orgList, languageCode);
+            return MapOrgListToResourceOwnerFe(orgList, languageCode)
+                .OrderBy(resorceOwner => resorceOwner.OrganisationName) // Order alphabetically
+                .ToList();
         }
 
         /// <inheritdoc />
