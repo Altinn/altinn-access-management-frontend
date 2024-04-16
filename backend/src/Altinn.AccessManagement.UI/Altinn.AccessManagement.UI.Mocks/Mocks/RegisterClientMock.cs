@@ -26,8 +26,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party>? partyList = JsonSerializer.Deserialize<List<Party>>(content);
-
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content);
                 party = partyList?.FirstOrDefault(p => p.Organization?.OrgNumber == organizationNumber);
             }
 
@@ -37,17 +36,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc/>
         public Task<List<Party>> GetPartyList(List<Guid> uuidList)
         {
-            Party party = null;
             string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party>? partyList = JsonSerializer.Deserialize<List<Party>>(content);
-
-                party = partyList?.FirstOrDefault(p => p.PartyUuid == uuidList[0]);
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content);
+                return Task.FromResult(new List<Party>() { partyList?.FirstOrDefault(p => p.PartyUuid == uuidList[0]) });
             }
 
-            return Task.FromResult(new List<Party> { party });
+            return Task.FromResult(new List<Party> { });
         }
     }
 }

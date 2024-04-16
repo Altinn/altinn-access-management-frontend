@@ -10,26 +10,26 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         /// <summary>
         /// ID
         /// </summary>
-        public string? Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Title
         /// </summary>
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// ResourceType
         /// </summary>
-        public ResourceType? ResourceType { get; set; }
+        public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Keywords
         /// </summary>
-        public string? Keyword { get; set; }
+        public string Keyword { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { Alert, Chip, Heading, Paragraph } from '@digdir/design-system-react';
+import { Alert, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 

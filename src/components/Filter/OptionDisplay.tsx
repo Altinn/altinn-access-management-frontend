@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Checkbox, Paragraph, Search } from '@digdir/design-system-react';
+import { Checkbox, Paragraph, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
 import { arraysEqual } from '@/resources/utils';

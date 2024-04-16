@@ -56,7 +56,7 @@ Cypress.Commands.add('chooseAPIToBeDelegated', (apiName) => {
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
-  cy.focused().next().click();
+  cy.get('button[aria-label*="Legg til"]').eq(1).click();
 });
 
 Cypress.Commands.add('verifyAPIselectedForDelegation', (apiName) => {
@@ -194,7 +194,7 @@ Cypress.Commands.add('addAPIToListAndMakeItReadyToAddNextAPI', (apiName) => {
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
-  cy.focused().next().click();
+  cy.get(`button[aria-label="Legg til ${apiName}"]`).first().click();
   cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type('{selectall}{backspace}');
 });
 

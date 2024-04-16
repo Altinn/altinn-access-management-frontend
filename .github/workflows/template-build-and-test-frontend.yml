@@ -1,13 +1,7 @@
-name: Build frontend and run unit tests
+name: template-build-and-test-frontend.yml
+
 on:
-  push:
-    branches: [ "main" ]
-    paths-ignore:
-      -backend/**
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths-ignore:
-      - backend/**
+  workflow_call:
 
 jobs:
   build:

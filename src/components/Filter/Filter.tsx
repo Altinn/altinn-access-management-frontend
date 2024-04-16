@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect, useId, type ReactNode } from 'react';
-import { Button, Spinner, Heading } from '@digdir/design-system-react';
+import { Button, Spinner, Heading } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
-import { arraysEqual } from '@/resources/utils';
+import { arraysEqual, getButtonIconSize } from '@/resources/utils';
 import { usePrevious } from '@/resources/hooks';
 
 import type { FilterOption } from './utils';
@@ -139,10 +139,15 @@ export const Filter = ({
         variant='tertiary'
         color='second'
         onClick={handleOpenOrClose}
-        icon={<XMarkIcon aria-label={String(t('common.close'))} />}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
         size='medium'
-      />
+        icon={true}
+      >
+        <XMarkIcon
+          aria-label={String(t('common.close'))}
+          fontSize={getButtonIconSize(false)}
+        />
+      </Button>
     </div>
   );
 

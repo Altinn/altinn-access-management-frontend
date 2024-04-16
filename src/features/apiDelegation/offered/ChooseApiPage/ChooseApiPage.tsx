@@ -1,4 +1,4 @@
-import { Button, Spinner, Search, Skeleton } from '@digdir/design-system-react';
+import { Button, Spinner, Search, Skeleton } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
@@ -222,7 +222,7 @@ export const ChooseApiPage = () => {
           </h3>
           {isSm && (chosenApis.length > 0 || urlParams.size > 0) && (
             <div>
-              <h4>{t('api_delegation.chosen_apis')}</h4>
+              <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
               <div className={classes.chosenApisContainer}>
                 <div className={classes.actionBarWrapper}>
                   {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}

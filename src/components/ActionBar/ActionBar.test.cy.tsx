@@ -2,7 +2,7 @@ import '@digdir/design-system-tokens/brand/altinn/tokens.css'; // need to import
 
 import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@digdir/designsystemet-react';
 import * as React from 'react';
 
 import store from '@/rtk/app/store';
@@ -54,14 +54,21 @@ describe('ActionBar', () => {
       cy.get('h1').should('exist');
       cy.get('h2').should('not.exist');
     });
+
     it('should render an actionbar with a classname corresponding to the given size prop', () => {
       sizes.forEach((size) => {
         mount(expandableActionBar({ size, onClick: cy.stub() }));
-        cy.get('button').parent().invoke('attr', 'class').should('include', size);
+        cy.get('[data-testid="action-bar"]')
+          .parent()
+          .invoke('attr', 'class')
+          .should('include', size);
         sizes
           .filter((s) => s !== size)
           .forEach((otherSize) => {
-            cy.get('button').parent().invoke('attr', 'class').should('not.include', otherSize);
+            cy.get('[data-testid="action-bar"]')
+              .parent()
+              .invoke('attr', 'class')
+              .should('not.include', otherSize);
           });
       });
     });

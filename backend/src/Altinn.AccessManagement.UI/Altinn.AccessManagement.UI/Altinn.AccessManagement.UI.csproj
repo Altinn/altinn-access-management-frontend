@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>a673dbb3-54f1-477a-b0d6-2751f915f4fb</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -17,9 +17,10 @@
     <PackageReference Include="JWTCookieAuthentication" Version="4.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.22.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"
+      Version="1.20.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,15 +29,20 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
-    <ProjectReference Include="..\Altinn.AccessManagement.UI.Integration\Altinn.AccessManagement.UI.Integration.csproj" />
-    <ProjectReference Include="..\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj" />
+    <ProjectReference
+      Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
+    <ProjectReference
+      Include="..\Altinn.AccessManagement.UI.Integration\Altinn.AccessManagement.UI.Integration.csproj" />
+    <ProjectReference
+      Include="..\Altinn.AccessManagement.UI.Mocks\Altinn.AccessManagement.UI.Mocks.csproj" />
   </ItemGroup>
+
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
-		<AdditionalFiles Include="$(SolutionDir)stylecop.json">
-			<Link>stylecop.json</Link>
-		</AdditionalFiles>
+    <AdditionalFiles Include="$(SolutionDir)stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
   </ItemGroup>
+
   <ItemGroup>
     <Folder Include="wwwroot\accessmanagement\" />
   </ItemGroup>
