@@ -29,6 +29,10 @@ export enum ServiceStatus {
   Unauthorized = `Unauthorized`,
 }
 
+export enum ServiceType {
+  AltinnApp = 'AltinnApp',
+}
+
 export interface DelegationAccessCheckDto {
   resourceReference: IdValuePair[];
   serviceResource: ServiceResource;
@@ -227,11 +231,19 @@ const singleRightSlice = createSlice({
       })
 
       .addCase(delegationAccessCheck.fulfilled, (state, action) => {
+        const rightList: Right[] = action.payload.filter((right: Right) => {
+          return right.status !== ServiceStatus.NotDelegable;
+        });
+
         const serviceWithStatus: ServiceWithStatus = {
-          rightList: action.payload,
+          rightList: rightList,
           service: action.meta.arg.serviceResource,
           status: ServiceStatus.Delegable,
         };
+
+        /*         if (serviceWithStatus.service?.resourceType === ServiceType.AltinnApp) {
+          rightList.map((right: Right ) => )
+        } */
 
         const serviceID = action.meta.arg.serviceResource.identifier;
         let status = ServiceStatus.Delegable;
@@ -252,9 +264,11 @@ const singleRightSlice = createSlice({
             status = ServiceStatus.NotDelegable;
           }
         }
+        console.log('serviceWithStatus', serviceWithStatus);
+
         const nextStateArray = state.servicesWithStatus.map((sws: ServiceWithStatus) => {
           if (sws.service?.identifier === serviceID) {
-            sws.rightList = action.payload;
+            sws.rightList = rightList;
             sws.isLoading = false;
             sws.status = status;
           }

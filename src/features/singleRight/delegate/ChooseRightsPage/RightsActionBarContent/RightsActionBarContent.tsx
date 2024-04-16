@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
-import { type Details } from '@/rtk/features/singleRights/singleRightsSlice';
+import { ServiceType, type Details } from '@/rtk/features/singleRights/singleRightsSlice';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 
 import classes from './RightsActionBarContent.module.css';
@@ -22,6 +22,9 @@ export type ChipRight = {
 export interface RightsActionBarContentProps {
   /** The callback function to be called when toggling a right. */
   toggleRight: (serviceIdentifier: string, action: string) => void;
+
+  /** Callback to toggle sll delegable rights  for a service*/
+  toggleAllDelegableRights: (serviceIdentifier: string) => void;
 
   /** List of rights to be presented as toggle chips */
   rights: ChipRight[];
@@ -41,6 +44,7 @@ export interface RightsActionBarContentProps {
 
 export const RightsActionBarContent = ({
   toggleRight,
+  toggleAllDelegableRights,
   rights,
   serviceDescription,
   rightDescription,
@@ -49,9 +53,8 @@ export const RightsActionBarContent = ({
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation('common');
   const hasUndelegableRights =
-    rights.some((r) => r.delegable === false) && serviceType !== 'AltinnApp';
+    rights.some((r) => r.delegable === false) && serviceType !== ServiceType.AltinnApp;
   const [errorList, setErrorList] = useState<string[]>([]);
-  const [altinnAppAccess, setAltinnAppAccess] = useState(true);
 
   const createErrorList = () => {
     const errors: string[] = [];
@@ -74,15 +77,6 @@ export const RightsActionBarContent = ({
     createErrorList();
   }, [rights]);
 
-  const toggleAllDelegableRights = () => {
-    rights.forEach((right: ChipRight) => {
-      if (right.delegable) {
-        toggleRight(serviceIdentifier, right.action);
-      }
-    });
-    setAltinnAppAccess(!altinnAppAccess);
-  };
-
   const serviceResourceContent = (
     <>
       <Paragraph>{serviceDescription}</Paragraph>
@@ -94,8 +88,8 @@ export const RightsActionBarContent = ({
             <Chip.Toggle
               size='small'
               checkmark
-              selected={altinnAppAccess}
-              onClick={toggleAllDelegableRights}
+              selected={rights[0].checked}
+              onClick={() => toggleAllDelegableRights(serviceIdentifier)}
             >
               {t('common.access')}
             </Chip.Toggle>

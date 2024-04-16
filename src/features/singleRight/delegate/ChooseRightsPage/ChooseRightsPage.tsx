@@ -153,10 +153,24 @@ export const ChooseRightsPage = () => {
             right.checked = !right.checked;
             setChosenServices(serviceStateCopy);
             updateDelegationCount(serviceStateCopy);
-            return;
           }
         }
       }
+    }
+  };
+
+  const toggleAllDelegableRights = (serviceIdentifier: string) => {
+    const serviceStateCopy = [...chosenServices];
+
+    for (const service of serviceStateCopy) {
+      if (service.serviceIdentifier === serviceIdentifier) {
+        for (const right of service.rights) {
+          right.checked = !right.checked;
+          setChosenServices(serviceStateCopy);
+          updateDelegationCount(serviceStateCopy);
+        }
+      }
+      console.log('service', service);
     }
   };
 
@@ -178,6 +192,7 @@ export const ChooseRightsPage = () => {
     >
       <RightsActionBarContent
         toggleRight={toggleRight}
+        toggleAllDelegableRights={toggleAllDelegableRights}
         rights={service.rights}
         serviceIdentifier={service.serviceIdentifier}
         serviceDescription={service.description}
