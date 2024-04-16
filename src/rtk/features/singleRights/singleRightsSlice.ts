@@ -241,10 +241,6 @@ const singleRightSlice = createSlice({
           status: ServiceStatus.Delegable,
         };
 
-        /*         if (serviceWithStatus.service?.resourceType === ServiceType.AltinnApp) {
-          rightList.map((right: Right ) => )
-        } */
-
         const serviceID = action.meta.arg.serviceResource.identifier;
         let status = ServiceStatus.Delegable;
 
