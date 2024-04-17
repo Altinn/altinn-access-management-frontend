@@ -171,6 +171,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     const isLoading = currentServiceWithStatus?.isLoading;
     const status = currentServiceWithStatus?.status;
 
+    /**
+     * Creates a list of all the errors on delegating an action. If there are no actions on an APP
+     * it means that none of the actions is delegable
+     * @returns {string[]} - The size of the button's icon, measured in rem units.
+     */
     const errorCodeTextKeyList =
       currentServiceWithStatus?.rightList?.length === 0 && ServiceStatus.NotDelegable
         ? [ErrorCode.MissingRoleAccess]
