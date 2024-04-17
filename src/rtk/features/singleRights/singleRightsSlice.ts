@@ -258,7 +258,6 @@ const singleRightSlice = createSlice({
               (response: Right) => response.status === ServiceStatus.Delegable,
             ) ?? false;
 
-          console.log('isDelegable', isDelegable);
           if (isDelegable) {
             status = ServiceStatus.PartiallyDelegable;
           } else {
@@ -275,8 +274,6 @@ const singleRightSlice = createSlice({
           }
           return sws;
         });
-
-        console.log('nextStateArray', nextStateArray);
 
         state.servicesWithStatus = nextStateArray;
       })

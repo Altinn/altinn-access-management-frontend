@@ -170,19 +170,20 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
 
     const isLoading = currentServiceWithStatus?.isLoading;
     const status = currentServiceWithStatus?.status;
-    console.log('status', status);
 
     const errorCodeTextKeyList =
-      currentServiceWithStatus?.status === ServiceStatus.NotDelegable ||
-      currentServiceWithStatus?.status === ServiceStatus.Unauthorized ||
-      currentServiceWithStatus?.status === ServiceStatus.HTTPError
-        ? currentServiceWithStatus.rightList?.flatMap(
-            (result) =>
-              result.details
-                ?.filter((detail) => Object.values(ErrorCode).includes(detail.code as ErrorCode))
-                .map((detail) => detail.code) || [],
-          ) || []
-        : [];
+      currentServiceWithStatus?.rightList?.length === 0 && ServiceStatus.NotDelegable
+        ? [ErrorCode.MissingRoleAccess]
+        : currentServiceWithStatus?.status === ServiceStatus.NotDelegable ||
+            currentServiceWithStatus?.status === ServiceStatus.Unauthorized ||
+            currentServiceWithStatus?.status === ServiceStatus.HTTPError
+          ? currentServiceWithStatus.rightList?.flatMap(
+              (result) =>
+                result.details
+                  ?.filter((detail) => Object.values(ErrorCode).includes(detail.code as ErrorCode))
+                  .map((detail) => detail.code) || [],
+            ) || []
+          : [];
 
     let prioritizedErrorCodes: string[] = [];
 
