@@ -7,19 +7,34 @@ namespace Altinn.AccessManagement.UI.Core.Enums
     /// </summary>
     public enum ReferenceSource : int
     {
-        [EnumMember(Value = "Default")]    
+        /// <summary>
+        /// Default
+        /// </summary>
+        [EnumMember(Value = "Default")]
         Default = 0,
 
+        /// <summary>
+        /// Altinn1
+        /// </summary>
         [EnumMember(Value = "Altinn1")]
         Altinn1 = 1,
 
+        /// <summary>
+        /// Altinn2
+        /// </summary>
         [EnumMember(Value = "Altinn2")]
         Altinn2 = 2,
 
+        /// <summary>
+        /// Altinn3
+        /// </summary>
         [EnumMember(Value = "Altinn3")]
         Altinn3 = 3,
 
+        /// <summary>
+        /// ExternalPlatform
+        /// </summary>
         [EnumMember(Value = "ExternalPlatform")]
-        ExternalPlatform = 4
+        ExternalPlatform = 4,
     }
 }

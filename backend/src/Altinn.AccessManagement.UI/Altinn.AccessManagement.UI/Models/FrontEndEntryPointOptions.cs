@@ -13,12 +13,12 @@
         /// <summary>
         /// File reference
         /// </summary>
-        public string? File { get; set; }
+        public string File { get; set; }
 
         /// <summary>
         /// Source
         /// </summary>
-        public string? Src { get; set; }
+        public string Src { get; set; }
 
         /// <summary>
         /// IsEntry
@@ -28,11 +28,11 @@
         /// <summary>
         /// Css
         /// </summary>
-        public List<string>? Css { get; set; }
+        public List<string> Css { get; set; }
 
         /// <summary>
         /// Assets
         /// </summary>
-        public List<string>? Assets { get; set; }
+        public List<string> Assets { get; set; }
     }
 }

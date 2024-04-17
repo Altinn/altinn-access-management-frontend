@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useId, type ReactNode } from 'react';
-import { Button, Spinner } from '@digdir/designsystemet-react';
+import { Button, Spinner, Heading } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -129,7 +129,12 @@ export const Filter = ({
 
   const modalHeader = () => (
     <div className={classes.modalHeader}>
-      <h3>{label}</h3>
+      <Heading
+        size='xsmall'
+        level={3}
+      >
+        {label}
+      </Heading>
       <Button
         variant='tertiary'
         color='second'
@@ -165,7 +170,7 @@ export const Filter = ({
       setIsOpen={handleOpenOrClose}
       isModal={fullScreenModal}
     >
-      <div className={classes.popoverContent}>
+      <div className={cn(classes.content, fullScreenModal && classes.modal)}>
         {fullScreenModal && modalHeader()}
         {isLoading || options === undefined ? (
           <div className={classes.loadingContainer}>
@@ -201,7 +206,6 @@ export const Filter = ({
                 size={fullScreenModal ? 'medium' : 'small'}
                 onClick={hasChanges ? handleOpenOrClose : undefined}
                 aria-disabled={!hasChanges}
-                fullWidth={fullScreenModal}
               >
                 {applyButtonLabel}
               </Button>

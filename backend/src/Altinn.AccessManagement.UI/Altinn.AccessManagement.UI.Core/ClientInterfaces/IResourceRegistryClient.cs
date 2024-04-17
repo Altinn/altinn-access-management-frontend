@@ -17,13 +17,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<ServiceResource> GetResource(string resourceId);
 
         /// <summary>
-        /// Integration point for retrieving a list of resources. Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint
+        /// Integration point for retrieving a list of resources. Weird enough it's not possible to filter on AltinnApp or Altinn2Service for this endpoint.
         /// </summary>
         /// <returns>The resource list if exists</returns>
         Task<List<ServiceResource>> GetResources();
-        
+
         /// <summary>
-        ///     Integration point for retrieving the list of resources for the given <param name="resourceType"></param> 
+        ///     Integration point for retrieving the list of resources for the given.
         /// </summary>
         /// <returns>The resource list if exists</returns>
         Task<List<ServiceResource>> GetMaskinportenSchemas();
@@ -35,9 +35,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<ServiceResource>> GetResourceList();
 
         /// <summary>
-        ///     Gets list of all resource owners
+        ///     Gets list of all resource owners.
         /// </summary>
-        /// <returns>List of resource owners in string format</returns>
+        /// <returns>List of resource owners in string format.</returns>
         Task<OrgList> GetAllResourceOwners();
     }
 }
