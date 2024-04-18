@@ -13,6 +13,7 @@ import classes from './RightsActionBarContent.module.css';
 
 export type ChipRight = {
   action: string;
+  rightKey: string;
   delegable: boolean;
   checked: boolean;
   resourceReference: IdValuePair[];
@@ -77,7 +78,7 @@ export const RightsActionBarContent = ({
   const toggleAllDelegableRights = () => {
     rights.forEach((right: ChipRight) => {
       if (right.delegable) {
-        toggleRight(serviceIdentifier, right.action);
+        toggleRight(serviceIdentifier, right.rightKey);
       }
     });
     setAltinnAppAccess(!altinnAppAccess);
@@ -97,7 +98,7 @@ export const RightsActionBarContent = ({
               selected={altinnAppAccess}
               onClick={toggleAllDelegableRights}
             >
-              {t('common.access')}
+              {t('common.action_access')}
             </Chip.Toggle>
           </div>
         ) : (
@@ -116,7 +117,7 @@ export const RightsActionBarContent = ({
                     checkmark
                     selected={right.checked}
                     onClick={() => {
-                      toggleRight(serviceIdentifier, right.action);
+                      toggleRight(serviceIdentifier, right.rightKey);
                     }}
                   >
                     {actionText}
@@ -161,7 +162,7 @@ export const RightsActionBarContent = ({
                 const actionText = Object.values(LocalizedAction).includes(
                   right.action as LocalizedAction,
                 )
-                  ? t(`common.${right.action}`)
+                  ? t(`common.action_${right.action}`)
                   : right.action;
                 return (
                   <Chip.Toggle

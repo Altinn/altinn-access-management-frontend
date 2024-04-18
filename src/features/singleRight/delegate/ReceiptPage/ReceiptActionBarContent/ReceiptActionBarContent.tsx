@@ -70,7 +70,7 @@ export const ReceiptActionBarContent = ({
                   const chipText = Object.values(LocalizedAction).includes(
                     failedRight.action as LocalizedAction,
                   )
-                    ? t(`common.${failedRight.action}`)
+                    ? t(`common.action_${failedRight.action}`)
                     : failedRight.action;
                   return (
                     <Chip.Toggle key={`failed-${index}-${innerIndex}`}>{chipText}</Chip.Toggle>
@@ -100,14 +100,14 @@ export const ReceiptActionBarContent = ({
                 selected={true}
                 checkmark
               >
-                {t('common.access')}
+                {t('common.action_access')}
               </Chip.Toggle>
             ) : (
               successfulDelegations?.map((right: Right, innerIndex) => {
                 const chipText = Object.values(LocalizedAction).includes(
                   right.action as LocalizedAction,
                 )
-                  ? t(`common.${right.action}`)
+                  ? t(`common.action_${right.action}`)
                   : right.action;
                 return (
                   <Chip.Toggle
