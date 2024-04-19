@@ -343,6 +343,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 if (numMatches > 0)
                 {
                     res.PriorityCounter = numMatches;
+
+                    if (res.Title != null && searchString.Trim().ToLower() == res.Title.Trim().ToLower())
+                    {
+                        res.PriorityCounter++; // Prioritize resources who's title is an exact match
+                    }
+
                     matchedResources.Add(res);
                 }
             }
