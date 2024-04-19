@@ -18,14 +18,14 @@ interface RestartPrompterProps extends Pick<AlertProps, 'severity'> {
   ingress?: string;
 
   /* The path to where your navigated */
-  restartPath: string;
+  restartPath?: string;
 }
 
 export const RestartPrompter = ({
   spacingBottom = false,
   title,
   ingress,
-  severity = 'warning',
+  severity = 'info',
   restartPath,
 }: RestartPrompterProps) => {
   const navigate = useNavigate();
@@ -43,18 +43,20 @@ export const RestartPrompter = ({
         {title}
       </Heading>
       {ingress && <Ingress>{ingress}</Ingress>}
-      <div className={classes.restartButton}>
-        <Button
-          variant='primary'
-          color='first'
-          size='medium'
-          onClick={() => {
-            navigate(restartPath);
-          }}
-        >
-          {t('common.restart')}
-        </Button>
-      </div>
+      {restartPath && (
+        <div className={classes.restartButton}>
+          <Button
+            variant='primary'
+            color='first'
+            size='medium'
+            onClick={() => {
+              navigate(restartPath);
+            }}
+          >
+            {t('common.restart')}
+          </Button>
+        </div>
+      )}
     </Alert>
   );
 };

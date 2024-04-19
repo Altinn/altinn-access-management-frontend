@@ -316,13 +316,6 @@ export const ChooseRightsPage = () => {
             <RestartPrompter
               title={t('single_rights.no_resources chosen')}
               ingress={t('single_rights.restart_prompter_no_resources_chosen_ingress')}
-              restartPath={
-                '/' +
-                SingleRightPath.DelegateSingleRights +
-                '/' +
-                SingleRightPath.ChooseService +
-                `?${urlParams}`
-              }
             />
           ) : !isLoading && recipientError ? (
             <RecipientErrorAlert
