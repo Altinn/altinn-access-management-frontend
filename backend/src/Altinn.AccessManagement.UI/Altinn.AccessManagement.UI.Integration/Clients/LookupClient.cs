@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             try
             {
-                string endpointUrl = $"lookup/reportee/{partyId}";
+                string endpointUrl = $"authorizedparty/{partyId}?includeAltinn2=true";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
