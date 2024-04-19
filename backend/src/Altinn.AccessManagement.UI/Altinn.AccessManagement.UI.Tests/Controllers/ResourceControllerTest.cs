@@ -247,7 +247,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: GetAllResourceOwners, returns a simplified list of resource owners
-        ///     Expected: GetResources returns a list of resource owners in correct language
+        ///     Expected: GetAllResourceOwners returns a list of resource owners in correct language, ordered alphabetically
         /// </summary>
         [Fact]
         public async Task GetAllResourceOwners_validresults()
@@ -255,7 +255,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(ResourceControllerTest).Assembly.Location).LocalPath);
             string path = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "ResourceRegistry", "resourceOwnersOrgList.json");
-            List<ResourceOwnerFE> expectedResult = Util.GetMockData<List<ResourceOwnerFE>>(path);
+            List<ResourceOwnerFE> expectedResult = Util.GetMockData<List<ResourceOwnerFE>>(path).OrderBy(resorceOwner => resorceOwner.OrganisationName).ToList(); // order alphabetically
 
             string token = PrincipalUtil.GetToken(1337, 501337);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -272,6 +272,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             }
         }
 
+        /// <summary>
+        ///     Test case: GetResourceOwners, returns a simplified list of resource owners that have resources of type MaskinportenSchema
+        ///     Expected: GetResourceOwners returns a list of resource owners in correct language, with MaskinportenSchema, ordered alphabetically
+        /// </summary>
         [Fact]
         public async Task GetResourceOwners_resourceTypeMaskinPortenSchemAndAltinn2Service()
         {
@@ -287,10 +291,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ResourceOwnerFE> expectedResult = new List<ResourceOwnerFE>
             {
-                new ResourceOwnerFE("Skatteetaten", "974761076"),
-                new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
                 new ResourceOwnerFE("BLOMSTERFINN", "994598759"),
                 new ResourceOwnerFE("NARNIA", "777777777"),
+                new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
+                new ResourceOwnerFE("Skatteetaten", "974761076"),
                 new ResourceOwnerFE("Testdepartementet", "123456789"),
             };
 

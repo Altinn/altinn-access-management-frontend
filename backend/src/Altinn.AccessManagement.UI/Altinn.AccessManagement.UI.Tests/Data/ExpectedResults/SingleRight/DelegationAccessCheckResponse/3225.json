@@ -1,6 +1,6 @@
 [
   {
-    "rightKey": "ttd-am-k6/read",
+    "rightKey": "3225/read",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/read",
+    "rightKey": "3225/all-accesses-3325",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -58,7 +58,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/write",
+    "rightKey": "3225/write",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -74,12 +74,22 @@
     "details": [
       {
         "code": "MissingSrrRightAccess",
-        "description": "MissingSrrRightAccess",
+        "description": "",
+        "parameters": {
+        }
+      },
+      {
+        "code": "MissingRoleAccess",
+        "description": "",
         "parameters": {
           "roleRequirementsMatches": [
             {
               "id": "urn:altinn:role",
               "value": "DAGL"
+            },
+            {
+              "id": "urn:altinn:role",
+              "value": "REGN"
             }
           ]
         }
@@ -87,7 +97,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/sign",
+    "rightKey": "3225/sign",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -105,18 +115,12 @@
         "code": "MissingSrrRightAccess",
         "description": "MissingSrrRightAccess",
         "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
         }
       }
     ]
   },
   {
-    "rightKey": "ttd-am-k6/confirm",
+    "rightKey": "3225/confirm",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -127,7 +131,7 @@
         "value": "1596"
       }
     ],
-    "action": "task-edit",
+    "action": "confirm",
     "status": "NotDelegable",
     "details": [
       {
