@@ -100,6 +100,7 @@ export const ChooseRightsPage = () => {
       const rights: ChipRight[] =
         service.rightList?.map((right) => ({
           action: right.action,
+          rightKey: right.rightKey,
           delegable: right.status === ServiceStatus.Delegable,
           checked: right.status === ServiceStatus.Delegable,
           resourceReference: right.resource,
@@ -147,13 +148,13 @@ export const ChooseRightsPage = () => {
     void dispatch(removeServiceResource(identifier));
   };
 
-  const toggleRight = (serviceIdentifier: string, action: string) => {
+  const toggleRight = (serviceIdentifier: string, rightKey: string) => {
     const serviceStateCopy = [...chosenServices];
 
     for (const service of serviceStateCopy) {
       if (service.serviceIdentifier === serviceIdentifier) {
         for (const right of service.rights) {
-          if (right.action === action) {
+          if (right.rightKey === rightKey) {
             right.checked = !right.checked;
             setChosenServices(serviceStateCopy);
             updateDelegationCount(serviceStateCopy);

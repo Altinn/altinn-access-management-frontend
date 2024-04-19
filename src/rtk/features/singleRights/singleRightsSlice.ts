@@ -35,7 +35,7 @@ export interface DelegationAccessCheckDto {
 }
 
 export interface Right {
-  rightKey?: string;
+  rightKey: string;
   resource: IdValuePair[];
   action: string;
   status?: string;
