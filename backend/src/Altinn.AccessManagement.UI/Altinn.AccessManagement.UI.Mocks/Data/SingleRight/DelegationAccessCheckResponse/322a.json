@@ -1,6 +1,6 @@
 [
   {
-    "rightKey": "ttd-am-k6/read",
+    "rightKey": "322a/read",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/write",
+    "rightKey": "322a/write",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
@@ -62,7 +62,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/sign",
+    "rightKey": "322a/sign",
     "resource": [
       {
         "id": "urn:altinn:servicecode",
