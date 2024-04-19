@@ -337,9 +337,9 @@ export const ChooseRightsPage = () => {
                 progressValue={processedDelegationsRatio()}
                 progressLabel={progressLabel}
               />
-              <div className={classes.navigationContainer}>{navigationButtons()}</div>
             </>
           )}
+          <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>
       </Page>
     </PageContainer>
