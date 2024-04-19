@@ -1,6 +1,6 @@
 [
   {
-    "rightKey": "ttd-am-k6/read",
+    "rightKey": "appid-508/read",
     "resource": [
       {
         "id": "urn:altinn:resource",
@@ -25,7 +25,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/write",
+    "rightKey": "appid-508/write",
     "resource": [
       {
         "id": "urn:altinn:resource",
@@ -50,7 +50,7 @@
     ]
   },
   {
-    "rightKey": "ttd-am-k6/sign",
+    "rightKey": "appid-508/sign",
     "resource": [
       {
         "id": "urn:altinn:resource",
