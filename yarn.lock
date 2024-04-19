@@ -427,18 +427,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:0.55.0":
-  version: 0.55.0
-  resolution: "@digdir/designsystemet-react@npm:0.55.0"
+"@digdir/designsystemet-react@npm:0.57.0":
+  version: 0.57.0
+  resolution: "@digdir/designsystemet-react@npm:0.57.0"
   dependencies:
     "@floating-ui/react": "npm:0.26.4"
     "@navikt/aksel-icons": "npm:^5.12.2"
     "@radix-ui/react-slot": "npm:^1.0.2"
-    "@tanstack/react-virtual": "npm:^3.0.1"
+    "@tanstack/react-virtual": "npm:^3.2.0"
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: 10/36bd8d02b21f2553bca4a1909c5e6653d1525b5130278eecee53e6476740273a691e96c276c1f8b2466533b4071246d6f1451faa73351226f3e478c044326d13
+  checksum: 10/2f620bc28a577786cab9bfbe8ec4af319bb5d939c5985e2d965362ffaf2bd075a613db6ec2349baf03f400607a73a24ed9c7703329fddca57e83e896312f3506
   languageName: node
   linkType: hard
 
@@ -1552,10 +1552,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-virtual@npm:^3.2.0":
+  version: 3.4.0
+  resolution: "@tanstack/react-virtual@npm:3.4.0"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.4.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/73c272d4a6242d1e49e37e56cec3985d8ff3108e8cd33d2f0c8c3f6ec3d84fece50813e875ee15ee025de4c47f051fcdf8829b1a9c824fd360ae0a569eddb1f5
+  languageName: node
+  linkType: hard
+
 "@tanstack/virtual-core@npm:3.1.3":
   version: 3.1.3
   resolution: "@tanstack/virtual-core@npm:3.1.3"
   checksum: 10/fdaee168954ba96908476105d61ad3ed45973afcb9cec2c33707d4b48abaa705b7cbf7dd8e4264a7848d57366cc1422a378c8f34c5da124f18d3f7ae7bc8bd23
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@tanstack/virtual-core@npm:3.4.0"
+  checksum: 10/b4fe50c36dd5d9e4998c154323e777a027216296bf862faf73eaa357144e2b33f6298732e5bf7f8d9a151d2d65d3488872f767276c7630f245dbabfb034fc0fc
   languageName: node
   linkType: hard
 
@@ -1991,7 +2010,7 @@ __metadata:
     "@altinn/altinn-design-system": "npm:0.30.0"
     "@digdir/design-system-tokens": "npm:0.13.0"
     "@digdir/designsystemet-css": "npm:0.2.2"
-    "@digdir/designsystemet-react": "npm:0.55.0"
+    "@digdir/designsystemet-react": "npm:0.57.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@reduxjs/toolkit": "npm:^2.1.0"
     "@tanstack/react-query": "npm:^4.32.6"
