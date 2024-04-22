@@ -13,6 +13,7 @@ import {
   PageContent,
   PageHeader,
   ProgressModal,
+  RestartPrompter,
 } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { SingleRightPath } from '@/routes/paths';
@@ -311,9 +312,13 @@ export const ChooseRightsPage = () => {
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
-
         <PageContent>
-          {!isLoading && recipientError ? (
+          {chosenServices.length < 1 ? (
+            <RestartPrompter
+              title={t('single_rights.no_resources chosen')}
+              ingress={t('single_rights.restart_prompter_no_resources_chosen_ingress')}
+            />
+          ) : !isLoading && recipientError ? (
             <RecipientErrorAlert
               userUUID={urlParams.get('userUUID')}
               partyUUID={urlParams.get('partyUUID')}
@@ -332,10 +337,10 @@ export const ChooseRightsPage = () => {
                 loadingText={t('single_rights.processing_delegations')}
                 progressValue={processedDelegationsRatio()}
                 progressLabel={progressLabel}
-              ></ProgressModal>
-              <div className={classes.navigationContainer}>{navigationButtons()}</div>
+              />
             </>
           )}
+          <div className={classes.navigationContainer}>{navigationButtons()}</div>
         </PageContent>
       </Page>
     </PageContainer>

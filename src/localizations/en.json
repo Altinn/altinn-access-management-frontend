@@ -183,6 +183,8 @@
     "missing_recipient_error_title": "Recipient missing",
     "missing_recipient_error_message": "The recipient for the delegation is missing. Please go back to the profile page and select who you wish to delegate to.",
     "faulty_recipient_error_title": "Cannot delegate to recipient",
-    "faulty_recipient_error_message": "The given recipient cannot be delegated to. Please go back to the profile page and select another. The recipient must be an organization, a business user, or a person registered with a birth number. Self-registered users cannot be delegated to."
+    "faulty_recipient_error_message": "The given recipient cannot be delegated to. Please go back to the profile page and select another. The recipient must be an organization, a business user, or a person registered with a birth number. Self-registered users cannot be delegated to.",
+    "no_resources chosen": "No services selected",
+    "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected."
   }
 }
