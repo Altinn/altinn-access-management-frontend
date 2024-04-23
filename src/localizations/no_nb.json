@@ -123,7 +123,7 @@
     "delegations_not_registered": "Valgene dine ble ikke registrert. Vennligst start delegerings\u00adprosessen på nytt.",
     "failed_delegations": "Disse api-delegeringene gikk galt og ble derfor ikke tildelt",
     "succesful_delegations": "Disse api-delegeringene ble gitt",
-    "no_offered_delegations": "Din virksomhet har ikke delegert noen API-tilganger",
+    "no_offered_api_delegations": "Din virksomhet har ikke delegert noen API-tilganger",
     "no_received_delegations": "Din virksomhet har ikke blitt tildelt noen API-tilganger",
     "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den aktivt slettes eller trekkes tilbake.",
     "receipt_page_failed_text": "Vennligst prøv igjen senere. Kontakt Altinn Servicedesk om feilen vedvarer.",
