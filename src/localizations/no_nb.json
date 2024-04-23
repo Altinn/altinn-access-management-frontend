@@ -132,8 +132,7 @@
     "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
     "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette.",
     "no_orgs_chosen": "Ingen organisasjoner valgt",
-    "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Klikk på knappen for å gå til innlogging og velg et høyere sikkerhetsnivå. Du må starte delegeringen på nytt. Du kan velge mellom følgende metoder:"
-  },
+    "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Vennligst logg inn på nytt med en av metodene under:",
   "single_rights": {
     "delegate_single_rights": "Gi nye enkeltrettigheter",
     "request_single_rights": "Be om enkeltrettigheter",

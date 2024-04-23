@@ -133,7 +133,7 @@
     "own_orgnumber_delegation_heading": "You can't delegate to your own organisation number",
     "own_orgnumber_delegation_paragraph": "Search for another organisation number to continue.",
     "no_orgs_chosen": "No chosen organisations",
-    "insufficient_authentication_level": "You don't have secure enough login to delegate the service. Click on the button to go to login and choose a higher security level. You then have the start the delegation over. You can choose between the following:"
+    "insufficient_authentication_level": "You don't have secure enough login to delegate the service. Please log in with one of the methods below:"
   },
   "single_rights": {
     "delegate_single_rights": "Delegate single rights",
