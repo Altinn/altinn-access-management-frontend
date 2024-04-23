@@ -125,7 +125,7 @@
     "receipt_page_main_button": "To API-overview",
     "failed_delegations": "These API delegations went wrong and were therefore not assigned",
     "succesful_delegations": "These API delegations were successful",
-    "no_offered_delegations": "Your organisation hasn't delegated any APIs",
+    "no_offered_api_delegations": "Your organisation hasn't delegated any APIs",
     "no_received_delegations": "Your organisation hasn't received any API delegations",
     "receipt_page_failed_text": "Please try again later and contact Altinn Service desk if the error persists.",
     "receipt_page_bottom_text": "Access is granted and valid until it is actively deleted or withdrawn.",
