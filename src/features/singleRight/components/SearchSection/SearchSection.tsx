@@ -272,7 +272,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           values={filters}
           onApply={(filters) => {
             setFilters(filters);
-            setCurrentPage(1);
           }}
         ></Filter>
       </div>
