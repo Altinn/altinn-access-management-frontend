@@ -115,12 +115,14 @@ export const ChooseApiPage = () => {
     setUrlParams(urlParams);
   };
 
-  const filterOptions: FilterOption[] | undefined = apiProviders?.map(
-    (provider: ResourceOwner) => ({
-      label: provider.organisationName,
-      value: provider.organisationNumber,
-    }),
-  );
+  const filterOptions: FilterOption[] | undefined = apiProviders
+    ? apiProviders.map((provider: ResourceOwner) => {
+        return {
+          label: provider.organisationName,
+          value: provider.organisationNumber,
+        };
+      })
+    : [];
 
   const delegableApiActionBars = () => {
     if (error?.message) {
@@ -251,7 +253,7 @@ export const ChooseApiPage = () => {
                 onApply={(filters) => {
                   setFilters(filters);
                 }}
-                searchable={true}
+                searchable
                 fullScreenModal={isSm}
               />
             </div>

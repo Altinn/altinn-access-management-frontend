@@ -89,7 +89,7 @@ export const OptionDisplay = ({
     return (
       <button
         className={classes.option}
-        key={option.value}
+        key={option.label}
         onClick={() => {
           handleSelection(option.value);
         }}
