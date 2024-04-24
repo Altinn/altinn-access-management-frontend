@@ -180,7 +180,7 @@ export const OverviewPageContent = ({
             fullWidth={isSm}
             size='medium'
           >
-            <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_org')}
+            <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_api')}
           </Button>
         </div>
       )}
