@@ -57,7 +57,7 @@
     "eslint-plugin-react": "^7.32.2",
     "husky": "^9.0.0",
     "lint-staged": "^15.0.0",
-    "madge": "^6.0.0",
+    "madge": "^7.0.0",
     "prettier": "^3.0.0",
     "redux-logger": "^3.0.6",
     "typescript": "5.4.5",
