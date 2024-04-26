@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { defineConfig } from 'cypress';
 
 export default defineConfig({

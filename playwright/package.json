@@ -1,0 +1,24 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "description": "",
+  "packageManager": "yarn@4.0.2",
+  "main": "index.js",
+  "scripts": {
+    "env:at22": "cross-env environment=at22 npx playwright test",
+    "env:at23": "cross-env environment=at23 npx playwright test",
+    "env:at24": "cross-env environment=at24 npx playwright test",
+    "env:tt02": "cross-env environment=tt02 npx playwright test",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "dotenv": "^16.4.5"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
