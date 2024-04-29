@@ -1,7 +1,10 @@
-.infoText {
-  margin-bottom: 2.2rem;
+.navButtons {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 30px;
 }
 
-.collectionBar {
-  margin-bottom: 3.5rem;
+.pagination {
+  width: 100%;
 }

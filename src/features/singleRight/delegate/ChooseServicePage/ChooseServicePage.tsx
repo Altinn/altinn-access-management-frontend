@@ -47,9 +47,8 @@ export const ChooseServicePage = () => {
     error: recipientError,
     userID,
     partyID,
-    isLoading,
+    isLoading: recipientIsLoading,
   } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
-  const pageIsLoading = true;
 
   const onAdd = (serviceResource: ServiceResource) => {
     const dto: DelegationAccessCheckDto = {
@@ -72,11 +71,11 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
         <PageContent>
-          {pageIsLoading ? (
+          {recipientIsLoading ? (
             <ChooseServiceSkeleton />
           ) : (
             <>
-              {!isLoading && recipientError ? (
+              {recipientError ? (
                 <RecipientErrorAlert
                   userUUID={urlParams.get('userUUID')}
                   partyUUID={urlParams.get('partyUUID')}
