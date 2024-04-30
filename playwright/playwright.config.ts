@@ -11,10 +11,10 @@ dotenv.config({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   testMatch: ['playwright/e2eTests/idPortenLogin.spec.ts'],
-  timeout: 5000,
-  reporter: 'html',
+  reporter: process.env.CI ? 'dot' : 'list',
+  timeout: 5 * 60 * 1000,
   use: {
-    headless: false,
+    headless: true,
     screenshot: 'on',
     video: 'on',
     launchOptions: {},
