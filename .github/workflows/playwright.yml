@@ -1,7 +1,6 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
   schedule : 
@@ -15,8 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         environment: [AT21, AT22, AT23, AT24]
-    
-
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
