@@ -27,7 +27,7 @@ import {
   ServiceStatus,
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
-import { debounce } from '@/resources/utils';
+import { arraysEqual, debounce } from '@/resources/utils';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -270,8 +270,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           searchable
           fullScreenModal={isSm}
           values={filters}
-          onApply={(filters) => {
-            setFilters(filters);
+          onApply={(filtersToApply) => {
+            if (!arraysEqual(filtersToApply, filters)) {
+              setFilters(filtersToApply);
+              setCurrentPage(1);
+            }
           }}
         ></Filter>
       </div>

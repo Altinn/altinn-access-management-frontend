@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .Where(sr => sr.HasCompetentAuthority != null && sr.HasCompetentAuthority.Name != null
                                  && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
-                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode)
+                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode.ToUpper())
                     .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
                     .Select(sr => new ResourceOwnerFE(
                         sr.HasCompetentAuthority.Name[languageCode],
@@ -265,7 +265,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
-                List<ServiceResource> resources = await _resourceRegistryClient.GetResources();
+                resources = await _resourceRegistryClient.GetResources();
 
                 MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetPriority(CacheItemPriority.High)
