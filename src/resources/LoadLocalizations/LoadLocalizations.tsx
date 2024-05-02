@@ -9,27 +9,22 @@ interface Props {
 }
 
 const LoadLocalizations = ({ children }: Props) => {
-  const getBackupLanguage = () => {
+  const getLanguageFile = async () => {
     const value = getCookie('i18next');
-    if (value === 'no_nn' || value === 'en') {
-      return value;
+    if (value === 'no_nn') {
+      return [await import('../../localizations/no_nn.json'), 'no_nn'] as const;
+    } else if (value === 'en') {
+      return [await import('../../localizations/en.json'), 'en'] as const;
     } else {
-      return 'no_nb';
+      return [await import('../../localizations/no_nb.json'), 'no_nb'] as const;
     }
   };
-
-  const backupLang = getBackupLanguage();
-  const envUrl = import.meta.env.DEV ? 'src/' : 'accessmanagement/';
-  const baseUrl = import.meta.env.BASE_URL + envUrl;
-  const localizationsFilePath = `${baseUrl}localizations/${backupLang}.json`;
-  const localizationsFileUrl = new URL(localizationsFilePath, import.meta.url).href;
 
   useQuery(
     ['Localizations'],
     async () => {
-      const data = await fetch(localizationsFileUrl);
-      const resource = await data.json();
-      return i18next.addResourceBundle(backupLang, 'common', resource);
+      const [data, language] = await getLanguageFile();
+      return i18next.addResourceBundle(language, 'common', data.default);
     },
     {
       staleTime: Infinity,
