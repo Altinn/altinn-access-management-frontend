@@ -115,16 +115,14 @@ export const ChooseApiPage = () => {
     setUrlParams(urlParams);
   };
 
-  const handleFilterChange = (filterList: string[]) => {
-    setFilters(filterList);
-  };
-
-  const filterOptions: FilterOption[] | undefined = apiProviders?.map(
-    (provider: ResourceOwner) => ({
-      label: provider.organisationName,
-      value: provider.organisationNumber,
-    }),
-  );
+  const filterOptions: FilterOption[] | undefined = apiProviders
+    ? apiProviders.map((provider: ResourceOwner) => {
+        return {
+          label: provider.organisationName,
+          value: provider.organisationNumber,
+        };
+      })
+    : [];
 
   const delegableApiActionBars = () => {
     if (error?.message) {
@@ -245,14 +243,17 @@ export const ChooseApiPage = () => {
             </div>
             <div className={classes.filter}>
               <Filter
-                options={filterOptions}
                 icon={<FilterIcon />}
                 label={String(t('api_delegation.filter_label'))}
+                options={filterOptions}
                 applyButtonLabel={String(t('common.apply'))}
                 resetButtonLabel={String(t('common.reset_choices'))}
                 closeButtonAriaLabel={String(t('common.close'))}
-                onApply={handleFilterChange}
-                searchable={true}
+                values={filters}
+                onApply={(filters) => {
+                  setFilters(filters);
+                }}
+                searchable
                 fullScreenModal={isSm}
               />
             </div>

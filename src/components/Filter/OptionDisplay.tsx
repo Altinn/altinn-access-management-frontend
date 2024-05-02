@@ -84,12 +84,12 @@ export const OptionDisplay = ({
     setSortedOptions(optionSearch(options, searchString));
   };
 
-  const checkboxes = sortedOptions.map((option) => {
+  const checkboxes = sortedOptions.map((option, index) => {
     const isSelected = selectedValues?.includes(option.value);
     return (
       <button
         className={classes.option}
-        key={option.value}
+        key={`filterOption_${index}_${option.value}`}
         onClick={() => {
           handleSelection(option.value);
         }}

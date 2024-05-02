@@ -179,12 +179,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .Where(sr => sr.HasCompetentAuthority != null && sr.HasCompetentAuthority.Name != null
                                  && sr.HasCompetentAuthority.Name.ContainsKey(languageCode)
                                  && relevantResourceTypeList.Contains(sr.ResourceType))
-                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode)
+                    .GroupBy(sr => sr.HasCompetentAuthority.Orgcode.ToUpper())
                     .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
                     .Select(sr => new ResourceOwnerFE(
                         sr.HasCompetentAuthority.Name[languageCode],
                         sr.HasCompetentAuthority.Organization))
-                    .OrderBy(resorceOwner => resorceOwner.OrganisationName) // Order alphabetically
+                    .OrderBy(resourceOwner => resourceOwner.OrganisationName) // Order alphabetically
                     .ToList();
 
                 return resourceOwnerList;
@@ -262,7 +262,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<ServiceResource>> GetResources()
         {
             string cacheKey = "resources:all";
-
+            
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
                 resources = await _resourceRegistryClient.GetResources();
