@@ -444,12 +444,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-css@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@digdir/designsystemet-css@npm:0.2.2"
+"@digdir/designsystemet-css@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@digdir/designsystemet-css@npm:0.6.0"
   dependencies:
-    "@digdir/designsystemet-react": "npm:^0.54.0"
-  checksum: 10/f5db30ab54d2438b37e3807da819cd5b6762e0781051218f0448b3b83037aa62a5371f237803709c54a7014eec953333ac580b941a5532c2509092d6da89b19e
+    "@digdir/designsystemet-react": "npm:^0.59.0"
+  checksum: 10/1130b5aa05f220addcf4379348cf6770addb8ec52783401c28892df469080e5ebf45b27914d2be63d658ce491183ef19b85b57d022bae5b6c19adf3787893828
   languageName: node
   linkType: hard
 
@@ -468,18 +468,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:^0.54.0":
-  version: 0.54.0
-  resolution: "@digdir/designsystemet-react@npm:0.54.0"
+"@digdir/designsystemet-react@npm:^0.59.0":
+  version: 0.59.0
+  resolution: "@digdir/designsystemet-react@npm:0.59.0"
   dependencies:
     "@floating-ui/react": "npm:0.26.4"
     "@navikt/aksel-icons": "npm:^5.12.2"
     "@radix-ui/react-slot": "npm:^1.0.2"
-    "@tanstack/react-virtual": "npm:^3.0.1"
+    "@tanstack/react-virtual": "npm:^3.2.0"
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: 10/8531abfa45f292b7dbc2cff38254c5e1896ba1a96c47520f31c6e164e3467d778e96b6e57088400989f9559f3858ec544c88e0f30a7d5adfbd7ddea85e742d22
+  checksum: 10/84656a3838b219a52d525ba1b9eedba34fc3717662f4c04c5dd5eb21503ea22022731b2e5ee10e60acd4159157acd15a2020bc21075d2d8a95ec7592704be9d0
   languageName: node
   linkType: hard
 
@@ -1596,10 +1596,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-virtual@npm:^3.2.0":
+  version: 3.5.0
+  resolution: "@tanstack/react-virtual@npm:3.5.0"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.5.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/ecb1424b9961ada3c7516b8f05a1bb37fb1b75cb88035e06530a9365e4e565e701b5de9668c17f727bbcb3be1bbe6482f7bd37af9e0b144846e5a67fc9dfd57d
+  languageName: node
+  linkType: hard
+
 "@tanstack/virtual-core@npm:3.4.0":
   version: 3.4.0
   resolution: "@tanstack/virtual-core@npm:3.4.0"
   checksum: 10/b4fe50c36dd5d9e4998c154323e777a027216296bf862faf73eaa357144e2b33f6298732e5bf7f8d9a151d2d65d3488872f767276c7630f245dbabfb034fc0fc
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.5.0":
+  version: 3.5.0
+  resolution: "@tanstack/virtual-core@npm:3.5.0"
+  checksum: 10/76a37734118c59f992bfdd540bb5900aa30d040c723909312c1e7071af1619da6ddedabba1834802fee7e0f6497c38d0fe8bc70ab4950d2d09342558b5c89bb2
   languageName: node
   linkType: hard
 
@@ -1993,7 +2012,7 @@ __metadata:
     "@altinn/altinn-design-system": "npm:0.30.0"
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/design-system-tokens": "npm:0.13.0"
-    "@digdir/designsystemet-css": "npm:0.2.2"
+    "@digdir/designsystemet-css": "npm:0.6.0"
     "@digdir/designsystemet-react": "npm:0.55.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@playwright/test": "npm:^1.43.1"
