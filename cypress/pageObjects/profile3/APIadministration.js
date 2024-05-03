@@ -9,6 +9,5 @@ export const apiDelegering = {
   orgListInConfirmationPage: '*[class^="_baseListItemContent"]',
   orgInDelegationsOverviewPage: '*[class^="_actionBarWrapper"]',
   previousDelegatedOrgsContainer:
-    // eslint-disable-next-line prettier/prettier
     '*[class^="_delegableOrgsContainer"] > *[class^="_actionBarScrollContainer"]',
 };

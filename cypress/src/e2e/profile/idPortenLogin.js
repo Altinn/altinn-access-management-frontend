@@ -1,5 +1,4 @@
 /// <reference types='cypress' />
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { idPortenLogin } from '../../support/idPortenLogin';
 
 describe('login tests', () => {

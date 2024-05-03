@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import './login';
 import './party-select';
 import './other-with-rights-helper';
@@ -7,7 +6,6 @@ import './generic-helper';
 import './APIadministration';
 import './idPortenLogin';
 
-// eslint-disable-next-line no-undef
 const registerCypressGrep = require('cypress-grep');
 registerCypressGrep();
 

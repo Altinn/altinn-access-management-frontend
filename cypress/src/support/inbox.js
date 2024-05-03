@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types='cypress' />
 import { inboxPage } from '../../pageObjects/Inbox/inbox';
 

@@ -1,4 +1,3 @@
-/* eslint-disable cypress/unsafe-to-chain-command */
 import { recurse } from 'cypress-recurse';
 
 Cypress.Commands.add('typeAndRetry', (textField, text) => {
