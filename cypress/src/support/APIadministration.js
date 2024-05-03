@@ -1,4 +1,3 @@
-/* eslint-disable cypress/no-unnecessary-waiting */
 import { apiDelegering } from '../../pageObjects/profile3/APIadministration';
 
 Cypress.Commands.add('deleteAPIsDelegated', () => {

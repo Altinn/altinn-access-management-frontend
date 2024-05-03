@@ -1,4 +1,3 @@
-/* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types='cypress' />
 import { otherWithRights } from '../../../pageObjects/profile3/other-with-rights';
 import { apiDelegering } from '../../../pageObjects/profile3/APIadministration';

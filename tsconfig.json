@@ -26,6 +26,12 @@
   "**/*.ts",
   "**/*.tsx",
   "**/*.js",
-  "**/.eslintrc.js"],
+  "**/.eslintrc.js"
+],
+"exclude": [
+  "node_modules",
+  "dist",
+  "eslint.config.cjs"
+],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
