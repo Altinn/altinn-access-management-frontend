@@ -150,7 +150,6 @@ async Task SetConfigurationProviders(ConfigurationManager config)
     config.AddCommandLine(args);
 
     await ConnectToKeyVaultAndSetApplicationInsights(config);
-
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
