@@ -1,15 +1,5 @@
 {
   "profiles": {
-    "http": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5110"
-    },
     "LocalDev": {
       "commandName": "Project",
       "launchBrowser": true,
@@ -34,18 +24,6 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "publishAllPorts": true,
-      "useSSL": true
-    },
-    "ATDev": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "AT22",
-        "RUN_FRONTEND_LOCALLY": "true"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost",
       "useSSL": true
     }
   },

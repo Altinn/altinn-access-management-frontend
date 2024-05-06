@@ -1,6 +1,6 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    var isDev = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.OrdinalIgnoreCase) || string.Equals(Environment.GetEnvironmentVariable("RUN_FRONTEND_LOCALLY"), "true", StringComparison.OrdinalIgnoreCase);
+    var isDev = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.OrdinalIgnoreCase);
 }
 
 <!DOCTYPE html>
