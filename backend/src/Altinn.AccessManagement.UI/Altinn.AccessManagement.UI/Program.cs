@@ -149,10 +149,8 @@ async Task SetConfigurationProviders(ConfigurationManager config)
 
     config.AddCommandLine(args);
 
-    if (!builder.Environment.IsDevelopment())
-    {
-        await ConnectToKeyVaultAndSetApplicationInsights(config);
-    }
+    await ConnectToKeyVaultAndSetApplicationInsights(config);
+
 }
 
 async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
@@ -206,6 +204,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
         services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
+        services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
     }
     else
     {
@@ -214,6 +213,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         services.AddHttpClient<IRegisterClient, RegisterClient>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
         services.AddHttpClient<ISingleRightClient, SingleRightClient>();
+        services.AddSingleton<IKeyVaultService, KeyVaultService>();
     }
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -224,14 +224,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
-    if (builder.Environment.IsDevelopment())
-    {
-        services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
-    }
-    else
-    {
-        services.AddSingleton<IKeyVaultService, KeyVaultService>();
-    }
 
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 
