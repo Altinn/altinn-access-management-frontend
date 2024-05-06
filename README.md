@@ -53,6 +53,7 @@ OBS: Note that overwriting this path in the host file will make you unable to re
 
 Open Altinn.AccessManagement.UI.sln in Visual Studio (or another IDE).
 
+- In Visual Studio, log in with your ai-dev email (the user that has the necessary accesses)
 - Locate the Launch button
 - Switch launch settings to the one named AT22
 - Start the application by pressing the Launch button
