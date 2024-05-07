@@ -61,7 +61,7 @@ export const useFetchRecipientInfo = (
             setError(true);
         }
       }
-    } else if (partyUUID && !getPartyIsLoading) {
+    } else if (!userUUID && partyUUID && !getPartyIsLoading) {
       if (getPartyError || !party) {
         setError(true);
       } else {
