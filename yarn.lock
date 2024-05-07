@@ -453,22 +453,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:0.55.0":
-  version: 0.55.0
-  resolution: "@digdir/designsystemet-react@npm:0.55.0"
-  dependencies:
-    "@floating-ui/react": "npm:0.26.4"
-    "@navikt/aksel-icons": "npm:^5.12.2"
-    "@radix-ui/react-slot": "npm:^1.0.2"
-    "@tanstack/react-virtual": "npm:^3.0.1"
-  peerDependencies:
-    react: ">=18.2.0"
-    react-dom: ">=18.2.0"
-  checksum: 10/36bd8d02b21f2553bca4a1909c5e6653d1525b5130278eecee53e6476740273a691e96c276c1f8b2466533b4071246d6f1451faa73351226f3e478c044326d13
-  languageName: node
-  linkType: hard
-
-"@digdir/designsystemet-react@npm:^0.59.0":
+"@digdir/designsystemet-react@npm:0.59.0, @digdir/designsystemet-react@npm:^0.59.0":
   version: 0.59.0
   resolution: "@digdir/designsystemet-react@npm:0.59.0"
   dependencies:
@@ -1584,18 +1569,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.0.1":
-  version: 3.4.0
-  resolution: "@tanstack/react-virtual@npm:3.4.0"
-  dependencies:
-    "@tanstack/virtual-core": "npm:3.4.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/73c272d4a6242d1e49e37e56cec3985d8ff3108e8cd33d2f0c8c3f6ec3d84fece50813e875ee15ee025de4c47f051fcdf8829b1a9c824fd360ae0a569eddb1f5
-  languageName: node
-  linkType: hard
-
 "@tanstack/react-virtual@npm:^3.2.0":
   version: 3.5.0
   resolution: "@tanstack/react-virtual@npm:3.5.0"
@@ -1605,13 +1578,6 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/ecb1424b9961ada3c7516b8f05a1bb37fb1b75cb88035e06530a9365e4e565e701b5de9668c17f727bbcb3be1bbe6482f7bd37af9e0b144846e5a67fc9dfd57d
-  languageName: node
-  linkType: hard
-
-"@tanstack/virtual-core@npm:3.4.0":
-  version: 3.4.0
-  resolution: "@tanstack/virtual-core@npm:3.4.0"
-  checksum: 10/b4fe50c36dd5d9e4998c154323e777a027216296bf862faf73eaa357144e2b33f6298732e5bf7f8d9a151d2d65d3488872f767276c7630f245dbabfb034fc0fc
   languageName: node
   linkType: hard
 
@@ -2013,7 +1979,7 @@ __metadata:
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/design-system-tokens": "npm:0.13.0"
     "@digdir/designsystemet-css": "npm:0.6.0"
-    "@digdir/designsystemet-react": "npm:0.55.0"
+    "@digdir/designsystemet-react": "npm:0.59.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@playwright/test": "npm:^1.43.1"
     "@reduxjs/toolkit": "npm:^2.1.0"
