@@ -83,6 +83,7 @@ export const ResourceActionBar = ({
         onAddClick?.();
       }}
       icon={compact}
+      className={classes.actionBarButtonText}
     >
       {!compact && (status === ServiceStatus.HTTPError ? t('common.try_again') : t('common.add'))}
       <PlusCircleIcon
