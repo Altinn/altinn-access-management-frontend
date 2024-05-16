@@ -31,7 +31,7 @@
     "cypress": "13.6.4",
     "cypress-real-events": "^1.10.0",
     "i18next": "^23.0.0",
-    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-browser-languagedetector": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.0",
