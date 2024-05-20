@@ -3189,7 +3189,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.8.1":
+"cypress@npm:^13.9.0":
   version: 13.9.0
   resolution: "cypress@npm:13.9.0"
   dependencies:
@@ -3245,7 +3245,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "cypress@workspace:cypress"
   dependencies:
-    cypress: "npm:^13.8.1"
+    cypress: "npm:^13.9.0"
     cypress-file-upload: "npm:^5.0.8"
     cypress-grep: "npm:^3.0.0"
     cypress-iframe: "npm:^1.0.1"
