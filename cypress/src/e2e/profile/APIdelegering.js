@@ -185,13 +185,15 @@ describe('API delegering tests', () => {
 
     //click option in filter, click same option again and verify if it resets
     cy.contains('Testdepartement').click();
-    cy.contains('Testdepartement').siblings().should('be.checked');
+    cy.wait(200);
+    cy.get('input[type="checkbox"]').should('be.checked');
+
     cy.contains('Testdepartement').click();
     cy.contains('Testdepartement').siblings().should('not.be.checked');
 
     //select Testdepartement option from filter and verify only APIs with Testdepartement as provider is listed
     cy.contains('Testdepartement').click();
-    cy.contains('Testdepartement').siblings().should('be.checked');
+    cy.get('input[type="checkbox"]').should('be.checked');
     cy.get('button').contains(new RegExp('^Bruk$', 'g')).should('be.enabled').click();
     cy.get(
       ':nth-child(1) > *[class^="_delegableApisContainer"] > *[class^="_actionBarWrapper"]',
@@ -205,12 +207,12 @@ describe('API delegering tests', () => {
     cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 })
       .eq(1)
       .type('Maskinporten Schema - AM - K6');
-    cy.get(':nth-child(1) > *[class^="_delegableApisContainer"] > *[class^="_actionBarWrapper"]')
-      .children()
-      .contains(/^Maskinporten Schema - AM - K6$/)
-      .closest('*[class^="_actionBar_"]')
-      .find('button[aria-label*="Legg til"]')
+    //searching for API in seach field to mach the exact string.  Ref: https://stackoverflow.com/a/57894080
+    cy.get(apiDelegering.seachedAPIResultContainer)
+      .contains(new RegExp('^' + 'Maskinporten Schema - AM - K6' + '$', 'g'))
       .click();
+    //clicking Add button for adding API to the list
+    cy.get(`button[aria-label="Legg til Maskinporten Schema - AM - K6"]`).first().click();
     cy.get(apiDelegering.selectedAPIsForDelegationResultContainer).should('not.be.empty');
     cy.get(
       ':nth-child(2) > *[class^="_delegableApisContainer"] > *[class^="_actionBarWrapper"]',
@@ -450,6 +452,9 @@ describe('API delegering tests', () => {
       .eq(1)
       .type('Maskinporten Schema - AM - K6 - NUF');
     cy.get('*[class^="_actionBarActions_"]').first().click();
-    cy.get('*[class^="fds-alert-icon-"]').should('have.text', 'Feil');
+    cy.get('.fds-alert').should(
+      'have.text',
+      'FeilDu har ikke tilstrekkelig rettighet til å delegere denne tjenesten. Daglig leder eller hovedadministrator kan hjelpe deg med dette.',
+    );
   });
 });

@@ -55,7 +55,7 @@ Cypress.Commands.add('chooseAPIToBeDelegated', (apiName) => {
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
-  cy.get('button[aria-label*="Legg til"]').eq(1).click();
+  cy.get(`button[aria-label="Legg til ${apiName}"]`).first().click();
 });
 
 Cypress.Commands.add('verifyAPIselectedForDelegation', (apiName) => {
@@ -129,7 +129,7 @@ Cypress.Commands.add('chooseSameOrgToDelegateAPI', (supplierOrgName) => {
   cy.get('h4').should('contain', 'Tidligere tildelegerte virksomheter');
   cy.get(apiDelegering.previousDelegatedOrgsContainer).should('contain.text', supplierOrgName);
   cy.contains(supplierOrgName)
-    .closest('*[class^="_actionBar_"]')
+    .closest('*[class^="_actionBarWrapper_"]')
     .find('button[aria-label*="Legg til"]')
     .click();
   cy.contains('button', 'Neste').click();
@@ -140,7 +140,7 @@ Cypress.Commands.add('filterAPIUsingAPIProvidersFilterAndAddAPI', (apiName) => {
   cy.get('button').contains('Filtrer på etat').click();
   cy.wait(1000);
   cy.contains('Testdepartement').click();
-  cy.contains('Testdepartement').siblings().should('be.checked');
+  cy.get('input[type="checkbox"]').should('be.checked');
   cy.get('button').contains(new RegExp('^Bruk$', 'g')).should('be.enabled').click();
 
   //clicking Add button for adding API
@@ -160,7 +160,7 @@ Cypress.Commands.add('addOrgToListAndMakeItReadyToAddNextOrg', (supplierOrg, sup
   cy.get('h4').should('contain', 'Virksomheter basert på ditt søk');
   cy.get(apiDelegering.searchedOrgResultContainer).should('contains.text', supplierOrgName);
   cy.contains(supplierOrgName)
-    .closest('*[class^="_actionBar_"]')
+    .closest('*[class^="_actionBarWrapper_"]')
     .find('button[aria-label*="Legg til"]')
     .click();
   cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type('{selectall}{backspace}');
