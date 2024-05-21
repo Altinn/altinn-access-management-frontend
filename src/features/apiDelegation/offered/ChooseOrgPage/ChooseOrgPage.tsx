@@ -128,7 +128,12 @@ export const ChooseOrgPage = () => {
             <Button
               variant={'tertiary'}
               color={'second'}
-              onClick={() => dispatch(softAddOrg(org))}
+              onClick={async () => {
+                try {
+                  await dispatch(softAddOrg(org));
+                  setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgName}`);
+                } catch {}
+              }}
               aria-label={t('common.add') + ' ' + org.orgName}
               size='large'
               icon={true}
