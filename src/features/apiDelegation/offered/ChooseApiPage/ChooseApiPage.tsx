@@ -37,6 +37,7 @@ import {
   ResourceType,
   useGetResourceOwnersQuery,
 } from '@/rtk/features/resourceOwner/resourceOwnerApi';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 
@@ -56,6 +57,7 @@ export const ChooseApiPage = () => {
   const dispatch = useAppDispatch();
   const [delegationCheck] = useDelegationCheckMutation();
   const resourceTypeList: ResourceType[] = [ResourceType.MaskinportenSchema];
+  const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
 
   const {
     data: searchResults,
@@ -108,6 +110,7 @@ export const ChooseApiPage = () => {
   const handleRemove = (api: DelegableApi) => {
     removeApiFromParams(api);
     dispatch(softRemoveApi(api));
+    setChosenItemsStatusMessage(`${t('common.removed')}: ${api.apiName}`);
   };
 
   const removeApiFromParams = (api: DelegableApi) => {
@@ -161,6 +164,7 @@ export const ChooseApiPage = () => {
           onAdd={() => {
             addApiToParams(api);
             dispatch(softAddApi(api));
+            setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
           }}
           initWithDelegationCheck={initWithDelegationCheck}
         ></ApiActionBar>
@@ -278,6 +282,7 @@ export const ChooseApiPage = () => {
               </div>
             )}
           </div>
+          <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
           <GroupElements>
             <Button
               variant={'secondary'}

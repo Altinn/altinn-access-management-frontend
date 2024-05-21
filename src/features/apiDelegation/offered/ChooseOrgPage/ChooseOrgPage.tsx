@@ -32,9 +32,9 @@ import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import classes from './ChooseOrgPage.module.css';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
@@ -128,11 +128,9 @@ export const ChooseOrgPage = () => {
             <Button
               variant={'tertiary'}
               color={'second'}
-              onClick={async () => {
-                try {
-                  await dispatch(softAddOrg(org));
-                  setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgName}`);
-                } catch {}
+              onClick={() => {
+                dispatch(softAddOrg(org));
+                setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgName}`);
               }}
               aria-label={t('common.add') + ' ' + org.orgName}
               size='large'
@@ -161,8 +159,9 @@ export const ChooseOrgPage = () => {
             <Button
               variant={'tertiary'}
               color={'danger'}
-              onClick={() => {
+              onClick={async () => {
                 handleSoftRemove(org);
+                setChosenItemsStatusMessage(`${t('common.removed')}: ${org.orgName}`);
               }}
               aria-label={t('common.remove') + ' ' + org.orgName}
               size='large'
