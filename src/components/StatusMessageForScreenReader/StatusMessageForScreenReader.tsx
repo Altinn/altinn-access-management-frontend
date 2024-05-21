@@ -1,5 +1,6 @@
 import * as React from 'react';
-import classes from './StatusMessage.module.css';
+
+import classes from './StatusMessageForScreenReader.module.css';
 
 interface statusMessageProps {
   children?: React.ReactNode;
@@ -7,7 +8,7 @@ interface statusMessageProps {
   visibility?: boolean;
 }
 
-export const StatusMessage = ({
+export const StatusMessageForScreenReader = ({
   children,
   politenessSetting = 'polite',
   visibility = false,
