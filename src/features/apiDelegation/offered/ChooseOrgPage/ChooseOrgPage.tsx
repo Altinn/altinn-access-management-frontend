@@ -34,6 +34,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ChooseOrgPage.module.css';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
@@ -49,6 +50,7 @@ export const ChooseOrgPage = () => {
   const [promptOrgNumber, setPromptOrgNumber] = useState(false);
   const [viewLoading, setViewLoading] = useState(true);
   const isSm = useMediaQuery('(max-width: 768px)');
+  const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
   const navigate = useNavigate();
 
   const { t } = useTranslation('common');
@@ -174,12 +176,14 @@ export const ChooseOrgPage = () => {
   const infoPanel = () => {
     if (reporteeOrgNumber === searchString && searchString.length > 0) {
       return (
-        <Alert severity='warning'>
+        <Alert
+          severity='warning'
+          role='alert'
+        >
           <Heading
             size={'xsmall'}
             level={2}
             spacing
-            role='alert'
           >
             {t('api_delegation.own_orgnumber_delegation_heading')}
           </Heading>
@@ -240,6 +244,7 @@ export const ChooseOrgPage = () => {
             />
           )}
           <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
+          <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
           {isSm && chosenItems.length > 0 && (
             <div className={classes.chosenOrgs}>
               <h4 className={classes.chosenOrgsHeader}>

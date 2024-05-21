@@ -161,6 +161,7 @@ export const ApiActionBar = ({
     if (error) {
       return (
         <Alert
+          role='alert'
           severity='danger'
           className={classes.errorContent}
         >
@@ -170,6 +171,7 @@ export const ApiActionBar = ({
     } else if (accessResult?.details[0].code === ErrorCode.InsufficientAuthenticationLevel) {
       return (
         <Alert
+          role='alert'
           severity='danger'
           className={classes.errorContent}
         >
@@ -189,6 +191,7 @@ export const ApiActionBar = ({
     } else if (accessResult?.details[0].code === ErrorCode.MissingRoleAccess) {
       return (
         <Alert
+          role='alert'
           severity='danger'
           className={classes.errorContent}
         >
@@ -201,6 +204,7 @@ export const ApiActionBar = ({
     } else {
       return (
         <Alert
+          role='alert'
           severity='danger'
           className={classes.errorContent}
         >
