@@ -5,19 +5,19 @@ import classes from './StatusMessageForScreenReader.module.css';
 interface statusMessageProps {
   children?: React.ReactNode;
   politenessSetting?: 'off' | 'polite' | 'assertive';
-  visibility?: boolean;
+  visible?: boolean;
 }
 
 export const StatusMessageForScreenReader = ({
   children,
   politenessSetting = 'polite',
-  visibility = false,
+  visible = false,
 }: statusMessageProps) => {
   return (
     <div
       role='status'
       aria-live={politenessSetting}
-      className={visibility ? '' : classes.visuallyHidden}
+      className={visible ? '' : classes.visuallyHidden}
     >
       {children}
     </div>

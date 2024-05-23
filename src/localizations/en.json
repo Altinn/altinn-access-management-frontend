@@ -120,6 +120,7 @@
     "scopes": "Scopes",
     "search_for_buisness": "Search by organisation number",
     "search_for_api": "Search for API",
+    "search_for_api_no_result": "No results found",
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Something crashed, try refreshing the page.",

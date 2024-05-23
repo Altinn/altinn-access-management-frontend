@@ -118,6 +118,7 @@
     "scopes": "Scopes",
     "search_for_buisness": "Søk på organisasjonsnummer",
     "search_for_api": "Søk etter API",
+    "search_for_api_no_result": "Søket gav ingen resultat",
     "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Noke feilet, prøv å laste inn sida på ny.",

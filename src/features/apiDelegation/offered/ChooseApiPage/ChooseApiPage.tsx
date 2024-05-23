@@ -154,7 +154,16 @@ export const ChooseApiPage = () => {
     const unchosenApis = searchResults?.filter(
       (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
     );
-
+    if (unchosenApis && unchosenApis?.length === 0) {
+      return (
+        <StatusMessageForScreenReader
+          visible
+          politenessSetting='assertive'
+        >
+          {t('api_delegation.search_for_api_no_result')}
+        </StatusMessageForScreenReader>
+      );
+    }
     return unchosenApis?.map((api: DelegableApi) => {
       const initWithDelegationCheck = prechosenApis.includes(api.identifier);
       return (
