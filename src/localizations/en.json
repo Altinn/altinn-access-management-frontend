@@ -81,6 +81,7 @@
   },
   "api_delegation": {
     "api_delegation_page_title": "API delegation - Altinn",
+    "api_delegation_received_page_title": "Received API-accesses - Altinn",
     "businesses": "Businesses",
     "delegated_apis": "Delegated APIs",
     "api_accesses": "API-accesses",

@@ -4,15 +4,15 @@ import * as React from 'react';
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import ApiIcon from '@/assets/Api.svg?react';
 import { useMediaQuery } from '@/resources/hooks';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 import { OverviewPageContent } from '../../components/OverviewPageContent';
 import { LayoutState } from '../../components/LayoutState';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const OverviewPage = () => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
-  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
+  useDocumentTitle(t('api_delegation.api_delegation_received_page_title'));
 
   return (
     <div>

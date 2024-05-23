@@ -78,6 +78,7 @@
   },
   "api_delegation": {
     "api_delegation_page_title": "Deleger API-tilgang - Altinn",
+    "api_delegation_received_page_title": "Mottekne API-tilganger - Altinn",
     "businesses": "Verksemder",
     "delegated_apis": "Delegerte API",
     "api_accesses": "API-tilgangar",
