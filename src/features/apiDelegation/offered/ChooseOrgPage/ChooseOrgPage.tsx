@@ -159,7 +159,7 @@ export const ChooseOrgPage = () => {
             <Button
               variant={'tertiary'}
               color={'danger'}
-              onClick={async () => {
+              onClick={() => {
                 handleSoftRemove(org);
                 setChosenItemsStatusMessage(`${t('common.removed')}: ${org.orgName}`);
               }}

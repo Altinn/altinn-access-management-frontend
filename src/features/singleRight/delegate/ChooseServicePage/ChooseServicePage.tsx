@@ -24,6 +24,7 @@ import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -32,6 +33,7 @@ export const ChooseServicePage = () => {
   const dispatch = useAppDispatch();
   const [urlParams] = useSearchParams();
   const [popoverOpen, setPopoverOpen] = useState(false);
+  useDocumentTitle(t('single_rights.single_rights_page_title'));
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
       (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,

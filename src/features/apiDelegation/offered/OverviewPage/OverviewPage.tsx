@@ -7,10 +7,12 @@ import { useMediaQuery } from '@/resources/hooks';
 
 import { OverviewPageContent } from '../../components/OverviewPageContent';
 import { LayoutState } from '../../components/LayoutState';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const OverviewPage = () => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
+  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
 
   return (
     <PageContainer>

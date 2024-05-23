@@ -22,6 +22,7 @@ import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationReque
 import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './ReceiptPage.module.css';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(
@@ -34,6 +35,7 @@ export const ReceiptPage = () => {
   const dispatch = useAppDispatch();
   const isSm = useMediaQuery('(max-width: 768px)');
   const navigate = useNavigate();
+  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
 
   const failedDelegationContent = () => {
     return (

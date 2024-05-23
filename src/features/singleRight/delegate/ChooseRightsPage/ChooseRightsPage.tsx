@@ -40,6 +40,7 @@ import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
 import classes from './ChooseRightsPage.module.css';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 type Service = {
   serviceIdentifier: string;
@@ -70,7 +71,7 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
   const [clearAccessCashe] = useClearAccessCacheMutation();
-
+  useDocumentTitle(t('single_rights.single_rights_page_title'));
   const {
     name: recipientName,
     error: recipientError,

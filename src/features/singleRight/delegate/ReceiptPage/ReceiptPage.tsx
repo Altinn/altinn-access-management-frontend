@@ -15,6 +15,7 @@ import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 
 import classes from './ReceiptPage.module.css';
 import { ActionBarSection } from './ActionBarSection/ActionBarSection';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ReceiptPage = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export const ReceiptPage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const [urlParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  useDocumentTitle(t('single_rights.single_rights_page_title'));
   const processedDelegations = useAppSelector(
     (state) => state.singleRightsSlice.processedDelegations,
   );

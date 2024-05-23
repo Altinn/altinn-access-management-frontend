@@ -34,6 +34,7 @@ import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegab
 import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './ConfirmationPage.module.css';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
@@ -44,6 +45,7 @@ export const ConfirmationPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
 
   useEffect(() => {
     if (!loading) {

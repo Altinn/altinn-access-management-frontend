@@ -42,6 +42,7 @@ import { StatusMessageForScreenReader } from '@/components/StatusMessageForScree
 import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
@@ -52,6 +53,7 @@ export const ChooseApiPage = () => {
   const partyId = getCookie('AltinnPartyId');
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
+  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
 
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const dispatch = useAppDispatch();
