@@ -77,8 +77,8 @@
     "change_rights": "Endre rettar"
   },
   "api_delegation": {
-    "api_delegation_page_title": "Deleger API-tilgang - Altinn",
-    "api_delegation_received_page_title": "Mottekne API-tilganger - Altinn",
+    "delegate_page_title": "Deleger API-tilgang - Altinn",
+    "received_page_title": "Mottekne API-tilganger - Altinn",
     "businesses": "Verksemder",
     "delegated_apis": "Delegerte API",
     "api_accesses": "API-tilgangar",
@@ -137,7 +137,7 @@
     "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Ver vennleg og logg inn på nytt med ein av metodane under:"
   },
   "single_rights": {
-    "single_rights_page_title": "Deleger enkeltrettar - Altinn",
+    "page_title": "Deleger enkeltrettar - Altinn",
     "delegate_single_rights": "Gi nye enkeltrettar",
     "search_label": "Søk etter skjema og teneste",
     "filter_label": "Filtrer på tenesteeigar",

@@ -80,8 +80,8 @@
     "change_rights": "Edit client rights"
   },
   "api_delegation": {
-    "api_delegation_page_title": "API delegation - Altinn",
-    "api_delegation_received_page_title": "Received API-accesses - Altinn",
+    "delegate_page_title": "API delegation - Altinn",
+    "received_page_title": "Received API-accesses - Altinn",
     "businesses": "Businesses",
     "delegated_apis": "Delegated APIs",
     "api_accesses": "API-accesses",
@@ -139,7 +139,7 @@
     "insufficient_authentication_level": "You don't have secure enough login to delegate the service. Please log in with one of the methods below:"
   },
   "single_rights": {
-    "single_rights_page_title": "Single rights - Altinn",
+    "page_title": "Single rights - Altinn",
     "delegate_single_rights": "Delegate single rights",
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",

@@ -12,7 +12,7 @@ import { useDocumentTitle } from '@/resources/utils/pageUtils';
 export const OverviewPage = () => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
-  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   return (
     <PageContainer>

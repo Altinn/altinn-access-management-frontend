@@ -53,7 +53,7 @@ export const ChooseApiPage = () => {
   const partyId = getCookie('AltinnPartyId');
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
-  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const dispatch = useAppDispatch();

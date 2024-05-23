@@ -12,7 +12,7 @@ import { LayoutState } from '../../components/LayoutState';
 export const OverviewPage = () => {
   const { t } = useTranslation('common');
   const isSm = useMediaQuery('(max-width: 768px)');
-  useDocumentTitle(t('api_delegation.api_delegation_received_page_title'));
+  useDocumentTitle(t('api_delegation.received_page_title'));
 
   return (
     <div>

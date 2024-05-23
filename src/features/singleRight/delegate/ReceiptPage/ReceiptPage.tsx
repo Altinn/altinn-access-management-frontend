@@ -23,7 +23,7 @@ export const ReceiptPage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const [urlParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  useDocumentTitle(t('single_rights.single_rights_page_title'));
+  useDocumentTitle(t('single_rights.page_title'));
   const processedDelegations = useAppSelector(
     (state) => state.singleRightsSlice.processedDelegations,
   );

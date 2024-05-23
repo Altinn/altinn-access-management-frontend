@@ -71,7 +71,7 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
   const [clearAccessCashe] = useClearAccessCacheMutation();
-  useDocumentTitle(t('single_rights.single_rights_page_title'));
+  useDocumentTitle(t('single_rights.page_title'));
   const {
     name: recipientName,
     error: recipientError,

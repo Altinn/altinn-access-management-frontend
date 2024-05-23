@@ -35,7 +35,7 @@ export const ReceiptPage = () => {
   const dispatch = useAppDispatch();
   const isSm = useMediaQuery('(max-width: 768px)');
   const navigate = useNavigate();
-  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   const failedDelegationContent = () => {
     return (

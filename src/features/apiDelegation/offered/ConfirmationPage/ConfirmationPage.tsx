@@ -45,7 +45,7 @@ export const ConfirmationPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  useDocumentTitle(t('api_delegation.api_delegation_page_title'));
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   useEffect(() => {
     if (!loading) {
