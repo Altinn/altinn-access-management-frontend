@@ -1,9 +1,11 @@
 import { Button, Spinner, Search, Skeleton } from '@digdir/designsystemet-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type { SerializedError } from '@reduxjs/toolkit';
 
 import {
   Page,
@@ -38,11 +40,11 @@ import {
   useGetResourceOwnersQuery,
 } from '@/rtk/features/resourceOwner/resourceOwnerApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
@@ -82,7 +84,10 @@ export const ChooseApiPage = () => {
 
     for (const key of urlParams.keys()) {
       searchResults?.forEach((api: DelegableApi) => {
-        if (api.identifier === key) {
+        if (
+          api.identifier === key &&
+          chosenApis.filter((chosenApi: DelegableApi) => chosenApi.identifier === key).length === 0
+        ) {
           const resourceRef: ResourceReference = { resource: api.authorizationReference };
           const promise = delegationCheck({
             partyId,
@@ -129,64 +134,10 @@ export const ChooseApiPage = () => {
       })
     : [];
 
-  const delegableApiActionBars = () => {
-    if (error?.message) {
-      return (
-        <ErrorPanel
-          title={t('api_delegation.data_retrieval_failed')}
-          message={error?.message}
-          statusCode={error?.statusCode}
-        ></ErrorPanel>
-      );
-    } else if (isFetching) {
-      return (
-        <div className={common.spinnerContainer}>
-          <Spinner
-            title={t('common.loading')}
-            variant='interaction'
-          />
-        </div>
-      );
-    }
-
-    const prechosenApis = Array.from(urlParams.keys());
-
-    const unchosenApis = searchResults?.filter(
-      (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
-    );
-    if (unchosenApis && unchosenApis?.length === 0) {
-      return (
-        <StatusMessageForScreenReader
-          visible
-          politenessSetting='assertive'
-        >
-          {t('api_delegation.search_for_api_no_result')}
-        </StatusMessageForScreenReader>
-      );
-    }
-    return unchosenApis?.map((api: DelegableApi) => {
-      const initWithDelegationCheck = prechosenApis.includes(api.identifier);
-      return (
-        <ApiActionBar
-          key={api.identifier}
-          variant={'add'}
-          color={'neutral'}
-          api={api}
-          onAdd={() => {
-            addApiToParams(api);
-            dispatch(softAddApi(api));
-            setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
-          }}
-          initWithDelegationCheck={initWithDelegationCheck}
-        ></ApiActionBar>
-      );
-    });
-  };
-
-  const chosenApiActionBars = chosenApis.map((api: DelegableApi) => {
+  const chosenApiActionBars = chosenApis.map((api: DelegableApi, index) => {
     return (
       <ApiActionBar
-        key={api.identifier}
+        key={`${api.identifier}${index}`}
         api={api}
         variant={'remove'}
         color={'success'}
@@ -278,7 +229,22 @@ export const ChooseApiPage = () => {
               <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
               <div className={classes.delegableApisContainer}>
                 <div className={classes.actionBarWrapper}>
-                  {showSkeleton ? DelegableApiSkeleton() : delegableApiActionBars()}
+                  {showSkeleton ? (
+                    DelegableApiSkeleton()
+                  ) : (
+                    <ApiSearchResults
+                      addApi={(api) => {
+                        addApiToParams(api);
+                        dispatch(softAddApi(api));
+                        setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
+                      }}
+                      error={error}
+                      isFetching={isFetching}
+                      urlParams={urlParams}
+                      searchResults={searchResults || []}
+                      chosenApis={chosenApis}
+                    ></ApiSearchResults>
+                  )}
                 </div>
               </div>
             </div>
@@ -321,5 +287,85 @@ export const ChooseApiPage = () => {
         </PageContent>
       </Page>
     </PageContainer>
+  );
+};
+
+interface ApiSearchResultsProps {
+  error?: FetchBaseQueryError | SerializedError;
+  isFetching: boolean;
+  urlParams: URLSearchParams;
+  searchResults: DelegableApi[];
+  chosenApis: DelegableApi[];
+  addApi: (api: DelegableApi) => void;
+}
+
+const ApiSearchResults = ({
+  error,
+  isFetching,
+  urlParams,
+  searchResults,
+  chosenApis,
+  addApi,
+}: ApiSearchResultsProps) => {
+  const { t } = useTranslation('common');
+
+  const { statusMessage, unchosenApis } = useMemo(() => {
+    const unchosenApis = searchResults?.filter(
+      (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
+    );
+    const statusMessage =
+      (!isFetching && !error && unchosenApis?.length) === 0
+        ? t('api_delegation.search_for_api_no_result', { count: 0 })
+        : '';
+
+    return { unchosenApis, statusMessage };
+  }, [searchResults, error, isFetching, chosenApis]);
+
+  const delegableApiActionBars = () => {
+    if (isFetching) {
+      return (
+        <div className={common.spinnerContainer}>
+          <Spinner
+            title={t('common.loading')}
+            variant='interaction'
+          />
+        </div>
+      );
+    }
+
+    const prechosenApis = Array.from(urlParams.keys());
+
+    return unchosenApis?.map((api: DelegableApi, index) => {
+      const initWithDelegationCheck = prechosenApis.includes(api.identifier);
+      return (
+        <ApiActionBar
+          key={`${api.identifier}${index}`}
+          variant={'add'}
+          color={'neutral'}
+          api={api}
+          onAdd={() => {
+            addApi(api);
+          }}
+          initWithDelegationCheck={initWithDelegationCheck}
+        ></ApiActionBar>
+      );
+    });
+  };
+
+  return (
+    <>
+      <StatusMessageForScreenReader visible>{statusMessage}</StatusMessageForScreenReader>
+
+      {error?.message ? (
+        <ErrorPanel
+          role='alert'
+          title={t('api_delegation.data_retrieval_failed')}
+          message={error?.message}
+          statusCode={error?.statusCode}
+        ></ErrorPanel>
+      ) : (
+        delegableApiActionBars()
+      )}
+    </>
   );
 };

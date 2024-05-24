@@ -119,7 +119,7 @@
     "scopes": "Scopes",
     "search_for_buisness": "Søk på organisasjonsnummer",
     "search_for_api": "Søk etter API",
-    "search_for_api_no_result": "Søket ga ingen resultater",
+    "search_for_api_no_result": " {{count}} treff",
     "description": "Beskrivelse",
     "additional_description": "Ytterligere beskrivelse",
     "data_retrieval_failed": "Noe feilet, prøv å laste inn siden på nytt.",

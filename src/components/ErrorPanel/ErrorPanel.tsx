@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import classes from './ErrorPanel.module.css';
 
-export interface ErrorPanelProps {
+export interface ErrorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   message?: string;
   statusCode?: string;
 }
 
-export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
+export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelProps) => {
   const { t } = useTranslation('common');
 
   const currentDate = new Date();
@@ -27,7 +27,7 @@ export const ErrorPanel = ({ title, message, statusCode }: ErrorPanelProps) => {
       variant={PanelVariant.Error}
       forceMobileLayout
     >
-      <div>
+      <div {...props}>
         <p className={classes.errorListItem}>
           {t('common.error_status_code')}: {statusCode}
         </p>

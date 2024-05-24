@@ -19,12 +19,12 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { SingleRightPath } from '@/routes/paths';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
+import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
