@@ -290,6 +290,11 @@ export const ChooseOrgPage = () => {
                     {t('api_delegation.businesses_search_results')}
                   </h4>
                 )}
+                <StatusMessageForScreenReader>
+                  {!searchLoading &&
+                    searchOrgNotExist &&
+                    t('api_delegation.buisness_search_notfound_title')}
+                </StatusMessageForScreenReader>
                 {infoPanel()}
                 <div>
                   {searchLoading ? (
