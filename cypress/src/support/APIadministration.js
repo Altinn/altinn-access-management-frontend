@@ -36,7 +36,7 @@ Cypress.Commands.add('chooseOrgToDelegateAPI', (supplierOrg, supplierOrgName) =>
   cy.wait(1000);
   cy.get('h1').should('contain', 'Gi tilgang til nytt API');
   cy.get('h2').should('contain', 'Ny virksomhet?');
-  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type(supplierOrg);
+  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).type(supplierOrg);
   cy.get('h4').should('contain', 'Virksomheter basert på ditt søk');
   cy.get(apiDelegering.searchedOrgResultContainer, { timeout: 1000 }).should(
     'contains.text',
@@ -49,13 +49,13 @@ Cypress.Commands.add('chooseOrgToDelegateAPI', (supplierOrg, supplierOrgName) =>
 Cypress.Commands.add('chooseAPIToBeDelegated', (apiName) => {
   cy.contains('Deleger nytt API').click();
   cy.get('h1').should('contain', 'Gi tilgang til nytt API');
-  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type(apiName);
+  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).type(apiName);
   //searching for API in seach field to mach the exact string.  Ref: https://stackoverflow.com/a/57894080
   cy.get(apiDelegering.seachedAPIResultContainer)
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
-  cy.get('button[aria-label*="Legg til"]').eq(1).click();
+  cy.get('button[aria-label*="Legg til"]').first().click();
 });
 
 Cypress.Commands.add('verifyAPIselectedForDelegation', (apiName) => {
@@ -140,7 +140,7 @@ Cypress.Commands.add('filterAPIUsingAPIProvidersFilterAndAddAPI', (apiName) => {
   cy.get('button').contains('Filtrer på etat').click();
   cy.wait(1000);
   cy.contains('Testdepartement').click();
-  cy.contains('Testdepartement').siblings().should('be.checked');
+  cy.contains('button', `Testdepartement`).find('[type=checkbox]').should('be.checked');
   cy.get('button').contains(new RegExp('^Bruk$', 'g')).should('be.enabled').click();
 
   //clicking Add button for adding API
@@ -187,14 +187,14 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('addAPIToListAndMakeItReadyToAddNextAPI', (apiName) => {
-  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type(apiName);
+  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).type(apiName);
   //searching for API in seach field to mach the exact string.  Ref: https://stackoverflow.com/a/57894080
   cy.get(apiDelegering.seachedAPIResultContainer)
     .contains(new RegExp('^' + apiName + '$', 'g'))
     .click();
   //clicking Add button for adding API to the list
   cy.get(`button[aria-label="Legg til ${apiName}"]`).first().click();
-  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type('{selectall}{backspace}');
+  cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).type('{selectall}{backspace}');
 });
 
 Cypress.Commands.add('addMultipleAPIsToDelegateAPI', (apiName1, apiName2, apiName3) => {

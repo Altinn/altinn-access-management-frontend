@@ -2457,6 +2457,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^1.6.8":
+  version: 1.7.2
+  resolution: "axios@npm:1.7.2"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10/6ae80dda9736bb4762ce717f1a26ff997d94672d3a5799ad9941c24d4fb019c1dff45be8272f08d1975d7950bac281f3ba24aff5ecd49ef5a04d872ec428782f
+  languageName: node
+  linkType: hard
+
 "axobject-query@npm:^3.2.1":
   version: 3.2.1
   resolution: "axobject-query@npm:3.2.1"
@@ -3189,8 +3200,8 @@ __metadata:
   linkType: hard
 
 "cypress@npm:^13.6.4":
-  version: 13.8.1
-  resolution: "cypress@npm:13.8.1"
+  version: 13.10.0
+  resolution: "cypress@npm:13.10.0"
   dependencies:
     "@cypress/request": "npm:^3.0.0"
     "@cypress/xvfb": "npm:^1.2.4"
@@ -3236,7 +3247,7 @@ __metadata:
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10/ff5410ef53dd2498a7143dc10e6c90d4fe0314ac536ebef8cdd503a2d2bfff267e91ffda0f2ede8da68cdae9b05ddbb59c2f177090ce3e6d51b6506b0e8a35d5
+  checksum: 10/d3dbce9a00a108d76d0f91ba419106be24a6ad2dfa3c4a3cbb70db7c053b84e9cff2465b31c77ed3a40574bdba6f908b9aa247bdc7e8115f23b622f9ef05d51d
   languageName: node
   linkType: hard
 
@@ -7199,7 +7210,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "playwright@workspace:playwright"
   dependencies:
+    "@playwright/test": "npm:^1.43.1"
     "@types/node": "npm:^20.12.7"
+    axios: "npm:^1.6.8"
     cross-env: "npm:^7.0.3"
     dotenv: "npm:^16.4.5"
   languageName: unknown
