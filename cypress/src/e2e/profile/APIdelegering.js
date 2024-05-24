@@ -444,6 +444,9 @@ describe('API delegering tests', () => {
       'Maskinporten Schema - AM - K6 - NUF',
     );
     cy.get('*[class^="_actionBarActions_"]').first().click();
-    cy.get('*[class^="fds-alert-icon-"]').should('have.text', 'Feil');
+    cy.get('.fds-alert').should(
+      'have.text',
+      'FeilDu har ikke tilstrekkelig rettighet til å delegere denne tjenesten. Daglig leder eller hovedadministrator kan hjelpe deg med dette.',
+    );
   });
 });

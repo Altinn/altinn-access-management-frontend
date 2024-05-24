@@ -129,7 +129,7 @@ Cypress.Commands.add('chooseSameOrgToDelegateAPI', (supplierOrgName) => {
   cy.get('h4').should('contain', 'Tidligere tildelegerte virksomheter');
   cy.get(apiDelegering.previousDelegatedOrgsContainer).should('contain.text', supplierOrgName);
   cy.contains(supplierOrgName)
-    .closest('*[class^="_actionBar_"]')
+    .closest('*[class^="_actionBarWrapper_"]')
     .find('button[aria-label*="Legg til"]')
     .click();
   cy.contains('button', 'Neste').click();
@@ -160,7 +160,7 @@ Cypress.Commands.add('addOrgToListAndMakeItReadyToAddNextOrg', (supplierOrg, sup
   cy.get('h4').should('contain', 'Virksomheter basert på ditt søk');
   cy.get(apiDelegering.searchedOrgResultContainer).should('contains.text', supplierOrgName);
   cy.contains(supplierOrgName)
-    .closest('*[class^="_actionBar_"]')
+    .closest('*[class^="_actionBarWrapper_"]')
     .find('button[aria-label*="Legg til"]')
     .click();
   cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).eq(1).type('{selectall}{backspace}');
