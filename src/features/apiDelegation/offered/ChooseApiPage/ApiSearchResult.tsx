@@ -36,7 +36,7 @@ export const ApiSearchResults = ({
     );
     const statusMessage =
       (!isFetching && !error && unchosenApis?.length) === 0
-        ? t('api_delegation.search_for_api_no_result', { count: 0 })
+        ? t('api_delegation.search_for_api_no_result')
         : '';
 
     return { unchosenApis, statusMessage };
