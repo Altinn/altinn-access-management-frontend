@@ -58,6 +58,7 @@ export const ChooseApiPage = () => {
     data: searchResults,
     error,
     isFetching,
+    isLoading,
   } = useSearchQuery({ searchString, ROfilters: filters });
 
   const { data: apiProviders } = useGetResourceOwnersQuery({
@@ -65,10 +66,10 @@ export const ChooseApiPage = () => {
   });
 
   useEffect(() => {
-    if (!isFetching && urlParams) {
+    if (!isLoading && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   const makeChosenApisFromParams = () => {
     const promises: Promise<void>[] = [];
