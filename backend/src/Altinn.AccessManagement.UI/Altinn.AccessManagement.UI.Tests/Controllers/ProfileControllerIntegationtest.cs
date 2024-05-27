@@ -26,16 +26,16 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// Integrationtests of ProfileController
     /// </summary>
     [Collection("ProfileController integrationtests")]
-    public partial class ProfileControllerIntegationtest : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+    public partial class ProfileControllerIntegationtest : IClassFixture<CustomWebApplicationFactory<UserController>>
     {
-        private readonly CustomWebApplicationFactory<ProfileController> _factory;
+        private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly Mock<ILogger<ProfileClient>> _logger;
 
         /// <summary>
         /// Integration test of ProfileController
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public ProfileControllerIntegationtest(CustomWebApplicationFactory<ProfileController> factory)
+        public ProfileControllerIntegationtest(CustomWebApplicationFactory<UserController> factory)
         {
             _factory = factory;
             _logger = new Mock<ILogger<ProfileClient>>();

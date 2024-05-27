@@ -4,8 +4,6 @@ import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 
-import type { ResourceOwner } from '../resourceOwner/resourceOwnerApi';
-
 interface PaginatedListDTO {
   page: number;
   numEntriesTotal: number;
@@ -49,6 +47,7 @@ export const singleRightsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
       query: (args) => {
         const { searchString, ROfilters, page, resultsPerPage } = args;
@@ -56,11 +55,8 @@ export const singleRightsApi = createApi({
         for (const filter of ROfilters) {
           filterUrl = filterUrl + `&ROFilters=${filter}`;
         }
-        return `resources/paginatedSearch?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
+        return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
       },
-    }),
-    getResourceOwners: builder.query<ResourceOwner[], void>({
-      query: () => 'resources/resourceowners',
     }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
@@ -74,10 +70,6 @@ export const singleRightsApi = createApi({
   }),
 });
 
-export const {
-  useGetPaginatedSearchQuery,
-  useGetResourceOwnersQuery,
-  useClearAccessCacheMutation,
-} = singleRightsApi;
+export const { useGetPaginatedSearchQuery, useClearAccessCacheMutation } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

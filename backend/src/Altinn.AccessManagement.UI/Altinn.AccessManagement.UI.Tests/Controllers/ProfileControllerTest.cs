@@ -20,12 +20,12 @@ using Moq;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    /// Test class for <see cref="ProfileController"/>
+    /// Test class for <see cref="UserController"/>
     /// </summary>
     [Collection("ProfileController Tests")]
-    public class ProfileControllerTest : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+    public class ProfileControllerTest : IClassFixture<CustomWebApplicationFactory<UserController>>
     {
-        private readonly CustomWebApplicationFactory<ProfileController> _factory;
+        private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly HttpClient _client;
         private readonly IProfileClient _profileClient;
 
@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// Initializes a new instance of the <see cref="ProfileControllerTest"/> class.
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public ProfileControllerTest(CustomWebApplicationFactory<ProfileController> factory)
+        public ProfileControllerTest(CustomWebApplicationFactory<UserController> factory)
         {
             _factory = factory;
             _profileClient = Mock.Of<IProfileClient>();

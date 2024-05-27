@@ -11,17 +11,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <summary>
     ///     Service that integrates with the delegation client. Processes and maps the required data to the frontend model
     /// </summary>
-    public class MaskinportenSchemaService : IMaskinportenSchemaService
+    public class APIDelegationService : IAPIDelegationService
     {
         private readonly IMaskinportenSchemaClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
+        ///     Initializes a new instance of the <see cref="APIDelegationService" /> class.
         /// </summary>
         /// <param name="maskinportenSchemaClient">handler for delegations client</param>
         /// <param name="resourceService">handler for resource registry</param>
-        public MaskinportenSchemaService(
+        public APIDelegationService(
             IMaskinportenSchemaClient maskinportenSchemaClient,
             IResourceService resourceService)
         {

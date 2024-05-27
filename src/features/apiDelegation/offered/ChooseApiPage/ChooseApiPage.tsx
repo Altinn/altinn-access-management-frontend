@@ -32,11 +32,8 @@ import {
 } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
-import type { ResourceOwner } from '@/rtk/features/resourceOwner/resourceOwnerApi';
-import {
-  ResourceType,
-  useGetResourceOwnersQuery,
-} from '@/rtk/features/resourceOwner/resourceOwnerApi';
+import type { ResourceOwner } from '@/rtk/features/resourceApi';
+import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 
@@ -63,9 +60,7 @@ export const ChooseApiPage = () => {
     isFetching,
   } = useSearchQuery({ searchString, ROfilters: filters });
 
-  const { data: apiProviders } = useGetResourceOwnersQuery({
-    resourceTypeList,
-  });
+  const { data: apiProviders } = useGetResourceOwnersQuery(resourceTypeList);
 
   useEffect(() => {
     if (!isFetching && urlParams) {

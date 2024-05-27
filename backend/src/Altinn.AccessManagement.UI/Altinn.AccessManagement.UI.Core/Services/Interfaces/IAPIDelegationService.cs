@@ -7,7 +7,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     /// <summary>
     ///     Service interface for service handling maskinporten schema delegations
     /// </summary>
-    public interface IMaskinportenSchemaService
+    public interface IAPIDelegationService
     {
         /// <summary>
         /// Gets all the resources delegated by the reportee

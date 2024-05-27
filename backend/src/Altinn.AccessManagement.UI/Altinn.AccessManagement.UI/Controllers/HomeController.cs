@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly GeneralSettings _generalSettings;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IProfileService _profileService;
+        private readonly IUserService _profileService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="HomeController" /> class.
@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             IAntiforgery antiforgery,
             IOptions<PlatformSettings> platformSettings,
             IWebHostEnvironment env,
-            IProfileService profileService,
+            IUserService profileService,
             IHttpContextAccessor httpContextAccessor,
             IOptions<GeneralSettings> generalSettings)
         {

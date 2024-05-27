@@ -16,13 +16,13 @@ using Azure.Core;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="MaskinportenSchemaController"></see>
+    ///     Test class for <see cref="APIDelegationController"></see>
     /// </summary>
     [Collection("MaskinportenSchemaController Tests")]
-    public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<MaskinportenSchemaController>>
+    public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<APIDelegationController>>
     {
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<MaskinportenSchemaController> _factory;
+        private readonly CustomWebApplicationFactory<APIDelegationController> _factory;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string unitTestFolder;
@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public MaskinportenSchemaControllerTest(CustomWebApplicationFactory<MaskinportenSchemaController> factory)
+        public MaskinportenSchemaControllerTest(CustomWebApplicationFactory<APIDelegationController> factory)
         {
             _factory = factory;
             _client = SetupUtils.GetTestClient(factory);

@@ -216,10 +216,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     }
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IMaskinportenSchemaService, MaskinportenSchemaService>();
+    services.AddSingleton<IAPIDelegationService, APIDelegationService>();
     services.AddSingleton<ILookupService, LookupService>();
     services.AddSingleton<IResourceService, ResourceService>();
-    services.AddSingleton<IProfileService, ProfileService>();
+    services.AddSingleton<IUserService, UserService>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();

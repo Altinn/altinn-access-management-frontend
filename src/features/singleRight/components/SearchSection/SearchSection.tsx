@@ -18,9 +18,9 @@ import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
-  useGetResourceOwnersQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import {
