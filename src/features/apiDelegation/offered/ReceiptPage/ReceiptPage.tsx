@@ -20,9 +20,9 @@ import {
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import classes from './ReceiptPage.module.css';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ReceiptPage = () => {
   const failedApiDelegations = useAppSelector(

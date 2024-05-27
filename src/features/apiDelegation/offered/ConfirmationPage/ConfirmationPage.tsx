@@ -32,9 +32,9 @@ import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegab
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import classes from './ConfirmationPage.module.css';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);

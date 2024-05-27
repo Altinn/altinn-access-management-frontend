@@ -33,6 +33,7 @@ import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { useClearAccessCacheMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
@@ -40,7 +41,6 @@ import { RightsActionBar } from './RightsActionBar/RightsActionBar';
 import type { ChipRight } from './RightsActionBarContent/RightsActionBarContent';
 import { RightsActionBarContent } from './RightsActionBarContent/RightsActionBarContent';
 import classes from './ChooseRightsPage.module.css';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
 
 type Service = {
   serviceIdentifier: string;

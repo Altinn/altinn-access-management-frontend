@@ -30,7 +30,7 @@ import {
   useGetResourceOwnersQuery,
 } from '@/rtk/features/resourceOwner/resourceOwnerApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 

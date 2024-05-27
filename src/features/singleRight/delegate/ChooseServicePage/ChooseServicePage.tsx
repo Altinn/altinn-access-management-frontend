@@ -19,7 +19,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { SingleRightPath } from '@/routes/paths';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
-import { useDocumentTitle } from '@/resources/utils/pageUtils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
