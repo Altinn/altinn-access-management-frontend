@@ -63,7 +63,7 @@
     "husky": "^9.0.0",
     "lint-staged": "^15.0.0",
     "madge": "^7.0.0",
-    "prettier": "^3.0.0",
+    "prettier": "^3.2.5",
     "redux-logger": "^3.0.6",
     "typescript": "5.4.5",
     "typescript-plugin-css-modules": "^5.0.0",
