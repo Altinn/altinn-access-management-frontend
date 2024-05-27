@@ -1,23 +1,19 @@
 import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/designsystemet-react';
 import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import type { Key } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PlusCircleIcon, MinusCircleIcon } from '@navikt/aksel-icons';
 
 import {
   Page,
   PageHeader,
   PageContent,
-  ActionBar,
   PageContainer,
   GroupElements,
   RestartPrompter,
 } from '@/components';
 import {
-  softAddOrg,
   softRemoveOrg,
   searchInCurrentOrgs,
   lookupOrg,
@@ -31,10 +27,11 @@ import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
 import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
-import { getButtonIconSize } from '@/resources/utils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import classes from './ChooseOrgPage.module.css';
+import { DelegableOrgItems } from './DelegableOrgItems';
+import { ChosenItems } from './ChosenItems';
 
 export const ChooseOrgPage = () => {
   const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
@@ -113,70 +110,6 @@ export const ChooseOrgPage = () => {
     }
   }
 
-  const delegableOrgItems = delegableOrgs.map((org: DelegableOrg) => {
-    return (
-      <div
-        className={classes.actionBarWrapper}
-        key={org.orgNr}
-      >
-        <ActionBar
-          key={org.orgNr}
-          title={org.orgName}
-          subtitle={t('common.org_nr') + ' ' + org.orgNr}
-          headingLevel={5}
-          actions={
-            <Button
-              variant={'tertiary'}
-              color={'second'}
-              onClick={() => {
-                dispatch(softAddOrg(org));
-                setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgName}`);
-              }}
-              aria-label={t('common.add') + ' ' + org.orgName}
-              size='large'
-              icon={true}
-            >
-              <PlusCircleIcon fontSize={getButtonIconSize(false)} />
-            </Button>
-          }
-          color={'neutral'}
-        />
-      </div>
-    );
-  });
-
-  const chosenItems = chosenOrgs.map((org: DelegableOrg, index: Key | null | undefined) => {
-    return (
-      <div
-        className={classes.actionBarWrapper}
-        key={index}
-      >
-        <ActionBar
-          key={index}
-          title={org.orgName}
-          subtitle={t('common.org_nr') + ' ' + org.orgNr}
-          actions={
-            <Button
-              variant={'tertiary'}
-              color={'danger'}
-              onClick={() => {
-                handleSoftRemove(org);
-                setChosenItemsStatusMessage(`${t('common.removed')}: ${org.orgName}`);
-              }}
-              aria-label={t('common.remove') + ' ' + org.orgName}
-              size='large'
-              className={classes.actionButton}
-              icon={true}
-            >
-              <MinusCircleIcon fontSize={getButtonIconSize(false)} />
-            </Button>
-          }
-          color={'success'}
-        />
-      </div>
-    );
-  });
-
   const infoPanel = () => {
     if (reporteeOrgNumber === searchString && searchString.length > 0) {
       return (
@@ -249,12 +182,16 @@ export const ChooseOrgPage = () => {
           )}
           <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
           <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
-          {isSm && chosenItems.length > 0 && (
+          {isSm && chosenOrgs.length > 0 && (
             <div className={classes.chosenOrgs}>
               <h4 className={classes.chosenOrgsHeader}>
                 {t('api_delegation.businesses_going_to_get_access')}
               </h4>
-              {chosenItems}
+              <ChosenItems
+                chosenOrgs={chosenOrgs}
+                handleSoftRemove={handleSoftRemove}
+                setChosenItemsStatusMessage={setChosenItemsStatusMessage}
+              />
             </div>
           )}
           <div className={classes.searchSection}>
@@ -305,7 +242,10 @@ export const ChooseOrgPage = () => {
                       />
                     </div>
                   ) : (
-                    delegableOrgItems
+                    <DelegableOrgItems
+                      delegableOrgs={delegableOrgs}
+                      setChosenItemsStatusMessage={setChosenItemsStatusMessage}
+                    />
                   )}
                 </div>
               </div>
@@ -314,7 +254,11 @@ export const ChooseOrgPage = () => {
                   <h4 className={classes.chosenOrgsHeader}>
                     {t('api_delegation.businesses_going_to_get_access')}
                   </h4>
-                  {chosenItems}
+                  <ChosenItems
+                    chosenOrgs={chosenOrgs}
+                    handleSoftRemove={handleSoftRemove}
+                    setChosenItemsStatusMessage={setChosenItemsStatusMessage}
+                  />
                 </div>
               )}
             </div>

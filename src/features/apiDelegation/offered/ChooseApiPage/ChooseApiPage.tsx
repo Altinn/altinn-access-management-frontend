@@ -1,25 +1,15 @@
-import { Button, Spinner, Search, Skeleton } from '@digdir/designsystemet-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Button, Search, Skeleton } from '@digdir/designsystemet-react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import type { SerializedError } from '@reduxjs/toolkit';
 
-import {
-  Page,
-  PageHeader,
-  PageContent,
-  PageContainer,
-  ErrorPanel,
-  GroupElements,
-} from '@/components';
+import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
 import { useMediaQuery } from '@/resources/hooks';
-import common from '@/resources/css/Common.module.css';
 import {
   softAddApi,
   softRemoveApi,
@@ -45,6 +35,7 @@ import { useDocumentTitle } from '@/resources/utils/pageUtils';
 import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
+import { ApiSearchResults } from './ApiSearchResult';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
@@ -243,7 +234,7 @@ export const ChooseApiPage = () => {
                       urlParams={urlParams}
                       searchResults={searchResults || []}
                       chosenApis={chosenApis}
-                    ></ApiSearchResults>
+                    />
                   )}
                 </div>
               </div>
@@ -287,85 +278,5 @@ export const ChooseApiPage = () => {
         </PageContent>
       </Page>
     </PageContainer>
-  );
-};
-
-interface ApiSearchResultsProps {
-  error?: FetchBaseQueryError | SerializedError;
-  isFetching: boolean;
-  urlParams: URLSearchParams;
-  searchResults: DelegableApi[];
-  chosenApis: DelegableApi[];
-  addApi: (api: DelegableApi) => void;
-}
-
-const ApiSearchResults = ({
-  error,
-  isFetching,
-  urlParams,
-  searchResults,
-  chosenApis,
-  addApi,
-}: ApiSearchResultsProps) => {
-  const { t } = useTranslation('common');
-
-  const { statusMessage, unchosenApis } = useMemo(() => {
-    const unchosenApis = searchResults?.filter(
-      (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
-    );
-    const statusMessage =
-      (!isFetching && !error && unchosenApis?.length) === 0
-        ? t('api_delegation.search_for_api_no_result', { count: 0 })
-        : '';
-
-    return { unchosenApis, statusMessage };
-  }, [searchResults, error, isFetching, chosenApis]);
-
-  const delegableApiActionBars = () => {
-    if (isFetching) {
-      return (
-        <div className={common.spinnerContainer}>
-          <Spinner
-            title={t('common.loading')}
-            variant='interaction'
-          />
-        </div>
-      );
-    }
-
-    const prechosenApis = Array.from(urlParams.keys());
-
-    return unchosenApis?.map((api: DelegableApi, index) => {
-      const initWithDelegationCheck = prechosenApis.includes(api.identifier);
-      return (
-        <ApiActionBar
-          key={`${api.identifier}${index}`}
-          variant={'add'}
-          color={'neutral'}
-          api={api}
-          onAdd={() => {
-            addApi(api);
-          }}
-          initWithDelegationCheck={initWithDelegationCheck}
-        ></ApiActionBar>
-      );
-    });
-  };
-
-  return (
-    <>
-      <StatusMessageForScreenReader visible>{statusMessage}</StatusMessageForScreenReader>
-
-      {error?.message ? (
-        <ErrorPanel
-          role='alert'
-          title={t('api_delegation.data_retrieval_failed')}
-          message={error?.message}
-          statusCode={error?.statusCode}
-        ></ErrorPanel>
-      ) : (
-        delegableApiActionBars()
-      )}
-    </>
   );
 };
