@@ -3,6 +3,7 @@ import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import cn from 'classnames';
 
 import common from '@/resources/css/Common.module.css';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
@@ -10,6 +11,8 @@ import { StatusMessageForScreenReader } from '@/components/StatusMessageForScree
 import { ErrorPanel } from '@/components';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
+
+import classes from './ChooseApiPage.module.css';
 
 interface ApiSearchResultsProps {
   error?: FetchBaseQueryError | SerializedError;
@@ -57,7 +60,7 @@ export const ApiSearchResults = ({
     const prechosenApis = Array.from(urlParams.keys());
 
     return (
-      <ul className={common.unstyledList}>
+      <ul className={cn(common.unstyledList, classes.actionBarWrapper)}>
         {unchosenApis?.map((api: DelegableApi, index) => {
           const initWithDelegationCheck = prechosenApis.includes(api.identifier);
           return (
