@@ -185,38 +185,30 @@ describe('API delegering tests', () => {
 
     //click option in filter, click same option again and verify if it resets
     cy.contains('Testdepartement').click();
-    cy.wait(200);
-    cy.get('input[type="checkbox"]').should('be.checked');
-
+    cy.contains('button', `Testdepartement`).find('[type=checkbox]').should('be.checked');
     cy.contains('Testdepartement').click();
-    cy.contains('Testdepartement').siblings().should('not.be.checked');
+    cy.contains('button', `Testdepartement`).find('[type=checkbox]').should('not.be.checked');
 
     //select Testdepartement option from filter and verify only APIs with Testdepartement as provider is listed
     cy.contains('Testdepartement').click();
-    cy.get('input[type="checkbox"]').should('be.checked');
+    cy.contains('button', `Testdepartement`).find('[type=checkbox]').should('be.checked');
     cy.get('button').contains(new RegExp('^Bruk$', 'g')).should('be.enabled').click();
     cy.get(
       ':nth-child(1) > *[class^="_delegableApisContainer"] > *[class^="_actionBarWrapper"]',
     ).each(($ele) => {
       cy.wrap($ele).should('contain', 'Testdepartement');
       // .and('not.contain', 'Digitaliseringsdirektoratet');
-      cy.get('button').contains('Filtrer på etat').click();
+      //cy.get('button').contains('Filtrer på etat').click();
+      //cy.contains('')
     });
 
     //click on Add for first element in the list and verify if it is listed under Valgte API
     cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 })
-      .eq(1)
+      .first()
       .type('Maskinporten Schema - AM - K6');
-    //searching for API in seach field to mach the exact string.  Ref: https://stackoverflow.com/a/57894080
-    cy.get(apiDelegering.seachedAPIResultContainer)
-      .contains(new RegExp('^' + 'Maskinporten Schema - AM - K6' + '$', 'g'))
-      .click();
-    //clicking Add button for adding API to the list
     cy.get(`button[aria-label="Legg til Maskinporten Schema - AM - K6"]`).first().click();
     cy.get(apiDelegering.selectedAPIsForDelegationResultContainer).should('not.be.empty');
-    cy.get(
-      ':nth-child(2) > *[class^="_delegableApisContainer"] > *[class^="_actionBarWrapper"]',
-    ).each(($ele) => {
+    cy.get('*[class^="_actionBarTexts_"]').each(($ele) => {
       cy.wrap($ele)
         .should('contain', 'Testdepartement')
         .and('not.contain', 'Digitaliseringsdirektoratet');
@@ -448,9 +440,9 @@ describe('API delegering tests', () => {
     cy.contains('Gi og fjerne API tilganger', { timeout: 6000 }).should('be.visible').click();
     cy.contains('Deleger nytt API').click();
     cy.get('h1').should('contain', 'Gi tilgang til nytt API');
-    cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 })
-      .eq(1)
-      .type('Maskinporten Schema - AM - K6 - NUF');
+    cy.get(apiDelegering.searchForOrgOrAPI, { timeout: 1000 }).type(
+      'Maskinporten Schema - AM - K6 - NUF',
+    );
     cy.get('*[class^="_actionBarActions_"]').first().click();
     cy.get('.fds-alert').should(
       'have.text',
