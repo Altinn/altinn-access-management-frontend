@@ -209,7 +209,6 @@ export const ApiActionBar = ({
           className={classes.errorContent}
         >
           <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>
-          <Paragraph></Paragraph>
         </Alert>
       );
     }
@@ -217,7 +216,7 @@ export const ApiActionBar = ({
 
   return (
     <ActionBar
-      title={<p className={classes.actionBarHeaderTitle}>{api.apiName}</p>}
+      title={<span className={classes.actionBarHeaderTitle}>{api.apiName}</span>}
       subtitle={api.orgName}
       actions={actions}
       size='medium'
