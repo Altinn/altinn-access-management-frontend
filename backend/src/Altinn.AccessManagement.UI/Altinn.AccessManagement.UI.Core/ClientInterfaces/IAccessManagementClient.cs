@@ -1,14 +1,41 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
     ///     Interface for client to integrate with maskinporten schema delegations API in platform
     /// </summary>
-    public interface IMaskinportenSchemaClient
+    public interface IAccessManagementClient
     {
+        /// <summary>
+        /// Retreive party if party exists in the authenticated users reporteelist
+        /// </summary>
+        /// <param name="partyId">party id</param>
+        /// <returns></returns>
+        Task<Party> GetPartyFromReporteeListIfExists(int partyId);
+
+        /// <summary>
+        ///     Clears cached accesses of the delegation recipient
+        /// </summary>
+        /// <param name="party">
+        ///     The party from which the rights have been given (delegator)
+        /// </param>
+        /// <param name="recipient">
+        ///     The uuid identifier of the recipient (delegation recipient) to clear access cache on
+        ///     Example: 
+        ///     {
+        ///     "type": "urn:altinn:person:uuid",
+        ///     "value": "00000000-0000-0000-0000-000000000000"
+        ///     }
+        /// </param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient);
+
+        //// MaskinportenSchema
+
         /// <summary>
         ///     Gets the delegations received by the party
         /// </summary>
@@ -50,6 +77,32 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="partyId">The reportee's party id</param>
         /// <param name="request">Necessary info about the right that's going to be checked</param>
-        Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request);
+        Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request);
+
+        //// Single Rights
+
+        /// <summary>
+        ///     Checks whether the user can delegate the given right to the given party
+        /// </summary>
+        /// <param name="partyId">
+        ///     Used to identify the party the authenticated user is acting on behalf of.
+        /// </param>
+        /// <param name="request">
+        ///     The delegation access check request object that's going to be consumed by the backend
+        /// </param>
+        /// <returns>HttpResponseMessage: The response from backend /></returns>
+        Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request);
+
+        /// <summary>
+        ///     Creates a single rights delegation
+        /// </summary>
+        /// <param name="party">
+        ///     The party from which to delegate the right
+        /// </param>
+        /// <param name="delegation">
+        ///     The delegation to be created
+        /// </param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> CreateSingleRightsDelegation(string party, DelegationInput delegation);
     }
 }

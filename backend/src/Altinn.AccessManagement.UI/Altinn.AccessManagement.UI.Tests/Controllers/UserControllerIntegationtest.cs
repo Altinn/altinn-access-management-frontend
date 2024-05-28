@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// Integrationtests of ProfileController
     /// </summary>
     [Collection("ProfileController integrationtests")]
-    public partial class ProfileControllerIntegationtest : IClassFixture<CustomWebApplicationFactory<UserController>>
+    public partial class UserControllerIntegationtest : IClassFixture<CustomWebApplicationFactory<UserController>>
     {
         private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly Mock<ILogger<ProfileClient>> _logger;
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// Integration test of ProfileController
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public ProfileControllerIntegationtest(CustomWebApplicationFactory<UserController> factory)
+        public UserControllerIntegationtest(CustomWebApplicationFactory<UserController> factory)
         {
             _factory = factory;
             _logger = new Mock<ILogger<ProfileClient>>();
@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var handler = new MessageHandlerMock(expectedStatusCode, JsonContent.Create(userProfile));
             var client = GetClient(userId, handler);
 
-            var response = await client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(expectedStatusCode, response.StatusCode);
             var userProfileResult = await response.Content.ReadFromJsonAsync<UserProfile>();
@@ -101,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _logger.Setup(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
             var client = GetClient(userId, handler);
 
-            var response = await client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await client.GetAsync("accessmanagement/api/v1/user/profile");
 
             // Verify log is called with loglevel error once
             _logger.Verify(

@@ -18,8 +18,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// <summary>
     ///     Test class for <see cref="APIDelegationController"></see>
     /// </summary>
-    [Collection("MaskinportenSchemaController Tests")]
-    public class MaskinportenSchemaControllerTest : IClassFixture<CustomWebApplicationFactory<APIDelegationController>>
+    [Collection("APIDelegationController Tests")]
+    public class APIDelegationControllerTest : IClassFixture<CustomWebApplicationFactory<APIDelegationController>>
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<APIDelegationController> _factory;
@@ -31,7 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public MaskinportenSchemaControllerTest(CustomWebApplicationFactory<APIDelegationController> factory)
+        public APIDelegationControllerTest(CustomWebApplicationFactory<APIDelegationController> factory)
         {
             _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaControllerTest).Assembly.Location).LocalPath);
+            unitTestFolder = Path.GetDirectoryName(new Uri(typeof(APIDelegationControllerTest).Assembly.Location).LocalPath);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedInboundDelegationsForParty(50004219);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004219/maskinportenschema/received");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004219/received");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string expected = "[]";
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004223/maskinportenschema/received");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004223/received");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -101,7 +101,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedOutboundDelegationsForParty(50004223);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004223/maskinportenschema/offered");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004223/offered");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string expected = "[]";
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/50004219/maskinportenschema/offered");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004219/offered");
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -144,11 +144,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string fromParty = "50005545";
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(20000490, 50002598));
 
-            DelegationOutput expectedResponse = GetExpectedResponse("Delegation", "nav_aa_distribution", $"p{fromParty}", "810418672");
-            StreamContent requestContent = GetRequestContent("Delegation", "nav_aa_distribution", $"p{fromParty}", "810418672");
+            DelegationOutput expectedResponse = GetExpectedResponse("Delegation", "nav_aa_distribution");
+            StreamContent requestContent = GetRequestContent("Delegation");
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered", requestContent);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{fromParty}/offered", requestContent);
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -169,10 +169,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string fromParty = "50004223";
-            StreamContent requestContent = GetRequestContent("RevokeOffered", "nav_aa_distribution", $"p{fromParty}", "810418192");
+            StreamContent requestContent = GetRequestContent("RevokeOffered");
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{fromParty}/maskinportenschema/offered/revoke", requestContent);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{fromParty}/offered/revoke", requestContent);
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -189,10 +189,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string toParty = "50004219";
-            StreamContent requestContent = GetRequestContent("RevokeReceived", "nav_aa_distribution", "810418672", $"p{toParty}");
+            StreamContent requestContent = GetRequestContent("RevokeReceived");
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{toParty}/maskinportenschema/received/revoke", requestContent);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/received/revoke", requestContent);
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -214,7 +214,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, $"request-{resourceId}.json")));
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{reporteePartyId}/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, $"request-{resourceId}.json")));
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -241,7 +241,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/{reporteePartyId}/maskinportenschema/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, $"request-{resourceId}.json")));
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{reporteePartyId}/delegationcheck", Util.GetRequestWithHeader(Path.Combine(folderPath, $"request-{resourceId}.json")));
             string responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
@@ -258,17 +258,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return outboundDelegations;
         }
 
-        private static StreamContent GetRequestContent(string operation, string resourceId, string from, string to, string inputFileName = "Input_Default")
+        private static StreamContent GetRequestContent(string operation, string inputFileName = "Input_Default")
         {
-            Stream dataStream = File.OpenRead($"Data/MaskinportenSchema/{operation}/{resourceId}/from_{from}/to_{to}/{inputFileName}.json");
+            Stream dataStream = File.OpenRead($"Data/RequestInputs/MaskinportenSchema/{operation}/{inputFileName}.json");
             StreamContent content = new StreamContent(dataStream);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return content;
         }
 
-        private static DelegationOutput GetExpectedResponse(string operation, string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
+        private static DelegationOutput GetExpectedResponse(string operation, string resourceId)
         {
-            string responsePath = $"Data/MaskinportenSchema/{operation}/{resourceId}/from_{from}/to_{to}/{responseFileName}.json";
+            string responsePath = $"Data/MaskinportenSchema/{operation}/{resourceId}.json";
             string content = File.ReadAllText(responsePath);
             return (DelegationOutput)JsonSerializer.Deserialize(content, typeof(DelegationOutput), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }

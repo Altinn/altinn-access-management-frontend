@@ -10,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     ///     Client that integrates with MaskinportenSchema API
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class MaskinportenSchemaClient : IMaskinportenSchemaClient
+    public class AccessManagementClient : IAccessManagementClient
     {
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -33,11 +34,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaskinportenSchemaClient" /> class
+        /// Initializes a new instance of the <see cref="AccessManagementClient" /> class
         /// </summary>
-        public MaskinportenSchemaClient(
+        public AccessManagementClient(
             HttpClient httpClient,
-            ILogger<MaskinportenSchemaClient> logger,
+            ILogger<AccessManagementClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
@@ -48,6 +49,44 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint);
             _client = httpClient;
         }
+
+        /// <inheritdoc />
+        public async Task<Party> GetPartyFromReporteeListIfExists(int partyId)
+        {
+            try
+            {
+                string endpointUrl = $"authorizedparty/{partyId}?includeAltinn2=true";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<Party>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetPartyFromReporteeListIfExists // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
+        {
+            string endpointUrl = $"internal/{party}/accesscache/clear";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(recipient, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PutAsync(token, endpointUrl, requestBody);
+            return response;
+        }
+
+        //// MaskinportenSchema
 
         /// <inheritdoc />
         public async Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
@@ -144,7 +183,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
+        public async Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request)
         {
             try
             {
@@ -171,6 +210,37 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // MaskinportenSchemaClient // DelegationCheck // Exception");
                 throw;
             }
+        }
+
+        //// SingleRights
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
+        {
+            try
+            {
+                string endpointUrl = $"internal/{partyId}/rights/delegation/delegationcheck";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // CheckDelegationAccess // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateSingleRightsDelegation(string party, DelegationInput delegation)
+        {
+            string endpointUrl = $"internal/{party}/rights/delegation/offered";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            return response;
         }
     }
 }

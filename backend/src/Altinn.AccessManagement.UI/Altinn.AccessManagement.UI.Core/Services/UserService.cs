@@ -16,22 +16,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly ILogger _logger;
         private readonly IProfileClient _profileClient;
-        private readonly ILookupClient _lookupClient;
+        private readonly IAccessManagementClient _accessManagementClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="APIDelegationService"/> class.
         /// </summary>
         /// <param name="logger">handler for logger</param>
         /// <param name="profileClient">handler for profile client</param>
-        /// <param name="lookupClient">handler for AM client</param>
+        /// <param name="accessManagementClient">handler for AM client</param>
         public UserService(
             ILogger<IAPIDelegationService> logger,
             IProfileClient profileClient,
-            ILookupClient lookupClient)
+            IAccessManagementClient accessManagementClient)
         {
             _logger = logger;
             _profileClient = profileClient;
-            _lookupClient = lookupClient;
+            _accessManagementClient = accessManagementClient;
         }
 
         /// <inheritdoc/>
@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>        
         public async Task<Party> GetPartyFromReporteeListIfExists(int partyId)
         {
-            Party partyInfo = await _lookupClient.GetPartyFromReporteeListIfExists(partyId);
+            Party partyInfo = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
             return partyInfo;
         }
     }

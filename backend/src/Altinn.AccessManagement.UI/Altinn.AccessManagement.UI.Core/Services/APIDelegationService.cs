@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class APIDelegationService : IAPIDelegationService
     {
-        private readonly IMaskinportenSchemaClient _maskinportenSchemaClient;
+        private readonly IAccessManagementClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="maskinportenSchemaClient">handler for delegations client</param>
         /// <param name="resourceService">handler for resource registry</param>
         public APIDelegationService(
-            IMaskinportenSchemaClient maskinportenSchemaClient,
+            IAccessManagementClient maskinportenSchemaClient,
             IResourceService resourceService)
         {
             _maskinportenSchemaClient = maskinportenSchemaClient;
@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
-            return await _maskinportenSchemaClient.DelegationCheck(partyId, request);
+            return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }
 
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)

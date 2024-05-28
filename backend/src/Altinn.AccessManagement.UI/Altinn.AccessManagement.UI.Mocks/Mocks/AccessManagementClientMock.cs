@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
@@ -7,36 +8,54 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.Common.PEP.Configuration;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IMaskinportenSchemaClient"></see> interface
+    ///     Mock class for <see cref="IAccessManagementClient"></see> interface
     /// </summary>
-    public class MaskinportenSchemaClientMock : IMaskinportenSchemaClient
+    public class AccessManagementClientMock : IAccessManagementClient
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        private readonly string mockFolder;
+        private readonly string dataFolder;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaClientMock" /> class
+        ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
         /// </summary>
-        public MaskinportenSchemaClientMock(
+        public AccessManagementClientMock(
             HttpClient httpClient,
-            ILogger<MaskinportenSchemaClientMock> logger,
+            ILogger<AccessManagementClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            mockFolder = Path.GetDirectoryName(new Uri(typeof(MaskinportenSchemaClientMock).Assembly.Location).LocalPath);
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
         }
+
+        /// <inheritdoc />
+        public Task<Party> GetPartyFromReporteeListIfExists(int partyId)
+        {
+            return Task.FromResult(Util.GetMockData<Party>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
+
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
+        {
+            return Task.FromResult(new HttpResponseMessage
+            { StatusCode = HttpStatusCode.OK });
+        }
+
+        //// MaskinportenSchema
 
         public Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
         {
             List<MaskinportenSchemaDelegation> delegations = new List<MaskinportenSchemaDelegation>();
             List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
 
-            string path = GetDataPathForDelegations();
+            string path = Path.Combine(dataFolder, "MaskinportenSchema");
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
@@ -56,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             List<MaskinportenSchemaDelegation> delegations = new List<MaskinportenSchemaDelegation>();
             List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
 
-            string path = GetDataPathForDelegations();
+            string path = Path.Combine(dataFolder, "MaskinportenSchema");
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
@@ -76,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
             IdValuePair fromMatch = delegation.From.First();
 
-            string path = GetDataPathForDelegations();
+            string path = Path.Combine(dataFolder, "MaskinportenSchema");
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
@@ -100,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
             IdValuePair toMatch = delegation.To.First();
 
-            string path = GetDataPathForDelegations();
+            string path = Path.Combine(dataFolder, "MaskinportenSchema");
             if (Directory.Exists(path))
             {
                 string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
@@ -122,9 +141,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
-            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
+            string resourceId = delegation.Rights.First().Resource.First().Value;
             IdValuePair toMatch = delegation.To.First();
-            string path = GetDataPathForDelegationOutput(resourceMatch.Value, party, toMatch.Value);
+            string path = Path.Combine(dataFolder, "MaskinportenSchema", "Delegation", $"{resourceId}.json");
             if (File.Exists(path))
             {
                 string content = File.ReadAllText(path);
@@ -136,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
+        public Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request)
         {
             string resourceId = request.Resource[0].Value;
             string filename;
@@ -151,7 +170,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     break;
             }
 
-            string fullPath = Path.Combine(mockFolder, "Data", "MaskinportenSchema", "DelegationCheck", "scope-access-check", filename + ".json");
+            string fullPath = Path.Combine(dataFolder, "MaskinportenSchema", "DelegationCheck", filename + ".json");
 
             if (!File.Exists(fullPath))
             {
@@ -163,26 +182,54 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(mockedResponse);
         }
 
-        private static string GetDataPathForDelegations()
+        //// SingleRight
+        
+        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
         {
-            var folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            if (!string.IsNullOrEmpty(folder))
-            {
-                return Path.Combine(folder, "Data", "MaskinportenSchema");
-            }
+            string resourceFileName = GetMockDataFilenameFromUrn(request.Resource);
+            string path = Path.Combine(dataFolder, "SingleRight", "DelegationAccessCheckResponse");
 
-            return string.Empty;
+            return await GetMockedHttpResponse(path, resourceFileName);
         }
 
-        private static string GetDataPathForDelegationOutput(string resourceId, string from, string to, string responseFileName = "ExpectedOutput_Default")
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateSingleRightsDelegation(string party, DelegationInput delegation)
         {
-            var folder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
-            if (!string.IsNullOrEmpty(folder))
-            {
-                return $"{folder}/Data/MaskinportenSchema/Delegation/{resourceId}/from_p{from}/to_{to}/{responseFileName}.json";
-            }
+            string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation");
 
-            return string.Empty;
+            return await GetMockedHttpResponse(dataPath, resourceFileName);
+        }
+
+        private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
+        {
+            IdValuePair referencePart = resourceReference.First();
+
+            switch (referencePart.Id)
+            {
+                case "urn:altinn:resource":
+                case "urn:altinn:servicecode":
+                case "urn:altinn:app":
+                    return referencePart.Value;
+                case "urn:altinn:org":
+                case "urn:altinn:serviceeditioncode":
+                    return resourceReference[1].Value;
+                default:
+                    return "Unknown";
+            }
+        }
+
+        private static Task<HttpResponseMessage> GetMockedHttpResponse(string path, string resourceFileName)
+        {
+            try
+            {
+                string data = Util.GetMockDataSerialized(path, resourceFileName + ".json");
+                return Task.FromResult(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) });
+            }
+            catch
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
         }
     }
 }

@@ -23,17 +23,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     /// Test class for <see cref="UserController"/>
     /// </summary>
     [Collection("ProfileController Tests")]
-    public class ProfileControllerTest : IClassFixture<CustomWebApplicationFactory<UserController>>
+    public class UserControllerTest : IClassFixture<CustomWebApplicationFactory<UserController>>
     {
         private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly HttpClient _client;
         private readonly IProfileClient _profileClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProfileControllerTest"/> class.
+        /// Initializes a new instance of the <see cref="UserControllerTest"/> class.
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public ProfileControllerTest(CustomWebApplicationFactory<UserController> factory)
+        public UserControllerTest(CustomWebApplicationFactory<UserController> factory)
         {
             _factory = factory;
             _profileClient = Mock.Of<IProfileClient>();
@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var userProfile = await response.Content.ReadFromJsonAsync<UserProfile>();
@@ -115,7 +115,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -132,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
@@ -149,7 +149,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Mock.Get(_profileClient).Setup(m => m.GetUserProfile(It.IsAny<int>()))
                 .Throws(new Exception("Something failed"));
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }

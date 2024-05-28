@@ -52,6 +52,32 @@
     }
   },
   {
+    "UserId": 20010996,
+    "UserUuid": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "UserName": "GullMedalje",
+    "PhoneNumber": "90001337",
+    "Email": "1337@altinnstudiotestusers.com",
+    "PartyId": 51329012,
+    "Party": {
+      "PartyId": 51329012,
+      "PartyUuid": "5c0656db-cf51-43a4-bd64-6a91c8caacf1",
+      "PartyTypeName": 1,
+      "OrgNumber": null,
+      "Ssn": "51329012",
+      "UnitType": null,
+      "Name": "SITRONGUL MEDALJONG",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "Person": null,
+      "Organisation": null,
+      "ChildParties": null
+    },
+    "UserType": 1,
+    "ProfileSettingPreference": {
+      "Language": "nb"
+    }
+  },
+  {
     "UserId": 20020251,
     "UserUuid": "64684267-9b38-43f6-b6d6-af8750b5aef6",
     "UserName": "Sveinern",

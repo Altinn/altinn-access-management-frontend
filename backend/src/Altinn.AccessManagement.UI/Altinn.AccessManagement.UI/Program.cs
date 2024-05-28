@@ -192,26 +192,23 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);
-    services.AddHttpClient<ILookupClient, LookupClient>();
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
 
     bool useMockData = config.GetValue("GeneralSettings:UseMockData", false);
     if (useMockData)
     {
         services.AddHttpClient<IProfileClient, ProfileClientMock>();
-        services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClientMock>();
+        services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
-        services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
     }
     else
     {
         services.AddHttpClient<IProfileClient, ProfileClient>();
-        services.AddHttpClient<IMaskinportenSchemaClient, MaskinportenSchemaClient>();
+        services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
         services.AddHttpClient<IRegisterClient, RegisterClient>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
-        services.AddHttpClient<ISingleRightClient, SingleRightClient>();
         services.AddSingleton<IKeyVaultService, KeyVaultService>();
     }
 
