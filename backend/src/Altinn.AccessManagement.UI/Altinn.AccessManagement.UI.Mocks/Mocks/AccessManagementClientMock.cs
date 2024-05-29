@@ -37,7 +37,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<Party> GetPartyFromReporteeListIfExists(int partyId)
         {
-            return Task.FromResult(Util.GetMockData<Party>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
+            try
+            {
+                return Task.FromResult(Util.GetMockData<Party>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
+            }
+            catch (FileNotFoundException) {
+                return Task.FromResult<Party>(null);
+            }
 
         }
 
