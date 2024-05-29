@@ -178,11 +178,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string fullPath = Path.Combine(dataFolder, "MaskinportenSchema", "DelegationCheck", filename + ".json");
 
-            if (!File.Exists(fullPath))
-            {
-                throw new FileNotFoundException($"The file with path {fullPath} does not exist");
-            }
-
             List<DelegationResponseData> mockedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
 
             return Task.FromResult(mockedResponse);

@@ -74,12 +74,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is ValidationException || ex is ArgumentException)
-                {
-                    ModelState.AddModelError("Validation Error", ex.Message);
-                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
-                }
-
                 _logger.LogError(ex, "Unexpected exception occurred during retrieval of received maskinportenschema");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
@@ -104,12 +98,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is ValidationException || ex is ArgumentException)
-                {
-                    ModelState.AddModelError("Validation Error", ex.Message);
-                    return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState));
-                }
-
                 _logger.LogError(ex, "Unexpected exception occurred during retrieval of offered maskinportenschema");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
