@@ -11,18 +11,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <summary>
     ///     Service that integrates with the delegation client. Processes and maps the required data to the frontend model
     /// </summary>
-    public class MaskinportenSchemaService : IMaskinportenSchemaService
+    public class APIDelegationService : IAPIDelegationService
     {
-        private readonly IMaskinportenSchemaClient _maskinportenSchemaClient;
+        private readonly IAccessManagementClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="MaskinportenSchemaService" /> class.
+        ///     Initializes a new instance of the <see cref="APIDelegationService" /> class.
         /// </summary>
         /// <param name="maskinportenSchemaClient">handler for delegations client</param>
         /// <param name="resourceService">handler for resource registry</param>
-        public MaskinportenSchemaService(
-            IMaskinportenSchemaClient maskinportenSchemaClient,
+        public APIDelegationService(
+            IAccessManagementClient maskinportenSchemaClient,
             IResourceService resourceService)
         {
             _maskinportenSchemaClient = maskinportenSchemaClient;
@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
-            return await _maskinportenSchemaClient.DelegationCheck(partyId, request);
+            return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }
 
         private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)

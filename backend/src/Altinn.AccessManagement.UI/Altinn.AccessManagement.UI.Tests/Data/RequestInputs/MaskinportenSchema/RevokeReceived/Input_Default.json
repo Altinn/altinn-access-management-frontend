@@ -1,19 +1,18 @@
 {
-  "to": [
+  "from": [
     {
       "id": "urn:altinn:organizationnumber",
-      "value": "810418362"
+      "value": "810418672"
     }
   ],
-  "rightDelegationResults": [
+  "rights": [
     {
       "resource": [
         {
           "id": "urn:altinn:resource",
-          "value": "appid-402"
+          "value": "nav_aa_distribution"
         }
-      ],
-      "action": "ScopeAccess"
+      ]
     }
   ]
 }

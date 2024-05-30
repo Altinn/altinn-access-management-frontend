@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Tests.Utils
@@ -225,6 +226,23 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 Assert.Equal(actual.Errors[expectedKey], actual.Errors[expectedKey]);
             }
+        }
+
+        public static void AssertEqual(Party expected, Party actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.UnitType, actual.UnitType);
+            Assert.Equal(expected.PartyTypeName, actual.PartyTypeName);
+            Assert.Equal(expected.Organization, actual.Organization);
+            Assert.Equal(expected.OrgNumber, actual.OrgNumber);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
+            AssertCollections<Party>(expected.ChildParties, actual.ChildParties, AssertEqual);
+
         }
 
         private static void AssertEqual(IdValuePair expected, IdValuePair actual)

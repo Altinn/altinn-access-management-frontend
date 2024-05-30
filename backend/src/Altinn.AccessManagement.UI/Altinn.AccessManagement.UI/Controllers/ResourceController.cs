@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
-        private readonly IProfileService _profileService;
+        private readonly IUserService _userService;
         private readonly IResourceService _resourceService;
 
         /// <summary>
@@ -29,66 +29,41 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="logger">the logger.</param>
         /// <param name="resourceService">The resource administration point</param>
-        /// <param name="profileService">handler for profile service</param>
+        /// <param name="userService">handler for profile service</param>
         /// <param name="httpContextAccessor">handler for httpcontext</param>
         public ResourceController(
             ILogger<ResourceController> logger,
             IResourceService resourceService,
-            IProfileService profileService,
+            IUserService userService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _resourceService = resourceService;
-            _profileService = profileService;
+            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
-        ///     Get list of maskinportenschema resources
-        /// </summary>
-        /// <returns>List of API service resources</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("maskinportenschema")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> GetMaskinportenSchema()
-        {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _profileService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
-
-            return await _resourceService.GetResources(ResourceType.MaskinportenSchema, languageCode);
-        }
-        
-        /// <summary>
         ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
-        /// </summary>
-        /// <returns>List of resource owners</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("getResourceOwners")]
-        public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
-        {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _profileService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
-
-            return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
-        }
-
-        /// <summary>
-        ///     Gets list of all resource owners
         /// </summary>
         /// <returns>List of resource owners in string format</returns>
         [HttpGet]
         [Authorize]
         [Route("resourceowners")]
-        public async Task<ActionResult<List<ResourceOwnerFE>>> GetAllResourceOwners()
+        public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            UserProfile userProfile = await _userService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
 
-            return await _resourceService.GetAllResourceOwners(languageCode);
+            if (relevantResourceTypes?.Count > 0)
+            {
+                return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
+            }
+            else
+            {
+                return await _resourceService.GetAllResourceOwners(languageCode);
+            }
         }
 
         /// <summary>
@@ -97,11 +72,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>Paginated search results</returns>
         [HttpGet]
         [Authorize]
-        [Route("paginatedSearch")]
+        [Route("search")]
         public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            UserProfile userProfile = await _userService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
 
             try
@@ -123,14 +98,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Searches through all delegable maskinportenschema services and returns matches based on the provided search string and filters
         /// </summary>
-        /// <returns>list of maskinportenschemas</returns>
+        /// <returns>list of maskinportenschemas matching search params</returns>
         [HttpGet]
         [Authorize]
-        [Route("maskinportenschema/search")]
-        public async Task<ActionResult<List<ServiceResourceFE>>> Search([FromQuery] ApiSearchParams parameters)
+        [Route("maskinportenapi/search")]
+        public async Task<ActionResult<List<ServiceResourceFE>>> MaskinportenSearch([FromQuery] ApiSearchParams parameters)
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _profileService.GetUserProfile(userId);
+            UserProfile userProfile = await _userService.GetUserProfile(userId);
             string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
 
             try

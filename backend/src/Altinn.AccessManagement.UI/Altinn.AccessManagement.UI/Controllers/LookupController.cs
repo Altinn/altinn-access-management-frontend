@@ -62,36 +62,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving party if party exists in the authenticated users reporteelist
-        /// </summary>
-        /// <param name="partyId">The partyId for the reportee to look up</param>
-        /// <returns>Reportee if party is in authenticated users reporteelist</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("reportee/{partyId}")]
-        public async Task<ActionResult<Party>> GetPartyFromReporteeListIfExists(int partyId)
-        {           
-            try
-            {
-                Party party = await _lookupService.GetPartyFromReporteeListIfExists(partyId);
-
-                if (party != null)
-                {
-                    return party;
-                }
-                else
-                {
-                    return StatusCode(404);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
-                return StatusCode(500);
-            }
-        }
-
-        /// <summary>
         /// Endpoint for retrieving a party by uuid
         /// </summary>
         /// <param name="uuid">The uuid for the party to look up</param>

@@ -3,8 +3,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Common.PEP.Interfaces;
 using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
@@ -20,47 +22,27 @@ using Moq;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    /// Test class for <see cref="ProfileController"/>
+    /// Test class for <see cref="UserController"/>
     /// </summary>
     [Collection("ProfileController Tests")]
-    public class ProfileControllerTest : IClassFixture<CustomWebApplicationFactory<ProfileController>>
+    public class UserControllerTest : IClassFixture<CustomWebApplicationFactory<UserController>>
     {
-        private readonly CustomWebApplicationFactory<ProfileController> _factory;
+        private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly HttpClient _client;
         private readonly IProfileClient _profileClient;
+        private string _testDataFolder;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProfileControllerTest"/> class.
+        /// Initializes a new instance of the <see cref="UserControllerTest"/> class.
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public ProfileControllerTest(CustomWebApplicationFactory<ProfileController> factory)
+        public UserControllerTest(CustomWebApplicationFactory<UserController> factory)
         {
             _factory = factory;
             _profileClient = Mock.Of<IProfileClient>();
-            _client = GetTestClient();
-        }
+            _client = SetupUtils.GetTestClient(factory);
+            _testDataFolder = Path.GetDirectoryName(new Uri(typeof(UserControllerTest).Assembly.Location).LocalPath);
 
-        private HttpClient GetTestClient()
-        {
-            var httpClient = _factory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton<IProfileClient>(sp => _profileClient);
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                    services.AddSingleton<IPDP, PdpPermitMock>();
-                });
-            }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
-
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            return httpClient;
-        }
-
-        private void SetupProfileClientMock(UserProfile userProfile)
-        {
-            Mock.Get(_profileClient).Setup(m => m.GetUserProfile(It.IsAny<int>())).ReturnsAsync(userProfile);
         }
 
         private static UserProfile GetUserProfile(int id)
@@ -91,17 +73,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         [Fact]
         public async Task GetUser_UserFound_ReturnsUserProfile()
         {
-            const int userId = 1234;
-            SetupProfileClientMock(GetUserProfile(userId));
+            const int userId = 20004938;
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var userProfile = await response.Content.ReadFromJsonAsync<UserProfile>();
             Assert.Equal(userId, userProfile.UserId);
-            Mock.Get(_profileClient).Verify(p => p.GetUserProfile(It.Is<int>(i => i == userId)), Times.Once());
         }
 
         /// <summary>
@@ -111,11 +91,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetUser_UserIdNotSet_ReturnsBadRequest()
         {
             const int userId = 0;
-            SetupProfileClientMock(GetUserProfile(userId));
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -127,31 +106,51 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetUser_UserNotFoundByProfoileService_ReturnsNotFound()
         {
             const int userId = 1234;
-            SetupProfileClientMock(null);
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         /// <summary>
-        /// Assert that InternalServiceError is returned upon exception
+        /// Assert that Party is returned if exists
         /// </summary>
         [Fact]
-        public async Task GetUser_ExceptionInProfileService_ReturnsInternalServiceError()
+        public async Task GetPartyFromReporteeList_PartyExists()
         {
             const int userId = 1234;
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            Mock.Get(_profileClient).Setup(m => m.GetUserProfile(It.IsAny<int>()))
-                .Throws(new Exception("Something failed"));
+            string reporteePartyID = "51329012";
 
-            var response = await _client.GetAsync("accessmanagement/api/v1/profile/user");
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", $"{reporteePartyID}.json");
+            Party expectedResponse = Util.GetMockData<Party>(path);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{reporteePartyID}");
+            Party actualResponse = await response.Content.ReadFromJsonAsync<Party>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Assert that 404 Not Found is returned if not found
+        /// </summary>
+        [Fact]
+        public async Task GetPartyFromReporteeList_PartyNotFound()
+        {
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string reporteePartyID = "51320000";
+
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{reporteePartyID}");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
 }

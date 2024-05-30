@@ -32,7 +32,7 @@ export enum UserType {
   PSA,
 }
 
-const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
+const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'lookup';
 
 export const lookupApi = createApi({
   reducerPath: 'lookupApi',
@@ -49,10 +49,10 @@ export const lookupApi = createApi({
   }),
   endpoints: (builder) => ({
     getUserByUUID: builder.query<UserProfile, string>({
-      query: (userUUID) => `lookup/user/${userUUID}`,
+      query: (userUUID) => `user/${userUUID}`,
     }),
     getPartyByUUID: builder.query<Party, string>({
-      query: (partyUUID) => `lookup/party/${partyUUID}`,
+      query: (partyUUID) => `party/${partyUUID}`,
     }),
   }),
 });

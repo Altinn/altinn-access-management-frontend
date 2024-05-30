@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client = GetTestClient();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _resourceService = new ResourceService();
-            mockFolder = Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath);
+            mockFolder = Path.GetDirectoryName(new Uri(typeof(ResourceRegistryClientMock).Assembly.Location).LocalPath);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/maskinportenschema");
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/resources/maskinportenapi/search");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -89,7 +89,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?ResultsPerPage={resultsPerPage}&Page={page}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={page}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?ResultsPerPage={resultsPerPage}&Page={page}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={page}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?ResultsPerPage={resultsPerPage}&Page={page}&SearchString={searchString}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={page}&SearchString={searchString}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -187,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?ResultsPerPage={resultsPerPage}&Page={page}&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={page}&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -220,7 +220,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             for (int i = 1; i <= totalPages; i++)
             {
-                HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/paginatedSearch?ResultsPerPage={resultsPerPage}&Page={i}");
+                HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={i}");
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     allActualPages.Add(JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options));
@@ -299,7 +299,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/getResourceowners?relevantResourceTypes={relevantResourceTypes[0]}&relevantResourceTypes={relevantResourceTypes[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/resourceowners?relevantResourceTypes={relevantResourceTypes[0]}&relevantResourceTypes={relevantResourceTypes[1]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -321,7 +321,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema);
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -346,7 +346,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?ROFilters={roFilters[0]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?ROFilters={roFilters[0]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -371,7 +371,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> expectedResult = TestDataUtil.GetExpectedResources(ResourceType.MaskinportenSchema).FindAll(r => r.Title.ToLower().Contains(searchString));
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?&SearchString={searchString}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?&SearchString={searchString}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -399,7 +399,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ServiceResourceFE> filteredExpectedResult = expectedResult.FindAll(r => r.Title.ToLower().Contains(searchString));
 
             // Act
-            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenschema/search?&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/maskinportenapi/search?&SearchString={searchString}&ROFilters={roFilters[0]}&ROFilters={roFilters[1]}");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
