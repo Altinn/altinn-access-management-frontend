@@ -1,23 +1,15 @@
-import { Button, Spinner, Search, Skeleton } from '@digdir/designsystemet-react';
+import { Button, Search, Skeleton } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import {
-  Page,
-  PageHeader,
-  PageContent,
-  PageContainer,
-  ErrorPanel,
-  GroupElements,
-} from '@/components';
+import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
 import { useMediaQuery } from '@/resources/hooks';
-import common from '@/resources/css/Common.module.css';
 import {
   softAddApi,
   softRemoveApi,
@@ -37,10 +29,13 @@ import {
   ResourceType,
   useGetResourceOwnersQuery,
 } from '@/rtk/features/resourceOwner/resourceOwnerApi';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
+import { ApiSearchResults } from './ApiSearchResult';
 
 export const ChooseApiPage = () => {
   const [searchString, setSearchString] = useState('');
@@ -51,16 +46,19 @@ export const ChooseApiPage = () => {
   const partyId = getCookie('AltinnPartyId');
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const dispatch = useAppDispatch();
   const [delegationCheck] = useDelegationCheckMutation();
   const resourceTypeList: ResourceType[] = [ResourceType.MaskinportenSchema];
+  const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
 
   const {
     data: searchResults,
     error,
     isFetching,
+    isLoading,
   } = useSearchQuery({ searchString, ROfilters: filters });
 
   const { data: apiProviders } = useGetResourceOwnersQuery({
@@ -68,17 +66,20 @@ export const ChooseApiPage = () => {
   });
 
   useEffect(() => {
-    if (!isFetching && urlParams) {
+    if (!isLoading && urlParams) {
       makeChosenApisFromParams();
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   const makeChosenApisFromParams = () => {
     const promises: Promise<void>[] = [];
 
     for (const key of urlParams.keys()) {
       searchResults?.forEach((api: DelegableApi) => {
-        if (api.identifier === key) {
+        if (
+          api.identifier === key &&
+          chosenApis.filter((chosenApi: DelegableApi) => chosenApi.identifier === key).length === 0
+        ) {
           const resourceRef: ResourceReference = { resource: api.authorizationReference };
           const promise = delegationCheck({
             partyId,
@@ -108,6 +109,7 @@ export const ChooseApiPage = () => {
   const handleRemove = (api: DelegableApi) => {
     removeApiFromParams(api);
     dispatch(softRemoveApi(api));
+    setChosenItemsStatusMessage(`${t('common.removed')}: ${api.apiName}`);
   };
 
   const removeApiFromParams = (api: DelegableApi) => {
@@ -124,54 +126,10 @@ export const ChooseApiPage = () => {
       })
     : [];
 
-  const delegableApiActionBars = () => {
-    if (error?.message) {
-      return (
-        <ErrorPanel
-          title={t('api_delegation.data_retrieval_failed')}
-          message={error?.message}
-          statusCode={error?.statusCode}
-        ></ErrorPanel>
-      );
-    } else if (isFetching) {
-      return (
-        <div className={common.spinnerContainer}>
-          <Spinner
-            title={t('common.loading')}
-            variant='interaction'
-          />
-        </div>
-      );
-    }
-
-    const prechosenApis = Array.from(urlParams.keys());
-
-    const unchosenApis = searchResults?.filter(
-      (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
-    );
-
-    return unchosenApis?.map((api: DelegableApi) => {
-      const initWithDelegationCheck = prechosenApis.includes(api.identifier);
-      return (
-        <ApiActionBar
-          key={api.identifier}
-          variant={'add'}
-          color={'neutral'}
-          api={api}
-          onAdd={() => {
-            addApiToParams(api);
-            dispatch(softAddApi(api));
-          }}
-          initWithDelegationCheck={initWithDelegationCheck}
-        ></ApiActionBar>
-      );
-    });
-  };
-
-  const chosenApiActionBars = chosenApis.map((api: DelegableApi) => {
+  const chosenApiActionBars = chosenApis.map((api: DelegableApi, index) => {
     return (
       <ApiActionBar
-        key={api.identifier}
+        key={`${api.identifier}${index}`}
         api={api}
         variant={'remove'}
         color={'success'}
@@ -263,7 +221,22 @@ export const ChooseApiPage = () => {
               <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
               <div className={classes.delegableApisContainer}>
                 <div className={classes.actionBarWrapper}>
-                  {showSkeleton ? DelegableApiSkeleton() : delegableApiActionBars()}
+                  {showSkeleton ? (
+                    DelegableApiSkeleton()
+                  ) : (
+                    <ApiSearchResults
+                      addApi={(api) => {
+                        addApiToParams(api);
+                        dispatch(softAddApi(api));
+                        setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
+                      }}
+                      error={error}
+                      isFetching={isFetching}
+                      urlParams={urlParams}
+                      searchResults={searchResults || []}
+                      chosenApis={chosenApis}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -278,6 +251,7 @@ export const ChooseApiPage = () => {
               </div>
             )}
           </div>
+          <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
           <GroupElements>
             <Button
               variant={'secondary'}
