@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GroupElements } from '@/components/GroupElements/GroupElements';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import classes from './ReceiptPage.module.css';
 import { ActionBarSection } from './ActionBarSection/ActionBarSection';
@@ -22,6 +23,7 @@ export const ReceiptPage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const [urlParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  useDocumentTitle(t('single_rights.page_title'));
   const processedDelegations = useAppSelector(
     (state) => state.singleRightsSlice.processedDelegations,
   );

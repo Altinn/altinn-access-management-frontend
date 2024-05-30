@@ -23,3 +23,9 @@ body {
   display: flex;
   justify-content: center;
 }
+
+.unstyledList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}

@@ -32,6 +32,7 @@ import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegab
 import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import classes from './ConfirmationPage.module.css';
 
@@ -44,6 +45,7 @@ export const ConfirmationPage = () => {
   const { t } = useTranslation('common');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   useEffect(() => {
     if (!loading) {

@@ -19,6 +19,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { SingleRightPath } from '@/routes/paths';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
@@ -32,6 +33,7 @@ export const ChooseServicePage = () => {
   const dispatch = useAppDispatch();
   const [urlParams] = useSearchParams();
   const [popoverOpen, setPopoverOpen] = useState(false);
+  useDocumentTitle(t('single_rights.page_title'));
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
       (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,

@@ -1,0 +1,123 @@
+{
+  "config": {
+    "configFile": "c:\\repos\\access-managment-frontend-repo\\altinn-access-management-frontend\\playwright\\playwright.config.ts",
+    "rootDir": "c:/repos/access-managment-frontend-repo/altinn-access-management-frontend/playwright",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "dot",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "jsonReports/jsonReport.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "open": "on-failure"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "c:/repos/access-managment-frontend-repo/altinn-access-management-frontend/playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "",
+        "name": "",
+        "testDir": "c:/repos/access-managment-frontend-repo/altinn-access-management-frontend/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "playwright/e2eTests/*.spec.ts"
+        ],
+        "timeout": 300000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.44.0",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "e2eTests\\singleRightsDelegering.spec.ts",
+      "file": "e2eTests/singleRightsDelegering.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to Org B",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "status": "passed",
+                  "duration": 98468,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "getByRole('heading', { name: /OPPKLARENDE OMKOMMEN TIGER AS/i })\n"
+                    },
+                    {
+                      "text": "getByRole('heading', { name: /OPPKLARENDE OMKOMMEN TIGER AS/i })\n"
+                    },
+                    {
+                      "text": "Ressurs for enkeltrettigheter testing\n  \nAutomatiseringstest for Access Management\n  \nAltinn2 Reporting service for Authorization tests\n \nLese\n \nFylle ut\nSignere\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2024-05-24T12:03:31.493Z",
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7c617cc8bedb734f9ab-813017cc0c6318bf52b3",
+          "file": "e2eTests/singleRightsDelegering.spec.ts",
+          "line": 34,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2024-05-24T12:03:29.455Z",
+    "duration": 102628.413,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

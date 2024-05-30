@@ -17,6 +17,7 @@
     "search": "Søk",
     "add": "Legg til",
     "remove": "Fjern",
+    "removed": "Fjerna",
     "try_again": "Prøv igjen",
     "undo": "Angra",
     "to": "Til",
@@ -76,6 +77,8 @@
     "change_rights": "Endre rettar"
   },
   "api_delegation": {
+    "delegate_page_title": "Deleger API-tilgang - Altinn",
+    "received_page_title": "Mottekne API-tilganger - Altinn",
     "businesses": "Verksemder",
     "delegated_apis": "Delegerte API",
     "api_accesses": "API-tilgangar",
@@ -115,6 +118,7 @@
     "scopes": "Scopes",
     "search_for_buisness": "Søk på organisasjonsnummer",
     "search_for_api": "Søk etter API",
+    "search_for_api_no_result": "0 treff",
     "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
     "data_retrieval_failed": "Noke feilet, prøv å laste inn sida på ny.",
@@ -134,6 +138,7 @@
     "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Ver vennleg og logg inn på nytt med ein av metodane under:"
   },
   "single_rights": {
+    "page_title": "Deleger enkeltrettar - Altinn",
     "delegate_single_rights": "Gi nye enkeltrettar",
     "search_label": "Søk etter skjema og teneste",
     "filter_label": "Filtrer på tenesteeigar",
