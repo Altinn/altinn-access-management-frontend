@@ -32,11 +32,12 @@ export const resourceApi = createApi({
   endpoints: (builder) => ({
     getResourceOwners: builder.query<ResourceOwner[], ResourceType[] | void>({
       query: (resourceTypeList) => {
-        let resourceTypesUrl = '';
-        resourceTypeList?.forEach((type) => {
-          resourceTypesUrl = resourceTypesUrl + `&relevantResourceTypes=${type}`;
-        });
-        return `resourceowners?${resourceTypesUrl}`;
+        return (
+          'resourceowners?' +
+          resourceTypeList?.reduce((url, type) => {
+            return url + `&relevantResourceTypes=${type}`;
+          }, '')
+        );
       },
     }),
   }),

@@ -58,6 +58,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
         {
+            ThrowExceptionIfTriggerParty(party);
+
             List<MaskinportenSchemaDelegation> delegations = new List<MaskinportenSchemaDelegation>();
             List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
 
@@ -78,6 +80,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<List<MaskinportenSchemaDelegation>> GetOfferedMaskinportenSchemaDelegations(string party)
         {
+            ThrowExceptionIfTriggerParty(party);
+
             List<MaskinportenSchemaDelegation> delegations = new List<MaskinportenSchemaDelegation>();
             List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
 
@@ -98,6 +102,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
         {
+            ThrowExceptionIfTriggerParty(party);
+
             IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
             IdValuePair fromMatch = delegation.From.First();
 
@@ -122,6 +128,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
         {
+            ThrowExceptionIfTriggerParty(party);
+
             IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
             IdValuePair toMatch = delegation.To.First();
 
@@ -147,6 +155,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
+            ThrowExceptionIfTriggerParty(party);
+
             string resourceId = delegation.Rights.First().Resource.First().Value;
             IdValuePair toMatch = delegation.To.First();
             string path = Path.Combine(dataFolder, "MaskinportenSchema", "Delegation", $"{resourceId}.json");
@@ -230,6 +240,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             catch
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+        }
+
+        // A helper for testing handling of exceptions in client
+        private static void ThrowExceptionIfTriggerParty(string partyId)
+        {
+            if (partyId == "********") {
+                throw new Exception();
             }
         }
     }

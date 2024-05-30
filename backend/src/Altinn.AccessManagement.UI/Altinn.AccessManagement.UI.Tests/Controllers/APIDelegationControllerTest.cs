@@ -83,11 +83,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Contains(expected, responseContent);
         }
 
-        private static List<MaskinportenSchemaDelegationFE> GetExpectedInboundDelegationsForParty(int covererdByPartyId)
+        /// <summary>
+        ///     Test case: GetReceivedMaskinportenSchemaDelegations handles exceptions thrown in client code
+        ///     Expected: GetReceivedMaskinportenSchemaDelegations returns InternalServerError
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedMaskinportenSchemaDelegations_ExternalExceptionHandled()
         {
-            List<MaskinportenSchemaDelegationFE> inboundDelegations = new List<MaskinportenSchemaDelegationFE>();
-            inboundDelegations = TestDataUtil.GetDelegationsFE(0, covererdByPartyId);
-            return inboundDelegations;
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/********/received"); //Invalid partyId to trigger exception
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
         }
 
         /// <summary>
@@ -131,6 +141,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetOfferedMaskinportenSchemaDelegations handles exceptions thrown in client code
+        ///     Expected: GetOfferedMaskinportenSchemaDelegations returns InternalServerError
+        /// </summary>
+        [Fact]
+        public async Task GetOfferedMaskinportenSchemaDelegations_ExternalExceptionHandled()
+        {
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/********/offered"); //Invalid partyId to trigger exception
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+        }
+
+        /// <summary>
         ///     Test case: MaskinportenDelegation performed by authenticated user 20000490 for the reportee party 50005545 of the
         ///     nav_aa_distribution maskinporten schema resource from the resource registry, to the organization 810418672
         ///     In this case:
@@ -156,6 +183,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             DelegationOutput actualResponse = JsonSerializer.Deserialize<DelegationOutput>(responseContent, options);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: PostMaskinportenSchemaDelegation handles exceptions thrown in client code
+        ///     Expected: PostMaskinportenSchemaDelegation returns InternalServerError
+        /// </summary>
+        [Fact]
+        public async Task PostMaskinportenSchemaDelegation_ExternalExceptionHandled()
+        {
+            // Arrange
+            string fromParty = "********"; // Invalid partyID that triggers exception
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(20000490, 50002598));
+
+            StreamContent requestContent = GetRequestContent("Delegation");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{fromParty}/offered", requestContent);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
         /// <summary>
@@ -251,6 +299,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
+
+
         private static List<MaskinportenSchemaDelegationFE> GetExpectedOutboundDelegationsForParty(int offeredByPartyId)
         {
             List<MaskinportenSchemaDelegationFE> outboundDelegations = new List<MaskinportenSchemaDelegationFE>();
@@ -271,6 +321,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string responsePath = $"Data/MaskinportenSchema/{operation}/{resourceId}.json";
             string content = File.ReadAllText(responsePath);
             return (DelegationOutput)JsonSerializer.Deserialize(content, typeof(DelegationOutput), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        private static List<MaskinportenSchemaDelegationFE> GetExpectedInboundDelegationsForParty(int covererdByPartyId)
+        {
+            List<MaskinportenSchemaDelegationFE> inboundDelegations = new List<MaskinportenSchemaDelegationFE>();
+            inboundDelegations = TestDataUtil.GetDelegationsFE(0, covererdByPartyId);
+            return inboundDelegations;
         }
     }
 }
