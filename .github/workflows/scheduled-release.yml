@@ -2,13 +2,13 @@ name: Schedule a release and image
 on:
   workflow_dispatch:
   schedule:
-     - cron: "0 0 * * 3"
+    - cron: '0 0 * * 3'
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: altinn/altinn-access-management-frontend
 
-jobs:     
+jobs:
   getlatestrelease:
     runs-on: ubuntu-latest
     permissions:
@@ -16,7 +16,7 @@ jobs:
       deployments: write
       issues: write
       packages: write
-    
+
     steps:
       - name: setup current year
         id: get_year
@@ -35,23 +35,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: print status
         run: "echo Release could not be found. Request failed with status '${{ steps.get_latest_release_version.outputs.status }}'"
-      
+
       - name: split release version f.ex v2023.1 will be split into output0 v2023 and output1 1
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         uses: winterjung/split@v2
         id: split
         with:
-          msg: "${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
+          msg: '${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}'
           separator: '.'
-          
+
       - name: split 'v' and year f.ex v2023 will be split into output0 v and output1 2023
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         uses: winterjung/split@v2
         id: splitv
         with:
-          msg: "${{steps.split.outputs._0}}"
+          msg: '${{steps.split.outputs._0}}'
           separator: 'v'
-          
+
       - name: Increment release version f.ex the release version for the year is incremented
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         id: update_version
@@ -59,7 +59,7 @@ jobs:
           NUM: ${{ steps.split.outputs._1 }}
         run: |
           echo "VERSION=$(($NUM + 1))" >> $GITHUB_ENV
-          
+
       - name: Format new release version when there is atleast 1 previous release. If the release is created in the new year, the current year is set and the identity is reset to 1.
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
         id: format_version
@@ -72,7 +72,7 @@ jobs:
           else
              echo "RELEASEVERSION=v${{env.RELEASE_YEAR}}.${{env.VERSION}}" >> $GITHUB_OUTPUT
           fi
-    
+
       - name: Set release version if 0 releases. The initial version is set to the v{currentyear}.{identity} f.ex v2023.1
         id: releaseversion
         run: |
@@ -84,7 +84,7 @@ jobs:
           fi
     outputs:
       RELEASEVERSION: ${{ steps.releaseversion.outputs.RELEASE }}
-    
+
   tag:
     name: Tag image with release version
     runs-on: ubuntu-latest
@@ -100,25 +100,25 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "github-actions[bot]"
           git config user.email ""
           git config -l | grep url
-          
+
       - name: Get last commit id
         id: get_commit_sha
         run: echo "commitid=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-          
+
       - name: Login to GHCR
         uses: docker/login-action@v3.1.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - id: version
         uses: battila7/get-version-action@v2
       - name: Add Version tag to Docker Image
@@ -131,15 +131,15 @@ jobs:
 
   update_release_draft:
     name: Release Drafter with releaseversion that was formatted
-    needs: [getlatestrelease,tag]
+    needs: [getlatestrelease, tag]
     permissions:
-      contents: write  # for release-drafter/release-drafter to create a github release
-      pull-requests: write  # for release-drafter/release-drafter to add label to PR
+      contents: write # for release-drafter/release-drafter to create a github release
+      pull-requests: write # for release-drafter/release-drafter to add label to PR
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       # Drafts your next Release notes as Pull Requests are merged into "master"
-      - uses: release-drafter/release-drafter@v6
+      - uses: release-drafter/release-drafter@v6.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
