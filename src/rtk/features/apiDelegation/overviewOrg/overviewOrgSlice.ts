@@ -149,7 +149,7 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       }
 
       const response = await axios.get(
-        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`,
+        `/accessmanagement/api/v1/apidelegation/${altinnPartyId}/offered`,
       );
       return response.data;
     } catch (error) {
@@ -169,7 +169,7 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
     }
 
     return await axios
-      .get(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/received`)
+      .get(`/accessmanagement/api/v1/apidelegation/${altinnPartyId}/received`)
       .then((response) => response.data)
       .catch((error) => {
         console.error(error);
@@ -189,7 +189,7 @@ export const deleteOfferedApiDelegation = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        `/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered/revoke`,
+        `/accessmanagement/api/v1/apidelegation/${altinnPartyId}/offered/revoke`,
         {
           to: [
             {
@@ -228,7 +228,7 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
     }
 
     return await axios
-      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/received/revoke`, {
+      .post(`/accessmanagement/api/v1/apidelegation/${altinnPartyId}/received/revoke`, {
         from: [
           {
             id: 'urn:altinn:organizationnumber',

@@ -17,6 +17,7 @@
     "search": "Search",
     "add": "Add",
     "remove": "Remove",
+    "removed": "Removed",
     "try_again": "Try again",
     "undo": "Undo",
     "to": "To",
@@ -26,7 +27,7 @@
     "previous": "Previous",
     "next": "Next",
     "general_error_title": "Sorry, looks like something went wrong",
-    "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn Servicedesk.",
+    "general_error_paragraph": "We aren't able to get the requested information, please try again later. If the error persists, please contact Altinn support.",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "complete": "Complete",
@@ -79,6 +80,8 @@
     "change_rights": "Edit client rights"
   },
   "api_delegation": {
+    "delegate_page_title": "API delegation - Altinn",
+    "received_page_title": "Received API-accesses - Altinn",
     "businesses": "Businesses",
     "delegated_apis": "Delegated APIs",
     "api_accesses": "API-accesses",
@@ -117,6 +120,7 @@
     "scopes": "Scopes",
     "search_for_buisness": "Search by organisation number",
     "search_for_api": "Search for API",
+    "search_for_api_no_result": "0 hits",
     "description": "Description",
     "additional_description": "Additional description",
     "data_retrieval_failed": "Something crashed, try refreshing the page.",
@@ -136,6 +140,7 @@
     "insufficient_authentication_level": "You don't have secure enough login to delegate the service. Please log in with one of the methods below:"
   },
   "single_rights": {
+    "page_title": "Single rights - Altinn",
     "delegate_single_rights": "Delegate single rights",
     "search_label": "Search after form or service",
     "filter_label": "Filter on service owner",
@@ -150,7 +155,7 @@
     "unknown_title": "Unknown error",
     "new_error_title": "New error",
     "generic_error_try_again_title": "Whoops, we stumbled on a technical error",
-    "generic_error_try_again": "Try adding the service again by clicking on the plus sign again. Contact Altinn Servicedesk if the problem persists.",
+    "generic_error_try_again": "Try adding the service again by clicking on the plus sign again. Contact Altinn support if the problem persists.",
     "unauthorized_for_party_title": "Manglar delegasjonstilgang",
     "unauthorized_for_party": "Du kan ikkje delegere tenester for valde aktør. Om du meinte å delegere på vegner av nokon andre, vennlegst gå til profilen og vel denne aktøren frå avgjevarlista.",
     "give_more_rights": "Give more rights",

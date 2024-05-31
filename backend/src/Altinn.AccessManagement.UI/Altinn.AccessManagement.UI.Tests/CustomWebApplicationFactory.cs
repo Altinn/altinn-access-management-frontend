@@ -18,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Tests
         /// <param name="builder">IWebHostBuilder</param>
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddConfiguration(new ConfigurationBuilder()

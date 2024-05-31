@@ -20,6 +20,7 @@ import {
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import type { ApiDelegation } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { useMediaQuery } from '@/resources/hooks';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import classes from './ReceiptPage.module.css';
 
@@ -34,6 +35,7 @@ export const ReceiptPage = () => {
   const dispatch = useAppDispatch();
   const isSm = useMediaQuery('(max-width: 768px)');
   const navigate = useNavigate();
+  useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   const failedDelegationContent = () => {
     return (

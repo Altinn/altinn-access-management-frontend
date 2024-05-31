@@ -23,9 +23,10 @@ const initialState: SliceState = {
   reporteeOrgNumber: '',
 };
 
+// TODO: Make this entire slice into an rtkQuery Api
 export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfoSlice', async () => {
   return await axios
-    .get('/accessmanagement/api/v1/profile/user')
+    .get('/accessmanagement/api/v1/user/profile')
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
@@ -36,7 +37,7 @@ export const fetchUserInfo = createAsyncThunk('userInfo/fetchUserInfoSlice', asy
 export const fetchReportee = createAsyncThunk('userInfo/fetchReportee', async () => {
   const altinnPartyId = getCookie('AltinnPartyId');
   return await axios
-    .get(`/accessmanagement/api/v1/lookup/reportee/${altinnPartyId}`)
+    .get(`/accessmanagement/api/v1/user/reporteelist/${altinnPartyId}`)
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);

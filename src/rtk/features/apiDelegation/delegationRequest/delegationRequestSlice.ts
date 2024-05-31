@@ -48,7 +48,7 @@ export const postApiDelegation = createAsyncThunk(
     }
 
     return await axios
-      .post(`/accessmanagement/api/v1/${altinnPartyId}/maskinportenschema/offered`, {
+      .post(`/accessmanagement/api/v1/apidelegation/${altinnPartyId}/offered`, {
         to: [
           {
             id: 'urn:altinn:organizationnumber',

@@ -18,9 +18,9 @@ import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import {
   useGetPaginatedSearchQuery,
-  useGetResourceOwnersQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ErrorCode, getErrorCodeTextKey, prioritizeErrors } from '@/resources/utils/errorCodeUtils';
 import {
@@ -118,6 +118,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     } else if (error) {
       return (
         <Alert
+          role='alert'
           className={classes.searchError}
           severity='danger'
           iconTitle={t('common.error')}
@@ -212,6 +213,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <div className={classes.serviceResourceContent}>
           {prioritizedErrorCodes?.length > 0 && (
             <Alert
+              role='alert'
               severity='danger'
               elevated={false}
               className={classes.notDelegableAlert}
