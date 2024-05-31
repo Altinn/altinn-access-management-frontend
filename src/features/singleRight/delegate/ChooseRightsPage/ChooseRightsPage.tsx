@@ -33,6 +33,7 @@ import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { useClearAccessCacheMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
@@ -70,7 +71,7 @@ export const ChooseRightsPage = () => {
   const processedDelegationsRatio = (): number =>
     Math.round((processedDelegations.length / delegationCount) * 100);
   const [clearAccessCashe] = useClearAccessCacheMutation();
-
+  useDocumentTitle(t('single_rights.page_title'));
   const {
     name: recipientName,
     error: recipientError,

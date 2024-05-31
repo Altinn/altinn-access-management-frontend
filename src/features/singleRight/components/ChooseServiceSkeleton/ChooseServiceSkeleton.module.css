@@ -1,0 +1,10 @@
+.navButtons {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 30px;
+}
+
+.pagination {
+  width: 100%;
+}

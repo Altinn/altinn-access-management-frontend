@@ -444,16 +444,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-css@npm:0.6.0":
-  version: 0.6.0
-  resolution: "@digdir/designsystemet-css@npm:0.6.0"
-  dependencies:
-    "@digdir/designsystemet-react": "npm:^0.59.0"
-  checksum: 10/1130b5aa05f220addcf4379348cf6770addb8ec52783401c28892df469080e5ebf45b27914d2be63d658ce491183ef19b85b57d022bae5b6c19adf3787893828
+"@digdir/designsystemet-css@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@digdir/designsystemet-css@npm:0.9.0"
+  checksum: 10/01442285c2d862a76b0693dc07b1856ad4a153ec038d86ea080eec02feb8df47c3ae5f69e7d6812a17a1b7b32d6fe1fc362a900aaf039e25fd7ab6a4a612c19a
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:0.59.0, @digdir/designsystemet-react@npm:^0.59.0":
+"@digdir/designsystemet-react@npm:0.59.0":
   version: 0.59.0
   resolution: "@digdir/designsystemet-react@npm:0.59.0"
   dependencies:
@@ -1978,7 +1976,7 @@ __metadata:
     "@altinn/altinn-design-system": "npm:0.30.0"
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/design-system-tokens": "npm:0.13.0"
-    "@digdir/designsystemet-css": "npm:0.6.0"
+    "@digdir/designsystemet-css": "npm:0.9.0"
     "@digdir/designsystemet-react": "npm:0.59.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@playwright/test": "npm:^1.43.1"
@@ -1995,26 +1993,26 @@ __metadata:
     axios: "npm:^1.3.4"
     classnames: "npm:^2.3.2"
     cross-env: "npm:^7.0.3"
-    cypress: "npm:13.6.4"
+    cypress: "npm:13.8.1"
     cypress-real-events: "npm:^1.10.0"
     cypress-recurse: "npm:^1.35.2"
     dotenv: "npm:^16.4.5"
     eslint: "npm:^9.0.0"
-    eslint-config-prettier: "npm:^9.0.0"
+    eslint-config-prettier: "npm:^9.1.0"
     eslint-import-resolver-typescript: "npm:^3.5.5"
     eslint-plugin-cypress: "npm:^3.1.0"
     eslint-plugin-import: "npm:^2.27.5"
     eslint-plugin-jsx-a11y: "npm:^6.7.1"
     eslint-plugin-n: "npm:^17.0.0"
-    eslint-plugin-prettier: "npm:^5.0.0"
+    eslint-plugin-prettier: "npm:^5.1.3"
     eslint-plugin-promise: "npm:^6.1.1"
     eslint-plugin-react: "npm:^7.32.2"
     husky: "npm:^9.0.0"
     i18next: "npm:^23.0.0"
-    i18next-browser-languagedetector: "npm:^7.0.1"
+    i18next-browser-languagedetector: "npm:^8.0.0"
     lint-staged: "npm:^15.0.0"
     madge: "npm:^7.0.0"
-    prettier: "npm:^3.0.0"
+    prettier: "npm:^3.2.5"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-i18next: "npm:^14.0.0"
@@ -2446,14 +2444,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.3.4":
-  version: 1.6.8
-  resolution: "axios@npm:1.6.8"
+"axios@npm:^1.3.4, axios@npm:^1.6.8":
+  version: 1.7.2
+  resolution: "axios@npm:1.7.2"
   dependencies:
     follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/3f9a79eaf1d159544fca9576261ff867cbbff64ed30017848e4210e49f3b01e97cf416390150e6fdf6633f336cd43dc1151f890bbd09c3c01ad60bb0891eee63
+  checksum: 10/6ae80dda9736bb4762ce717f1a26ff997d94672d3a5799ad9941c24d4fb019c1dff45be8272f08d1975d7950bac281f3ba24aff5ecd49ef5a04d872ec428782f
   languageName: node
   linkType: hard
 
@@ -2577,7 +2575,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^5.5.0, buffer@npm:^5.6.0, buffer@npm:^5.7.1":
+"buffer@npm:^5.5.0, buffer@npm:^5.7.1":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
   dependencies:
@@ -3136,59 +3134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.6.4":
-  version: 13.6.4
-  resolution: "cypress@npm:13.6.4"
-  dependencies:
-    "@cypress/request": "npm:^3.0.0"
-    "@cypress/xvfb": "npm:^1.2.4"
-    "@types/sinonjs__fake-timers": "npm:8.1.1"
-    "@types/sizzle": "npm:^2.3.2"
-    arch: "npm:^2.2.0"
-    blob-util: "npm:^2.0.2"
-    bluebird: "npm:^3.7.2"
-    buffer: "npm:^5.6.0"
-    cachedir: "npm:^2.3.0"
-    chalk: "npm:^4.1.0"
-    check-more-types: "npm:^2.24.0"
-    cli-cursor: "npm:^3.1.0"
-    cli-table3: "npm:~0.6.1"
-    commander: "npm:^6.2.1"
-    common-tags: "npm:^1.8.0"
-    dayjs: "npm:^1.10.4"
-    debug: "npm:^4.3.4"
-    enquirer: "npm:^2.3.6"
-    eventemitter2: "npm:6.4.7"
-    execa: "npm:4.1.0"
-    executable: "npm:^4.1.1"
-    extract-zip: "npm:2.0.1"
-    figures: "npm:^3.2.0"
-    fs-extra: "npm:^9.1.0"
-    getos: "npm:^3.2.1"
-    is-ci: "npm:^3.0.0"
-    is-installed-globally: "npm:~0.4.0"
-    lazy-ass: "npm:^1.6.0"
-    listr2: "npm:^3.8.3"
-    lodash: "npm:^4.17.21"
-    log-symbols: "npm:^4.0.0"
-    minimist: "npm:^1.2.8"
-    ospath: "npm:^1.2.2"
-    pretty-bytes: "npm:^5.6.0"
-    process: "npm:^0.11.10"
-    proxy-from-env: "npm:1.0.0"
-    request-progress: "npm:^3.0.0"
-    semver: "npm:^7.5.3"
-    supports-color: "npm:^8.1.1"
-    tmp: "npm:~0.2.1"
-    untildify: "npm:^4.0.0"
-    yauzl: "npm:^2.10.0"
-  bin:
-    cypress: bin/cypress
-  checksum: 10/acdc246cf41bf77b95ab78a26ae7cb000c64abfd768ad7cef54830e1fa8d7e89cee64a56d00a9a389ac36ff6ec8bd704d6fa1d5d92123123c8d96ebae6328b8b
-  languageName: node
-  linkType: hard
-
-"cypress@npm:^13.6.4":
+"cypress@npm:13.8.1":
   version: 13.8.1
   resolution: "cypress@npm:13.8.1"
   dependencies:
@@ -3240,11 +3186,63 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cypress@npm:^13.9.0":
+  version: 13.9.0
+  resolution: "cypress@npm:13.9.0"
+  dependencies:
+    "@cypress/request": "npm:^3.0.0"
+    "@cypress/xvfb": "npm:^1.2.4"
+    "@types/sinonjs__fake-timers": "npm:8.1.1"
+    "@types/sizzle": "npm:^2.3.2"
+    arch: "npm:^2.2.0"
+    blob-util: "npm:^2.0.2"
+    bluebird: "npm:^3.7.2"
+    buffer: "npm:^5.7.1"
+    cachedir: "npm:^2.3.0"
+    chalk: "npm:^4.1.0"
+    check-more-types: "npm:^2.24.0"
+    cli-cursor: "npm:^3.1.0"
+    cli-table3: "npm:~0.6.1"
+    commander: "npm:^6.2.1"
+    common-tags: "npm:^1.8.0"
+    dayjs: "npm:^1.10.4"
+    debug: "npm:^4.3.4"
+    enquirer: "npm:^2.3.6"
+    eventemitter2: "npm:6.4.7"
+    execa: "npm:4.1.0"
+    executable: "npm:^4.1.1"
+    extract-zip: "npm:2.0.1"
+    figures: "npm:^3.2.0"
+    fs-extra: "npm:^9.1.0"
+    getos: "npm:^3.2.1"
+    is-ci: "npm:^3.0.1"
+    is-installed-globally: "npm:~0.4.0"
+    lazy-ass: "npm:^1.6.0"
+    listr2: "npm:^3.8.3"
+    lodash: "npm:^4.17.21"
+    log-symbols: "npm:^4.0.0"
+    minimist: "npm:^1.2.8"
+    ospath: "npm:^1.2.2"
+    pretty-bytes: "npm:^5.6.0"
+    process: "npm:^0.11.10"
+    proxy-from-env: "npm:1.0.0"
+    request-progress: "npm:^3.0.0"
+    semver: "npm:^7.5.3"
+    supports-color: "npm:^8.1.1"
+    tmp: "npm:~0.2.1"
+    untildify: "npm:^4.0.0"
+    yauzl: "npm:^2.10.0"
+  bin:
+    cypress: bin/cypress
+  checksum: 10/67bf838eee804f33773245491e5298d520ac8da8e990ee12dff812b58ddf05ef2182957f533355ec2bf638d99f533b0e350474d816db4d20c6720a810b5b7885
+  languageName: node
+  linkType: hard
+
 "cypress@workspace:cypress":
   version: 0.0.0-use.local
   resolution: "cypress@workspace:cypress"
   dependencies:
-    cypress: "npm:^13.6.4"
+    cypress: "npm:^13.9.0"
     cypress-file-upload: "npm:^5.0.8"
     cypress-grep: "npm:^3.0.0"
     cypress-iframe: "npm:^1.0.1"
@@ -4022,7 +4020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^9.0.0":
+"eslint-config-prettier@npm:^9.1.0":
   version: 9.1.0
   resolution: "eslint-config-prettier@npm:9.1.0"
   peerDependencies:
@@ -4169,7 +4167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^5.0.0":
+"eslint-plugin-prettier@npm:^5.1.3":
   version: 5.1.3
   resolution: "eslint-plugin-prettier@npm:5.1.3"
   dependencies:
@@ -5247,12 +5245,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next-browser-languagedetector@npm:^7.0.1":
-  version: 7.2.1
-  resolution: "i18next-browser-languagedetector@npm:7.2.1"
+"i18next-browser-languagedetector@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "i18next-browser-languagedetector@npm:8.0.0"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10/20c93cbd23d62703e12268ec24679a91743cb6d652a6e83e6a102b2ecb8f79542821046a7f8f567a93fabfdc5cd9353dc7f3050c9c48948fe2ae0640d859a0dd
+  checksum: 10/b2b4911b3c8dab0960cb5609053d12e61479123ab6397b4ea3d41a28630ebfb45d6ccc409baa164e86f35616cfad4d9aa56560041aeb9cd946b8495f1133ff97
   languageName: node
   linkType: hard
 
@@ -5483,7 +5481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-ci@npm:^3.0.0, is-ci@npm:^3.0.1":
+"is-ci@npm:^3.0.1":
   version: 3.0.1
   resolution: "is-ci@npm:3.0.1"
   dependencies:
@@ -7199,7 +7197,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "playwright@workspace:playwright"
   dependencies:
+    "@playwright/test": "npm:^1.43.1"
     "@types/node": "npm:^20.12.7"
+    axios: "npm:^1.6.8"
     cross-env: "npm:^7.0.3"
     dotenv: "npm:^16.4.5"
   languageName: unknown
@@ -7349,7 +7349,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.0":
+"prettier@npm:^3.2.5":
   version: 3.2.5
   resolution: "prettier@npm:3.2.5"
   bin:

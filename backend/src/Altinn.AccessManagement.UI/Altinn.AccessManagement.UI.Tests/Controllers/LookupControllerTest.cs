@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly CustomWebApplicationFactory<LookupController> _factory;
         private readonly HttpClient _client;
-        private readonly ILookupClient _lookupClient;
+        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public LookupControllerTest(CustomWebApplicationFactory<LookupController> factory)
         {
             _factory = factory;
-            _lookupClient = Mock.Of<ILookupClient>();
+            _accessManagementClient = Mock.Of<IAccessManagementClient>();
             _registerClient = new RegisterClientMock();
             _client = GetTestClient();
         }
@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddSingleton(sp => _lookupClient);
+                    services.AddSingleton(sp => _accessManagementClient);
                     services.AddSingleton(sp => _registerClient);
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();

@@ -29,3 +29,7 @@
   padding-right: 12px;
   color: var(--fds-semantic-text-neutral-subtle) !important;
 }
+
+.actionBarButtonText {
+  white-space: nowrap;
+}

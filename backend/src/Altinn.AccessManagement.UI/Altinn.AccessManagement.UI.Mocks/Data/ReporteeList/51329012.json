@@ -1,0 +1,29 @@
+{
+  "partyUuid": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+  "name": "DISKRET NÆR TIGER AS",
+  "organizationNumber": "310202398",
+  "personId": null,
+  "partyId": 51329012,
+  "type": "Organization",
+  "unitType": "AS",
+  "isDeleted": false,
+  "onlyHierarchyElementWithNoAccess": false,
+  "authorizedResources": [],
+  "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+  "subunits": [
+    {
+      "partyUuid": "b0a79f3d-4cef-430a-9774-301b754e0f6f",
+      "name": "DISKRET NÆR TIGER AS",
+      "organizationNumber": "311312294",
+      "personId": null,
+      "partyId": 51433301,
+      "type": "Organization",
+      "unitType": "BEDR",
+      "isDeleted": false,
+      "onlyHierarchyElementWithNoAccess": false,
+      "authorizedResources": [],
+      "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+      "subunits": []
+    }
+  ]
+}

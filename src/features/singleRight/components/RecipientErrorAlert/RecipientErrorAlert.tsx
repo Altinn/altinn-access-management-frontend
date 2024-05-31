@@ -24,7 +24,10 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
     );
   } else {
     return (
-      <Alert severity='danger'>
+      <Alert
+        role='alert'
+        severity='danger'
+      >
         <Heading
           level={3}
           size='small'

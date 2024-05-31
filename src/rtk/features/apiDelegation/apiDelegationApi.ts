@@ -69,6 +69,7 @@ export const apiDelegationApi = createApi({
   }),
   tagTypes: ['APIs'],
   endpoints: (builder) => ({
+    // TODO: Move to resourceApi
     search: builder.query<DelegableApi[], searchParams>({
       query: (args) => {
         const { searchString, ROfilters } = args;
@@ -76,7 +77,7 @@ export const apiDelegationApi = createApi({
         for (const filter of ROfilters) {
           filterUrl = filterUrl + `&ROFilters=${filter}`;
         }
-        return `resources/maskinportenschema/search?SearchString=${searchString}${filterUrl}`;
+        return `resources/maskinportenapi/search?SearchString=${searchString}${filterUrl}`;
       },
       transformResponse: (response: DelegableApiDto[]) => {
         return response
@@ -89,7 +90,7 @@ export const apiDelegationApi = createApi({
       { partyId: string; resourceRef: ResourceReference }
     >({
       query: ({ partyId, resourceRef }) => ({
-        url: `${partyId}/maskinportenschema/delegationcheck`,
+        url: `apidelegation/${partyId}/delegationcheck`,
         method: 'POST',
         body: JSON.stringify(resourceRef),
       }),

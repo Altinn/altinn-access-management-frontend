@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
+    <ProjectReference Include="..\Altinn.AccessManagement.UI.Core\Altinn.AccessManagement.UI.Core.csproj" />
   </ItemGroup>
 
 
