@@ -25,6 +25,7 @@ import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
+import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -101,12 +102,12 @@ export const ChooseServicePage = () => {
                     onAdd={onAdd}
                     onUndo={onRemove}
                   />
-                  <GroupElements>
+                  <div className={classes.navigationContainer}>
                     <Button
                       variant='primary'
                       color='first'
                       disabled={delegableChosenServices.length < 1}
-                      fullWidth
+                      fullWidth={isSm}
                       onClick={() => {
                         navigate(
                           `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`,
@@ -135,12 +136,12 @@ export const ChooseServicePage = () => {
                       </Popover.Trigger>
                       <Popover.Content>
                         <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
-                        <GroupElements>
+                        <div className={classes.navigationContainer}>
                           <Button
                             onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                             color={'danger'}
                             variant={'primary'}
-                            fullWidth
+                            fullWidth={isSm}
                           >
                             {t('common.yes')}
                           </Button>
@@ -148,13 +149,14 @@ export const ChooseServicePage = () => {
                             onClick={() => setPopoverOpen(false)}
                             color={'danger'}
                             variant={'tertiary'}
+                            fullWidth={isSm}
                           >
                             {t('single_rights.no_continue_delegating')}
                           </Button>
-                        </GroupElements>
+                        </div>
                       </Popover.Content>
                     </Popover>
-                  </GroupElements>
+                  </div>
                 </>
               )}
             </>
