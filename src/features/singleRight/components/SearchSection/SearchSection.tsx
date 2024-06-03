@@ -245,7 +245,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   }, 300);
 
   return (
-    <div className={classes.searchSection}>
+    <search className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
           <Search
@@ -281,6 +281,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         />
       </div>
       {searchResults()}
-    </div>
+    </search>
   );
 };
