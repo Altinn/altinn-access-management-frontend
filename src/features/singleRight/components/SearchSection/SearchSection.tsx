@@ -259,7 +259,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               setSearchString('');
               setCurrentPage(1);
             }}
-          ></Search>
+          />
         </div>
         <Filter
           className={classes.filter}
@@ -278,7 +278,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               setCurrentPage(1);
             }
           }}
-        ></Filter>
+        />
       </div>
       {searchResults()}
     </div>

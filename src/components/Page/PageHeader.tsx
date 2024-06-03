@@ -14,12 +14,12 @@ export const PageHeader = ({ children, icon }: PageHeaderProps) => {
   const { color, size } = usePageContext();
 
   return (
-    <header className={cn(classes.pageHeader, classes[color], classes[size])}>
+    <div className={cn(classes.pageHeader, classes[color], classes[size])}>
       <SvgIcon
         className={cn(classes.icon, classes[size])}
         svgIconComponent={icon}
       />
       <h1 className={classes.headerText}>{children}</h1>
-    </header>
+    </div>
   );
 };

@@ -26,27 +26,25 @@ export const UserInfoBar = () => {
   }, []);
 
   return (
-    <div>
-      <div className={classes.userInfoBar}>
-        <div>
-          <AltinnTextLogo />
+    <header className={classes.userInfoBar}>
+      <div>
+        <AltinnTextLogo title='Altinn' />
+      </div>
+      <div className={classes.userInfoContent}>
+        <div className={classes.userInfoTextContainer}>
+          {userInfoName && <p className={classes.userInfoText}>{userInfoName}</p>}
+          {userInfoName !== reporteeName && reporteeName && (
+            <p className={classes.userInfoText}>for {reporteeName}</p>
+          )}
         </div>
-        <div className={classes.userInfoContent}>
-          <div className={classes.userInfoTextContainer}>
-            {userInfoName && <p className={classes.userInfoText}>{userInfoName}</p>}
-            {userInfoName !== reporteeName && reporteeName && (
-              <p className={classes.userInfoText}>for {reporteeName}</p>
-            )}
-          </div>
-          <div className={classes.companyIconContainer}>
-            <SvgIcon
-              width={24}
-              height={24}
-              svgIconComponent={<Office1Filled />}
-            ></SvgIcon>
-          </div>
+        <div className={classes.companyIconContainer}>
+          <SvgIcon
+            width={24}
+            height={24}
+            svgIconComponent={<Office1Filled />}
+          ></SvgIcon>
         </div>
       </div>
-    </div>
+    </header>
   );
 };

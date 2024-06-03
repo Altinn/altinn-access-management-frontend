@@ -112,43 +112,43 @@ export const ApiActionBar = ({
     return (
       <div className={classes.content}>
         {api.scopes?.length > 0 && (
-          <div>
+          <>
             <Heading
               size='xxsmall'
-              level={4}
+              level={5}
               spacing
             >
               {t('api_delegation.scopes')}:
             </Heading>
             <ScopeList scopeList={api.scopes} />
-          </div>
+          </>
         )}
         {api.rightDescription && (
-          <div>
+          <>
             <Heading
               size='xxsmall'
-              level={4}
+              level={5}
               spacing
             >
               {t('api_delegation.description')}
             </Heading>
             <Paragraph>{api.rightDescription}</Paragraph>
-          </div>
+          </>
         )}
         {api.rightDescription === undefined && (
           <Paragraph>{t('api_delegation.data_retrieval_failed')}</Paragraph>
         )}
         {api.description && (
-          <div>
+          <>
             <Heading
               size='xxsmall'
-              level={4}
+              level={5}
               spacing
             >
               {t('api_delegation.additional_description')}
             </Heading>
             <Paragraph>{api.description}</Paragraph>
-          </div>
+          </>
         )}
         {api.description === undefined && (
           <Paragraph>{t('api_delegation.data_retrieval_failed')}</Paragraph>
@@ -222,7 +222,7 @@ export const ApiActionBar = ({
       size='medium'
       color={actionBarColor}
       open={open}
-      headingLevel={5}
+      headingLevel={4}
       onClick={() => {
         setOpen(!open);
       }}

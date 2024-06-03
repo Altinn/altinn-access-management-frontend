@@ -1,73 +1,21 @@
-@media only screen and (max-width: 768px) {
-  .searchField {
-    width: 100%;
-  }
-
-  .delegableApisContainer {
-    margin-bottom: 30px;
-    width: 100%;
-  }
-
-  .chosenApisContainer {
-    margin-bottom: 30px;
-    width: 100%;
-  }
-  .searchSection {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .filter {
-    padding-top: 1rem;
-  }
+.pageContentContainer {
+  display: grid;
+  grid-template-areas:
+    'description description'
+    'searchFormTextInput searchFormFilter'
+    'searchresults selectedSearchResults'
+    'navigation navigation';
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
-@media only screen and (min-width: 769px) {
-  .searchSection {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
-  .searchField {
-    width: 47.5%;
-  }
-
-  .pageContentActionBarsContainer {
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-  }
-
-  .delegableApisContainer {
-    margin-right: 25px;
-    height: 400px;
-    overflow-y: auto;
-    margin-right: 20px;
-  }
-
-  .chosenApisContainer {
-    margin-left: 25px;
-    height: 400px;
-    overflow-y: auto;
-  }
-
-  .filter {
-    padding-left: 1rem;
-  }
-}
-
-.chosenOrgsListHeader {
-  font-weight: 500;
-}
-
-.chooseApiSecondHeader {
-  font-weight: 500;
+.delegableApisContainer {
+  height: 400px;
+  overflow-y: auto;
 }
 
 .explanationTexts {
   font-weight: 500;
-  margin-left: 10px;
 }
 
 .actionBarWrapper {
@@ -76,8 +24,68 @@
   gap: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
-  margin-right: 10px;
-  margin-left: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.chooseApiSecondHeader {
+  font-weight: 500;
+  font-size: 20px;
+  grid-area: description;
+}
+
+.searchFormTextInputSection {
+  grid-area: searchFormTextInput;
+}
+
+.searchFormFilterSection {
+  grid-area: searchFormFilter;
+  display: flex;
+  align-items: center;
+}
+
+.searchResultsSection {
+  grid-area: searchresults;
+}
+
+.selectedSearchResultsSection {
+  grid-area: selectedSearchResults;
+}
+
+.navigationSection {
+  grid-area: navigation;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.semanticOnlyTag {
+  display: contents;
+}
+
+@media only screen and (max-width: 768px) {
+  .pageContentContainer {
+    display: grid;
+    grid-template-areas:
+      'description'
+      'selectedSearchResults'
+      'searchFormTextInput'
+      'searchFormFilter'
+      'searchresults'
+      'navigation';
+    grid-template-columns: 1fr;
+  }
+
+  .delegableApisContainer {
+    max-height: none;
+    height: auto;
+  }
+
+  .navigationSection {
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+  }
 }
