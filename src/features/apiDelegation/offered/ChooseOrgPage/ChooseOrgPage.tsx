@@ -114,17 +114,17 @@ export const ChooseOrgPage = () => {
         size={isSm ? 'small' : 'medium'}
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
-        {chosenApis.length < 1 && (
-          <RestartPrompter
-            spacingBottom
-            restartPath={
-              '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
-            }
-            title={t('common.an_error_has_occured')}
-            ingress={t('api_delegation.delegations_not_registered')}
-          />
-        )}
         <PageContent>
+          {chosenApis.length < 1 && (
+            <RestartPrompter
+              spacingBottom
+              restartPath={
+                '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi
+              }
+              title={t('common.an_error_has_occured')}
+              ingress={t('api_delegation.delegations_not_registered')}
+            />
+          )}
           <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
           <div className={classes.pageContentContainer}>
             <search className={classes.semanticOnlyTag}>
