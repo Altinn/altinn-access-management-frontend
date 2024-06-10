@@ -1,29 +1,41 @@
 import { Button, Popover, Paragraph } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 
-import { GroupElements } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './NavigationSection.module.css';
 
-interface NavigationSectionProps {
-  delegableChosenServices: any[];
+interface NextButtonProps {
+  onNext: () => void;
+  disabled: boolean;
+}
+
+interface CancelButtonProps {
   onCancel: () => void;
+  showWarning?: boolean;
+}
+
+interface NavigationSectionProps extends HTMLAttributes<HTMLDivElement> {
+  nextButtonProps: NextButtonProps;
+  cancelButtonProps: CancelButtonProps;
 }
 
 export const NavigationSection = ({
-  delegableChosenServices,
-  onCancel,
+  nextButtonProps,
+  cancelButtonProps,
+  ...props
 }: NavigationSectionProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const isSm = useMediaQuery('(max-width: 768px)');
   return (
-    <div className={classes.NavigationSection}>
+    <div {...props}>
       <Button
         variant='primary'
         color='first'
         fullWidth={isSm}
+        disabled={nextButtonProps.disabled}
+        onClick={nextButtonProps.onNext}
       >
         {t('common.proceed')}
       </Button>
@@ -35,19 +47,21 @@ export const NavigationSection = ({
       >
         <Popover.Trigger
           variant='tertiary'
-          color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
+          color={cancelButtonProps.showWarning ? 'danger' : 'first'}
           size='medium'
           onClick={
-            delegableChosenServices.length > 0 ? () => setPopoverOpen(!popoverOpen) : onCancel
+            cancelButtonProps.showWarning
+              ? () => setPopoverOpen(!popoverOpen)
+              : cancelButtonProps.onCancel
           }
         >
           {t('common.cancel')}
         </Popover.Trigger>
         <Popover.Content>
           <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
-          <GroupElements>
+          <div className={classes.NavigationSection}>
             <Button
-              onClick={onCancel}
+              onClick={cancelButtonProps.onCancel}
               color={'danger'}
               variant={'primary'}
               fullWidth
@@ -61,7 +75,7 @@ export const NavigationSection = ({
             >
               {t('single_rights.no_continue_delegating')}
             </Button>
-          </GroupElements>
+          </div>
         </Popover.Content>
       </Popover>
     </div>

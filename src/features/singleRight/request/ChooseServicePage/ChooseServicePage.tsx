@@ -20,6 +20,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
+import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -87,8 +88,15 @@ export const ChooseServicePage = () => {
             onUndo={onRemove}
           />
           <NavigationSection
-            delegableChosenServices={delegableChosenServices}
-            onCancel={onCancel}
+            className={classes.navigationContainer}
+            nextButtonProps={{
+              onNext: () => {},
+              disabled: false,
+            }}
+            cancelButtonProps={{
+              onCancel,
+              showWarning: delegableChosenServices.length > 0,
+            }}
           />
         </PageContent>
       </Page>
