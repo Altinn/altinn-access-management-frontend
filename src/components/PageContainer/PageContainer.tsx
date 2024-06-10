@@ -22,7 +22,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
         <div className={classes.closeButtonContainer}>
           <button
             className={classes.closeButton}
-            aria-label={String(t('common.close'))} // Should this rather be "Avslutt" or "Cancel" as you are not closing anything?
+            aria-label={String(t('common.cancel'))}
             onClick={redirectToProfile}
           >
             <XMarkIcon
