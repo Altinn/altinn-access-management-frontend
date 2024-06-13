@@ -1,18 +1,11 @@
-import { Alert, Button, Heading, Paragraph, Spinner, Search } from '@digdir/designsystemet-react';
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
+import { Button, Spinner, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import cn from 'classnames';
 
-import {
-  Page,
-  PageHeader,
-  PageContent,
-  PageContainer,
-  GroupElements,
-  RestartPrompter,
-} from '@/components';
+import { Page, PageHeader, PageContent, PageContainer, RestartPrompter } from '@/components';
 import {
   softRemoveOrg,
   searchInCurrentOrgs,
@@ -32,15 +25,19 @@ import { StatusMessageForScreenReader } from '@/components/StatusMessageForScree
 import classes from './ChooseOrgPage.module.css';
 import { DelegableOrgItems } from './DelegableOrgItems';
 import { ChosenItems } from './ChosenItems';
+import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
 
 export const ChooseOrgPage = () => {
-  const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const {
+    presentedOrgList: delegableOrgs,
+    chosenDelegableOrgList: chosenOrgs,
+    searchOrgNonexistant: searchOrgNotExist,
+    searchLoading,
+  } = useAppSelector((state) => state.delegableOrg);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
-  const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
-  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
-  const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
+  const { overviewOrgs, loading: overviewOrgsLoading } = useAppSelector(
+    (state) => state.overviewOrg,
+  );
   const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
@@ -110,58 +107,6 @@ export const ChooseOrgPage = () => {
     }
   }
 
-  const infoPanel = () => {
-    if (reporteeOrgNumber === searchString && searchString.length > 0) {
-      return (
-        <Alert
-          severity='warning'
-          role='alert'
-        >
-          <Heading
-            size={'xsmall'}
-            level={2}
-            spacing
-          >
-            {t('api_delegation.own_orgnumber_delegation_heading')}
-          </Heading>
-          <Paragraph>{t('api_delegation.own_orgnumber_delegation_paragraph')}</Paragraph>
-        </Alert>
-      );
-    } else if (!searchLoading && searchOrgNotExist) {
-      return (
-        <Panel
-          variant={PanelVariant.Error}
-          showIcon={false}
-          title={String(t('api_delegation.buisness_search_notfound_title'))}
-          forceMobileLayout={true}
-        >
-          <div>
-            {t('api_delegation.buisness_search_notfound_content')}{' '}
-            <a
-              className={classes.link}
-              href='https://www.brreg.no/'
-              target='_blank'
-              rel='noreferrer'
-            >
-              {t('common.broennoeysund_register')}
-            </a>
-          </div>
-        </Panel>
-      );
-    } else if (!searchLoading && promptOrgNumber) {
-      return (
-        <Panel
-          variant={PanelVariant.Info}
-          showIcon={false}
-          title={String(t('api_delegation.buisness_search_info_title'))}
-          forceMobileLayout={true}
-        >
-          {t('api_delegation.buisness_search_info_content')}
-        </Panel>
-      );
-    }
-  };
-
   return (
     <PageContainer>
       <Page
@@ -180,77 +125,74 @@ export const ChooseOrgPage = () => {
               ingress={t('api_delegation.delegations_not_registered')}
             />
           )}
-          <h2 className={classes.topText}>{t('api_delegation.new_org_content_text')}</h2>
           <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
-          {isSm && chosenOrgs.length > 0 && (
-            <div className={classes.chosenOrgs}>
-              <h4 className={classes.chosenOrgsHeader}>
-                {t('api_delegation.businesses_going_to_get_access')}
-              </h4>
-              <ChosenItems
-                chosenOrgs={chosenOrgs}
-                handleSoftRemove={handleSoftRemove}
-                setChosenItemsStatusMessage={setChosenItemsStatusMessage}
+          <div className={classes.pageContentContainer}>
+            <search className={classes.semanticOnlyTag}>
+              <h2 className={classes.chooseOrgSecondHeader}>
+                {t('api_delegation.new_org_content_text')}
+              </h2>
+
+              <Search
+                label={t('api_delegation.search_for_buisness')}
+                hideLabel={false}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  handleSearch(event.target.value);
+                }}
+                value={searchString}
+                size='medium'
+                onClear={() => {
+                  handleSearch('');
+                }}
               />
-            </div>
-          )}
-          <div className={classes.searchSection}>
-            <Search
-              label={t('api_delegation.search_for_buisness')}
-              hideLabel={false}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                handleSearch(event.target.value);
-              }}
-              value={searchString}
-              size='medium'
-              onClear={() => {
-                handleSearch('');
-              }}
-            ></Search>
-          </div>
-          {viewLoading ? (
-            <div className={common.spinnerContainer}>
-              <Spinner
-                title={t('common.loading')}
-                variant='interaction'
-              />
-            </div>
-          ) : (
-            <div className={classes.pageContentActionBarContainer}>
-              <div className={classes.delegableOrgsContainer}>
-                {searchString === '' ? (
-                  <h4 className={classes.actionBarContainerText}>
-                    {t('api_delegation.businesses_previously_delegated_to')}
-                  </h4>
-                ) : (
-                  <h4 className={classes.actionBarContainerText}>
-                    {t('api_delegation.businesses_search_results')}
-                  </h4>
-                )}
-                <StatusMessageForScreenReader>
-                  {!searchLoading &&
-                    searchOrgNotExist &&
-                    t('api_delegation.buisness_search_notfound_title')}
-                </StatusMessageForScreenReader>
-                {infoPanel()}
-                <div>
-                  {searchLoading ? (
-                    <div className={common.spinnerContainer}>
-                      <Spinner
-                        title={t('common.loading')}
-                        variant='interaction'
-                      />
-                    </div>
-                  ) : (
-                    <DelegableOrgItems
-                      delegableOrgs={delegableOrgs}
-                      setChosenItemsStatusMessage={setChosenItemsStatusMessage}
-                    />
-                  )}
+              {viewLoading ? (
+                <div className={cn(common.spinnerContainer, classes.viewLoadingSection)}>
+                  <Spinner
+                    title={t('common.loading')}
+                    variant='interaction'
+                  />
                 </div>
-              </div>
-              {!isSm && (
-                <div className={common.chosenOrgsContainer}>
+              ) : (
+                <>
+                  <div className={classes.searchResultsSection}>
+                    {searchString === '' ? (
+                      <h4 className={classes.actionBarContainerText}>
+                        {t('api_delegation.businesses_previously_delegated_to')}
+                      </h4>
+                    ) : (
+                      <h4 className={classes.actionBarContainerText}>
+                        {t('api_delegation.businesses_search_results')}
+                      </h4>
+                    )}
+                    <StatusMessageForScreenReader>
+                      {!searchLoading &&
+                        searchOrgNotExist &&
+                        t('api_delegation.buisness_search_notfound_title')}
+                    </StatusMessageForScreenReader>
+                    <ChooseOrgInfoPanel
+                      searchString={searchString}
+                      promptOrgNumber={promptOrgNumber}
+                    />
+
+                    {searchLoading ? (
+                      <div className={common.spinnerContainer}>
+                        <Spinner
+                          title={t('common.loading')}
+                          variant='interaction'
+                        />
+                      </div>
+                    ) : (
+                      <DelegableOrgItems
+                        delegableOrgs={delegableOrgs}
+                        setChosenItemsStatusMessage={setChosenItemsStatusMessage}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+            </search>
+            <div className={classes.selectedSearchResultsSection}>
+              {chosenOrgs.length > 0 && (
+                <>
                   <h4 className={classes.chosenOrgsHeader}>
                     {t('api_delegation.businesses_going_to_get_access')}
                   </h4>
@@ -259,11 +201,12 @@ export const ChooseOrgPage = () => {
                     handleSoftRemove={handleSoftRemove}
                     setChosenItemsStatusMessage={setChosenItemsStatusMessage}
                   />
-                </div>
+                </>
               )}
             </div>
-          )}
-          <GroupElements>
+          </div>
+
+          <div className={classes.navigationSection}>
             <Button
               variant={'secondary'}
               onClick={() =>
@@ -289,7 +232,7 @@ export const ChooseOrgPage = () => {
             >
               {t('common.next')}
             </Button>
-          </GroupElements>
+          </div>
         </PageContent>
       </Page>
     </PageContainer>

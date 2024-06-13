@@ -11,8 +11,8 @@ export interface PageProps {
 
 export const Page = ({ children, color = 'dark', size = 'medium' }: PageProps) => {
   return (
-    <div className={classes.page}>
+    <main className={classes.page}>
       <PageContext.Provider value={{ color, size }}>{children}</PageContext.Provider>
-    </div>
+    </main>
   );
 };

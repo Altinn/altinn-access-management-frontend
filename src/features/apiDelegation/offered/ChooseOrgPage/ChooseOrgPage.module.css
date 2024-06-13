@@ -1,58 +1,11 @@
-@media only screen and (max-width: 768px) {
-  .searchSection {
-    width: 100%;
-  }
-
-  .chosenOrgs {
-    margin-bottom: 1.5rem;
-  }
-
-  .topText {
-    font-size: 20px;
-  }
-
-  .delegableOrgsContainer {
-    margin-bottom: 2rem;
-  }
-
-  .chosenOrgsContainer {
-    margin-bottom: 2rem;
-  }
-
-  .pageContentActionBarContainer {
-    width: 100%;
-  }
+.actionBarContainerText {
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
-@media only screen and (min-width: 769px) {
-  .searchSection {
-    width: 47.5%;
-  }
-
-  .delegableOrgsContainer {
-    margin-right: 25px;
-  }
-
-  .chosenOrgsContainer {
-    margin-left: 25px;
-  }
-
-  .pageContentActionBarContainer {
-    grid-template-columns: 1fr 1fr;
-    display: grid;
-  }
-}
-
-.navButtonContainer {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.navButton {
-  margin-right: 3rem;
-  width: 10rem;
-  margin-bottom: 70px;
+.chosenOrgsHeader {
+  font-weight: 500;
+  margin-bottom: 5px;
 }
 
 .link {
@@ -63,25 +16,68 @@
   background: transparent;
 }
 
-.chooseOrgText {
-  font-weight: normal;
-}
-
-.actionBarContainerText {
-  margin-bottom: 5px;
+.chooseOrgSecondHeader {
   font-weight: 500;
+  font-size: 20px;
+  grid-area: description;
 }
 
-.topText {
-  font-weight: 500;
+.semanticOnlyTag {
+  display: contents;
 }
 
-.chosenOrgsHeader {
-  font-weight: 500;
-  margin-bottom: 5px;
+.searchFormFilterSection {
+  grid-area: searchFormFilter;
+  display: flex;
+  align-items: center;
 }
 
-.actionBarWrapper {
-  margin-top: 5px;
-  margin-bottom: 5px;
+.searchResultsSection {
+  grid-area: searchresults;
+}
+
+.selectedSearchResultsSection {
+  grid-area: selectedSearchResults;
+}
+
+.navigationSection {
+  grid-area: navigation;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.searchFormTextInputSection {
+  grid-area: searchFormTextInput;
+}
+
+.viewLoadingSection {
+  grid-area: searchresults / searchresults / selectedSearchResults / selectedSearchResults;
+}
+
+.pageContentContainer {
+  display: grid;
+  grid-template-areas:
+    'description description'
+    'searchFormTextInput searchFormFilter'
+    'searchresults selectedSearchResults'
+    'navigation navigation';
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  .pageContentContainer {
+    display: grid;
+    grid-template-areas:
+      'description'
+      'selectedSearchResults'
+      'searchFormTextInput'
+      'searchFormFilter'
+      'searchresults'
+      'navigation';
+    grid-template-columns: 1fr;
+  }
 }
