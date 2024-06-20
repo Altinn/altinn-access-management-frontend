@@ -57,16 +57,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessManagement
         /// <summary>
         /// Gets or sets a collection of all resource identifier the authorized subject has some access to on behalf of this party
         /// </summary>
-        public List<string> AuthorizedResources { get; set; } = [];
+        public List<string> AuthorizedResources { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets a collection of all rolecodes for roles from either Enhetsregisteret or Altinn 2 which the authorized subject has been authorized for on behalf of this party
         /// </summary>
-        public List<string> AuthorizedRoles { get; set; } = [];
+        public List<string> AuthorizedRoles { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets a set of subunits of this party, which the authorized subject also has some access to.
         /// </summary>
-        public List<AuthorizedParty> Subunits { get; set; } = [];
+        public List<AuthorizedParty> Subunits { get; set; } = new List<AuthorizedParty>();
     }
 }
