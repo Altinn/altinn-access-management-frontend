@@ -8,7 +8,7 @@ import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
-import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import {
   fetchOverviewOrgsOffered,
   fetchOverviewOrgsReceived,
@@ -59,7 +59,7 @@ export const OverviewPageContent = ({
       void fetchData();
     }
     handleSaveDisabled();
-    dispatch(resetDelegableOrgs());
+    dispatch(resetState());
     dispatch(resetDelegationRequests());
     dispatch(resetChosenApis());
   }, [overviewOrgs, error]);
@@ -120,9 +120,11 @@ export const OverviewPageContent = ({
       for (const item of org.apiList) {
         if (item.isSoftDelete) {
           if (layout === LayoutState.Offered) {
-            void dispatch(deleteOfferedApiDelegation(mapToDeletionRequest(org.orgNr, item.id)));
+            void dispatch(deleteOfferedApiDelegation(mapToDeletionRequest(org.orgNumber, item.id)));
           } else if (layout === LayoutState.Received) {
-            void dispatch(deleteReceivedApiDelegation(mapToDeletionRequest(org.orgNr, item.id)));
+            void dispatch(
+              deleteReceivedApiDelegation(mapToDeletionRequest(org.orgNumber, item.id)),
+            );
           }
         }
       }

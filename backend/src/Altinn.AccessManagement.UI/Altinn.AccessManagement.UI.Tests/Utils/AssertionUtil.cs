@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -242,6 +243,21 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyId, actual.PartyId);
             Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
             AssertCollections<Party>(expected.ChildParties, actual.ChildParties, AssertEqual);
+
+        }
+
+        public static void AssertEqual(AuthorizedParty expected, AuthorizedParty actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.UnitType, actual.UnitType);
+            Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
+            Assert.Equal(expected.PartyId, actual.PartyId);
+            Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
+            AssertCollections<AuthorizedParty>(expected.Subunits, actual.Subunits, AssertEqual);
 
         }
 

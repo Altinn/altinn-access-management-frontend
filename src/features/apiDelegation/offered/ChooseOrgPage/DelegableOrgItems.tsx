@@ -4,16 +4,16 @@ import * as React from 'react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { ActionBar } from '@/components';
-import { softAddOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { addOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import type { Organization } from '@/rtk/features/lookup/lookupApi';
 import common from '@/resources/css/Common.module.css';
 import { getButtonIconSize } from '@/resources/utils';
 
 import classes from './ChooseOrgPage.module.css';
 
 interface DelegatableOrgItemsProps {
-  delegableOrgs: DelegableOrg[];
+  delegableOrgs: Organization[];
   setChosenItemsStatusMessage: (message: string) => void;
 }
 
@@ -26,26 +26,26 @@ export const DelegableOrgItems = ({
 
   return (
     <ul className={common.unstyledList}>
-      {delegableOrgs.map((org: DelegableOrg) => {
+      {delegableOrgs.map((org: Organization) => {
         return (
           <div
             className={classes.actionBarWrapper}
-            key={org.orgNr}
+            key={org.orgNumber}
           >
             <ActionBar
-              key={org.orgNr}
-              title={org.orgName}
-              subtitle={t('common.org_nr') + ' ' + org.orgNr}
+              key={org.orgNumber}
+              title={org.name}
+              subtitle={t('common.org_nr') + ' ' + org.orgNumber}
               headingLevel={5}
               actions={
                 <Button
                   variant={'tertiary'}
                   color={'second'}
                   onClick={() => {
-                    dispatch(softAddOrg(org));
-                    setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgName}`);
+                    dispatch(addOrg(org));
+                    setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgNumber}`);
                   }}
-                  aria-label={t('common.add') + ' ' + org.orgName}
+                  aria-label={t('common.add') + ' ' + org.orgNumber}
                   size='large'
                   icon={true}
                 >

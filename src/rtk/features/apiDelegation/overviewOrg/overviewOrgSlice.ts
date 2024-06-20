@@ -17,8 +17,8 @@ export interface ApiListItem {
 
 export interface OverviewOrg {
   id: string;
-  orgName: string;
-  orgNr: string;
+  name: string;
+  orgNumber: string;
   isAllSoftDeleted: boolean;
   apiList: ApiListItem[];
 }
@@ -100,8 +100,8 @@ const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutSt
       // Add new org
       const newOrg: OverviewOrg = {
         id: delegationOrg,
-        orgName: delegationOrg,
-        orgNr: delegationOrgNumber,
+        name: delegationOrg,
+        orgNumber: delegationOrgNumber,
         isAllSoftDeleted: false,
         apiList: [api],
       };
@@ -131,9 +131,9 @@ const setAllSoftDeleteState = (
 const createCopyOrg = (org: OverviewOrg) => {
   return {
     id: org.id,
-    orgName: org.orgName,
+    name: org.name,
     isAllSoftDeleted: false,
-    orgNr: org.orgNr,
+    orgNumber: org.orgNumber,
     apiList: [],
   };
 };
@@ -367,7 +367,7 @@ const overviewOrgSlice = createSlice({
       .addCase(deleteOfferedApiDelegation.fulfilled, (state, action) => {
         const { overviewOrgs } = state;
         for (const org of overviewOrgs) {
-          if (org.orgNr === action.meta.arg.orgNr) {
+          if (org.orgNumber === action.meta.arg.orgNr) {
             org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
           }
         }
@@ -386,7 +386,7 @@ const overviewOrgSlice = createSlice({
       .addCase(deleteReceivedApiDelegation.fulfilled, (state, action) => {
         const { overviewOrgs } = state;
         for (const org of overviewOrgs) {
-          if (org.orgNr === action.meta.arg.orgNr) {
+          if (org.orgNumber === action.meta.arg.orgNr) {
             org.apiList = org.apiList.filter((api) => api.id !== action.meta.arg.apiId);
           }
         }

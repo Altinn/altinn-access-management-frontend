@@ -13,15 +13,9 @@ import {
   GroupElements,
   RestartPrompter,
 } from '@/components';
-import {
-  softRemoveOrg,
-  searchInCurrentOrgs,
-  lookupOrg,
-  populateDelegableOrgs,
-  setSearchLoading,
-} from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import type { Organization } from '@/rtk/features/lookup/lookupApi';
 import ApiIcon from '@/assets/Api.svg?react';
 import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
@@ -32,19 +26,16 @@ import { StatusMessageForScreenReader } from '@/components/StatusMessageForScree
 import classes from './ChooseOrgPage.module.css';
 import { DelegableOrgItems } from './DelegableOrgItems';
 import { ChosenItems } from './ChosenItems';
+import { useOrgSearch } from './useOrgSearch';
 
 export const ChooseOrgPage = () => {
-  const delegableOrgs = useAppSelector((state) => state.delegableOrg.presentedOrgList);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
-  const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
   const overviewOrgsLoading = useAppSelector((state) => state.overviewOrg.loading);
-  const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
   const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
-  const [promptOrgNumber, setPromptOrgNumber] = useState(false);
   const [viewLoading, setViewLoading] = useState(true);
   const isSm = useMediaQuery('(max-width: 768px)');
   const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
@@ -52,63 +43,38 @@ export const ChooseOrgPage = () => {
 
   const { t } = useTranslation('common');
 
-  const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
+  const { matches: displayOrgs, error, isFetching } = useOrgSearch(overviewOrgs, searchString);
+
+  const searchOrgNotExist = searchString.length === 9 && displayOrgs.length === 0;
+  const promptOrgNumber = searchString.length !== 9 && displayOrgs.length === 0;
 
   useEffect(() => {
-    dispatch(searchInCurrentOrgs(searchString));
-
     if (overviewOrgsLoading) {
       void dispatch(fetchOverviewOrgsOffered());
     }
 
     if (!overviewOrgsLoading) {
-      dispatch(transferDelegableOrgs);
       setViewLoading(false);
     }
   }, [overviewOrgs, overviewOrgsLoading]);
 
-  useEffect(() => {
-    if (delegableOrgs.length > 0) {
-      setPromptOrgNumber(false);
-    } else if (
-      searchString.length === 9 &&
-      !chosenOrgs.some((org) => org.orgNr === searchString) &&
-      reporteeOrgNumber !== searchString
-    ) {
-      dispatch(setSearchLoading());
-      void dispatch(lookupOrg(searchString));
-    } else if (searchString.length !== 9) {
-      setPromptOrgNumber(true);
-    }
-  }, [delegableOrgs]);
-
-  const transferDelegableOrgs = () => {
-    let delegableOrgList: DelegableOrg[] = [];
-    for (const org of overviewOrgs) {
-      delegableOrgList.push({
-        id: org.id,
-        orgName: org.orgName,
-        orgNr: org.orgNr,
-      });
-    }
-    for (const chosen of chosenOrgs) {
-      delegableOrgList = delegableOrgList.filter((org) => org.id !== chosen.id);
-    }
-    dispatch(populateDelegableOrgs(delegableOrgList));
-  };
-
-  const handleSoftRemove = (org: DelegableOrg) => {
-    dispatch(softRemoveOrg(org));
-    dispatch(searchInCurrentOrgs(searchString));
+  const handleSoftRemove = (org: Organization) => {
+    dispatch(removeOrg(org));
   };
 
   function handleSearch(searchText: string) {
+    const IsOnlyNumbers = (str: string) => /^\d+$/.test(str);
     const cleanText = searchText.replace(/\s+/g, '');
     if (IsOnlyNumbers(cleanText) || cleanText === '') {
       setSearchString(cleanText);
-      dispatch(searchInCurrentOrgs(cleanText));
     }
   }
+
+  const removeChosenOrgs = (displayOrgs: Organization[]) => {
+    return displayOrgs.filter(
+      (org) => !chosenOrgs.includes(org) && org.orgNumber !== reporteeOrgNumber,
+    );
+  };
 
   const infoPanel = () => {
     if (reporteeOrgNumber === searchString && searchString.length > 0) {
@@ -127,7 +93,7 @@ export const ChooseOrgPage = () => {
           <Paragraph>{t('api_delegation.own_orgnumber_delegation_paragraph')}</Paragraph>
         </Alert>
       );
-    } else if (!searchLoading && searchOrgNotExist) {
+    } else if (!isFetching && searchOrgNotExist) {
       return (
         <Panel
           variant={PanelVariant.Error}
@@ -148,7 +114,7 @@ export const ChooseOrgPage = () => {
           </div>
         </Panel>
       );
-    } else if (!searchLoading && promptOrgNumber) {
+    } else if (!isFetching && promptOrgNumber) {
       return (
         <Panel
           variant={PanelVariant.Info}
@@ -228,13 +194,13 @@ export const ChooseOrgPage = () => {
                   </h4>
                 )}
                 <StatusMessageForScreenReader>
-                  {!searchLoading &&
+                  {!isFetching &&
                     searchOrgNotExist &&
                     t('api_delegation.buisness_search_notfound_title')}
                 </StatusMessageForScreenReader>
                 {infoPanel()}
                 <div>
-                  {searchLoading ? (
+                  {isFetching ? (
                     <div className={common.spinnerContainer}>
                       <Spinner
                         title={t('common.loading')}
@@ -243,7 +209,7 @@ export const ChooseOrgPage = () => {
                     </div>
                   ) : (
                     <DelegableOrgItems
-                      delegableOrgs={delegableOrgs}
+                      delegableOrgs={removeChosenOrgs(displayOrgs)}
                       setChosenItemsStatusMessage={setChosenItemsStatusMessage}
                     />
                   )}

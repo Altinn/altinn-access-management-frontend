@@ -60,7 +60,7 @@ export const OrgDelegationActionBar = ({
             color={'second'}
             size={'medium'}
             onClick={softRestoreAllCallback}
-            aria-label={String(t('common.undo')) + ' ' + organization.orgName}
+            aria-label={String(t('common.undo')) + ' ' + organization.name}
             icon={isSm}
           >
             <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} />
@@ -73,7 +73,7 @@ export const OrgDelegationActionBar = ({
               color={'danger'}
               size={'medium'}
               onClick={handleSoftDeleteAll}
-              aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
+              aria-label={String(t('api_delegation.delete')) + ' ' + organization.name}
               icon={isSm}
             >
               <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
@@ -110,7 +110,7 @@ export const OrgDelegationActionBar = ({
             [classes.actionBarText__softDelete]: organization.isAllSoftDeleted,
           })}
         >
-          {organization.orgName}
+          {organization.name}
         </div>
       }
       subtitle={
@@ -119,7 +119,7 @@ export const OrgDelegationActionBar = ({
             [classes.actionBarSubtitle__softDelete]: organization.isAllSoftDeleted,
           })}
         >
-          {t('common.org_nr') + ' ' + organization.orgNr}
+          {t('common.org_nr') + ' ' + organization.name}
         </div>
       }
       additionalText={

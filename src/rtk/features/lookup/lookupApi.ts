@@ -32,6 +32,11 @@ export enum UserType {
   PSA,
 }
 
+export interface Organization {
+  orgNumber: string;
+  name: string;
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'lookup';
 
 export const lookupApi = createApi({
@@ -54,9 +59,12 @@ export const lookupApi = createApi({
     getPartyByUUID: builder.query<Party, string>({
       query: (partyUUID) => `party/${partyUUID}`,
     }),
+    getOrganization: builder.query<Organization, string>({
+      query: (orgNumber) => `org/${orgNumber}`,
+    }),
   }),
 });
 
-export const { useGetUserByUUIDQuery, useGetPartyByUUIDQuery } = lookupApi;
+export const { useGetUserByUUIDQuery, useGetPartyByUUIDQuery, useGetOrganizationQuery } = lookupApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = lookupApi;
