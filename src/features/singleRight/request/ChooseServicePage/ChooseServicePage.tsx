@@ -2,11 +2,10 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress, Paragraph, Popover } from '@digdir/designsystemet-react';
-import { useState } from 'react';
+import { Ingress } from '@digdir/designsystemet-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
+import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -20,6 +19,8 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
+import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
+import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -28,7 +29,6 @@ export const ChooseServicePage = () => {
   const reporteeName = useAppSelector((state) => state.userInfo.reporteeName);
   const userName = useAppSelector((state) => state.userInfo.personName);
   const requestee = reporteeName ? reporteeName : userName;
-  const [popoverOpen, setPopoverOpen] = useState(false);
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
       (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
@@ -87,52 +87,17 @@ export const ChooseServicePage = () => {
             onAdd={onAdd}
             onUndo={onRemove}
           />
-          <GroupElements>
-            <Button
-              variant='primary'
-              color='first'
-              fullWidth={isSm}
-            >
-              {t('common.proceed')}
-            </Button>
-            <Popover
-              variant={'warning'}
-              placement='top'
-              open={popoverOpen}
-              onClose={() => setPopoverOpen(false)}
-            >
-              <Popover.Trigger
-                variant='tertiary'
-                color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
-                size='medium'
-                onClick={
-                  delegableChosenServices.length > 0 ? () => setPopoverOpen(!popoverOpen) : onCancel
-                }
-              >
-                {t('common.cancel')}
-              </Popover.Trigger>
-              <Popover.Content>
-                <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
-                <GroupElements>
-                  <Button
-                    onClick={onCancel}
-                    color={'danger'}
-                    variant={'primary'}
-                    fullWidth
-                  >
-                    {t('common.yes')}
-                  </Button>
-                  <Button
-                    onClick={() => setPopoverOpen(false)}
-                    color={'danger'}
-                    variant={'tertiary'}
-                  >
-                    {t('single_rights.no_continue_delegating')}
-                  </Button>
-                </GroupElements>
-              </Popover.Content>
-            </Popover>
-          </GroupElements>
+          <NavigationSection
+            className={classes.navigationContainer}
+            nextButtonProps={{
+              onNext: () => {},
+              disabled: false,
+            }}
+            cancelButtonProps={{
+              onCancel,
+              showWarning: delegableChosenServices.length > 0,
+            }}
+          />
         </PageContent>
       </Page>
     </PageContainer>

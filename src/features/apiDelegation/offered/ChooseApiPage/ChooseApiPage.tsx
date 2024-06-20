@@ -5,7 +5,7 @@ import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
+import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
@@ -168,109 +168,105 @@ export const ChooseApiPage = () => {
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
         <PageContent>
-          <h3 className={classes.chooseApiSecondHeader}>
-            {t('api_delegation.new_api_content_text2')}
-          </h3>
-          {isSm && (chosenApis.length > 0 || urlParams.size > 0) && (
-            <div>
-              <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
-              <div className={classes.chosenApisContainer}>
+          <div className={classes.pageContentContainer}>
+            <h2 className={classes.chooseApiSecondHeader}>
+              {t('api_delegation.new_api_content_text2')}
+            </h2>
+            <search className={classes.semanticOnlyTag}>
+              <div className={classes.searchFormTextInputSection}>
+                <Search
+                  label={t('api_delegation.search_for_api')}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    debouncedSearch(event.target.value);
+                  }}
+                  size='medium'
+                  onClear={() => {
+                    setSearchString('');
+                  }}
+                />
+              </div>
+              <div className={classes.searchFormFilterSection}>
+                <Filter
+                  icon={<FilterIcon />}
+                  label={String(t('api_delegation.filter_label'))}
+                  options={filterOptions}
+                  applyButtonLabel={String(t('common.apply'))}
+                  resetButtonLabel={String(t('common.reset_choices'))}
+                  closeButtonAriaLabel={String(t('common.close'))}
+                  values={filters}
+                  onApply={(filters) => {
+                    setFilters(filters);
+                  }}
+                  searchable
+                  fullScreenModal={isSm}
+                />
+              </div>
+              <div className={classes.searchResultsSection}>
+                <StatusMessageForScreenReader>
+                  {chosenItemsStatusMessage}
+                </StatusMessageForScreenReader>
+                <h3 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h3>
+                <div className={classes.delegableApisContainer}>
+                  <div className={classes.actionBarWrapper}>
+                    {showSkeleton ? (
+                      DelegableApiSkeleton()
+                    ) : (
+                      <ApiSearchResults
+                        addApi={(api) => {
+                          addApiToParams(api);
+                          dispatch(softAddApi(api));
+                          setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
+                        }}
+                        error={error}
+                        isFetching={isFetching}
+                        urlParams={urlParams}
+                        searchResults={searchResults || []}
+                        chosenApis={chosenApis}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </search>
+            <div className={classes.selectedSearchResultsSection}>
+              <h3 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h3>
+              <div className={classes.delegableApisContainer}>
                 <div className={classes.actionBarWrapper}>
                   {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}
                 </div>
               </div>
             </div>
-          )}
-          <div className={classes.searchSection}>
-            <div className={classes.searchField}>
-              <Search
-                label={t('api_delegation.search_for_api')}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  debouncedSearch(event.target.value);
-                }}
-                size='medium'
-                onClear={() => {
-                  setSearchString('');
-                }}
-              ></Search>
-            </div>
-            <div className={classes.filter}>
-              <Filter
-                icon={<FilterIcon />}
-                label={String(t('api_delegation.filter_label'))}
-                options={filterOptions}
-                applyButtonLabel={String(t('common.apply'))}
-                resetButtonLabel={String(t('common.reset_choices'))}
-                closeButtonAriaLabel={String(t('common.close'))}
-                values={filters}
-                onApply={(filters) => {
-                  setFilters(filters);
-                }}
-                searchable
-                fullScreenModal={isSm}
-              />
+            <div className={classes.navigationSection}>
+              <Button
+                variant={'secondary'}
+                onClick={() =>
+                  navigate(
+                    '/' +
+                      ApiDelegationPath.OfferedApiDelegations +
+                      '/' +
+                      ApiDelegationPath.Overview,
+                  )
+                }
+                fullWidth={isSm}
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button
+                disabled={chosenApis.length < 1}
+                fullWidth={isSm}
+                onClick={() =>
+                  navigate(
+                    '/' +
+                      ApiDelegationPath.OfferedApiDelegations +
+                      '/' +
+                      ApiDelegationPath.ChooseOrg,
+                  )
+                }
+              >
+                {t('common.next')}
+              </Button>
             </div>
           </div>
-          <div className={classes.pageContentActionBarsContainer}>
-            <div>
-              <h4 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h4>
-              <div className={classes.delegableApisContainer}>
-                <div className={classes.actionBarWrapper}>
-                  {showSkeleton ? (
-                    DelegableApiSkeleton()
-                  ) : (
-                    <ApiSearchResults
-                      addApi={(api) => {
-                        addApiToParams(api);
-                        dispatch(softAddApi(api));
-                        setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
-                      }}
-                      error={error}
-                      isFetching={isFetching}
-                      urlParams={urlParams}
-                      searchResults={searchResults || []}
-                      chosenApis={chosenApis}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-            {!isSm && (
-              <div>
-                <h4 className={classes.explanationTexts}>{t('api_delegation.chosen_apis')}</h4>
-                <div className={classes.delegableApisContainer}>
-                  <div className={classes.actionBarWrapper}>
-                    {showSkeleton ? ChosenApiSkeleton() : chosenApiActionBars}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
-          <GroupElements>
-            <Button
-              variant={'secondary'}
-              onClick={() =>
-                navigate(
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview,
-                )
-              }
-              fullWidth={isSm}
-            >
-              {t('common.cancel')}
-            </Button>
-            <Button
-              disabled={chosenApis.length < 1}
-              fullWidth={isSm}
-              onClick={() =>
-                navigate(
-                  '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
-                )
-              }
-            >
-              {t('common.next')}
-            </Button>
-          </GroupElements>
         </PageContent>
       </Page>
     </PageContainer>

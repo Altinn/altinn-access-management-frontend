@@ -144,7 +144,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
             )}
             {filterChips()}
           </div>
-          <div className={classes.serviceResources}> {serviceResouces}</div>
+          <ul className={classes.serviceResources}> {serviceResouces}</ul>
           {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
             <Pagination
               className={classes.pagination}
@@ -191,51 +191,53 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     }
 
     return (
-      <ResourceActionBar
-        key={resource.identifier ?? index}
-        title={resource.title}
-        subtitle={resource.resourceOwnerName}
-        status={status ?? ServiceStatus.Unchecked}
-        isLoading={isLoading}
-        onAddClick={() => {
-          onAdd(resource);
-        }}
-        onRemoveClick={() => {
-          onUndo(resource.identifier);
-        }}
-        errorText={
-          prioritizedErrorCodes?.length > 0
-            ? t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)
-            : undefined
-        }
-        compact={isSm}
-      >
-        <div className={classes.serviceResourceContent}>
-          {prioritizedErrorCodes?.length > 0 && (
-            <Alert
-              role='alert'
-              severity='danger'
-              elevated={false}
-              className={classes.notDelegableAlert}
-            >
-              <Heading size='xsmall'>
-                {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)}
-              </Heading>
-              <Paragraph>
-                {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
-                  you: t('common.you_uppercase'),
-                })}
-              </Paragraph>
-              {prioritizedErrorCodes[0] !== ServiceStatus.HTTPError &&
-                prioritizedErrorCodes[0] !== ServiceStatus.Unauthorized && (
-                  <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
-                )}
-            </Alert>
-          )}
-          <Paragraph size='small'>{resource.description}</Paragraph>
-          <Paragraph size='small'>{resource.rightDescription}</Paragraph>
-        </div>
-      </ResourceActionBar>
+      <li>
+        <ResourceActionBar
+          key={resource.identifier ?? index}
+          title={resource.title}
+          subtitle={resource.resourceOwnerName}
+          status={status ?? ServiceStatus.Unchecked}
+          isLoading={isLoading}
+          onAddClick={() => {
+            onAdd(resource);
+          }}
+          onRemoveClick={() => {
+            onUndo(resource.identifier);
+          }}
+          errorText={
+            prioritizedErrorCodes?.length > 0
+              ? t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)
+              : undefined
+          }
+          compact={isSm}
+        >
+          <div className={classes.serviceResourceContent}>
+            {prioritizedErrorCodes?.length > 0 && (
+              <Alert
+                role='alert'
+                severity='danger'
+                elevated={false}
+                className={classes.notDelegableAlert}
+              >
+                <Heading size='xsmall'>
+                  {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)}
+                </Heading>
+                <Paragraph>
+                  {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
+                    you: t('common.you_uppercase'),
+                  })}
+                </Paragraph>
+                {prioritizedErrorCodes[0] !== ServiceStatus.HTTPError &&
+                  prioritizedErrorCodes[0] !== ServiceStatus.Unauthorized && (
+                    <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
+                  )}
+              </Alert>
+            )}
+            <Paragraph size='small'>{resource.description}</Paragraph>
+            <Paragraph size='small'>{resource.rightDescription}</Paragraph>
+          </div>
+        </ResourceActionBar>
+      </li>
     );
   });
 
@@ -245,7 +247,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   }, 300);
 
   return (
-    <div className={classes.searchSection}>
+    <search className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
           <Search
@@ -259,7 +261,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               setSearchString('');
               setCurrentPage(1);
             }}
-          ></Search>
+          />
         </div>
         <Filter
           className={classes.filter}
@@ -278,9 +280,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               setCurrentPage(1);
             }
           }}
-        ></Filter>
+        />
       </div>
       {searchResults()}
-    </div>
+    </search>
   );
 };

@@ -1,0 +1,14 @@
+.navigationContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .navigationContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}

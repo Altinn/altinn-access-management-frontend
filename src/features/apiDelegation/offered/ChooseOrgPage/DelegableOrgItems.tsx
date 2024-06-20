@@ -28,7 +28,7 @@ export const DelegableOrgItems = ({
     <ul className={common.unstyledList}>
       {delegableOrgs.map((org: Organization) => {
         return (
-          <div
+          <li
             className={classes.actionBarWrapper}
             key={org.orgNumber}
           >
@@ -54,7 +54,7 @@ export const DelegableOrgItems = ({
               }
               color={'neutral'}
             />
-          </div>
+          </li>
         );
       })}
     </ul>

@@ -25,6 +25,8 @@ import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
+import classes from './ChooseServicePage.module.css';
+import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation('common');
@@ -32,7 +34,6 @@ export const ChooseServicePage = () => {
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const [urlParams] = useSearchParams();
-  const [popoverOpen, setPopoverOpen] = useState(false);
   useDocumentTitle(t('single_rights.page_title'));
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
@@ -101,60 +102,21 @@ export const ChooseServicePage = () => {
                     onAdd={onAdd}
                     onUndo={onRemove}
                   />
-                  <GroupElements>
-                    <Button
-                      variant='primary'
-                      color='first'
-                      disabled={delegableChosenServices.length < 1}
-                      fullWidth
-                      onClick={() => {
+                  <NavigationSection
+                    className={classes.navigationContainer}
+                    cancelButtonProps={{
+                      onCancel: () => redirectToSevicesAvailableForUser(userID, partyID),
+                      showWarning: delegableChosenServices.length > 0,
+                    }}
+                    nextButtonProps={{
+                      onNext: () => {
                         navigate(
                           `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`,
                         );
-                      }}
-                    >
-                      {t('common.proceed')}
-                    </Button>
-                    <Popover
-                      variant={'warning'}
-                      placement='top'
-                      open={popoverOpen}
-                      onClose={() => setPopoverOpen(false)}
-                    >
-                      <Popover.Trigger
-                        variant='tertiary'
-                        color={delegableChosenServices.length > 0 ? 'danger' : 'first'}
-                        size='medium'
-                        onClick={
-                          delegableChosenServices.length > 0
-                            ? () => setPopoverOpen(!popoverOpen)
-                            : () => redirectToSevicesAvailableForUser(userID, partyID)
-                        }
-                      >
-                        {t('common.cancel')}
-                      </Popover.Trigger>
-                      <Popover.Content>
-                        <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
-                        <GroupElements>
-                          <Button
-                            onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
-                            color={'danger'}
-                            variant={'primary'}
-                            fullWidth
-                          >
-                            {t('common.yes')}
-                          </Button>
-                          <Button
-                            onClick={() => setPopoverOpen(false)}
-                            color={'danger'}
-                            variant={'tertiary'}
-                          >
-                            {t('single_rights.no_continue_delegating')}
-                          </Button>
-                        </GroupElements>
-                      </Popover.Content>
-                    </Popover>
-                  </GroupElements>
+                      },
+                      disabled: delegableChosenServices.length < 1,
+                    }}
+                  />
                 </>
               )}
             </>
