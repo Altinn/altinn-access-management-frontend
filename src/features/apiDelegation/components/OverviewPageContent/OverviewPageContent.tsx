@@ -8,7 +8,7 @@ import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
-import { resetDelegableOrgs } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import {
   fetchOverviewOrgsOffered,
   fetchOverviewOrgsReceived,
@@ -30,6 +30,7 @@ import { LayoutState } from '../LayoutState';
 
 import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 export interface OverviewPageContentInterface {
   layout: LayoutState;
@@ -47,6 +48,7 @@ export const OverviewPageContent = ({
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
   const isSm = useMediaQuery('(max-width: 768px)');
+  const [deletedItemsStatusMessage, setDeletedItemsStatusMessage] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let fetchData: () => any;
@@ -59,7 +61,7 @@ export const OverviewPageContent = ({
       void fetchData();
     }
     handleSaveDisabled();
-    dispatch(resetDelegableOrgs());
+    dispatch(resetState());
     dispatch(resetDelegationRequests());
     dispatch(resetChosenApis());
   }, [overviewOrgs, error]);
@@ -120,9 +122,11 @@ export const OverviewPageContent = ({
       for (const item of org.apiList) {
         if (item.isSoftDelete) {
           if (layout === LayoutState.Offered) {
-            void dispatch(deleteOfferedApiDelegation(mapToDeletionRequest(org.orgNr, item.id)));
+            void dispatch(deleteOfferedApiDelegation(mapToDeletionRequest(org.orgNumber, item.id)));
           } else if (layout === LayoutState.Received) {
-            void dispatch(deleteReceivedApiDelegation(mapToDeletionRequest(org.orgNr, item.id)));
+            void dispatch(
+              deleteReceivedApiDelegation(mapToDeletionRequest(org.orgNumber, item.id)),
+            );
           }
         }
       }
@@ -161,8 +165,12 @@ export const OverviewPageContent = ({
         <OrgDelegationActionBar
           organization={org}
           isEditable={isEditable}
-          softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+          softDeleteAllCallback={() => {
+            dispatch(softDeleteAll(org.id));
+            setDeletedItemsStatusMessage(t('common.changes_made_msg'));
+          }}
           softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+          setScreenreaderMsg={() => setDeletedItemsStatusMessage(t('common.changes_made_msg'))}
           key={org.id}
         ></OrgDelegationActionBar>
       </div>
@@ -199,6 +207,7 @@ export const OverviewPageContent = ({
           {t('common.maskinporten')}
         </a>
       </Panel>
+      <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
         {overviewOrgs.length > 0 && (
           <>

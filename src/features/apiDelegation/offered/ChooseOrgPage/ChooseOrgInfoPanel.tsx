@@ -10,12 +10,17 @@ import classes from './ChooseOrgPage.module.css';
 interface InfoPanelProps {
   searchString: string;
   promptOrgNumber: boolean;
+  searchOrgNotExist: boolean;
+  searchLoading: boolean;
 }
 
-export const ChooseOrgInfoPanel = ({ searchString, promptOrgNumber }: InfoPanelProps) => {
+export const ChooseOrgInfoPanel = ({
+  searchString,
+  promptOrgNumber,
+  searchOrgNotExist,
+  searchLoading,
+}: InfoPanelProps) => {
   const { t } = useTranslation('common');
-  const searchOrgNotExist = useAppSelector((state) => state.delegableOrg.searchOrgNonexistant);
-  const searchLoading = useAppSelector((state) => state.delegableOrg.searchLoading);
   const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
   if (reporteeOrgNumber === searchString && searchString.length > 0) {
     return (

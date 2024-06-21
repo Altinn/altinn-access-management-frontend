@@ -5,6 +5,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -35,14 +36,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Party> GetPartyFromReporteeListIfExists(int partyId)
+        public Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
         {
             try
             {
-                return Task.FromResult(Util.GetMockData<Party>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
+                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
             }
             catch (FileNotFoundException) {
-                return Task.FromResult<Party>(null);
+                return Task.FromResult<AuthorizedParty>(null);
             }
 
         }

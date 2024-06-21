@@ -29,8 +29,8 @@ import {
 } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import type { DelegableOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
-import { softRemoveOrg } from '@/rtk/features/apiDelegation/delegableOrg/delegableOrgSlice';
+import type { Organization } from '@/rtk/features/lookup/lookupApi';
+import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
@@ -38,7 +38,7 @@ import classes from './ConfirmationPage.module.css';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
-  const chosenOrgs = useAppSelector((state) => state.delegableOrg.chosenDelegableOrgList);
+  const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
   const loading = useAppSelector((state) => state.delegationRequest.loading);
   const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
   const isSm = useMediaQuery('(max-width: 768px)');
@@ -62,8 +62,8 @@ export const ConfirmationPage = () => {
         const request: DelegationRequest = {
           apiIdentifier: api.identifier,
           apiName: api.apiName,
-          orgName: org.orgName,
-          orgNr: org.orgNr,
+          orgName: org.name,
+          orgNr: org.orgNumber,
         };
         void dispatch(postApiDelegation(request));
       }
@@ -92,13 +92,13 @@ export const ConfirmationPage = () => {
     return (
       <div className={classes.listContainer}>
         <BorderedList>
-          {chosenOrgs?.map((org: DelegableOrg, index: Key | null | undefined) => (
+          {chosenOrgs?.map((org: Organization, index: Key | null | undefined) => (
             <CompactDeletableListItem
               key={index}
               startIcon={<Buldings3Icon />}
-              removeCallback={chosenOrgs.length > 1 ? () => dispatch(softRemoveOrg(org)) : null}
-              leftText={org.orgName}
-              middleText={t('common.org_nr') + ' ' + org.orgNr}
+              removeCallback={chosenOrgs.length > 1 ? () => dispatch(removeOrg(org)) : null}
+              leftText={org.name}
+              middleText={t('common.org_nr') + ' ' + org.orgNumber}
             ></CompactDeletableListItem>
           ))}
         </BorderedList>

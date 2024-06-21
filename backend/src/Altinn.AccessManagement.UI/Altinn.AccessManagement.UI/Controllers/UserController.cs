@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -66,11 +67,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("reporteelist/{partyId}")]
-        public async Task<ActionResult<Party>> GetPartyFromReporteeListIfExists(int partyId)
+        public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(int partyId)
         {
             try
             {
-                Party party = await _profileService.GetPartyFromReporteeListIfExists(partyId);
+                AuthorizedParty party = await _profileService.GetPartyFromReporteeListIfExists(partyId);
 
                 if (party != null)
                 {

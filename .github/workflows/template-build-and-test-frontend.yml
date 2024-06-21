@@ -6,13 +6,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build
+    name: Test & Build
     steps:
       - name: checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      
+
       - name: install dependencies
         working-directory: ./
         run: yarn --immutable
@@ -21,15 +21,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '19'
-          
+
       - name: run eslint
         working-directory: ./
         run: yarn lint
-        
+
       - name: run test coverage components
         working-directory: ./
         run: yarn coverage
-          
+
       - name: run build
         working-directory: ./
         run: yarn build
