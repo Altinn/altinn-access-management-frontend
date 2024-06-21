@@ -30,6 +30,7 @@ import { LayoutState } from '../LayoutState';
 
 import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 export interface OverviewPageContentInterface {
   layout: LayoutState;
@@ -47,6 +48,7 @@ export const OverviewPageContent = ({
   const error = useAppSelector((state) => state.overviewOrg.error);
   const loading = useAppSelector((state) => state.overviewOrg.loading);
   const isSm = useMediaQuery('(max-width: 768px)');
+  const [deletedItemsStatusMessage, setDeletedItemsStatusMessage] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let fetchData: () => any;
@@ -163,8 +165,12 @@ export const OverviewPageContent = ({
         <OrgDelegationActionBar
           organization={org}
           isEditable={isEditable}
-          softDeleteAllCallback={() => dispatch(softDeleteAll(org.id))}
+          softDeleteAllCallback={() => {
+            dispatch(softDeleteAll(org.id));
+            setDeletedItemsStatusMessage(t('common.changes_made_msg'));
+          }}
           softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
+          setScreenreaderMsg={() => setDeletedItemsStatusMessage(t('common.changes_made_msg'))}
           key={org.id}
         ></OrgDelegationActionBar>
       </div>
@@ -201,6 +207,7 @@ export const OverviewPageContent = ({
           {t('common.maskinporten')}
         </a>
       </Panel>
+      <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
         {overviewOrgs.length > 0 && (
           <>

@@ -3,6 +3,7 @@
     "error": "Error",
     "restart": "Restart",
     "close": "Close",
+    "changes_made_msg": "Changes made. Click the save button to apply",
     "status_code": "Status code",
     "maskinporten": "Maskinporten",
     "broennoeysund_register": "The Brønnøysund Register Center",
