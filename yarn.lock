@@ -687,9 +687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:0.62.0":
-  version: 0.62.0
-  resolution: "@digdir/designsystemet-react@npm:0.62.0"
+"@digdir/designsystemet-react@npm:0.63.0":
+  version: 0.63.0
+  resolution: "@digdir/designsystemet-react@npm:0.63.0"
   dependencies:
     "@floating-ui/react": "npm:0.26.12"
     "@navikt/aksel-icons": "npm:^5.12.2"
@@ -698,7 +698,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1"
     react-dom: ">=18.3.1"
-  checksum: 10/c1f488c482a5358c9b6d4fd9a15390bbe923cba824cd6dddb47cbbf55e7be07fd4e2e4358767498995d95209352890a1a662a2cc748e37ed005a07ae9e35303f
+  checksum: 10/e89be514d4d4270b2704e75eb57bc1c92f5b7a651287d11c75ab8bbda4d819c5431662095ecad38701c8e6c2741560f1a1b7738ba3aa6b72fb130afd155fb96b
   languageName: node
   linkType: hard
 
@@ -2187,7 +2187,7 @@ __metadata:
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/design-system-tokens": "npm:0.13.0"
     "@digdir/designsystemet-css": "npm:0.10.0"
-    "@digdir/designsystemet-react": "npm:0.62.0"
+    "@digdir/designsystemet-react": "npm:0.63.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@playwright/test": "npm:^1.43.1"
     "@reduxjs/toolkit": "npm:^2.1.0"
