@@ -41,7 +41,7 @@ jobs:
       - name: print status
         run: |
           if [ "${{ steps.get_latest_release_version.outputs.status }}" == "200" ]; then
-            echo "Release version: ${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
+            echo "Latest release version: ${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
           else
             echo "Release could not be found. Request failed with status '${{ steps.get_latest_release_version.outputs.status }}'"
           fi
@@ -147,7 +147,7 @@ jobs:
 
   update_release_draft:
     name: Release Drafter with releaseversion that was formatted
-    needs: [getlatestrelease, tag]
+    needs: [getlatestrelease]
     permissions:
       contents: write # for release-drafter/release-drafter to create a github release
       pull-requests: write # for release-drafter/release-drafter to add label to PR
