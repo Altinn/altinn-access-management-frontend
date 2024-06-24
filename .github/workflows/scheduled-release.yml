@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * 3'
-  
+
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:
@@ -93,7 +93,7 @@ jobs:
             echo "RELEASE=v${{env.currentyear}}.1" >> $GITHUB_OUTPUT
           fi
 
-        - name: Print release version
+      - name: Print release version
         run: |
           echo "Release version: ${{ env.RELEASEVERSION }}"
 
