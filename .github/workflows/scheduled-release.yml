@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: '0 0 * * 3'
 
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths-ignore:
-      - src/**
-
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: altinn/altinn-access-management-frontend
@@ -147,7 +142,7 @@ jobs:
 
   update_release_draft:
     name: Release Drafter with releaseversion that was formatted
-    needs: [getlatestrelease]
+    needs: [getlatestrelease, tag]
     permissions:
       contents: write # for release-drafter/release-drafter to create a github release
       pull-requests: write # for release-drafter/release-drafter to add label to PR
