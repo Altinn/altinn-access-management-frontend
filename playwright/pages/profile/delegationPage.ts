@@ -6,7 +6,7 @@ export class delegateToUser {
   constructor(public page: Page) {}
 
   async delegateToSSN(ssnUser: string, ssnUserName: string) {
-    await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+    await this.page.getByText('Andre med rettigheter til').click();
     await this.page.keyboard.press('Enter');
     await this.page.getByRole('button', { name: 'Legge til ny person eller' }).click();
     await this.page.getByRole('button', { name: 'person' });
@@ -17,7 +17,7 @@ export class delegateToUser {
     await this.page.getByRole('button', { name: 'Neste' }).click();
   }
   async delegateToOrg(orgNumber: string, orgNavn: string) {
-    await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+    await this.page.getByText('Andre med rettigheter til').click();
     await this.page.getByRole('button', { name: 'Legge til ny person eller' }).click();
     await this.page.getByRole('tab', { name: 'Ekstern virksomhet' }).click();
     await this.page.getByRole('tab', { name: 'Ekstern virksomhet' }).click();
@@ -47,7 +47,6 @@ export class delegateRightsToUser {
     await this.page.getByRole('button', { name: 'Fullfør delegering' }).click();
     await this.page.getByRole('button', { name: 'Bekreft' }).click();
     await this.page.getByRole('button', { name: 'Ferdig' }).click();
-    await this.page.reload(); // Refresh the page
     await this.page.getByRole('link', { name: 'Har tilgang til disse' }).click();
 
     const refreshLimit = 8;
@@ -64,7 +63,7 @@ export class delegateRightsToUser {
       } else {
         await this.page.reload();
         numRefreshes++;
-        await this.page.waitForTimeout(1000); // wait for 1 second before the next check
+        await this.page.waitForTimeout(5000); // wait for 1 second before the next check
       }
     }
   }
@@ -75,7 +74,7 @@ export class coverebyUserRights {
   async checkCoverebyRights() {
     await this.page.getByRole('link', { name: 'Skjema og tjenester du har' }).click();
     await this.page.getByRole('link', { name: 'Har tilgang til disse' }).click();
-    console.log(await this.page.locator('css=#DirectRights-View').innerText());
+    const coveredByRights = await this.page.innerText('css=#DirectRights-View');
   }
   async checkCoverebyOrgRights() {
     await this.page.getByRole('link', { name: 'Skjema og tjenester du har' }).click();
@@ -94,22 +93,79 @@ export class revokeRights {
 
     await loader.waitFor({ state: 'detached' });
 
-    const reporteeLocator = rightsHoldersList
-      .getByRole('link')
-      .filter({ has: this.page.getByLabel(reporteeName) });
-    if ((await reporteeLocator.count()) > 0) {
-      await reporteeLocator.click();
+    if (await this.page.getByRole('link', { name: reporteeName }).isVisible()) {
+      await this.page.getByRole('link', { name: reporteeName }).click();
       const removeButton = this.page
         .getByRole('button')
         .filter({ hasText: 'Fjern en eller flere' });
-      await removeButton.click();
-      await this.page.getByText('Fjern alle').first().click();
-      await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
-      await this.page.getByRole('link', { name: 'Ferdig' }).click();
-      await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+      if (await removeButton.isDisabled()) {
+        console.error('Button not found');
+        await this.page.getByLabel('Lukk').click();
+        await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+      } else {
+        await removeButton.click();
+        await this.page.getByText('Fjern alle').first().click();
+        await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
+        await this.page.getByRole('link', { name: 'Ferdig' }).click();
+        await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+      }
     } else {
+      console.error('Reportee not found');
       await this.page.goto(process.env.BASE_URL + '/ui/profile');
-      await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     }
+  }
+
+  async revokeRightsOrg(reporteeName: string, buttonIndex: number) {
+    const rightsHoldersList = this.page.locator('css=#rightHolderList');
+    const loader = rightsHoldersList.locator('css=.a-loader');
+
+    await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+    await loader.waitFor({ state: 'attached' });
+
+    await loader.waitFor({ state: 'detached' });
+
+    if (await this.page.getByRole('link', { name: reporteeName }).isVisible()) {
+      await this.page.getByRole('link', { name: reporteeName }).click();
+      const reporteLinks = this.page.getByRole('link', { name: reporteeName });
+      const reporteeLink = reporteLinks.nth(buttonIndex);
+      if (await reporteeLink.isVisible()) {
+        await reporteeLink.click();
+        const removeButton = this.page
+          .getByRole('button')
+          .filter({ hasText: 'Fjern en eller flere' });
+        if (await removeButton.isDisabled()) {
+          console.error('Button not found');
+          await this.page.getByLabel('Lukk').click();
+          await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+        } else {
+          await removeButton.click();
+          await this.page.getByText('Fjern alle').first().click();
+          await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
+          await this.page.getByRole('link', { name: 'Ferdig' }).click();
+          await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+        }
+      }
+    } else {
+      console.error('Reportee not found');
+      await this.page.goto(process.env.BASE_URL + '/ui/profile');
+    }
+  }
+}
+
+export class delegateRoleToUser {
+  constructor(public page: Page) {}
+
+  async delegateRole(roleName1: string, roleName2: string) {
+    await this.page.getByText('Har også disse 0 rollene').click();
+    await this.page.getByText('+ Legg til ny rolle').click();
+    await this.page.locator('span.col', { hasText: roleName1 }).click();
+    await this.page.locator('span.col', { hasText: roleName2 }).click();
+    //await this.page.getByText(roleName1, { exact: true }).last().click();
+    //await this.page.getByText(roleName2, { exact: true }).click();
+    await this.page.getByRole('button', { name: 'Jeg forstår. Fullfør' }).click();
+    await this.page.getByPlaceholder('f.eks post@karinordmann.no').click();
+    await this.page.getByPlaceholder('f.eks post@karinordmann.no').fill('test@email.com');
+    await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
+    await this.page.getByRole('link', { name: 'Ferdig' }).click();
   }
 }

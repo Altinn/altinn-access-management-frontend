@@ -18,10 +18,8 @@ const config: PlaywrightTestConfig = {
   testMatch: ['playwright/e2eTests/*.spec.ts'],
   //timeout: 5000,
   timeout: 5 * 60 * 1000,
-  workers: process.env.CI ? 2 : 4,
-  fullyParallel: true,
   use: {
-    headless: true,
+    headless: false,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     launchOptions: {},
