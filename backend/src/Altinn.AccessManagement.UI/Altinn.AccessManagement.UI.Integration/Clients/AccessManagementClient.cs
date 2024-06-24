@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -51,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<Party> GetPartyFromReporteeListIfExists(int partyId)
+        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<Party>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<AuthorizedParty>(responseContent, _serializerOptions);
                 }
 
                 _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);

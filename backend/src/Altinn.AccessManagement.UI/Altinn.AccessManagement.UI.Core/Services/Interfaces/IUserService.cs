@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
+﻿using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
 
@@ -21,6 +22,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <returns>Party that corresponds to partyId parameter if it's in the users reporteelist</returns>
-        Task<Party> GetPartyFromReporteeListIfExists(int partyId);
+        Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
     }
 }

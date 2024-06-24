@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.Platform.Register.Models;
@@ -15,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="partyId">party id</param>
         /// <returns></returns>
-        Task<Party> GetPartyFromReporteeListIfExists(int partyId);
+        Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
 
         /// <summary>
         ///     Clears cached accesses of the delegation recipient

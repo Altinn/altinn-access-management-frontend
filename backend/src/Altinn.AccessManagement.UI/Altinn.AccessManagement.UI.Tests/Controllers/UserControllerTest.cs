@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -127,11 +127,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string reporteePartyID = "51329012";
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", $"{reporteePartyID}.json");
-            Party expectedResponse = Util.GetMockData<Party>(path);
+            AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
 
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{reporteePartyID}");
-            Party actualResponse = await response.Content.ReadFromJsonAsync<Party>();
+            AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);

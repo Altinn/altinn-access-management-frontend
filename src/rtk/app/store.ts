@@ -4,7 +4,7 @@ import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import delegableApiReducer from '../features/apiDelegation/delegableApi/delegableApiSlice';
 import overviewOrgReducer from '../features/apiDelegation/overviewOrg/overviewOrgSlice';
-import delegableOrgReducer from '../features/apiDelegation/delegableOrg/delegableOrgSlice';
+import apiDelegationReducer from '../features/apiDelegation/apiDelegationSlice';
 import delegationRequestReducer from '../features/apiDelegation/delegationRequest/delegationRequestSlice';
 import userInfoReducer from '../features/userInfo/userInfoSlice';
 import { singleRightsApi } from '../features/singleRights/singleRightsApi';
@@ -19,8 +19,8 @@ const store = configureStore({
   reducer: {
     delegableApi: delegableApiReducer,
     overviewOrg: overviewOrgReducer,
-    delegableOrg: delegableOrgReducer,
     delegationRequest: delegationRequestReducer,
+    apiDelegation: apiDelegationReducer,
     userInfo: userInfoReducer,
     singleRightsSlice: singleRightsReducer,
     [lookupApi.reducerPath]: lookupApi.reducer,

@@ -5,45 +5,77 @@ import * as React from 'react';
 import { OrgDelegationActionBar } from '@/features/apiDelegation/components/OverviewPageContent/OrgDelegationActionBar';
 import store from '@/rtk/app/store';
 
-import type { OverviewOrg } from '@/rtk/features/apiDelegation/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 
-Cypress.Commands.add('mount', (component, options = {}) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { reduxStore = store, ...mountOptions } = options as any;
+type MountReactComponentOptions = Record<string, any>;
+Cypress.Commands.add(
+  'mount',
+  (component: React.ReactNode, options: MountReactComponentOptions = {}) => {
+    const { reduxStore = store, ...mountOptions } = options;
 
-  const wrapped = <Provider store={reduxStore}>{component}</Provider>;
+    const wrapped = <Provider store={reduxStore}>{component}</Provider>;
 
-  return mount(wrapped, mountOptions);
-});
+    return mount(wrapped, mountOptions);
+  },
+);
+
+const overviewOrgs: OverviewOrg = {
+  id: '1',
+  name: 'Evry',
+  isAllSoftDeleted: false,
+  orgNumber: '123456789',
+  apiList: [
+    {
+      id: '1',
+      apiName: 'Delegert API A',
+      isSoftDelete: false,
+      scopes: ['some-scope'],
+      owner: 'Accenture',
+      description:
+        'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+    },
+    {
+      id: '2',
+      apiName: 'Delegert API B',
+      isSoftDelete: false,
+      scopes: ['some-other-scope'],
+      owner: 'Accenture',
+      description:
+        'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+    },
+  ],
+};
+
+const deletedOverviewOrgs: OverviewOrg = {
+  id: '1',
+  name: 'Evry',
+  isAllSoftDeleted: true,
+  orgNumber: '123456789',
+  apiList: [
+    {
+      id: '1',
+      apiName: 'Delegert API A',
+      isSoftDelete: true,
+      scopes: ['some-scope'],
+      owner: 'Accenture',
+      description:
+        'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+    },
+    {
+      id: '2',
+      apiName: 'Delegert API B',
+      isSoftDelete: true,
+      scopes: ['some-other-scope'],
+      owner: 'Accenture',
+      description:
+        'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
+    },
+  ],
+};
 
 describe('OrgDelegationActionBar', () => {
   describe('AccordionHeader', () => {
     it('should show delegateNewApi-button on render when delegateToOrgCallback is set', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: false,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
       cy.mount(
         <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
@@ -57,31 +89,6 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should not show delegateNewApi-button on render when delegateToOrgCallback is not set', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: false,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
       cy.mount(
         <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
@@ -94,14 +101,6 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should show delete button when state isEditable=true', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: false,
-        orgNr: '123456789',
-        apiList: [],
-      };
-
       cy.mount(
         <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
@@ -114,14 +113,6 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should not show undo button when state is isEditable=false', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: false,
-        orgNr: '123456789',
-        apiList: [],
-      };
-
       cy.mount(
         <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
@@ -134,36 +125,11 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should show an undo button and display header with line through when all apis are soft deleted', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: true,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: true,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: true,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
       cy.mount(
         <OrgDelegationActionBar
           softRestoreAllCallback={() => null}
           softDeleteAllCallback={() => null}
-          organization={overviewOrgs}
+          organization={deletedOverviewOrgs}
           isEditable={true}
         />,
       );
@@ -175,31 +141,6 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should call softDeleteAllCallback on buttonclick when isEditable=true ', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: false,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
       const softDeleteAll = () => {
         cy.stub();
       };
@@ -220,31 +161,6 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should call softRestoreCallback on buttonclick', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: true,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
       const softRestoreAll = () => {
         cy.stub();
       };
@@ -253,7 +169,7 @@ describe('OrgDelegationActionBar', () => {
 
       cy.mount(
         <OrgDelegationActionBar
-          organization={overviewOrgs}
+          organization={deletedOverviewOrgs}
           softDeleteAllCallback={() => null}
           softRestoreAllCallback={softRestoreAllSpy}
           isEditable={true}
@@ -265,31 +181,6 @@ describe('OrgDelegationActionBar', () => {
     });
 
     it('should call delegateToOrgCallback on buttonclick', () => {
-      const overviewOrgs: OverviewOrg = {
-        id: '1',
-        orgName: 'Evry',
-        isAllSoftDeleted: true,
-        orgNr: '123456789',
-        apiList: [
-          {
-            id: '1',
-            apiName: 'Delegert API A',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-          {
-            id: '2',
-            apiName: 'Delegert API B',
-            isSoftDelete: false,
-            owner: 'Accenture',
-            description:
-              'API for forvaltningsorgan og kompetansesenter som skal styrke kommunenes, sektormyndighetenes og andre samarbeidspartneres kompetanse på integrering og',
-          },
-        ],
-      };
-
       const delegateToNewOrg = () => {
         cy.stub();
       };

@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
@@ -42,9 +43,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<Party> GetPartyFromReporteeListIfExists(int partyId)
+        public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
         {
-            Party partyInfo = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
+            AuthorizedParty partyInfo = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
             return partyInfo;
         }
     }

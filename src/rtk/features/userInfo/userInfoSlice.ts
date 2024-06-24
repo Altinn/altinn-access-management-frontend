@@ -63,7 +63,7 @@ const userInfoSlice = createSlice({
         const reporteeDataArray = action.payload;
         state.reporteeName = reporteeDataArray.name;
         state.reporteeLoading = false;
-        state.reporteeOrgNumber = reporteeDataArray.orgNumber;
+        state.reporteeOrgNumber = reporteeDataArray.organizationNumber;
       })
       .addCase(fetchReportee.rejected, (state, action) => {
         state.reporteeError = action.error.message ?? 'Unknown error';

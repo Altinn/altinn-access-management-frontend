@@ -20,6 +20,7 @@ export interface OrgDelegationActionBarProps {
   softRestoreAllCallback: () => void;
   softDeleteAllCallback: () => void;
   delegateToOrgCallback?: () => void;
+  setScreenreaderMsg: () => void;
 }
 
 export const OrgDelegationActionBar = ({
@@ -28,6 +29,7 @@ export const OrgDelegationActionBar = ({
   softDeleteAllCallback,
   isEditable = false,
   delegateToOrgCallback,
+  setScreenreaderMsg,
 }: OrgDelegationActionBarProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('common');
@@ -60,7 +62,7 @@ export const OrgDelegationActionBar = ({
             color={'second'}
             size={'medium'}
             onClick={softRestoreAllCallback}
-            aria-label={String(t('common.undo')) + ' ' + organization.orgName}
+            aria-label={`${t('common.undo')} ${t('api_delegation.delete')} ${organization.name}`}
             icon={isSm}
           >
             <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} />
@@ -73,7 +75,7 @@ export const OrgDelegationActionBar = ({
               color={'danger'}
               size={'medium'}
               onClick={handleSoftDeleteAll}
-              aria-label={String(t('api_delegation.delete')) + ' ' + organization.orgName}
+              aria-label={String(t('api_delegation.delete')) + ' ' + organization.name}
               icon={isSm}
             >
               <MinusCircleIcon fontSize={getButtonIconSize(!isSm)} />
@@ -87,7 +89,10 @@ export const OrgDelegationActionBar = ({
   const listItems = organization.apiList.map((item, i) => (
     <DeletableListItem
       key={i}
-      softDeleteCallback={() => dispatch(softDelete([organization.id, item.id]))}
+      softDeleteCallback={() => {
+        dispatch(softDelete([organization.id, item.id]));
+        setScreenreaderMsg();
+      }}
       softRestoreCallback={() => dispatch(softRestore([organization.id, item.id]))}
       item={item}
       isEditable={isEditable}
@@ -110,7 +115,7 @@ export const OrgDelegationActionBar = ({
             [classes.actionBarText__softDelete]: organization.isAllSoftDeleted,
           })}
         >
-          {organization.orgName}
+          {organization.name}
         </div>
       }
       subtitle={
@@ -119,7 +124,7 @@ export const OrgDelegationActionBar = ({
             [classes.actionBarSubtitle__softDelete]: organization.isAllSoftDeleted,
           })}
         >
-          {t('common.org_nr') + ' ' + organization.orgNr}
+          {t('common.org_nr') + ' ' + organization.name}
         </div>
       }
       additionalText={
