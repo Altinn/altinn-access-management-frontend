@@ -34,7 +34,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: print status
-        run: "echo Release could not be found. Request failed with status '${{ steps.get_latest_release_version.outputs.status }}'"
+        run: |
+          if [ "${{ steps.get_latest_release_version.outputs.status }}" == "200" ]; then
+            echo "Latest release version: ${{ fromJson(steps.get_latest_release_version.outputs.data).tag_name }}"
+          else
+            echo "Release could not be found. Request failed with status '${{ steps.get_latest_release_version.outputs.status }}'"
+          fi
 
       - name: split release version f.ex v2023.1 will be split into output0 v2023 and output1 1
         if: ${{ steps.get_latest_release_version.outputs.status == '200' }}
@@ -82,6 +87,11 @@ jobs:
           else
             echo "RELEASE=v${{env.currentyear}}.1" >> $GITHUB_OUTPUT
           fi
+
+      - name: Print release version
+        run: |
+          echo "Release version: ${{ steps.releaseversion.outputs.RELEASE }}"
+
     outputs:
       RELEASEVERSION: ${{ steps.releaseversion.outputs.RELEASE }}
 
@@ -121,6 +131,7 @@ jobs:
 
       - id: version
         uses: battila7/get-version-action@v2
+
       - name: Add Version tag to Docker Image
         uses: shrink/actions-docker-registry-tag@v4
         with:
