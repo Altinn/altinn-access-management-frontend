@@ -1,7 +1,7 @@
 .icon {
-  display: inline-block;
-  height: var(--component-button-size-icon-small);
-  width: var(--component-button-size-icon-small);
+  --component-button-size-icon-small: 1.5rem;
+  min-height: var(--component-button-size-icon-small);
+  min-width: var(--component-button-size-icon-small);
 }
 
 .chevron.open {
@@ -9,6 +9,8 @@
 }
 
 .filterButton {
+  --component-button-size-height-small: 2.25rem;
+  --component-button-space-padding-x-small: 1.125rem;
   composes: focusable from '@/resources/utils/utility.module.css';
   background-color: var(--fds-semantic-surface-neutral-subtle);
   align-items: center;
