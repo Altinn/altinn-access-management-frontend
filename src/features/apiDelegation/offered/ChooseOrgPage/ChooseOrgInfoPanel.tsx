@@ -1,4 +1,4 @@
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -45,14 +45,14 @@ export const ChooseOrgInfoPanel = ({
       >
         <div>
           {t('api_delegation.buisness_search_notfound_content')}{' '}
-          <a
+          <Link
             className={classes.link}
             href='https://www.brreg.no/'
             target='_blank'
             rel='noreferrer'
           >
             {t('common.broennoeysund_register')}
-          </a>
+          </Link>
         </div>
       </Alert>
     );

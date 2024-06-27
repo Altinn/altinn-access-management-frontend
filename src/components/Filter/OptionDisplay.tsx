@@ -84,35 +84,21 @@ export const OptionDisplay = ({
     setSortedOptions(optionSearch(options, searchString));
   };
 
-  const checkboxes = sortedOptions.map((option, index) => {
+  const checkboxes = sortedOptions.map((option) => {
     const isSelected = selectedValues?.includes(option.value);
     return (
-      <button
+      <Checkbox
         className={classes.option}
-        key={`filterOption_${index}_${option.value}`}
-        onClick={() => {
+        onChange={() => {
           handleSelection(option.value);
         }}
-        tabIndex={-1}
+        size={compact ? 'small' : 'medium'}
+        value={option.value}
+        checked={isSelected}
+        aria-label={option.label}
       >
-        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <Checkbox
-          className={classes.optionCheckbox}
-          onChange={() => {
-            handleSelection(option.value);
-          }}
-          size={compact ? 'small' : 'medium'}
-          value={option.value}
-          checked={isSelected}
-          aria-label={option.label}
-        ></Checkbox>
-        <Paragraph
-          className={classes.optionLabel}
-          size={compact ? 'small' : 'medium'}
-        >
-          {option.label}
-        </Paragraph>
-      </button>
+        {option.label}
+      </Checkbox>
     );
   });
 

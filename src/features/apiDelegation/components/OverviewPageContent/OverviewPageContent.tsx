@@ -1,4 +1,4 @@
-import { Alert, Button, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Link, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -195,15 +195,16 @@ export const OverviewPageContent = ({
         title={t('api_delegation.card_title')}
         severity='info'
       >
-        {t('api_delegation.api_panel_content')}{' '}
-        <a
-          className={classes.link}
-          href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
-          target='_blank'
-          rel='noreferrer'
-        >
-          {t('common.maskinporten')}
-        </a>
+        <Paragraph>
+          {t('api_delegation.api_panel_content')}{' '}
+          <Link
+            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+            target='_blank'
+            rel='noreferrer'
+          >
+            {t('common.maskinporten')}
+          </Link>
+        </Paragraph>
       </Alert>
       <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>

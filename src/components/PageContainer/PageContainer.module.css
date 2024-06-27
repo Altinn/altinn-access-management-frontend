@@ -18,13 +18,8 @@
   border-radius: 50%;
   background-color: #ffffff;
   border: none;
-  padding: 0px;
-  height: 36px;
-  padding-top: 3px;
-  cursor: pointer;
   margin-bottom: 10px;
   margin-right: 6px;
-  composes: focusable from '@/resources/utils/utility.module.css';
 }
 
 .closeButton:hover {

@@ -394,13 +394,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@digdir/design-system-tokens@npm:0.13.0"
-  checksum: 10/1564c638807b6bb4706ae893ecc6142f0aa8816f9915a0d43aa08c121a6a8810501b3d7857067df4151c67d372c9443123924351efcc8f490aecf65bc135d7d3
-  languageName: node
-  linkType: hard
-
 "@digdir/designsystemet-css@npm:0.10.0":
   version: 0.10.0
   resolution: "@digdir/designsystemet-css@npm:0.10.0"
@@ -420,6 +413,13 @@ __metadata:
     react: ">=18.3.1"
     react-dom: ">=18.3.1"
   checksum: 10/e89be514d4d4270b2704e75eb57bc1c92f5b7a651287d11c75ab8bbda4d819c5431662095ecad38701c8e6c2741560f1a1b7738ba3aa6b72fb130afd155fb96b
+  languageName: node
+  linkType: hard
+
+"@digdir/designsystemet-theme@npm:^0.15.0":
+  version: 0.15.3
+  resolution: "@digdir/designsystemet-theme@npm:0.15.3"
+  checksum: 10/0c9760ffbc42ed736ebcd1ee9069b2a8dd9312de08263d8beee74438933df736280c07fba2568d05f202ea88687b3309c40bf55be3d7d8e57f54cf84cc33af96
   languageName: node
   linkType: hard
 
@@ -1496,9 +1496,9 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@cypress/react18": "npm:^2.0.0"
-    "@digdir/design-system-tokens": "npm:0.13.0"
     "@digdir/designsystemet-css": "npm:0.10.0"
     "@digdir/designsystemet-react": "npm:0.63.0"
+    "@digdir/designsystemet-theme": "npm:^0.15.0"
     "@navikt/aksel-icons": "npm:^6.0.0"
     "@playwright/test": "npm:^1.44.1"
     "@reduxjs/toolkit": "npm:^2.2.5"

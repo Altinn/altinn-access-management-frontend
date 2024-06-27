@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import '@digdir/designsystemet-theme';
+import '@digdir/designsystemet-css';
+import '@/resources/css/Common.module.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -15,9 +18,6 @@ import { getConfig } from '../config';
 
 import LoadLocalizations from './resources/LoadLocalizations';
 import store from './rtk/app/store';
-
-import '@digdir/designsystemet-css';
-import '@/resources/css/Common.module.css';
 
 /**
  * Special behaviour for react-query in dev environment

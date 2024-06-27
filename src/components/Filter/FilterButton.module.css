@@ -9,25 +9,14 @@
 }
 
 .filterButton {
-  --component-button-size-height-small: 2.25rem;
-  --component-button-space-padding-x-small: 1.125rem;
-  composes: focusable from '@/resources/utils/utility.module.css';
   background-color: var(--fds-semantic-surface-neutral-subtle);
-  align-items: center;
+  color: #000;
   border-radius: 50px;
-  border: solid transparent;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
   gap: 2px;
-  font-family: inherit;
-  font-weight: 500;
-  height: var(--component-button-size-height-small);
-  justify-content: center;
-  padding: 0 var(--component-button-space-padding-x-small);
-  text-align: center;
+  min-height: 36px;
+  max-height: 36px;
+  font-size: 14px;
   max-width: 300px;
-  position: auto;
 }
 
 .filterButton:not([aria-disabled='true'], :disabled):hover {

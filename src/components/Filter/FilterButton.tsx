@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { ChevronDownIcon, FilterIcon } from '@navikt/aksel-icons';
 
 import classes from './FilterButton.module.css';
+import { Button } from '@digdir/designsystemet-react';
 
 export interface FilterButtonProps {
   onClick?: () => void;
@@ -47,9 +48,9 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
     };
     return (
       <div className={cn(classes.filterButtonContainer, className)}>
-        {activeNotification()}
-        <button
+        <Button
           {...restHTMLProps}
+          size='sm'
           ref={ref}
           id={id}
           className={classes.filterButton}
@@ -61,7 +62,8 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
             className={cn(classes.icon, classes.chevron, { [classes.open]: isOpen })}
             aria-hidden
           />
-        </button>
+        </Button>
+        {activeNotification()}
       </div>
     );
   },
