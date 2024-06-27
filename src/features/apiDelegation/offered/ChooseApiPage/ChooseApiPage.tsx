@@ -187,7 +187,6 @@ export const ChooseApiPage = () => {
               </div>
               <div className={classes.searchFormFilterSection}>
                 <Filter
-                  icon={<FilterIcon />}
                   label={String(t('api_delegation.filter_label'))}
                   options={filterOptions}
                   applyButtonLabel={String(t('common.apply'))}

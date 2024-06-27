@@ -1,6 +1,5 @@
-import { SvgIcon } from '@altinn/altinn-design-system';
 import * as React from 'react';
-import { Office1Filled } from '@navikt/ds-icons';
+import { Buildings3FillIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
 
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
@@ -37,13 +36,7 @@ export const UserInfoBar = () => {
             <p className={classes.userInfoText}>for {reporteeName}</p>
           )}
         </div>
-        <div className={classes.companyIconContainer}>
-          <SvgIcon
-            width={24}
-            height={24}
-            svgIconComponent={<Office1Filled />}
-          ></SvgIcon>
-        </div>
+        <Buildings3FillIcon className={classes.companyIconContainer} />
       </div>
     </header>
   );

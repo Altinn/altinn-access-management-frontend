@@ -265,7 +265,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         </div>
         <Filter
           className={classes.filter}
-          icon={<FilterIcon />}
           label={t('single_rights.filter_label')}
           options={filterOptions}
           applyButtonLabel={t('common.apply')}

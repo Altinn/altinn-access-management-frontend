@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { CircularProgress } from '@altinn/altinn-design-system';
 import { Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +7,7 @@ import { Dialog, DialogContent, type DialogProps } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './ProgressModal.module.css';
+import { CircularProgress } from '../CircularProgress/CircularProgress';
 
 export interface ProgressModalProps extends Pick<DialogProps, 'open'> {
   /** The text that's displayed besides the spinner */

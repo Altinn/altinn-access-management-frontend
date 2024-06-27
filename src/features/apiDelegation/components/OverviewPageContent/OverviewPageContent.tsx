@@ -1,5 +1,4 @@
-import { Panel } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Spinner } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -192,10 +191,9 @@ export const OverviewPageContent = ({
           </Button>
         </div>
       )}
-      <Panel
+      <Alert
         title={t('api_delegation.card_title')}
-        forceMobileLayout={isSm}
-        showIcon={!isSm}
+        severity='info'
       >
         {t('api_delegation.api_panel_content')}{' '}
         <a
@@ -206,7 +204,7 @@ export const OverviewPageContent = ({
         >
           {t('common.maskinporten')}
         </a>
-      </Panel>
+      </Alert>
       <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
         {overviewOrgs.length > 0 && (

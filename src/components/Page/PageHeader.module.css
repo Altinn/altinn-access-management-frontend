@@ -56,12 +56,12 @@
   --page-header-height: 96px;
 }
 
-.icon.small {
+.icon.small > * {
   min-width: 28px;
   min-height: 28px;
 }
 
-.icon.medium {
+.icon.medium > * {
   min-width: 40px;
   min-height: 40px;
 }

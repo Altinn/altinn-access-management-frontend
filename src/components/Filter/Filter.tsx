@@ -25,8 +25,6 @@ export interface FilterProps {
   resetButtonLabel: string;
   /** The label for the reset button inside the popover */
   searchable?: boolean;
-  /** The icon element to display with the filter label */
-  icon?: ReactNode;
   /** The active filter values. Can be used for setting active filters externally. */
   values?: string[];
   /** Callback function that will be called when filters are applied */
@@ -53,7 +51,6 @@ export interface FilterProps {
  *   label="Filter"
  *   applyButtonLabel="Apply"
  *   resetButtonLabel="Reset"
- *   icon={<FilterIcon />}
  *   values={selectedFilters}
  *   onApply={handleFilterApply}
  *   fullScreenModal={true}
@@ -64,7 +61,6 @@ export interface FilterProps {
  * @property {string} label - The label that will be displayed on the filter button
  * @property {string} applyButtonLabel - The label for the apply button inside the popover
  * @property {string} resetButtonLabel - The label for the reset button inside the popover
- * @property {React.ReactNode} [icon] - The icon element to display with the filter label
  * @property {string[]} [values] - The active filter values. Can be used for setting active filters externally.
  * @property {boolean} [searchable=false] - Indicates whether the options are searchable
  * @property {boolean} [fullScreenModal=false] - When true, displays a full screen modal when selecting filters
@@ -79,7 +75,6 @@ export const Filter = ({
   label,
   applyButtonLabel,
   resetButtonLabel,
-  icon,
   values,
   searchable,
   className,
@@ -159,7 +154,6 @@ export const Filter = ({
           className={className}
           id={filterButtonID}
           onClick={handleOpenOrClose}
-          iconLeft={icon}
           isOpen={isOpen}
           numActiveFilters={activeFilters.length}
         >
