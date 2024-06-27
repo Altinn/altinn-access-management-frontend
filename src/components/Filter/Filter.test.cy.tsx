@@ -99,7 +99,7 @@ describe(
       cy.get('@onApplySpy').should('not.have.been.called');
 
       // Select an option
-      cy.get('button').contains(filterOptions[0].label).click();
+      cy.get(`[aria-label="${filterOptions[0].label}"]`).click();
 
       // Button is no longer aria-disabled and is clickable
       cy.contains('button', 'Apply').should('not.have.attr', 'aria-disabled', 'true');
@@ -192,15 +192,9 @@ describe(
       cy.get('button').contains('Filter').click();
 
       cy.get('button').contains('Reset').click();
-      cy.contains('button', `${filterOptions[0].label}`)
-        .find('[type=checkbox]')
-        .should('not.be.checked');
-      cy.contains('button', `${filterOptions[1].label}`)
-        .find('[type=checkbox]')
-        .should('not.be.checked');
-      cy.contains('button', `${filterOptions[2].label}`)
-        .find('[type=checkbox]')
-        .should('not.be.checked');
+      cy.get(`[aria-label="${filterOptions[0].label}"]`).should('not.be.checked');
+      cy.get(`[aria-label="${filterOptions[1].label}"]`).should('not.be.checked');
+      cy.get(`[aria-label="${filterOptions[2].label}"]`).should('not.be.checked');
 
       cy.get('button').contains('Apply').click();
 
@@ -219,12 +213,8 @@ describe(
 
       // Check that they are still applied when reopening
       cy.get('button').contains('Filter').click();
-      cy.contains('button', `${filterOptions[0].label}`)
-        .find('[type=checkbox]')
-        .should('be.checked');
-      cy.contains('button', `${filterOptions[2].label}`)
-        .find('[type=checkbox]')
-        .should('be.checked');
+      cy.get(`[aria-label="${filterOptions[0].label}"]`).should('be.checked');
+      cy.get(`[aria-label="${filterOptions[2].label}"]`).should('be.checked');
     });
 
     it('calls onApply if closed without clicking apply', () => {
@@ -295,12 +285,8 @@ describe(
         />,
       );
       cy.get('button').contains('Filter').click();
-      cy.contains('button', `${filterOptions[0].label}`)
-        .find('[type=checkbox]')
-        .should('be.checked');
-      cy.contains('button', `${filterOptions[1].label}`)
-        .find('[type=checkbox]')
-        .should('not.be.checked');
+      cy.get(`[aria-label="${filterOptions[0].label}"]`).should('be.checked');
+      cy.get(`[aria-label="${filterOptions[1].label}"]`).should('not.be.checked');
 
       // There are no 'changes' so the Apply button should be disabled
       cy.get('button').contains('Apply').should('have.attr', 'aria-disabled', 'true');
