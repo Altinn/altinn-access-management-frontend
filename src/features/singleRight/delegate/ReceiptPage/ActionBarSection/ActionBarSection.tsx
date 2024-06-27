@@ -107,7 +107,6 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         return (
           <Ingress
             className={classes.failedText}
-            level={2}
             spacing
           >
             {t('single_rights.woops_something_went_wrong_ingress')}
@@ -120,7 +119,6 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
           <Ingress
             className={cn(extraSpacing && classes.successText)}
             spacing
-            level={2}
           >
             {t('single_rights.has_received_these_rights', { name: recipientName })}
           </Ingress>

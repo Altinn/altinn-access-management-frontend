@@ -190,5 +190,8 @@
     "faulty_recipient_error_message": "Oppgjeven mottakar kan ikkje delegere til. Ver venleg og gå tilbake til profilsida og vel ein annan. Mottakar må vere ein organisasjon, ein verksemdsbrukar, eller ein person registrert med fødselsnummer. Sjølvregistrerte brukarar kan ikkje delegere til.",
     "no_resources chosen": "Ingen valde tenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde."
+  },
+  "users_page": {
+    "page_title": "Brukare og grupper - Altinn"
   }
 }

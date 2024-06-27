@@ -191,9 +191,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     }
 
     return (
-      <li>
+      <li key={resource.identifier ?? index}>
         <ResourceActionBar
-          key={resource.identifier ?? index}
           title={resource.title}
           subtitle={resource.resourceOwnerName}
           status={status ?? ServiceStatus.Unchecked}

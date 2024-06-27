@@ -1,0 +1,4 @@
+.background {
+  background-color: var(--backgroundColorA3);
+  min-height: 100vh;
+}
