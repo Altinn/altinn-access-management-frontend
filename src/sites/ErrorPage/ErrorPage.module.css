@@ -5,7 +5,7 @@
 
 .errorMessage {
   font-size: 14px;
-  color: darkslategray !important;
+  color: darkslategray;
 }
 
 .contentText {
