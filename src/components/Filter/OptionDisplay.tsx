@@ -88,6 +88,7 @@ export const OptionDisplay = ({
     const isSelected = selectedValues?.includes(option.value);
     return (
       <Checkbox
+        key={option.value}
         className={classes.option}
         onChange={() => {
           handleSelection(option.value);
