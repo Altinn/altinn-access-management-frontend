@@ -36,8 +36,8 @@
 }
 
 .actionBarContent.dark {
-  --border-color: var(--semantic-surface-action-active);
-  --header-color: var(--semantic-surface-action-active);
+  --border-color: var(--fds-semantic-surface-action-first-active);
+  --header-color: var(--fds-semantic-surface-action-first-active);
   border-top-color: var(--header-color);
 }
 
