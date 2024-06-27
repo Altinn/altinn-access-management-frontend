@@ -90,7 +90,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               </Paragraph>
               {subtitle && (
                 <Paragraph
-                  as='div'
                   size='xsmall'
                   className={classes.subtitle}
                 >

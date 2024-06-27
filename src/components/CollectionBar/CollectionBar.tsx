@@ -56,7 +56,6 @@ export const CollectionBar = ({
         additionalText={
           !compact && (
             <Paragraph
-              as={'span'}
               role='status'
               size='small'
               className={cn(classes.counterText, classes[color])}
