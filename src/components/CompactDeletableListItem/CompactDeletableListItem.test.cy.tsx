@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import store from '@/rtk/app/store';
 import { CompactDeletableListItem } from '@/components';
-import { CogIcon } from '@navikt/aksel-icons';
 
 Cypress.Commands.add('mount', (component, options = {}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,7 +48,6 @@ describe('CompactDeletableListItem', () => {
         removeCallback={softRemoveSpy}
         leftText={'Api'}
         middleText={'Org'}
-        startIcon={<CogIcon />}
       />,
     );
   });
