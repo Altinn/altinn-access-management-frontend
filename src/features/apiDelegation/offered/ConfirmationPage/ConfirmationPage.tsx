@@ -29,6 +29,7 @@ import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './Del
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
+
   const isSm = useMediaQuery('(max-width: 768px)');
   const { t } = useTranslation('common');
   useDocumentTitle(t('api_delegation.delegate_page_title'));
@@ -39,6 +40,12 @@ export const ConfirmationPage = () => {
   const dispatch = useAppDispatch();
 
   const [postApiDelegation, { data, isLoading, isError }] = usePostApiDelegationMutation();
+
+  const successfulApiDelegations = React.useMemo(
+    () => data?.filter((d) => d.success) || [],
+    [data],
+  );
+  const failedApiDelegations = React.useMemo(() => data?.filter((d) => !d.success) || [], [data]);
 
   const handleConfirm = async () => {
     const request: BatchApiDelegationRequest = {
@@ -55,8 +62,6 @@ export const ConfirmationPage = () => {
   };
 
   const delegationRecieptContent = () => {
-    const successfulApiDelegations = data ? data.filter((d) => d.success) : [];
-    const failedApiDelegations = data ? data.filter((d) => !d.success) : [];
     return (
       <>
         {failedApiDelegations.length > 0 && (
@@ -164,7 +169,13 @@ export const ConfirmationPage = () => {
     <div>
       <PageContainer>
         <Page
-          color={'dark'}
+          color={
+            failedApiDelegations.length > 0
+              ? 'danger'
+              : successfulApiDelegations.length > 0
+                ? 'success'
+                : 'dark'
+          }
           size={isSm ? 'small' : 'medium'}
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
