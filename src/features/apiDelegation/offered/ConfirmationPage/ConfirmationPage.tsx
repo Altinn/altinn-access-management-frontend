@@ -24,7 +24,7 @@ import {
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
-import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegableList';
+import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
