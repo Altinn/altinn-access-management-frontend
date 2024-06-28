@@ -122,7 +122,7 @@
     "search_for_api_no_result": "0 treff",
     "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
-    "data_retrieval_failed": "Noke feilet, prøv å laste inn sida på ny.",
+    "data_retrieval_failed": "Noko feila, prøv å laste sida på ny",
     "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valde organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
     "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt.",
     "failed_delegations": "Desse API-delegeringene gjekk gale og vart derfor ikkje tildelte",
