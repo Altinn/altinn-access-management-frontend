@@ -192,5 +192,8 @@
     "faulty_recipient_error_message": "The given recipient cannot be delegated to. Please go back to the profile page and select another. The recipient must be an organization, a business user, or a person registered with a birth number. Self-registered users cannot be delegated to.",
     "no_resources chosen": "No services selected",
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected."
+  },
+  "users_page": {
+    "page_title": "Users and groups - Altinn"
   }
 }
