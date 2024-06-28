@@ -35,7 +35,7 @@ export const CollectionBar = ({
   proceedToPath,
   disabledProceedButton,
 }: CollectionBarProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const proceedClick = () => {

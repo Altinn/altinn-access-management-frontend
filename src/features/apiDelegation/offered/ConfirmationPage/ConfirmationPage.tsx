@@ -42,7 +42,7 @@ export const ConfirmationPage = () => {
   const loading = useAppSelector((state) => state.delegationRequest.loading);
   const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
   const isSm = useMediaQuery('(max-width: 768px)');
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   useDocumentTitle(t('api_delegation.delegate_page_title'));
