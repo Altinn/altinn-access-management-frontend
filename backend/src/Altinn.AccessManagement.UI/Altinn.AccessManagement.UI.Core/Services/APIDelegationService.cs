@@ -62,6 +62,35 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<List<HttpResponseMessage>> CreateMaskinportenScopeDelegation(string party, ApiDelegationInput delegation)
+        {
+            var responses = new List<HttpResponseMessage>();
+
+            foreach (var org in delegation.OrgNumbers)
+            {
+                foreach (var api in delegation.ApiIdentifiers)
+                {
+                    var delegationObject = new DelegationInput
+                    {
+                        To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = org } },
+                        Rights = new List<Right>
+                        {
+                            new Right
+                            {
+                                Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = api } }
+                            }
+                        }
+                    };
+
+                    var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
+                    responses.Add(response);
+                }
+            }
+
+            return responses;
+        }
+
+        /// <inheritdoc />
         public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);

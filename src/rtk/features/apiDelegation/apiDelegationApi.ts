@@ -1,15 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
-import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+import type {
+  ApiDelegationResult,
+  DelegationAccessResult,
+} from '@/dataObjects/dtos/resourceDelegation';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { DelegableApi } from './delegableApi/delegableApiSlice';
+import { Organization } from '../lookup/lookupApi';
 
 export type ResourceReference = {
   resource: IdValuePair[];
   action?: string;
 };
+
+export interface BatchApiDelegationRequest {
+  partyId: string;
+  apis: DelegableApi[];
+  orgs: Organization[];
+}
 
 interface searchParams {
   searchString: string;
@@ -101,7 +111,33 @@ export const apiDelegationApi = createApi({
         return response.status;
       },
     }),
+    postApiDelegation: builder.mutation<ApiDelegationResult[], BatchApiDelegationRequest>({
+      query: ({ partyId, apis, orgs }) => ({
+        url: `apidelegation/${partyId}/offered/batch`,
+        method: 'POST',
+        body: JSON.stringify({
+          apiIdentifiers: apis.map((api) => api.identifier),
+          orgNumbers: orgs.map((org) => org.orgNumber),
+        }),
+      }),
+      transformResponse: (response: ApiDelegationResult[], _meta, args) => {
+        return response.map((d) => {
+          return {
+            org: d.org,
+            orgName: args.orgs.find((org) => org.orgNumber === d.org)?.name || '',
+            api: d.api,
+            apiName: args.apis.find((api) => api.identifier === d.api)?.apiName || '',
+            success: d.success,
+            message: d.message,
+          };
+        });
+      },
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
   }),
 });
 
-export const { useDelegationCheckMutation, useSearchQuery } = apiDelegationApi;
+export const { useDelegationCheckMutation, useSearchQuery, usePostApiDelegationMutation } =
+  apiDelegationApi;
