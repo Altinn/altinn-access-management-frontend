@@ -64,5 +64,11 @@ export const RefreshToken = () => {
     };
     refreshJwtToken();
     setUpEventListeners();
-  });
+    return () => {
+      window.removeEventListener('mousemove', refreshJwtToken);
+      window.removeEventListener('scroll', refreshJwtToken);
+      window.removeEventListener('onfocus', refreshJwtToken);
+      window.removeEventListener('keydown', refreshJwtToken);
+    };
+  }, []);
 };
