@@ -177,15 +177,6 @@
   justify-content: center;
 }
 
-.title,
-.subtitle {
-  color: var(--text-color) !important;
-}
-
-.title {
-  font-weight: 500 !important;
-}
-
 .title > p {
   margin: 0px;
 }
