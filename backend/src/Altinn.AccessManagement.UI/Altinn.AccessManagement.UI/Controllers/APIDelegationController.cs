@@ -210,7 +210,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for delegating a maskinporten schema resource from the reportee party to a third party organization
+        ///     Endpoint for delegating one or more maskinporten schema resource from the reportee party to one or more third party organizations
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
