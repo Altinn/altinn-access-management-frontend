@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
@@ -15,6 +16,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessManagementClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
+
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="APIDelegationService" /> class.
@@ -62,9 +68,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<HttpResponseMessage>> CreateMaskinportenScopeDelegation(string party, ApiDelegationInput delegation)
+        public async Task<List<ApiDelegationOutput>> BatchCreateMaskinportenScopeDelegation(string party, ApiDelegationInput delegation)
         {
-            var responses = new List<HttpResponseMessage>();
+            List<ApiDelegationOutput> delegationOutputs = new List<ApiDelegationOutput>();
 
             foreach (var org in delegation.OrgNumbers)
             {
@@ -83,11 +89,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     };
 
                     var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
-                    responses.Add(response);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
+                    delegationOutputs.Add(new ApiDelegationOutput(delegationOutput));
                 }
             }
 
-            return responses;
+            return delegationOutputs;
         }
 
         /// <inheritdoc />

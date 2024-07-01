@@ -221,17 +221,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var response = await _apiDelegationService.CreateMaskinportenScopeDelegation(party, delegation);
-                List<ApiDelegationOutput> delegationOutputs = new List<ApiDelegationOutput>();
-
-                foreach (var responseMessage in response)
-                {
-                    string responseContent = await responseMessage.Content.ReadAsStringAsync();
-                    var delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
-                    delegationOutputs.Add(new ApiDelegationOutput(delegationOutput));
-                }
-
-                return Ok(delegationOutputs);
+                var response = await _apiDelegationService.BatchCreateMaskinportenScopeDelegation(party, delegation);
+                return Ok(response);
             }
             catch (Exception ex)
             {
