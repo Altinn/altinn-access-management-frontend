@@ -25,7 +25,7 @@ export const RightsActionBar = ({
   defaultOpen,
   compact = false,
 }: RightsActionBarProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   const removeButton = (
     <Button

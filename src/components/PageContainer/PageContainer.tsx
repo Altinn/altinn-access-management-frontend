@@ -13,7 +13,7 @@ export interface PageContainerProps {
 }
 
 export const PageContainer = ({ children }: PageContainerProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   return (
     <div className={classes.background}>

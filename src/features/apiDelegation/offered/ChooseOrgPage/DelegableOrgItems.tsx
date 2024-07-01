@@ -22,7 +22,7 @@ export const DelegableOrgItems = ({
   setChosenItemsStatusMessage,
 }: DelegatableOrgItemsProps) => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   return (
     <ul className={common.unstyledList}>

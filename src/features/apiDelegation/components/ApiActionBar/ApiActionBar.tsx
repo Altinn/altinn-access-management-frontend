@@ -40,7 +40,7 @@ export const ApiActionBar = ({
   const [actionBarColor, setActionBarColor] = useState<'success' | 'danger' | 'neutral'>(
     variant === 'remove' ? 'success' : 'neutral',
   );
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const resourceRef: ResourceReference = { resource: api.authorizationReference };
   const partyId = getCookie('AltinnPartyId');
 

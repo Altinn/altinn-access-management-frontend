@@ -7,7 +7,7 @@ import SeagullIcon from '@/assets/Seagull.svg?react';
 import classes from '../ErrorPage.module.css';
 
 export const UnknownError = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   return (
     <div>

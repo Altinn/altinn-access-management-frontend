@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { PageWrapper } from '@/components';
 
 export const UsersPage = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
   return <PageWrapper>Hello world!</PageWrapper>;
 };

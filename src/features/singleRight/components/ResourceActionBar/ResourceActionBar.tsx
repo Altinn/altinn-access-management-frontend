@@ -45,7 +45,7 @@ export const ResourceActionBar = ({
   compact = false,
   isLoading = false,
 }: ResourceActionBarProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const previousStatus = usePrevious(status);

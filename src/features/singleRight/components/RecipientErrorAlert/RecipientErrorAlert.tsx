@@ -8,7 +8,7 @@ type RecipientErrorAlertProps = {
 };
 
 export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlertProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   if (!userUUID && !partyUUID) {
     return (

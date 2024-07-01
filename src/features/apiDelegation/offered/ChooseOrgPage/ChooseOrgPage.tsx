@@ -36,7 +36,7 @@ export const ChooseOrgPage = () => {
   const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
   const navigate = useNavigate();
 
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   const { matches: displayOrgs, error, isFetching } = useOrgSearch(overviewOrgs, searchString);
 

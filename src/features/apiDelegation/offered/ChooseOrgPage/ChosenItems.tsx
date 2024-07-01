@@ -22,7 +22,7 @@ export const ChosenItems = ({
   handleSoftRemove,
   setChosenItemsStatusMessage,
 }: ChosenItemsProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   return (
     <ul className={common.unstyledList}>
       {chosenOrgs.map((org: Organization, index: Key | null | undefined) => {

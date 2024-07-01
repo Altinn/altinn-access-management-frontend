@@ -49,7 +49,7 @@ export const OptionDisplay = ({
 }: OptionDisplayProps) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(values ?? []);
   const [sortedOptions, setSortedOptions] = useState<FilterOption[]>(options);
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   // Update selected values when there are external changes
   const prevvalues = usePrevious(values);
