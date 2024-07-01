@@ -22,6 +22,7 @@ import {
   usePostApiDelegationMutation,
 } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import classes from './ConfirmationPage.module.css';
 
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
@@ -91,7 +92,10 @@ export const ConfirmationPage = () => {
             <DelegationReceiptList items={successfulApiDelegations} />
           </>
         )}
-        <Paragraph spacing>
+        <Paragraph
+          spacing
+          className={classes.list}
+        >
           {successfulApiDelegations.length === 0
             ? t('api_delegation.receipt_page_failed_text')
             : t('api_delegation.receipt_page_bottom_text')}

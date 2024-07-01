@@ -10,12 +10,12 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <summary>
         /// Gets or sets the organization identifier.
         /// </summary>
-        public string Org { get; set; }
+        public string OrgNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the API identifier.
         /// </summary>
-        public string Api { get; set; }
+        public string ApiId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the operation was successful.
@@ -33,8 +33,8 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <param name="delegationOutput">The delegation output.</param>
         public ApiDelegationOutput(DelegationOutput delegationOutput)
         {
-            Org = delegationOutput.To[0].Value;
-            Api = delegationOutput.RightDelegationResults[0].Resource[0].Value;
+            OrgNumber = delegationOutput.To[0].Value;
+            ApiId = delegationOutput.RightDelegationResults[0].Resource[0].Value;
             Success = delegationOutput.RightDelegationResults[0].Status == "Delegated";
             Message = delegationOutput.RightDelegationResults[0].Status;
         }

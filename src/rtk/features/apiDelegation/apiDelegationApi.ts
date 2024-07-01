@@ -123,10 +123,10 @@ export const apiDelegationApi = createApi({
       transformResponse: (response: ApiDelegationResult[], _meta, args) => {
         return response.map((d) => {
           return {
-            org: d.org,
-            orgName: args.orgs.find((org) => org.orgNumber === d.org)?.name || '',
-            api: d.api,
-            apiName: args.apis.find((api) => api.identifier === d.api)?.apiName || '',
+            orgNumber: d.orgNumber,
+            orgName: args.orgs.find((org) => org.orgNumber === d.orgNumber)?.name || '',
+            apiId: d.apiId,
+            apiName: args.apis.find((api) => api.identifier === d.apiId)?.apiName || '',
             success: d.success,
             message: d.message,
           };

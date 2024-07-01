@@ -49,9 +49,9 @@ export type DelegationResult = {
 };
 
 export type ApiDelegationResult = {
-  org: string;
+  orgNumber: string;
   orgName: string;
-  api: string;
+  apiId: string;
   apiName: string;
   success: boolean;
   message: string;
