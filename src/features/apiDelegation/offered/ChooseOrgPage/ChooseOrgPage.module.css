@@ -68,6 +68,14 @@
   gap: 15px;
 }
 
+.actionBarWrapper {
+  gap: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
 @media only screen and (max-width: 768px) {
   .pageContentContainer {
     display: grid;

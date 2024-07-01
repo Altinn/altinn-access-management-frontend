@@ -2,6 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
+export interface ApiDelegation {
+  orgName: string;
+  apiName: string;
+}
+
 export interface DelegableApi {
   identifier: string;
   apiName: string;

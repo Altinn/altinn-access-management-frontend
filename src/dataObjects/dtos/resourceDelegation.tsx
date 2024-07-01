@@ -41,3 +41,18 @@ type details = {
   description: string;
   parameters: IdValuePair;
 };
+
+export type DelegationResult = {
+  from: IdValuePair;
+  to: IdValuePair;
+  delegationResult: DelegationAccessResult[];
+};
+
+export type ApiDelegationResult = {
+  org: string;
+  orgName: string;
+  api: string;
+  apiName: string;
+  success: boolean;
+  message: string;
+};

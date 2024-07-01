@@ -1,1 +1,0 @@
-export { ReceiptPage } from './ReceiptPage';
