@@ -21,22 +21,5 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// Gets or sets a value indicating whether the operation was successful.
         /// </summary>
         public bool Success { get; set; }
-
-        /// <summary>
-        /// Gets or sets the message associated with the operation result.
-        /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApiDelegationOutput"/> class.
-        /// </summary>
-        /// <param name="delegationOutput">The delegation output.</param>
-        public ApiDelegationOutput(DelegationOutput delegationOutput)
-        {
-            OrgNumber = delegationOutput.To[0].Value;
-            ApiId = delegationOutput.RightDelegationResults[0].Resource[0].Value;
-            Success = delegationOutput.RightDelegationResults[0].Status == "Delegated";
-            Message = delegationOutput.RightDelegationResults[0].Status;
-        }
     }
 }

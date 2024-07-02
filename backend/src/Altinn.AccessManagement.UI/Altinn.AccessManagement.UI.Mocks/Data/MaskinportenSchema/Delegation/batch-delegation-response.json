@@ -1,0 +1,26 @@
+[
+  {
+    "orgNumber": "810418362",
+    "apiId": "appid-402",
+    "success": true,
+    "message": "Delegated"
+  },
+  {
+    "orgNumber": "810418362",
+    "apiId": "appid-400",
+    "success": true,
+    "message": "Delegated"
+  },
+  {
+    "orgNumber": "810418532",
+    "apiId": "appid-402",
+    "success": true,
+    "message": "Delegated"
+  },
+  {
+    "orgNumber": "810418532",
+    "apiId": "appid-400",
+    "success": true,
+    "message": "Delegated"
+  }
+]

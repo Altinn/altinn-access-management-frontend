@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<APIDelegationController> _factory;
 
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, IncludeFields = true };
         private readonly string unitTestFolder;
 
         /// <summary>
@@ -206,6 +206,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
+
+        /// <summary>
+        /// Tests the batch delegation of Maskinporten schema resources to various organizations by an authenticated user (DAGL) for multiple reportee parties.
+        /// Verifies that a successful delegation returns a 200 OK status code with a response body containing the expected delegated rights for all parties.
+        /// </summary>
+        [Fact]
+        public async Task PostBatchMaskinportenSchemaDelegation_DAGL_Success()
+        {
+
+            string fromParty = "50005545";
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(20000490, 50002598));
+
+            List<ApiDelegationOutput> expectedResponse = GetExpectedBatchResponse("Delegation", "batch-delegation-response");
+            StreamContent requestContent = GetRequestContent("Delegation", "Input_Batch");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{fromParty}/offered/batch", requestContent);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<ApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<ApiDelegationOutput>>(responseContent, options);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+
         /// <summary>
         ///     Test case: RevokeOfferedMaskinportenScopeDelegation for the reportee party 50004222 of the nav_aa_distribution
         ///     maskinporten schema resource from the resource registry,
@@ -256,7 +283,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             int reporteePartyId = 50076002;
             string resourceId = "default";
-                
+
             string folderPath = Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema", "DelegationCheck", "scope-access-schema");
             string fullPath = Path.Combine(folderPath, resourceId + ".json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
@@ -267,11 +294,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             List<DelegationResponseData> actualResponse = JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, options);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
-        
+
         /// <summary>
         ///     Test case: Tests if response has insufficient access level
         ///     Expected: Resource has insufficient access level
@@ -294,7 +321,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             List<DelegationResponseData> actualResponse = JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, options);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
@@ -321,6 +348,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string responsePath = $"Data/MaskinportenSchema/{operation}/{resourceId}.json";
             string content = File.ReadAllText(responsePath);
             return (DelegationOutput)JsonSerializer.Deserialize(content, typeof(DelegationOutput), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        class BatchDelegationOutput
+        {
+            public List<ApiDelegationOutput> result { get; set; }
+        }
+
+
+        private static List<ApiDelegationOutput> GetExpectedBatchResponse(string operation, string resourceId)
+        {
+            string responsePath = $"Data/MaskinportenSchema/{operation}/{resourceId}.json";
+            string content = File.ReadAllText(responsePath);
+
+            var res = (List<ApiDelegationOutput>)JsonSerializer.Deserialize(content, typeof(List<ApiDelegationOutput>), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return res;
         }
 
         private static List<MaskinportenSchemaDelegationFE> GetExpectedInboundDelegationsForParty(int covererdByPartyId)

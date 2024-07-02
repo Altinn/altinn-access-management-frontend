@@ -87,11 +87,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             }
                         }
                     };
+                    try
+                    {
+                        var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
+                        string responseContent = await response.Content.ReadAsStringAsync();
 
-                    var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    var delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(responseContent, _serializerOptions);
-                    delegationOutputs.Add(new ApiDelegationOutput(delegationOutput));
+                        delegationOutputs.Add(new ApiDelegationOutput()
+                        {
+                            OrgNumber = org,
+                            ApiId = api,
+                            Success = response.StatusCode == System.Net.HttpStatusCode.Created
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine(e.Message);
+                        delegationOutputs.Add(new ApiDelegationOutput()
+                        {
+                            OrgNumber = org,
+                            ApiId = api,
+                            Success = false,
+                        });
+                    }
                 }
             }
 

@@ -5,7 +5,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
     /// <summary>
     ///     Response model for the result of a delegation of one or more rights to a recipient.
     /// </summary>
-    public class DelegationOutput
+    public class DelegationOutput 
     {
         /// <summary>
         ///     Attribute id and value for the party delegating the rights
