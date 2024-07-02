@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<APIDelegationController> _factory;
 
-        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, IncludeFields = true };
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string unitTestFolder;
 
         /// <summary>
