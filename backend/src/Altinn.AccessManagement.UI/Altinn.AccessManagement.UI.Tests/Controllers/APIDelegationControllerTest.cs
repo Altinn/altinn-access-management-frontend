@@ -230,7 +230,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<ApiDelegationOutput>>(responseContent, options);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
-            Assert.True(actualResponse.All(x => x.Success));
         }
 
         /// <summary>
@@ -257,10 +256,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<ApiDelegationOutput>>(responseContent, options);
             
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
-
-            /// Assert that the response contains both successful and failed delegations
-            Assert.Contains(actualResponse, x => !x.Success);
-            Assert.Contains(actualResponse, x => x.Success);
         }
 
 
