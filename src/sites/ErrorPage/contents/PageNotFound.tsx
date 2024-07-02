@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { Paragraph, Heading } from '@digdir/designsystemet-react';
+import { Paragraph, Heading, Link } from '@digdir/designsystemet-react';
 
 import SeagullIcon from '@/assets/Seagull.svg?react';
 
@@ -34,12 +34,7 @@ export const PageNotFound = () => {
             spacing
             className={classes.contentText}
           >
-            <a
-              className={classes.link}
-              href='https://www.altinn.no/ui/MessageBox'
-            >
-              {t('error_page.go_to_inbox')}
-            </a>
+            <Link href='https://www.altinn.no/ui/MessageBox'>{t('error_page.go_to_inbox')}</Link>
           </Paragraph>
 
           <Paragraph
@@ -47,12 +42,7 @@ export const PageNotFound = () => {
             spacing
             className={classes.contentText}
           >
-            <a
-              className={classes.link}
-              href='https://www.altinn.no/ui/Profile'
-            >
-              {t('error_page.go_to_profile')}
-            </a>
+            <Link href='https://www.altinn.no/ui/Profile'>{t('error_page.go_to_profile')}</Link>
           </Paragraph>
 
           <Paragraph
@@ -60,12 +50,9 @@ export const PageNotFound = () => {
             spacing
             className={classes.contentText}
           >
-            <a
-              className={classes.link}
-              href='https://www.altinn.no/skjemaoversikt/'
-            >
+            <Link href='https://www.altinn.no/skjemaoversikt/'>
               {t('error_page.find_and_submit_scheme')}
-            </a>
+            </Link>
           </Paragraph>
 
           <Paragraph

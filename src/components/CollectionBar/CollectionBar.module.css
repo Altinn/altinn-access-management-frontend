@@ -2,7 +2,7 @@
   display: flex;
   gap: 2px;
   align-items: center;
-  margin-right: 2rem !important;
+  margin-right: 2rem;
 }
 
 .counterText.dark {

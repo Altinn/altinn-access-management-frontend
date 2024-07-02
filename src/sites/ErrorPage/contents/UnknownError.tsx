@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { Paragraph, Heading } from '@digdir/designsystemet-react';
+import { Paragraph, Heading, Link } from '@digdir/designsystemet-react';
 
 import SeagullIcon from '@/assets/Seagull.svg?react';
 
@@ -41,12 +41,7 @@ export const UnknownError = () => {
             spacing
             className={classes.contentText}
           >
-            <a
-              className={classes.link}
-              href='https://www.altinn.no/help'
-            >
-              {t('error_page.go_to_help')}
-            </a>
+            <Link href='https://www.altinn.no/help'>{t('error_page.go_to_help')}</Link>
           </Paragraph>
         </div>
         <div className={classes.rightContainer}>

@@ -1,8 +1,8 @@
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import classes from './ErrorPanel.module.css';
+import { Alert } from '@digdir/designsystemet-react';
 
 export interface ErrorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -22,12 +22,12 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
   const time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
   return (
-    <Panel
+    <Alert
       title={title}
-      variant={PanelVariant.Error}
-      forceMobileLayout
+      severity='danger'
+      {...props}
     >
-      <div {...props}>
+      <div>
         <p className={classes.errorListItem}>
           {t('common.error_status_code')}: {statusCode}
         </p>
@@ -44,6 +44,6 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
           {t('common.time')}: {time}
         </p>
       </div>
-    </Panel>
+    </Alert>
   );
 };
