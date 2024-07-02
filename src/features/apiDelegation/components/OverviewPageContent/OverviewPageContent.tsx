@@ -40,7 +40,7 @@ export const OverviewPageContent = ({
 }: OverviewPageContentInterface) => {
   const [saveDisabled, setSaveDisabled] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);

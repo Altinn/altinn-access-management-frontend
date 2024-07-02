@@ -122,7 +122,7 @@
     "search_for_api_no_result": "0 treff",
     "description": "Skildring",
     "additional_description": "Ytterlegare skildring",
-    "data_retrieval_failed": "Noke feilet, prøv å laste inn sida på ny.",
+    "data_retrieval_failed": "Noko feila, prøv å laste sida på ny",
     "orgs_not_chosen_subtitle": "Kunne ikkje henta ut valde organisasjonar. Gå tilbake til førre side for å velja organisasjonar ved å klikka på forrige-knappen nedst til høgre.",
     "delegations_not_registered": "Vala dine vart ikkje registrerte. Vennlegast start delegeringsprosessen på nytt.",
     "failed_delegations": "Desse API-delegeringene gjekk gale og vart derfor ikkje tildelte",
@@ -190,5 +190,8 @@
     "faulty_recipient_error_message": "Oppgjeven mottakar kan ikkje delegere til. Ver venleg og gå tilbake til profilsida og vel ein annan. Mottakar må vere ein organisasjon, ein verksemdsbrukar, eller ein person registrert med fødselsnummer. Sjølvregistrerte brukarar kan ikkje delegere til.",
     "no_resources chosen": "Ingen valde tenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde."
+  },
+  "users_page": {
+    "page_title": "Brukare og grupper - Altinn"
   }
 }

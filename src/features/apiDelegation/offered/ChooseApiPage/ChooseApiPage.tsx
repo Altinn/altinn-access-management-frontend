@@ -39,7 +39,7 @@ export const ChooseApiPage = () => {
   const [showSkeleton, setShowSkeleton] = useState(true);
   const [filters, setFilters] = useState<string[]>([]);
   const isSm = useMediaQuery('(max-width: 768px)');
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const partyId = getCookie('AltinnPartyId');
   const navigate = useNavigate();
   const [urlParams, setUrlParams] = useSearchParams();

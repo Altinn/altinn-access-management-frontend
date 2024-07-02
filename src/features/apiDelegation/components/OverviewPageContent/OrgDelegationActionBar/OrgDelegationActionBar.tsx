@@ -32,7 +32,7 @@ export const OrgDelegationActionBar = ({
   setScreenreaderMsg,
 }: OrgDelegationActionBarProps) => {
   const [open, setOpen] = useState(false);
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const numberOfAccesses = organization.apiList.length.toString();
   const dispatch = useAppDispatch();
   const isSm = useMediaQuery('(max-width: 768px)');

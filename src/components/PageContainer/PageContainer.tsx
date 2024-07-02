@@ -11,10 +11,10 @@ export interface PageContainerProps {
 }
 
 export const PageContainer = ({ children }: PageContainerProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   return (
-    <div className={classes.pageMargin}>
+    <div className={classes.background}>
       <div className={classes.pageContainer}>
         <UserInfoBar />
         <div className={classes.closeButtonContainer}>

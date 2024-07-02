@@ -48,7 +48,7 @@ export const RightsActionBarContent = ({
   serviceIdentifier,
   serviceType,
 }: RightsActionBarContentProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const hasUndelegableRights =
     rights.some((r) => r.delegable === false) && serviceType !== 'AltinnApp';
   const [errorList, setErrorList] = useState<string[]>([]);

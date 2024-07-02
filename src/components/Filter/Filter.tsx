@@ -88,7 +88,7 @@ export const Filter = ({
   const [checkedFilters, setCheckedFilters] = useState<string[]>(values ?? []);
   const [hasChanges, setHasChanges] = useState(false);
   const filterButtonID = useId();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   // Update selected values when there are external changes
   const prevvalues = usePrevious(values);

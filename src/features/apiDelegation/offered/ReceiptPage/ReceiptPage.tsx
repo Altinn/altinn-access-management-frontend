@@ -31,7 +31,7 @@ export const ReceiptPage = () => {
   const successfulApiDelegations = useAppSelector(
     (state) => state.delegationRequest.succesfulApiDelegations,
   );
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isSm = useMediaQuery('(max-width: 768px)');
   const navigate = useNavigate();

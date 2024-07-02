@@ -18,7 +18,7 @@ export const useFetchRecipientInfo = (
   error: boolean;
   isLoading: boolean;
 } => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   const [recipientName, setRecipientName] = useState<string | undefined>(undefined);
   const [userID, setUserID] = useState('');

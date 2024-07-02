@@ -11,7 +11,7 @@ import { UnknownError } from './contents/UnknownError';
 import classes from './ErrorPage.module.css';
 
 export const ErrorPage = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const error: any = useRouteError();
   const timestamp = new Date();
 

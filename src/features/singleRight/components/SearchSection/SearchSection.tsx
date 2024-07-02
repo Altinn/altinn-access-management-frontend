@@ -44,7 +44,7 @@ export interface SearchSectionParams {
 const searchResultsPerPage = 10;
 
 export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
@@ -191,9 +191,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     }
 
     return (
-      <li>
+      <li key={resource.identifier ?? index}>
         <ResourceActionBar
-          key={resource.identifier ?? index}
           title={resource.title}
           subtitle={resource.resourceOwnerName}
           status={status ?? ServiceStatus.Unchecked}

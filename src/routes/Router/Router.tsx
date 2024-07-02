@@ -13,7 +13,9 @@ import { ChooseServicePage as RequestChooseServicePage } from '@/features/single
 import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
 import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
 
-import { GeneralPath, SingleRightPath, ApiDelegationPath } from '../paths';
+import { UsersPage } from '@/features/amUI/users/UsersPage';
+
+import { GeneralPath, SingleRightPath, ApiDelegationPath, amUIPath } from '../paths';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -81,6 +83,10 @@ export const Router = createBrowserRouter(
           element={<RequestChooseServicePage />}
         />
       </Route>
+      <Route
+        path={amUIPath.Users}
+        element={<UsersPage />}
+      ></Route>
     </Route>,
   ),
   { basename: GeneralPath.BasePath },
