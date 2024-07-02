@@ -128,7 +128,6 @@ export const apiDelegationApi = createApi({
             apiId: d.apiId,
             apiName: args.apis.find((api) => api.identifier === d.apiId)?.apiName || '',
             success: d.success,
-            message: d.message,
           };
         });
       },

@@ -54,5 +54,4 @@ export type ApiDelegationResult = {
   apiId: string;
   apiName: string;
   success: boolean;
-  message: string;
 };
