@@ -230,6 +230,37 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<ApiDelegationOutput>>(responseContent, options);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+            Assert.True(actualResponse.All(x => x.Success));
+        }
+
+        /// <summary>
+        /// Tests the partial success of batch delegation of resources to multiple organizations by an authenticated user, where some delegations succeed while others fail.
+        /// Verifies that the response appropriately reflects the mixed outcome, indicating both the successfully delegated rights and the failures, along with corresponding status codes for each.
+        /// </summary>
+        [Fact]
+        public async Task PostBatchMaskinportenSchemaDelegation_DAGL_PartialSuccess()
+        {
+
+            string fromParty = "50005545";
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(20000490, 50002598));
+
+            List<ApiDelegationOutput> expectedResponse = GetExpectedBatchResponse("Delegation", "batch-delegation-mixed-response");
+            StreamContent requestContent = GetRequestContent("Delegation", "Input_Batch_Invalid");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{fromParty}/offered/batch", requestContent);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<ApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<ApiDelegationOutput>>(responseContent, options);
+            
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+
+            /// Assert that the response contains both successful and failed delegations
+            Assert.Contains(actualResponse, x => !x.Success);
+            Assert.Contains(actualResponse, x => x.Success);
         }
 
 
@@ -343,9 +374,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return content;
         }
 
-        private static DelegationOutput GetExpectedResponse(string operation, string resourceId)
+        private static DelegationOutput GetExpectedResponse(string operation, string fileName)
         {
-            string responsePath = $"Data/MaskinportenSchema/{operation}/{resourceId}.json";
+            string responsePath = $"Data/MaskinportenSchema/{operation}/{fileName}.json";
             string content = File.ReadAllText(responsePath);
             return (DelegationOutput)JsonSerializer.Deserialize(content, typeof(DelegationOutput), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }

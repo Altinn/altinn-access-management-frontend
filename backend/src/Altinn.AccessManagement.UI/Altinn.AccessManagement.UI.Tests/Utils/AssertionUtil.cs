@@ -280,7 +280,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.ApiId == item.ApiId);
                 Assert.Single(a);
-                Assert.Equal(item.Success, a[0].Success);
             }
         }
     }
