@@ -219,15 +219,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("{party}/offered/batch")]
         public async Task<ActionResult<List<ApiDelegationOutput>>> CreateMaskinportenDelegationBatch([FromRoute] string party, [FromBody] ApiDelegationInput delegation)
         {
-            try
-            {
-                var response = await _apiDelegationService.BatchCreateMaskinportenScopeDelegation(party, delegation);
-                return Ok(response);
-            }
-            catch
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
-            }
+            var response = await _apiDelegationService.BatchCreateMaskinportenScopeDelegation(party, delegation);
+            return Ok(response);
         }
 
         /// <summary>
