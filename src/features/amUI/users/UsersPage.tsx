@@ -3,8 +3,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTranslation } from 'react-i18next';
 
 import { PageWrapper } from '@/components';
-import { useAppSelector } from '@/rtk/app/hooks';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { Heading } from '@digdir/designsystemet-react';
 
 export const UsersPage = () => {
