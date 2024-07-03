@@ -224,7 +224,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 var response = await _apiDelegationService.BatchCreateMaskinportenScopeDelegation(party, delegation);
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
