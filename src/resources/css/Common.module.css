@@ -1,11 +1,13 @@
 @import '@digdir/design-system-tokens/brand/altinn/tokens.css';
 
-body {
-  margin: 0;
-}
-
 :root {
   font-family: 'Inter', sans-serif;
+  --backgroundColorA2: #1eadf7;
+  --backgroundColorA3: #e6eff8;
+}
+
+body {
+  margin: 0;
 }
 
 @supports (font-variation-settings: normal) {

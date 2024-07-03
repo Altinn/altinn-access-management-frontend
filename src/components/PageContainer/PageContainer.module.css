@@ -1,8 +1,13 @@
+.background {
+  background-color: #1eadf7;
+  min-height: 100vh;
+}
+
 .pageContainer {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1rem;
-  background-color: #1eadf7;
+  padding-top: 4px;
+  padding-bottom: 4px;
   min-width: 280px;
   max-width: 1056px;
   width: 100%;
@@ -36,19 +41,19 @@
 }
 
 @media only screen and (min-width: 375px) {
-  .pageMargin {
-    margin: 0 8px 8px 8px;
+  .background {
+    padding: 4px 8px;
   }
 }
 
 @media only screen and (min-width: 769px) {
-  .pageMargin {
-    margin: 0 16px 16px 16px;
+  .background {
+    padding: 4px 16px;
   }
 }
 
 @media only screen and (min-width: 992px) {
-  .pageMargin {
-    margin: 20px 40px 40px 40px;
+  .background {
+    padding: 4px 40px;
   }
 }

@@ -16,7 +16,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
   const { t } = useTranslation('common');
 
   return (
-    <div className={classes.pageMargin}>
+    <div className={classes.background}>
       <div className={classes.pageContainer}>
         <UserInfoBar />
         <div className={classes.closeButtonContainer}>

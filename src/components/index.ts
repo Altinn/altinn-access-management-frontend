@@ -2,6 +2,7 @@ export { CompactDeletableListItem, ListColor } from './CompactDeletableListItem'
 export { DeletableListItem } from './DeletableListItem';
 export { Line } from './Line';
 export { PageContainer } from './PageContainer';
+export { PageWrapper } from './PageWrapper/PageWrapper';
 export { UserInfoBar } from './UserInfoBar/UserInfoBar';
 export { ActionBar, type ActionBarProps } from './ActionBar';
 export { Page, PageHeader, PageContent, type PageColor, type PageSize } from './Page';
