@@ -177,15 +177,6 @@
   justify-content: center;
 }
 
-.title > p {
-  margin: 0px;
-}
-
-.actionBarButtonContainer {
-  display: flex;
-  height: 100%;
-}
-
 .title,
 .subtitle {
   color: var(--text-color);
@@ -193,4 +184,13 @@
 
 .title {
   font-weight: 500;
+}
+
+.title > p {
+  margin: 0px;
+}
+
+.actionBarButtonContainer {
+  display: flex;
+  height: 100%;
 }
