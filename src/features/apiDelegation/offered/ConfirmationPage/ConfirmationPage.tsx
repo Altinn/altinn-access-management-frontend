@@ -32,7 +32,8 @@ export const ConfirmationPage = () => {
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
 
   const isSm = useMediaQuery('(max-width: 768px)');
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
+
   useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   const partyId = getCookie('AltinnPartyId');
