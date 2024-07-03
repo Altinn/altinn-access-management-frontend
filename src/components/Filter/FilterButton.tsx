@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { forwardRef, type ReactNode } from 'react';
 import cn from 'classnames';
-import { ChevronDownIcon, FilterIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 
 import classes from './FilterButton.module.css';
 import { Button } from '@digdir/designsystemet-react';
 
 export interface FilterButtonProps {
   onClick?: () => void;
+  iconLeft?: ReactNode;
   id?: string;
   className?: string;
   children?: ReactNode;
@@ -20,7 +21,7 @@ export interface FilterButtonProps {
  *
  * @component
  * @example
- * <FilterButton onClick={handleClick} isOpen={true} numActiveFilters={3}>
+ * <FilterButton onClick={handleClick} iconLeft={<FilterIcon />} isOpen={true} numActiveFilters={3}>
  *   Filter
  * </FilterButton>
  *
@@ -33,7 +34,10 @@ export interface FilterButtonProps {
  * @returns {JSX.Element} The rendered FilterButton component.
  */
 export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
-  ({ onClick, id, className, children, isOpen, numActiveFilters = 0, ...restHTMLProps }, ref) => {
+  (
+    { onClick, iconLeft, id, className, children, isOpen, numActiveFilters = 0, ...restHTMLProps },
+    ref,
+  ) => {
     const activeNotification = () => {
       return (
         numActiveFilters !== 0 && (
@@ -56,12 +60,14 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
           className={classes.filterButton}
           onClick={onClick}
         >
-          <FilterIcon className={classes.icon} />
+          {iconLeft && <div className={classes.iconContainer}>{iconLeft}</div>}
           {children}
-          <ChevronDownIcon
-            className={cn(classes.icon, classes.chevron, { [classes.open]: isOpen })}
-            aria-hidden
-          />
+          <div className={classes.iconContainer}>
+            <ChevronDownIcon
+              className={cn(classes.chevron, { [classes.open]: isOpen })}
+              aria-hidden
+            />
+          </div>
         </Button>
         {activeNotification()}
       </div>

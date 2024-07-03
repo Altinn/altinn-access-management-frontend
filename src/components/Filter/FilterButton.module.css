@@ -1,4 +1,8 @@
-.icon {
+.iconContainer {
+  display: flex;
+}
+
+.iconContainer > * {
   --component-button-size-icon-small: 1.5rem;
   min-height: var(--component-button-size-icon-small);
   min-width: var(--component-button-size-icon-small);
@@ -10,12 +14,14 @@
 
 .filterButton {
   background-color: var(--fds-semantic-surface-neutral-subtle);
+  padding: 0 18px;
   color: #000;
   border-radius: 50px;
   gap: 2px;
   min-height: 36px;
   max-height: 36px;
   font-size: 14px;
+  font-weight: 500;
   max-width: 300px;
 }
 
