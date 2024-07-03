@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
@@ -15,6 +16,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessManagementClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
+
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="APIDelegationService" /> class.
@@ -59,6 +65,54 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
         {
             return await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegation);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<ApiDelegationOutput>> BatchCreateMaskinportenScopeDelegation(string party, ApiDelegationInput delegation)
+        {
+            List<ApiDelegationOutput> delegationOutputs = new List<ApiDelegationOutput>();
+
+            foreach (var org in delegation.OrgNumbers)
+            {
+                foreach (var api in delegation.ApiIdentifiers)
+                {
+                    var delegationObject = new DelegationInput
+                    {
+                        To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = org } },
+                        Rights = new List<Right>
+                        {
+                            new Right
+                            {
+                                Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = api } }
+                            }
+                        }
+                    };
+                    try
+                    {
+                        var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
+                        string responseContent = await response.Content.ReadAsStringAsync();
+
+                        delegationOutputs.Add(new ApiDelegationOutput()
+                        {
+                            OrgNumber = org,
+                            ApiId = api,
+                            Success = response.StatusCode == System.Net.HttpStatusCode.Created
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine(e.Message);
+                        delegationOutputs.Add(new ApiDelegationOutput()
+                        {
+                            OrgNumber = org,
+                            ApiId = api,
+                            Success = false,
+                        });
+                    }
+                }
+            }
+
+            return delegationOutputs;
         }
 
         /// <inheritdoc />

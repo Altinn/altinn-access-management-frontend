@@ -1,0 +1,22 @@
+[
+  {
+    "orgNumber": "810418362",
+    "apiId": "appid-402",
+    "success": true
+  },
+  {
+    "orgNumber": "123456789",
+    "apiId": "appid-402",
+    "success": true
+  },
+  {
+    "orgNumber": "123456789",
+    "apiId": "invalid_org_id",
+    "success": false
+  },
+  {
+    "orgNumber": "810418362",
+    "apiId": "invalid_org_id",
+    "success": false
+  }
+]
