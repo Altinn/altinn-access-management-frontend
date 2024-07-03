@@ -17,9 +17,9 @@ export const UserInfoBar = () => {
       </div>
       <div className={classes.userInfoContent}>
         <div className={classes.userInfoTextContainer}>
-          {!userIsFetching && <p className={classes.userInfoText}>{userData.name}</p>}
+          {!userIsFetching && <span className={classes.userInfoText}>{userData.name}</span>}
           {!reporteeFetching && !userIsFetching && userData?.name !== reporteeData?.name && (
-            <p className={classes.userInfoText}>for {reporteeData.name}</p>
+            <span className={classes.userInfoText}>for {reporteeData.name}</span>
           )}
         </div>
         <div className={classes.companyIconContainer}>
