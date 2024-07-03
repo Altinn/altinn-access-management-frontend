@@ -41,9 +41,16 @@ export const ChooseOrgInfoPanel = ({
     return (
       <Alert
         severity='danger'
-        title={String(t('api_delegation.buisness_search_notfound_title'))}
+        size='lg'
       >
-        <div>
+        <Heading
+          level={2}
+          size='sm'
+          spacing
+        >
+          {t('api_delegation.buisness_search_notfound_title')}
+        </Heading>
+        <Paragraph size='sm'>
           {t('api_delegation.buisness_search_notfound_content')}{' '}
           <Link
             className={classes.link}
@@ -53,7 +60,7 @@ export const ChooseOrgInfoPanel = ({
           >
             {t('common.broennoeysund_register')}
           </Link>
-        </div>
+        </Paragraph>
       </Alert>
     );
   } else if (!searchLoading && promptOrgNumber) {

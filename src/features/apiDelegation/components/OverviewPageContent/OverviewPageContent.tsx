@@ -1,4 +1,4 @@
-import { Alert, Button, Link, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Link, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -192,9 +192,15 @@ export const OverviewPageContent = ({
         </div>
       )}
       <Alert
-        title={t('api_delegation.card_title')}
         severity='info'
+        size='lg'
       >
+        <Heading
+          level={2}
+          size='sm'
+        >
+          {t('api_delegation.card_title')}
+        </Heading>
         <Paragraph>
           {t('api_delegation.api_panel_content')}{' '}
           <Link
