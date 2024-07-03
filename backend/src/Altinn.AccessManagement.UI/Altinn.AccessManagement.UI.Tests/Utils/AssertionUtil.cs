@@ -189,7 +189,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.Equal(expected[i].ContactPage, actual[i].ContactPage);
             }
         }
-        
+
         /// <summary>
         ///     Assert that two Lists of <see cref="ResourceOwnerFE" /> have the same property in the same positions.
         /// </summary>
@@ -268,6 +268,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Value, actual.Value);
+        }
+
+        public static void AssertEqual(List<ApiDelegationOutput> expected, List<ApiDelegationOutput> actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Count, actual.Count);
+            foreach (var item in expected)
+            {
+                var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.ApiId == item.ApiId && c.Success == item.Success);
+                Assert.Single(a);
+            }
         }
     }
 }

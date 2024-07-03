@@ -121,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NoContent();
                 }
-                
+
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return NoContent();
                 }
-                
+
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
@@ -205,6 +205,27 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during delegation of maskinportenschema");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for delegating one or more maskinporten schema resource from the reportee party to one or more third party organizations
+        /// </summary>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("{party}/offered/batch")]
+        public async Task<ActionResult<List<ApiDelegationOutput>>> CreateMaskinportenDelegationBatch([FromRoute] string party, [FromBody] ApiDelegationInput delegation)
+        {
+            try
+            {
+                var response = await _apiDelegationService.BatchCreateMaskinportenScopeDelegation(party, delegation);
+                return Ok(response);
+            }
+            catch
+            {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

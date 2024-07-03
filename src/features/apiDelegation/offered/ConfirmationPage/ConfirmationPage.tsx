@@ -1,125 +1,125 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import type { Key } from 'react';
-import { useEffect, useState } from 'react';
-import { Buldings3Icon, CogIcon } from '@navikt/aksel-icons';
-import { Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
 import {
-  CompactDeletableListItem,
   GroupElements,
   Page,
   PageContainer,
   PageContent,
   PageHeader,
   RestartPrompter,
-  BorderedList,
 } from '@/components';
-import type {
-  ApiDelegation,
-  DelegationRequest,
-} from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
-import {
-  postApiDelegation,
-  setBatchPostSize,
-} from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
-import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import type { Organization } from '@/rtk/features/lookup/lookupApi';
-import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
+import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import {
+  BatchApiDelegationRequest,
+  usePostApiDelegationMutation,
+} from '@/rtk/features/apiDelegation/apiDelegationApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 import classes from './ConfirmationPage.module.css';
+
+import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
+import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
 
 export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
-  const loading = useAppSelector((state) => state.delegationRequest.loading);
-  const [isProcessingDelegations, setIsProcessingDelegations] = useState(false);
+
   const isSm = useMediaQuery('(max-width: 768px)');
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+
   useDocumentTitle(t('api_delegation.delegate_page_title'));
 
-  useEffect(() => {
-    if (!loading) {
-      navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Receipt);
-    }
-  }, [loading]);
+  const partyId = getCookie('AltinnPartyId');
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const handleConfirm = () => {
-    setIsProcessingDelegations(true);
-    const batchSize = chosenOrgs.length * chosenApis.length;
-    dispatch(setBatchPostSize(batchSize));
-    for (const org of chosenOrgs) {
-      for (const api of chosenApis) {
-        const request: DelegationRequest = {
-          apiIdentifier: api.identifier,
-          apiName: api.apiName,
-          orgName: org.name,
-          orgNr: org.orgNumber,
-        };
-        void dispatch(postApiDelegation(request));
-      }
-    }
+  const [postApiDelegation, { data, isLoading, isError }] = usePostApiDelegationMutation();
+
+  const successfulApiDelegations = React.useMemo(
+    () => data?.filter((d) => d.success) || [],
+    [data],
+  );
+  const failedApiDelegations = React.useMemo(() => data?.filter((d) => !d.success) || [], [data]);
+
+  const handleConfirm = async () => {
+    const request: BatchApiDelegationRequest = {
+      partyId,
+      apis: chosenApis,
+      orgs: chosenOrgs,
+    };
+    postApiDelegation(request);
   };
 
-  const delegableApiList = () => {
+  const navigateToOverview = () => {
+    dispatch(setOveviewToReload());
+    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
+  };
+
+  const delegationRecieptContent = () => {
     return (
-      <div className={classes.listContainer}>
-        <BorderedList>
-          {chosenApis?.map((api: DelegableApi | ApiDelegation, index: Key) => (
-            <CompactDeletableListItem
-              key={index}
-              startIcon={<CogIcon />}
-              removeCallback={chosenApis.length > 1 ? () => dispatch(softRemoveApi(api)) : null}
-              leftText={api.apiName}
-              middleText={api.orgName}
-            ></CompactDeletableListItem>
-          ))}
-        </BorderedList>
-      </div>
+      <>
+        {failedApiDelegations.length > 0 && (
+          <>
+            <Heading
+              size='medium'
+              level={2}
+              spacing
+            >
+              {t('api_delegation.failed_delegations')}
+            </Heading>
+            <DelegationReceiptList
+              items={failedApiDelegations}
+              contentColor={ListTextColor.error}
+            />
+          </>
+        )}
+        {successfulApiDelegations.length > 0 && (
+          <>
+            <Heading
+              size='medium'
+              level={2}
+              spacing
+            >
+              {t('api_delegation.succesful_delegations')}
+            </Heading>
+            <DelegationReceiptList items={successfulApiDelegations} />
+          </>
+        )}
+        <Paragraph
+          spacing
+          className={classes.list}
+        >
+          {successfulApiDelegations.length === 0
+            ? t('api_delegation.receipt_page_failed_text')
+            : t('api_delegation.receipt_page_bottom_text')}
+        </Paragraph>
+        <Button
+          color='first'
+          variant='primary'
+          onClick={navigateToOverview}
+          fullWidth={isSm}
+        >
+          {t('api_delegation.receipt_page_main_button')}
+        </Button>
+      </>
     );
   };
 
-  const delegableOrgList = () => {
-    return (
-      <div className={classes.listContainer}>
-        <BorderedList>
-          {chosenOrgs?.map((org: Organization, index: Key | null | undefined) => (
-            <CompactDeletableListItem
-              key={index}
-              startIcon={<Buldings3Icon />}
-              removeCallback={chosenOrgs.length > 1 ? () => dispatch(removeOrg(org)) : null}
-              leftText={org.name}
-              middleText={t('common.org_nr') + ' ' + org.orgNumber}
-            ></CompactDeletableListItem>
-          ))}
-        </BorderedList>
-      </div>
-    );
-  };
-
-  const showTopSection = () => {
-    return chosenApis !== null && chosenApis !== undefined && chosenApis?.length > 0;
-  };
-
-  const showBottomSection = () => {
-    return chosenOrgs !== null && chosenOrgs !== undefined && chosenOrgs?.length > 0;
-  };
-
-  const showErrorPanel = () => {
-    return !showTopSection() && !showBottomSection();
+  const shouldShowErrorPanel = () => {
+    return (!chosenApis || chosenApis.length === 0) && (!chosenOrgs || chosenOrgs.length === 0);
   };
 
   const delegationContent = () => {
-    return (
+    return data && data.length > 0 ? (
+      delegationRecieptContent()
+    ) : (
       <>
         <Heading
           size='medium'
@@ -127,14 +127,14 @@ export const ConfirmationPage = () => {
         >
           {t('api_delegation.confirmation_page_content_top_text')}
         </Heading>
-        {delegableApiList()}
+        <DelegableApiList />
         <Heading
           size='medium'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_second_text')}
         </Heading>
-        {delegableOrgList()}
+        <DelegableOrgList />
         <Paragraph size='large'>
           {t('api_delegation.confirmation_page_content_bottom_text')}
         </Paragraph>
@@ -156,7 +156,7 @@ export const ConfirmationPage = () => {
             color={'success'}
             fullWidth={isSm}
           >
-            {isProcessingDelegations && (
+            {isLoading && (
               <Spinner
                 title={t('common.loading')}
                 variant='interaction'
@@ -173,12 +173,18 @@ export const ConfirmationPage = () => {
     <div>
       <PageContainer>
         <Page
-          color={'dark'}
+          color={
+            failedApiDelegations.length > 0
+              ? 'danger'
+              : successfulApiDelegations.length > 0
+                ? 'success'
+                : 'dark'
+          }
           size={isSm ? 'small' : 'medium'}
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
-            {showErrorPanel() ? (
+            {shouldShowErrorPanel() ? (
               <RestartPrompter
                 spacingBottom
                 restartPath={
@@ -189,6 +195,15 @@ export const ConfirmationPage = () => {
               />
             ) : (
               delegationContent()
+            )}
+            {isError && (
+              <Alert
+                title={t('common.general_error_title')}
+                severity='danger'
+              >
+                <Heading size='xsmall'>{t('common.general_error_title')}</Heading>
+                {`${t('common.general_error_paragraph')}`}
+              </Alert>
             )}
           </PageContent>
         </Page>

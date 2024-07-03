@@ -6,7 +6,6 @@ import * as React from 'react';
 import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { resetDelegationRequests } from '@/rtk/features/apiDelegation/delegationRequest/delegationRequestSlice';
 import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import {
   fetchOverviewOrgsOffered,
@@ -61,7 +60,6 @@ export const OverviewPageContent = ({
     }
     handleSaveDisabled();
     dispatch(resetState());
-    dispatch(resetDelegationRequests());
     dispatch(resetChosenApis());
   }, [overviewOrgs, error]);
 
