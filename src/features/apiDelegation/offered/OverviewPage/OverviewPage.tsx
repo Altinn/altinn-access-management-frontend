@@ -10,7 +10,7 @@ import { OverviewPageContent } from '../../components/OverviewPageContent';
 import { LayoutState } from '../../components/LayoutState';
 
 export const OverviewPage = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
   useDocumentTitle(t('api_delegation.delegate_page_title'));
 

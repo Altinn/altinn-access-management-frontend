@@ -31,7 +31,7 @@ export const ApiSearchResults = ({
   chosenApis,
   addApi,
 }: ApiSearchResultsProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   const { statusMessage, unchosenApis } = useMemo(() => {
     const unchosenApis = searchResults?.filter(

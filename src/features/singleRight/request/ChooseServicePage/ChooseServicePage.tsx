@@ -23,7 +23,7 @@ import { NavigationSection } from '../../components/NavigationSection/Navigation
 import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
   const reporteeName = useAppSelector((state) => state.userInfo.reporteeName);

@@ -11,7 +11,7 @@ export interface ErrorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   const currentDate = new Date();
 

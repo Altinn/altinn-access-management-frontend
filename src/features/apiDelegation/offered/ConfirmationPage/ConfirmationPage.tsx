@@ -36,7 +36,6 @@ export const ConfirmationPage = () => {
   useDocumentTitle(t('api_delegation.delegate_page_title'));
 
   const partyId = getCookie('AltinnPartyId');
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

@@ -20,7 +20,7 @@ export const ChooseOrgInfoPanel = ({
   searchOrgNotExist,
   searchLoading,
 }: InfoPanelProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
   const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
   if (reporteeOrgNumber === searchString && searchString.length > 0) {
     return (

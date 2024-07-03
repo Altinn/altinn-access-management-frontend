@@ -41,7 +41,7 @@ export const ResourceCollectionBar = ({
   onRemove,
   compact = false,
 }: ResourceCollectionBarProps) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   const selectedResourcesActionBars = resources.map((resource, index) => (
     <ActionBar

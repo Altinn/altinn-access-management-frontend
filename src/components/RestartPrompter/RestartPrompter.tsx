@@ -29,7 +29,7 @@ export const RestartPrompter = ({
   restartPath,
 }: RestartPrompterProps) => {
   const navigate = useNavigate();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation();
 
   return (
     <Alert
