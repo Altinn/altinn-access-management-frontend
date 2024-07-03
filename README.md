@@ -289,11 +289,12 @@ Start with these names for your branch depending on what your branch includes.
 
 - bugfix/
 - chore/
+- test/
 - dependencies/
 - documentation/
-- feat/single-rights/issue-number
-- feat/api-delegations/issue-number
-- feat/general/issue-number (When it's not related to any features of the features above or relates to both)
+- feat/
+- feat/_feature_/_issue-number_
+- feat/general/_issue-number_ (When it's not related to any specific feature. Can also just use feat/ by itself.)
 
 ### ClassNames
 
