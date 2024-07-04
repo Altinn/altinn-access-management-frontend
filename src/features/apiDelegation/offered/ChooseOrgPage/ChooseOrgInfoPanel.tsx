@@ -22,7 +22,7 @@ export const ChooseOrgInfoPanel = ({
   const { t } = useTranslation();
   const { data: reporteeData } = useGetReporteeQuery();
 
-  if (reporteeData?.orgNumber === searchString && searchString.length > 0) {
+  if (reporteeData?.organizationNumber === searchString && searchString.length > 0) {
     return (
       <Alert
         severity='warning'

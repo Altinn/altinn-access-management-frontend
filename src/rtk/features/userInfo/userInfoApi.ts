@@ -6,10 +6,6 @@ interface UserInfoApiResponse {
     name: string;
   };
 }
-interface ReporteeApiResponse {
-  organizationNumber: any;
-  name: string;
-}
 
 interface UserInfo {
   name: string;
@@ -17,7 +13,7 @@ interface UserInfo {
 
 interface ReporteeInfo {
   name: string;
-  orgNumber?: string;
+  organizationNumber?: string;
 }
 
 export const userInfoApi = createApi({
@@ -41,12 +37,6 @@ export const userInfoApi = createApi({
     getReportee: builder.query<ReporteeInfo, void>({
       query: () => `reporteelist/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
-      transformResponse: (response: ReporteeApiResponse) => {
-        return {
-          name: response.name,
-          orgNumber: response.organizationNumber,
-        };
-      },
     }),
   }),
 });

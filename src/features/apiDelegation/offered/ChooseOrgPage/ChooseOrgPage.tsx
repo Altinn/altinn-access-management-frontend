@@ -70,7 +70,7 @@ export const ChooseOrgPage = () => {
 
   const removeChosenOrgs = (displayOrgs: Organization[]) => {
     return displayOrgs.filter(
-      (org) => !chosenOrgs.includes(org) && org.orgNumber !== reporteeData?.orgNumber,
+      (org) => !chosenOrgs.includes(org) && org.orgNumber !== reporteeData?.organizationNumber,
     );
   };
 

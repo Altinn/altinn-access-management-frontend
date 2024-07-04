@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Ingress } from '@digdir/designsystemet-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
