@@ -21,6 +21,7 @@ import { DelegableOrgItems } from './DelegableOrgItems';
 import { ChosenItems } from './ChosenItems';
 import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
 import { useOrgSearch } from './useOrgSearch';
+import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 export const ChooseOrgPage = () => {
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
@@ -28,7 +29,9 @@ export const ChooseOrgPage = () => {
   const { overviewOrgs, loading: overviewOrgsLoading } = useAppSelector(
     (state) => state.overviewOrg,
   );
-  const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
+
+  const { data: reporteeData } = useGetReporteeQuery();
+
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
   const [viewLoading, setViewLoading] = useState(true);
@@ -67,7 +70,7 @@ export const ChooseOrgPage = () => {
 
   const removeChosenOrgs = (displayOrgs: Organization[]) => {
     return displayOrgs.filter(
-      (org) => !chosenOrgs.includes(org) && org.orgNumber !== reporteeOrgNumber,
+      (org) => !chosenOrgs.includes(org) && org.orgNumber !== reporteeData?.orgNumber,
     );
   };
 

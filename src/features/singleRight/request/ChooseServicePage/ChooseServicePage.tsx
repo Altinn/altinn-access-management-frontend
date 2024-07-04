@@ -21,14 +21,18 @@ import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
 import classes from './ChooseServicePage.module.css';
+import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
   const dispatch = useAppDispatch();
-  const reporteeName = useAppSelector((state) => state.userInfo.reporteeName);
-  const userName = useAppSelector((state) => state.userInfo.personName);
-  const requestee = reporteeName ? reporteeName : userName;
+
+  const { data: userData } = useGetUserInfoQuery();
+  const { data: reporteeData } = useGetReporteeQuery();
+
+  const requestee = reporteeData?.name || userData?.name || '';
+
   const delegableChosenServices = useAppSelector((state) =>
     state.singleRightsSlice.servicesWithStatus.filter(
       (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
