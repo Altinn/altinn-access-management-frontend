@@ -193,6 +193,7 @@
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt."
   },
   "users_page": {
-    "page_title": "Brukere og grupper - Altinn"
+    "page_title": "Brukere og grupper - Altinn",
+    "main_page_heading": "Brukere med fullmakter i {{name}}"
   }
 }
