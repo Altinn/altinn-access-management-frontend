@@ -7,8 +7,8 @@ import classes from './UserInfoBar.module.css';
 import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 export const UserInfoBar = () => {
-  const { data: userData, isFetching: userIsFetching } = useGetUserInfoQuery();
-  const { data: reporteeData, isFetching: reporteeFetching } = useGetReporteeQuery();
+  const { data: userData } = useGetUserInfoQuery();
+  const { data: reporteeData } = useGetReporteeQuery();
 
   return (
     <header className={classes.userInfoBar}>
@@ -17,8 +17,8 @@ export const UserInfoBar = () => {
       </div>
       <div className={classes.userInfoContent}>
         <div className={classes.userInfoTextContainer}>
-          {!userIsFetching && <span className={classes.userInfoText}>{userData.name}</span>}
-          {!reporteeFetching && !userIsFetching && userData?.name !== reporteeData?.name && (
+          {userData?.name && <span className={classes.userInfoText}>{userData.name}</span>}
+          {reporteeData?.name && reporteeData.name !== userData?.name && (
             <span className={classes.userInfoText}>for {reporteeData.name}</span>
           )}
         </div>

@@ -1,12 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-interface UserInfoResponse {
+interface UserInfoApiResponse {
   party: {
     name: string;
   };
 }
-interface ReporteeResponse {
+interface ReporteeApiResponse {
+  name: string;
+}
+
+interface UserInfordata {
   name: string;
 }
 
@@ -21,17 +25,17 @@ export const userInfoApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getUserInfo: builder.query<any, void>({
+    getUserInfo: builder.query<UserInfordata, void>({
       query: () => 'profile',
       keepUnusedDataFor: 300,
-      transformResponse: (response: UserInfoResponse) => {
+      transformResponse: (response: UserInfoApiResponse) => {
         return { name: response.party.name };
       },
     }),
-    getReportee: builder.query<any, void>({
+    getReportee: builder.query<UserInfordata, void>({
       query: () => `reporteelist/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
-      transformResponse: (response: ReporteeResponse) => {
+      transformResponse: (response: ReporteeApiResponse) => {
         return { name: response.name };
       },
     }),
