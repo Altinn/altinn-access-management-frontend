@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     [Route("accessmanagement/api/v1/user")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _profileService;
+        private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
 
@@ -23,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         public UserController(IUserService profileService, IHttpContextAccessor httpContextAccessor, ILogger<UserController> logger)
         {
-            _profileService = profileService;
+            _userService = profileService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
@@ -44,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var user = await _profileService.GetUserProfile(userId);
+                var user = await _userService.GetUserProfile(userId);
 
                 if (user == null)
                 {
@@ -71,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                AuthorizedParty party = await _profileService.GetPartyFromReporteeListIfExists(partyId);
+                AuthorizedParty party = await _userService.GetPartyFromReporteeListIfExists(partyId);
 
                 if (party != null)
                 {
@@ -81,6 +82,33 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return StatusCode(404);
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving all right holders of a reportee
+        /// </summary>
+        /// <param name="partyId">The partyId for the reportee who's right holders to return</param>
+        /// <returns>List of right holders</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("reportee/{partyId}/rightholders")]
+        public async Task<ActionResult<List<RightHolder>>> GetReporteeRightHolders(int partyId)
+        {
+            try
+            {
+
+                string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
+
+                // Get Right holder but remove current user from list?
+                List<RightHolder> rightHolders = await _userService.GetReporteeRightHolders(partyId);
+
+                return rightHolders;
             }
             catch (Exception ex)
             {
