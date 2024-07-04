@@ -11,11 +11,11 @@ interface ReporteeApiResponse {
   name: string;
 }
 
-interface UserInfoData {
+interface UserInfo {
   name: string;
 }
 
-interface ReporteeInfoData {
+interface ReporteeInfo {
   name: string;
   orgNumber?: string;
 }
@@ -31,14 +31,14 @@ export const userInfoApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getUserInfo: builder.query<UserInfoData, void>({
+    getUserInfo: builder.query<UserInfo, void>({
       query: () => 'profile',
       keepUnusedDataFor: 300,
       transformResponse: (response: UserInfoApiResponse) => {
         return { name: response.party.name };
       },
     }),
-    getReportee: builder.query<ReporteeInfoData, void>({
+    getReportee: builder.query<ReporteeInfo, void>({
       query: () => `reporteelist/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
       transformResponse: (response: ReporteeApiResponse) => {
