@@ -67,9 +67,16 @@ export const ChooseOrgInfoPanel = ({
     return (
       <Alert
         severity='info'
-        title={String(t('api_delegation.buisness_search_info_title'))}
+        size='lg'
       >
-        {t('api_delegation.buisness_search_info_content')}
+        <Heading
+          level={2}
+          size='sm'
+          spacing
+        >
+          {String(t('api_delegation.buisness_search_info_title'))}
+        </Heading>
+        <Paragraph size='sm'>{t('api_delegation.buisness_search_info_content')}</Paragraph>
       </Alert>
     );
   }
