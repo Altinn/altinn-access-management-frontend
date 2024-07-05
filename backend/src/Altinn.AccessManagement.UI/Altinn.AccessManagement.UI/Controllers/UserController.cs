@@ -105,14 +105,13 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                // Get Right holder but remove current user from list?
                 List<RightHolder> rightHolders = await _userService.GetReporteeRightHolders(partyId);
 
                 return rightHolders;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                _logger.LogError(ex, "GetReportee failed to fetch right holders");
                 return StatusCode(500);
             }
         }

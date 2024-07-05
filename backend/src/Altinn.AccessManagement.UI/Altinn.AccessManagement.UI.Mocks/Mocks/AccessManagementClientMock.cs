@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
@@ -11,8 +12,11 @@ using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Common.PEP.Configuration;
 using Altinn.Platform.Register.Models;
+using Bogus;
+using Bogus.Extensions.Norway;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
@@ -23,6 +27,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string dataFolder;
+        private Faker<AuthorizedParty> _faker;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
@@ -33,6 +38,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IHttpContextAccessor httpContextAccessor)
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            setUpAuthorizedPartyFaker();
         }
 
         /// <inheritdoc />
@@ -46,6 +52,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return Task.FromResult<AuthorizedParty>(null);
             }
 
+        }
+
+        /// <inheritdoc />
+        public async Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId)
+        {
+            return _faker.Generate(100);
         }
 
         /// <inheritdoc />
@@ -250,6 +262,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (partyId == "********") {
                 throw new Exception();
             }
+        }
+
+        private void setUpAuthorizedPartyFaker()
+        {
+            List<AuthorizedPartyType> allowedPartyTypes = Enum.GetValues(typeof(AuthorizedPartyType)).Cast<AuthorizedPartyType>().Where(type => type != AuthorizedPartyType.None).ToList();
+
+            _faker = new Faker<AuthorizedParty>()
+                .RuleFor(p => p.PartyUuid, f => f.Random.Guid())
+                .RuleFor(p => p.Type, f => f.PickRandom(allowedPartyTypes))
+                .RuleFor(p => p.OrganizationNumber, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Random.Number(100000000, 999999999).ToString() : null)
+                .RuleFor(p => p.PersonId, (f, p) => p.Type != AuthorizedPartyType.Organization ? f.Person.Fodselsnummer() : null)
+                .RuleFor(p => p.PartyId, f => f.Random.Number(10000000, 99999999))
+                .RuleFor(p => p.Name, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanyName() : f.Person.FullName)
+                .RuleFor(p => p.UnitType, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanySuffix() : null)
+                .RuleFor(p => p.AuthorizedRoles, f => f.Make(f.Random.Number(0, 20), () => f.PickRandom<RegistryRoleType>().ToString()));
         }
     }
 }

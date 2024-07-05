@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
@@ -53,9 +54,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<List<RightHolder>> GetReporteeRightHolders(int partyId)
         {
-            List<AuthorizedParty> allRightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
+            List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
 
-            allRightHolders.ForEach(rightHolder => { rightHolder. });
+            return rightHolders.Select( rightHolder => new RightHolder()
+            {
+                PartyUuid = rightHolder.PartyUuid,
+                PartyType = rightHolder.Type,
+                Name = rightHolder.Name,
+                PersonId = rightHolder.PersonId,
+                OrganizationNumber = rightHolder.OrganizationNumber,
+                UnitType = rightHolder.UnitType,
+                RegistryRoles = rightHolder.AuthorizedRoles.Where(role => Enum.IsDefined(typeof(RegistryRoleType), role.ToUpper()))
+                    .Select(role => (RegistryRoleType)Enum.Parse(typeof(RegistryRoleType), role.ToUpper()))
+                    .ToList()
+            }).ToList();
 
         }
     }

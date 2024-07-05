@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// <summary>
         /// The roles gotten from Enhetsregisteret
         /// </summary>
-        public List<string> RegistryRoles { get; set; }
+        public List<RegistryRoleType> RegistryRoles { get; set; }
 
         /// <summary>
         /// The national identity number if the party is a person

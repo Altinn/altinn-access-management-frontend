@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -61,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<AuthorizedParty>(responseContent, _serializerOptions);
@@ -75,6 +77,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetPartyFromReporteeListIfExists // Exception");
                 throw;
             }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId)
+        {
+            string endpointUrl = $"rightholders/{partyId}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<AuthorizedParty>>(responseContent, _serializerOptions);
+            }
+
+            _logger.LogError("Getting right holders from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
         /// <inheritdoc />
