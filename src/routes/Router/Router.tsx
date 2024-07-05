@@ -5,7 +5,6 @@ import { ChooseApiPage } from '@/features/apiDelegation/offered/ChooseApiPage';
 import { OverviewPage as OfferedOverviewPage } from '@/features/apiDelegation/offered/OverviewPage';
 import { OverviewPage as ReceivedOverviewPage } from '@/features/apiDelegation/received/OverviewPage';
 import { ChooseOrgPage } from '@/features/apiDelegation/offered/ChooseOrgPage';
-import { ReceiptPage } from '@/features/apiDelegation/offered/ReceiptPage';
 import { ConfirmationPage } from '@/features/apiDelegation/offered/ConfirmationPage';
 import { ErrorPage } from '@/sites/ErrorPage';
 import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singleRight/delegate/ChooseServicePage/ChooseServicePage';
@@ -42,10 +41,6 @@ export const Router = createBrowserRouter(
         <Route
           path={ApiDelegationPath.Confirmation}
           element={<ConfirmationPage />}
-        />
-        <Route
-          path={ApiDelegationPath.Receipt}
-          element={<ReceiptPage />}
         />
       </Route>
       <Route

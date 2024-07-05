@@ -3,9 +3,8 @@ import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '@/rtk/app/hooks';
-
 import classes from './ChooseOrgPage.module.css';
+import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 interface InfoPanelProps {
   searchString: string;
@@ -21,8 +20,9 @@ export const ChooseOrgInfoPanel = ({
   searchLoading,
 }: InfoPanelProps) => {
   const { t } = useTranslation();
-  const reporteeOrgNumber = useAppSelector((state) => state.userInfo.reporteeOrgNumber);
-  if (reporteeOrgNumber === searchString && searchString.length > 0) {
+  const { data: reporteeData } = useGetReporteeQuery();
+
+  if (reporteeData?.organizationNumber === searchString && searchString.length > 0) {
     return (
       <Alert
         severity='warning'

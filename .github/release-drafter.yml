@@ -12,6 +12,9 @@ categories:
     labels:
       - 'kind/bug'
       - 'bugfix'
+  - title: '🧪 Test Coverage'
+    labels:
+      - 'Test'
   - title: '🧰 Maintenance'
     labels:
       - 'kind/documentation'
