@@ -1,0 +1,23 @@
+.userIcon {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0.5rem;
+}
+
+.userIcon::before {
+  content: attr(data-user-initials);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: #23262a 2px solid;
+  background-color: #fff;
+  color: #23262a;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+}
