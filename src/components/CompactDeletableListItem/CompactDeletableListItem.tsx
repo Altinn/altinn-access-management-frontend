@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { Button } from '@digdir/designsystemet-react';
-import { SvgIcon } from '@altinn/altinn-design-system';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import * as React from 'react';
@@ -44,12 +43,7 @@ export const CompactDeletableListItem = ({
         <div className={classes.baseListItemContent}>
           {startIcon && (
             <div className={cn(classes.listItemIcon, classes[`listItemIcon__${contentColor}`])}>
-              <SvgIcon
-                width={20}
-                height={20}
-                svgIconComponent={startIcon}
-                className={classes.listItemIcon}
-              />
+              {startIcon}
             </div>
           )}
           <div className={classes.listItemTexts}>

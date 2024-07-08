@@ -78,14 +78,6 @@
   font-weight: 500;
 }
 
-.link {
-  color: black;
-  text-decoration-line: underline;
-  text-decoration-color: #1eadf7;
-  display: inline-block;
-  background: transparent;
-}
-
 .errorPanel {
   margin-top: 2rem;
 }

@@ -1,5 +1,4 @@
-import { Panel } from '@altinn/altinn-design-system';
-import { Button, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Link, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -190,21 +189,27 @@ export const OverviewPageContent = ({
           </Button>
         </div>
       )}
-      <Panel
-        title={t('api_delegation.card_title')}
-        forceMobileLayout={isSm}
-        showIcon={!isSm}
+      <Alert
+        severity='info'
+        size='lg'
       >
-        {t('api_delegation.api_panel_content')}{' '}
-        <a
-          className={classes.link}
-          href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
-          target='_blank'
-          rel='noreferrer'
+        <Heading
+          level={2}
+          size='sm'
         >
-          {t('common.maskinporten')}
-        </a>
-      </Panel>
+          {t('api_delegation.card_title')}
+        </Heading>
+        <Paragraph>
+          {t('api_delegation.api_panel_content')}{' '}
+          <Link
+            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+            target='_blank'
+            rel='noreferrer'
+          >
+            {t('common.maskinporten')}
+          </Link>
+        </Paragraph>
+      </Alert>
       <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
         {overviewOrgs.length > 0 && (

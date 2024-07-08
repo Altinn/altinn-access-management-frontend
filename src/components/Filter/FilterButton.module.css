@@ -1,7 +1,11 @@
-.icon {
-  display: inline-block;
-  height: var(--component-button-size-icon-small);
-  width: var(--component-button-size-icon-small);
+.iconContainer {
+  display: flex;
+}
+
+.iconContainer > * {
+  --component-button-size-icon-small: 1.5rem;
+  min-height: var(--component-button-size-icon-small);
+  min-width: var(--component-button-size-icon-small);
 }
 
 .chevron.open {
@@ -9,23 +13,16 @@
 }
 
 .filterButton {
-  composes: focusable from '@/resources/utils/utility.module.css';
   background-color: var(--fds-semantic-surface-neutral-subtle);
-  align-items: center;
+  padding: 0 18px;
+  color: #000;
   border-radius: 50px;
-  border: solid transparent;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
   gap: 2px;
-  font-family: inherit;
+  min-height: 36px;
+  max-height: 36px;
+  font-size: 14px;
   font-weight: 500;
-  height: var(--component-button-size-height-small);
-  justify-content: center;
-  padding: 0 var(--component-button-space-padding-x-small);
-  text-align: center;
   max-width: 300px;
-  position: auto;
 }
 
 .filterButton:not([aria-disabled='true'], :disabled):hover {

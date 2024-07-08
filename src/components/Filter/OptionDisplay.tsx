@@ -107,11 +107,11 @@ export const OptionDisplay = ({
           aria-label={option.label}
         ></Checkbox>
         <Paragraph
-          as={'label'}
+          asChild
           className={classes.optionLabel}
           size={compact ? 'small' : 'medium'}
         >
-          {option.label}
+          <label>{option.label}</label>
         </Paragraph>
       </button>
     );

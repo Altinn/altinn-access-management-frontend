@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { XMarkIcon } from '@navikt/aksel-icons';
-
-import { redirectToProfile } from '@/resources/utils';
-
+import { getRedirectToProfileUrl } from '@/resources/utils';
 import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
-
 import classes from './PageContainer.module.css';
+import { Button } from '@digdir/designsystemet-react';
 
 export interface PageContainerProps {
   children: React.ReactNode;
@@ -20,17 +18,22 @@ export const PageContainer = ({ children }: PageContainerProps) => {
       <div className={classes.pageContainer}>
         <UserInfoBar />
         <div className={classes.closeButtonContainer}>
-          <button
+          <Button
+            icon={true}
+            title={t('common.close')}
             className={classes.closeButton}
+            size='small'
             aria-label={String(t('common.cancel'))}
-            onClick={redirectToProfile}
+            asChild
           >
-            <XMarkIcon
-              width={36}
-              height={30}
-              className={classes.closeIcon}
-            />
-          </button>
+            <a href={getRedirectToProfileUrl()}>
+              <XMarkIcon
+                width={30}
+                height={30}
+                className={classes.closeIcon}
+              />
+            </a>
+          </Button>
         </div>
         <div>{children}</div>
       </div>

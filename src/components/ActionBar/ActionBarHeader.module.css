@@ -58,12 +58,12 @@
 
 .actionBar.dark {
   --text-color: var(--fds-semantic-text-neutral-on_inverted);
-  --border-color: var(--semantic-surface-action-active);
-  --background-color: var(--semantic-surface-action-active);
+  --border-color: var(--fds-semantic-surface-action-first-active);
+  --background-color: var(--fds-semantic-surface-action-first-active);
 }
 
 .actionBar.dark.clickable:hover {
-  --background-color: var(--semantic-surface-action-hover);
+  --background-color: var(--fds-semantic-surface-action-first-hover);
 }
 
 .actionBar.neutral {
@@ -104,19 +104,14 @@
 
 .actionBarHeader {
   --component-actionbar_header_title-color-background: none;
-  display: flex;
-  align-items: center;
   padding: 0px 4px 0px 8px;
-  flex: 1 1 auto;
-  border-style: none;
-  text-align: var(--component-actionbar_header_title-text-align);
+  text-align: left;
+  flex: 1;
+  justify-content: flex-start;
   background-color: var(--component-actionbar_header_title-color-background);
-  font-family: inherit;
-  font-size: var(--font_size-300);
   color: inherit;
   line-height: 16px;
   word-break: break-word;
-  composes: focusable from '@/resources/utils/utility.module.css';
 }
 
 .actionBarHeader.clickable {
@@ -184,11 +179,11 @@
 
 .title,
 .subtitle {
-  color: var(--text-color) !important;
+  color: var(--text-color);
 }
 
 .title {
-  font-weight: 500 !important;
+  font-weight: 500;
 }
 
 .title > p {
