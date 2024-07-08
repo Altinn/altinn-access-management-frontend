@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { forwardRef, type ReactNode } from 'react';
-import { SvgIcon } from '@altinn/altinn-design-system';
 import cn from 'classnames';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 
 import classes from './FilterButton.module.css';
+import { Button } from '@digdir/designsystemet-react';
 
 export interface FilterButtonProps {
   onClick?: () => void;
@@ -26,7 +26,6 @@ export interface FilterButtonProps {
  * </FilterButton>
  *
  * @param {Function} onClick - The click event handler for the button.
- * @param {ReactNode} iconLeft - The icon to be displayed on the left side of the button.
  * @param {string} id - The ID attribute of the button.
  * @param {string} className - Additional CSS class(es) for the component.
  * @param {ReactNode} children - The content of the button.
@@ -53,27 +52,24 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
     };
     return (
       <div className={cn(classes.filterButtonContainer, className)}>
-        {activeNotification()}
-        <button
+        <Button
           {...restHTMLProps}
+          size='sm'
           ref={ref}
           id={id}
           className={classes.filterButton}
           onClick={onClick}
         >
-          {iconLeft && (
-            <SvgIcon
-              svgIconComponent={iconLeft}
-              className={classes.icon}
-            />
-          )}
+          {iconLeft && <div className={classes.iconContainer}>{iconLeft}</div>}
           {children}
-          <SvgIcon
-            svgIconComponent={<ChevronDownIcon />}
-            className={cn(classes.icon, classes.chevron, { [classes.open]: isOpen })}
-            aria-hidden
-          />
-        </button>
+          <div className={classes.iconContainer}>
+            <ChevronDownIcon
+              className={cn(classes.chevron, { [classes.open]: isOpen })}
+              aria-hidden
+            />
+          </div>
+        </Button>
+        {activeNotification()}
       </div>
     );
   },
