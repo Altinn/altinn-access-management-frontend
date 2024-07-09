@@ -1,0 +1,29 @@
+{
+  "partyUuid": "87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+  "name": "STA TOM TIGER AS",
+  "organizationNumber": "313160300",
+  "personId": null,
+  "partyId": 51473841,
+  "type": "Organization",
+  "unitType": "AS",
+  "isDeleted": false,
+  "onlyHierarchyElementWithNoAccess": false,
+  "authorizedResources": [],
+  "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+  "subunits": [
+    {
+      "partyUuid": "87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "STA TOM TIGER AS",
+      "organizationNumber": "313160300",
+      "personId": null,
+      "partyId": 51473841,
+      "type": "Organization",
+      "unitType": "BEDR",
+      "isDeleted": false,
+      "onlyHierarchyElementWithNoAccess": false,
+      "authorizedResources": [],
+      "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+      "subunits": []
+    }
+  ]
+}

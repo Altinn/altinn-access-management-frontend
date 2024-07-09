@@ -1,0 +1,385 @@
+﻿[
+    {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff9",
+        "name": "Diane Davis",
+        "organizationNumber": null,
+        "personId": "20030098626",
+        "partyId": 41126877,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "DAGL",
+            "LEDE"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "bab5d1f0-0599-589f-3852-9959156108eb",
+        "name": "Kevin O'Hara",
+        "organizationNumber": null,
+        "personId": "24088418790",
+        "partyId": 26031788,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "MEDL"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "ad3fd1c3-a055-62df-67cb-2564d8ab5991",
+        "name": "Garry Turner",
+        "organizationNumber": null,
+        "personId": "02049430569",
+        "partyId": 92451127,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "MEDL"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "8502ed31-0341-972d-d4f5-d294c10b2058",
+        "name": "Tommie Wilkinson",
+        "organizationNumber": null,
+        "personId": "20128146181",
+        "partyId": 85129801,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "MEDL",
+            "SIGN",
+            "KNUF"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "60fc0a53-cc94-f0eb-13f8-5113aa4c5dc6",
+        "name": "Tiffany Langosh",
+        "organizationNumber": null,
+        "personId": "01026425227",
+        "partyId": 98939302,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "VARA"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
+        "name": "Jast Economics",
+        "organizationNumber": "644227165",
+        "personId": null,
+        "partyId": 81373770,
+        "type": "Organization",
+        "unitType": "LLC",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "REGN"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
+        "name": "Kunze - Kunde",
+        "organizationNumber": "400928636",
+        "personId": null,
+        "partyId": 75306803,
+        "type": "Organization",
+        "unitType": "Group",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
+        "name": "Vanessa Schmitt",
+        "organizationNumber": null,
+        "personId": "23088826000",
+        "partyId": 49721067,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "f8022101-70f5-098b-91ff-f19c05f3e9b3",
+        "name": "Kristopher Blanda",
+        "organizationNumber": null,
+        "personId": "08099016729",
+        "partyId": 85638494,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
+        "name": "Ken Kuvalis",
+        "organizationNumber": null,
+        "personId": "01010276396",
+        "partyId": 87038023,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "4396942d-d9ef-6891-c610-395729839907",
+        "name": "Bennie Toy",
+        "organizationNumber": null,
+        "personId": "08069730192",
+        "partyId": 37651296,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "6d8c7a97-c1c0-ea2d-9f49-8a752381fdf6",
+        "name": "Homer O'Connell",
+        "organizationNumber": null,
+        "personId": "31057617570",
+        "partyId": 24814034,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "78438b26-9c75-df45-08c8-90721642b934",
+        "name": "Huels Group",
+        "organizationNumber": "275557230",
+        "personId": null,
+        "partyId": 49013054,
+        "type": "Organization",
+        "unitType": "Group",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+            "FEMV"
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "f36a1862-f275-8c2d-07d6-24837cc83606",
+        "name": "Hoppe LLC",
+        "organizationNumber": "547029769",
+        "personId": null,
+        "partyId": 98939121,
+        "type": "Organization",
+        "unitType": "LLC",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "f34b2eac-1826-5688-acc1-bec291f4382d",
+        "name": "Jonathan Schimmel",
+        "organizationNumber": null,
+        "personId": "12017006140",
+        "partyId": 25326460,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "b88930fb-d42a-8e85-eee4-b0a8be0d65ad",
+        "name": "Dean Wuckert",
+        "organizationNumber": null,
+        "personId": "29069315303",
+        "partyId": 19234230,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [],
+        "subunits": []
+    },
+    {
+        "partyUuid": "9b7d0241-f3c3-e741-536b-dea640ab7c8a",
+        "name": "Franecki LLC",
+        "organizationNumber": "850743312",
+        "personId": null,
+        "partyId": 76164092,
+        "type": "Organization",
+        "unitType": "and Sons",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "1211d608-82c8-2e0c-7f5a-32beb8fd25d8",
+        "name": "Roosevelt Reilly",
+        "organizationNumber": null,
+        "personId": "04079512503",
+        "partyId": 82271531,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "0befed1b-4165-a49f-2436-06a504940604",
+        "name": "Otis Kozey",
+        "organizationNumber": null,
+        "personId": "21017649539",
+        "partyId": 43635524,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "f05e4e1e-ef4e-9c40-80a7-0f25cbb9884c",
+        "name": "Candice Dicki",
+        "organizationNumber": null,
+        "personId": "29089611677",
+        "partyId": 61489108,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "04c5895c-5d14-12dd-7284-c2438f3bd9a5",
+        "name": "Shelly Goyette",
+        "organizationNumber": null,
+        "personId": "07065512860",
+        "partyId": 98111495,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "141dadcb-1577-6661-2ab0-9b77f04ea32c",
+        "name": "Renee Schaden",
+        "organizationNumber": null,
+        "personId": "02019615653",
+        "partyId": 82237482,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [],
+        "subunits": []
+    },
+    {
+        "partyUuid": "5a7ed7c2-485e-a7d1-5abb-9ccd8a1a5b32",
+        "name": "Kim Ortiz",
+        "organizationNumber": null,
+        "personId": "01018307096",
+        "partyId": 49580354,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "8c4f7b43-6016-18f0-4042-3252f0921b5a",
+        "name": "Brown, Little and Stiedemann",
+        "organizationNumber": "803894122",
+        "personId": null,
+        "partyId": 40115463,
+        "type": "Organization",
+        "unitType": "Inc",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    },
+    {
+        "partyUuid": "227583ca-2e0e-851e-e524-d72fca0e8d3f",
+        "name": "Pearl Murphy",
+        "organizationNumber": null,
+        "personId": "25057410879",
+        "partyId": 56616542,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+        ],
+        "subunits": []
+    }
+]

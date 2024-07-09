@@ -102,7 +102,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
                 List<RightHolder> rightHolders = await _userService.GetReporteeRightHolders(partyId);

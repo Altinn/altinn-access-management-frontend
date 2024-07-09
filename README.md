@@ -14,7 +14,7 @@
 - To run or build the frontend, you'll need to download [Node minimum v21 ](https://nodejs.org/).
 - Enable corepack on your machine and download yarn via corepack (don't download yarn globally, it will give you problems at some later point). Follow this [guide](https://yarnpkg.com/getting-started/install) to download yarn.
 
-## Alternative 1 - Local-AT hybrid
+## Running the Local-AT hybrid
 
 Access management has a lot of dependencies, which can get tedious to work with when developing locally. If all you are working with is frontend-specific code (that is, the code found in this repo) then this hybrid solution will simplify your setup, allowing you to run the React application and the BFF (Backend For Frontend) locally, while using the access management backend and other dependencies that are deployed in an AT-environment.
 
@@ -82,145 +82,40 @@ You can now access the regular altinn features enabled in the environment. Once 
 
 Happy coding!
 
-## Alternative 2 - Running the full solution (with localtest mocking)
+## Running with "The Mock"
 
-### Step 1: Getting started
+The BFF provides us with the option of mocking away all external connections, instead fetching data from static files or generating it dynamically on-call. This can be usefull when testing out code only pertaining to the frontend or when developing functionality that lacks backend support.
 
-The frontend is the simplest, so let's start with that.
-Simply run `yarn` on root to install dependencies and then `yarn start` to start the development environment.
-That's it!
-
-PS: To actually see anything on the local environment port you'll need to follow the guide until step 3.
-
-### Step 2: Setup localtest to get test users
-
-To add test data to the app, do the following:
-
-- Clone following [repo](https://github.com/Altinn/app-localtest) and checkout branch feature/accessmanagement-subdomain and pull latest changes. Also remember to follow readme in that branch (Because localtest for podman doesn't work yet). You have completed this step when you can run localtest.
-- Sometimes the docker command isn't recognized on computer, if so try to run this command:
+The mock can be activated locally or in a specific environment by going to the relevant appsettings file and setting `UseMockData` to true. Be aware that this should NEVER be done for TT02 or PROD!
 
 ```bash
-   export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+"GeneralSettings": {
+  "FrontendBaseUrl": "https://am.ui.at22.altinn.cloud",
+  "Hostname": "at22.altinn.cloud",
+  "UseMockData": true
+},
 ```
 
-#### If readme in localTest doesn't setup things correctly, try the steps below:
+Fun fact: The static files used to run the mock is the same that is used for integration tests - meaning we get twice the usage out of the same data! ♻️
 
-- Start the loadbalancer container that routes between the local platform services and the app with command below:
+### Login when in mock-mode
 
-  ```bash
-  docker-compose up -d --build
-  ```
+Since most of the mocked data is generated from static files, a lot of the functionality will only work for users that are part of the mocked data set. Here is a list of such users and their login details:
 
-- If having problems with docker command try running this: export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
+- 🍋 **Sitrongul Medaljong** - fNr: 20838198385
 
-- Navigate to the `src` folder in the app-localtest repo
+  - Covered in all static data with the same IDs as in at22
+  - Is DAGL for Diskret Nær Tiger AS (310202398)
 
-  ```bash
-  cd src/
-  ```
+- 🦢 **Intelligent Albatross** - fNr: 19895199357
 
-- Run below command in that folder
+  - Used mostly to delegate things to from Sitrongul Medaljong (has the same IDs as in at22)
+  - Is DAGL for Rakrygget Ung Tiger AS (313523497)
 
-  ```bash
-  docker-compose up -d --build
-  ```
-
-- Set path to app folder in local platform services. The simplest way to do this is:
-
-  - Edit the appsettings.json file:
-    - Open `appSettings.json` in an editor.
-    - Change the setting `"AppRepsitoryBasePath"` to the path to the folder where you've cloned your frontend and backend repos. (Be aware that on mac you don't have c:/ in your paths.)
-    - Create folder AltinnPlatformLocal wherever you like, copy and paste path to that folder in LocalTestingStorageBasePath.
-    - Set LocalTestingStaticTestDataPath to your full path to the file in src/testdata
-
-- Start the local platform services (make sure you are in the src folder)
-
-  ```bash
-  dotnet run
-  ```
-
-- Add below text to your hosts file (Path to file on mac: /private/etc/hosts. Path to file on Windows: c:\Windows\System32\Drivers\etc\hosts.
-  On mac you need to edit and save hosts-file, we recommend to use vs code for mac to edit the file)
-
-```#Subdomain for accessmanagement
-#Subdomain for accessmanagement
-127.0.0.1 am.ui.local.altinn.cloud #ipv4
-0000:0000:0000:0000:0000:0000:0000:0001 am.ui.local.altinn.cloud #ipv6
-#
-# Host Database
-#
-# localhost is used to configure the loopback interface
-# when the system is booting.  Do not change this entry.
-##
-127.0.0.1    localhost #ipv4
-0000:0000:0000:0000:0000:0000:0000:0001 localhost #ipv6
-255.255.255.255    broadcasthost
-127.0.0.1 kubernetes.docker.internal #ipv4
-0000:0000:0000:0000:0000:0000:0000:0001 kubernetes.docker.internal #ipv6
-# Added by Docker Desktop
-# To allow the same kube context to work on the host and the container:
-127.0.0.1 kubernetes.docker.internal
-# End of section
-```
-
-### Step 3: Setup BFF (Backend for frontend)
-
-- Open Altinn.AccessManagement.UI.sln in an IDE
-- Build solution
-- Run solution
-- Go to http://local.altinn.cloud/
-- Select user and continue
-- To see single rights feature, go to url: http://am.ui.local.altinn.cloud/accessmanagement/ui/delegate-single-rights/choose-service
-- Paths to other parts of the application can be found on: src/routes/paths
-
-### Setup backend:
-
-#### Step 4: Set up database:
-
-Download [PostgreSQL v14](https://www.postgresql.org/download/). (on Mac, use installer and not homebrew). Run stackbuilder and download all packages when being prompted.
-<img width="1254" alt="image" src="https://github.com/Altinn/altinn-access-management-frontend/assets/31471142/bd1f6ec6-91bb-411b-8746-df5fe8272fbf">
-
-- Open pgAdmin 4
-- Create the following users by right clicking PostgreSQL 14 and clicking create user group or by scrolling down and right clickking Login/Group Roles (with privileges for authorizationdb):
-  1. Name: platform_authorization_admin (superuser, canlogin). Set password as Password.
-  2. Name: platform_authorization (canlogin). Set password as Password.
-- Create database with name: authorizationdb by right clicking on databases and choosing "Create database" and set owner to platform_authorization_admin in properties.
-- Create schema delegation in authorizationdb
-- Set platform_authorization_admin as owner
-
-### Run backend and frontend together
-
-- Open [Altinn-Access-Management](https://github.com/Altinn/altinn-access-management) repo in an IDE or go to following folder
-
-  ```bash
-   cd src/Altinn.AccessManagement
-  ```
-
-- ON MAC: change WorkspacePath in file: src/Altinn.AccessManagement/appsettings.Development.json to "Altinn.AccessManagement.Persistence/Migration".
-
-- Start Access Management Backend by pressing run in the IDE (Altinn.AccessManagement) or by running the following in a console
-
-  ```bash
-  dotnet run
-  ```
-
-- Start the BFF (AccessManagement.UI) by pressing run (http) in the IDE or by running the following in a console
-
-  ```bash
-   dotnet run
-  ```
-
-- Start Access Management Frontend (if not started)
-
-  - Go to access-management-frontend repo
-  - Run `yarn`
-  - run `yarn start`
-
-- Go to http://local.altinn.cloud/
-
-You should now see localtest login page with access management as the only application.
-
-Choose an account and click on the button to proceed to react-app
+- 🎥 **Livsglad Film** - fNr: 21915399719
+  - Used for automatically generated data (performance/worst case testing)
+  - Partial data coverage (only new amUI)
+  - Is DAGL for Sta Tom Tiger AS (313160300)
 
 # Build, Deploy and Release
 
@@ -293,8 +188,8 @@ Start with these names for your branch depending on what your branch includes.
 - dependencies/
 - documentation/
 - feat/
-- feat/_feature_/_issue-number_
-- feat/general/_issue-number_ (When it's not related to any specific feature. Can also just use feat/ by itself.)
+- feat/\<feature-name\>/\<issue-number\>
+- feat/general/\<issue-number\> (When it's not related to any specific feature. Can also just use feat/ by itself.)
 
 ### ClassNames
 
