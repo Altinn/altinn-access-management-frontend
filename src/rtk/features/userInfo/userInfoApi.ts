@@ -16,6 +16,23 @@ interface ReporteeInfo {
   organizationNumber?: string;
 }
 
+enum PartyType {
+  None,
+  Person,
+  Organization,
+  SelfIdentified,
+}
+
+interface RightHolder {
+  partyUuid: string;
+  partyType: PartyType;
+  name: string;
+  registryRoles: string[];
+  personId?: string;
+  organizationNumber?: string;
+  unitType?: string;
+}
+
 export const userInfoApi = createApi({
   reducerPath: 'userInfoApi',
   baseQuery: fetchBaseQuery({
@@ -38,9 +55,13 @@ export const userInfoApi = createApi({
       query: () => `reporteelist/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
+    getRightHolders: builder.query<RightHolder[], void>({
+      query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
+      keepUnusedDataFor: 300,
+    }),
   }),
 });
 
-export const { useGetUserInfoQuery, useGetReporteeQuery } = userInfoApi;
+export const { useGetUserInfoQuery, useGetReporteeQuery, useGetRightHoldersQuery } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;
