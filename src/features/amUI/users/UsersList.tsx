@@ -57,6 +57,7 @@ const UserListItem = ({ user }: { user: UserType }) => {
             onClick={() => setIsExpanded((oldExpanded) => !oldExpanded)}
             variant='tertiary'
             className={classes.listItemContent}
+            fullWidth
           >
             <UserIcon
               icon={
