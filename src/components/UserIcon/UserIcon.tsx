@@ -1,13 +1,19 @@
 import React from 'react';
 import classes from './UserIcon.module.css';
 
-export const UserIcon = ({ userName }: { userName: string }) => {
+interface UserIconProps {
+  icon: React.ReactNode;
+}
+
+export const UserIcon = ({ icon }: UserIconProps) => {
   return (
-    userName && (
-      <span
-        data-user-initials={userName.charAt(0)}
+    icon && (
+      <div
         className={classes.userIcon}
-      />
+        aria-hidden
+      >
+        {icon}
+      </div>
     )
   );
 };

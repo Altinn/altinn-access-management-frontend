@@ -1,23 +1,15 @@
 .userIcon {
-  display: block;
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0.5rem;
-}
-
-.userIcon::before {
-  content: attr(data-user-initials);
-  position: absolute;
+  --userIcon-size: 2.5rem;
+  min-width: var(--userIcon-size);
+  min-height: var(--userIcon-size);
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
   border-radius: 50%;
   border: #23262a 2px solid;
-  background-color: #fff;
-  color: #23262a;
+  background-color: #00315d;
+  color: #ffffff;
   text-align: center;
-  font-weight: bold;
   text-transform: uppercase;
+  margin-right: 1rem;
 }
