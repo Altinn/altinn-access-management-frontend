@@ -49,15 +49,25 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
             }
             catch (FileNotFoundException) {
+
                 return Task.FromResult<AuthorizedParty>(null);
             }
 
         }
 
         /// <inheritdoc />
-        public async Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId)
+        public Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId)
         {
-            return _faker.Generate(100);
+            if (partyId == 51329012)
+            {
+                // Use static mock data
+                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "RightHolders", partyId + ".json")));
+            }
+            else
+            {
+                // Use automatically generated data
+                return Task.FromResult(_faker.Generate(3000));
+            }
         }
 
         /// <inheritdoc />
@@ -266,7 +276,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         private void setUpAuthorizedPartyFaker()
         {
-            List<AuthorizedPartyType> allowedPartyTypes = Enum.GetValues(typeof(AuthorizedPartyType)).Cast<AuthorizedPartyType>().Where(type => type != AuthorizedPartyType.None).ToList();
+            List<AuthorizedPartyType> allowedPartyTypes = Enum.GetValues(typeof(AuthorizedPartyType)).Cast<AuthorizedPartyType>().Where(type => type != AuthorizedPartyType.None && type != AuthorizedPartyType.SelfIdentified).ToList();
 
             _faker = new Faker<AuthorizedParty>()
                 .RuleFor(p => p.PartyUuid, f => f.Random.Guid())
@@ -276,7 +286,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 .RuleFor(p => p.PartyId, f => f.Random.Number(10000000, 99999999))
                 .RuleFor(p => p.Name, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanyName() : f.Person.FullName)
                 .RuleFor(p => p.UnitType, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanySuffix() : null)
-                .RuleFor(p => p.AuthorizedRoles, f => f.Make(f.Random.Number(0, 20), () => f.PickRandom<RegistryRoleType>().ToString()));
+                .RuleFor(p => p.AuthorizedRoles, f => f.Make(f.Random.Number(0, 5), () => f.PickRandom<RegistryRoleType>().ToString()));
         }
     }
 }

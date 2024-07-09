@@ -24,10 +24,17 @@ export const UsersPage = () => {
       return [[], 1];
     }
     const numPages = getTotalNumOfPages(rightHolders, pageSize);
-    return [getArrayPage(rightHolders, currentPage, numPages), numPages];
+    return [getArrayPage(rightHolders, currentPage, pageSize), numPages];
   }, [rightHolders, currentPage]);
 
-  const displayedRightHolders = pageEntrees?.map((rh, index) => <p key={index}>{rh.name}</p>);
+  const displayedRightHolders = pageEntrees?.map((rh, index) => (
+    <p key={index}>
+      {rh.name} - Roller:{' '}
+      {rh.registryRoles.map((role) => (
+        <span key={rh.name + role}> {role} </span>
+      ))}
+    </p>
+  ));
 
   return (
     <PageWrapper>

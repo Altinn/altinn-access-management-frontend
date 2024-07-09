@@ -1,0 +1,244 @@
+[
+  {
+    "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff9",
+    "partyType": "Person",
+    "name": "Diane Davis",
+    "registryRoles": [
+      "DAGL",
+      "LEDE"
+    ],
+    "personId": "20030098626",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "bab5d1f0-0599-589f-3852-9959156108eb",
+    "partyType": "Person",
+    "name": "Kevin O'Hara",
+    "registryRoles": [
+      "MEDL"
+    ],
+    "personId": "24088418790",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "ad3fd1c3-a055-62df-67cb-2564d8ab5991",
+    "partyType": "Person",
+    "name": "Garry Turner",
+    "registryRoles": [
+      "MEDL"
+    ],
+    "personId": "02049430569",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "8502ed31-0341-972d-d4f5-d294c10b2058",
+    "partyType": "Person",
+    "name": "Tommie Wilkinson",
+    "registryRoles": [
+      "MEDL",
+      "SIGN",
+      "KNUF"
+    ],
+    "personId": "20128146181",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "60fc0a53-cc94-f0eb-13f8-5113aa4c5dc6",
+    "partyType": "Person",
+    "name": "Tiffany Langosh",
+    "registryRoles": [
+      "VARA"
+    ],
+    "personId": "01026425227",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
+    "partyType": "Organization",
+    "name": "Jast Economics",
+    "registryRoles": [
+      "REGN"
+    ],
+    "personId": null,
+    "organizationNumber": "644227165",
+    "unitType": "LLC"
+  },
+  {
+    "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
+    "partyType": "Organization",
+    "name": "Kunze - Kunde",
+    "registryRoles": [],
+    "personId": null,
+    "organizationNumber": "400928636",
+    "unitType": "Group"
+  },
+  {
+    "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
+    "partyType": "Person",
+    "name": "Vanessa Schmitt",
+    "registryRoles": [],
+    "personId": "23088826000",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "f8022101-70f5-098b-91ff-f19c05f3e9b3",
+    "partyType": "Person",
+    "name": "Kristopher Blanda",
+    "registryRoles": [],
+    "personId": "08099016729",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
+    "partyType": "Person",
+    "name": "Ken Kuvalis",
+    "registryRoles": [],
+    "personId": "01010276396",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "4396942d-d9ef-6891-c610-395729839907",
+    "partyType": "Person",
+    "name": "Bennie Toy",
+    "registryRoles": [],
+    "personId": "08069730192",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "6d8c7a97-c1c0-ea2d-9f49-8a752381fdf6",
+    "partyType": "Person",
+    "name": "Homer O'Connell",
+    "registryRoles": [],
+    "personId": "31057617570",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "78438b26-9c75-df45-08c8-90721642b934",
+    "partyType": "Organization",
+    "name": "Huels Group",
+    "registryRoles": [
+      "FEMV"
+    ],
+    "personId": null,
+    "organizationNumber": "275557230",
+    "unitType": "Group"
+  },
+  {
+    "partyUuid": "f36a1862-f275-8c2d-07d6-24837cc83606",
+    "partyType": "Organization",
+    "name": "Hoppe LLC",
+    "registryRoles": [],
+    "personId": null,
+    "organizationNumber": "547029769",
+    "unitType": "LLC"
+  },
+  {
+    "partyUuid": "f34b2eac-1826-5688-acc1-bec291f4382d",
+    "partyType": "Person",
+    "name": "Jonathan Schimmel",
+    "registryRoles": [],
+    "personId": "12017006140",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "b88930fb-d42a-8e85-eee4-b0a8be0d65ad",
+    "partyType": "Person",
+    "name": "Dean Wuckert",
+    "registryRoles": [],
+    "personId": "29069315303",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "9b7d0241-f3c3-e741-536b-dea640ab7c8a",
+    "partyType": "Organization",
+    "name": "Franecki LLC",
+    "registryRoles": [],
+    "personId": null,
+    "organizationNumber": "850743312",
+    "unitType": "and Sons"
+  },
+  {
+    "partyUuid": "1211d608-82c8-2e0c-7f5a-32beb8fd25d8",
+    "partyType": "Person",
+    "name": "Roosevelt Reilly",
+    "registryRoles": [],
+    "personId": "04079512503",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "0befed1b-4165-a49f-2436-06a504940604",
+    "partyType": "Person",
+    "name": "Otis Kozey",
+    "registryRoles": [],
+    "personId": "21017649539",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "f05e4e1e-ef4e-9c40-80a7-0f25cbb9884c",
+    "partyType": "Person",
+    "name": "Candice Dicki",
+    "registryRoles": [],
+    "personId": "29089611677",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "04c5895c-5d14-12dd-7284-c2438f3bd9a5",
+    "partyType": "Person",
+    "name": "Shelly Goyette",
+    "registryRoles": [],
+    "personId": "07065512860",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "141dadcb-1577-6661-2ab0-9b77f04ea32c",
+    "partyType": "Person",
+    "name": "Renee Schaden",
+    "registryRoles": [],
+    "personId": "02019615653",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "5a7ed7c2-485e-a7d1-5abb-9ccd8a1a5b32",
+    "partyType": "Person",
+    "name": "Kim Ortiz",
+    "registryRoles": [],
+    "personId": "01018307096",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
+    "partyUuid": "8c4f7b43-6016-18f0-4042-3252f0921b5a",
+    "partyType": "Organization",
+    "name": "Brown, Little and Stiedemann",
+    "registryRoles": [],
+    "personId": null,
+    "organizationNumber": "803894122",
+    "unitType": "Inc"
+  },
+  {
+    "partyUuid": "227583ca-2e0e-851e-e524-d72fca0e8d3f",
+    "partyType": "Person",
+    "name": "Pearl Murphy",
+    "registryRoles": [],
+    "personId": "25057410879",
+    "organizationNumber": null,
+    "unitType": null
+  }
+]

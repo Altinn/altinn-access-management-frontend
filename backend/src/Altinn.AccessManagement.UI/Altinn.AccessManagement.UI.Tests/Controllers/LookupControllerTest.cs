@@ -99,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetPartyByUUID_Success()
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1337, 501337));
-            Guid lookupUUID = new Guid("f7237f59-178b-4f25-8ffe-017e611effdb");
+            Guid lookupUUID = new Guid("60fb3d5b-99c2-4df0-aa77-f3fca3bc5199");
 
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/lookup/party/{lookupUUID}");
 

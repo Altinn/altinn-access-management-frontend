@@ -2,6 +2,9 @@
 
 namespace Altinn.AccessManagement.UI.Core.Models.User
 {
+    /// <summary>
+    /// Someone who holds some kind of right/power of atturney for someone else
+    /// </summary>
     public class RightHolder
     {
         /// <summary>
@@ -38,6 +41,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// The unit type if the party is an organization
         /// </summary>
         public string UnitType { get; set; }
-
     }
 }
