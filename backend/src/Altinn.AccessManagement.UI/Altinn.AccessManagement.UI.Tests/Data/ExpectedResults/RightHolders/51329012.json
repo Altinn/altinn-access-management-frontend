@@ -12,6 +12,17 @@
     "unitType": null
   },
   {
+    "partyUuid": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "partyType": "Person",
+    "name": "Sitrongul Medaljong",
+    "registryRoles": [
+      "MEDL"
+    ],
+    "personId": "20838198385",
+    "organizationNumber": null,
+    "unitType": null
+  },
+  {
     "partyUuid": "bab5d1f0-0599-589f-3852-9959156108eb",
     "partyType": "Person",
     "name": "Kevin O'Hara",
