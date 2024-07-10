@@ -23,7 +23,7 @@ enum PartyType {
   SelfIdentified,
 }
 
-interface RightHolder {
+export interface RightHolder {
   partyUuid: string;
   partyType: PartyType;
   name: string;
@@ -31,6 +31,7 @@ interface RightHolder {
   personId?: string;
   organizationNumber?: string;
   unitType?: string;
+  inheritingRightHolders: RightHolder[];
 }
 
 export const userInfoApi = createApi({

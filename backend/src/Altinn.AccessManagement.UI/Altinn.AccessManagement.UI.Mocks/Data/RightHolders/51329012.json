@@ -100,7 +100,7 @@
   },
   {
     "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
-    "name": "Jast Economics",
+    "name": "Narnia Economics",
     "organizationNumber": "644227165",
     "personId": null,
     "partyId": 81373770,
@@ -112,7 +112,56 @@
     "authorizedRoles": [
       "REGN"
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff8",
+        "name": "Aslan Lion",
+        "organizationNumber": null,
+        "personId": "21030098626",
+        "partyId": 41126876,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "DAGL"
+        ],
+        "subunits": []
+      },
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff6",
+        "name": "Tumulus Deer",
+        "organizationNumber": null,
+        "personId": "22030098626",
+        "partyId": 41126875,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "LEDE"
+        ],
+        "subunits": []
+      },
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "REGN"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
@@ -127,7 +176,24 @@
     "authorizedResources": [],
     "authorizedRoles": [
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff1",
+        "name": "Malin Kunze",
+        "organizationNumber": null,
+        "personId": "24110098626",
+        "partyId": 41126878,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "DAGL"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
@@ -218,7 +284,24 @@
     "authorizedRoles": [
       "FEMV"
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "REGN"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "f36a1862-f275-8c2d-07d6-24837cc83606",
@@ -233,7 +316,24 @@
     "authorizedResources": [],
     "authorizedRoles": [
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "REGN"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "f34b2eac-1826-5688-acc1-bec291f4382d",
@@ -248,7 +348,24 @@
     "authorizedResources": [],
     "authorizedRoles": [
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "REGN"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "b88930fb-d42a-8e85-eee4-b0a8be0d65ad",
@@ -277,7 +394,24 @@
     "authorizedResources": [],
     "authorizedRoles": [
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "REGN"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "1211d608-82c8-2e0c-7f5a-32beb8fd25d8",
@@ -381,7 +515,24 @@
     "authorizedResources": [],
     "authorizedRoles": [
     ],
-    "subunits": []
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": [
+          "REGN"
+        ],
+        "subunits": []
+      }
+    ]
   },
   {
     "partyUuid": "227583ca-2e0e-851e-e524-d72fca0e8d3f",

@@ -49,6 +49,13 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public List<RightHolder> InheritingRightHolders { get; set; }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public RightHolder()
+        {
+        }
+
+        /// <summary>
         /// Mapping from AuthorizedParty
         /// </summary>
         public RightHolder(AuthorizedParty party)
