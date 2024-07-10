@@ -27,7 +27,7 @@ export function getArrayPage<T>(array: T[], page: number, numPerPage: number): T
     throw new RangeError('numPerPage must be greater than 0');
   }
 
-  if (page <= 0 || page > Math.ceil(array.length / numPerPage)) {
+  if (page <= 0 || page > getTotalNumOfPages(array, numPerPage)) {
     throw new RangeError('Invalid page number');
   }
 
@@ -47,5 +47,10 @@ export function getTotalNumOfPages<T>(array: T[], numPerPage: number): number {
   if (numPerPage <= 0) {
     throw new RangeError('numPerPage must be greater than 0');
   }
+
+  if (!array || array.length == 0) {
+    return 1;
+  }
+
   return Math.ceil(array.length / numPerPage);
 }

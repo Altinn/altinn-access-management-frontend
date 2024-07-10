@@ -62,6 +62,8 @@ describe('arrayUtils', () => {
       expect(getArrayPage(sampleArray, 2, 5)).to.equal([6, 7, 8, 9, 10]);
 
       expect(getArrayPage(sampleArray2, 2, 2)).to.equal(['c']);
+
+      expect(getArrayPage([], 1, 2)).to.equal([]);
     });
 
     it('throws error for invalid page number', () => {
@@ -90,6 +92,8 @@ describe('arrayUtils', () => {
       expect(getTotalNumOfPages(sampleArray2, 10)).to.equal(2);
 
       expect(getTotalNumOfPages(sampleArray3, 2)).to.equal(2);
+
+      expect(getTotalNumOfPages([], 2)).to.equal(1); // Empty array only has a single (empty) page
     });
 
     it('throws error for invalid numPerPage', () => {
