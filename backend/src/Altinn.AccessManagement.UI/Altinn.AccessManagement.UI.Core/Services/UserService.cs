@@ -56,18 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
 
-            return rightHolders.Select(rightHolder => new RightHolder()
-            {
-                PartyUuid = rightHolder.PartyUuid,
-                PartyType = rightHolder.Type,
-                Name = rightHolder.Name,
-                PersonId = rightHolder.PersonId,
-                OrganizationNumber = rightHolder.OrganizationNumber,
-                UnitType = rightHolder.UnitType,
-                RegistryRoles = rightHolder.AuthorizedRoles.Where(role => Enum.IsDefined(typeof(RegistryRoleType), role.ToUpper()))
-                    .Select(role => (RegistryRoleType)Enum.Parse(typeof(RegistryRoleType), role.ToUpper()))
-                    .ToList()
-            }).ToList();
+            return rightHolders.Select(rightHolder => new RightHolder(rightHolder)).ToList();
         }
     }
 }

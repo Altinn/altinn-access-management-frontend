@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 
 namespace Altinn.AccessManagement.UI.Core.Models.User
 {
@@ -41,5 +42,27 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// The unit type if the party is an organization
         /// </summary>
         public string UnitType { get; set; }
+
+        /// <summary>
+        /// Key persons inheriting rights from the organization
+        /// </summary>
+        public List<RightHolder> InheritingRightHolders { get; set; }
+
+        /// <summary>
+        /// Mapping from AuthorizedParty
+        /// </summary>
+        public RightHolder(AuthorizedParty party)
+        {
+            PartyUuid = party.PartyUuid;
+            PartyType = party.Type;
+            Name = party.Name;
+            PersonId = party.PersonId;
+            OrganizationNumber = party.OrganizationNumber;
+            UnitType = party.UnitType;
+            RegistryRoles = party.AuthorizedRoles.Where(role => Enum.IsDefined(typeof(RegistryRoleType), role.ToUpper()))
+                .Select(role => (RegistryRoleType)Enum.Parse(typeof(RegistryRoleType), role.ToUpper()))
+                .ToList();
+            InheritingRightHolders = party.Subunits.Select(unit => new RightHolder(unit)).ToList();
+        }
     }
 }

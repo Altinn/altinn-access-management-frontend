@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.CodeDom.Compiler;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -48,7 +49,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
             }
-            catch (FileNotFoundException) {
+            catch (FileNotFoundException)
+            {
 
                 return Task.FromResult<AuthorizedParty>(null);
             }
@@ -217,7 +219,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         //// SingleRight
-        
+
         public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
         {
             string resourceFileName = GetMockDataFilenameFromUrn(request.Resource);
@@ -269,7 +271,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         // A helper for testing handling of exceptions in client
         private static void ThrowExceptionIfTriggerParty(string partyId)
         {
-            if (partyId == "********") {
+            if (partyId == "********")
+            {
                 throw new Exception();
             }
         }
@@ -286,7 +289,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 .RuleFor(p => p.PartyId, f => f.Random.Number(10000000, 99999999))
                 .RuleFor(p => p.Name, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanyName() : f.Person.FullName)
                 .RuleFor(p => p.UnitType, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanySuffix() : null)
-                .RuleFor(p => p.AuthorizedRoles, f => f.Make(f.Random.Number(0, 5), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList());
+                .RuleFor(p => p.AuthorizedRoles, f => f.Make(f.Random.Number(0, 5), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList())
+                .RuleFor(p => p.Subunits, (f, p) =>
+                {
+                    if (p.Type == AuthorizedPartyType.Organization)
+                    {
+                        // These can only be of type Person
+                        return f.Make(f.Random.Number(1, 5), () => new AuthorizedParty
+                        {
+                            Type = AuthorizedPartyType.Person,
+                            Name = f.Person.FullName,
+                            PartyId = f.Random.Number(10000000, 99999999),
+                            PartyUuid = f.Random.Guid(),
+                            PersonId = f.Person.Fodselsnummer(),
+                            AuthorizedRoles = f.Make(f.Random.Number(1, 2), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList(),
+                        }).ToList();
+                    }
+                    return [];
+                });
         }
     }
 }
