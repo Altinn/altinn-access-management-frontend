@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -151,6 +152,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{reporteePartyID}");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Assert that List of right holders is returned when valid input
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeRightHolders_ReturnsList()
+        {
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string reporteePartyID = "51329012";
+
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{reporteePartyID}.json");
+            List<RightHolder> expectedResponse = Util.GetMockData<List<RightHolder>>(path);
+
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}/rightholders");
+            List<RightHolder> actualResponse = await response.Content.ReadFromJsonAsync<List<RightHolder>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
     }
 }

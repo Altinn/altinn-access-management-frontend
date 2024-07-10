@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -257,7 +258,22 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyId, actual.PartyId);
             Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
-            AssertCollections<AuthorizedParty>(expected.Subunits, actual.Subunits, AssertEqual);
+            AssertCollections(expected.Subunits, actual.Subunits, AssertEqual);
+
+        }
+
+        public static void AssertEqual(RightHolder expected, RightHolder actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.UnitType, actual.UnitType);
+            Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
+            Assert.Equal(expected.PartyType, actual.PartyType);
+            Assert.Equal(expected.PersonId, actual.PersonId);
+            AssertCollections(expected.RegistryRoles, actual.RegistryRoles, Assert.Equal);
 
         }
 

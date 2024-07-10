@@ -1,8 +1,10 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
@@ -47,6 +49,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             AuthorizedParty partyInfo = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
             return partyInfo;
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<RightHolder>> GetReporteeRightHolders(int partyId)
+        {
+            List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
+
+            return rightHolders.Select(rightHolder => new RightHolder(rightHolder)).ToList();
         }
     }
 }
