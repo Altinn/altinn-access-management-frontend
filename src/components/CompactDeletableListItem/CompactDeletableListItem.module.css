@@ -55,10 +55,10 @@
   word-break: break-word;
 }
 
-.listItemIcon {
+.listItemIcon > * {
   margin-right: 10px;
-  display: flex;
-  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .middleText {

@@ -100,8 +100,8 @@
     "new_org_content_text": "Vel kva brukarar som skal få tilgang ved å klikka pluss-teiknet. Du kan også leggja til ny ved å bruke søkefeltet.",
     "businesses_previously_delegated_to": "Tidlegare tildelegerte verksemder:",
     "businesses_search_results": "Verksemder basert på ditt søk:",
-    "buisness_search_notfound_title": "Vi finner ikkje det du søker etter. Har du skrevet inn riktig organisasjonsnummer?",
-    "buisness_search_notfound_content": "Dersom du er usekker, kan du gjere eit søk på navn på sidane til",
+    "buisness_search_notfound_title": "Vi finner ikkje det du søker etter",
+    "buisness_search_notfound_content": "Har du skrevet inn riktig organisasjonsnummer? Dersom du er usekker, kan du gjere eit søk på navn på sidane til",
     "buisness_search_info_title": "Ny verksemd?",
     "buisness_search_info_content": "Søk etter verksemda du ønsker å delegere til ved å fylle inn verksemdas komplette 9-sifrede organisasjonsnummer",
     "businesses_going_to_get_access": "Verksemder som skal få rett:",
@@ -193,6 +193,7 @@
   },
   "users_page": {
     "page_title": "Brukare og grupper - Altinn",
-       "main_page_heading": "Brukare med fullmakter i {{name}}"
+    "main_page_heading": "Brukare med fullmakter i {{name}}",
+    "user_list_heading": "Andre med fullmakt"
   }
 }

@@ -1,8 +1,8 @@
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import classes from './ErrorPanel.module.css';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 
 export interface ErrorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -22,28 +22,44 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
   const time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
 
   return (
-    <Panel
-      title={title}
-      variant={PanelVariant.Error}
-      forceMobileLayout
+    <Alert
+      severity='danger'
+      size='lg'
+      {...props}
     >
-      <div {...props}>
-        <p className={classes.errorListItem}>
+      <Heading
+        level={2}
+        size='sm'
+      >
+        {title}
+      </Heading>
+      <div>
+        <Paragraph
+          size='sm'
+          className={classes.errorListItem}
+        >
           {t('common.error_status_code')}: {statusCode}
-        </p>
-
-        <p className={classes.errorListItem}>
+        </Paragraph>
+        <Paragraph
+          size='sm'
+          className={classes.errorListItem}
+        >
           {t('common.error_message')}: {message}
-        </p>
-
-        <p className={classes.errorListItem}>
+        </Paragraph>
+        <Paragraph
+          size='sm'
+          className={classes.errorListItem}
+        >
           {t('common.date')}: {date}
-        </p>
+        </Paragraph>
 
-        <p className={classes.errorListItem}>
+        <Paragraph
+          size='sm'
+          className={classes.errorListItem}
+        >
           {t('common.time')}: {time}
-        </p>
+        </Paragraph>
       </div>
-    </Panel>
+    </Alert>
   );
 };

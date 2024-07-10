@@ -1,5 +1,4 @@
-import { Panel, PanelVariant } from '@altinn/altinn-design-system';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -40,35 +39,45 @@ export const ChooseOrgInfoPanel = ({
     );
   } else if (!searchLoading && searchOrgNotExist) {
     return (
-      <Panel
-        variant={PanelVariant.Error}
-        showIcon={false}
-        title={String(t('api_delegation.buisness_search_notfound_title'))}
-        forceMobileLayout={true}
+      <Alert
+        severity='danger'
+        size='lg'
       >
-        <div>
+        <Heading
+          level={2}
+          size='sm'
+          spacing
+        >
+          {t('api_delegation.buisness_search_notfound_title')}
+        </Heading>
+        <Paragraph size='sm'>
           {t('api_delegation.buisness_search_notfound_content')}{' '}
-          <a
+          <Link
             className={classes.link}
             href='https://www.brreg.no/'
             target='_blank'
             rel='noreferrer'
           >
             {t('common.broennoeysund_register')}
-          </a>
-        </div>
-      </Panel>
+          </Link>
+        </Paragraph>
+      </Alert>
     );
   } else if (!searchLoading && promptOrgNumber) {
     return (
-      <Panel
-        variant={PanelVariant.Info}
-        showIcon={false}
-        title={String(t('api_delegation.buisness_search_info_title'))}
-        forceMobileLayout={true}
+      <Alert
+        severity='info'
+        size='lg'
       >
-        {t('api_delegation.buisness_search_info_content')}
-      </Panel>
+        <Heading
+          level={2}
+          size='sm'
+          spacing
+        >
+          {String(t('api_delegation.buisness_search_info_title'))}
+        </Heading>
+        <Paragraph size='sm'>{t('api_delegation.buisness_search_info_content')}</Paragraph>
+      </Alert>
     );
   }
 };

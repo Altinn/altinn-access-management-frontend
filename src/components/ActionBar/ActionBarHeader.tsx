@@ -3,7 +3,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
@@ -48,9 +48,8 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
         })}
       >
         {toggleOpen ? (
-          <button
+          <Button
             className={cn(classes.actionBarHeader, classes.clickable, classes[color])}
-            type='button'
             onClick={toggleOpen}
             id={headerId}
             aria-expanded={open}
@@ -78,7 +77,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 )}
               </div>
             </div>
-          </button>
+          </Button>
         ) : (
           <div className={cn(classes.actionBarHeader)}>
             <div className={classes.actionBarTexts}>
@@ -90,7 +89,6 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               </Paragraph>
               {subtitle && (
                 <Paragraph
-                  as='div'
                   size='xsmall'
                   className={classes.subtitle}
                 >

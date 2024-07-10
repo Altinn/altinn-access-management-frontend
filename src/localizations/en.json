@@ -103,8 +103,8 @@
     "new_org_content_text": "Select which users will have access by clicking the plus sign. You can also add a new organization by using the search field.",
     "businesses_previously_delegated_to": "Businesses previously delegated to:",
     "businesses_search_results": "Businesses resulting from your search:",
-    "buisness_search_notfound_title": "We can't find what you're looking for. Are you sure this is the right organization number?",
-    "buisness_search_notfound_content": "If you're unsure, you can search by name on the pages of ",
+    "buisness_search_notfound_title": "We can't find what you're looking for",
+    "buisness_search_notfound_content": "Are you sure this is the right organization number? If you're unsure, you can search by name on the pages of ",
     "buisness_search_info_title": "New organization?",
     "buisness_search_info_content": "Search for the organization you wish to delegate to by inputting their complete 9 digit organization number",
     "businesses_going_to_get_access": "Chosen businesses to receive right:",
@@ -195,6 +195,7 @@
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
-    "main_page_heading": "Users with power of attorney in {{name}}"
+    "main_page_heading": "Users with power of attorney in {{name}}",
+    "user_list_heading": "Other users with power of attorney"
   }
 }

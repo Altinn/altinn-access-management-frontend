@@ -5,10 +5,10 @@ import { getArrayPage, getTotalNumOfPages } from '@/resources/utils';
 
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery, useGetRightHoldersQuery } from '@/rtk/features/userInfo/userInfoApi';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Pagination } from '@digdir/designsystemet-react';
 import { useMemo, useState } from 'react';
 
-import { Pagination } from '@digdir/designsystemet-react';
+import { UsersList } from './UsersList';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
@@ -51,6 +51,7 @@ export const UsersPage = () => {
         nextLabel='Neste'
         previousLabel='Forrige'
       />
+      <UsersList />
     </PageWrapper>
   );
 };

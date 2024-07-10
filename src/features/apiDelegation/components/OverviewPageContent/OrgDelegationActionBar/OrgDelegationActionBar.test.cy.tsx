@@ -136,7 +136,7 @@ describe('OrgDelegationActionBar', () => {
 
       cy.get('button')
         .contains('Evry')
-        .should('have.css', 'text-decoration', 'line-through solid rgb(30, 43, 60)');
+        .should('have.css', 'text-decoration', 'line-through solid rgb(0, 0, 0)');
       cy.findByRole('button', { name: /undo/i }).should('exist');
     });
 

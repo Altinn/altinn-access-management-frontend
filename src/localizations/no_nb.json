@@ -101,8 +101,8 @@
     "new_org_content_text": "Velg hvilke brukere som skal få tilgang ved å klikke pluss-tegnet. Du kan også legge til ny virksomhet ved å benytte søkefeltet.",
     "businesses_previously_delegated_to": "Tidligere tildelegerte virksomheter:",
     "businesses_search_results": "Virksomheter basert på ditt søk:",
-    "buisness_search_notfound_title": "Vi finner ikke det du søker etter. Har du skrevet inn riktig organisasjonsnummer?",
-    "buisness_search_notfound_content": "Dersom du er usikker, kan du gjøre et søk på navn på sidene til",
+    "buisness_search_notfound_title": "Vi finner ikke det du søker etter",
+    "buisness_search_notfound_content": "Har du skrevet inn riktig organisasjonsnummer? Dersom du er usikker, kan du gjøre et søk på navn på sidene til",
     "buisness_search_info_title": "Ny virksomhet?",
     "buisness_search_info_content": "Søk etter virksomheten du ønsker å delegere til ved å fylle inn virksomhetens komplette 9-sifrede organisasjonsnummer",
     "businesses_going_to_get_access": "Virksomheter som skal få rettighet:",
@@ -194,6 +194,7 @@
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
-    "main_page_heading": "Brukere med fullmakter i {{name}}"
+    "main_page_heading": "Brukere med fullmakter i {{name}}",
+    "user_list_heading": "Andre med fullmakt"
   }
 }
