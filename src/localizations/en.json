@@ -195,6 +195,7 @@
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
-    "main_page_heading": "Users with power of attorney in {{name}}"
+    "main_page_heading": "Users with power of attorney in {{name}}",
+    "user_list_heading": "Other users with power of attorney"
   }
 }

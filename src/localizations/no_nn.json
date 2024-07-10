@@ -193,6 +193,7 @@
   },
   "users_page": {
     "page_title": "Brukare og grupper - Altinn",
-       "main_page_heading": "Brukare med fullmakter i {{name}}"
+    "main_page_heading": "Brukare med fullmakter i {{name}}",
+    "user_list_heading": "Andre med fullmakt"
   }
 }
