@@ -1,0 +1,15 @@
+.userIcon {
+  --userIcon-size: 2.5rem;
+  min-width: var(--userIcon-size);
+  min-height: var(--userIcon-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: #23262a 2px solid;
+  background-color: #00315d;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+  margin-right: 1rem;
+}

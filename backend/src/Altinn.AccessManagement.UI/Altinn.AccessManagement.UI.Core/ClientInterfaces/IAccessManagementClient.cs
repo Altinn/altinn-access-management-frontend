@@ -19,6 +19,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
 
         /// <summary>
+        /// Gets the right holders of a given reportee
+        /// </summary>
+        /// <param name="partyId">The party Id of the reportee</param>
+        /// <returns>List of parties holding rights for the partyId</returns>
+        Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId);
+
+        /// <summary>
         ///     Clears cached accesses of the delegation recipient
         /// </summary>
         /// <param name="party">

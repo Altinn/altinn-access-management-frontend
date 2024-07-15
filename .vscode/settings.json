@@ -5,6 +5,7 @@
     "eslint.validate": [
       "javascript"
     ],
+    "eslint.useFlatConfig": false,
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#65c89b",
       "activityBar.background": "#65c89b",

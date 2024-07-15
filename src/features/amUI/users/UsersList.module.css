@@ -1,0 +1,26 @@
+.usersList {
+  padding: 1rem 0;
+}
+
+.listItemContent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  font-size: 20px;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border: 0;
+}
+
+.roleListContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+}
