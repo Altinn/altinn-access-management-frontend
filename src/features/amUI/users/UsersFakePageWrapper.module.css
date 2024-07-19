@@ -1,0 +1,57 @@
+.pageWrapper {
+  padding: 2rem;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.menuButton {
+  width: 6rem;
+  border-radius: 6px;
+  background-color: #111d46;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
+.companySquare {
+  display: inline-block;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  background-color: #b3f5ff;
+}
+
+.contentWrapper {
+  display: flex;
+  gap: 2rem;
+  max-width: 66rem;
+  margin: 0 auto;
+}
+
+.sideMenu {
+  width: 14em;
+}
+
+.sideMenuItem {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+.sideMenuItem > svg {
+  font-size: 1.5rem;
+}
+.companyTitle {
+  composes: sideMenuItem;
+  height: 3rem;
+  align-items: center;
+}
+
+.pageContent {
+  flex: 1;
+}
