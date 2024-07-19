@@ -10,10 +10,14 @@ import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
 import classes from './UsersFakePageWrapper.module.css';
 
 interface UsersFakePageWrapperProps {
+  reporteeName: string;
   children?: React.ReactNode;
 }
 
-export const UsersFakePageWrapper = ({ children }: UsersFakePageWrapperProps): React.ReactNode => {
+export const UsersFakePageWrapper = ({
+  reporteeName,
+  children,
+}: UsersFakePageWrapperProps): React.ReactNode => {
   return (
     <div className={classes.pageWrapper}>
       <div className={classes.topBar}>
@@ -30,7 +34,7 @@ export const UsersFakePageWrapper = ({ children }: UsersFakePageWrapperProps): R
         <div className={classes.sideMenu}>
           <Label className={classes.companyTitle}>
             <span className={classes.companySquare} />
-            Fysioterapautene
+            {reporteeName}
           </Label>
           <Divider />
           {[

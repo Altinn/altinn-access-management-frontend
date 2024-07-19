@@ -17,7 +17,7 @@ export const UsersPage = () => {
 
   return (
     <PageWrapper>
-      <UsersFakePageWrapper>
+      <UsersFakePageWrapper reporteeName={reportee?.name || ''}>
         <Heading
           level={1}
           spacing
