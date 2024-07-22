@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Button, Heading, Tag, Pagination } from '@digdir/designsystemet-react';
+import { Button, Heading, Tag, Pagination, Search } from '@digdir/designsystemet-react';
 import classes from './UsersList.module.css';
 import { useTranslation } from 'react-i18next';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
@@ -16,6 +16,7 @@ export const UsersList = () => {
   const { t } = useTranslation();
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchString, setSearchString] = useState<string>('');
   const pageSize = 10;
 
   const { data: rightHolders } = useGetRightHoldersQuery();
@@ -24,12 +25,49 @@ export const UsersList = () => {
     if (!rightHolders) {
       return [[], 1];
     }
-    const numPages = getTotalNumOfPages(rightHolders, pageSize);
-    return [getArrayPage(rightHolders, currentPage, pageSize), numPages];
-  }, [rightHolders, currentPage]);
+
+    const isSearchMatch = (rightHolder: RightHolder): boolean => {
+      const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
+      const isPersonIdMatch = rightHolder.personId === searchString;
+      const isOrgNrMatch = rightHolder.organizationNumber === searchString;
+      return isNameMatch || isPersonIdMatch || isOrgNrMatch;
+    };
+
+    const filteredRightHolders: RightHolder[] = [];
+    rightHolders.forEach((rightHolder) => {
+      if (isSearchMatch(rightHolder)) {
+        filteredRightHolders.push(rightHolder);
+      } else if (rightHolder.inheritingRightHolders?.length > 0) {
+        // check for searchString matches in inheritingRightHolders
+        const matchingInheritingItems = rightHolder.inheritingRightHolders.filter(isSearchMatch);
+        if (matchingInheritingItems.length > 0) {
+          filteredRightHolders.push({
+            ...rightHolder,
+            inheritingRightHolders: matchingInheritingItems,
+          });
+        }
+      }
+    });
+
+    const numPages = getTotalNumOfPages(filteredRightHolders, pageSize);
+    return [getArrayPage(filteredRightHolders, currentPage, pageSize), numPages];
+  }, [rightHolders, currentPage, searchString, t]);
 
   return (
     <div className={classes.usersList}>
+      <Search
+        className={classes.searchBar}
+        placeholder={t('users_page.user_search_placeholder')}
+        value={searchString}
+        onChange={(event) => {
+          setSearchString(event.target.value);
+          setCurrentPage(1); // reset current page when searching
+        }}
+        onClear={() => {
+          setSearchString('');
+          setCurrentPage(1); // reset current page when searching
+        }}
+      />
       <List
         compact
         heading={
@@ -42,6 +80,9 @@ export const UsersList = () => {
           </Heading>
         }
       >
+        {pageEntrees.length === 0 && searchString && (
+          <div>{t('users_page.user_no_search_result')}</div>
+        )}
         {pageEntrees.map((user) => (
           <UserListItem
             key={user.partyUuid}
