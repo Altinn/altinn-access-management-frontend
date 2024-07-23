@@ -23,7 +23,7 @@
     "@digdir/designsystemet-theme": "^0.15.0",
     "@navikt/aksel-icons": "^6.0.0",
     "@reduxjs/toolkit": "^2.2.5",
-    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query": "^5.0.0",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "cross-env": "^7.0.3",
