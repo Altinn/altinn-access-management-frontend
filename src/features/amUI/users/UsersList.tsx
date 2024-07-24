@@ -12,6 +12,13 @@ import { ListItem } from '@/components/List/ListItem';
 import { List } from '@/components/List/List';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
 
+const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
+  const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
+  const isPersonIdMatch = rightHolder.personId === searchString;
+  const isOrgNrMatch = rightHolder.organizationNumber === searchString;
+  return isNameMatch || isPersonIdMatch || isOrgNrMatch;
+};
+
 export const UsersList = () => {
   const { t } = useTranslation();
 
@@ -26,20 +33,15 @@ export const UsersList = () => {
       return [[], 1];
     }
 
-    const isSearchMatch = (rightHolder: RightHolder): boolean => {
-      const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
-      const isPersonIdMatch = rightHolder.personId === searchString;
-      const isOrgNrMatch = rightHolder.organizationNumber === searchString;
-      return isNameMatch || isPersonIdMatch || isOrgNrMatch;
-    };
-
     const filteredRightHolders: RightHolder[] = [];
     rightHolders.forEach((rightHolder) => {
-      if (isSearchMatch(rightHolder)) {
+      if (isSearchMatch(searchString, rightHolder)) {
         filteredRightHolders.push(rightHolder);
       } else if (rightHolder.inheritingRightHolders?.length > 0) {
         // check for searchString matches in inheritingRightHolders
-        const matchingInheritingItems = rightHolder.inheritingRightHolders.filter(isSearchMatch);
+        const matchingInheritingItems = rightHolder.inheritingRightHolders.filter(
+          (inheritRightHolder) => isSearchMatch(searchString, inheritRightHolder),
+        );
         if (matchingInheritingItems.length > 0) {
           filteredRightHolders.push({
             ...rightHolder,
@@ -51,7 +53,12 @@ export const UsersList = () => {
 
     const numPages = getTotalNumOfPages(filteredRightHolders, pageSize);
     return [getArrayPage(filteredRightHolders, currentPage, pageSize), numPages];
-  }, [rightHolders, currentPage, searchString, t]);
+  }, [rightHolders, currentPage, searchString]);
+
+  const onSearch = (newSearchString: string) => {
+    setSearchString(newSearchString);
+    setCurrentPage(1); // reset current page when searching
+  };
 
   return (
     <div className={classes.usersList}>
@@ -59,14 +66,8 @@ export const UsersList = () => {
         className={classes.searchBar}
         placeholder={t('users_page.user_search_placeholder')}
         value={searchString}
-        onChange={(event) => {
-          setSearchString(event.target.value);
-          setCurrentPage(1); // reset current page when searching
-        }}
-        onClear={() => {
-          setSearchString('');
-          setCurrentPage(1); // reset current page when searching
-        }}
+        onChange={(event) => onSearch(event.target.value)}
+        onClear={() => onSearch('')}
       />
       <List
         compact
