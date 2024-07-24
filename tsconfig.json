@@ -31,7 +31,8 @@
 "exclude": [
   "node_modules",
   "dist",
-  "eslint.config.cjs"
+  "eslint.config.cjs",
+  "vite.config.ts"
 ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
