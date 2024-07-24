@@ -21,6 +21,7 @@ import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
 import classes from './ChooseServicePage.module.css';
 import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { Ingress } from '@digdir/designsystemet-react';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();
@@ -80,9 +81,11 @@ export const ChooseServicePage = () => {
             {t('single_rights.request_choose_service_page_top_text', { name: requestee })}
           </Ingress>
           <ResourceCollectionBar
-            resources={delegableChosenServices.map(
-              (servicewithStatus) => servicewithStatus.service,
-            )}
+            resources={
+              delegableChosenServices
+                .map((servicewithStatus) => servicewithStatus.service)
+                .filter(Boolean) as ServiceResource[]
+            }
             onRemove={onRemove}
             compact={isSm}
           />

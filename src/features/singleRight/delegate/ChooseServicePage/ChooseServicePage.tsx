@@ -91,9 +91,11 @@ export const ChooseServicePage = () => {
                     })}
                   </Ingress>
                   <ResourceCollectionBar
-                    resources={delegableChosenServices.map(
-                      (servicewithStatus) => servicewithStatus.service,
-                    )}
+                    resources={
+                      delegableChosenServices
+                        .map((servicewithStatus) => servicewithStatus.service)
+                        .filter(Boolean) as ServiceResource[]
+                    }
                     onRemove={onRemove}
                     compact={isSm}
                     proceedToPath={`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`}
