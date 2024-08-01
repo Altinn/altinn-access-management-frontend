@@ -130,7 +130,7 @@
     "no_offered_api_delegations": "Verksemda di har ikkje delegert nokon API-tilganger",
     "no_received_delegations": "Verksemda di har ikkje blitt tildelt nokon API-tilganger",
     "receipt_page_bottom_text": "Tilgang er gitt og er gyldig til den blir aktivt sletta eller trekt tilbake.",
-    "receipt_page_failed_text": Prøv igjen seinare. Dersom feilen held fram, kontakt Altinn brukarservice på telefon 75 00 60 00.",
+    "receipt_page_failed_text": "Prøv igjen seinare. Dersom feilen held fram, kontakt Altinn brukarservice på telefon 75 00 60 00.",
     "receipt_page_main_button": "Til totaloversikt",
     "api_delegation_choice": "API-delegeringsvalg",
     "own_orgnumber_delegation_heading": "Du kan ikkje delegere til eige organisasjonsnummer",
