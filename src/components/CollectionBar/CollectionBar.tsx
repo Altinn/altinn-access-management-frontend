@@ -73,7 +73,7 @@ export const CollectionBar = ({
             <Button
               variant='tertiary'
               size='small'
-              color={color === 'dark' ? 'inverted' : undefined}
+              className={cn(classes.buttonText, classes[color])}
               onClick={proceedClick}
               disabled={disabledProceedButton}
             >

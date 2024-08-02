@@ -187,7 +187,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     let prioritizedErrorCodes: string[] = [];
 
     if (errorCodeTextKeyList?.length > 0) {
-      prioritizedErrorCodes = prioritizeErrors(errorCodeTextKeyList);
+      prioritizedErrorCodes = prioritizeErrors(errorCodeTextKeyList.filter(Boolean) as string[]);
     }
 
     return (

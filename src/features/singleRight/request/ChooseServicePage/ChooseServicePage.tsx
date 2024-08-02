@@ -80,9 +80,11 @@ export const ChooseServicePage = () => {
             {t('single_rights.request_choose_service_page_top_text', { name: requestee })}
           </Ingress>
           <ResourceCollectionBar
-            resources={delegableChosenServices.map(
-              (servicewithStatus) => servicewithStatus.service,
-            )}
+            resources={
+              delegableChosenServices
+                .map((servicewithStatus) => servicewithStatus.service)
+                .filter(Boolean) as ServiceResource[]
+            }
             onRemove={onRemove}
             compact={isSm}
           />

@@ -13,9 +13,10 @@ import { ErrorPanel } from '@/components';
 import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
+import type { CustomError } from '@/dataObjects';
 
 interface ApiSearchResultsProps {
-  error?: FetchBaseQueryError | SerializedError;
+  error?: FetchBaseQueryError | SerializedError | CustomError;
   isFetching: boolean;
   urlParams: URLSearchParams;
   searchResults: DelegableApi[];
@@ -85,12 +86,12 @@ export const ApiSearchResults = ({
     <>
       <StatusMessageForScreenReader visible>{statusMessage}</StatusMessageForScreenReader>
 
-      {error?.message ? (
+      {error && 'message' in error ? (
         <ErrorPanel
           role='alert'
           title={t('api_delegation.data_retrieval_failed')}
           message={error?.message}
-          statusCode={error?.statusCode}
+          statusCode={'statusCode' in error ? error.statusCode : undefined}
         ></ErrorPanel>
       ) : (
         delegableApiActionBars()

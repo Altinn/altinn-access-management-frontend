@@ -83,6 +83,7 @@ describe('OrgDelegationActionBar', () => {
           organization={overviewOrgs}
           isEditable={false}
           delegateToOrgCallback={() => null}
+          setScreenreaderMsg={() => null}
         />,
       );
       cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('exist');
@@ -95,6 +96,7 @@ describe('OrgDelegationActionBar', () => {
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
           isEditable={false}
+          setScreenreaderMsg={() => null}
         />,
       );
       cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('not.exist');
@@ -107,6 +109,7 @@ describe('OrgDelegationActionBar', () => {
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
           isEditable={true}
+          setScreenreaderMsg={() => null}
         />,
       );
       cy.findByRole('button', { name: /delete/i }).should('exist');
@@ -119,6 +122,7 @@ describe('OrgDelegationActionBar', () => {
           softDeleteAllCallback={() => null}
           organization={overviewOrgs}
           isEditable={false}
+          setScreenreaderMsg={() => null}
         />,
       );
       cy.findByRole('button', { name: /undo/i }).should('not.exist');
@@ -131,6 +135,7 @@ describe('OrgDelegationActionBar', () => {
           softDeleteAllCallback={() => null}
           organization={deletedOverviewOrgs}
           isEditable={true}
+          setScreenreaderMsg={() => null}
         />,
       );
 
@@ -153,6 +158,7 @@ describe('OrgDelegationActionBar', () => {
           softDeleteAllCallback={softDeleteAllSpy}
           softRestoreAllCallback={() => null}
           isEditable={true}
+          setScreenreaderMsg={() => null}
         />,
       );
 
@@ -173,6 +179,7 @@ describe('OrgDelegationActionBar', () => {
           softDeleteAllCallback={() => null}
           softRestoreAllCallback={softRestoreAllSpy}
           isEditable={true}
+          setScreenreaderMsg={() => null}
         />,
       );
 
@@ -194,6 +201,7 @@ describe('OrgDelegationActionBar', () => {
           softRestoreAllCallback={() => null}
           delegateToOrgCallback={delegateToNewOrgSpy}
           isEditable={true}
+          setScreenreaderMsg={() => null}
         />,
       );
 

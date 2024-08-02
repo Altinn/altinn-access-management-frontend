@@ -65,7 +65,7 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         (data: Right) => data.status !== BFFDelegatedStatus.NotDelegated,
       );
 
-      if (!hasSuccessfullDelegations && successfulDelegations?.length > 0) {
+      if (!hasSuccessfullDelegations && successfulDelegations && successfulDelegations.length > 0) {
         setHasSuccessfullDelegations(true);
       }
 
