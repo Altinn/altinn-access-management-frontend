@@ -21,6 +21,7 @@ import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
 import classes from './ChooseServicePage.module.css';
 import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { Ingress } from '@digdir/designsystemet-react';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();
@@ -32,10 +33,9 @@ export const ChooseServicePage = () => {
 
   const requestee = reporteeData?.name || userData?.name || '';
 
-  const delegableChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.servicesWithStatus.filter(
-      (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
-    ),
+  const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
+  const delegableChosenServices = servicesWithStatus.filter(
+    (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
   );
 
   const onAdd = (serviceResource: ServiceResource) => {
