@@ -28,7 +28,7 @@ export const UsersList = () => {
 
   const { data: rightHolders } = useGetRightHoldersQuery();
 
-  const [pageEntrees, numOfPages] = useMemo(() => {
+  const [pageEntries, numOfPages] = useMemo(() => {
     if (!rightHolders) {
       return [[], 1];
     }
@@ -81,10 +81,10 @@ export const UsersList = () => {
           </Heading>
         }
       >
-        {pageEntrees.length === 0 && searchString && (
+        {pageEntries.length === 0 && searchString && (
           <div>{t('users_page.user_no_search_result')}</div>
         )}
-        {pageEntrees.map((user) => (
+        {pageEntries.map((user) => (
           <UserListItem
             key={user.partyUuid}
             user={user}
