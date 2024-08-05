@@ -1,23 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Button, Heading, Tag, Pagination, Search } from '@digdir/designsystemet-react';
 import classes from './UsersList.module.css';
 import { useTranslation } from 'react-i18next';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfo/userInfoApi';
-import { getArrayPage, getTotalNumOfPages } from '@/resources/utils';
-
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 import { ListItem } from '@/components/List/ListItem';
 import { List } from '@/components/List/List';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
-
-const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
-  const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
-  const isPersonIdMatch = rightHolder.personId === searchString;
-  const isOrgNrMatch = rightHolder.organizationNumber === searchString;
-  return isNameMatch || isPersonIdMatch || isOrgNrMatch;
-};
+import { useDebouncedFilteredRightHolders } from './useDebouncedFilteredRightHolders';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -26,35 +17,11 @@ export const UsersList = () => {
   const [searchString, setSearchString] = useState<string>('');
   const pageSize = 10;
 
-  const { data: rightHolders } = useGetRightHoldersQuery();
-
-  const [pageEntries, numOfPages, serchresultLength] = useMemo(() => {
-    if (!rightHolders) {
-      return [[], 1];
-    }
-
-    const filteredRightHolders: RightHolder[] = [];
-    rightHolders.forEach((rightHolder) => {
-      if (isSearchMatch(searchString, rightHolder)) {
-        filteredRightHolders.push(rightHolder);
-      } else if (rightHolder.inheritingRightHolders?.length > 0) {
-        // check for searchString matches in inheritingRightHolders
-        const matchingInheritingItems = rightHolder.inheritingRightHolders.filter(
-          (inheritRightHolder) => isSearchMatch(searchString, inheritRightHolder),
-        );
-        if (matchingInheritingItems.length > 0) {
-          filteredRightHolders.push({
-            ...rightHolder,
-            inheritingRightHolders: matchingInheritingItems,
-          });
-        }
-      }
-    });
-    const serchresultLength = filteredRightHolders.length;
-
-    const numPages = getTotalNumOfPages(filteredRightHolders, pageSize);
-    return [getArrayPage(filteredRightHolders, currentPage, pageSize), numPages, serchresultLength];
-  }, [rightHolders, currentPage, searchString]);
+  const { pageEntries, numOfPages, searchResultLength } = useDebouncedFilteredRightHolders(
+    searchString,
+    currentPage,
+    pageSize,
+  );
 
   const onSearch = (newSearchString: string) => {
     setSearchString(newSearchString);
@@ -75,12 +42,9 @@ export const UsersList = () => {
         level={2}
         size='sm'
         role='alert'
+        spacing
       >
-        {searchString
-          ? serchresultLength === 0
-            ? t('users_page.user_no_search_result')
-            : t('users_page.user_number_of_search_results', { count: serchresultLength })
-          : ''}
+        {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
       </Heading>
 
       <List
@@ -88,7 +52,7 @@ export const UsersList = () => {
         heading={
           <Heading
             level={2}
-            size='lg'
+            size='md'
             spacing
           >
             {t('users_page.user_list_heading')}
