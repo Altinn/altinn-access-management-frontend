@@ -3,7 +3,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTranslation } from 'react-i18next';
 
 import { PageWrapper } from '@/components';
-import { Heading, Pagination } from '@digdir/designsystemet-react';
+import { Heading } from '@digdir/designsystemet-react';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 import { UsersList } from './UsersList';

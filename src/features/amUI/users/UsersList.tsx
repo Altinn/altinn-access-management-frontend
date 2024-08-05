@@ -28,7 +28,7 @@ export const UsersList = () => {
 
   const { data: rightHolders } = useGetRightHoldersQuery();
 
-  const [pageEntries, numOfPages] = useMemo(() => {
+  const [pageEntries, numOfPages, serchresultLength] = useMemo(() => {
     if (!rightHolders) {
       return [[], 1];
     }
@@ -50,9 +50,10 @@ export const UsersList = () => {
         }
       }
     });
+    const serchresultLength = filteredRightHolders.length;
 
     const numPages = getTotalNumOfPages(filteredRightHolders, pageSize);
-    return [getArrayPage(filteredRightHolders, currentPage, pageSize), numPages];
+    return [getArrayPage(filteredRightHolders, currentPage, pageSize), numPages, serchresultLength];
   }, [rightHolders, currentPage, searchString]);
 
   const onSearch = (newSearchString: string) => {
@@ -69,6 +70,19 @@ export const UsersList = () => {
         onChange={(event) => onSearch(event.target.value)}
         onClear={() => onSearch('')}
       />
+
+      <Heading
+        level={2}
+        size='sm'
+        role='alert'
+      >
+        {searchString
+          ? serchresultLength === 0
+            ? t('users_page.user_no_search_result')
+            : t('users_page.user_number_of_search_results', { count: serchresultLength })
+          : ''}
+      </Heading>
+
       <List
         compact
         heading={
@@ -81,9 +95,6 @@ export const UsersList = () => {
           </Heading>
         }
       >
-        {pageEntries.length === 0 && searchString && (
-          <div>{t('users_page.user_no_search_result')}</div>
-        )}
         {pageEntries.map((user) => (
           <UserListItem
             key={user.partyUuid}
@@ -91,16 +102,19 @@ export const UsersList = () => {
           />
         ))}
       </List>
-      <Pagination
-        className={classes.pagination}
-        size='sm'
-        hideLabels={true}
-        currentPage={currentPage}
-        totalPages={numOfPages}
-        onChange={(newPage) => setCurrentPage(newPage)}
-        nextLabel='Neste'
-        previousLabel='Forrige'
-      />
+
+      {numOfPages > 1 && (
+        <Pagination
+          className={classes.pagination}
+          size='sm'
+          hideLabels={true}
+          currentPage={currentPage}
+          totalPages={numOfPages}
+          onChange={(newPage) => setCurrentPage(newPage)}
+          nextLabel='Neste'
+          previousLabel='Forrige'
+        />
+      )}
     </div>
   );
 };

@@ -197,6 +197,7 @@
     "main_page_heading": "Brukere med fullmakter i {{name}}",
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
-    "user_no_search_result": "Ingen brukere funnet"
+    "user_no_search_result": "Ingen brukere funnet",
+    "user_number_of_search_results": "{{count}} treff på søket"
   }
 }
