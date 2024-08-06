@@ -290,7 +290,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <returns>List of filtered resources or all resources if the list of filters is null or empty</returns>
         private List<ServiceResourceFE> FilterResourceList(List<ServiceResourceFE> resources, string[] resourceOwnerFilters)
         {
-            if (resourceOwnerFilters.IsNullOrEmpty())
+            if (resourceOwnerFilters == null || resourceOwnerFilters.Length == 0)
             {
                 return resources;
             }
@@ -320,7 +320,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </returns>
         private List<ServiceResourceFE> SearchInResourceList(List<ServiceResourceFE> resources, string searchString)
         {
-            if (searchString.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(searchString))
             {
                 return resources;
             }
