@@ -1,64 +1,85 @@
-import React, { useState, useMemo } from 'react';
-import { Button, Heading, Tag, Pagination } from '@digdir/designsystemet-react';
+import React, { useState } from 'react';
+import { Button, Heading, Tag, Pagination, Search, Paragraph } from '@digdir/designsystemet-react';
 import classes from './UsersList.module.css';
 import { useTranslation } from 'react-i18next';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfo/userInfoApi';
-import { getArrayPage, getTotalNumOfPages } from '@/resources/utils';
-
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 
 import { ListItem } from '@/components/List/ListItem';
 import { List } from '@/components/List/List';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
+import { useFilteredRightHolders } from './useFilteredRightHolders';
+import { debounce } from '@/resources/utils';
 
 export const UsersList = () => {
   const { t } = useTranslation();
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchString, setSearchString] = useState<string>('');
+
   const pageSize = 10;
 
-  const { data: rightHolders } = useGetRightHoldersQuery();
+  const { pageEntries, numOfPages, searchResultLength } = useFilteredRightHolders(
+    searchString,
+    currentPage,
+    pageSize,
+  );
 
-  const [pageEntrees, numOfPages] = useMemo(() => {
-    if (!rightHolders) {
-      return [[], 1];
-    }
-    const numPages = getTotalNumOfPages(rightHolders, pageSize);
-    return [getArrayPage(rightHolders, currentPage, pageSize), numPages];
-  }, [rightHolders, currentPage]);
+  const onSearch = debounce((newSearchString: string) => {
+    setSearchString(newSearchString);
+    setCurrentPage(1); // reset current page when searching
+  }, 300);
 
   return (
     <div className={classes.usersList}>
-      <List
-        compact
-        heading={
-          <Heading
-            level={2}
-            size='lg'
-            spacing
-          >
-            {t('users_page.user_list_heading')}
-          </Heading>
-        }
+      <Heading
+        level={2}
+        size='sm'
+        spacing
+        id='user_list_heading_id'
       >
-        {pageEntrees.map((user) => (
+        {t('users_page.user_list_heading')}
+      </Heading>
+      <Search
+        className={classes.searchBar}
+        placeholder={t('users_page.user_search_placeholder')}
+        onChange={(event) => onSearch(event.target.value)}
+        onClear={() => {
+          setSearchString('');
+          setCurrentPage(1);
+        }}
+        hideLabel
+        label={t('users_page.user_search_placeholder')}
+      />
+      <List
+        aria-labelledby='user_list_heading_id'
+        compact
+      >
+        {pageEntries.map((user) => (
           <UserListItem
             key={user.partyUuid}
             user={user}
           />
         ))}
       </List>
-      <Pagination
-        className={classes.pagination}
-        size='sm'
-        hideLabels={true}
-        currentPage={currentPage}
-        totalPages={numOfPages}
-        onChange={(newPage) => setCurrentPage(newPage)}
-        nextLabel='Neste'
-        previousLabel='Forrige'
-      />
+      <Paragraph
+        role='alert'
+        size='lg'
+      >
+        {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
+      </Paragraph>
+      {numOfPages > 1 && (
+        <Pagination
+          className={classes.pagination}
+          size='sm'
+          hideLabels={true}
+          currentPage={currentPage}
+          totalPages={numOfPages}
+          onChange={(newPage) => setCurrentPage(newPage)}
+          nextLabel='Neste'
+          previousLabel='Forrige'
+        />
+      )}
     </div>
   );
 };

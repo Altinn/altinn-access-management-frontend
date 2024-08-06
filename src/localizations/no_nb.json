@@ -195,7 +195,9 @@
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",
-    "user_list_heading": "Andre med fullmakt"
+    "user_list_heading": "Andre med fullmakt",
+    "user_search_placeholder": "Søk etter person eller virksomhet",
+    "user_no_search_result": "Ingen brukere funnet"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
