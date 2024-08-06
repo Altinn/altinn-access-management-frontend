@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Heading, Tag, Pagination, Search } from '@digdir/designsystemet-react';
+import { Button, Heading, Tag, Pagination, Search, Paragraph } from '@digdir/designsystemet-react';
 import classes from './UsersList.module.css';
 import { useTranslation } from 'react-i18next';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
@@ -30,24 +30,26 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
+      <Heading
+        level={2}
+        size='md'
+        spacing
+        id='user_list_heading_id'
+      >
+        {t('users_page.user_list_heading')}
+      </Heading>
       <Search
         className={classes.searchBar}
         placeholder={t('users_page.user_search_placeholder')}
         value={searchString}
         onChange={(event) => onSearch(event.target.value)}
         onClear={() => onSearch('')}
+        hideLabel
+        label={t('users_page.user_search_placeholder')}
       />
       <List
+        aria-labelledby='user_list_heading_id'
         compact
-        heading={
-          <Heading
-            level={2}
-            size='md'
-            spacing
-          >
-            {t('users_page.user_list_heading')}
-          </Heading>
-        }
       >
         {pageEntries.map((user) => (
           <UserListItem
@@ -56,14 +58,12 @@ export const UsersList = () => {
           />
         ))}
       </List>
-      <Heading
-        level={2}
-        size='sm'
+      <Paragraph
         role='alert'
-        spacing
+        size='lg'
       >
         {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
-      </Heading>
+      </Paragraph>
       {numOfPages > 1 && (
         <Pagination
           className={classes.pagination}
