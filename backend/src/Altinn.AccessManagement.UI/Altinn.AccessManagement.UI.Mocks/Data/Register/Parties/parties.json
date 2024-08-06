@@ -521,5 +521,48 @@
     "Person": null,
     "Organisation": null,
     "ChildParties": null
+  },
+  {
+    "PartyTypeName": 2,
+    "SSN": "",
+    "OrgNumber": "313160300",
+    "Person": null,
+    "Organization": {
+      "OrgNumber": "313160300",
+      "Name": "STA TOM TIGER AS",
+      "UnitType": "AS",
+      "TelephoneNumber": "12345678",
+      "MobileNumber": "92010000",
+      "FaxNumber": "92110000",
+      "EMailAddress": "central@vikesaa.no",
+      "InternetAddress": "http://vikesaa.no",
+      "MailingAddress": "Medalje Gate 1",
+      "MailingPostalCode": "0170",
+      "MailingPostalCity": "Oslo",
+      "BusinessAddress": "Medalje Gate 1",
+      "BusinessPostalCode": "0170",
+      "BusinessPostalCity": "By"
+    },
+    "PartyId": 51473841,
+    "PartyUuid": "87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+    "UnitType": "AS",
+    "Name": "STA TOM TIGER AS",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "ChildParties": null
+  },
+  {
+    "PartyId": 51194376,
+    "PartyUuid": "eb0e874b-5f37-44cc-b648-f9a902a82c89",
+    "PartyTypeName": 1,
+    "OrgNumber": null,
+    "Ssn": "21915399719",
+    "UnitType": null,
+    "Name": "LIVSGLAD FILM",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
   }
 ]

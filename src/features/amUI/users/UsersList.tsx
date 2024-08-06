@@ -35,7 +35,7 @@ export const UsersList = () => {
         heading={
           <Heading
             level={2}
-            size='lg'
+            size='sm'
             spacing
           >
             {t('users_page.user_list_heading')}

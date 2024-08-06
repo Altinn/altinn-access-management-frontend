@@ -7,17 +7,17 @@ import {
   RobotSmileIcon,
 } from '@navikt/aksel-icons';
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
-import classes from './UsersFakePageWrapper.module.css';
+import classes from './FakePageWrapper.module.css';
 
-interface UsersFakePageWrapperProps {
+interface FakePageWrapperProps {
   reporteeName: string;
   children?: React.ReactNode;
 }
 
-export const UsersFakePageWrapper = ({
+export const FakePageWrapper = ({
   reporteeName,
   children,
-}: UsersFakePageWrapperProps): React.ReactNode => {
+}: FakePageWrapperProps): React.ReactNode => {
   return (
     <div className={classes.pageWrapper}>
       <div className={classes.topBar}>

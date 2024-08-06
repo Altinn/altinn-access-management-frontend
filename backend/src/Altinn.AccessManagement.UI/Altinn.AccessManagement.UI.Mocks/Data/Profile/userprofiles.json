@@ -147,5 +147,31 @@
       "PreSelectedPartyId": 0,
       "DoNotPromptForParty": false
     }
+  },
+  {
+    "UserId": 20010996,
+    "UserUuid": "eb0e874b-5f37-44cc-b648-f9a902a82c89",
+    "UserName": "FilmLover42",
+    "PhoneNumber": "90001337",
+    "Email": "1337gg@altinnstudiotestusers.com",
+    "PartyId": 51194376,
+    "Party": {
+      "PartyId": 51194376,
+      "PartyUuid": "eb0e874b-5f37-44cc-b648-f9a902a82c89",
+      "PartyTypeName": 1,
+      "OrgNumber": null,
+      "Ssn": "21915399719",
+      "UnitType": null,
+      "Name": "LIVSGLAD FILM",
+      "IsDeleted": false,
+      "OnlyHierarchyElementWithNoAccess": false,
+      "Person": null,
+      "Organisation": null,
+      "ChildParties": null
+    },
+    "UserType": 1,
+    "ProfileSettingPreference": {
+      "Language": "nb"
+    }
   }
 ]

@@ -1,0 +1,1 @@
+export { FakePageWrapper } from './FakePageWrapper';

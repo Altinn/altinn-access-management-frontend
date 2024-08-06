@@ -68,7 +68,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             else
             {
                 // Use automatically generated data
-                return Task.FromResult(_faker.Generate(3000));
+                List<AuthorizedParty> reportees = _faker.Generate(3000);
+                AuthorizedParty currentUser = new AuthorizedParty
+                {
+                    PartyId = 51194376,
+                    Name = "Livsglad Film",
+                    Type = AuthorizedPartyType.Person,
+                    PartyUuid = new Guid("eb0e874b-5f37-44cc-b648-f9a902a82c89"),
+                    PersonId = "21915399719",
+                    AuthorizedRoles = []
+                };
+                reportees.Add(currentUser);
+                return Task.FromResult(reportees);
             }
         }
 
