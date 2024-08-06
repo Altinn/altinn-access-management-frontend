@@ -24,18 +24,18 @@ const computePageEntries = (
     };
   }
 
-  const serchResult: RightHolder[] = [];
+  const searchResult: RightHolder[] = [];
 
   rightHolders.forEach((rightHolder) => {
     if (isSearchMatch(searchString, rightHolder)) {
-      serchResult.push(rightHolder);
+      searchResult.push(rightHolder);
     } else if (rightHolder.inheritingRightHolders?.length > 0) {
       // check for searchString matches in inheritingRightHolders
       const matchingInheritingItems = rightHolder.inheritingRightHolders.filter(
         (inheritRightHolder) => isSearchMatch(searchString, inheritRightHolder),
       );
       if (matchingInheritingItems.length > 0) {
-        serchResult.push({
+        searchResult.push({
           ...rightHolder,
           inheritingRightHolders: matchingInheritingItems,
         });
@@ -44,9 +44,9 @@ const computePageEntries = (
   });
 
   return {
-    pageEntries: getArrayPage(serchResult, currentPage, pageSize),
-    numOfPages: getTotalNumOfPages(serchResult, pageSize),
-    searchResultLength: serchResult.length,
+    pageEntries: getArrayPage(searchResult, currentPage, pageSize),
+    numOfPages: getTotalNumOfPages(searchResult, pageSize),
+    searchResultLength: searchResult.length,
   };
 };
 
