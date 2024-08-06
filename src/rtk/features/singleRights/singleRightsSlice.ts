@@ -29,6 +29,12 @@ export enum ServiceStatus {
   Unauthorized = `Unauthorized`,
 }
 
+interface RejectedPayload {
+  response: {
+    status: number;
+  };
+}
+
 export interface DelegationAccessCheckDto {
   resourceReference: IdValuePair[];
   serviceResource: ServiceResource;
@@ -111,7 +117,7 @@ const createDelegationResponseData = (
   detailsDescription?: string,
 ): Right => {
   return {
-    resource: [{ id: resourceId, value: resourceValue }],
+    resource: [{ id: resourceId, value: resourceValue || '' }],
     action: action,
     status: status,
     details: [
@@ -268,7 +274,7 @@ const singleRightSlice = createSlice({
       .addCase(delegationAccessCheck.rejected, (state, action) => {
         const serviceID = action.meta.arg.serviceResource.identifier;
         const errorCode =
-          action.payload.response.status === 401
+          (action.payload as RejectedPayload).response.status === 401
             ? ServiceStatus.Unauthorized
             : ServiceStatus.HTTPError;
 

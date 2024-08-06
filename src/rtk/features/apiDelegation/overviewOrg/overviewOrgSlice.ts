@@ -51,6 +51,15 @@ export interface DeletionRequest {
   apiId: string;
 }
 
+interface RejectedPayload {
+  response?: {
+    status?: string;
+    data?: {
+      title?: string;
+    };
+  };
+}
+
 const initialState: SliceState = {
   loading: true,
   overviewOrgs: [],
@@ -334,12 +343,13 @@ const overviewOrgSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsReceived.rejected, (state, action) => {
+        const payload = action.payload as RejectedPayload;
         state.loading = true;
-        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        state.error.statusCode = `${payload?.response?.status || 'Unknown code'}`;
         if (state.error.statusCode === '400') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error.statusCode === '500') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }
@@ -353,12 +363,13 @@ const overviewOrgSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOverviewOrgsOffered.rejected, (state, action) => {
+        const payload = action.payload as RejectedPayload;
         state.loading = true;
-        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        state.error.statusCode = `${payload?.response?.status || 'Unknown code'}`;
         if (state.error?.statusCode === '400') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error?.statusCode === '500') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }
@@ -374,11 +385,12 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteOfferedApiDelegation.rejected, (state, action) => {
-        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        const payload = action.payload as RejectedPayload;
+        state.error.statusCode = `${payload?.response?.status || 'Unknown code'}`;
         if (state.error?.statusCode === '400') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error?.statusCode === '500') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }
@@ -393,11 +405,12 @@ const overviewOrgSlice = createSlice({
         state.overviewOrgs = overviewOrgs.filter((org) => org.apiList.length !== 0);
       })
       .addCase(deleteReceivedApiDelegation.rejected, (state, action) => {
-        state.error.statusCode = String(action.payload?.response?.status) ?? 'Unknown code';
+        const payload = action.payload as RejectedPayload;
+        state.error.statusCode = `${payload?.response?.status || 'Unknown code'}`;
         if (state.error?.statusCode === '400') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else if (state.error?.statusCode === '500') {
-          state.error.message = action.payload?.response?.data?.title ?? 'Unknown error';
+          state.error.message = payload?.response?.data?.title ?? 'Unknown error';
         } else {
           state.error.message = 'Unknown error';
         }

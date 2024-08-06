@@ -7,6 +7,7 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 import { UsersList } from './UsersList';
+import { UsersFakePageWrapper } from './UsersFakePageWrapper';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
@@ -16,13 +17,15 @@ export const UsersPage = () => {
 
   return (
     <PageWrapper>
-      <Heading
-        level={1}
-        spacing
-      >
-        {t('users_page.main_page_heading', { name: reportee?.name || '' })}
-      </Heading>
-      <UsersList />
+      <UsersFakePageWrapper reporteeName={reportee?.name || ''}>
+        <Heading
+          level={1}
+          spacing
+        >
+          {t('users_page.main_page_heading', { name: reportee?.name || '' })}
+        </Heading>
+        <UsersList />
+      </UsersFakePageWrapper>
     </PageWrapper>
   );
 };

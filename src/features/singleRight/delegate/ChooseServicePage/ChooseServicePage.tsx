@@ -35,10 +35,9 @@ export const ChooseServicePage = () => {
   const dispatch = useAppDispatch();
   const [urlParams] = useSearchParams();
   useDocumentTitle(t('single_rights.page_title'));
-  const delegableChosenServices = useAppSelector((state) =>
-    state.singleRightsSlice.servicesWithStatus.filter(
-      (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
-    ),
+  const servicesWithStatus = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
+  const delegableChosenServices = servicesWithStatus.filter(
+    (s) => s.status === ServiceStatus.Delegable || s.status === ServiceStatus.PartiallyDelegable,
   );
 
   useLayoutEffect(() => {
@@ -91,9 +90,11 @@ export const ChooseServicePage = () => {
                     })}
                   </Ingress>
                   <ResourceCollectionBar
-                    resources={delegableChosenServices.map(
-                      (servicewithStatus) => servicewithStatus.service,
-                    )}
+                    resources={
+                      delegableChosenServices
+                        .map((servicewithStatus) => servicewithStatus.service)
+                        .filter(Boolean) as ServiceResource[]
+                    }
                     onRemove={onRemove}
                     compact={isSm}
                     proceedToPath={`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`}

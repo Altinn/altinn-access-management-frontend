@@ -4,7 +4,7 @@ import classes from './GroupElements.module.css';
 
 export interface GroupElementsProps {
   /** The list of elements to place besides eachother*/
-  children: React.ReactNode;
+  children: React.ReactNode[];
 }
 
 /**

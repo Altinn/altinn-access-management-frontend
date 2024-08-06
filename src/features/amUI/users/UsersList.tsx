@@ -82,6 +82,19 @@ export const UsersList = () => {
     </div>
   );
 };
+
+const UserListRole = ({ role }: { role: string }) => {
+  const { t } = useTranslation();
+  return (
+    <Tag
+      size='sm'
+      color='warning'
+    >
+      {t(`user_role.${role}`)}
+    </Tag>
+  );
+};
+
 const UserListItem = ({ user }: { user: RightHolder }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isExpanable = !!(user.inheritingRightHolders && user.inheritingRightHolders.length > 0);
@@ -91,13 +104,10 @@ const UserListItem = ({ user }: { user: RightHolder }) => {
       <div className={classes.roleListContainer}>
         {user.registryRoles?.map((role) => {
           return (
-            <Tag
+            <UserListRole
               key={role}
-              size='sm'
-              color='warning'
-            >
-              {role}
-            </Tag>
+              role={role}
+            />
           );
         })}
       </div>
