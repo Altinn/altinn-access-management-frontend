@@ -8,31 +8,33 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { ListItem } from '@/components/List/ListItem';
 import { List } from '@/components/List/List';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
-import { useDebouncedFilteredRightHolders } from './useDebouncedFilteredRightHolders';
+import { useFilteredRightHolders } from './useFilteredRightHolders';
+import { debounce } from '@/resources/utils';
 
 export const UsersList = () => {
   const { t } = useTranslation();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchString, setSearchString] = useState<string>('');
+
   const pageSize = 10;
 
-  const { pageEntries, numOfPages, searchResultLength } = useDebouncedFilteredRightHolders(
+  const { pageEntries, numOfPages, searchResultLength } = useFilteredRightHolders(
     searchString,
     currentPage,
     pageSize,
   );
 
-  const onSearch = (newSearchString: string) => {
+  const onSearch = debounce((newSearchString: string) => {
     setSearchString(newSearchString);
     setCurrentPage(1); // reset current page when searching
-  };
+  }, 300);
 
   return (
     <div className={classes.usersList}>
       <Heading
         level={2}
-        size='md'
+        size='sm'
         spacing
         id='user_list_heading_id'
       >
@@ -41,9 +43,11 @@ export const UsersList = () => {
       <Search
         className={classes.searchBar}
         placeholder={t('users_page.user_search_placeholder')}
-        value={searchString}
         onChange={(event) => onSearch(event.target.value)}
-        onClear={() => onSearch('')}
+        onClear={() => {
+          setSearchString('');
+          setCurrentPage(1);
+        }}
         hideLabel
         label={t('users_page.user_search_placeholder')}
       />
