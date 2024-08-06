@@ -37,16 +37,6 @@ export const UsersList = () => {
         onChange={(event) => onSearch(event.target.value)}
         onClear={() => onSearch('')}
       />
-
-      <Heading
-        level={2}
-        size='sm'
-        role='alert'
-        spacing
-      >
-        {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
-      </Heading>
-
       <List
         compact
         heading={
@@ -66,7 +56,14 @@ export const UsersList = () => {
           />
         ))}
       </List>
-
+      <Heading
+        level={2}
+        size='sm'
+        role='alert'
+        spacing
+      >
+        {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
+      </Heading>
       {numOfPages > 1 && (
         <Pagination
           className={classes.pagination}
