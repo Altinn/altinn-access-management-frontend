@@ -86,7 +86,7 @@ export const useFilteredRightHolders = (
       pageSize,
       sortedRightHolders,
     );
-    setPageEntries(pageEntries.filter((entry) => entry !== undefined));
+    setPageEntries(pageEntries);
     setNumOfPages(numOfPages);
     setSearchResultLength(searchResultLength);
   }, [searchString, currentPage, rightHolders]);
