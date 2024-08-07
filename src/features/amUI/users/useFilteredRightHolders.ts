@@ -10,7 +10,6 @@ const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean 
   return isNameMatch || isPersonIdMatch || isOrgNrMatch;
 };
 
-// Custom sort function to prioritize registryRoles containing "DAGL"
 const sortRightHolders = (rightHolders: RightHolder[]): RightHolder[] =>
   [...rightHolders].sort((a, b) => a.name.localeCompare(b.name));
 
