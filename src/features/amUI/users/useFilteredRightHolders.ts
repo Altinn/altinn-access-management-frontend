@@ -11,21 +11,8 @@ const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean 
 };
 
 // Custom sort function to prioritize registryRoles containing "DAGL"
-const sortRightHolders = (rightHolders: RightHolder[]): RightHolder[] => {
-  const sorted = [...rightHolders].sort((a, b) => {
-    const aHasDAGL = a.registryRoles.includes('DAGL');
-    const bHasDAGL = b.registryRoles.includes('DAGL');
-
-    if (aHasDAGL && !bHasDAGL) {
-      return -1;
-    } else if (!aHasDAGL && bHasDAGL) {
-      return 1;
-    } else {
-      return a.name.localeCompare(b.name);
-    }
-  });
-  return sorted;
-};
+const sortRightHolders = (rightHolders: RightHolder[]): RightHolder[] =>
+  [...rightHolders].sort((a, b) => a.name.localeCompare(b.name));
 
 export const sortRightholderList = (list: RightHolder[]): RightHolder[] =>
   sortRightHolders(list).map((rightHolder) => {
