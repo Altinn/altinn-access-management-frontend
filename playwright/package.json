@@ -5,7 +5,7 @@
   "packageManager": "yarn@4.3.1",
   "main": "index.js",
   "scripts": {
-    "env:AT21": "cross-env environment=at22 npx playwright test",
+    "env:AT21": "cross-env environment=at21 npx playwright test",
     "env:AT22": "cross-env environment=at22 npx playwright test",
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:AT24": "cross-env environment=at24 npx playwright test",
