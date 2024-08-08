@@ -29,7 +29,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IResourceService _resourceService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<APIDelegationController> _logger;
-        private readonly IUserService _profileService;
+        private readonly IUserService _userService;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
@@ -38,19 +38,19 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="logger">the handler for logger service</param>
         /// <param name="apiDelegationService">The service implementation for handling maskinporten schema delegations</param>
         /// <param name="resourceService">The resource administration point</param>
-        /// <param name="profileService">The service implementation for user profile operations</param>
+        /// <param name="userService">The service implementation for user profile operations</param>
         /// <param name="httpContextAccessor">Accessor for httpcontext</param>
         public APIDelegationController(
             ILogger<APIDelegationController> logger,
             IAPIDelegationService apiDelegationService,
             IResourceService resourceService,
-            IUserService profileService,
+            IUserService userService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _apiDelegationService = apiDelegationService;
             _resourceService = resourceService;
-            _profileService = profileService;
+            _userService = userService;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _httpContextAccessor = httpContextAccessor;
         }
@@ -67,9 +67,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-                UserProfile userProfile = await _profileService.GetUserProfile(userId);
-                string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+                var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
+
                 return await _apiDelegationService.GetReceivedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)
@@ -91,9 +90,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-                UserProfile userProfile = await _profileService.GetUserProfile(userId);
-                string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+                var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
                 return await _apiDelegationService.GetOfferedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)

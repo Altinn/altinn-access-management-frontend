@@ -93,10 +93,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             UserProfile user = await _profileService.GetUserProfile(userId);
-            AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = ProfileHelper.GetStandardLanguageCodeIsoStandard(user, HttpContext);
 
-            HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
+            string languageCode = null;
+            if (user != null)
+            {
+                languageCode = ProfileHelper.GetFrontendStandardLanguage(user.ProfileSettingPreference?.Language);
+            }
+            else
+            {
+                ProfileHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
+            }
+
+            HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,

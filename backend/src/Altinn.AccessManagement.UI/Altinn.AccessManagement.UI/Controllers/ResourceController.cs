@@ -43,6 +43,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+
         /// <summary>
         ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
         /// </summary>
@@ -52,9 +53,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("resourceowners")]
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _userService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+
+            var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
 
             if (relevantResourceTypes?.Count > 0)
             {
@@ -75,9 +75,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("search")]
         public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
         {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _userService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+            var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
 
             try
             {
@@ -94,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
-        
+
         /// <summary>
         ///     Searches through all delegable maskinportenschema services and returns matches based on the provided search string and filters
         /// </summary>
@@ -104,9 +102,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("maskinportenapi/search")]
         public async Task<ActionResult<List<ServiceResourceFE>>> MaskinportenSearch([FromQuery] ApiSearchParams parameters)
         {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile userProfile = await _userService.GetUserProfile(userId);
-            string languageCode = ProfileHelper.GetLanguageCodeForUserAltinnStandard(userProfile, HttpContext);
+            var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
 
             try
             {

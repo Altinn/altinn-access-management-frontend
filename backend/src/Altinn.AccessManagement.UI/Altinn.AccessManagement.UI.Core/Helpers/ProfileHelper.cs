@@ -1,70 +1,49 @@
-﻿using System.Security.Claims;
-using Altinn.AccessManagement.UI.Core.Constants;
+﻿using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
     /// <summary>
-    /// helper class for authentication
+    /// Helper class for authentication.
     /// </summary>
     public static class ProfileHelper
     {
-        /// <summary>
-        /// Gets the users language preference in Altinn format, mostly used for getting correct language code for backend
-        /// </summary>
-        /// <param name="userProfile">the logged in user profile.</param>
-        /// <param name="httpContext">Http client.</param>
-        /// <returns>the logged in users language preference in Altinn format(en, no, nb)</returns>
-        public static string GetLanguageCodeForUserAltinnStandard(UserProfile userProfile, HttpContext httpContext)
+
+        // Tuple type for language mappings
+        private static readonly List<(string Altinn2Standard, string BackendStandard, string FrontendStandard)> LanguageMappings = new List<(string, string, string)>
         {
-            string languageCookieValue = GetAltinnPersistenceCookieValueAltinnStandard(httpContext);
+            ("UL=1044", "nb", "no_nb"), // Norwegian Bokmål
+            ("UL=2068", "nn", "no_nn"), // Norwegian Nynorsk
+            ("UL=1033", "en", "en") // English
+        };
 
-            if (languageCookieValue != string.Empty)
-            {
-                return languageCookieValue;
-            }
-
-            if (userProfile != null)
-            {
-                return userProfile.ProfileSettingPreference.Language;
-            }
-
-            return "nb";
+        /// <summary>
+        /// Gets the backend standard language based on the either Altinn 2 or frontend standard.
+        /// </summary>
+        /// <param name="languageCode">The language code.</param>
+        /// <returns>The backend standard language code.</returns>
+        public static string GetBackendStandardLanguage(string languageCode)
+        {
+            return LanguageMappings.FirstOrDefault(m => languageCode.Contains(m.Altinn2Standard) || m.FrontendStandard == languageCode).BackendStandard;
         }
 
         /// <summary>
-        /// Gets the standard language code in ISO format
+        /// Gets the frontend standard language based on the either Altinn 2 or backend standard.
         /// </summary>
-        /// <returns>the logged in users language on ISO format (no_nb, no_nn, en)</returns>
-        public static string GetStandardLanguageCodeIsoStandard(UserProfile userProfile, HttpContext httpContext)
+        /// <param name="languageCode">The language code.</param>
+        /// <returns>The frontend standard language code.</returns>
+        public static string GetFrontendStandardLanguage(string languageCode)
         {
-            string languageCookieValue = GetAltinnPersistenceCookieValueIsoStandard(httpContext);
-
-            if (languageCookieValue != string.Empty)
-            {
-                return languageCookieValue;
-            }
-
-            if (userProfile != null)
-            {
-                switch (userProfile.ProfileSettingPreference?.Language)
-                {
-                    case "nn":
-                        return "no_nn";
-                    case "nb":
-                        return "no_nb";
-                    case "en":
-                        return "en";
-                    default:
-                        return "no_nb";
-                }
-            }
-
-            return "no_nb";
+            return LanguageMappings.FirstOrDefault(m => languageCode.Contains(m.Altinn2Standard) || m.BackendStandard == languageCode).FrontendStandard;
         }
 
-        private static string GetAltinnPersistenceCookieValueAltinnStandard(HttpContext httpContext)
+        /// <summary>
+        /// Gets the value of the Altinn persistence cookie in frontend standard format.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context.</param>
+        /// <returns>The value of the Altinn persistence cookie.</returns>
+        public static string GetAltinnPersistenceCookieValueFrontendStandard(HttpContext httpContext)
         {
             var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
 
@@ -73,49 +52,24 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 return string.Empty;
             }
 
-            if (cookieValue.Contains("UL=1033"))
-            {
-                return "en";
-            }
-
-            if (cookieValue.Contains("UL=1044"))
-            {
-                return "nb";
-            }
-
-            if (cookieValue.Contains("UL=2068"))
-            {
-                return "nn";
-            }
-
-            return string.Empty;
+            return GetFrontendStandardLanguage(cookieValue);
         }
 
-        private static string GetAltinnPersistenceCookieValueIsoStandard(HttpContext httpContext)
+        /// <summary>
+        /// Gets the value of the selected language cookie in backend standard format.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context.</param>
+        /// <returns>The value of the selected language cookie.</returns>
+        public static string GetSelectedLanguageCookieValueBackendStandard(HttpContext httpContext)
         {
-            var cookieValue = httpContext.Request.Cookies["altinnPersistentContext"];
+            var cookieValue = httpContext.Request.Cookies["selectedLanguage"];
 
             if (cookieValue == null)
             {
                 return string.Empty;
             }
 
-            if (cookieValue.Contains("UL=1033"))
-            {
-                return "en";
-            }
-
-            if (cookieValue.Contains("UL=1044"))
-            {
-                return "no_nb";
-            }
-
-            if (cookieValue.Contains("UL=2068"))
-            {
-                return "no_nn";
-            }
-
-            return string.Empty;
+            return GetBackendStandardLanguage(cookieValue);
         }
     }
 }

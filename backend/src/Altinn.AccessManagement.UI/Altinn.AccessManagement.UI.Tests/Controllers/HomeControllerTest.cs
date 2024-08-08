@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(3, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
-            Assert.StartsWith("i18next", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
             Assert.StartsWith("deny", xframeHeaders.ElementAt(0));
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
@@ -98,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(3, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
-            Assert.StartsWith("i18next", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
         }
 
         /// <summary>
