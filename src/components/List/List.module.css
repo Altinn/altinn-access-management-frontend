@@ -1,4 +1,5 @@
 .list {
+  --backgroundColor: transparent;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -8,16 +9,19 @@
   width: 100%;
 }
 
+.background {
+  --backgroundColor: var(--fds-semantic-surface-neutral-default);
+}
+
 .spacious {
   gap: 0.5rem;
 }
 .spacious > .listItem {
   padding: 0.5rem;
-  border-radius: 0.5rem;
 }
 
 .listItem {
-  background-color: #fff;
+  background-color: var(--backgroundColor);
   border-bottom: 1px solid #e1e4e8;
 }
 

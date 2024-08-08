@@ -1,6 +1,10 @@
 import { getTotalNumOfPages, getArrayPage } from '@/resources/utils';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfo/userInfoApi';
+import {
+  PartyType,
+  useGetRightHoldersQuery,
+  useGetUserInfoQuery,
+} from '@/rtk/features/userInfo/userInfoApi';
 import { useState, useEffect } from 'react';
 
 const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
@@ -14,6 +18,7 @@ const computePageEntries = (
   searchString: string,
   currentPage: number,
   pageSize: number,
+  currentUserUuid?: string,
   rightHolders?: RightHolder[],
 ) => {
   if (!rightHolders) {
@@ -25,9 +30,19 @@ const computePageEntries = (
   }
 
   const searchResult: RightHolder[] = [];
+  let currentUser: RightHolder = {
+    partyUuid: '',
+    partyType: PartyType.Person,
+    registryRoles: [],
+    name: '',
+    inheritingRightHolders: [],
+  };
 
   rightHolders.forEach((rightHolder) => {
-    if (isSearchMatch(searchString, rightHolder)) {
+    if (rightHolder.partyUuid === currentUserUuid) {
+      // remove current user from paginated list
+      currentUser = rightHolder;
+    } else if (isSearchMatch(searchString, rightHolder)) {
       searchResult.push(rightHolder);
     } else if (rightHolder.inheritingRightHolders?.length > 0) {
       // check for searchString matches in inheritingRightHolders
@@ -47,6 +62,7 @@ const computePageEntries = (
     pageEntries: getArrayPage(searchResult, currentPage, pageSize),
     numOfPages: getTotalNumOfPages(searchResult, pageSize),
     searchResultLength: searchResult.length,
+    currentUserAsRightHolder: currentUser,
   };
 };
 
@@ -56,21 +72,20 @@ export const useFilteredRightHolders = (
   pageSize: number,
 ) => {
   const { data: rightHolders } = useGetRightHoldersQuery();
+  const { data: currentUser } = useGetUserInfoQuery();
   const [pageEntries, setPageEntries] = useState<RightHolder[]>([]);
   const [numOfPages, setNumOfPages] = useState<number>(1);
   const [searchResultLength, setSearchResultLength] = useState<number>(0);
+  const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<RightHolder>();
 
   useEffect(() => {
-    const { pageEntries, numOfPages, searchResultLength } = computePageEntries(
-      searchString,
-      currentPage,
-      pageSize,
-      rightHolders,
-    );
+    const { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder } =
+      computePageEntries(searchString, currentPage, pageSize, currentUser?.uuid, rightHolders);
     setPageEntries(pageEntries);
     setNumOfPages(numOfPages);
     setSearchResultLength(searchResultLength);
-  }, [searchString, currentPage, rightHolders]);
+    setCurrentUserAsRightHolder(currentUserAsRightHolder);
+  }, [searchString, currentPage, rightHolders, currentUser]);
 
-  return { pageEntries, numOfPages, searchResultLength };
+  return { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder };
 };

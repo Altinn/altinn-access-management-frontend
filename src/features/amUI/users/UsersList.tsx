@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Heading, Tag, Pagination, Search, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Pagination, Search, Paragraph } from '@digdir/designsystemet-react';
 import classes from './UsersList.module.css';
 import { useTranslation } from 'react-i18next';
-import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 
 import { ListItem } from '@/components/List/ListItem';
 import { List } from '@/components/List/List';
-import { UserIcon } from '@/components/UserIcon/UserIcon';
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import { debounce } from '@/resources/utils';
+import { UserItem } from './UserItem';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -19,11 +18,8 @@ export const UsersList = () => {
 
   const pageSize = 10;
 
-  const { pageEntries, numOfPages, searchResultLength } = useFilteredRightHolders(
-    searchString,
-    currentPage,
-    pageSize,
-  );
+  const { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder } =
+    useFilteredRightHolders(searchString, currentPage, pageSize);
 
   const onSearch = debounce((newSearchString: string) => {
     setSearchString(newSearchString);
@@ -32,6 +28,13 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
+      {currentUserAsRightHolder && (
+        <UserItem
+          user={currentUserAsRightHolder}
+          size='lg'
+          className={classes.currentUser}
+        />
+      )}
       <Heading
         level={2}
         size='sm'
@@ -51,10 +54,7 @@ export const UsersList = () => {
         hideLabel
         label={t('users_page.user_search_placeholder')}
       />
-      <List
-        aria-labelledby='user_list_heading_id'
-        compact
-      >
+      <List aria-labelledby='user_list_heading_id'>
         {pageEntries.map((user) => (
           <UserListItem
             key={user.partyUuid}
@@ -84,75 +84,31 @@ export const UsersList = () => {
   );
 };
 
-const UserListRole = ({ role }: { role: string }) => {
-  const { t } = useTranslation();
-  return (
-    <Tag
-      size='sm'
-      color='warning'
-    >
-      {t(`user_role.${role}`)}
-    </Tag>
-  );
-};
-
 const UserListItem = ({ user }: { user: RightHolder }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const isExpanable = !!(user.inheritingRightHolders && user.inheritingRightHolders.length > 0);
-  const children = (
-    <>
-      <div>{user.name + (user.unitType ? ` ${user.unitType}` : '')}</div>
-      <div className={classes.roleListContainer}>
-        {user.registryRoles?.map((role) => {
-          return (
-            <UserListRole
-              key={role}
-              role={role}
-            />
-          );
-        })}
-      </div>
-    </>
-  );
+  const hasChildren = !!(user.inheritingRightHolders && user.inheritingRightHolders.length > 0);
 
   return (
     <>
       <ListItem>
-        {isExpanable ? (
-          <Button
-            onClick={() => setIsExpanded((oldExpanded) => !oldExpanded)}
-            variant='tertiary'
-            className={classes.listItemContent}
-            fullWidth
-          >
-            <UserIcon
-              icon={
-                isExpanded ? (
-                  <ChevronUpIcon fontSize={'2rem'} />
-                ) : (
-                  <ChevronDownIcon fontSize={'2rem'} />
-                )
-              }
-            />
-            {children}
-          </Button>
-        ) : (
-          <div className={classes.listItemContent}>
-            <UserIcon icon={user.name.charAt(0)} />
-            {children}
-          </div>
-        )}
+        <UserItem user={user}>
+          {hasChildren && (
+            <List background={false}>
+              {user.inheritingRightHolders.map((user) => (
+                <ListItem key={user.partyUuid}>
+                  <UserItem
+                    user={user}
+                    size='sm'
+                    color='subtle'
+                    className={classes.inheritingUsers}
+                    icon={false}
+                    showRoles={false}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </UserItem>
       </ListItem>
-      {isExpanded && user.inheritingRightHolders && (
-        <List compact>
-          {user.inheritingRightHolders.map((user) => (
-            <UserListItem
-              key={user.name}
-              user={user}
-            />
-          ))}
-        </List>
-      )}
     </>
   );
 };

@@ -292,6 +292,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             List<AuthorizedPartyType> allowedPartyTypes = Enum.GetValues(typeof(AuthorizedPartyType)).Cast<AuthorizedPartyType>().Where(type => type != AuthorizedPartyType.None && type != AuthorizedPartyType.SelfIdentified).ToList();
 
+            var subunitFaker = new Faker<AuthorizedParty>()
+                .RuleFor(s => s.Type, AuthorizedPartyType.Person)
+                .RuleFor(s => s.Name, f => f.Person.FullName)
+                .RuleFor(s => s.PartyId, f => f.Random.Number(10000000, 99999999))
+                .RuleFor(s => s.PartyUuid, f => f.Random.Guid())
+                .RuleFor(s => s.PersonId, f => f.Person.Fodselsnummer())
+                .RuleFor(s => s.AuthorizedRoles, f => f.Make(f.Random.Number(0, 5), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList());
+
             _faker = new Faker<AuthorizedParty>()
                 .RuleFor(p => p.PartyUuid, f => f.Random.Guid())
                 .RuleFor(p => p.Type, f => f.PickRandom(allowedPartyTypes))
@@ -305,18 +313,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 {
                     if (p.Type == AuthorizedPartyType.Organization)
                     {
-                        // These can only be of type Person
-                        return f.Make(f.Random.Number(1, 5), () => new AuthorizedParty
-                        {
-                            Type = AuthorizedPartyType.Person,
-                            Name = f.Person.FullName,
-                            PartyId = f.Random.Number(10000000, 99999999),
-                            PartyUuid = f.Random.Guid(),
-                            PersonId = f.Person.Fodselsnummer(),
-                            AuthorizedRoles = f.Make(f.Random.Number(1, 2), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList(),
-                        }).ToList();
+                        return subunitFaker.Generate(f.Random.Number(1, 5));
                     }
-                    return [];
+                    return new List<AuthorizedParty>();
                 });
         }
     }
