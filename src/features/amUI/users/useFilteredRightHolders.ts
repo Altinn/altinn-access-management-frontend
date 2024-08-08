@@ -1,11 +1,7 @@
 import { getTotalNumOfPages, getArrayPage } from '@/resources/utils';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import {
-  PartyType,
-  useGetRightHoldersQuery,
-  useGetUserInfoQuery,
-} from '@/rtk/features/userInfo/userInfoApi';
-import { useState, useEffect } from 'react';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useState, useEffect, useMemo } from 'react';
 
 const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
   const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
@@ -14,11 +10,40 @@ const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean 
   return isNameMatch || isPersonIdMatch || isOrgNrMatch;
 };
 
+const sortRightHolders = (rightHolders: RightHolder[]): RightHolder[] =>
+  [...rightHolders].sort((a, b) => a.name.localeCompare(b.name));
+
+export const sortRightholderList = (list: RightHolder[]): RightHolder[] =>
+  sortRightHolders(list).map((rightHolder) => {
+    if (rightHolder.inheritingRightHolders) {
+      return {
+        ...rightHolder,
+        inheritingRightHolders: sortRightHolders(rightHolder.inheritingRightHolders),
+      };
+    }
+    return rightHolder;
+  });
+
+const extractFromList = (
+  list: RightHolder[],
+  uuidToRemove: string,
+  onRemove: (removed: RightHolder) => void,
+): RightHolder[] => {
+  const remainingList = list.reduce<RightHolder[]>((acc, item) => {
+    if (item.partyUuid === uuidToRemove) {
+      onRemove(item);
+    } else {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+  return remainingList;
+};
+
 const computePageEntries = (
   searchString: string,
   currentPage: number,
   pageSize: number,
-  currentUserUuid?: string,
   rightHolders?: RightHolder[],
 ) => {
   if (!rightHolders) {
@@ -30,19 +55,9 @@ const computePageEntries = (
   }
 
   const searchResult: RightHolder[] = [];
-  let currentUser: RightHolder = {
-    partyUuid: '',
-    partyType: PartyType.Person,
-    registryRoles: [],
-    name: '',
-    inheritingRightHolders: [],
-  };
 
   rightHolders.forEach((rightHolder) => {
-    if (rightHolder.partyUuid === currentUserUuid) {
-      // remove current user from paginated list
-      currentUser = rightHolder;
-    } else if (isSearchMatch(searchString, rightHolder)) {
+    if (isSearchMatch(searchString, rightHolder)) {
       searchResult.push(rightHolder);
     } else if (rightHolder.inheritingRightHolders?.length > 0) {
       // check for searchString matches in inheritingRightHolders
@@ -62,7 +77,6 @@ const computePageEntries = (
     pageEntries: getArrayPage(searchResult, currentPage, pageSize),
     numOfPages: getTotalNumOfPages(searchResult, pageSize),
     searchResultLength: searchResult.length,
-    currentUserAsRightHolder: currentUser,
   };
 };
 
@@ -78,13 +92,26 @@ export const useFilteredRightHolders = (
   const [searchResultLength, setSearchResultLength] = useState<number>(0);
   const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<RightHolder>();
 
+  // Extract currentUser from rightHolders and sort remaining list alphabetically
+  const sortedRightHolders = useMemo(() => {
+    const remainingAfterExtraction = extractFromList(
+      rightHolders || [],
+      currentUser?.uuid ?? 'loading',
+      setCurrentUserAsRightHolder,
+    );
+    return sortRightholderList(remainingAfterExtraction);
+  }, [rightHolders, currentUser]);
+
   useEffect(() => {
-    const { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder } =
-      computePageEntries(searchString, currentPage, pageSize, currentUser?.uuid, rightHolders);
+    const { pageEntries, numOfPages, searchResultLength } = computePageEntries(
+      searchString,
+      currentPage,
+      pageSize,
+      sortedRightHolders,
+    );
     setPageEntries(pageEntries);
     setNumOfPages(numOfPages);
     setSearchResultLength(searchResultLength);
-    setCurrentUserAsRightHolder(currentUserAsRightHolder);
   }, [searchString, currentPage, rightHolders, currentUser]);
 
   return { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder };
