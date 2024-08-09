@@ -1,17 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
-using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,10 +21,9 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class APIDelegationController : ControllerBase
     {
         private readonly IAPIDelegationService _apiDelegationService;
-        private readonly IResourceService _resourceService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<APIDelegationController> _logger;
-        private readonly IUserService _userService;
+  
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
@@ -37,20 +31,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="logger">the handler for logger service</param>
         /// <param name="apiDelegationService">The service implementation for handling maskinporten schema delegations</param>
-        /// <param name="resourceService">The resource administration point</param>
-        /// <param name="userService">The service implementation for user profile operations</param>
         /// <param name="httpContextAccessor">Accessor for httpcontext</param>
         public APIDelegationController(
             ILogger<APIDelegationController> logger,
             IAPIDelegationService apiDelegationService,
-            IResourceService resourceService,
-            IUserService userService,
             IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _apiDelegationService = apiDelegationService;
-            _resourceService = resourceService;
-            _userService = userService;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _httpContextAccessor = httpContextAccessor;
         }
