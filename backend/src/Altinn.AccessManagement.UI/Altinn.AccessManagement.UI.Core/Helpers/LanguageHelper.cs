@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>The backend standard language code.</returns>
         public static string GetBackendStandardLanguage(string languageCode)
         {
-            return LanguageMappings.FirstOrDefault(m => languageCode.Contains(m.Altinn2Standard) || m.FrontendStandard == languageCode).BackendStandard;
+            return LanguageMappings.Find(m => languageCode.Contains(m.Altinn2Standard) || m.FrontendStandard == languageCode).BackendStandard;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>The frontend standard language code.</returns>
         public static string GetFrontendStandardLanguage(string languageCode)
         {
-            return LanguageMappings.FirstOrDefault(m => languageCode.Contains(m.Altinn2Standard) || m.BackendStandard == languageCode).FrontendStandard;
+            return LanguageMappings.Find(m => languageCode.Contains(m.Altinn2Standard) || m.BackendStandard == languageCode).FrontendStandard;
         }
 
         /// <summary>
