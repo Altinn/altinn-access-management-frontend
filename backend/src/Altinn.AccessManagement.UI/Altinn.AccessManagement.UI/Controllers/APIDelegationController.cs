@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var languageCode = ProfileHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
 
                 return await _apiDelegationService.GetReceivedMaskinportenSchemaDelegations(party, languageCode);
             }
@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var languageCode = ProfileHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
                 return await _apiDelegationService.GetOfferedMaskinportenSchemaDelegations(party, languageCode);
             }
             catch (Exception ex)

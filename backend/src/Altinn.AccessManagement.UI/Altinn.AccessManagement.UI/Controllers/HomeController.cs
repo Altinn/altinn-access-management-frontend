@@ -92,14 +92,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         private async Task SetLanguageCookie()
         {
             // Get the language code from the Altinn persistence cookie
-            string languageCode = ProfileHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
+            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
             
             // If the language code is not found in the Altinn persistence cookie, get the language code from user profile.
             if (string.IsNullOrEmpty(languageCode))
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile user = await _profileService.GetUserProfile(userId);
-                languageCode = ProfileHelper.GetFrontendStandardLanguage(user.ProfileSettingPreference?.Language);
+                languageCode = LanguageHelper.GetFrontendStandardLanguage(user.ProfileSettingPreference?.Language);
             }
 
             HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions
