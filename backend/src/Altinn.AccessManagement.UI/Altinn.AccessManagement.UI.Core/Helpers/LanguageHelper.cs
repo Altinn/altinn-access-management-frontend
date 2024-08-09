@@ -7,7 +7,6 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// </summary>
     public static class LanguageHelper
     {
-
         // Lanugage mappings between Altinn 2, backend standard and frontend standard.
         private static readonly List<(string Altinn2Standard, string BackendStandard, string FrontendStandard)> LanguageMappings = new List<(string, string, string)>
         {
