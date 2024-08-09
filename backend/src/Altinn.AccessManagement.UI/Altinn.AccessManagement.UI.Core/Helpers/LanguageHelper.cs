@@ -1,16 +1,14 @@
-﻿using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Profile.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
     /// <summary>
-    /// Helper class for authentication.
+    /// Helper class for user language.
     /// </summary>
-    public static class ProfileHelper
+    public static class LanguageHelper
     {
 
-        // Tuple type for language mappings
+        // Lanugage mappings between Altinn 2, backend standard and frontend standard.
         private static readonly List<(string Altinn2Standard, string BackendStandard, string FrontendStandard)> LanguageMappings = new List<(string, string, string)>
         {
             ("UL=1044", "nb", "no_nb"), // Norwegian Bokmål
