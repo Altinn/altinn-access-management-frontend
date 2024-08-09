@@ -53,9 +53,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("resourceowners")]
         public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
         {
-
-            var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
-
+            var languageCode = ProfileHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             if (relevantResourceTypes?.Count > 0)
             {
                 return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
@@ -75,8 +73,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("search")]
         public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
         {
-            var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
-
+            var languageCode = ProfileHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
                 return await _resourceService.GetPaginatedSearchResults(languageCode, parameters.ROFilters, parameters.SearchString, parameters.Page, parameters.ResultsPerPage);
@@ -102,8 +99,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("maskinportenapi/search")]
         public async Task<ActionResult<List<ServiceResourceFE>>> MaskinportenSearch([FromQuery] ApiSearchParams parameters)
         {
-            var languageCode = await ProfileHelper.GetLanguageCode(_httpContextAccessor, _userService);
-
+            var languageCode = ProfileHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
                 return await _resourceService.MaskinportenschemaSearch(languageCode, parameters.ROFilters, parameters.SearchString);
