@@ -1,6 +1,8 @@
 ﻿using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Microsoft.AspNetCore.Http;
+using Moq;
 using System.Net;
 using System.Net.Http.Headers;
 
@@ -83,6 +85,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetHome_OK_WithAuthCookie()
         {
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+            
+            var cookiesMock = new Mock<IRequestCookieCollection>();
+            cookiesMock.Setup(c => c["altinnPersistentContext"]).Returns("UL=1033");
 
             HttpClient client = SetupUtils.GetTestClient(_factory, false);
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
@@ -93,6 +98,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _ = await response.Content.ReadAsStringAsync();
             IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
 
+        
             // Verify that 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Equal(3, cookieHeaders.Count());
@@ -100,6 +106,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
             Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
         }
+
 
         /// <summary>
         /// Test case : Authenticate with a invalid cookie

@@ -6,6 +6,26 @@ using Moq;
 [Collection("LanguageHelper Tests")]
 public class LanguageHelperTests
 {
+
+    [Fact]
+    public void GetAltinnPersistenceCookieValueFrontendStandard_ShouldReturnEmptyString_WhenCookieIsNull()
+    {
+        // Arrange
+        var httpContextMock = new Mock<HttpContext>();
+        var requestMock = new Mock<HttpRequest>();
+        var cookiesMock = new Mock<IRequestCookieCollection>();
+
+        cookiesMock.Setup(c => c["altinnPersistentContext"]).Returns((string)null);
+        requestMock.Setup(r => r.Cookies).Returns(cookiesMock.Object);
+        httpContextMock.Setup(h => h.Request).Returns(requestMock.Object);
+
+        // Act
+        var result = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(httpContextMock.Object);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
     [Theory]
     [InlineData("UL=1044", "no_nb")]
     [InlineData("UL=2068", "no_nn")]
@@ -28,20 +48,21 @@ public class LanguageHelperTests
         Assert.Equal(expectedValue, result);
     }
 
+
     [Fact]
-    public void GetAltinnPersistenceCookieValueFrontendStandard_ShouldReturnEmptyString_WhenCookieIsNull()
+    public void GetSelectedLanguageCookieValueBackendStandard_ShouldReturnEmptyString_WhenCookieIsNull()
     {
         // Arrange
         var httpContextMock = new Mock<HttpContext>();
         var requestMock = new Mock<HttpRequest>();
         var cookiesMock = new Mock<IRequestCookieCollection>();
 
-        cookiesMock.Setup(c => c["altinnPersistentContext"]).Returns((string)null);
+        cookiesMock.Setup(c => c["selectedLanguage"]).Returns((string)null);
         requestMock.Setup(r => r.Cookies).Returns(cookiesMock.Object);
         httpContextMock.Setup(h => h.Request).Returns(requestMock.Object);
 
         // Act
-        var result = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(httpContextMock.Object);
+        var result = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContextMock.Object);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -67,26 +88,6 @@ public class LanguageHelperTests
 
         // Assert
         Assert.Equal(expectedValue, result);
-    }
-
-
-    [Fact]
-    public void GetSelectedLanguageCookieValueBackendStandard_ShouldReturnEmptyString_WhenCookieIsNull()
-    {
-        // Arrange
-        var httpContextMock = new Mock<HttpContext>();
-        var requestMock = new Mock<HttpRequest>();
-        var cookiesMock = new Mock<IRequestCookieCollection>();
-
-        cookiesMock.Setup(c => c["selectedLanguage"]).Returns((string)null);
-        requestMock.Setup(r => r.Cookies).Returns(cookiesMock.Object);
-        httpContextMock.Setup(h => h.Request).Returns(requestMock.Object);
-
-        // Act
-        var result = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContextMock.Object);
-
-        // Assert
-        Assert.Equal(string.Empty, result);
     }
 
     [Theory]
