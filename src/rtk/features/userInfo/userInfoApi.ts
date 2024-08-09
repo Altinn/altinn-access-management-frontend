@@ -5,10 +5,12 @@ interface UserInfoApiResponse {
   party: {
     name: string;
   };
+  userUuid: string;
 }
 
 interface UserInfo {
   name: string;
+  uuid: string;
 }
 
 interface ReporteeInfo {
@@ -16,7 +18,7 @@ interface ReporteeInfo {
   organizationNumber?: string;
 }
 
-enum PartyType {
+export enum PartyType {
   None,
   Person,
   Organization,
@@ -49,7 +51,7 @@ export const userInfoApi = createApi({
       query: () => 'profile',
       keepUnusedDataFor: 300,
       transformResponse: (response: UserInfoApiResponse) => {
-        return { name: response.party.name };
+        return { name: response.party.name, uuid: response.userUuid };
       },
     }),
     getReportee: builder.query<ReporteeInfo, void>({

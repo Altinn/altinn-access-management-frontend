@@ -1,6 +1,6 @@
 import { getTotalNumOfPages, getArrayPage } from '@/resources/utils';
 import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { useGetRightHoldersQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { useState, useEffect, useMemo } from 'react';
 
 const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
@@ -23,6 +23,22 @@ export const sortRightholderList = (list: RightHolder[]): RightHolder[] =>
     }
     return rightHolder;
   });
+
+const extractFromList = (
+  list: RightHolder[],
+  uuidToRemove: string,
+  onRemove: (removed: RightHolder) => void,
+): RightHolder[] => {
+  const remainingList = list.reduce<RightHolder[]>((acc, item) => {
+    if (item.partyUuid === uuidToRemove) {
+      onRemove(item);
+    } else {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+  return remainingList;
+};
 
 const computePageEntries = (
   searchString: string,
@@ -70,13 +86,21 @@ export const useFilteredRightHolders = (
   pageSize: number,
 ) => {
   const { data: rightHolders } = useGetRightHoldersQuery();
-
+  const { data: currentUser } = useGetUserInfoQuery();
   const [pageEntries, setPageEntries] = useState<RightHolder[]>([]);
   const [numOfPages, setNumOfPages] = useState<number>(1);
   const [searchResultLength, setSearchResultLength] = useState<number>(0);
+  const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<RightHolder>();
 
-  // Sorting the list of rightHolders only when the list changes
-  const sortedRightHolders = useMemo(() => sortRightholderList(rightHolders || []), [rightHolders]);
+  // Extract currentUser from rightHolders and sort remaining list alphabetically
+  const sortedRightHolders = useMemo(() => {
+    const remainingAfterExtraction = extractFromList(
+      rightHolders || [],
+      currentUser?.uuid ?? 'loading',
+      setCurrentUserAsRightHolder,
+    );
+    return sortRightholderList(remainingAfterExtraction);
+  }, [rightHolders, currentUser]);
 
   useEffect(() => {
     const { pageEntries, numOfPages, searchResultLength } = computePageEntries(
@@ -88,7 +112,7 @@ export const useFilteredRightHolders = (
     setPageEntries(pageEntries);
     setNumOfPages(numOfPages);
     setSearchResultLength(searchResultLength);
-  }, [searchString, currentPage, rightHolders]);
+  }, [searchString, currentPage, rightHolders, currentUser]);
 
-  return { pageEntries, numOfPages, searchResultLength };
+  return { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder };
 };

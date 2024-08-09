@@ -1,5 +1,5 @@
 .userIcon {
-  --userIcon-size: 2.5rem;
+  --userIcon-size: 2rem;
   min-width: var(--userIcon-size);
   min-height: var(--userIcon-size);
   display: flex;
@@ -11,5 +11,20 @@
   color: #ffffff;
   text-align: center;
   text-transform: uppercase;
-  margin-right: 1rem;
+}
+
+.lg {
+  --userIcon-size: 2.5rem;
+}
+
+.md {
+  --userIcon-size: 2rem;
+}
+
+.sm {
+  --userIcon-size: 1.75rem;
+}
+
+.icon {
+  color: #ffffff;
 }
