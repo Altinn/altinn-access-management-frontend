@@ -47,13 +47,13 @@ public class LanguageHelperTests
         Assert.Equal(string.Empty, result);
     }
 
-     [Fact]
-    public void GetSelectedLanguageCookieValueBackendStandard_ShouldReturnExpectedValue()
+    [Theory]
+    [InlineData("UL=1044", "nb")]
+    [InlineData("UL=2068", "nn")]
+    [InlineData("UL=1033", "en")]
+    public void GetSelectedLanguageCookieValueBackendStandard_ShouldReturnExpectedValue(string cookieValue, string expectedValue)
     {
         // Arrange
-        var cookieValue = "UL=2068";
-        var expectedValue = "nn"; // Replace with the expected value from GetBackendStandardLanguage
-
         var httpContextMock = new Mock<HttpContext>();
         var requestMock = new Mock<HttpRequest>();
         var cookiesMock = new Mock<IRequestCookieCollection>();
@@ -69,7 +69,8 @@ public class LanguageHelperTests
         Assert.Equal(expectedValue, result);
     }
 
-    [Fact]
+
+
     public void GetSelectedLanguageCookieValueBackendStandard_ShouldReturnEmptyString_WhenCookieIsNull()
     {
         // Arrange
