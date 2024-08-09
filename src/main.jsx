@@ -33,6 +33,7 @@ const queryClientDevDefaults = {
 use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    detection: { lookupCookie: 'selectedLanguage' },
     resources: {
       no_nb: { translation: no_nb },
       no_nn: { translation: no_nn },
