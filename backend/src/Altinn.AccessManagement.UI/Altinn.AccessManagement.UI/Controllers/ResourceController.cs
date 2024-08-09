@@ -5,7 +5,6 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
-using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,29 +19,20 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class ResourceController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger _logger;
-        private readonly IUserService _userService;
         private readonly IResourceService _resourceService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceController" /> class.
         /// </summary>
-        /// <param name="logger">the logger.</param>
         /// <param name="resourceService">The resource administration point</param>
-        /// <param name="userService">handler for profile service</param>
         /// <param name="httpContextAccessor">handler for httpcontext</param>
         public ResourceController(
-            ILogger<ResourceController> logger,
             IResourceService resourceService,
-            IUserService userService,
             IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
             _resourceService = resourceService;
-            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
         }
-
 
         /// <summary>
         ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
