@@ -1,6 +1,7 @@
 import { Button, Popover, Paragraph } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
-import React, { HTMLAttributes, useState } from 'react';
+import type { HTMLAttributes } from 'react';
+import React, { useState } from 'react';
 
 import { useMediaQuery } from '@/resources/hooks';
 
@@ -72,8 +73,9 @@ export const NavigationSection = ({
               onClick={() => setPopoverOpen(false)}
               color={'danger'}
               variant={'tertiary'}
+              fullWidth
             >
-              {t('single_rights.no_continue_delegating')}
+              {t('single_rights.no_stay_here')}
             </Button>
           </div>
         </Popover.Content>

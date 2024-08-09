@@ -182,7 +182,7 @@
     "action_bar_adjust_rights_text": "If you want to limit the delegable accesses you can click the buttons below to remove them.",
     "delegable_apis": "Delegable APIs",
     "cancel_popover_text": "Chosen services won't be delegated. Are you sure you want to cancel?",
-    "no_continue_delegating": "No, continue delegating",
+    "no_stay_here": "No, stay here",
     "add_more_services": "Add more services",
     "ceo_or_main_admin_can_help": "CEO or main administrator can help you with this.",
     "one_or_more_rights_is_undelegable": "One or more rights on this service cant be delegated because of {{reason}}",
