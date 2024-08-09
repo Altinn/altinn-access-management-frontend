@@ -1,5 +1,5 @@
 .userIcon {
-  --userIcon-size: 2.5rem;
+  --userIcon-size: 2rem;
   min-width: var(--userIcon-size);
   min-height: var(--userIcon-size);
   display: flex;
