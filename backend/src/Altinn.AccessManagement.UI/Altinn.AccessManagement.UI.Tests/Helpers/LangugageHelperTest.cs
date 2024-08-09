@@ -6,13 +6,13 @@ using Moq;
 [Collection("LanguageHelper Tests")]
 public class LanguageHelperTests
 {
-    [Fact]
-    public void GetAltinnPersistenceCookieValueFrontendStandard_ShouldReturnExpectedValue()
+    [Theory]
+    [InlineData("UL=1044", "no_nb")]
+    [InlineData("UL=2068", "no_nn")]
+    [InlineData("UL=1033", "en")]
+    public void GetAltinnPersistenceCookieValueFrontendStandard_ShouldReturnExpectedValue(string cookieValue, string expectedValue)
     {
         // Arrange
-        var cookieValue = "UL=2068";
-        var expectedValue = "no_nn";
-
         var httpContextMock = new Mock<HttpContext>();
         var requestMock = new Mock<HttpRequest>();
         var cookiesMock = new Mock<IRequestCookieCollection>();
@@ -70,7 +70,7 @@ public class LanguageHelperTests
     }
 
 
-
+    [Fact]
     public void GetSelectedLanguageCookieValueBackendStandard_ShouldReturnEmptyString_WhenCookieIsNull()
     {
         // Arrange
