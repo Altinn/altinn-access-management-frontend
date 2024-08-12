@@ -3,6 +3,10 @@ import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { useState, useEffect, useMemo } from 'react';
 
+export interface FilteredRightHolder extends RightHolder {
+  matchInInheritingRightHolders?: boolean;
+}
+
 const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
   const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
   const isPersonIdMatch = rightHolder.personId === searchString;
@@ -54,10 +58,11 @@ const computePageEntries = (
     };
   }
 
-  const searchResult: RightHolder[] = [];
+  const searchResult: FilteredRightHolder[] = [];
 
   rightHolders.forEach((rightHolder) => {
     if (isSearchMatch(searchString, rightHolder)) {
+      console.log('matching rightHolder', rightHolder.name);
       searchResult.push(rightHolder);
     } else if (rightHolder.inheritingRightHolders?.length > 0) {
       // check for searchString matches in inheritingRightHolders
@@ -65,8 +70,10 @@ const computePageEntries = (
         (inheritRightHolder) => isSearchMatch(searchString, inheritRightHolder),
       );
       if (matchingInheritingItems.length > 0) {
+        // add rightHolder with matching inheritingRightHolders and flag to show them as expanded
         searchResult.push({
           ...rightHolder,
+          matchInInheritingRightHolders: true,
           inheritingRightHolders: matchingInheritingItems,
         });
       }

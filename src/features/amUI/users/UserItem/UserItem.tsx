@@ -1,16 +1,17 @@
 import * as React from 'react';
+import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 import { useTranslation } from 'react-i18next';
 import classes from './UserItem.module.css';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
-import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
+import { FilteredRightHolder } from '../useFilteredRightHolders';
 
 interface UserProps {
   /** The user object containing user details. */
-  user: RightHolder;
+  user: FilteredRightHolder;
   /** The size of the component */
   size?: 'lg' | 'md' | 'sm';
   /** The color theme of the component */
@@ -41,6 +42,11 @@ export const UserItem = ({
   const headerId = useId();
   const contentId = useId();
   const [isExpanded, setIsExpanded] = useState(false);
+  useEffect(
+    () => setIsExpanded(user.matchInInheritingRightHolders ?? false),
+    [user.matchInInheritingRightHolders],
+  );
+
   const isExpanable = !!(user.inheritingRightHolders && user.inheritingRightHolders.length > 0);
 
   const avatar = <span>{user.name.charAt(0)}</span>;
