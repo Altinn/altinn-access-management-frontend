@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly GeneralSettings _generalSettings;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IUserService _profileService;
+        private readonly IUserService _userService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="HomeController" /> class.
@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="antiforgery">the anti forgery service</param>
         /// <param name="platformSettings">settings related to the platform</param>
         /// <param name="env">the current environment</param>
-        /// <param name="profileService">service implementation for user profile</param>
+        /// <param name="userService">service implementation for user profile</param>
         /// <param name="httpContextAccessor">http context</param>
         /// <param name="generalSettings">general settings</param>
         public HomeController(
@@ -41,14 +41,14 @@ namespace Altinn.AccessManagement.UI.Controllers
             IAntiforgery antiforgery,
             IOptions<PlatformSettings> platformSettings,
             IWebHostEnvironment env,
-            IUserService profileService,
+            IUserService userService,
             IHttpContextAccessor httpContextAccessor,
             IOptions<GeneralSettings> generalSettings)
         {
             _antiforgery = antiforgery;
             _platformSettings = platformSettings.Value;
             _env = env;
-            _profileService = profileService;
+            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
             _generalSettings = generalSettings.Value;
         }
@@ -91,12 +91,18 @@ namespace Altinn.AccessManagement.UI.Controllers
 
         private async Task SetLanguageCookie()
         {
-            int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-            UserProfile user = await _profileService.GetUserProfile(userId);
-            AntiforgeryTokenSet tokens = _antiforgery.GetAndStoreTokens(HttpContext);
-            string languageCode = ProfileHelper.GetStandardLanguageCodeIsoStandard(user, HttpContext);
+            // Get the language code from the Altinn persistence cookie
+            string languageCode = LanguageHelper.GetAltinnPersistenceCookieValueFrontendStandard(_httpContextAccessor.HttpContext);
+            
+            // If the language code is not found in the Altinn persistence cookie, get the language code from user profile.
+            if (string.IsNullOrEmpty(languageCode))
+            {
+                int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
+                UserProfile user = await _userService.GetUserProfile(userId);
+                languageCode = LanguageHelper.GetFrontendStandardLanguage(user.ProfileSettingPreference?.Language);
+            }
 
-            HttpContext.Response.Cookies.Append("i18next", languageCode, new CookieOptions
+            HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
