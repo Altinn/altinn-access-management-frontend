@@ -62,7 +62,6 @@ const computePageEntries = (
 
   rightHolders.forEach((rightHolder) => {
     if (isSearchMatch(searchString, rightHolder)) {
-      console.log('matching rightHolder', rightHolder.name);
       searchResult.push(rightHolder);
     } else if (rightHolder.inheritingRightHolders?.length > 0) {
       // check for searchString matches in inheritingRightHolders
