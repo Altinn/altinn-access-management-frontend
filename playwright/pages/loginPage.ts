@@ -27,6 +27,9 @@ export class logoutWithUser {
 
   async gotoLogoutPage(logoutReportee: string, page: Page) {
     await this.page.goto(process.env.BASE_URL + '/ui/profile');
+    if (await this.page.getByText('Oida, denne siden kjenner vi ikke til...').isVisible()) {
+      await this.page.click("'profil'");
+    }
     await this.page.getByRole('button', { name: logoutReportee }).click();
     await this.page.getByRole('link', { name: 'Logg ut' }).click();
   }
