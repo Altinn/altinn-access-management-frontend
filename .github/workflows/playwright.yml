@@ -1,10 +1,15 @@
 name: Playwright Tests
 on:
-  schedule : 
-    - cron : '0 5 * * *' # every day at 05:00 UTC
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+        description: Environment
 jobs:
   e2e-tests:
     
+    name: 'Playwright end to end tests'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

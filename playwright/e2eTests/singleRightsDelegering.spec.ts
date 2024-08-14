@@ -53,7 +53,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
 
     //To delete rights - setup
-    // GIVEN user without delegated rights to ROMANTISK ESKE
+    // GIVEN user without delegated rights to OPPKLARENDE OMKOMMEN TIGER AS
     const buttonIndex = 1;
     await deleteRights.revokeRightsOrg('GJESTFRI RESERVERT HUND DA', buttonIndex);
 
@@ -73,6 +73,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await coverebyRights.checkCoverebyRights();
   });
+
   test('DAGL/HADM do not have rights to delegate Altinn2 to org Y , but has the rights to delegate same service after delegating sens role to himself', async ({
     login,
     delegate,
@@ -92,14 +93,15 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await deleteRights.revokeRightsSSN('UINTERESSERT LØVEFLOKK');
 
     //To delegate rights
-    // WHEN user delegates to
+    // WHEN user delegates rolls to UINTERESSERT LØVEFLOKK
     await delegate.delegateToSSN('07922148605', 'LØVEFLOKK');
-    await delegateRoles.delegateRole('Taushetsbelagt post', 'Tilgangsstyring');
+    await delegateRoles.delegateRole('Taushetsbelagt post', 'Hovedadministrator');
     await logoutUser.gotoLogoutPage('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await context.clearCookies();
 
     await login.gotoLoginPage('07922148605', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
+    await deleteRights.revokeRightsSSN('STORARTET KORGSTOL');
     await delegate.delegateToSSN('07885798378', 'KORGSTOL');
     await delegateRights.delegateRightsToSSN(
       'Altinn2 sensitive reporting service for Authorizaion tests',

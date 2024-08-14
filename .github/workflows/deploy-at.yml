@@ -26,14 +26,14 @@ jobs:
       environment: ${{ matrix.environment }}
       tag: ${{ github.sha }}
 
-  cypress-main:
-    name: 'Cypress'
+  playwright-main:
+    name: 'Playwright'
     needs: deploy-main
     strategy:
       fail-fast: false
       matrix:
         environment: [AT21, AT22, AT23, AT24]
-    uses: './.github/workflows/template-test-cypress.yml'
+    uses: './.github/workflows/playwright.yml'
     with:
       environment: ${{ matrix.environment }}
  

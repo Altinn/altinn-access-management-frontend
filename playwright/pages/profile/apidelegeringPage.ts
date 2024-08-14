@@ -7,7 +7,7 @@ export class apiDelegation {
 
   async delegateAPI(apiName: string, orgNumber: string) {
     await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
-    await this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }).click();
+    await this.page.getByRole('button').filter({ hasText: 'Gi og fjerne API tilganger' }).click();
     await this.page.getByRole('button', { name: 'Deleger nytt API' }).click();
     await this.page.getByLabel('Søk etter API').click();
     await this.page.getByLabel('Søk etter API').fill(apiName);
@@ -21,6 +21,7 @@ export class apiDelegation {
 
   async deleteDelegatedAPI() {
     await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+    await this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }).isVisible();
     await this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }).click();
     if (await this.page.getByRole('button', { name: 'Rediger tilganger' }).isVisible()) {
       await this.page.getByRole('button', { name: 'Rediger tilganger' }).click();
@@ -77,5 +78,28 @@ export class apiDelegation {
     await expect(receivedApiName).toContainText(
       'INTERESSANT KOMPATIBEL TIGER ASOrg.nr. INTERESSANT KOMPATIBEL TIGER AS',
     );
+  }
+
+  async apiFiltering() {
+    await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+    await this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }).click();
+    await this.page.getByRole('button', { name: 'Deleger nytt API' }).click();
+    await this.page.getByRole('button', { name: 'Filtrer på etat' }).click();
+    await this.page.getByLabel('Testdepartement').check();
+    await this.page.getByLabel('Digitaliseringsdirektoratet').isChecked();
+    await this.page.getByRole('button', { name: 'Nullstill valg' }).isEnabled();
+    await this.page.getByLabel('Testdepartement').uncheck();
+    await this.page.getByLabel('Digitaliseringsdirektoratet').uncheck();
+    await this.page.getByRole('button', { name: 'Nullstill valg' }).isDisabled();
+    await this.page.getByLabel('Testdepartement').check();
+    await this.page.getByRole('button', { name: 'Bruk' }).click();
+    await this.page.getByLabel('Søk etter API').click();
+    await this.page.getByLabel('Søk etter API').fill('Maskinporten Schema - AM - K6');
+    await this.page.getByLabel('Legg til Maskinporten Schema - AM - K6', { exact: true }).click();
+    await this.page.getByRole('button', { name: 'Neste' }).last().click();
+    await this.page.getByLabel('Søk på organisasjonsnummer').click();
+    await this.page.getByLabel('Søk på organisasjonsnummer').fill('310661414');
+    await this.page.getByLabel('Legg til').click();
+    await this.page.getByRole('button', { name: 'Neste' }).click();
   }
 }

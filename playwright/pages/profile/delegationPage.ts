@@ -81,6 +81,21 @@ export class coverebyUserRights {
     await this.page.getByRole('link', { name: 'Har tilgang til disse' }).click();
   }
 }
+export class delegateRoleToUser {
+  constructor(public page: Page) {}
+
+  async delegateRole(roleName1: string, roleName2: string) {
+    await this.page.getByText('Har også disse 0 rollene').click();
+    await this.page.getByText('+ Legg til ny rolle').click();
+    await this.page.locator('span.col', { hasText: roleName1 }).click();
+    await this.page.locator('span.col', { hasText: roleName2 }).click();
+    await this.page.getByRole('button', { name: 'Jeg forstår. Fullfør' }).click();
+    await this.page.getByPlaceholder('f.eks post@karinordmann.no').click();
+    await this.page.getByPlaceholder('f.eks post@karinordmann.no').fill('test@email.com');
+    await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
+    await this.page.getByRole('link', { name: 'Ferdig' }).click();
+  }
+}
 export class revokeRights {
   constructor(public page: Page) {}
 
@@ -149,23 +164,5 @@ export class revokeRights {
       console.error('Reportee not found');
       await this.page.goto(process.env.BASE_URL + '/ui/profile');
     }
-  }
-}
-
-export class delegateRoleToUser {
-  constructor(public page: Page) {}
-
-  async delegateRole(roleName1: string, roleName2: string) {
-    await this.page.getByText('Har også disse 0 rollene').click();
-    await this.page.getByText('+ Legg til ny rolle').click();
-    await this.page.locator('span.col', { hasText: roleName1 }).click();
-    await this.page.locator('span.col', { hasText: roleName2 }).click();
-    //await this.page.getByText(roleName1, { exact: true }).last().click();
-    //await this.page.getByText(roleName2, { exact: true }).click();
-    await this.page.getByRole('button', { name: 'Jeg forstår. Fullfør' }).click();
-    await this.page.getByPlaceholder('f.eks post@karinordmann.no').click();
-    await this.page.getByPlaceholder('f.eks post@karinordmann.no').fill('test@email.com');
-    await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
-    await this.page.getByRole('link', { name: 'Ferdig' }).click();
   }
 }
