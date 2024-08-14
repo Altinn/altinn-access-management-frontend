@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        environment: [AT21, AT22, AT23, AT24]
-        
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
