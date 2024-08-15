@@ -2,6 +2,8 @@ import React from 'react';
 import classes from './PageContainer.module.css';
 import { Button } from '@digdir/designsystemet-react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { getButtonIconSize } from '@/resources/utils/iconUtils';
+import { useTranslation } from 'react-i18next';
 
 interface PageContainerProps {
   children: React.ReactNode;
@@ -16,6 +18,7 @@ export const PageContainer = ({
   contentActions,
   onNavigateBack,
 }: PageContainerProps) => {
+  const { t } = useTranslation();
   return (
     <div className={classes.container}>
       <div className={classes.topActions}>
@@ -27,8 +30,8 @@ export const PageContainer = ({
               onClick={onNavigateBack}
               icon
             >
-              <ArrowLeftIcon />
-              Tilbake
+              <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+              {t('common.back')}
             </Button>
           )}
           {pageActions}

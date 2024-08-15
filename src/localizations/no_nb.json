@@ -3,6 +3,7 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
+    "back": "Tilbake",
     "changes_made_msg": "Endringer gjort. Klikk på lagre for å gjøre dem gjeldende",
     "status_code": "Statuskode",
     "maskinporten": "Maskinporten",

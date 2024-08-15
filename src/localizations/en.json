@@ -3,6 +3,7 @@
     "error": "Error",
     "restart": "Restart",
     "close": "Close",
+    "back": "Back",
     "changes_made_msg": "Changes made. Click the save button to apply",
     "status_code": "Status code",
     "maskinporten": "Maskinporten",

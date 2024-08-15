@@ -40,7 +40,7 @@ export const UserRightsPage = () => {
               size='sm'
               className={classes.heading}
             >
-              {user?.name}
+              {party?.name}
             </Heading>
           </div>
         </PageContainer>
