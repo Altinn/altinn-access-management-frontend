@@ -5,7 +5,7 @@
   "packageManager": "yarn@4.4.0",
   "main": "index.js",
   "scripts": {
-    "env:AT21": "cross-env environment=at22 npx playwright test",
+    "env:AT21": "cross-env environment=at21 npx playwright test",
     "env:AT22": "cross-env environment=at22 npx playwright test",
     "env:AT23": "cross-env environment=at23 npx playwright test",
     "env:AT24": "cross-env environment=at24 npx playwright test",
@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.43.3",
     "@types/node": "^20.12.7",
     "dotenv": "^16.4.5"
   },

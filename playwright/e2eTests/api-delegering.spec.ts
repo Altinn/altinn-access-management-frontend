@@ -69,8 +69,31 @@ test.describe('API-Delegations to org user', () => {
       'Maskinporten Schema - AM - K6',
       'INTERESSANT KOMPATIBEL TIGER ASOrg.nr. 310661414',
     );
+
+    //Delegate API to same Org to which API was delegated before
     await apiDelegations.chooseApiToDelegate(
       'Automation Regression',
+      'INTERESSANT KOMPATIBEL TIGER ASOrg.nr. 310661414',
+    );
+  });
+
+  test('Verify filtering of API providers in API delagation and verify Forrige/ Neste buttons', async ({
+    login,
+    logoutUser,
+    context,
+    apiDelegations,
+    page,
+  }) => {
+    await login.gotoLoginPage('14824497789', page);
+    await login.chooseReportee('AKTVERDIG RETORISK APE', page);
+
+    //delete delegated API
+    await apiDelegations.deleteDelegatedAPI();
+
+    //API-delegations
+    await apiDelegations.apiFiltering();
+    await apiDelegations.delegatedAPIOverviewPage(
+      'Maskinporten Schema - AM - K6Testdepartement',
       'INTERESSANT KOMPATIBEL TIGER ASOrg.nr. 310661414',
     );
   });
