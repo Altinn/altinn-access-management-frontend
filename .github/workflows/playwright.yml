@@ -11,8 +11,6 @@ jobs:
     
     name: 'Playwright end to end tests'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -24,7 +22,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Running yarn tests
       working-directory: playwright
-      run: yarn run env:${{ matrix.environment }}
+      run: yarn run env:${{ inputs.environment }}
     - uses: actions/upload-artifact@v4
       if: always()
       with:
