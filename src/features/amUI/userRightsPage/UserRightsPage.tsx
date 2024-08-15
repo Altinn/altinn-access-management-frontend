@@ -10,7 +10,7 @@ import { UserIcon } from '@/components/UserIcon/UserIcon';
 import classes from './UserRightsPage.module.css';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageWrapper } from '@/components';
-import { useGetUserByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
@@ -21,10 +21,10 @@ export const UserRightsPage = () => {
   const navigate = useNavigate();
 
   const { data: reportee } = useGetReporteeQuery();
-  const { data: user } = useGetUserByUUIDQuery(id ?? '');
+  const { data: party } = useGetPartyByUUIDQuery(id ?? '');
 
   useDocumentTitle(t('user_rights_page.page_title'));
-  const avatar = id ? <span>{user?.party.name?.charAt(0)}</span> : '';
+  const avatar = id ? <span>{party?.name?.charAt(0)}</span> : '';
 
   return (
     <PageWrapper>
@@ -40,7 +40,7 @@ export const UserRightsPage = () => {
               size='sm'
               className={classes.heading}
             >
-              {user?.party.name}
+              {user?.name}
             </Heading>
           </div>
         </PageContainer>
