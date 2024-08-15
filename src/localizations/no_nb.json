@@ -199,6 +199,9 @@
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "user_no_search_result": "Ingen brukere funnet"
   },
+  "user_details_page": {
+    "page_title": "Brukertilganger - Altinn"
+  },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
     "FGRP": "Inngår i foretaksgruppe med",

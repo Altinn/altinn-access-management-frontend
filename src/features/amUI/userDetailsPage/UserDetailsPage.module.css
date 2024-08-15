@@ -1,0 +1,12 @@
+.heading {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 0;
+}
+
+.headingRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

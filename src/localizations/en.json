@@ -200,6 +200,9 @@
     "user_search_placeholder": "Search for users",
     "user_no_search_result": "No users found"
   },
+  "user_details_page": {
+    "page_title": "UserAccess - Altinn"
+  },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
     "FGRP": "Part of enterprise group with",

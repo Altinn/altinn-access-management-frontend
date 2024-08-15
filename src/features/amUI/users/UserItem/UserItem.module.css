@@ -62,3 +62,8 @@
 .expandedContent {
   background-color: var(--fds-semantic-surface-neutral-subtle);
 }
+
+.clickableListitem {
+  cursor: pointer;
+  text-decoration: none;
+}

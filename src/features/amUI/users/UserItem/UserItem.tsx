@@ -7,6 +7,7 @@ import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useId, useState } from 'react';
 import cn from 'classnames';
+import { Link } from 'react-router-dom';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -109,7 +110,16 @@ export const UserItem = ({
             {headerContent}
           </Button>
         ) : (
-          <div className={cn(classes.user, classes[size], classes[color], className)}>
+          <Link
+            to={`${user.partyUuid}`}
+            className={cn(
+              classes.user,
+              classes[size],
+              classes[color],
+              classes.clickableListitem,
+              className,
+            )}
+          >
             {icon && (
               <UserIcon
                 size={size}
@@ -118,7 +128,7 @@ export const UserItem = ({
               />
             )}
             {headerContent}
-          </div>
+          </Link>
         )}
         {isExpanded && (
           <div
