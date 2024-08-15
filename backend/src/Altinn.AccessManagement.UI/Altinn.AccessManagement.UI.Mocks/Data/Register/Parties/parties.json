@@ -523,6 +523,48 @@
     "ChildParties": null
   },
   {
+    "PartyId": 98939302,
+    "PartyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff9",
+    "PartyTypeName": 1,
+    "OrgNumber": null,
+    "Ssn": "01026425227",
+    "UnitType": null,
+    "Name": "Diane Davis",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
+  },
+  {
+    "PartyId": 81373770,
+    "PartyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
+    "PartyTypeName": 1,
+    "OrgNumber": "644227165",
+    "Ssn": null,
+    "UnitType": null,
+    "Name": "Narnia Economics",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
+  },
+  {
+    "PartyId": 12345678,
+    "PartyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+    "PartyTypeName": 1,
+    "OrgNumber": null,
+    "Ssn": "12345678901",
+    "UnitType": null,
+    "Name": "Santa Claus",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
+  },
+  {
     "PartyTypeName": 2,
     "SSN": "",
     "OrgNumber": "313160300",
