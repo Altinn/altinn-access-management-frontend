@@ -8,7 +8,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
-import { FilteredRightHolder } from '../useFilteredRightHolders';
+import type { FilteredRightHolder } from '../useFilteredRightHolders';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -101,7 +101,7 @@ export const UserItem = ({
               classes.user,
               classes[size],
               classes[color],
-              isExpanable && classes.expandable,
+              classes.clickable,
               className,
             )}
             fullWidth
@@ -122,7 +122,7 @@ export const UserItem = ({
               classes.user,
               classes[size],
               classes[color],
-              classes.clickableListitem,
+              classes.clickable,
               className,
             )}
           >

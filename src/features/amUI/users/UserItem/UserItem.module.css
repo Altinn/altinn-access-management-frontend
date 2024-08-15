@@ -9,6 +9,7 @@
   gap: 0.5rem;
   border: 0;
   background-color: var(--backgroundColor);
+  text-decoration: none;
 }
 
 .subtle {
@@ -19,11 +20,11 @@
   --backgroundColor: var(--fds-semantic-surface-neutral-default);
 }
 
-.user.expandable:hover {
+.user.clickable:hover {
   --backgroundColor: var(--fds-semantic-surface-neutral-subtle-hover);
 }
 
-.user.expandable:active {
+.user.clickable:active {
   --backgroundColor: var(--fds-semantic-surface-neutral-selected);
 }
 
@@ -61,9 +62,4 @@
 
 .expandedContent {
   background-color: var(--fds-semantic-surface-neutral-subtle);
-}
-
-.clickableListitem {
-  cursor: pointer;
-  text-decoration: none;
 }
