@@ -18,7 +18,7 @@ export const PageContainer = ({
 }: PageContainerProps) => {
   return (
     <div className={classes.container}>
-      <div className={classes.actionbar}>
+      <div className={classes.topActions}>
         <div className={classes.pageActions}>
           {onNavigateBack && (
             <Button

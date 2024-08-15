@@ -7,7 +7,7 @@
   border-radius: 0 0 4px 4px;
 }
 
-.actionbar {
+.topActions {
   display: flex;
   justify-content: space-between;
   padding-bottom: 1rem 0;
