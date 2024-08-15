@@ -7,14 +7,14 @@ import { Heading } from '@digdir/designsystemet-react';
 import { FakePageWrapper } from '../common/FakePageWrapper';
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
-import classes from './UserDetailsPage.module.css';
+import classes from './UserRightsPage.module.css';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageWrapper } from '@/components';
 import { useGetUserByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
-export const UserDetailsPage = () => {
+export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -23,7 +23,7 @@ export const UserDetailsPage = () => {
   const { data: reportee } = useGetReporteeQuery();
   const { data: user } = useGetUserByUUIDQuery(id ?? '');
 
-  useDocumentTitle(t('user_details_page.page_title'));
+  useDocumentTitle(t('user_rights_page.page_title'));
   const avatar = id ? <span>{user?.party.name?.charAt(0)}</span> : '';
 
   return (

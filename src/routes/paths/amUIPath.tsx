@@ -1,4 +1,4 @@
 export enum amUIPath {
   Users = 'users',
-  UserDetails = 'users/:id',
+  UserRights = 'users/:id',
 }

@@ -11,7 +11,7 @@ import { ChooseServicePage as DelegateChooseServicePage } from '@/features/singl
 import { ChooseServicePage as RequestChooseServicePage } from '@/features/singleRight/request/ChooseServicePage/ChooseServicePage';
 import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPage/ChooseRightsPage';
 import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
-import { UserDetailsPage } from '@/features/amUI/userDetailsPage/UserDetailsPage';
+import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 
 import { UsersPage } from '@/features/amUI/users/UsersPage';
 
@@ -84,8 +84,8 @@ export const Router = createBrowserRouter(
         element={<UsersPage />}
       />
       <Route
-        path={amUIPath.UserDetails}
-        element={<UserDetailsPage />}
+        path={amUIPath.UserRights}
+        element={<UserRightsPage />}
       />
     </Route>,
   ),
