@@ -11,8 +11,6 @@ jobs:
     
     name: 'Playwright end to end tests'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
