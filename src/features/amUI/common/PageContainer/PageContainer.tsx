@@ -1,9 +1,11 @@
 import React from 'react';
-import classes from './PageContainer.module.css';
 import { Button } from '@digdir/designsystemet-react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { getButtonIconSize } from '@/resources/utils/iconUtils';
 import { useTranslation } from 'react-i18next';
+
+import { getButtonIconSize } from '@/resources/utils/iconUtils';
+
+import classes from './PageContainer.module.css';
 
 interface PageContainerProps {
   children: React.ReactNode;

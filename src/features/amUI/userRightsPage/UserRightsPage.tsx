@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTranslation } from 'react-i18next';
-
 import { Heading } from '@digdir/designsystemet-react';
-
-import { FakePageWrapper } from '../common/FakePageWrapper';
 import { useNavigate, useParams } from 'react-router-dom';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { UserIcon } from '@/components/UserIcon/UserIcon';
-import classes from './UserRightsPage.module.css';
-import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+
+import { PageContainer } from '../common/PageContainer/PageContainer';
+import { FakePageWrapper } from '../common/FakePageWrapper';
+
+import classes from './UserRightsPage.module.css';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
