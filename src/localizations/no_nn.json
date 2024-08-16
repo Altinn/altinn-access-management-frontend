@@ -3,6 +3,7 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
+    "back": "Tilbake",
     "changes_made_msg": "Endringar gjort. Klikk på lagre-knappen for å gjere dei gjeldande",
     "status_code": "Statuskode",
     "maskinporten": "Maskinporten",
@@ -197,6 +198,9 @@
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller virksomheter",
     "user_no_search_result": "Inga resultat for søket"
+  },
+  "user_rights_page": {
+    "page_title": "Brukertilgang - Altinn"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

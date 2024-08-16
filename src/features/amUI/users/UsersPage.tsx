@@ -7,13 +7,13 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 import { UsersList } from './UsersList';
-import { FakePageWrapper } from './FakePageWrapper';
+import { FakePageWrapper } from '../common/FakePageWrapper';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
 
-  const { data: reportee } = useGetReporteeQuery();
+  const { data: reportee } = useGetReporteeQuery({ partyId: undefined });
 
   return (
     <PageWrapper>

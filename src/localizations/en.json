@@ -3,6 +3,7 @@
     "error": "Error",
     "restart": "Restart",
     "close": "Close",
+    "back": "Back",
     "changes_made_msg": "Changes made. Click the save button to apply",
     "status_code": "Status code",
     "maskinporten": "Maskinporten",
@@ -199,6 +200,9 @@
     "user_list_heading": "Other users with power of attorney",
     "user_search_placeholder": "Search for users",
     "user_no_search_result": "No users found"
+  },
+  "user_rights_page": {
+    "page_title": "User access - Altinn"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",

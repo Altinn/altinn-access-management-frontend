@@ -7,7 +7,8 @@ import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
-import { FilteredRightHolder } from '../useFilteredRightHolders';
+import { Link } from 'react-router-dom';
+import type { FilteredRightHolder } from '../useFilteredRightHolders';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -100,7 +101,7 @@ export const UserItem = ({
               classes.user,
               classes[size],
               classes[color],
-              isExpanable && classes.expandable,
+              classes.clickable,
               className,
             )}
             fullWidth
@@ -115,7 +116,16 @@ export const UserItem = ({
             {headerContent}
           </Button>
         ) : (
-          <div className={cn(classes.user, classes[size], classes[color], className)}>
+          <Link
+            to={`${user.partyUuid}`}
+            className={cn(
+              classes.user,
+              classes[size],
+              classes[color],
+              classes.clickable,
+              className,
+            )}
+          >
             {icon && (
               <UserIcon
                 size={size}
@@ -124,7 +134,7 @@ export const UserItem = ({
               />
             )}
             {headerContent}
-          </div>
+          </Link>
         )}
         {isExpanded && (
           <div

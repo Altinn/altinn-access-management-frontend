@@ -1,0 +1,28 @@
+.container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--fds-semantic-surface-neutral-default);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 0 0 4px 4px;
+}
+
+.topActions {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem 0;
+}
+
+.pageActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.contentActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.pageContent {
+  padding: 1rem;
+}
