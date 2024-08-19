@@ -6,7 +6,9 @@ import {
   PersonGroupIcon,
   RobotSmileIcon,
 } from '@navikt/aksel-icons';
+
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
+
 import classes from './FakePageWrapper.module.css';
 
 interface FakePageWrapperProps {

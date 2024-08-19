@@ -23,12 +23,12 @@ import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
 import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { getButtonIconSize } from '@/resources/utils';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import { LayoutState } from '../LayoutState';
 
 import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
-import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 export interface OverviewPageContentInterface {
   layout: LayoutState;
