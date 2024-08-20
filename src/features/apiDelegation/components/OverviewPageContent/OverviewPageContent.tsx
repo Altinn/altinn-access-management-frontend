@@ -100,10 +100,8 @@ export const OverviewPageContent = ({
     fetchError,
   } = useOverviewOrgs(layout);
 
-  const [
-    BatchDeleteApiDelegationRequest,
-    { data: revokeData, isLoading: isRevoking, error: revokeError },
-  ] = useDeleteApiDelegationBatchMutation();
+  const [BatchDeleteApiDelegationRequest, { isLoading: isRevoking, error: revokeError }] =
+    useDeleteApiDelegationBatchMutation();
 
   const confirmRevoke = () => {
     const partyId = getCookie('AltinnPartyId');
@@ -237,7 +235,7 @@ export const OverviewPageContent = ({
                 onClick={handleSetIsEditable(!isEditable)}
                 size='medium'
               >
-                {isEditable ? (
+                {!isEditable ? (
                   <>
                     <PencilIcon fontSize={getButtonIconSize(true)} />{' '}
                     {t('api_delegation.edit_accesses')}

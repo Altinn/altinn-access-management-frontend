@@ -45,7 +45,7 @@ export interface DeletionDto {
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
-const overviewOrgApi = createApi({
+export const overviewOrgApi = createApi({
   reducerPath: 'overviewOrgApi',
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
