@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
+// import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type CustomError } from '@/dataObjects';
 
@@ -22,24 +22,6 @@ export interface OverviewOrg {
   isAllSoftDeleted: boolean;
   apiList: ApiListItem[];
 }
-
-interface ResourceReference {
-  reference: string;
-  referenceSource: string;
-  referenceType: string;
-}
-interface DelegationDTO {
-  coveredByName: string;
-  offeredByName: string;
-  offeredByOrganizationNumber: string;
-  coveredByOrganizationNumber: string;
-  resourceId: string;
-  resourceTitle: string;
-  resourceOwnerName: string;
-  rightDescription: string;
-  resourceReferences?: ResourceReference[];
-}
-
 export interface SliceState {
   loading: boolean;
   overviewOrgs: OverviewOrg[];
@@ -69,58 +51,6 @@ const initialState: SliceState = {
   },
 };
 
-const mapToOverviewOrgList = (delegationArray: DelegationDTO[], layout: LayoutState) => {
-  const overviewOrgList: OverviewOrg[] = [];
-  for (const delegation of delegationArray) {
-    const api: ApiListItem = {
-      id: delegation.resourceId,
-      apiName: delegation.resourceTitle,
-      isSoftDelete: false,
-      owner: delegation.resourceOwnerName,
-      description: delegation.rightDescription,
-      scopes: [],
-    };
-    if (delegation.resourceReferences) {
-      for (const ref of delegation.resourceReferences) {
-        if (ref.referenceType === 'MaskinportenScope') {
-          api.scopes.push(ref.reference);
-        }
-      }
-    }
-
-    let delegationOrg = '';
-    let delegationOrgNumber = '';
-    switch (layout) {
-      case LayoutState.Offered:
-        delegationOrg = delegation.coveredByName;
-        delegationOrgNumber = delegation.coveredByOrganizationNumber;
-        break;
-      case LayoutState.Received:
-        delegationOrg = delegation.offeredByName;
-        delegationOrgNumber = delegation.offeredByOrganizationNumber;
-        break;
-    }
-
-    const existingOrgIndex = overviewOrgList.findIndex((org) => org.id === delegationOrg);
-    if (existingOrgIndex >= 0) {
-      // Add delegation to existing org-entry
-      overviewOrgList[existingOrgIndex].apiList.push(api);
-    } else {
-      // Add new org
-      const newOrg: OverviewOrg = {
-        id: delegationOrg,
-        name: delegationOrg,
-        orgNumber: delegationOrgNumber,
-        isAllSoftDeleted: false,
-        apiList: [api],
-      };
-      overviewOrgList.push(newOrg);
-    }
-  }
-
-  return overviewOrgList;
-};
-
 const setAllSoftDeleteState = (
   state: SliceState,
   softDeletedOrgId: string,
@@ -135,16 +65,6 @@ const setAllSoftDeleteState = (
       break;
     }
   }
-};
-
-const createCopyOrg = (org: OverviewOrg) => {
-  return {
-    id: org.id,
-    name: org.name,
-    isAllSoftDeleted: false,
-    orgNumber: org.orgNumber,
-    apiList: [],
-  };
 };
 
 export const fetchOverviewOrgsOffered = createAsyncThunk(
@@ -162,7 +82,6 @@ export const fetchOverviewOrgsOffered = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.error(error);
       return rejectWithValue(error);
     }
   },
@@ -181,7 +100,6 @@ export const fetchOverviewOrgsReceived = createAsyncThunk(
       .get(`/accessmanagement/api/v1/apidelegation/${altinnPartyId}/received`)
       .then((response) => response.data)
       .catch((error) => {
-        console.error(error);
         return rejectWithValue(error);
       });
   },
@@ -200,28 +118,13 @@ export const deleteOfferedApiDelegation = createAsyncThunk(
       const response = await axios.post(
         `/accessmanagement/api/v1/apidelegation/${altinnPartyId}/offered/revoke`,
         {
-          to: [
-            {
-              id: 'urn:altinn:organizationnumber',
-              value: String(request.orgNr),
-            },
-          ],
-          rights: [
-            {
-              resource: [
-                {
-                  id: 'urn:altinn:resource',
-                  value: request.apiId,
-                },
-              ],
-            },
-          ],
+          orgNr: request.orgNr,
+          apiId: request.apiId,
         },
       );
 
       return response.data;
     } catch (error) {
-      console.error(error);
       return rejectWithValue(error);
     }
   },
@@ -238,22 +141,8 @@ export const deleteReceivedApiDelegation = createAsyncThunk(
 
     return await axios
       .post(`/accessmanagement/api/v1/apidelegation/${altinnPartyId}/received/revoke`, {
-        from: [
-          {
-            id: 'urn:altinn:organizationnumber',
-            value: String(request.orgNr),
-          },
-        ],
-        rights: [
-          {
-            resource: [
-              {
-                id: 'urn:altinn:resource',
-                value: request.apiId,
-              },
-            ],
-          },
-        ],
+        orgNr: request.orgNr,
+        apiId: request.apiId,
       })
       .then((response) => response.data)
       .catch((error) => {
@@ -267,6 +156,7 @@ const overviewOrgSlice = createSlice({
   name: 'overviewOrg',
   initialState,
   reducers: {
+    // Move out as util
     softDelete: (state, action) => {
       let softDeleteCount = 0;
       const softDeletedItemId = action.payload[1];
@@ -274,7 +164,7 @@ const overviewOrgSlice = createSlice({
 
       for (const org of state.overviewOrgs) {
         if (org.id === softDeletedOrgId) {
-          const copyOrg: OverviewOrg = createCopyOrg(org);
+          const copyOrg: OverviewOrg = { ...org };
 
           for (const item of org.apiList) {
             if (item.isSoftDelete) {
@@ -337,8 +227,7 @@ const overviewOrgSlice = createSlice({
     builder
       .addCase(fetchOverviewOrgsReceived.fulfilled, (state, action) => {
         state.loading = true;
-        const dataArray = action.payload;
-        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Received);
+        const responseList = action.payload as OverviewOrg[];
         state.overviewOrgs = responseList;
         state.loading = false;
       })
@@ -357,8 +246,7 @@ const overviewOrgSlice = createSlice({
       })
       .addCase(fetchOverviewOrgsOffered.fulfilled, (state, action) => {
         state.loading = true;
-        const dataArray = action.payload;
-        const responseList: OverviewOrg[] = mapToOverviewOrgList(dataArray, LayoutState.Offered);
+        const responseList = action.payload as OverviewOrg[];
         state.overviewOrgs = responseList;
         state.loading = false;
       })

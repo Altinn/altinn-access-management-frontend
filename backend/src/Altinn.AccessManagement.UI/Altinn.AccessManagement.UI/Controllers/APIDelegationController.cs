@@ -3,8 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/received")]
-        public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetReceivedAPIDelegations([FromRoute] string party)
+        public async Task<ActionResult<List<OverviewOrg>>> GetReceivedAPIDelegations([FromRoute] string party)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/offered")]
-        public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetOfferedAPIDelegations([FromRoute] string party)
+        public async Task<ActionResult<List<OverviewOrg>>> GetOfferedAPIDelegations([FromRoute] string party)
         {
             try
             {
@@ -96,11 +96,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/received/revoke")]
-        public async Task<ActionResult> RevokeReceivedAPIDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
+        public async Task<ActionResult> RevokeReceivedAPIDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegationDTO delegationDTO)
         {
             try
             {
-                HttpResponseMessage response = await _apiDelegationService.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+                HttpResponseMessage response = await _apiDelegationService.RevokeReceivedMaskinportenScopeDelegation(party, delegationDTO);
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {
@@ -125,11 +125,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/offered/revoke")]
-        public async Task<ActionResult> RevokeOfferedAPIDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegation delegation)
+        public async Task<ActionResult> RevokeOfferedAPIDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegationDTO delegationDTO)
         {
             try
             {
-                HttpResponseMessage response = await _apiDelegationService.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
+                HttpResponseMessage response = await _apiDelegationService.RevokeOfferedMaskinportenScopeDelegation(party, delegationDTO);
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {

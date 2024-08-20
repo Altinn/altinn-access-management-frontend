@@ -36,29 +36,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<MaskinportenSchemaDelegationFE>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
+        public async Task<List<OverviewOrg>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> offeredDelegations = await _maskinportenSchemaClient.GetOfferedMaskinportenSchemaDelegations(party);
-            return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode);
+            return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode, LayoutState.Offered);
         }
 
         /// <inheritdoc />
-        public async Task<List<MaskinportenSchemaDelegationFE>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
+        public async Task<List<OverviewOrg>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> receivedDelegations = await _maskinportenSchemaClient.GetReceivedMaskinportenSchemaDelegations(party);
-            return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode);
+            return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode, LayoutState.Received);
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegationDTO delegationDTO)
         {
-            return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+            return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegationDTO));
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
+        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegationDTO delegationDTO)
         {
-            return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
+
+            return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegationDTO));
         }
 
         /// <inheritdoc />
@@ -121,42 +122,150 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }
 
-        private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)
+        private async Task<List<OverviewOrg>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, LayoutState layout)
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
             List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
-
-            List<MaskinportenSchemaDelegationFE> result = new List<MaskinportenSchemaDelegationFE>();
+        
+            List<OverviewOrg> overviewOrgList = new List<OverviewOrg>();
+        
             foreach (MaskinportenSchemaDelegation delegation in delegations)
             {
-                MaskinportenSchemaDelegationFE delegationFE = new MaskinportenSchemaDelegationFE();
-                delegationFE.LanguageCode = languageCode;
-                delegationFE.OfferedByPartyId = delegation.OfferedByPartyId;
-                delegationFE.OfferedByOrganizationNumber = delegation.OfferedByOrganizationNumber;
-                delegationFE.OfferedByName = delegation.OfferedByName;
-                delegationFE.CoveredByPartyId = delegation.CoveredByPartyId;
-                delegationFE.CoveredByOrganizationNumber = delegation.CoveredByOrganizationNumber;
-                delegationFE.CoveredByName = delegation.CoveredByName;
-                delegationFE.PerformedByUserId = delegation.PerformedByUserId;
-                delegationFE.Created = delegation.Created;
-                delegationFE.ResourceId = delegation.ResourceId;
-                ServiceResource resource = resources.FirstOrDefault(r => r.Identifier == delegation.ResourceId);
-                if (resource != null)
+                var resource = resources.FirstOrDefault(r => r.Identifier == delegation.ResourceId);
+                if (resource == null)
                 {
-                    delegationFE.ResourceTitle = resource.Title.GetValueOrDefault(languageCode, "nb");
-                    delegationFE.ResourceType = resource.ResourceType;
-                    delegationFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority?.Orgcode;
-                    delegationFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority?.Organization;
-                    delegationFE.ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb");
-                    delegationFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode, "nb");
-                    delegationFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode, "nb");
-                    delegationFE.ResourceReferences = resource.ResourceReferences;
+                    continue;
                 }
 
-                result.Add(delegationFE);
+                var delegationFE = new MaskinportenSchemaDelegationFE
+                {
+                    LanguageCode = languageCode,
+                    OfferedByPartyId = delegation.OfferedByPartyId,
+                    OfferedByOrganizationNumber = delegation.OfferedByOrganizationNumber,
+                    OfferedByName = delegation.OfferedByName,
+                    CoveredByPartyId = delegation.CoveredByPartyId,
+                    CoveredByOrganizationNumber = delegation.CoveredByOrganizationNumber,
+                    CoveredByName = delegation.CoveredByName,
+                    PerformedByUserId = delegation.PerformedByUserId,
+                    Created = delegation.Created,
+                    ResourceId = delegation.ResourceId,
+                    ResourceTitle = resource.Title.GetValueOrDefault(languageCode, "nb"),
+                    ResourceType = resource.ResourceType,
+                    ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb"),
+                    RightDescription = resource.RightDescription.GetValueOrDefault(languageCode, "nb"),
+                    ResourceReferences = resource.ResourceReferences
+                };
+        
+                var api = new ApiListItem
+                {
+                    Id = delegationFE.ResourceId,
+                    ApiName = delegationFE.ResourceTitle,
+                    Owner = delegationFE.ResourceOwnerName,
+                    Description = delegationFE.RightDescription,
+                    Scopes = delegationFE.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
+                };
+        
+                string delegationOrg = layout == LayoutState.Offered ? delegationFE.CoveredByName : delegationFE.OfferedByName;
+                string delegationOrgNumber = layout == LayoutState.Offered ? delegationFE.CoveredByOrganizationNumber : delegationFE.OfferedByOrganizationNumber;
+        
+                var existingOrg = overviewOrgList.Find(org => org.Id == delegationOrg);
+                if (existingOrg != null)
+                {
+                    existingOrg.ApiList.Add(api);
+                }
+                else
+                {
+                    var newOrg = new OverviewOrg
+                    {
+                        Id = delegationOrg,
+                        Name = delegationOrg,
+                        OrgNumber = delegationOrgNumber,
+                        IsAllSoftDeleted = false,
+                        ApiList = new List<ApiListItem> { api }
+                    };
+                    overviewOrgList.Add(newOrg);
+                }
             }
-
-            return result;
+        
+            return overviewOrgList;
         }
+    }
+
+    /// <summary>
+    /// Represents an API item.
+    /// </summary>
+    public class ApiListItem
+    {
+        /// <summary>
+        /// Gets or sets the ID of the API.
+        /// </summary>
+        public string Id { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the name of the API.
+        /// </summary>
+        public string ApiName { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the owner of the API.
+        /// </summary>
+        public string Owner { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the description of the API.
+        /// </summary>
+        public string Description { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the scopes of the API.
+        /// </summary>
+        public List<string> Scopes { get; set; } = new List<string>();
+    }
+
+    /// <summary>
+    /// Represents an overview organization.
+    /// </summary>
+    public class OverviewOrg
+    {
+        /// <summary>
+        /// Gets or sets the ID of the organization.
+        /// </summary>
+        public string Id { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the name of the organization.
+        /// </summary>
+        public string Name { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the organization number.
+        /// </summary>
+        public string OrgNumber { get; set; }
+    
+        /// <summary>
+        /// Gets or sets a value indicating whether all items in the organization are soft deleted.
+        /// </summary>
+        public bool IsAllSoftDeleted { get; set; }
+    
+        /// <summary>
+        /// Gets or sets the list of API items in the organization.
+        /// </summary>
+        public List<ApiListItem> ApiList { get; set; } = new List<ApiListItem>();
+    }
+
+    /// <summary>
+    /// Represents the layout state.
+    /// </summary>
+    public enum LayoutState
+    {
+        /// <summary>
+        /// Offered layout state.
+        /// </summary>
+        Offered,
+    
+        /// <summary>
+        /// Received layout state.
+        /// </summary>
+        Received
     }
 }

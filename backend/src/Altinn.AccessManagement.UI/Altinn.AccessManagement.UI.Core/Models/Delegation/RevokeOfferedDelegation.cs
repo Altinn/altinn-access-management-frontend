@@ -22,5 +22,55 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// </summary>
         [Required]
         public List<Right> Rights { get; set; }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="RevokeOfferedDelegation"/> class.
+        /// </summary>
+        /// <param name="dto">The DTO object containing the data for the delegation.</param>
+        public RevokeOfferedDelegation(RevokeOfferedDelegationDTO dto)
+        {
+            To = new List<IdValuePair>
+        {
+            new IdValuePair
+            {
+                Id = "urn:altinn:organizationnumber",
+                Value = dto.OrgNr
+            }
+        };
+
+            Rights = new List<Right>
+            {
+                new Right
+                {
+                    Resource = new List<IdValuePair>
+                    {
+                        new IdValuePair
+                        {
+                            Id = "urn:altinn:resource",
+                            Value = dto.ApiId
+                        }
+                    }
+                }
+            };
+        }
     }
+
+    /// <summary>
+    ///     Represents the data transfer object for revoking an offered delegation.
+    /// </summary>
+    public class RevokeOfferedDelegationDTO
+    {
+        /// <summary>
+        ///     Gets or sets the organization number.
+        /// </summary>
+        [Required]
+        public string OrgNr { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the API identifier.
+        /// </summary>
+        [Required]
+        public string ApiId { get; set; }
+    }
+
 }
