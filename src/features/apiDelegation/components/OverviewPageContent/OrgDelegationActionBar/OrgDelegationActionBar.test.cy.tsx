@@ -4,8 +4,7 @@ import * as React from 'react';
 
 import { OrgDelegationActionBar } from '@/features/apiDelegation/components/OverviewPageContent/OrgDelegationActionBar';
 import store from '@/rtk/app/store';
-
-import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 
 type MountReactComponentOptions = Record<string, any>;
 Cypress.Commands.add(

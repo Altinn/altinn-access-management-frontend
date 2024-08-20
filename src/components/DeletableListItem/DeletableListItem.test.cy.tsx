@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'cypress/react18';
 import * as React from 'react';
 
-import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import store from '@/rtk/app/store';
 import { DeletableListItem, BorderedList } from '@/components';
 

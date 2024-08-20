@@ -7,8 +7,9 @@ import type {
 } from '@/dataObjects/dtos/resourceDelegation';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import type { Organization } from '../lookup/lookupApi';
+
 import type { DelegableApi } from './delegableApi/delegableApiSlice';
-import { Organization } from '../lookup/lookupApi';
 
 export type ResourceReference = {
   resource: IdValuePair[];

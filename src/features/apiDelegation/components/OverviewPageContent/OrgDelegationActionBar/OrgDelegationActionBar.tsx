@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
-import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import { softDelete, softRestore } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import { useAppDispatch } from '@/rtk/app/hooks';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import { DeletableListItem, ActionBar, BorderedList } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
@@ -19,6 +17,8 @@ export interface OrgDelegationActionBarProps {
   isEditable: boolean;
   softRestoreAllCallback: () => void;
   softDeleteAllCallback: () => void;
+  softRestoreCallback: (orgId: string, apiId: string) => void;
+  softDeleteCallback: (orgId: string, apiId: string) => void;
   delegateToOrgCallback?: () => void;
   setScreenreaderMsg: () => void;
 }
@@ -27,6 +27,8 @@ export const OrgDelegationActionBar = ({
   organization,
   softRestoreAllCallback,
   softDeleteAllCallback,
+  softRestoreCallback,
+  softDeleteCallback,
   isEditable = false,
   delegateToOrgCallback,
   setScreenreaderMsg,
@@ -34,7 +36,6 @@ export const OrgDelegationActionBar = ({
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const numberOfAccesses = organization.apiList.length.toString();
-  const dispatch = useAppDispatch();
   const isSm = useMediaQuery('(max-width: 768px)');
 
   const handleSoftDeleteAll = () => {
@@ -90,10 +91,10 @@ export const OrgDelegationActionBar = ({
     <DeletableListItem
       key={i}
       softDeleteCallback={() => {
-        dispatch(softDelete([organization.id, item.id]));
+        softDeleteCallback(organization.id, item.id);
         setScreenreaderMsg();
       }}
-      softRestoreCallback={() => dispatch(softRestore([organization.id, item.id]))}
+      softRestoreCallback={() => softRestoreCallback(organization.id, item.id)}
       item={item}
       isEditable={isEditable}
       scopes={item.scopes}

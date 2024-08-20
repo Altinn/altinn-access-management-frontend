@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 
-import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
 

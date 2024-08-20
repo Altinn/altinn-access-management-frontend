@@ -3,7 +3,7 @@ import { createLogger } from 'redux-logger';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import delegableApiReducer from '../features/apiDelegation/delegableApi/delegableApiSlice';
-import overviewOrgReducer from '../features/apiDelegation/overviewOrg/overviewOrgSlice';
+import overviewOrgReducer from '../features/apiDelegation/overviewOrg/overviewOrgApi';
 import apiDelegationReducer from '../features/apiDelegation/apiDelegationSlice';
 import { singleRightsApi } from '../features/singleRights/singleRightsApi';
 import singleRightsReducer from '../features/singleRights/singleRightsSlice';
