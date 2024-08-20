@@ -29,17 +29,26 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Revokes a delegation received by the party
         /// </summary>
         /// <param name="party">party</param>
-        /// <param name="delegation">delegation to be revoked</param>
+        /// <param name="delegationDTO">delegation to be revoked</param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegationDTO delegationDTO);
+        public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO);
 
         /// <summary>
         /// Revokes a delegation offered by the party
         /// </summary>
         /// <param name="party">party</param>
-        /// <param name="delegation">delegation to be revoked</param>
+        /// <param name="delegationDTO">delegation to be revoked</param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegationDTO delegationDTO);
+        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO);
+        
+        /// <summary>
+        /// Revokes a one or more delegation offered or received by the party
+        /// </summary>
+        /// <param name="party">party</param>
+        /// <param name="delegationDTOs">List of delegations to be revoked</param>
+        /// <param name="layout">the layout state</param>
+        /// <returns></returns>
+        public Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, LayoutState layout);
 
         /// <summary>
         /// Creates a maskinporten delegation from the party to a third party organization

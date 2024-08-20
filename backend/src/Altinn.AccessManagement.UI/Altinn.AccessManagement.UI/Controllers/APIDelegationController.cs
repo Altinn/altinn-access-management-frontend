@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/received/revoke")]
-        public async Task<ActionResult> RevokeReceivedAPIDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegationDTO delegationDTO)
+        public async Task<ActionResult> RevokeReceivedAPIDelegation([FromRoute] string party, [FromBody] RevokeDelegationDTO delegationDTO)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/offered/revoke")]
-        public async Task<ActionResult> RevokeOfferedAPIDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegationDTO delegationDTO)
+        public async Task<ActionResult> RevokeOfferedAPIDelegation([FromRoute] string party, [FromBody] RevokeDelegationDTO delegationDTO)
         {
             try
             {
@@ -151,6 +151,29 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during revoke of offered maskinportenschema");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+
+        /// <summary>
+        ///     Endpoint for revoking a maskinporten scope delegation on behalf of the party having offered the delegation
+        /// </summary>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("{party}/{layout}/revoke/batch")]
+        public async Task<ActionResult> RevokeAPIDelegationBatch([FromRoute] string party, [FromRoute] LayoutState layout, [FromBody] List<RevokeDelegationDTO> delegationDTO)
+        {
+            try
+            {
+                var response = await _apiDelegationService.BatchRevokeMaskinportenScopeDelegation(party, delegationDTO, layout);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during batch revoke of maskinportenschemas");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

@@ -50,13 +50,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegationDTO delegationDTO)
+        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
             return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegationDTO));
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegationDTO delegationDTO)
+        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
 
             return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegationDTO));
@@ -126,9 +126,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
             List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
-        
+
             List<OverviewOrg> overviewOrgList = new List<OverviewOrg>();
-        
+
             foreach (MaskinportenSchemaDelegation delegation in delegations)
             {
                 var resource = resources.FirstOrDefault(r => r.Identifier == delegation.ResourceId);
@@ -155,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     RightDescription = resource.RightDescription.GetValueOrDefault(languageCode, "nb"),
                     ResourceReferences = resource.ResourceReferences
                 };
-        
+
                 var api = new ApiListItem
                 {
                     Id = delegationFE.ResourceId,
@@ -164,10 +164,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Description = delegationFE.RightDescription,
                     Scopes = delegationFE.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
                 };
-        
+
                 string delegationOrg = layout == LayoutState.Offered ? delegationFE.CoveredByName : delegationFE.OfferedByName;
                 string delegationOrgNumber = layout == LayoutState.Offered ? delegationFE.CoveredByOrganizationNumber : delegationFE.OfferedByOrganizationNumber;
-        
+
                 var existingOrg = overviewOrgList.Find(org => org.Id == delegationOrg);
                 if (existingOrg != null)
                 {
@@ -186,8 +186,81 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     overviewOrgList.Add(newOrg);
                 }
             }
-        
+
             return overviewOrgList;
+        }
+
+        /// <summary>
+        /// Revoke a batch of Maskinporten scope delegations.
+        /// </summary>
+        /// <param name="party">The party identifier.</param>
+        /// <param name="delegationDTOs">The list of delegation DTOs.</param>
+        /// <param name="layout">The layout state.</param>
+        /// <returns>A list of tasks representing the HTTP response messages.</returns>
+        public async Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, LayoutState layout)
+        {
+            var responses = new List<RevokeApiDelegationOutput>();
+
+            if (layout == LayoutState.Offered)
+            {
+                foreach (var delegation in delegationDTOs)
+                {
+                    try
+                    {
+                        var response = await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegation));
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNr,
+                            ApiId = delegation.ApiId,
+                            Success = response.StatusCode == System.Net.HttpStatusCode.OK
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        var errorResponse = Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError)
+                        {
+                            Content = new StringContent(e.Message)
+                        });
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNr,
+                            ApiId = delegation.ApiId,
+                            Success = false
+                        });
+                    }
+                }
+            }
+            else
+            {
+                foreach (var delegation in delegationDTOs)
+                {
+                    try
+                    {
+                        var res = _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegation));
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNr,
+                            ApiId = delegation.ApiId,
+                            Success = res.Result.StatusCode == System.Net.HttpStatusCode.OK
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        var errorResponse = Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError)
+                        {
+                            Content = new StringContent(e.Message)
+                        });
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNr,
+                            ApiId = delegation.ApiId,
+                            Success = false
+                        });
+                    }
+                }
+            }
+
+            return responses;
         }
     }
 
@@ -200,22 +273,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Gets or sets the ID of the API.
         /// </summary>
         public string Id { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the name of the API.
         /// </summary>
         public string ApiName { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the owner of the API.
         /// </summary>
         public string Owner { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the description of the API.
         /// </summary>
         public string Description { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the scopes of the API.
         /// </summary>
@@ -231,22 +304,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Gets or sets the ID of the organization.
         /// </summary>
         public string Id { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the name of the organization.
         /// </summary>
         public string Name { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the organization number.
         /// </summary>
         public string OrgNumber { get; set; }
-    
+
         /// <summary>
         /// Gets or sets a value indicating whether all items in the organization are soft deleted.
         /// </summary>
         public bool IsAllSoftDeleted { get; set; }
-    
+
         /// <summary>
         /// Gets or sets the list of API items in the organization.
         /// </summary>
@@ -262,7 +335,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Offered layout state.
         /// </summary>
         Offered,
-    
+
         /// <summary>
         /// Received layout state.
         /// </summary>
