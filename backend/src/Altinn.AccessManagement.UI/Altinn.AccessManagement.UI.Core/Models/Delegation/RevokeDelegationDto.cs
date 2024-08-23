@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
         ///     Gets or sets the organization number.
         /// </summary>
         [Required]
-        public string OrgNr { get; set; }
+        public string OrgNumber { get; set; }
 
         /// <summary>
         ///     Gets or sets the API identifier.

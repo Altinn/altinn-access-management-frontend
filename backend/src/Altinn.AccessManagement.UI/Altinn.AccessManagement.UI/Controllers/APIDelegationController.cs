@@ -154,21 +154,22 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
-
-
+      
         /// <summary>
-        ///     Endpoint for revoking a maskinporten scope delegation on behalf of the party having offered the delegation
+        ///     Endpoint for revoking a batch of maskinporten scope delegations on behalf of the party having received the delegations.
         /// </summary>
-        /// <response code="400">Bad Request</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <param name="party">The party identifier.</param>
+        /// <param name="type">The type of delegation.</param>
+        /// <param name="delegationDTO">The list of delegation DTOs.</param>
+        /// <returns>The action result.</returns>
         [HttpPost]
         [Authorize]
-        [Route("{party}/{layout}/revoke/batch")]
-        public async Task<ActionResult> RevokeAPIDelegationBatch([FromRoute] string party, [FromRoute] LayoutState layout, [FromBody] List<RevokeDelegationDTO> delegationDTO)
+        [Route("{party}/{type}/revoke/batch")]
+        public async Task<ActionResult> RevokeAPIDelegationBatch([FromRoute] string party, [FromRoute] DelegationType type, [FromBody] List<RevokeDelegationDTO> delegationDTO)
         {
             try
             {
-                var response = await _apiDelegationService.BatchRevokeMaskinportenScopeDelegation(party, delegationDTO, layout);
+                var response = await _apiDelegationService.BatchRevokeMaskinportenScopeDelegation(party, delegationDTO, type);
                 return Ok(response);
             }
             catch (Exception ex)

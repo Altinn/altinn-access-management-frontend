@@ -10,7 +10,7 @@ export const useSoftDeleteApi = (overviewOrgs: OverviewOrg[]) => {
 
   const softRestoreAll = (orgId?: string) => {
     if (orgId) {
-      setItemsToDelete(itemsToDelete.filter((o) => o.orgNr !== orgId));
+      setItemsToDelete(itemsToDelete.filter((o) => o.orgNumber !== orgId));
     } else {
       setItemsToDelete([]);
     }
@@ -20,27 +20,29 @@ export const useSoftDeleteApi = (overviewOrgs: OverviewOrg[]) => {
     if (orgNumber && overviewOrgs) {
       const orgToDelete = overviewOrgs.find((o) => orgNumber === o.orgNumber);
       setItemsToDelete(
-        orgToDelete ? orgToDelete.apiList.map((a) => ({ apiId: a.id, orgNr: orgNumber })) : [],
+        orgToDelete ? orgToDelete.apiList.map((a) => ({ apiId: a.id, orgNumber })) : [],
       );
     }
   };
 
-  const softRestoreItem = ({ orgNr, apiId }: DeletionDto) => {
-    setItemsToDelete(itemsToDelete.filter((o) => !(o.orgNr === orgNr && o.apiId === apiId)));
+  const softRestoreItem = ({ orgNumber, apiId }: DeletionDto) => {
+    setItemsToDelete(
+      itemsToDelete.filter((o) => !(o.orgNumber === orgNumber && o.apiId === apiId)),
+    );
   };
 
-  const softDeleteItem = ({ orgNr, apiId }: DeletionDto) => {
-    setItemsToDelete([...itemsToDelete, { apiId, orgNr: orgNr }]);
+  const softDeleteItem = ({ orgNumber, apiId }: DeletionDto) => {
+    setItemsToDelete([...itemsToDelete, { apiId, orgNumber }]);
   };
 
-  const checkIfItemIsSoftDeleted = ({ orgNr, apiId }: DeletionDto) => {
-    return itemsToDelete.some((o) => o.orgNr === orgNr && o.apiId === apiId);
+  const checkIfItemIsSoftDeleted = ({ orgNumber, apiId }: DeletionDto) => {
+    return itemsToDelete.some((o) => o.orgNumber === orgNumber && o.apiId === apiId);
   };
 
-  const checkIfAllItmesAreSoftDeleted = (orgNr: string) => {
-    const selctedOrg = overviewOrgs.find((o) => o.orgNumber === orgNr);
+  const checkIfAllItmesAreSoftDeleted = (orgNumber: string) => {
+    const selctedOrg = overviewOrgs.find((o) => o.orgNumber === orgNumber);
     return selctedOrg
-      ? selctedOrg.apiList.every((a) => checkIfItemIsSoftDeleted({ orgNr: orgNr, apiId: a.id }))
+      ? selctedOrg.apiList.every((a) => checkIfItemIsSoftDeleted({ orgNumber, apiId: a.id }))
       : false;
   };
 

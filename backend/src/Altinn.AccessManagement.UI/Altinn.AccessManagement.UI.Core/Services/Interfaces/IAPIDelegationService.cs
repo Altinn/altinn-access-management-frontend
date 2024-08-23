@@ -46,9 +46,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="party">party</param>
         /// <param name="delegationDTOs">List of delegations to be revoked</param>
-        /// <param name="layout">the layout state</param>
+        /// <param name="type">Type of delegation</param>
         /// <returns></returns>
-        public Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, LayoutState layout);
+        public Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, DelegationType type);
 
         /// <summary>
         /// Creates a maskinporten delegation from the party to a third party organization

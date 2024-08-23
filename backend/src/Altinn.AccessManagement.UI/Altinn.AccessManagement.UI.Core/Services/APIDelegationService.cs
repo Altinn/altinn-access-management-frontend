@@ -39,14 +39,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<OverviewOrg>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> offeredDelegations = await _maskinportenSchemaClient.GetOfferedMaskinportenSchemaDelegations(party);
-            return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode, LayoutState.Offered);
+            return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode, DelegationType.Offered);
         }
 
         /// <inheritdoc />
         public async Task<List<OverviewOrg>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> receivedDelegations = await _maskinportenSchemaClient.GetReceivedMaskinportenSchemaDelegations(party);
-            return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode, LayoutState.Received);
+            return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode, DelegationType.Received);
         }
 
         /// <inheritdoc />
@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }
 
-        private async Task<List<OverviewOrg>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, LayoutState layout)
+        private async Task<List<OverviewOrg>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, DelegationType type)
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
             List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
@@ -131,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (MaskinportenSchemaDelegation delegation in delegations)
             {
-                var resource = resources.FirstOrDefault(r => r.Identifier == delegation.ResourceId);
+                var resource = resources.Find(r => r.Identifier == delegation.ResourceId);
                 if (resource == null)
                 {
                     continue;
@@ -165,8 +165,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     Scopes = delegationFE.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
                 };
 
-                string delegationOrg = layout == LayoutState.Offered ? delegationFE.CoveredByName : delegationFE.OfferedByName;
-                string delegationOrgNumber = layout == LayoutState.Offered ? delegationFE.CoveredByOrganizationNumber : delegationFE.OfferedByOrganizationNumber;
+                string delegationOrg = type == DelegationType.Offered ? delegationFE.CoveredByName : delegationFE.OfferedByName;
+                string delegationOrgNumber = type == DelegationType.Offered ? delegationFE.CoveredByOrganizationNumber : delegationFE.OfferedByOrganizationNumber;
 
                 var existingOrg = overviewOrgList.Find(org => org.Id == delegationOrg);
                 if (existingOrg != null)
@@ -180,7 +180,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         Id = delegationOrg,
                         Name = delegationOrg,
                         OrgNumber = delegationOrgNumber,
-                        IsAllSoftDeleted = false,
                         ApiList = new List<ApiListItem> { api }
                     };
                     overviewOrgList.Add(newOrg);
@@ -195,13 +194,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="party">The party identifier.</param>
         /// <param name="delegationDTOs">The list of delegation DTOs.</param>
-        /// <param name="layout">The layout state.</param>
+        /// <param name="type">The type of delegation.</param>
         /// <returns>A list of tasks representing the HTTP response messages.</returns>
-        public async Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, LayoutState layout)
+        public async Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, DelegationType type)
         {
             var responses = new List<RevokeApiDelegationOutput>();
 
-            if (layout == LayoutState.Offered)
+            if (type == DelegationType.Offered)
             {
                 foreach (var delegation in delegationDTOs)
                 {
@@ -210,7 +209,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         var response = await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegation));
                         responses.Add(new RevokeApiDelegationOutput
                         {
-                            OrgNumber = delegation.OrgNr,
+                            OrgNumber = delegation.OrgNumber,
                             ApiId = delegation.ApiId,
                             Success = response.IsSuccessStatusCode
                         });
@@ -223,7 +222,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         });
                         responses.Add(new RevokeApiDelegationOutput
                         {
-                            OrgNumber = delegation.OrgNr,
+                            OrgNumber = delegation.OrgNumber,
                             ApiId = delegation.ApiId,
                             Success = false
                         });
@@ -239,7 +238,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         var res = _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegation));
                         responses.Add(new RevokeApiDelegationOutput
                         {
-                            OrgNumber = delegation.OrgNr,
+                            OrgNumber = delegation.OrgNumber,
                             ApiId = delegation.ApiId,
                             Success = res.Result.StatusCode == System.Net.HttpStatusCode.OK
                         });
@@ -252,7 +251,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         });
                         responses.Add(new RevokeApiDelegationOutput
                         {
-                            OrgNumber = delegation.OrgNr,
+                            OrgNumber = delegation.OrgNumber,
                             ApiId = delegation.ApiId,
                             Success = false
                         });
@@ -290,9 +289,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the scopes of the API.
+        /// Gets or sets the scopes associated with the API.
         /// </summary>
-        public List<string> Scopes { get; set; } = new List<string>();
+        public List<string> Scopes { get; set; }
     }
 
     /// <summary>
@@ -316,28 +315,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public string OrgNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether all items in the organization are soft deleted.
-        /// </summary>
-        public bool IsAllSoftDeleted { get; set; }
-
-        /// <summary>
         /// Gets or sets the list of API items in the organization.
         /// </summary>
         public List<ApiListItem> ApiList { get; set; } = new List<ApiListItem>();
     }
 
     /// <summary>
-    /// Represents the layout state.
+    /// Represents the type of delegation.
     /// </summary>
-    public enum LayoutState
+    public enum DelegationType
     {
         /// <summary>
-        /// Offered layout state.
+        /// Offered delegation type.
         /// </summary>
         Offered,
-
+    
         /// <summary>
-        /// Received layout state.
+        /// Received delegation type.
         /// </summary>
         Received
     }

@@ -21,13 +21,11 @@ Cypress.Commands.add(
 const overviewOrgs: OverviewOrg = {
   id: '1',
   name: 'Evry',
-  isAllSoftDeleted: false,
   orgNumber: '123456789',
   apiList: [
     {
       id: '1',
       apiName: 'Delegert API A',
-      isSoftDelete: false,
       scopes: ['some-scope'],
       owner: 'Accenture',
       description:
@@ -36,7 +34,6 @@ const overviewOrgs: OverviewOrg = {
     {
       id: '2',
       apiName: 'Delegert API B',
-      isSoftDelete: false,
       scopes: ['some-other-scope'],
       owner: 'Accenture',
       description:
@@ -48,13 +45,11 @@ const overviewOrgs: OverviewOrg = {
 const deletedOverviewOrgs: OverviewOrg = {
   id: '1',
   name: 'Evry',
-  isAllSoftDeleted: true,
   orgNumber: '123456789',
   apiList: [
     {
       id: '1',
       apiName: 'Delegert API A',
-      isSoftDelete: true,
       scopes: ['some-scope'],
       owner: 'Accenture',
       description:
@@ -63,7 +58,6 @@ const deletedOverviewOrgs: OverviewOrg = {
     {
       id: '2',
       apiName: 'Delegert API B',
-      isSoftDelete: true,
       scopes: ['some-other-scope'],
       owner: 'Accenture',
       description:
@@ -83,6 +77,10 @@ describe('OrgDelegationActionBar', () => {
           isEditable={false}
           delegateToOrgCallback={() => null}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
       cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('exist');
@@ -96,6 +94,10 @@ describe('OrgDelegationActionBar', () => {
           organization={overviewOrgs}
           isEditable={false}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
       cy.findByRole('button', { name: /api_delegation.delegate_new_api/i }).should('not.exist');
@@ -109,6 +111,10 @@ describe('OrgDelegationActionBar', () => {
           organization={overviewOrgs}
           isEditable={true}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
       cy.findByRole('button', { name: /delete/i }).should('exist');
@@ -122,6 +128,10 @@ describe('OrgDelegationActionBar', () => {
           organization={overviewOrgs}
           isEditable={false}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
       cy.findByRole('button', { name: /undo/i }).should('not.exist');
@@ -135,6 +145,10 @@ describe('OrgDelegationActionBar', () => {
           organization={deletedOverviewOrgs}
           isEditable={true}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
 
@@ -158,6 +172,10 @@ describe('OrgDelegationActionBar', () => {
           softRestoreAllCallback={() => null}
           isEditable={true}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
 
@@ -179,6 +197,10 @@ describe('OrgDelegationActionBar', () => {
           softRestoreAllCallback={softRestoreAllSpy}
           isEditable={true}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
 
@@ -201,6 +223,10 @@ describe('OrgDelegationActionBar', () => {
           delegateToOrgCallback={delegateToNewOrgSpy}
           isEditable={true}
           setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
         />,
       );
 

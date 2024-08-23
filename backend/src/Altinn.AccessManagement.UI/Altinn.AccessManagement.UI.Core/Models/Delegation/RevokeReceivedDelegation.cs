@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Models
                 new IdValuePair
                 {
                     Id = "urn:altinn:organizationnumber",
-                    Value = dto.OrgNr
+                    Value = dto.OrgNumber
                 }
             };
 

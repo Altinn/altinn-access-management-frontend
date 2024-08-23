@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { useDispatch } from 'react-redux';
 
 import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -16,6 +17,8 @@ import {
   useFetchOverviewOrgsQuery,
 } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
+import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
 import { LayoutState } from '../LayoutState';
 
@@ -70,6 +73,12 @@ export const OverviewPageContent = ({
       setDeletedItemsStatusMessage(t('common.changes_made_msg'));
     }
   }, [deletedItemsSuccess, isRevoking]);
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(resetState());
+    dispatch(resetChosenApis());
+  }, []);
 
   const {
     itemsToDelete,
@@ -163,7 +172,9 @@ export const OverviewPageContent = ({
         <div className={classes.delegateNewButton}>
           <Button
             variant='secondary'
-            onClick={() => navigate(ApiDelegationPath.OfferedApiDelegations)}
+            onClick={() =>
+              navigate(`/${ApiDelegationPath.OfferedApiDelegations}/${ApiDelegationPath.ChooseApi}`)
+            }
             fullWidth={isSm}
             size='medium'
           >

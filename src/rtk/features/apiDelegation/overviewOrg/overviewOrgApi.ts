@@ -7,7 +7,6 @@ import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
 export interface ApiListItem {
   id: string;
   apiName: string;
-  isSoftDelete: boolean;
   owner: string;
   description: string;
   scopes: string[];
@@ -17,7 +16,6 @@ export interface OverviewOrg {
   id: string;
   name: string;
   orgNumber: string;
-  isAllSoftDeleted: boolean;
   apiList: ApiListItem[];
 }
 export interface SliceState {
@@ -39,7 +37,7 @@ export interface BatchDeletionRequest {
 }
 
 export interface DeletionDto {
-  orgNr: string;
+  orgNumber: string;
   apiId: string;
 }
 

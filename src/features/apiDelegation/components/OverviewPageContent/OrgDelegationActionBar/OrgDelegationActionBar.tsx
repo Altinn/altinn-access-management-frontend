@@ -98,17 +98,17 @@ export const OrgDelegationActionBar = ({
     <DeletableListItem
       key={i}
       softDeleteCallback={() => {
-        softDeleteCallback({ orgNr: organization.orgNumber, apiId: item.id });
+        softDeleteCallback({ orgNumber: organization.orgNumber, apiId: item.id });
         setScreenreaderMsg();
       }}
       softRestoreCallback={() =>
-        softRestoreCallback({ orgNr: organization.orgNumber, apiId: item.id })
+        softRestoreCallback({ orgNumber: organization.orgNumber, apiId: item.id })
       }
       item={item}
       isEditable={isEditable}
       scopes={item.scopes}
       checkIfItemOfOrgIsSoftDeleted={(itemId: string) =>
-        checkIfItemIsSoftDeleted({ orgNr: organization.orgNumber, apiId: itemId })
+        checkIfItemIsSoftDeleted({ orgNumber: organization.orgNumber, apiId: itemId })
       }
     />
   ));
