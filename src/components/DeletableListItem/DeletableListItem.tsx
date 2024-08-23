@@ -19,21 +19,24 @@ export interface DeletableListItemProps {
   item: ApiListItem;
   isEditable: boolean;
   scopes?: string[];
+  checkIfItemOfOrgIsSoftDeleted: (apiId: string) => boolean;
 }
 
 export const DeletableListItem = ({
   softDeleteCallback,
   softRestoreCallback,
+  checkIfItemOfOrgIsSoftDeleted,
   item,
   isEditable,
   scopes,
 }: DeletableListItemProps) => {
   const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
+  const isSoftDeleted = checkIfItemOfOrgIsSoftDeleted(item.id);
 
   const isEditableActions = (
     <div className={cn(classes.deleteSection)}>
-      {item.isSoftDelete ? (
+      {isSoftDeleted ? (
         <Button
           variant={'tertiary'}
           color='second'

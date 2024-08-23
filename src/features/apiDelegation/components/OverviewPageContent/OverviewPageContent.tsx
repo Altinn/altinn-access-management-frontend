@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 
@@ -10,10 +10,7 @@ import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
 import { getButtonIconSize } from '@/resources/utils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import type {
-  DeletionDto,
-  OverviewOrg,
-} from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import {
   useDeleteApiDelegationBatchMutation,
   useFetchOverviewOrgsQuery,
@@ -24,6 +21,7 @@ import { LayoutState } from '../LayoutState';
 
 import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
+import { useSoftDeleteApi } from './useSoftDeleteApi';
 
 export interface OverviewPageContentInterface {
   layout: LayoutState;
@@ -36,44 +34,8 @@ const useOverviewOrgs = (layout: LayoutState) => {
     isLoading: loadingOverviewOrgs,
     error: fetchError,
   } = useFetchOverviewOrgsQuery({ partyId, layout });
-  const [orgsToDelete, setOrgsToDelete] = useState<DeletionDto[]>([]);
-
-  const softRestoreAll = (orgId?: string) => {
-    if (orgId) {
-      setOrgsToDelete(orgsToDelete.filter((o) => o.orgNr !== orgId));
-    }
-    setOrgsToDelete([]);
-  };
-
-  const softDeleteAll = (orgId?: string) => {
-    if (orgId && overviewOrgs) {
-      const orgToDelete = overviewOrgs.find((o) => orgId === o.id);
-      setOrgsToDelete(
-        orgToDelete ? orgToDelete.apiList.map((a) => ({ apiId: a.id, orgNr: orgId })) : [],
-      );
-    }
-  };
-
-  const softRestoreCallback = (orgId: string, apiId: string) => {
-    const softDeleteCallback = () => {
-      setOrgsToDelete(orgsToDelete.filter((o) => o.apiId !== apiId));
-    };
-    return softDeleteCallback;
-  };
-
-  const softDeleteCallback = (orgId: string, apiId: string) => {
-    const softDeleteCallback = () => {
-      setOrgsToDelete([...orgsToDelete, { apiId, orgNr: orgId }]);
-    };
-    return softDeleteCallback;
-  };
 
   return {
-    softRestoreAll,
-    softDeleteAll,
-    softRestoreCallback,
-    softDeleteCallback,
-    orgsToDelete,
     overviewOrgs,
     loadingOverviewOrgs,
     fetchError,
@@ -85,28 +47,46 @@ export const OverviewPageContent = ({
 }: OverviewPageContentInterface) => {
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   const isSm = useMediaQuery('(max-width: 768px)');
   const [deletedItemsStatusMessage, setDeletedItemsStatusMessage] = useState('');
 
+  const { overviewOrgs, loadingOverviewOrgs, fetchError } = useOverviewOrgs(layout);
+
+  const [
+    BatchDeleteApiDelegationRequest,
+    {
+      isLoading: isRevoking,
+      error: revokeError,
+      isSuccess: deletedItemsSuccess,
+      reset: resetDeleteApiDelegationBatchMutation,
+    },
+  ] = useDeleteApiDelegationBatchMutation();
+
+  React.useEffect(() => {
+    if (!isRevoking && deletedItemsSuccess) {
+      setIsEditable(false);
+      softRestoreAll();
+      setDeletedItemsStatusMessage(t('common.changes_made_msg'));
+    }
+  }, [deletedItemsSuccess, isRevoking]);
+
   const {
+    itemsToDelete,
     softRestoreAll,
     softDeleteAll,
-    softRestoreCallback,
-    softDeleteCallback,
-    overviewOrgs,
-    orgsToDelete,
-    loadingOverviewOrgs,
-    fetchError,
-  } = useOverviewOrgs(layout);
+    softRestoreItem,
+    softDeleteItem,
+    checkIfItemIsSoftDeleted,
+    checkIfAllItmesAreSoftDeleted,
+  } = useSoftDeleteApi(overviewOrgs || []);
 
-  const [BatchDeleteApiDelegationRequest, { isLoading: isRevoking, error: revokeError }] =
-    useDeleteApiDelegationBatchMutation();
-
-  const confirmRevoke = () => {
+  const confirmRevoke = async () => {
     const partyId = getCookie('AltinnPartyId');
+    const res = resetDeleteApiDelegationBatchMutation();
+    await res;
     BatchDeleteApiDelegationRequest({
-      apiDelegations: orgsToDelete,
+      apiDelegations: itemsToDelete,
       layout,
       partyId,
     });
@@ -115,9 +95,6 @@ export const OverviewPageContent = ({
   const error = fetchError ?? revokeError;
   const loading = isRevoking || loadingOverviewOrgs;
 
-  const handleSetIsEditable = (value: boolean) => () => {
-    setIsEditable(value);
-  };
   const activeDelegations = () => {
     if (error) {
       return (
@@ -158,14 +135,15 @@ export const OverviewPageContent = ({
             organization={org}
             isEditable={isEditable}
             softDeleteAllCallback={() => {
-              softDeleteAll(org.id);
-              setDeletedItemsStatusMessage(t('common.changes_made_msg'));
+              softDeleteAll(org.orgNumber);
             }}
-            softRestoreAllCallback={() => softRestoreAll(org.id)}
+            softRestoreAllCallback={() => softRestoreAll(org.orgNumber)}
             setScreenreaderMsg={() => setDeletedItemsStatusMessage(t('common.changes_made_msg'))}
             key={org.id}
-            softRestoreCallback={softRestoreCallback}
-            softDeleteCallback={softDeleteCallback}
+            softRestoreCallback={softRestoreItem}
+            softDeleteCallback={softDeleteItem}
+            checkIfItemIsSoftDeleted={checkIfItemIsSoftDeleted}
+            checkIfAllItmesAreSoftDeleted={checkIfAllItmesAreSoftDeleted}
           />
         </div>
       ))
@@ -183,15 +161,14 @@ export const OverviewPageContent = ({
       )}
       {layout === LayoutState.Offered && (
         <div className={classes.delegateNewButton}>
-          <Link
-            // variant='secondary'
-            to={ApiDelegationPath.OfferedApiDelegations}
-            // onClick={goToStartDelegation}
-            // fullWidth={isSm}
-            // size='medium'
+          <Button
+            variant='secondary'
+            onClick={() => navigate(ApiDelegationPath.OfferedApiDelegations)}
+            fullWidth={isSm}
+            size='medium'
           >
             <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_api')}
-          </Link>
+          </Button>
         </div>
       )}
       <Alert
@@ -232,7 +209,10 @@ export const OverviewPageContent = ({
             <div className={classes.editButton}>
               <Button
                 variant='tertiary'
-                onClick={handleSetIsEditable(!isEditable)}
+                onClick={() => {
+                  softRestoreAll();
+                  setIsEditable(!isEditable);
+                }}
                 size='medium'
               >
                 {!isEditable ? (

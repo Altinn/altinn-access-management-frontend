@@ -212,7 +212,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         {
                             OrgNumber = delegation.OrgNr,
                             ApiId = delegation.ApiId,
-                            Success = response.StatusCode == System.Net.HttpStatusCode.OK
+                            Success = response.IsSuccessStatusCode
                         });
                     }
                     catch (Exception e)

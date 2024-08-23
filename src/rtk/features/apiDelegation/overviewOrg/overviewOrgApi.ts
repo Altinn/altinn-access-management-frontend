@@ -43,6 +43,12 @@ export interface DeletionDto {
   apiId: string;
 }
 
+interface DeletionResponseDto {
+  orgNumber: string;
+  apiId: string;
+  success: boolean;
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const overviewOrgApi = createApi({
@@ -60,6 +66,7 @@ export const overviewOrgApi = createApi({
     fetchOverviewOrgs: builder.query<OverviewOrg[], { partyId: string; layout: LayoutState }>({
       query: ({ partyId, layout }) =>
         `/apidelegation/${partyId}/${layout === LayoutState.Offered ? 'offered' : 'received'}`,
+      providesTags: ['overviewOrg'],
     }),
     deleteApiDelegation: builder.mutation<void, SingleDeletionRequest>({
       query: ({ partyId, layout, apiDelegation }) => ({
@@ -67,16 +74,15 @@ export const overviewOrgApi = createApi({
         method: 'POST',
         body: apiDelegation,
       }),
+      invalidatesTags: ['overviewOrg'],
     }),
-    deleteApiDelegationBatch: builder.mutation<void, BatchDeletionRequest>({
+    deleteApiDelegationBatch: builder.mutation<DeletionResponseDto[], BatchDeletionRequest>({
       query: ({ partyId, apiDelegations, layout }) => ({
         url: `/apidelegation/${partyId}/${layout === LayoutState.Offered ? 'offered' : 'received'}/revoke/batch`,
         method: 'POST',
-        body: {
-          layout: layout,
-          apiDelegations: apiDelegations,
-        },
+        body: apiDelegations,
       }),
+      invalidatesTags: ['overviewOrg'],
     }),
   }),
 });
