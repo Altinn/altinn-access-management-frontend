@@ -39,7 +39,7 @@ export const ChooseOrgPage = () => {
   const navigate = useNavigate();
 
   const { t } = useTranslation();
-  const { data: overviewOrgs, isLoading: viewLoading } = useFetchOverviewOrgsQuery(partyId);
+  const { data: overviewOrgs, isLoading: viewLoading } = useFetchOverviewOrgsQuery(partyId, layout);
   const { matches: displayOrgs, isFetching } = useOrgSearch(overviewOrgs || [], searchString);
 
   const searchOrgNotExist = searchString.length === 9 && displayOrgs.length === 0;

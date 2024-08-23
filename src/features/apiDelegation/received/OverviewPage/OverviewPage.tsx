@@ -7,7 +7,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { OverviewPageContent } from '../../components/OverviewPageContent';
-import { LayoutState } from '../../components/LayoutState';
+import { LayoutState } from '../../components/DelegationType';
 
 export const OverviewPage = () => {
   const { t } = useTranslation();

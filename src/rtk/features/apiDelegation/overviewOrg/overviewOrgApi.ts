@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { type CustomError } from '@/dataObjects';
-import { LayoutState } from '@/features/apiDelegation/components/LayoutState';
+import { DelegationType } from '@/features/apiDelegation/components/DelegationType';
 
 export interface ApiListItem {
   id: string;
@@ -26,14 +26,14 @@ export interface SliceState {
 
 export interface SingleDeletionRequest {
   partyId?: string;
-  layout: LayoutState;
+  delegationType: DelegationType;
   apiDelegation: DeletionDto;
 }
 
 export interface BatchDeletionRequest {
   partyId?: string;
   apiDelegations: DeletionDto[];
-  layout: LayoutState;
+  delegationType: DelegationType;
 }
 
 export interface DeletionDto {
@@ -61,22 +61,25 @@ export const overviewOrgApi = createApi({
   }),
   tagTypes: ['APIs', 'overviewOrg'],
   endpoints: (builder) => ({
-    fetchOverviewOrgs: builder.query<OverviewOrg[], { partyId: string; layout: LayoutState }>({
-      query: ({ partyId, layout }) =>
-        `/apidelegation/${partyId}/${layout === LayoutState.Offered ? 'offered' : 'received'}`,
+    fetchOverviewOrgs: builder.query<
+      OverviewOrg[],
+      { partyId: string; delegationType: DelegationType }
+    >({
+      query: ({ partyId, delegationType }) =>
+        `/apidelegation/${partyId}/${delegationType === DelegationType.Offered ? 'offered' : 'received'}`,
       providesTags: ['overviewOrg'],
     }),
     deleteApiDelegation: builder.mutation<void, SingleDeletionRequest>({
-      query: ({ partyId, layout, apiDelegation }) => ({
-        url: `/apidelegation/${partyId}/${layout === LayoutState.Offered ? 'offered' : 'received'}/revoke`,
+      query: ({ partyId, delegationType, apiDelegation }) => ({
+        url: `/apidelegation/${partyId}/${delegationType === DelegationType.Offered ? 'offered' : 'received'}/revoke`,
         method: 'POST',
         body: apiDelegation,
       }),
       invalidatesTags: ['overviewOrg'],
     }),
     deleteApiDelegationBatch: builder.mutation<DeletionResponseDto[], BatchDeletionRequest>({
-      query: ({ partyId, apiDelegations, layout }) => ({
-        url: `/apidelegation/${partyId}/${layout === LayoutState.Offered ? 'offered' : 'received'}/revoke/batch`,
+      query: ({ partyId, apiDelegations, delegationType }) => ({
+        url: `/apidelegation/${partyId}/${delegationType === DelegationType.Offered ? 'offered' : 'received'}/revoke/batch`,
         method: 'POST',
         body: apiDelegations,
       }),

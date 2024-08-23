@@ -20,23 +20,23 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
-import { LayoutState } from '../LayoutState';
+import { DelegationType } from '../DelegationType';
 
 import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
 import { useSoftDeleteApi } from './useSoftDeleteApi';
 
 export interface OverviewPageContentInterface {
-  layout: LayoutState;
+  delegationType: DelegationType;
 }
 
-const useOverviewOrgs = (layout: LayoutState) => {
+const useOverviewOrgs = (delegationType: DelegationType) => {
   const partyId = getCookie('AltinnPartyId');
   const {
     data: overviewOrgs,
     isLoading: loadingOverviewOrgs,
     error: fetchError,
-  } = useFetchOverviewOrgsQuery({ partyId, layout });
+  } = useFetchOverviewOrgsQuery({ partyId, delegationType });
 
   return {
     overviewOrgs,
@@ -46,7 +46,7 @@ const useOverviewOrgs = (layout: LayoutState) => {
 };
 
 export const OverviewPageContent = ({
-  layout = LayoutState.Offered,
+  delegationType = DelegationType.Offered,
 }: OverviewPageContentInterface) => {
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation();
@@ -54,7 +54,7 @@ export const OverviewPageContent = ({
   const isSm = useMediaQuery('(max-width: 768px)');
   const [deletedItemsStatusMessage, setDeletedItemsStatusMessage] = useState('');
 
-  const { overviewOrgs, loadingOverviewOrgs, fetchError } = useOverviewOrgs(layout);
+  const { overviewOrgs, loadingOverviewOrgs, fetchError } = useOverviewOrgs(delegationType);
 
   const [
     BatchDeleteApiDelegationRequest,
@@ -96,7 +96,7 @@ export const OverviewPageContent = ({
     await res;
     BatchDeleteApiDelegationRequest({
       apiDelegations: itemsToDelete,
-      layout,
+      delegationType,
       partyId,
     });
   };
