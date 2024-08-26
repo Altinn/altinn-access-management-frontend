@@ -127,7 +127,7 @@ export const OverviewPageContent = ({
     } else if (overviewOrgs && overviewOrgs.length < 1) {
       return (
         <h3 className={classes.noActiveDelegations}>
-          {layout === LayoutState.Offered
+          {delegationType === DelegationType.Offered
             ? t('api_delegation.no_offered_api_delegations')
             : t('api_delegation.no_received_delegations')}
         </h3>
@@ -163,12 +163,12 @@ export const OverviewPageContent = ({
     <div className={classes.overviewActionBarContainer}>
       {!isSm && (
         <h2 className={classes.pageContentText}>
-          {layout === LayoutState.Offered
+          {delegationType === DelegationType.Offered
             ? t('api_delegation.api_overview_text')
             : t('api_delegation.api_received_overview_text')}
         </h2>
       )}
-      {layout === LayoutState.Offered && (
+      {delegationType === DelegationType.Offered && (
         <div className={classes.delegateNewButton}>
           <Button
             variant='secondary'
@@ -212,7 +212,7 @@ export const OverviewPageContent = ({
               size={isSm ? 'sm' : 'lg'}
               className={classes.apiSubheading}
             >
-              {layout === LayoutState.Offered
+              {delegationType === DelegationType.Offered
                 ? t('api_delegation.you_have_delegated_accesses')
                 : t('api_delegation.you_have_received_accesses')}
             </Heading>

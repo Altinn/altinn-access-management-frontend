@@ -7,7 +7,7 @@ import { useMediaQuery } from '@/resources/hooks';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { OverviewPageContent } from '../../components/OverviewPageContent';
-import { LayoutState } from '../../components/DelegationType';
+import { DelegationType } from '../../components/DelegationType';
 
 export const OverviewPage = () => {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ export const OverviewPage = () => {
       >
         <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations')}</PageHeader>
         <PageContent>
-          <OverviewPageContent layout={LayoutState.Offered} />
+          <OverviewPageContent delegationType={DelegationType.Offered} />
         </PageContent>
       </Page>
     </PageContainer>

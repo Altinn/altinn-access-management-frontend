@@ -63,7 +63,7 @@ export const overviewOrgApi = createApi({
   endpoints: (builder) => ({
     fetchOverviewOrgs: builder.query<
       OverviewOrg[],
-      { partyId: string; delegationType: DelegationType }
+      { partyId?: string; delegationType: DelegationType }
     >({
       query: ({ partyId, delegationType }) =>
         `/apidelegation/${partyId}/${delegationType === DelegationType.Offered ? 'offered' : 'received'}`,
