@@ -6,6 +6,7 @@ import { OrgDelegationActionBar } from '@/features/apiDelegation/components/Over
 import store from '@/rtk/app/store';
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MountReactComponentOptions = Record<string, any>;
 Cypress.Commands.add(
   'mount',
