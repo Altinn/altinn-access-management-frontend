@@ -94,24 +94,26 @@ export const OrgDelegationActionBar = ({
     </>
   );
 
-  const listItems = organization.apiList.map((item, i) => (
-    <DeletableListItem
-      key={i}
-      softDeleteCallback={() => {
-        softDeleteCallback({ orgNumber: organization.orgNumber, apiId: item.id });
-        setScreenreaderMsg();
-      }}
-      softRestoreCallback={() =>
-        softRestoreCallback({ orgNumber: organization.orgNumber, apiId: item.id })
-      }
-      item={item}
-      isEditable={isEditable}
-      scopes={item.scopes}
-      checkIfItemOfOrgIsSoftDeleted={(itemId: string) =>
-        checkIfItemIsSoftDeleted({ orgNumber: organization.orgNumber, apiId: itemId })
-      }
-    />
-  ));
+  const listItems = organization.apiList.map((item, i) => {
+    return (
+      <DeletableListItem
+        key={i}
+        softDeleteCallback={() => {
+          softDeleteCallback({ orgNumber: organization.orgNumber, apiId: item.id });
+          setScreenreaderMsg();
+        }}
+        softRestoreCallback={() =>
+          softRestoreCallback({ orgNumber: organization.orgNumber, apiId: item.id })
+        }
+        item={item}
+        isEditable={isEditable}
+        scopes={item.scopes}
+        checkIfItemOfOrgIsSoftDeleted={(itemId: string) =>
+          checkIfItemIsSoftDeleted({ orgNumber: organization.orgNumber, apiId: itemId })
+        }
+      />
+    );
+  });
 
   return (
     <ActionBar

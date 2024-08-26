@@ -147,8 +147,8 @@ describe('OrgDelegationActionBar', () => {
           setScreenreaderMsg={() => null}
           softRestoreCallback={() => null}
           softDeleteCallback={() => null}
-          checkIfItemIsSoftDeleted={() => false}
-          checkIfAllItmesAreSoftDeleted={() => false}
+          checkIfItemIsSoftDeleted={() => true}
+          checkIfAllItmesAreSoftDeleted={() => true}
         />,
       );
 
@@ -199,8 +199,8 @@ describe('OrgDelegationActionBar', () => {
           setScreenreaderMsg={() => null}
           softRestoreCallback={() => null}
           softDeleteCallback={() => null}
-          checkIfItemIsSoftDeleted={() => false}
-          checkIfAllItmesAreSoftDeleted={() => false}
+          checkIfItemIsSoftDeleted={() => true}
+          checkIfAllItmesAreSoftDeleted={() => true}
         />,
       );
 

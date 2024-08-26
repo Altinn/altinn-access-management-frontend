@@ -68,7 +68,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={() => null}
           item={deletedListItem}
           isEditable={true}
-          checkIfItemOfOrgIsSoftDeleted={() => false}
+          checkIfItemOfOrgIsSoftDeleted={() => true}
         />
       </BorderedList>,
     );
@@ -94,7 +94,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
-          checkIfItemOfOrgIsSoftDeleted={() => true}
+          checkIfItemOfOrgIsSoftDeleted={() => false}
         />
       </BorderedList>,
     );
@@ -117,7 +117,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={softRestoreSpy}
           item={deletedListItem}
           isEditable={true}
-          checkIfItemOfOrgIsSoftDeleted={() => false}
+          checkIfItemOfOrgIsSoftDeleted={() => true}
         />
       </BorderedList>,
     );
