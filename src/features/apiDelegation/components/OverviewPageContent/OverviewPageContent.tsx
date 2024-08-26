@@ -112,7 +112,7 @@ export const OverviewPageContent = ({
             title={t('api_delegation.data_retrieval_failed')}
             message={'message' in error ? error.message : ''}
             statusCode={'status' in error ? error.status.toString() : ''}
-          ></ErrorPanel>
+          />
         </div>
       );
     } else if (loading) {

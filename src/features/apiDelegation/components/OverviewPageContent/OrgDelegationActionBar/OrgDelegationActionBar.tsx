@@ -21,7 +21,7 @@ export interface OrgDelegationActionBarProps {
   softRestoreAllCallback: () => void;
   softDeleteAllCallback: () => void;
   softRestoreCallback: (value: DeletionDto) => void;
-  softDeleteCallback: (vallue: DeletionDto) => void;
+  softDeleteCallback: (value: DeletionDto) => void;
   delegateToOrgCallback?: () => void;
   setScreenreaderMsg: () => void;
   checkIfItemIsSoftDeleted: (value: DeletionDto) => boolean;

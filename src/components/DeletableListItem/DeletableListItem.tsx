@@ -69,7 +69,7 @@ export const DeletableListItem = ({
         <div
           data-testid='list-item-texts'
           className={cn(classes.itemText, {
-            [classes.itemText__softDelete]: item.isSoftDelete,
+            [classes.itemText__softDelete]: true,
           })}
         >
           <div className={classes.listItemTexts}>

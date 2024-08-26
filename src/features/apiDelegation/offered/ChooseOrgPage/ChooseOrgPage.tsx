@@ -18,6 +18,8 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { useFetchOverviewOrgsQuery } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import { DelegationType } from '../../components/DelegationType';
+
 import classes from './ChooseOrgPage.module.css';
 import { DelegableOrgItems } from './DelegableOrgItems';
 import { ChosenItems } from './ChosenItems';
@@ -33,16 +35,15 @@ export const ChooseOrgPage = () => {
 
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
-  // const [viewLoading, setViewLoading] = useState(true);
   const isSm = useMediaQuery('(max-width: 768px)');
   const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
   const navigate = useNavigate();
 
   const { t } = useTranslation();
-  const { data: overviewOrgs, isLoading: viewLoading } = useFetchOverviewOrgsQuery(
+  const { data: overviewOrgs, isLoading: viewLoading } = useFetchOverviewOrgsQuery({
     partyId,
-    delegationType,
-  );
+    delegationType: DelegationType.Offered,
+  });
   const { matches: displayOrgs, isFetching } = useOrgSearch(overviewOrgs || [], searchString);
 
   const searchOrgNotExist = searchString.length === 9 && displayOrgs.length === 0;

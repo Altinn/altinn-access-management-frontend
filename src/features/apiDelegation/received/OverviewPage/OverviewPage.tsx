@@ -23,7 +23,7 @@ export const OverviewPage = () => {
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.api_delegations_received')}</PageHeader>
           <PageContent>
-            <OverviewPageContent layout={DelegationType.Received} />
+            <OverviewPageContent delegationType={DelegationType.Received} />
           </PageContent>
         </Page>
       </PageContainer>

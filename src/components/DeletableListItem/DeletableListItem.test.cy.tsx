@@ -1,21 +1,16 @@
-import { Provider } from 'react-redux';
-import { mount } from 'cypress/react18';
 import * as React from 'react';
 
 import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
-import store from '@/rtk/app/store';
 import { DeletableListItem, BorderedList } from '@/components';
 
 const overviewOrg: OverviewOrg = {
   id: '1',
   name: 'Evry',
-  isAllSoftDeleted: false,
   orgNumber: '123456789',
   apiList: [
     {
       id: '1',
       apiName: 'Delegert API A',
-      isSoftDelete: false,
       owner: 'Accenture',
       scopes: ['some-scope'],
       description:
@@ -43,6 +38,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
+          checkIfItemOfOrgIsSoftDeleted={() => true}
         />
       </BorderedList>,
     );
@@ -57,6 +53,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={false}
+          checkIfItemOfOrgIsSoftDeleted={() => true}
         />
       </BorderedList>,
     );
@@ -71,6 +68,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={() => null}
           item={deletedListItem}
           isEditable={true}
+          checkIfItemOfOrgIsSoftDeleted={() => false}
         />
       </BorderedList>,
     );
@@ -96,6 +94,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={() => null}
           item={overviewOrg.apiList[0]}
           isEditable={true}
+          checkIfItemOfOrgIsSoftDeleted={() => true}
         />
       </BorderedList>,
     );
@@ -118,6 +117,7 @@ describe('DeletableListItem', () => {
           softRestoreCallback={softRestoreSpy}
           item={deletedListItem}
           isEditable={true}
+          checkIfItemOfOrgIsSoftDeleted={() => false}
         />
       </BorderedList>,
     );
