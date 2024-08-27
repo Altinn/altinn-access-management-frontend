@@ -307,8 +307,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Count, actual.Count);
             foreach (var item in expected)
             {
-                // var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.ApiId == item.ApiId && c.Success == item.Success);
-                // Assert.Single(a);
+                var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.Name == item.Name);
+                Assert.Single(a);
             }
         }
     }

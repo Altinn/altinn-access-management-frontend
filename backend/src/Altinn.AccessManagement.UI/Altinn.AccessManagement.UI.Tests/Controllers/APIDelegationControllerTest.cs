@@ -319,6 +319,61 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
 
+        [Fact]
+        public async Task RevokeOfferedMaskinportenScopeDelegationBatch_Success()
+        {
+            // Arrange
+            string toParty = "50004223";
+            StreamContent requestContent = GetRequestContent("RevokeOffered", "Input_revoke_delegation_batch_dto");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/offered/revoke/batch", requestContent);
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            List<RevokeApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<RevokeApiDelegationOutput>>(responseBody, options);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.All(actualResponse, r => Assert.True(r.Success));
+        }
+
+       [Fact]
+        public async Task RevokeOfferedMaskinportenScopeDelegationBatch_Partial_Success()
+        {
+            // Arrange
+            string toParty = "50004223";
+            StreamContent requestContent = GetRequestContent("RevokeOffered", "Input_revoke_delegation_batch_dto_partial_success");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/offered/revoke/batch", requestContent);
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            List<RevokeApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<RevokeApiDelegationOutput>>(responseBody, options);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Single(actualResponse.FindAll(r => r.Success));
+        }
+
+       [Fact]
+        public async Task RevokeReceivedMaskinportenScopeDelegationBatch_Partial_Success()
+        {
+            // Arrange
+            string toParty = "50004223";
+            StreamContent requestContent = GetRequestContent("RevokeReceived", "Input_revoke_delegation_batch_dto_partial_success");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/received/revoke/batch", requestContent);
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            List<RevokeApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<RevokeApiDelegationOutput>>(responseBody, options);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Single(actualResponse.FindAll(r => r.Success));
+        }
+
+
         /// <summary>
         ///     Test case: Tests if resource is delegable
         ///     Expected: Resource is delegable
