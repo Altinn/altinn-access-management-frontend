@@ -125,9 +125,11 @@ test.describe('API-Delegations to org user', () => {
 
     await page.getByRole('button', { name: 'Bekreft' }).click();
 
-    const header = page.getByRole('heading', { name: 'Disse api-delegeringene ble gitt' });
-    await expect(header).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Disse api-delegeringene ble gitt' }),
+    ).toBeVisible();
 
-    //Finish this step, search in this project for "   //CURRENT STEP PLAYWRIGHT" to find where you stopped
+    await expect(page.getByText('INTERESSANT KOMPATIBEL TIGER AS')).toBeVisible();
+    await expect(page.getByText('Maskinporten Schema - AM - K6')).toBeVisible();
   });
 });
