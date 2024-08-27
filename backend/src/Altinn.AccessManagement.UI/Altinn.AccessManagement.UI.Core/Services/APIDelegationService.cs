@@ -226,12 +226,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             Success = response.IsSuccessStatusCode,
                         });
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        var errorResponse = Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError)
-                        {
-                            Content = new StringContent(e.Message)
-                        });
                         responses.Add(new RevokeApiDelegationOutput
                         {
                             OrgNumber = delegation.OrgNumber,
@@ -247,20 +243,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     try
                     {
-                        var res = _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegation));
+                        var res = await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegation));
                         responses.Add(new RevokeApiDelegationOutput
                         {
                             OrgNumber = delegation.OrgNumber,
                             ApiId = delegation.ApiId,
-                            Success = res.Result.StatusCode == System.Net.HttpStatusCode.OK
+                            Success = res.IsSuccessStatusCode,
                         });
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        var errorResponse = Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError)
-                        {
-                            Content = new StringContent(e.Message)
-                        });
                         responses.Add(new RevokeApiDelegationOutput
                         {
                             OrgNumber = delegation.OrgNumber,
