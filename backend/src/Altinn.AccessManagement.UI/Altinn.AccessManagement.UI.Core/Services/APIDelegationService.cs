@@ -52,6 +52,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
+            var delegation = new RevokeReceivedDelegation(delegationDTO);
+            var delegationInput = new DelegationInput
+            {
+                To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = delegationDTO.OrgNumber } },
+                Rights = new List<Right>
+                {
+                    new Right
+                    {
+                        Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = delegationDTO.ApiId } }
+                    }
+                }
+            };
             return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegationDTO));
         }
 
@@ -211,7 +223,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         {
                             OrgNumber = delegation.OrgNumber,
                             ApiId = delegation.ApiId,
-                            Success = response.IsSuccessStatusCode
+                            Success = response.IsSuccessStatusCode,
                         });
                     }
                     catch (Exception e)
@@ -329,7 +341,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Offered delegation type.
         /// </summary>
         Offered,
-    
+
         /// <summary>
         /// Received delegation type.
         /// </summary>

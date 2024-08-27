@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.User;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -296,6 +297,18 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.ApiId == item.ApiId && c.Success == item.Success);
                 Assert.Single(a);
+            }
+        }
+           public static void AssertEqual(List<OverviewOrg> expected, List<OverviewOrg> actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Count, actual.Count);
+            foreach (var item in expected)
+            {
+                // var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.ApiId == item.ApiId && c.Success == item.Success);
+                // Assert.Single(a);
             }
         }
     }

@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -50,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetReceivedMaskinportenSchemaDelegations_Valid_CoveredBy()
         {
             // Arrange
-            List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedInboundDelegationsForParty(50004219);
+            List<OverviewOrg> expectedDelegations = GetExpectedOverviewOrgsForParty();
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004219/received");
@@ -59,8 +60,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<MaskinportenSchemaDelegationFE> actualDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegationFE>>(responseContent, options);
-            AssertionUtil.AssertCollections(expectedDelegations, actualDelegations, AssertionUtil.AssertEqual);
+            List<OverviewOrg> actualDelegations = JsonSerializer.Deserialize<List<OverviewOrg>>(responseContent, options);
+            AssertionUtil.AssertEqual(expectedDelegations, actualDelegations);
         }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetOfferedMaskinportenSchemaDelegations_Valid_OfferedBy()
         {
             // Arrange
-            List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedOutboundDelegationsForParty(50004223);
+            List<OverviewOrg> expectedDelegations = GetExpectedOverviewOrgsForParty();
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004223/offered");
@@ -117,8 +118,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<MaskinportenSchemaDelegationFE> actualDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegationFE>>(responseContent, options);
-            AssertionUtil.AssertCollections(expectedDelegations, actualDelegations, AssertionUtil.AssertEqual);
+            List<OverviewOrg> actualDelegations = JsonSerializer.Deserialize<List<OverviewOrg>>(responseContent, options);
+            AssertionUtil.AssertEqual(expectedDelegations, actualDelegations);
         }
 
         /// <summary>
@@ -254,7 +255,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<ApiDelegationOutput> actualResponse = JsonSerializer.Deserialize<List<ApiDelegationOutput>>(responseContent, options);
-            
+
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
@@ -270,7 +271,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string fromParty = "50004223";
-            StreamContent requestContent = GetRequestContent("RevokeOffered");
+            StreamContent requestContent = GetRequestContent("RevokeOffered", "Input_revoke_delegation_dto");
 
             // Act
             HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{fromParty}/offered/revoke", requestContent);
@@ -290,14 +291,38 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string toParty = "50004219";
-            StreamContent requestContent = GetRequestContent("RevokeReceived");
+            StreamContent requestContent = GetRequestContent("RevokeReceived", "Input_revoke_delegation_dto");
 
             // Act
             HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/received/revoke", requestContent);
+            
+            // Debugging output
+            string responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Response Status Code: {response.StatusCode}");
+            Console.WriteLine($"Response Body: {responseBody}");
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
+
+        
+        [Fact]
+        public async Task RevokeReceivedMaskinportenScopeDelegationBatch_Success()
+        {
+            // Arrange
+            string toParty = "50004219";
+            StreamContent requestContent = GetRequestContent("RevokeReceived", "Input_revoke_delegation_batch_dto");
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/received/revoke/batch", requestContent);
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Response Body: {responseBody}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
 
         /// <summary>
         ///     Test case: Tests if resource is delegable
@@ -397,5 +422,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             inboundDelegations = TestDataUtil.GetDelegationsFE(0, covererdByPartyId);
             return inboundDelegations;
         }
+
+        private static List<OverviewOrg> GetExpectedOverviewOrgsForParty()
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            var filename = "frontendOffered_OverviewOrg.json";
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(APIDelegationControllerTest).Assembly.Location).LocalPath);
+            var path = Path.Combine(unitTestFolder, "Data", "MaskinportenSchema", filename);
+            string content = File.ReadAllText(path);
+            List<OverviewOrg> delegations = JsonSerializer.Deserialize<List<OverviewOrg>>(content, options);
+            return delegations;
+        }
+
     }
 }

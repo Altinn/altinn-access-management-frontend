@@ -29,30 +29,8 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <param name="dto">The DTO object containing the data for the delegation.</param>
         public RevokeOfferedDelegation(RevokeDelegationDTO dto)
         {
-            To = new List<IdValuePair>
-        {
-            new IdValuePair
-            {
-                Id = "urn:altinn:organizationnumber",
-                Value = dto.OrgNumber
-            }
-        };
-
-            Rights = new List<Right>
-            {
-                new Right
-                {
-                    Resource = new List<IdValuePair>
-                    {
-                        new IdValuePair
-                        {
-                            Id = "urn:altinn:resource",
-                            Value = dto.ApiId
-                        }
-                    }
-                }
-            };
+            To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = dto.OrgNumber } };
+            Rights = new List<Right> { new Right { Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = dto.ApiId } } } };
         }
     }
-
 }
