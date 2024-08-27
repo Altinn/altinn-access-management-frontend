@@ -36,6 +36,11 @@ export interface BatchDeletionRequest {
   delegationType: DelegationType;
 }
 
+interface BatchDeletionResponse {
+  successfulDeleteions: DeletionResponseDto[];
+  failedDeleteions: DeletionResponseDto[];
+}
+
 export interface DeletionDto {
   orgNumber: string;
   apiId: string;
@@ -77,11 +82,15 @@ export const overviewOrgApi = createApi({
       }),
       invalidatesTags: ['overviewOrg'],
     }),
-    deleteApiDelegationBatch: builder.mutation<DeletionResponseDto[], BatchDeletionRequest>({
+    deleteApiDelegationBatch: builder.mutation<BatchDeletionResponse, BatchDeletionRequest>({
       query: ({ partyId, apiDelegations, delegationType }) => ({
         url: `/apidelegation/${partyId}/${delegationType === DelegationType.Offered ? 'offered' : 'received'}/revoke/batch`,
         method: 'POST',
         body: apiDelegations,
+      }),
+      transformResponse: (response: DeletionResponseDto[]) => ({
+        successfulDeleteions: response.filter((r) => r.success),
+        failedDeleteions: response.filter((r) => !r.success),
       }),
       invalidatesTags: ['overviewOrg'],
     }),

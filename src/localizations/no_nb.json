@@ -138,7 +138,9 @@
     "own_orgnumber_delegation_heading": "Du kan ikke delegere til eget organisasjonsnummer",
     "own_orgnumber_delegation_paragraph": "Skriv inn et annet organisasjonsnummer for å fortsette.",
     "no_orgs_chosen": "Ingen organisasjoner valgt",
-    "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Vennligst logg inn på nytt med en av metodene under:"
+    "insufficient_authentication_level": "Du har ikke sikker nok innlogging for å delegere denne tjenesten. Vennligst logg inn på nytt med en av metodene under:",
+    "revoke_delegation_failed": "Kunne ikke slette delegering",
+    "failed_to_revoke": "{{apiId}} {{orgNumber}}"
   },
   "single_rights": {
     "page_title": "Deleger enkeltrettigheter - Altinn",

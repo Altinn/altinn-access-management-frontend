@@ -1,3 +1,5 @@
+import { fail } from 'assert';
+
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +64,7 @@ export const OverviewPageContent = ({
       isLoading: isRevoking,
       error: revokeError,
       isSuccess: deletedItemsSuccess,
+      data: deletedItems,
       reset: resetDeleteApiDelegationBatchMutation,
     },
   ] = useDeleteApiDelegationBatchMutation();
@@ -168,6 +171,7 @@ export const OverviewPageContent = ({
             : t('api_delegation.api_received_overview_text')}
         </h2>
       )}
+
       {delegationType === DelegationType.Offered && (
         <div className={classes.delegateNewButton}>
           <Button
@@ -203,6 +207,30 @@ export const OverviewPageContent = ({
           </Link>
         </Paragraph>
       </Alert>
+      {deletedItems && deletedItems?.failedDeleteions?.length > 0 && (
+        <Alert
+          role='alert'
+          severity='danger'
+          title={t('api_delegation.revoke_delegation_failed')}
+        >
+          <Heading
+            level={3}
+            size='sm'
+          >
+            {t('api_delegation.revoke_delegation_failed')}
+          </Heading>
+          <ul>
+            {deletedItems.failedDeleteions.map((item) => (
+              <li key={item.apiId}>
+                {t('api_delegation.failed_to_revoke', {
+                  apiId: item.apiId,
+                  orgNumber: item.orgNumber,
+                })}
+              </li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
         {overviewOrgs && overviewOrgs.length > 0 && (
