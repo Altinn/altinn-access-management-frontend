@@ -295,12 +295,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/apidelegation/{toParty}/received/revoke", requestContent);
-            
-            // Debugging output
-            string responseBody = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Response Status Code: {response.StatusCode}");
-            Console.WriteLine($"Response Body: {responseBody}");
-
+          
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
