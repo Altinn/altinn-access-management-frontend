@@ -299,7 +299,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.Single(a);
             }
         }
-           public static void AssertEqual(List<OverviewOrg> expected, List<OverviewOrg> actual)
+           public static void AssertEqual(List<OrganizationApiSet> expected, List<OrganizationApiSet> actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

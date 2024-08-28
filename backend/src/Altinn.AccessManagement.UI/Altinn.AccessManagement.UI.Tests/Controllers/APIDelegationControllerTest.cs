@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetReceivedMaskinportenSchemaDelegations_Valid_CoveredBy()
         {
             // Arrange
-            List<OverviewOrg> expectedDelegations = GetExpectedOverviewOrgsForParty();
+            List<OrganizationApiSet> expectedDelegations = GetExpectedOverviewOrgsForParty();
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004219/received");
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<OverviewOrg> actualDelegations = JsonSerializer.Deserialize<List<OverviewOrg>>(responseContent, options);
+            List<OrganizationApiSet> actualDelegations = JsonSerializer.Deserialize<List<OrganizationApiSet>>(responseContent, options);
             AssertionUtil.AssertEqual(expectedDelegations, actualDelegations);
         }
 
@@ -109,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetOfferedMaskinportenSchemaDelegations_Valid_OfferedBy()
         {
             // Arrange
-            List<OverviewOrg> expectedDelegations = GetExpectedOverviewOrgsForParty();
+            List<OrganizationApiSet> expectedDelegations = GetExpectedOverviewOrgsForParty();
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004223/offered");
@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            List<OverviewOrg> actualDelegations = JsonSerializer.Deserialize<List<OverviewOrg>>(responseContent, options);
+            List<OrganizationApiSet> actualDelegations = JsonSerializer.Deserialize<List<OrganizationApiSet>>(responseContent, options);
             AssertionUtil.AssertEqual(expectedDelegations, actualDelegations);
         }
 
@@ -474,7 +474,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             return inboundDelegations;
         }
 
-        private static List<OverviewOrg> GetExpectedOverviewOrgsForParty()
+        private static List<OrganizationApiSet> GetExpectedOverviewOrgsForParty()
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
@@ -484,7 +484,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(APIDelegationControllerTest).Assembly.Location).LocalPath);
             var path = Path.Combine(unitTestFolder, "Data", "MaskinportenSchema", filename);
             string content = File.ReadAllText(path);
-            List<OverviewOrg> delegations = JsonSerializer.Deserialize<List<OverviewOrg>>(content, options);
+            List<OrganizationApiSet> delegations = JsonSerializer.Deserialize<List<OrganizationApiSet>>(content, options);
             return delegations;
         }
 

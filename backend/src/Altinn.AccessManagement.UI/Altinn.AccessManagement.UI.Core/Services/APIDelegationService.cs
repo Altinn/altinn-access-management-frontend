@@ -31,14 +31,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<OverviewOrg>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
+        public async Task<List<OrganizationApiSet>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> offeredDelegations = await _maskinportenSchemaClient.GetOfferedMaskinportenSchemaDelegations(party);
             return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode, DelegationType.Offered);
         }
 
         /// <inheritdoc />
-        public async Task<List<OverviewOrg>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
+        public async Task<List<OrganizationApiSet>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> receivedDelegations = await _maskinportenSchemaClient.GetReceivedMaskinportenSchemaDelegations(party);
             return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode, DelegationType.Received);
@@ -114,12 +114,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }
 
-        private async Task<List<OverviewOrg>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, DelegationType type)
+        private async Task<List<OrganizationApiSet>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, DelegationType type)
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
             List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
 
-            List<OverviewOrg> overviewOrgList = new List<OverviewOrg>();
+            List<OrganizationApiSet> overviewOrgList = new List<OrganizationApiSet>();
 
             foreach (MaskinportenSchemaDelegation delegation in delegations)
             {
@@ -167,7 +167,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
                 else
                 {
-                    var newOrg = new OverviewOrg
+                    var newOrg = new OrganizationApiSet
                     {
                         Id = delegationOrg,
                         Name = delegationOrg,
@@ -279,27 +279,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
     }
 
     /// <summary>
-    /// Represents an overview organization.
+    /// Represents a set of APIs given to or recieved from an organization.
     /// </summary>
-    public class OverviewOrg
+    public class OrganizationApiSet
     {
         /// <summary>
         /// Gets or sets the ID of the organization.
         /// </summary>
         public string Id { get; set; }
-
+    
         /// <summary>
         /// Gets or sets the name of the organization.
         /// </summary>
         public string Name { get; set; }
-
+    
         /// <summary>
         /// Gets or sets the organization number.
         /// </summary>
         public string OrgNumber { get; set; }
-
+    
         /// <summary>
-        /// Gets or sets the list of API items in the organization.
+        /// Gets or sets a set of APIs given to or recieved from an organization
         /// </summary>
         public List<ApiListItem> ApiList { get; set; } = new List<ApiListItem>();
     }

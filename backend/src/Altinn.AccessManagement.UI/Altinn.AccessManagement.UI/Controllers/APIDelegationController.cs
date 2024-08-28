@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/received")]
-        public async Task<ActionResult<List<OverviewOrg>>> GetReceivedAPIDelegations([FromRoute] string party)
+        public async Task<ActionResult<List<OrganizationApiSet>>> GetReceivedAPIDelegations([FromRoute] string party)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/offered")]
-        public async Task<ActionResult<List<OverviewOrg>>> GetOfferedAPIDelegations([FromRoute] string party)
+        public async Task<ActionResult<List<OrganizationApiSet>>> GetOfferedAPIDelegations([FromRoute] string party)
         {
             try
             {

@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">reportee that delegated resources</param>
         /// <param name="languageCode">language to use for resource metadata</param>
         /// <returns>list of delgations</returns>
-        public Task<List<OverviewOrg>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode);
+        public Task<List<OrganizationApiSet>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode);
 
         /// <summary>
         /// Gets all the delegations received by a reportee
@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">reportee that received resources</param>
         /// <param name="languageCode">language to use for resource metadata</param>
         /// <returns>list of delgations</returns>
-        public Task<List<OverviewOrg>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode);
+        public Task<List<OrganizationApiSet>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode);
 
         /// <summary>
         /// Revokes a delegation received by the party
