@@ -92,7 +92,8 @@ export class apiDelegation {
     await this.page.getByLabel('Digitaliseringsdirektoratet').uncheck();
     await this.page.getByRole('button', { name: 'Nullstill valg' }).isDisabled();
     await this.page.getByLabel('Testdepartement').check();
-    await this.page.getByRole('button', { name: 'Bruk' }).click();
+    await this.page.getByLabel('Digitaliseringsdirektoratet').check();
+    await this.page.getByRole('button', { name: 'Bruk' }).first().click();
     await this.page.getByLabel('Søk etter API').click();
     await this.page.getByLabel('Søk etter API').fill('Maskinporten Schema - AM - K6');
     await this.page.getByLabel('Legg til Maskinporten Schema - AM - K6', { exact: true }).click();
