@@ -17,11 +17,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessManagementClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
 
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="APIDelegationService" /> class.
         /// </summary>
@@ -52,18 +47,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
-            var delegation = new RevokeReceivedDelegation(delegationDTO);
-            var delegationInput = new DelegationInput
-            {
-                To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = delegationDTO.OrgNumber } },
-                Rights = new List<Right>
-                {
-                    new Right
-                    {
-                        Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = delegationDTO.ApiId } }
-                    }
-                }
-            };
             return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegationDTO));
         }
 
@@ -102,8 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     try
                     {
                         var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
-                        string responseContent = await response.Content.ReadAsStringAsync();
-
+                    
                         delegationOutputs.Add(new ApiDelegationOutput()
                         {
                             OrgNumber = org,
@@ -111,9 +93,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             Success = response.StatusCode == System.Net.HttpStatusCode.Created
                         });
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        System.Diagnostics.Debug.WriteLine(e.Message);
                         delegationOutputs.Add(new ApiDelegationOutput()
                         {
                             OrgNumber = org,
