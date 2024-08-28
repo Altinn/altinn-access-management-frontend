@@ -70,7 +70,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
-
             return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegationDTO));
         }
 

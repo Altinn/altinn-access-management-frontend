@@ -19,5 +19,4 @@ namespace Altinn.AccessManagement.UI.Core.Models
         [Required]
         public string ApiId { get; set; }
     }
-
 }
