@@ -29,10 +29,8 @@ namespace Altinn.AccessManagement.UI.Core.Models
         /// <param name="dto">The data transfer object for revoking a received delegation.</param>
         public RevokeReceivedDelegation(RevokeDelegationDTO dto)
         {
-            {
-                From = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = dto.OrgNumber } };
-                Rights = new List<Right> { new Right { Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = dto.ApiId } } } };
-            }
+            From = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = dto.OrgNumber } };
+            Rights = new List<Right> { new Right { Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = dto.ApiId } } } };
         }
     }
 }
