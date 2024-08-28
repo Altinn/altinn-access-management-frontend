@@ -28,6 +28,7 @@ import {
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { arraysEqual, debounce } from '@/resources/utils';
+import { getEnvFromUrl, Environment } from '@/resources/utils/envUtils';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -61,6 +62,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
   });
+
+  const env = getEnvFromUrl();
+  const displayPopularResources =
+    !searchString && filters.length === 0 && (env === Environment.PROD || env === Environment.TT02);
 
   const resources = searchData?.pageList;
   const totalNumberOfResults = searchData?.numEntriesTotal;
@@ -139,26 +144,30 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
+                {displayPopularResources
+                  ? t('single_rights.popular_services')
+                  : String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
           </div>
           <ul className={classes.serviceResources}> {serviceResouces}</ul>
-          {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
-            <Pagination
-              className={classes.pagination}
-              currentPage={currentPage}
-              totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-              nextLabel={t('common.next')}
-              previousLabel={t('common.previous')}
-              itemLabel={(num: number) => `Side ${num}`}
-              onChange={setCurrentPage}
-              size='small'
-              compact={isSm}
-              hideLabels={isSm}
-            />
-          )}
+          {totalNumberOfResults !== undefined &&
+            totalNumberOfResults > 0 &&
+            !displayPopularResources && (
+              <Pagination
+                className={classes.pagination}
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
+                nextLabel={t('common.next')}
+                previousLabel={t('common.previous')}
+                itemLabel={(num: number) => `Side ${num}`}
+                onChange={setCurrentPage}
+                size='small'
+                compact={isSm}
+                hideLabels={isSm}
+              />
+            )}
         </>
       );
     }

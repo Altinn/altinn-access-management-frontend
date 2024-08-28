@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Configuration;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
@@ -10,7 +11,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -21,6 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger<IResourceService> _logger;
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly LogicFlags _logicFlags;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
@@ -36,16 +37,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceRegistryClient">the handler for resource registry client</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
+        /// <param name="logicFlags">the handler for env spesific logic flags</param>
         public ResourceService(
             ILogger<IResourceService> logger,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
-            IOptions<CacheConfig> cacheConfig)
+            IOptions<CacheConfig> cacheConfig,
+            IOptions<LogicFlags> logicFlags)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
+            _logicFlags = logicFlags.Value;
         }
 
         /// <inheritdoc />
@@ -57,9 +61,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.SystemResource && r.Delegable && r.Visible);
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
-                List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
-                List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
-                return PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                bool displayPopularServicesOnly = _logicFlags.DisplayPopularSingleRightsServices;
+                if (string.IsNullOrEmpty(searchString) && (resourceOwnerFilters == null || resourceOwnerFilters.Length == 0) && displayPopularServicesOnly)
+                {
+                    // Return a selection of popular services
+                    List<ServiceResourceFE> popularResources = FilterOutPopularResources(resourcesFE);
+                    return PaginationUtils.GetListPage(popularResources, page, resultsPerPage);
+                }
+                else
+                {
+                    // Perform search/filtering and return matches
+                    List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
+                    List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
+                    return PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                }
             }
             catch (Exception ex)
             {
@@ -356,6 +371,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<ServiceResourceFE> sortedMatches = matchedResources.OrderByDescending(res => res.PriorityCounter).ToList();
 
             return sortedMatches;
+        }
+
+        private List<ServiceResourceFE> FilterOutPopularResources(List<ServiceResourceFE> resources)
+        {
+            // A list of resource IDs for popular resources in Altinn2
+            List<string> popularResources = new List<string> { "se_4596_1", "se_4936_1", "se_1051_211111", "se_3906_141205", "se_3707_190403", "se_3161_140411", "se_3728_130106", "se_4655_4", "se_4699_3", "se_2437_1" };
+
+            return resources.Where(r => popularResources.Contains(r.Identifier)).ToList();
         }
 
         private List<ServiceResourceFE> MapResourceToFrontendModel(List<ServiceResource> resources, string languageCode)
