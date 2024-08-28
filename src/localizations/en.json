@@ -140,7 +140,7 @@
     "own_orgnumber_delegation_paragraph": "Search for another organisation number to continue.",
     "no_orgs_chosen": "No chosen organisations",
     "insufficient_authentication_level": "You don't have secure enough login to delegate the service. Please log in with one of the methods below:",
-    "revoke_delegation_failed": "Failed to revoke API access",
+    "revoke_delegation_failed": "Failed to delete",
     "failed_to_revoke": "{{apiId}} {{orgNumber}}"
   },
   "single_rights": {
