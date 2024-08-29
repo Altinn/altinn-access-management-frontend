@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetOfferedMaskinportenSchemaDelegations_Valid_OfferedBy()
         {
             // Arrange
-            List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedOutboundDelegationsForParty(50004223);
+            List<MaskinportenSchemaDelegationFE> expectedDelegations = GetExpectedOutboundDelegationsForParty(50004223); 
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004223/offered");
