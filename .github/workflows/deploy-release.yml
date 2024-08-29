@@ -3,7 +3,8 @@ name: 'Deploy: Release'
 run-name: ${{ github.ref_name }}
 
 on:
-  push:
+  release:
+    types: [published]
 
 jobs:
   containerize:
