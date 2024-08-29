@@ -8,7 +8,6 @@ on:
         description: Environment
 jobs:
   e2e-tests:
-    
     name: 'Playwright end to end tests'
     runs-on: ubuntu-latest
     steps:
