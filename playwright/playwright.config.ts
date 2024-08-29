@@ -18,6 +18,9 @@ const config: PlaywrightTestConfig = {
   testMatch: ['playwright/e2eTests/*.spec.ts'],
   //timeout: 5000,
   timeout: 5 * 60 * 1000,
+  expect: {
+    timeout: 15000, // for all "expect" statements. NOTE - only "toBeVisible". "isVisible" is deprecated and not awaited.
+  },
   use: {
     headless: true,
     screenshot: 'only-on-failure',

@@ -1,4 +1,5 @@
 import exp from 'constants';
+import { text } from 'stream/consumers';
 
 import { expect, selectors } from '@playwright/test';
 
@@ -103,7 +104,6 @@ test.describe('API-Delegations to org user', () => {
     );
   });
 
-  //Can we come up with a better "Functional name or description here?". Why do we need to delegate an api for instance?
   test('Delegate api to an organization by selecting from API providers filter', async ({
     login,
     apiDelegations,
@@ -122,6 +122,7 @@ test.describe('API-Delegations to org user', () => {
 
     await expect(page.getByText('Maskinporten Schema - AM - K6')).toBeVisible();
     await expect(page.getByText('Testdepartement')).toBeVisible();
+    await expect(page.getByText('Org.nr. 31066141')).toBeVisible();
 
     await page.getByRole('button', { name: 'Bekreft' }).click();
 
@@ -133,3 +134,58 @@ test.describe('API-Delegations to org user', () => {
     await expect(page.getByText('Maskinporten Schema - AM - K6')).toBeVisible();
   });
 });
+
+// Current TEST
+test('Verify adding multiple organizations and APIs and deleting them', async ({
+  login,
+  apiDelegations,
+  page,
+}) => {
+  //Login and cleanup state before running test
+  await login.gotoLoginPage('14824497789', page);
+  await login.chooseReportee('AKTVERDIG RETORISK APE', page);
+
+  await page.pause();
+  await apiDelegations.deleteDelegatedAPI();
+
+  //Step 1: add multiple APIs to list for delegation
+  await page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+  await page.getByText('Gi og fjerne API tilganger').click();
+
+  //Step 2: add multiple orgs to list for delegation
+  await page.pause();
+  await page.getByRole('button', { name: 'Deleger nytt API' }).click();
+  await page.getByRole('button', { name: 'Filtrer på etat' }).click();
+  await page.getByLabel('Testdepartement').check();
+  await page.getByLabel('Digitaliseringsdirektoratet').isChecked();
+  await page.getByRole('button', { name: 'Bruk' }).click();
+
+  //Add all
+  await apiDelegations.selectApiAccess();
+
+  // Select users that gets granted access
+  await apiDelegations.grantUserAccess();
+
+  //BEKREFT-SIDE
+  await apiDelegations.confirmAccessGranted();
+
+  // Verification page
+  await apiDelegations.verify();
+
+  await page.pause();
+  // 31066141;
+  //Step 3:   delete API added from API delegerings confirmation page
+  //Step 4: verify it is not possible to delete the last API in delegerings confirmation page
+  //Step 5:     //delete org added from API delegerings confirmation page
+  //Step 6:     //verify it is not possible to delete the last org in delegerings confirmation page
+});
+
+// //add multiple orgs to list for delegation
+// cy.addMultipleOrgsToDelegateAPI(
+//   '310661414',
+//   'INTERESSANT KOMPATIBEL TIGER AS',
+//   '310110914',
+//   'LYKKELIG DRIFTIG APE',
+//   '313259412',
+//   'UROMANTISK ALTERNATIV KATT GÅS',
+// );
