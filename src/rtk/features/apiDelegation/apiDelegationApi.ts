@@ -78,7 +78,7 @@ export const apiDelegationApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['APIs'],
+  tagTypes: ['APIs', 'overviewOrg'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     search: builder.query<DelegableApi[], searchParams>({
@@ -121,6 +121,7 @@ export const apiDelegationApi = createApi({
           orgNumbers: orgs.map((org) => org.orgNumber),
         }),
       }),
+      invalidatesTags: ['overviewOrg'],
       transformResponse: (response: ApiDelegationResult[], _meta, args) => {
         return response.map((d) => {
           return {
