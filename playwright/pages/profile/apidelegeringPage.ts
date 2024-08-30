@@ -2,13 +2,19 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
+import no_nb from '../../../src/localizations/no_nb.json';
+
 export class apiDelegation {
   public apiAccessButton: Locator;
+  public confirmationHeading: Locator;
 
   constructor(public page: Page) {
     //Should be done to more elements, but this is a start. Should be moved to "profile page" as well?
     this.apiAccessButton = page.getByText('Tilgang til programmeringsgrensesnitt - API', {
       exact: true,
+    });
+    this.confirmationHeading = page.getByRole('heading', {
+      name: no_nb.api_delegation.confirmation_page_content_top_text,
     });
   }
 
@@ -197,9 +203,7 @@ export class apiDelegation {
 
   async confirmAccessGranted() {
     await Promise.all([
-      expect(
-        this.page.getByRole('heading', { name: 'Du ønsker å gi rettigheter til følgende API:' }),
-      ).toBeVisible(),
+      expect(this.confirmationHeading).toBeVisible(),
       expect(
         this.page.getByText(
           'AuthorizedParties: Mainunit to Organization Maskinporten Schema for utviklingstester',
