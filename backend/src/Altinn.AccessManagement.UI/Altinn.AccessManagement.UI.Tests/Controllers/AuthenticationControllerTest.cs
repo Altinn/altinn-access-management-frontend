@@ -61,6 +61,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 });
             }).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
             return client;
         }
 
@@ -140,6 +142,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
             SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
+            SetupUtils.AddLanguageCookie(httpRequestMessage);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
             IEnumerable<string> cookieHeaders = response.Headers.GetValues("Set-Cookie");
             string value = cookieHeaders.ElementAt(1).Split("=")[1].Trim();

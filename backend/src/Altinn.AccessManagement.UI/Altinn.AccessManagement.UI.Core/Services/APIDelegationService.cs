@@ -143,13 +143,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 ServiceResource resource = resources.FirstOrDefault(r => r.Identifier == delegation.ResourceId);
                 if (resource != null)
                 {
-                    delegationFE.ResourceTitle = resource.Title.GetValueOrDefault(languageCode, "nb");
+                    delegationFE.ResourceTitle = resource.Title.GetValueOrDefault(languageCode);
                     delegationFE.ResourceType = resource.ResourceType;
                     delegationFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority?.Orgcode;
                     delegationFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority?.Organization;
-                    delegationFE.ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb");
-                    delegationFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode, "nb");
-                    delegationFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode, "nb");
+                    delegationFE.ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode);
+                    delegationFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode);
+                    delegationFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode);
                     delegationFE.ResourceReferences = resource.ResourceReferences;
                 }
 

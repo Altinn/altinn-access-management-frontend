@@ -99,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
                 UserProfile user = await _userService.GetUserProfile(userId);
-                languageCode = LanguageHelper.GetFrontendStandardLanguage(user.ProfileSettingPreference?.Language);
+                languageCode = LanguageHelper.GetFrontendStandardLanguage(user?.ProfileSettingPreference?.Language);
             }
 
             HttpContext.Response.Cookies.Append("selectedLanguage", languageCode ?? "no_nb", new CookieOptions

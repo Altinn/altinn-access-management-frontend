@@ -85,12 +85,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetHome_OK_WithAuthCookie()
         {
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
-            
-            var cookiesMock = new Mock<IRequestCookieCollection>();
-            cookiesMock.Setup(c => c["altinnPersistentContext"]).Returns("UL=1033");
 
             HttpClient client = SetupUtils.GetTestClient(_factory, false);
+
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/");
+            SetupUtils.AddLanguageCookie(httpRequestMessage);
 
             SetupUtils.AddAuthCookie(httpRequestMessage, token, "AltinnStudioRuntime");
 
