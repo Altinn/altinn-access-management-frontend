@@ -18,7 +18,7 @@ test.describe('API-Delegations to org user', () => {
     await login.chooseReportee('AKTVERDIG RETORISK APE', page);
 
     //delete delegated API
-    await apiDelegations.deleteDelegatedAPI();
+    await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
     await apiDelegations.delegateAPI('maskinporten scheme - AM- K6', '310661414');
@@ -39,7 +39,7 @@ test.describe('API-Delegations to org user', () => {
     await login.chooseReportee('AKTVERDIG RETORISK APE', page);
 
     //delete delegated API
-    await apiDelegations.deleteDelegatedAPI();
+    await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
     await apiDelegations.delegateAPI('Maskinporten scheme - AM- K6', '310661414');
@@ -67,7 +67,7 @@ test.describe('API-Delegations to org user', () => {
     await login.chooseReportee('AKTVERDIG RETORISK APE', page);
 
     //delete delegated API
-    await apiDelegations.deleteDelegatedAPI();
+    await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
     await apiDelegations.delegateAPI('maskinporten scheme - AM- K6', '310661414');
@@ -94,7 +94,7 @@ test.describe('API-Delegations to org user', () => {
     await login.chooseReportee('AKTVERDIG RETORISK APE', page);
 
     //delete delegated API
-    await apiDelegations.deleteDelegatedAPI();
+    await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
     await apiDelegations.apiFiltering();
@@ -112,7 +112,7 @@ test.describe('API-Delegations to org user', () => {
     //Login and cleanup state before running test
     await login.gotoLoginPage('14824497789', page);
     await login.chooseReportee('AKTVERDIG RETORISK APE', page);
-    await apiDelegations.deleteDelegatedAPI();
+    await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.apiFiltering();
 
@@ -135,7 +135,6 @@ test.describe('API-Delegations to org user', () => {
   });
 });
 
-// Current TEST
 test('Verify adding multiple organizations and APIs and deleting them', async ({
   login,
   apiDelegations,
@@ -145,15 +144,11 @@ test('Verify adding multiple organizations and APIs and deleting them', async ({
   await login.gotoLoginPage('14824497789', page);
   await login.chooseReportee('AKTVERDIG RETORISK APE', page);
 
-  await page.pause();
-  await apiDelegations.deleteDelegatedAPI();
+  await apiDelegations.deleteDelegatedAPIs();
 
   //Step 1: add multiple APIs to list for delegation
-  await page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+  await apiDelegations.apiAccessButton.click();
   await page.getByText('Gi og fjerne API tilganger').click();
-
-  //Step 2: add multiple orgs to list for delegation
-  await page.pause();
   await page.getByRole('button', { name: 'Deleger nytt API' }).click();
   await page.getByRole('button', { name: 'Filtrer på etat' }).click();
   await page.getByLabel('Testdepartement').check();
@@ -166,13 +161,11 @@ test('Verify adding multiple organizations and APIs and deleting them', async ({
   // Select users that gets granted access
   await apiDelegations.grantUserAccess();
 
-  //BEKREFT-SIDE
   await apiDelegations.confirmAccessGranted();
 
   // Verification page
   await apiDelegations.verify();
 
-  await page.pause();
   // 31066141;
   //Step 3:   delete API added from API delegerings confirmation page
   //Step 4: verify it is not possible to delete the last API in delegerings confirmation page

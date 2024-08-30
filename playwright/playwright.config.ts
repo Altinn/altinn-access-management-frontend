@@ -23,9 +23,13 @@ const config: PlaywrightTestConfig = {
   },
   use: {
     headless: true,
-    screenshot: 'only-on-failure',
+    // screenshot: 'only-on-failure',
+    screenshot: { mode: 'only-on-failure', fullPage: true },
     video: 'retain-on-failure',
-    launchOptions: {},
+    launchOptions: {
+      args: ['--start-maximized'],
+    },
+    viewport: null, // Disable Playwright's default viewport setting, required to utilize maximum screen. Mostly useful for viewing test results / screenshots to be able to view the entire screen
   },
   reporter: [
     ['dot'],

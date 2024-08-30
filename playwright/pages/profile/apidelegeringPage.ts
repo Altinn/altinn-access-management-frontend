@@ -1,12 +1,21 @@
 /* eslint-disable import/no-unresolved */
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 export class apiDelegation {
-  constructor(public page: Page) {}
+  public apiAccessButton: Locator;
+
+  constructor(public page: Page) {
+    //Should be done to more elements, but this is a start. Should be moved to "profile page" as well?
+    this.apiAccessButton = page.getByText('Tilgang til programmeringsgrensesnitt - API', {
+      exact: true,
+    });
+  }
 
   async delegateAPI(apiName: string, orgNumber: string) {
-    await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+    //This occasionally fails
+    await this.apiAccessButton.click();
+
     await this.page.getByRole('button').filter({ hasText: 'Gi og fjerne API tilganger' }).click();
     await this.page.getByRole('button', { name: 'Deleger nytt API' }).click();
     await this.page.getByLabel('Søk etter API').click();
@@ -19,43 +28,63 @@ export class apiDelegation {
     await this.page.getByRole('button', { name: 'Neste' }).click();
   }
 
-  async deleteDelegatedAPI() {
-    await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
-    await expect(
-      this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }).click();
-    if (await this.page.getByRole('button', { name: 'Rediger tilganger' }).isVisible()) {
-      await this.page.getByRole('button', { name: 'Rediger tilganger' }).click();
-      await this.page.getByTestId('action-bar').click();
-      await this.page.getByLabel('Slett INTERESSANT KOMPATIBEL').click();
+  async deleteDelegatedAPIs() {
+    await this.navigateToDelegateApis();
+
+    await this.page.waitForTimeout(1000);
+    const editRightsButton = this.page.getByRole('button', { name: 'Rediger tilganger' });
+
+    if ((await editRightsButton.count()) > 0) {
+      console.log(
+        `Found ${await editRightsButton.count()} elements to delete, attemtping to clean up`,
+      );
+      await editRightsButton.click();
+      await this.page.waitForTimeout(1000);
+
+      while (true) {
+        // Find the first "Slett" button with exact text match
+        // We have to look for a "Slett" element each time, since all other elements move when you click it
+        const deleteButton = this.page.getByText('Slett', { exact: true }).first();
+
+        if ((await deleteButton.count()) === 0) {
+          break; // Break the loop if no "Slett" button is found
+        }
+        await deleteButton.click();
+      }
+
+      // Save changes after all deletions
       await this.page.getByRole('button', { name: 'Lagre' }).click();
       await this.page.getByLabel('Avbryt').click();
     } else {
+      console.log('Found no elements to delete, navigating to profile');
       await this.page.goto(process.env.BASE_URL + '/ui/profile');
     }
   }
 
-  async deleteDelegatedAPIS() {
-    console.log('whats good');
+  async navigateToDelegateApis() {
+    await this.apiAccessButton.click();
+    const giveAccessButton = this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' });
+    await expect(giveAccessButton).toBeVisible();
+    await giveAccessButton.click();
   }
 
   async delegatedAPIOverviewPage(selectedApiName: string, orgName: string) {
-    const apiNameLocator = await this.page.getByText(selectedApiName);
+    const apiNameLocator = this.page.getByText(selectedApiName);
     await expect(apiNameLocator).toHaveText(selectedApiName);
-    const orgNameLocator = await this.page.getByText(orgName);
+    const orgNameLocator = this.page.getByText(orgName);
     await expect(orgNameLocator).toHaveText(orgName);
     await this.page.getByRole('button', { name: 'Bekreft' }).click();
     await this.page.getByRole('button', { name: 'Til totaloversikt' }).click();
-    await this.page.getByTestId('action-bar').click();
-    const receivedApiName = await this.page.getByTestId('action-bar');
-    await expect(receivedApiName).toContainText(
+
+    await this.page.getByTestId('action-bar').first().click();
+
+    await expect(this.page.getByTestId('action-bar').first()).toContainText(
       'INTERESSANT KOMPATIBEL TIGER ASOrg.nr. INTERESSANT KOMPATIBEL TIGER AS',
     );
   }
 
   async receiverAPIOverviewPage(receivedApiName: string) {
-    await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+    await this.apiAccessButton.click();
     await this.page.getByRole('button', { name: 'Mottatte API tilganger' }).click();
     await this.page.getByTestId('action-bar').first().click();
     await this.page.getByRole('heading', { name: receivedApiName });
@@ -80,15 +109,17 @@ export class apiDelegation {
     await expect(orgNameLocator).toHaveText(orgName);
     await this.page.getByRole('button', { name: 'Bekreft' }).click();
     await this.page.getByRole('button', { name: 'Til totaloversikt' }).click();
+
+    // This occasionally fails
     await this.page.getByTestId('action-bar').click();
-    const receivedApiName = await this.page.getByTestId('action-bar');
+    const receivedApiName = this.page.getByTestId('action-bar');
     await expect(receivedApiName).toContainText(
       'INTERESSANT KOMPATIBEL TIGER ASOrg.nr. INTERESSANT KOMPATIBEL TIGER AS',
     );
   }
 
   async apiFiltering() {
-    await this.page.getByText('Tilgang til programmeringsgrensesnitt - API').click();
+    await this.apiAccessButton.click();
     await this.page.getByRole('button', { name: 'Gi og fjerne API tilganger' }).click();
     await this.page.getByRole('button', { name: 'Deleger nytt API' }).click();
     await this.page.getByRole('button', { name: 'Filtrer på etat' }).click();
