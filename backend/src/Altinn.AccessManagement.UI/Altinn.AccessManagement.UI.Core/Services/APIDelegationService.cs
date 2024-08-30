@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     try
                     {
                         var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
-                    
+
                         delegationOutputs.Add(new ApiDelegationOutput()
                         {
                             OrgNumber = org,
@@ -112,73 +112,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<DelegationResponseData>> DelegationCheck(string partyId, Right request)
         {
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
-        }
-
-        private async Task<List<OrganizationApiSet>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, DelegationType type)
-        {
-            List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
-            List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
-
-            List<OrganizationApiSet> overviewOrgList = new List<OrganizationApiSet>();
-
-            foreach (MaskinportenSchemaDelegation delegation in delegations)
-            {
-                var resource = resources.Find(r => r.Identifier == delegation.ResourceId);
-                if (resource == null)
-                {
-                    continue;
-                }
-
-                var delegationFE = new MaskinportenSchemaDelegationFE
-                {
-                    LanguageCode = languageCode,
-                    OfferedByPartyId = delegation.OfferedByPartyId,
-                    OfferedByOrganizationNumber = delegation.OfferedByOrganizationNumber,
-                    OfferedByName = delegation.OfferedByName,
-                    CoveredByPartyId = delegation.CoveredByPartyId,
-                    CoveredByOrganizationNumber = delegation.CoveredByOrganizationNumber,
-                    CoveredByName = delegation.CoveredByName,
-                    PerformedByUserId = delegation.PerformedByUserId,
-                    Created = delegation.Created,
-                    ResourceId = delegation.ResourceId,
-                    ResourceTitle = resource.Title.GetValueOrDefault(languageCode, "nb"),
-                    ResourceType = resource.ResourceType,
-                    ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb"),
-                    RightDescription = resource.RightDescription.GetValueOrDefault(languageCode, "nb"),
-                    ResourceReferences = resource.ResourceReferences
-                };
-
-                var api = new ApiListItem
-                {
-                    Id = delegationFE.ResourceId,
-                    ApiName = delegationFE.ResourceTitle,
-                    Owner = delegationFE.ResourceOwnerName,
-                    Description = delegationFE.RightDescription,
-                    Scopes = delegationFE.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
-                };
-
-                string delegationOrg = type == DelegationType.Offered ? delegationFE.CoveredByName : delegationFE.OfferedByName;
-                string delegationOrgNumber = type == DelegationType.Offered ? delegationFE.CoveredByOrganizationNumber : delegationFE.OfferedByOrganizationNumber;
-
-                var existingOrg = overviewOrgList.Find(org => org.Id == delegationOrg);
-                if (existingOrg != null)
-                {
-                    existingOrg.ApiList.Add(api);
-                }
-                else
-                {
-                    var newOrg = new OrganizationApiSet
-                    {
-                        Id = delegationOrg,
-                        Name = delegationOrg,
-                        OrgNumber = delegationOrgNumber,
-                        ApiList = new List<ApiListItem> { api }
-                    };
-                    overviewOrgList.Add(newOrg);
-                }
-            }
-
-            return overviewOrgList;
         }
 
         /// <summary>
@@ -245,78 +178,70 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return responses;
         }
-    }
+        
+        /// <summary>
+        /// Builds a list of organization API sets for Maskinporten schema delegations.
+        /// </summary>
+        /// <param name="delegations">List of Maskinporten schema delegations.</param>
+        /// <param name="languageCode">Language code for localization.</param>
+        /// <param name="type">Type of delegation (Offered or Covered).</param>
+        /// <returns>A list of organization API sets.</returns>
+        /// <remarks>
+        /// This function processes a list of Maskinporten schema delegations and constructs a list of organization API sets.
+        /// It first retrieves the resources associated with the delegations. For each delegation, it creates an 
+        /// ApiListItem object with localized resource details. It then determines the organization name and number based 
+        /// on the delegation type. The function groups the API items by organization and returns the list of organization 
+        /// API sets.
+        /// </remarks>
+        private async Task<List<OrganizationApiSet>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, DelegationType type)
+        {
+            List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
+            List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
 
-    /// <summary>
-    /// Represents an API item.
-    /// </summary>
-    public class ApiListItem
-    {
-        /// <summary>
-        /// Gets or sets the ID of the API.
-        /// </summary>
-        public string Id { get; set; }
+            List<OrganizationApiSet> overviewOrgList = new List<OrganizationApiSet>();
 
-        /// <summary>
-        /// Gets or sets the name of the API.
-        /// </summary>
-        public string ApiName { get; set; }
+            foreach (MaskinportenSchemaDelegation delegation in delegations)
+            {
+                var resource = resources.Find(r => r.Identifier == delegation.ResourceId);
+                if (resource == null)
+                {
+                    continue;
+                }
 
-        /// <summary>
-        /// Gets or sets the owner of the API.
-        /// </summary>
-        public string Owner { get; set; }
+                var api = new ApiListItem
+                {
+                    Id = delegation.ResourceId,
+                    ApiName = resource.Title.GetValueOrDefault(languageCode, "nb"),
+                    Owner = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb"),
+                    Description = resource.RightDescription.GetValueOrDefault(languageCode, "nb"),
+                    Scopes = resource.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
+                };
 
-        /// <summary>
-        /// Gets or sets the description of the API.
-        /// </summary>
-        public string Description { get; set; }
+                // Determine the organization name and number based on the delegation type.
+                // If the delegation type is 'Offered', use 'CoveredBy(...)'.
+                // Otherwise, use 'OfferedBy(...)'.
+                string delegationOrg = type == DelegationType.Offered ? delegation.CoveredByName : delegation.OfferedByName;
+                string delegationOrgNumber = type == DelegationType.Offered ? delegation.CoveredByOrganizationNumber : delegation.OfferedByOrganizationNumber;
 
-        /// <summary>
-        /// Gets or sets the scopes associated with the API.
-        /// </summary>
-        public List<string> Scopes { get; set; }
-    }
+                var existingOrg = overviewOrgList.Find(org => org.Id == delegationOrg);
+                if (existingOrg != null)
+                {
+                    existingOrg.ApiList.Add(api);
+                }
+                else
+                {
+                    var newOrg = new OrganizationApiSet
+                    {
+                        Id = delegationOrg,
+                        Name = delegationOrg,
+                        OrgNumber = delegationOrgNumber,
+                        ApiList = new List<ApiListItem> { api }
+                    };
+                    overviewOrgList.Add(newOrg);
+                }
+            }
 
-    /// <summary>
-    /// Represents a set of APIs given to or recieved from an organization.
-    /// </summary>
-    public class OrganizationApiSet
-    {
-        /// <summary>
-        /// Gets or sets the ID of the organization.
-        /// </summary>
-        public string Id { get; set; }
-    
-        /// <summary>
-        /// Gets or sets the name of the organization.
-        /// </summary>
-        public string Name { get; set; }
-    
-        /// <summary>
-        /// Gets or sets the organization number.
-        /// </summary>
-        public string OrgNumber { get; set; }
-    
-        /// <summary>
-        /// Gets or sets a set of APIs given to or recieved from an organization
-        /// </summary>
-        public List<ApiListItem> ApiList { get; set; } = new List<ApiListItem>();
-    }
-
-    /// <summary>
-    /// Represents the type of delegation.
-    /// </summary>
-    public enum DelegationType
-    {
-        /// <summary>
-        /// Offered delegation type.
-        /// </summary>
-        Offered,
-
-        /// <summary>
-        /// Received delegation type.
-        /// </summary>
-        Received
+            return overviewOrgList;
+        }
     }
 }
