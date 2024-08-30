@@ -138,8 +138,7 @@
     "own_orgnumber_delegation_paragraph": "Skriv inn eit anna organisasjonsnummer for å halde fram.",
     "no_orgs_chosen": "Ingen organisasjonar valde",
     "insufficient_authentication_level": "Du har ikkje sikker nok innlogging for å delegere denne tenesta. Ver vennleg og logg inn på nytt med ein av metodane under:",
-    "revoke_delegation_failed": "Kunne ikkje slette",
-    "failed_to_revoke": "{{apiId}} {{orgNumber}}"
+    "revoke_delegation_failed": "Kunne ikkje slette"
   },
   "single_rights": {
     "page_title": "Deleger enkeltrettar - Altinn",

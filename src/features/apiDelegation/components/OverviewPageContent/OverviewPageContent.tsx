@@ -222,10 +222,7 @@ export const OverviewPageContent = ({
           <ul>
             {deletedItems.failedDeleteions.map((item) => (
               <li key={item.apiId}>
-                {t('api_delegation.failed_to_revoke', {
-                  apiId: item.apiId,
-                  orgNumber: item.orgNumber,
-                })}
+                {item.apiId} {item.orgNumber},
               </li>
             ))}
           </ul>
