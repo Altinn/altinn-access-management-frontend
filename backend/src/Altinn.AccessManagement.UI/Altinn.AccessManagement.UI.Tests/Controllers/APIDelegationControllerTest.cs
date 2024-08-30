@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetReceivedMaskinportenSchemaDelegations_Valid_CoveredBy()
         {
             // Arrange
-            List<OrganizationApiSet> expectedDelegations = GetExpectedOverviewOrgsForParty();
+            List<OrganizationApiSet> expectedDelegations = GetExpectedOverviewOrgsForParty_CoveredBy();
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/apidelegation/50004219/received");
@@ -487,6 +487,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<OrganizationApiSet> delegations = JsonSerializer.Deserialize<List<OrganizationApiSet>>(content, options);
             return delegations;
         }
-
+        private static List<OrganizationApiSet> GetExpectedOverviewOrgsForParty_CoveredBy()
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            var filename = "frontendCovered_OverviewOrg.json";
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(APIDelegationControllerTest).Assembly.Location).LocalPath);
+            var path = Path.Combine(unitTestFolder, "Data", "MaskinportenSchema", filename);
+            string content = File.ReadAllText(path);
+            List<OrganizationApiSet> delegations = JsonSerializer.Deserialize<List<OrganizationApiSet>>(content, options);
+            return delegations;
+        }
     }
 }
