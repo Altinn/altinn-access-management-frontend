@@ -8,7 +8,8 @@ assignees: ''
 ---
 
 # Beskrivelse
-
+<!--- Beskriv oppgaven som skal utføres --->
 
 # To do's
+<!--- Liste av ting som inngår i utførelsen --->
 - [ ] Eks: Ta ut av oppvaskmaskinen

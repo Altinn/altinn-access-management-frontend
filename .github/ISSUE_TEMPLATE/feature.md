@@ -9,13 +9,12 @@ assignees: ''
 ---
 
 # Beskrivelse
-Beskriv problemet/behovet som skal løses
+<!--- Beskriv problemet/behovet som skal løses --->
 
 ## Definisjoner
 Se #parentIssue
 
 # Avklaringer
-- Avkl-1: 
 
 # Akseptansekriterier
 
