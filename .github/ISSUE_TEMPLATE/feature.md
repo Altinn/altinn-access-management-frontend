@@ -1,28 +1,36 @@
 ---
-name: Feature
-about: Template for å beskrive en feature (user story/funksjon) knytt til
-  en Epic (større helhetlig leveranse).
+name: ✨ Feature
+about: En konkret funksjon som inngår i et produkt/leveranse (tilsvarende en User Story)
 title: Epic navn | Feature navn
 labels: ''
 assignees: ''
-
 ---
 
 # Beskrivelse
+
 <!--- Beskriv problemet/behovet som skal løses --->
 
 ## Definisjoner
+
+<!--- Om nødvendig --->
+
 Se #parentIssue
 
 # Avklaringer
 
+<!--- Er det noe som trenger avklaring? --->
+
 # Akseptansekriterier
 
+<!--- Rams opp hva som skal til for at featuren skal anses som løst --->
 
 # Bilder/Tegninger
 
+<!--- Eks: Arkitekturskisser eller figma-tegninger --->
 
-# Oppgaver
+# Oppgaver/Tasks
+
+<!--- Delt opp i fagrupper --->
 
 ```[tasklist]
 ### Trusselmodellering
