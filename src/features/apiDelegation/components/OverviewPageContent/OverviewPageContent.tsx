@@ -270,7 +270,7 @@ export const OverviewPageContent = ({
       {isEditable && (
         <div className={classes.saveSection}>
           <Button
-            disabled={loading}
+            disabled={loading || itemsToDelete.length === 0}
             onClick={confirmRevoke}
             color='success'
             fullWidth={isSm}
