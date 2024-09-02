@@ -1,5 +1,4 @@
-﻿
-namespace Altinn.AccessManagement.UI.Core.Models
+﻿namespace Altinn.AccessManagement.UI.Core.Models
 {
     /// <summary>
     /// Represents a set of APIs given to or recieved from an organization.
