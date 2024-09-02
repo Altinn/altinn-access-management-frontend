@@ -19,9 +19,10 @@ export const useSoftDeleteApi = (overviewOrgs: OverviewOrg[]) => {
   const softDeleteAll = (orgNumber?: string) => {
     if (orgNumber && overviewOrgs) {
       const orgToDelete = overviewOrgs.find((o) => orgNumber === o.orgNumber);
-      setItemsToDelete(
-        orgToDelete ? orgToDelete.apiList.map((a) => ({ apiId: a.id, orgNumber })) : [],
-      );
+      setItemsToDelete([
+        ...(orgToDelete ? orgToDelete.apiList.map((a) => ({ apiId: a.id, orgNumber })) : []),
+        ...itemsToDelete,
+      ]);
     }
   };
 
