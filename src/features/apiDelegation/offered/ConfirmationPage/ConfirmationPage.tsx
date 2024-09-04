@@ -20,6 +20,7 @@ import type { BatchApiDelegationRequest } from '@/rtk/features/apiDelegation/api
 import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
+import { overviewOrgApi } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 
 import classes from './ConfirmationPage.module.css';
 import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
@@ -43,6 +44,12 @@ export const ConfirmationPage = () => {
     [data],
   );
   const failedApiDelegations = React.useMemo(() => data?.filter((d) => !d.success) || [], [data]);
+
+  React.useEffect(() => {
+    if (successfulApiDelegations && successfulApiDelegations.length > 0) {
+      overviewOrgApi.util.invalidateTags(['overviewOrg']);
+    }
+  }, [successfulApiDelegations]);
 
   const handleConfirm = async () => {
     const request: BatchApiDelegationRequest = {
