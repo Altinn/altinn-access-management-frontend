@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { useDispatch } from 'react-redux';
 
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
@@ -26,6 +27,7 @@ import classes from './ConfirmationPage.module.css';
 import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
 
 export const ConfirmationPage = () => {
+  const dispatch = useDispatch();
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
 
@@ -47,7 +49,7 @@ export const ConfirmationPage = () => {
 
   React.useEffect(() => {
     if (successfulApiDelegations && successfulApiDelegations.length > 0) {
-      overviewOrgApi.util.invalidateTags(['overviewOrg']);
+      dispatch(overviewOrgApi.util.invalidateTags(['overviewOrg']));
     }
   }, [successfulApiDelegations]);
 
