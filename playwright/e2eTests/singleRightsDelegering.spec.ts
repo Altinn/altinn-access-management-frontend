@@ -102,6 +102,11 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await login.loginWithUser('07922148605', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await deleteRights.revokeRightsSSN('STORARTET KORGSTOL');
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        resolve(null);
+      }, 500),
+    );
     await delegate.delegateToSSN('07885798378', 'KORGSTOL');
     await delegateRights.delegateRightsToSSN(
       'Altinn2 sensitive reporting service for Authorizaion tests',

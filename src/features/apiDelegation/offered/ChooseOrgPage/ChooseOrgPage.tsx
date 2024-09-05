@@ -1,7 +1,7 @@
 import { Button, Spinner, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
@@ -12,49 +12,42 @@ import type { Organization } from '@/rtk/features/lookup/lookupApi';
 import ApiIcon from '@/assets/Api.svg?react';
 import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
-import { fetchOverviewOrgsOffered } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useFetchOverviewOrgsQuery } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+import { DelegationType } from '../../components/DelegationType';
 
 import classes from './ChooseOrgPage.module.css';
 import { DelegableOrgItems } from './DelegableOrgItems';
 import { ChosenItems } from './ChosenItems';
 import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
 import { useOrgSearch } from './useOrgSearch';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 export const ChooseOrgPage = () => {
+  const partyId = getCookie('AltinnPartyId');
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
-  const { overviewOrgs, loading: overviewOrgsLoading } = useAppSelector(
-    (state) => state.overviewOrg,
-  );
 
   const { data: reporteeData } = useGetReporteeQuery();
 
   const dispatch = useAppDispatch();
   const [searchString, setSearchString] = useState('');
-  const [viewLoading, setViewLoading] = useState(true);
   const isSm = useMediaQuery('(max-width: 768px)');
   const [chosenItemsStatusMessage, setChosenItemsStatusMessage] = useState('');
   const navigate = useNavigate();
 
   const { t } = useTranslation();
-
-  const { matches: displayOrgs, error, isFetching } = useOrgSearch(overviewOrgs, searchString);
+  const { data: overviewOrgs, isLoading: viewLoading } = useFetchOverviewOrgsQuery({
+    partyId,
+    delegationType: DelegationType.Offered,
+  });
+  const { matches: displayOrgs, isFetching } = useOrgSearch(overviewOrgs || [], searchString);
 
   const searchOrgNotExist = searchString.length === 9 && displayOrgs.length === 0;
   const promptOrgNumber = searchString.length !== 9 && displayOrgs.length === 0;
-
-  useEffect(() => {
-    if (overviewOrgsLoading) {
-      void dispatch(fetchOverviewOrgsOffered());
-    }
-
-    if (!overviewOrgsLoading) {
-      setViewLoading(false);
-    }
-  }, [overviewOrgs, overviewOrgsLoading]);
 
   const handleSoftRemove = (org: Organization) => {
     dispatch(removeOrg(org));

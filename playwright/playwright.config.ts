@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config({
   path: [
     `config/.env`,
-    `config/.env.${process.env.environment ?? 'at22'}`,
+    `config/.env.${process.env.environment ?? 'at24'}`,
     `config/.env.local`,
     `config/.env.${process.env.environment ?? 'at22'}.local`,
   ],
@@ -17,10 +17,7 @@ dotenv.config({
 const config: PlaywrightTestConfig = {
   testMatch: ['playwright/e2eTests/*.spec.ts'],
   //timeout: 5000,
-  timeout: 5 * 60 * 1000,
-  expect: {
-    timeout: 15000, // for all "expect" statements. NOTE - only "toBeVisible". "isVisible" is deprecated and not awaited.
-  },
+  timeout: 3 * 60 * 1000,
   use: {
     headless: true,
     // screenshot: 'only-on-failure',

@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">reportee that delegated resources</param>
         /// <param name="languageCode">language to use for resource metadata</param>
         /// <returns>list of delgations</returns>
-        public Task<List<MaskinportenSchemaDelegationFE>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode);
+        public Task<List<OrganizationApiSet>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode);
 
         /// <summary>
         /// Gets all the delegations received by a reportee
@@ -23,23 +23,32 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="party">reportee that received resources</param>
         /// <param name="languageCode">language to use for resource metadata</param>
         /// <returns>list of delgations</returns>
-        public Task<List<MaskinportenSchemaDelegationFE>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode);
+        public Task<List<OrganizationApiSet>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode);
 
         /// <summary>
         /// Revokes a delegation received by the party
         /// </summary>
         /// <param name="party">party</param>
-        /// <param name="delegation">delegation to be revoked</param>
+        /// <param name="delegationDTO">delegation to be revoked</param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation);
+        public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO);
 
         /// <summary>
         /// Revokes a delegation offered by the party
         /// </summary>
         /// <param name="party">party</param>
-        /// <param name="delegation">delegation to be revoked</param>
+        /// <param name="delegationDTO">delegation to be revoked</param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation);
+        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO);
+        
+        /// <summary>
+        /// Revokes a one or more delegation offered or received by the party
+        /// </summary>
+        /// <param name="party">party</param>
+        /// <param name="delegationDTOs">List of delegations to be revoked</param>
+        /// <param name="type">Type of delegation</param>
+        /// <returns></returns>
+        public Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, DelegationType type);
 
         /// <summary>
         /// Creates a maskinporten delegation from the party to a third party organization

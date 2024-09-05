@@ -6,8 +6,7 @@ export class delegateToUser {
   constructor(public page: Page) {}
 
   async delegateToSSN(ssnUser: string, ssnUserName: string) {
-    await this.page.getByText('Andre med rettigheter til').click();
-    await this.page.keyboard.press('Enter');
+    await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     await this.page.getByRole('button', { name: 'Legge til ny person eller' }).click();
     await this.page.getByRole('button', { name: 'person' });
     await this.page.getByPlaceholder('siffer').click();
@@ -36,7 +35,12 @@ export class delegateRightsToUser {
     await this.page.getByLabel('Søk etter skjema og tjeneste').click();
     await this.page.getByLabel('Søk etter skjema og tjeneste').fill(resourceName);
     await this.page.keyboard.press('Enter');
-    await this.page.getByRole('button', { name: resourceName }).click();
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        resolve(null);
+      }, 500),
+    );
+    await this.page.getByRole('button', { name: resourceName }).first().click();
     await this.page.getByRole('button', { name: 'Legg til add' }).first().click();
     await this.page.getByRole('button', { name: 'Valgte tjenester' }).click();
     await this.page.getByLabel('Valgte tjenester').getByText(resourceName);
@@ -63,7 +67,7 @@ export class delegateRightsToUser {
       } else {
         await this.page.reload();
         numRefreshes++;
-        await this.page.waitForTimeout(5000); // wait for 1 second before the next check
+        await this.page.waitForTimeout(1000); // wait for 1 second before the next check
       }
     }
   }
@@ -85,7 +89,7 @@ export class delegateRoleToUser {
   constructor(public page: Page) {}
 
   async delegateRole(roleName1: string, roleName2: string) {
-    await this.page.getByText('Har også disse 0 rollene').click();
+    await this.page.getByText('Har også disse').click();
     await this.page.getByText('+ Legg til ny rolle').click();
     await this.page.locator('span.col', { hasText: roleName1 }).click();
     await this.page.locator('span.col', { hasText: roleName2 }).click();
@@ -122,7 +126,7 @@ export class revokeRights {
         await this.page.getByText('Fjern alle').first().click();
         await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
         await this.page.getByRole('link', { name: 'Ferdig' }).click();
-        await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+        await this.page.goto(process.env.BASE_URL + '/ui/profile');
       }
     } else {
       console.error('Reportee not found');
@@ -133,6 +137,8 @@ export class revokeRights {
   async revokeRightsOrg(reporteeName: string, buttonIndex: number) {
     const rightsHoldersList = this.page.locator('css=#rightHolderList');
     const loader = rightsHoldersList.locator('css=.a-loader');
+    const reporteLinks = this.page.getByRole('link', { name: reporteeName });
+    const reporteeLink = reporteLinks.nth(buttonIndex);
 
     await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     await loader.waitFor({ state: 'attached' });
@@ -141,8 +147,7 @@ export class revokeRights {
 
     if (await this.page.getByRole('link', { name: reporteeName }).isVisible()) {
       await this.page.getByRole('link', { name: reporteeName }).click();
-      const reporteLinks = this.page.getByRole('link', { name: reporteeName });
-      const reporteeLink = reporteLinks.nth(buttonIndex);
+
       if (await reporteeLink.isVisible()) {
         await reporteeLink.click();
         const removeButton = this.page
@@ -157,7 +162,7 @@ export class revokeRights {
           await this.page.getByText('Fjern alle').first().click();
           await this.page.getByRole('button').filter({ hasText: 'Ferdig' }).click();
           await this.page.getByRole('link', { name: 'Ferdig' }).click();
-          await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
+          await this.page.goto(process.env.BASE_URL + '/ui/profile');
         }
       }
     } else {

@@ -2,8 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { useDispatch } from 'react-redux';
 
-import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
+import { useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
 import {
@@ -16,18 +17,17 @@ import {
 } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { setLoading as setOveviewToReload } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
-import {
-  BatchApiDelegationRequest,
-  usePostApiDelegationMutation,
-} from '@/rtk/features/apiDelegation/apiDelegationApi';
+import type { BatchApiDelegationRequest } from '@/rtk/features/apiDelegation/apiDelegationApi';
+import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import classes from './ConfirmationPage.module.css';
-
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
+import { overviewOrgApi } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+
+import classes from './ConfirmationPage.module.css';
 import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
 
 export const ConfirmationPage = () => {
+  const dispatch = useDispatch();
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
 
@@ -38,7 +38,6 @@ export const ConfirmationPage = () => {
 
   const partyId = getCookie('AltinnPartyId');
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const [postApiDelegation, { data, isLoading, isError }] = usePostApiDelegationMutation();
 
@@ -47,6 +46,12 @@ export const ConfirmationPage = () => {
     [data],
   );
   const failedApiDelegations = React.useMemo(() => data?.filter((d) => !d.success) || [], [data]);
+
+  React.useEffect(() => {
+    if (successfulApiDelegations && successfulApiDelegations.length > 0) {
+      dispatch(overviewOrgApi.util.invalidateTags(['overviewOrg']));
+    }
+  }, [successfulApiDelegations]);
 
   const handleConfirm = async () => {
     const request: BatchApiDelegationRequest = {
@@ -58,7 +63,6 @@ export const ConfirmationPage = () => {
   };
 
   const navigateToOverview = () => {
-    dispatch(setOveviewToReload());
     navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.Overview);
   };
 
