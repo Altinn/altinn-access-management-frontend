@@ -1,10 +1,10 @@
 namespace Altinn.AccessManagement.UI.Core.Configuration
 {
     /// <summary>
-    /// Logic flags configuration settings
-    /// For use in turning off an on logic in different envs
+    /// Feature flags configuration settings
+    /// For use in turning off an on features in different envs
     /// </summary>
-    public class LogicFlags
+    public class FeatureFlags
     {
         /// <summary>
         /// Whether or not to only display popular SingleRights services

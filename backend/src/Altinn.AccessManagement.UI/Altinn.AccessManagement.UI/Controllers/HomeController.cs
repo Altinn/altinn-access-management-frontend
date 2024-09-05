@@ -22,6 +22,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IAntiforgery _antiforgery;
         private readonly IWebHostEnvironment _env;
         private readonly GeneralSettings _generalSettings;
+        private readonly FeatureFlags _featureFlags;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
         private readonly IUserService _userService;
@@ -36,6 +37,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="userService">service implementation for user profile</param>
         /// <param name="httpContextAccessor">http context</param>
         /// <param name="generalSettings">general settings</param>
+        /// <param name="featureFlags">feature flags</param>
         public HomeController(
             IOptions<FrontEndEntryPointOptions> frontEndEntrypoints,
             IAntiforgery antiforgery,
@@ -43,7 +45,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             IWebHostEnvironment env,
             IUserService userService,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<GeneralSettings> generalSettings)
+            IOptions<GeneralSettings> generalSettings,
+            IOptions<FeatureFlags> featureFlags)
         {
             _antiforgery = antiforgery;
             _platformSettings = platformSettings.Value;
@@ -51,6 +54,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
             _generalSettings = generalSettings.Value;
+            _featureFlags = featureFlags.Value;
         }
 
         /// <summary>
@@ -80,6 +84,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (await ShouldShowAppView())
             {
+                ViewBag.featureFlags = _featureFlags;
                 return View();
             }
 

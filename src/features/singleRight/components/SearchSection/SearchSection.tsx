@@ -28,7 +28,6 @@ import {
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { arraysEqual, debounce } from '@/resources/utils';
-import { getEnvFromUrl, Environment } from '@/resources/utils/envUtils';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -63,9 +62,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     resultsPerPage: searchResultsPerPage,
   });
 
-  const env = getEnvFromUrl();
   const displayPopularResources =
-    !searchString && filters.length === 0 && (env === Environment.PROD || env === Environment.TT02);
+    !searchString && filters.length === 0 && window.featureFlags.displayPopularSingleRightsServices;
 
   const resources = searchData?.pageList;
   const totalNumberOfResults = searchData?.numEntriesTotal;

@@ -22,6 +22,9 @@
     <title>Altinn</title>
   </head>
     <body>
+    <script type="text/javascript">
+        window.featureFlags = @Html.Raw(Json.Serialize(ViewBag.featureFlags));
+    </script>
       <div id="root"></div>
       @if (isDev){
         <script type="module">

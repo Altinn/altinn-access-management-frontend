@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger<IResourceService> _logger;
         private readonly IMemoryCache _memoryCache;
         private readonly IResourceRegistryClient _resourceRegistryClient;
-        private readonly LogicFlags _logicFlags;
+        private readonly FeatureFlags _featureFlags;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceService" /> class for testing purposes.
@@ -37,19 +37,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceRegistryClient">the handler for resource registry client</param>
         /// <param name="cacheConfig">the handler for cache configuration</param>
         /// <param name="memoryCache">the handler for cache</param>
-        /// <param name="logicFlags">the handler for env spesific logic flags</param>
+        /// <param name="featureFlags">the handler for env spesific logic flags</param>
         public ResourceService(
             ILogger<IResourceService> logger,
             IResourceRegistryClient resourceRegistryClient,
             IMemoryCache memoryCache,
             IOptions<CacheConfig> cacheConfig,
-            IOptions<LogicFlags> logicFlags)
+            IOptions<FeatureFlags> featureFlags)
         {
             _logger = logger;
             _resourceRegistryClient = resourceRegistryClient;
             _memoryCache = memoryCache;
             _cacheConfig = cacheConfig.Value;
-            _logicFlags = logicFlags.Value;
+            _featureFlags = featureFlags.Value;
         }
 
         /// <inheritdoc />
@@ -61,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.SystemResource && r.Delegable && r.Visible);
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
-                bool displayPopularServicesOnly = _logicFlags.DisplayPopularSingleRightsServices;
+                bool displayPopularServicesOnly = _featureFlags.DisplayPopularSingleRightsServices;
                 if (string.IsNullOrEmpty(searchString) && (resourceOwnerFilters == null || resourceOwnerFilters.Length == 0) && displayPopularServicesOnly)
                 {
                     // Return a selection of popular services
