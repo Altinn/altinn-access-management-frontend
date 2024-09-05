@@ -7,8 +7,9 @@ import type {
 } from '@/dataObjects/dtos/resourceDelegation';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import type { Organization } from '../lookup/lookupApi';
+
 import type { DelegableApi } from './delegableApi/delegableApiSlice';
-import { Organization } from '../lookup/lookupApi';
 
 export type ResourceReference = {
   resource: IdValuePair[];
@@ -77,7 +78,7 @@ export const apiDelegationApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['APIs'],
+  tagTypes: ['APIs', 'overviewOrg'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     search: builder.query<DelegableApi[], searchParams>({
@@ -120,6 +121,7 @@ export const apiDelegationApi = createApi({
           orgNumbers: orgs.map((org) => org.orgNumber),
         }),
       }),
+      invalidatesTags: ['overviewOrg'],
       transformResponse: (response: ApiDelegationResult[], _meta, args) => {
         return response.map((d) => {
           return {

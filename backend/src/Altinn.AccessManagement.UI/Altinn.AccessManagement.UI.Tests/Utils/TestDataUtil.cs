@@ -211,7 +211,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         private static string GetDelegationPath()
         {
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(APIDelegationControllerTest).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "Data", "MaskinportenSchema");
+            return Path.Combine(unitTestFolder, "Data", "ExpectedResults", "MaskinportenSchema");
         }
 
         private static string GetResourcesPath(string fileName)

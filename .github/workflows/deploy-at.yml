@@ -32,8 +32,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT21, AT22, AT23, AT24]
-    uses: './.github/workflows/playwright.yml'
+        environment: [AT22, AT23, AT24]
+
+    uses: './.github/workflows/template-playwright.yml'
+
+
     with:
       environment: ${{ matrix.environment }}
  

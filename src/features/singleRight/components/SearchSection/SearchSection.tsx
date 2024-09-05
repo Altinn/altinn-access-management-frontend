@@ -225,8 +225,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 elevated={false}
                 className={classes.notDelegableAlert}
               >
-                <Heading size='xsmall'>
-                  {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)}
+                <Heading
+                  size='xsmall'
+                  spacing
+                >
+                  {t('single_rights.cannot_delegate_alert_heading')}
                 </Heading>
                 <Paragraph>
                   {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {

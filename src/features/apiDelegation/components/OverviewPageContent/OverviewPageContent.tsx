@@ -1,145 +1,121 @@
-import { Alert, Button, Heading, Link, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { useEffect, useState } from 'react';
+import { fail } from 'assert';
+
+import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { useDispatch } from 'react-redux';
 
-import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
-import {
-  fetchOverviewOrgsOffered,
-  fetchOverviewOrgsReceived,
-  restoreAllSoftDeletedItems,
-  softDeleteAll,
-  softRestoreAll,
-  deleteOfferedApiDelegation,
-  deleteReceivedApiDelegation,
-  type OverviewOrg,
-  type DeletionRequest,
-} from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
 import { useMediaQuery } from '@/resources/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import { ErrorPanel } from '@/components';
-import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { getButtonIconSize } from '@/resources/utils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+import {
+  useDeleteApiDelegationBatchMutation,
+  useFetchOverviewOrgsQuery,
+} from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { resetState } from '@/rtk/features/apiDelegation/apiDelegationSlice';
+import { resetChosenApis } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 
-import { LayoutState } from '../LayoutState';
+import { DelegationType } from '../DelegationType';
 
 import { OrgDelegationActionBar } from './OrgDelegationActionBar';
 import classes from './OverviewPageContent.module.css';
+import { useSoftDeleteApi } from './useSoftDeleteApi';
 
 export interface OverviewPageContentInterface {
-  layout: LayoutState;
+  delegationType: DelegationType;
 }
 
+const useOverviewOrgs = (delegationType: DelegationType) => {
+  const partyId = getCookie('AltinnPartyId');
+  const {
+    data: overviewOrgs,
+    isLoading: loadingOverviewOrgs,
+    error: fetchError,
+  } = useFetchOverviewOrgsQuery({ partyId, delegationType });
+
+  return {
+    overviewOrgs,
+    loadingOverviewOrgs,
+    fetchError,
+  };
+};
+
 export const OverviewPageContent = ({
-  layout = LayoutState.Offered,
+  delegationType = DelegationType.Offered,
 }: OverviewPageContentInterface) => {
-  const [saveDisabled, setSaveDisabled] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const overviewOrgs = useAppSelector((state) => state.overviewOrg.overviewOrgs);
-  const error = useAppSelector((state) => state.overviewOrg.error);
-  const loading = useAppSelector((state) => state.overviewOrg.loading);
   const isSm = useMediaQuery('(max-width: 768px)');
   const [deletedItemsStatusMessage, setDeletedItemsStatusMessage] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let fetchData: () => any;
-  let overviewText: string;
-  let accessesHeader: string;
-  let noDelegationsInfoText: string;
+  const { overviewOrgs, loadingOverviewOrgs, fetchError } = useOverviewOrgs(delegationType);
 
-  useEffect(() => {
-    if (loading) {
-      void fetchData();
+  const [
+    BatchDeleteApiDelegationRequest,
+    {
+      isLoading: isRevoking,
+      error: revokeError,
+      isSuccess: deletedItemsSuccess,
+      data: deletedItems,
+      reset: resetDeleteApiDelegationBatchMutation,
+    },
+  ] = useDeleteApiDelegationBatchMutation();
+
+  React.useEffect(() => {
+    if (!isRevoking && deletedItemsSuccess) {
+      setIsEditable(false);
+      softRestoreAll();
+      setDeletedItemsStatusMessage(t('common.changes_made_msg'));
     }
-    handleSaveDisabled();
+  }, [deletedItemsSuccess, isRevoking]);
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
     dispatch(resetState());
     dispatch(resetChosenApis());
-  }, [overviewOrgs, error]);
+  }, []);
 
-  switch (layout) {
-    case LayoutState.Offered:
-      fetchData = async () => await dispatch(fetchOverviewOrgsOffered());
-      overviewText = t('api_delegation.api_overview_text');
-      accessesHeader = t('api_delegation.you_have_delegated_accesses');
-      noDelegationsInfoText = t('api_delegation.no_offered_api_delegations');
-      break;
-    case LayoutState.Received:
-      fetchData = async () => await dispatch(fetchOverviewOrgsReceived());
-      overviewText = t('api_delegation.api_received_overview_text');
-      accessesHeader = t('api_delegation.you_have_received_accesses');
-      noDelegationsInfoText = t('api_delegation.no_received_delegations');
-      break;
-  }
+  const {
+    itemsToDelete,
+    softRestoreAll,
+    softDeleteAll,
+    softRestoreItem,
+    softDeleteItem,
+    checkIfItemIsSoftDeleted,
+    checkIfAllItmesAreSoftDeleted,
+  } = useSoftDeleteApi(overviewOrgs || []);
 
-  const goToStartDelegation = () => {
-    dispatch(restoreAllSoftDeletedItems());
-    navigate('/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi);
+  const confirmRevoke = async () => {
+    const partyId = getCookie('AltinnPartyId');
+    const res = resetDeleteApiDelegationBatchMutation();
+    await res;
+    BatchDeleteApiDelegationRequest({
+      apiDelegations: itemsToDelete,
+      delegationType,
+      partyId,
+    });
   };
 
-  const handleSaveDisabled = () => {
-    for (const org of overviewOrgs) {
-      if (org.isAllSoftDeleted) {
-        setSaveDisabled(false);
-        return;
-      }
-      for (const api of org.apiList) {
-        if (api.isSoftDelete) {
-          setSaveDisabled(false);
-          return;
-        }
-      }
-    }
-    setSaveDisabled(true);
-  };
-
-  const handleSetIsEditable = () => {
-    if (isEditable) {
-      dispatch(restoreAllSoftDeletedItems());
-    }
-    setIsEditable(!isEditable);
-  };
-
-  const mapToDeletionRequest = (orgNr: string, apiId: string) => {
-    const deletionRequest: DeletionRequest = {
-      orgNr,
-      apiId,
-    };
-    return deletionRequest;
-  };
-
-  const handleSave = () => {
-    for (const org of overviewOrgs) {
-      for (const item of org.apiList) {
-        if (item.isSoftDelete) {
-          if (layout === LayoutState.Offered) {
-            void dispatch(deleteOfferedApiDelegation(mapToDeletionRequest(org.orgNumber, item.id)));
-          } else if (layout === LayoutState.Received) {
-            void dispatch(
-              deleteReceivedApiDelegation(mapToDeletionRequest(org.orgNumber, item.id)),
-            );
-          }
-        }
-      }
-    }
-    setIsEditable(false);
-  };
+  const error = fetchError ?? revokeError;
+  const loading = isRevoking || loadingOverviewOrgs;
 
   const activeDelegations = () => {
-    if (error.message) {
+    if (error) {
       return (
         <div className={classes.errorPanel}>
           <ErrorPanel
             title={t('api_delegation.data_retrieval_failed')}
-            message={error.message}
-            statusCode={error.statusCode}
-          ></ErrorPanel>
+            message={'message' in error ? error.message : ''}
+            statusCode={'status' in error ? error.status.toString() : ''}
+          />
         </div>
       );
     } else if (loading) {
@@ -151,37 +127,58 @@ export const OverviewPageContent = ({
           />
         </div>
       );
-    } else if (overviewOrgs.length < 1) {
-      return <h3 className={classes.noActiveDelegations}>{noDelegationsInfoText}</h3>;
+    } else if (overviewOrgs && overviewOrgs.length < 1) {
+      return (
+        <h3 className={classes.noActiveDelegations}>
+          {delegationType === DelegationType.Offered
+            ? t('api_delegation.no_offered_api_delegations')
+            : t('api_delegation.no_received_delegations')}
+        </h3>
+      );
     }
-    return overviewOrgs.map((org: OverviewOrg) => (
-      <div
-        key={org.id}
-        className={classes.actionBarWrapper}
-      >
-        <OrgDelegationActionBar
-          organization={org}
-          isEditable={isEditable}
-          softDeleteAllCallback={() => {
-            dispatch(softDeleteAll(org.id));
-            setDeletedItemsStatusMessage(t('common.changes_made_msg'));
-          }}
-          softRestoreAllCallback={() => dispatch(softRestoreAll(org.id))}
-          setScreenreaderMsg={() => setDeletedItemsStatusMessage(t('common.changes_made_msg'))}
+    return (
+      overviewOrgs &&
+      overviewOrgs.map((org: OverviewOrg) => (
+        <div
           key={org.id}
-        ></OrgDelegationActionBar>
-      </div>
-    ));
+          className={classes.actionBarWrapper}
+        >
+          <OrgDelegationActionBar
+            organization={org}
+            isEditable={isEditable}
+            softDeleteAllCallback={() => {
+              softDeleteAll(org.orgNumber);
+            }}
+            softRestoreAllCallback={() => softRestoreAll(org.orgNumber)}
+            setScreenreaderMsg={() => setDeletedItemsStatusMessage(t('common.changes_made_msg'))}
+            key={org.id}
+            softRestoreCallback={softRestoreItem}
+            softDeleteCallback={softDeleteItem}
+            checkIfItemIsSoftDeleted={checkIfItemIsSoftDeleted}
+            checkIfAllItmesAreSoftDeleted={checkIfAllItmesAreSoftDeleted}
+          />
+        </div>
+      ))
+    );
   };
 
   return (
     <div className={classes.overviewActionBarContainer}>
-      {!isSm && <h2 className={classes.pageContentText}>{overviewText}</h2>}
-      {layout === LayoutState.Offered && (
+      {!isSm && (
+        <h2 className={classes.pageContentText}>
+          {delegationType === DelegationType.Offered
+            ? t('api_delegation.api_overview_text')
+            : t('api_delegation.api_received_overview_text')}
+        </h2>
+      )}
+
+      {delegationType === DelegationType.Offered && (
         <div className={classes.delegateNewButton}>
           <Button
             variant='secondary'
-            onClick={goToStartDelegation}
+            onClick={() =>
+              navigate(`/${ApiDelegationPath.OfferedApiDelegations}/${ApiDelegationPath.ChooseApi}`)
+            }
             fullWidth={isSm}
             size='medium'
           >
@@ -202,7 +199,7 @@ export const OverviewPageContent = ({
         <Paragraph>
           {t('api_delegation.api_panel_content')}{' '}
           <Link
-            href='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
+            to='https://samarbeid.digdir.no/maskinporten/maskinporten/25'
             target='_blank'
             rel='noreferrer'
           >
@@ -210,34 +207,61 @@ export const OverviewPageContent = ({
           </Link>
         </Paragraph>
       </Alert>
+      {deletedItems && deletedItems?.failedDeleteions?.length > 0 && (
+        <Alert
+          role='alert'
+          severity='danger'
+          title={t('api_delegation.revoke_delegation_failed')}
+        >
+          <Heading
+            level={3}
+            size='sm'
+          >
+            {t('api_delegation.revoke_delegation_failed')}
+          </Heading>
+          <ul>
+            {deletedItems.failedDeleteions.map((item) => (
+              <li key={item.apiId}>
+                {item.apiId} {item.orgNumber},
+              </li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       <StatusMessageForScreenReader>{deletedItemsStatusMessage}</StatusMessageForScreenReader>
       <div className={classes.explanatoryContainer}>
-        {overviewOrgs.length > 0 && (
+        {overviewOrgs && overviewOrgs.length > 0 && (
           <>
-            {isSm ? (
-              <h3 className={classes.apiSubheading}>{accessesHeader}</h3>
-            ) : (
-              <h2 className={classes.apiSubheading}>{accessesHeader}</h2>
-            )}
+            <Heading
+              level={3}
+              size={isSm ? 'sm' : 'lg'}
+              className={classes.apiSubheading}
+            >
+              {delegationType === DelegationType.Offered
+                ? t('api_delegation.you_have_delegated_accesses')
+                : t('api_delegation.you_have_received_accesses')}
+            </Heading>
+
             <div className={classes.editButton}>
-              {!isEditable ? (
-                <Button
-                  variant='tertiary'
-                  onClick={handleSetIsEditable}
-                  size='medium'
-                >
-                  <PencilIcon fontSize={getButtonIconSize(true)} />{' '}
-                  {t('api_delegation.edit_accesses')}
-                </Button>
-              ) : (
-                <Button
-                  variant='tertiary'
-                  onClick={handleSetIsEditable}
-                  size='medium'
-                >
-                  <XMarkOctagonIcon fontSize={getButtonIconSize(true)} /> {t('common.cancel')}
-                </Button>
-              )}
+              <Button
+                variant='tertiary'
+                onClick={() => {
+                  softRestoreAll();
+                  setIsEditable(!isEditable);
+                }}
+                size='medium'
+              >
+                {!isEditable ? (
+                  <>
+                    <PencilIcon fontSize={getButtonIconSize(true)} />{' '}
+                    {t('api_delegation.edit_accesses')}
+                  </>
+                ) : (
+                  <>
+                    <XMarkOctagonIcon fontSize={getButtonIconSize(true)} /> {t('common.cancel')}
+                  </>
+                )}
+              </Button>
             </div>
           </>
         )}
@@ -246,8 +270,8 @@ export const OverviewPageContent = ({
       {isEditable && (
         <div className={classes.saveSection}>
           <Button
-            disabled={saveDisabled}
-            onClick={handleSave}
+            disabled={loading || itemsToDelete.length === 0}
+            onClick={confirmRevoke}
             color='success'
             fullWidth={isSm}
           >
