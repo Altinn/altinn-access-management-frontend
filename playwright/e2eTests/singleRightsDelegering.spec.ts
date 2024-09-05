@@ -14,8 +14,8 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     context,
     page,
   }) => {
-    await login.gotoLoginPage('03835898554', page);
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
+    await login.loginWithUser('03835898554');
+    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to ROMANTISK ESKE
@@ -33,7 +33,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
 
     //Login with covereby User
 
-    await login.gotoLoginPage('11868898854', page);
+    await login.loginWithUser('11868898854', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await coverebyRights.checkCoverebyRights();
     // await context.close();
@@ -49,7 +49,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     context,
     page,
   }) => {
-    await login.gotoLoginPage('03835898554', page);
+    await login.loginWithUser('03835898554', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
 
     //To delete rights - setup
@@ -69,7 +69,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
 
     //Login with covereby User
 
-    await login.gotoLoginPage('21908498426', page);
+    await login.loginWithUser('21908498426', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await coverebyRights.checkCoverebyRights();
   });
@@ -85,7 +85,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegateRoles,
     page,
   }) => {
-    await login.gotoLoginPage('03835898554', page);
+    await login.loginWithUser('03835898554', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
 
     //To delete rights - setup
@@ -99,7 +99,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await logoutUser.gotoLogoutPage('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await context.clearCookies();
 
-    await login.gotoLoginPage('07922148605', page);
+    await login.loginWithUser('07922148605', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await deleteRights.revokeRightsSSN('STORARTET KORGSTOL');
     await delegate.delegateToSSN('07885798378', 'KORGSTOL');
@@ -111,7 +111,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await context.clearCookies();
 
     //Login with covereby User
-    await login.gotoLoginPage('07885798378', page);
+    await login.loginWithUser('07885798378', page);
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS', page);
     await coverebyRights.checkCoverebyRights();
   });
