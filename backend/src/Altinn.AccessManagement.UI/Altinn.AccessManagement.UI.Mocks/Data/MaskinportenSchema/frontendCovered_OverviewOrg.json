@@ -1,0 +1,65 @@
+[
+  {
+      "id": "KARLSTAD OG ULOYBUKT",
+      "name":"KARLSTAD OG ULOYBUKT",
+      "orgNumber": "810418672",
+      "apiList": [
+          {
+              "id": "nav_aa_distribution",
+              "apiName": "NAV aa distribution",
+              "owner": "Arbeids og velferdsetaten",
+              "description": "Gir mottaker lov til å bruke api",
+              "scopes": []
+          },
+          {
+              "id": "skd_1",
+              "apiName": "SKD 1",
+              "owner": "Skatteetaten",
+              "description": "Gir mottaker lov til å bruke api",
+              "scopes": []
+          }
+      ]
+  },
+  {
+      "id": "NORDRE FROGN OG MORTENHALS",
+      "name": "NORDRE FROGN OG MORTENHALS",
+      "orgNumber": "810418362",
+      "apiList": [
+          {
+              "id": "nav_aa_distribution",
+              "apiName": "NAV aa distribution",
+              "owner": "Arbeids og velferdsetaten",
+              "description": "Gir mottaker lov til å bruke api",
+              "scopes": []
+          },
+          {
+              "id": "skd_1",
+              "apiName": "SKD 1",
+              "owner": "Skatteetaten",
+              "description": "Gir mottaker lov til å bruke api",
+              "scopes": []
+          }
+      ]
+  },
+  {
+      "id": "LUNDAMO OG FLEINVAR",
+      "name": "LUNDAMO OG FLEINVAR",
+      "orgNumber": "810418532",
+      "apiList": [
+          {
+              "id": "nav_aa_distribution",
+              "apiName": "NAV aa distribution",
+              "owner": "Arbeids og velferdsetaten",
+              "description": "Gir mottaker lov til å bruke api",
+              "scopes": []
+          },
+          {
+              "id": "skd_1",
+              "apiName": "SKD 1",
+              "owner": "Skatteetaten",
+              "description": "Gir mottaker lov til å bruke api",
+              "scopes": []
+          }
+      ]
+  }
+]

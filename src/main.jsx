@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import '@digdir/designsystemet-theme';
+import '@digdir/designsystemet-theme/brand/altinn/tokens.css';
 import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
 import React from 'react';
@@ -10,14 +10,15 @@ import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { use } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import no_nb from './localizations/no_nb.json';
-import no_nn from './localizations/no_nn.json';
-import en from './localizations/en.json';
+
 import { RefreshToken } from '@/resources/Token/RefreshToken';
 import { Router } from '@/routes/Router/Router';
 
 import { getConfig } from '../config';
 
+import no_nb from './localizations/no_nb.json';
+import no_nn from './localizations/no_nn.json';
+import en from './localizations/en.json';
 import store from './rtk/app/store';
 
 /**

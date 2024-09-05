@@ -3,8 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/received")]
-        public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetReceivedAPIDelegations([FromRoute] string party)
+        public async Task<ActionResult<List<OrganizationApiSet>>> GetReceivedAPIDelegations([FromRoute] string party)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/offered")]
-        public async Task<ActionResult<List<MaskinportenSchemaDelegationFE>>> GetOfferedAPIDelegations([FromRoute] string party)
+        public async Task<ActionResult<List<OrganizationApiSet>>> GetOfferedAPIDelegations([FromRoute] string party)
         {
             try
             {
@@ -96,17 +96,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/received/revoke")]
-        public async Task<ActionResult> RevokeReceivedAPIDelegation([FromRoute] string party, [FromBody] RevokeReceivedDelegation delegation)
+        public async Task<ActionResult> RevokeReceivedAPIDelegation([FromRoute] string party, [FromBody] RevokeDelegationDTO delegationDTO)
         {
             try
             {
-                HttpResponseMessage response = await _apiDelegationService.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+                HttpResponseMessage response = await _apiDelegationService.RevokeReceivedMaskinportenScopeDelegation(party, delegationDTO);
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {
                     return NoContent();
                 }
-
+                
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
@@ -125,11 +125,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/offered/revoke")]
-        public async Task<ActionResult> RevokeOfferedAPIDelegation([FromRoute] string party, [FromBody] RevokeOfferedDelegation delegation)
+        public async Task<ActionResult> RevokeOfferedAPIDelegation([FromRoute] string party, [FromBody] RevokeDelegationDTO delegationDTO)
         {
             try
             {
-                HttpResponseMessage response = await _apiDelegationService.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
+                HttpResponseMessage response = await _apiDelegationService.RevokeOfferedMaskinportenScopeDelegation(party, delegationDTO);
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {
@@ -151,6 +151,30 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during revoke of offered maskinportenschema");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+      
+        /// <summary>
+        ///     Endpoint for revoking a batch of maskinporten scope delegations on behalf of the party having received the delegations.
+        /// </summary>
+        /// <param name="party">The party identifier.</param>
+        /// <param name="type">The type of delegation.</param>
+        /// <param name="delegationDTO">The list of delegation DTOs.</param>
+        /// <returns>The action result.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("{party}/{type}/revoke/batch")]
+        public async Task<ActionResult> RevokeAPIDelegationBatch([FromRoute] string party, [FromRoute] DelegationType type, [FromBody] List<RevokeDelegationDTO> delegationDTO)
+        {
+            try
+            {
+                var response = await _apiDelegationService.BatchRevokeMaskinportenScopeDelegation(party, delegationDTO, type);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during batch revoke of maskinportenschemas");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

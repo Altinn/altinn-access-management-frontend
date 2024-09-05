@@ -17,11 +17,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessManagementClient _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
 
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="APIDelegationService" /> class.
         /// </summary>
@@ -36,29 +31,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<MaskinportenSchemaDelegationFE>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
+        public async Task<List<OrganizationApiSet>> GetOfferedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> offeredDelegations = await _maskinportenSchemaClient.GetOfferedMaskinportenSchemaDelegations(party);
-            return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode);
+            return await BuildMaskinportenSchemaDelegationFE(offeredDelegations, languageCode, DelegationType.Offered);
         }
 
         /// <inheritdoc />
-        public async Task<List<MaskinportenSchemaDelegationFE>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
+        public async Task<List<OrganizationApiSet>> GetReceivedMaskinportenSchemaDelegations(string party, string languageCode)
         {
             List<MaskinportenSchemaDelegation> receivedDelegations = await _maskinportenSchemaClient.GetReceivedMaskinportenSchemaDelegations(party);
-            return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode);
+            return await BuildMaskinportenSchemaDelegationFE(receivedDelegations, languageCode, DelegationType.Received);
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
-            return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, delegation);
+            return await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegationDTO));
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
+        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeDelegationDTO delegationDTO)
         {
-            return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, delegation);
+            return await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegationDTO));
         }
 
         /// <inheritdoc />
@@ -90,7 +85,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     try
                     {
                         var response = await _maskinportenSchemaClient.CreateMaskinportenScopeDelegation(party, delegationObject);
-                        string responseContent = await response.Content.ReadAsStringAsync();
 
                         delegationOutputs.Add(new ApiDelegationOutput()
                         {
@@ -99,9 +93,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                             Success = response.StatusCode == System.Net.HttpStatusCode.Created
                         });
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        System.Diagnostics.Debug.WriteLine(e.Message);
                         delegationOutputs.Add(new ApiDelegationOutput()
                         {
                             OrgNumber = org,
@@ -121,42 +114,134 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _maskinportenSchemaClient.MaskinportenSchemaDelegationCheck(partyId, request);
         }
 
-        private async Task<List<MaskinportenSchemaDelegationFE>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode)
+        /// <summary>
+        /// Revoke a batch of Maskinporten scope delegations.
+        /// </summary>
+        /// <param name="party">The party identifier.</param>
+        /// <param name="delegationDTOs">The list of delegation DTOs.</param>
+        /// <param name="type">The type of delegation.</param>
+        /// <returns>A list of tasks representing the HTTP response messages.</returns>
+        public async Task<List<RevokeApiDelegationOutput>> BatchRevokeMaskinportenScopeDelegation(string party, List<RevokeDelegationDTO> delegationDTOs, DelegationType type)
+        {
+            var responses = new List<RevokeApiDelegationOutput>();
+
+            if (type == DelegationType.Offered)
+            {
+                foreach (var delegation in delegationDTOs)
+                {
+                    try
+                    {
+                        var response = await _maskinportenSchemaClient.RevokeOfferedMaskinportenScopeDelegation(party, new RevokeOfferedDelegation(delegation));
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNumber,
+                            ApiId = delegation.ApiId,
+                            Success = response.IsSuccessStatusCode,
+                        });
+                    }
+                    catch
+                    {
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNumber,
+                            ApiId = delegation.ApiId,
+                            Success = false
+                        });
+                    }
+                }
+            }
+            else
+            {
+                foreach (var delegation in delegationDTOs)
+                {
+                    try
+                    {
+                        var res = await _maskinportenSchemaClient.RevokeReceivedMaskinportenScopeDelegation(party, new RevokeReceivedDelegation(delegation));
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNumber,
+                            ApiId = delegation.ApiId,
+                            Success = res.IsSuccessStatusCode,
+                        });
+                    }
+                    catch
+                    {
+                        responses.Add(new RevokeApiDelegationOutput
+                        {
+                            OrgNumber = delegation.OrgNumber,
+                            ApiId = delegation.ApiId,
+                            Success = false
+                        });
+                    }
+                }
+            }
+
+            return responses;
+        }
+
+        /// <summary>
+        /// Builds a list of organization API sets for Maskinporten schema delegations.
+        /// </summary>
+        /// <param name="delegations">List of Maskinporten schema delegations.</param>
+        /// <param name="languageCode">Language code for localization.</param>
+        /// <param name="type">Type of delegation (Offered or Covered).</param>
+        /// <returns>A list of organization API sets.</returns>
+        /// <remarks>
+        /// This function processes a list of Maskinporten schema delegations and constructs a list of organization API sets.
+        /// It first retrieves the resources associated with the delegations. For each delegation, it creates an 
+        /// ApiListItem object with localized resource details. It then determines the organization name and number based 
+        /// on the delegation type. The function groups the API items by organization and returns the list of organization 
+        /// API sets.
+        /// </remarks>
+        private async Task<List<OrganizationApiSet>> BuildMaskinportenSchemaDelegationFE(List<MaskinportenSchemaDelegation> delegations, string languageCode, DelegationType type)
         {
             List<string> resourceIds = delegations.Select(d => d.ResourceId).ToList();
             List<ServiceResource> resources = await _resourceService.GetResources(resourceIds);
 
-            List<MaskinportenSchemaDelegationFE> result = new List<MaskinportenSchemaDelegationFE>();
+            List<OrganizationApiSet> overviewOrgList = new List<OrganizationApiSet>();
+
             foreach (MaskinportenSchemaDelegation delegation in delegations)
             {
-                MaskinportenSchemaDelegationFE delegationFE = new MaskinportenSchemaDelegationFE();
-                delegationFE.LanguageCode = languageCode;
-                delegationFE.OfferedByPartyId = delegation.OfferedByPartyId;
-                delegationFE.OfferedByOrganizationNumber = delegation.OfferedByOrganizationNumber;
-                delegationFE.OfferedByName = delegation.OfferedByName;
-                delegationFE.CoveredByPartyId = delegation.CoveredByPartyId;
-                delegationFE.CoveredByOrganizationNumber = delegation.CoveredByOrganizationNumber;
-                delegationFE.CoveredByName = delegation.CoveredByName;
-                delegationFE.PerformedByUserId = delegation.PerformedByUserId;
-                delegationFE.Created = delegation.Created;
-                delegationFE.ResourceId = delegation.ResourceId;
-                ServiceResource resource = resources.FirstOrDefault(r => r.Identifier == delegation.ResourceId);
-                if (resource != null)
+                var resource = resources.Find(r => r.Identifier == delegation.ResourceId);
+                if (resource == null)
                 {
-                    delegationFE.ResourceTitle = resource.Title.GetValueOrDefault(languageCode);
-                    delegationFE.ResourceType = resource.ResourceType;
-                    delegationFE.ResourceOwnerOrgcode = resource.HasCompetentAuthority?.Orgcode;
-                    delegationFE.ResourceOwnerOrgNumber = resource.HasCompetentAuthority?.Organization;
-                    delegationFE.ResourceOwnerName = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode);
-                    delegationFE.ResourceDescription = resource.Description.GetValueOrDefault(languageCode);
-                    delegationFE.RightDescription = resource.RightDescription.GetValueOrDefault(languageCode);
-                    delegationFE.ResourceReferences = resource.ResourceReferences;
+                    continue;
                 }
 
-                result.Add(delegationFE);
+                var api = new ApiListItem
+                {
+                    Id = delegation.ResourceId,
+                    ApiName = resource.Title.GetValueOrDefault(languageCode),
+                    Owner = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode),
+                    Description = resource.RightDescription.GetValueOrDefault(languageCode),
+                    Scopes = resource.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
+                };
+
+                // Determine the organization name and number based on the delegation type.
+                // If the delegation type is 'Offered', use 'CoveredBy(...)'.
+                // Otherwise, use 'OfferedBy(...)'.
+                string delegationOrg = type == DelegationType.Offered ? delegation.CoveredByName : delegation.OfferedByName;
+                string delegationOrgNumber = type == DelegationType.Offered ? delegation.CoveredByOrganizationNumber : delegation.OfferedByOrganizationNumber;
+
+                var existingOrg = overviewOrgList.Find(org => org.Id == delegationOrg);
+                if (existingOrg != null)
+                {
+                    existingOrg.ApiList.Add(api);
+                }
+                else
+                {
+                    var newOrg = new OrganizationApiSet
+                    {
+                        Id = delegationOrg,
+                        Name = delegationOrg,
+                        OrgNumber = delegationOrgNumber,
+                        ApiList = new List<ApiListItem> { api }
+                    };
+                    overviewOrgList.Add(newOrg);
+                }
             }
 
-            return result;
+            return overviewOrgList;
         }
     }
 }

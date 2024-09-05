@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { MinusCircleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 
-import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgSlice';
+import type { ApiListItem } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import { useMediaQuery } from '@/resources/hooks';
 import { getButtonIconSize } from '@/resources/utils';
 
@@ -19,21 +19,24 @@ export interface DeletableListItemProps {
   item: ApiListItem;
   isEditable: boolean;
   scopes?: string[];
+  checkIfItemOfOrgIsSoftDeleted: (apiId: string) => boolean;
 }
 
 export const DeletableListItem = ({
   softDeleteCallback,
   softRestoreCallback,
+  checkIfItemOfOrgIsSoftDeleted,
   item,
   isEditable,
   scopes,
 }: DeletableListItemProps) => {
   const { t } = useTranslation();
   const isSm = useMediaQuery('(max-width: 768px)');
+  const isSoftDeleted = checkIfItemOfOrgIsSoftDeleted(item.id);
 
   const isEditableActions = (
     <div className={cn(classes.deleteSection)}>
-      {item.isSoftDelete ? (
+      {isSoftDeleted ? (
         <Button
           variant={'tertiary'}
           color='second'
@@ -66,7 +69,7 @@ export const DeletableListItem = ({
         <div
           data-testid='list-item-texts'
           className={cn(classes.itemText, {
-            [classes.itemText__softDelete]: item.isSoftDelete,
+            [classes.itemText__softDelete]: isSoftDeleted,
           })}
         >
           <div className={classes.listItemTexts}>
