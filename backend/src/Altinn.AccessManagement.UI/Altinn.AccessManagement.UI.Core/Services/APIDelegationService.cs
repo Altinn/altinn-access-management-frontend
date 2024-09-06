@@ -178,7 +178,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return responses;
         }
-        
+
         /// <summary>
         /// Builds a list of organization API sets for Maskinporten schema delegations.
         /// </summary>
@@ -211,9 +211,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 var api = new ApiListItem
                 {
                     Id = delegation.ResourceId,
-                    ApiName = resource.Title.GetValueOrDefault(languageCode, "nb"),
-                    Owner = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode, "nb"),
-                    Description = resource.RightDescription.GetValueOrDefault(languageCode, "nb"),
+                    ApiName = resource.Title.GetValueOrDefault(languageCode),
+                    Owner = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode),
+                    Description = resource.RightDescription.GetValueOrDefault(languageCode),
                     Scopes = resource.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
                 };
 
