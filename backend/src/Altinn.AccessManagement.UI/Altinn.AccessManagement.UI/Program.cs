@@ -189,6 +189,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.Configure<CacheConfig>(config.GetSection("CacheConfig"));
     services.Configure<GeneralSettings>(config.GetSection("GeneralSettings"));
+    services.Configure<FeatureFlags>(config.GetSection("FeatureFlags"));
     services.Configure<KeyVaultSettings>(config.GetSection("KeyVaultSettings"));
     services.Configure<ClientSettings>(config.GetSection("ClientSettings"));
     services.AddSingleton(config);

@@ -62,6 +62,9 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     resultsPerPage: searchResultsPerPage,
   });
 
+  const displayPopularResources =
+    !searchString && filters.length === 0 && window.featureFlags.displayPopularSingleRightsServices;
+
   const resources = searchData?.pageList;
   const totalNumberOfResults = searchData?.numEntriesTotal;
   const { data: ROdata } = useGetResourceOwnersQuery();
@@ -139,26 +142,30 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <div className={classes.resultCountAndChips}>
             {totalNumberOfResults !== undefined && (
               <Paragraph>
-                {String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
+                {displayPopularResources
+                  ? t('single_rights.popular_services')
+                  : String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
               </Paragraph>
             )}
             {filterChips()}
           </div>
           <ul className={classes.serviceResources}> {serviceResouces}</ul>
-          {totalNumberOfResults !== undefined && totalNumberOfResults > 0 && (
-            <Pagination
-              className={classes.pagination}
-              currentPage={currentPage}
-              totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-              nextLabel={t('common.next')}
-              previousLabel={t('common.previous')}
-              itemLabel={(num: number) => `Side ${num}`}
-              onChange={setCurrentPage}
-              size='small'
-              compact={isSm}
-              hideLabels={isSm}
-            />
-          )}
+          {totalNumberOfResults !== undefined &&
+            totalNumberOfResults > 0 &&
+            !displayPopularResources && (
+              <Pagination
+                className={classes.pagination}
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
+                nextLabel={t('common.next')}
+                previousLabel={t('common.previous')}
+                itemLabel={(num: number) => `Side ${num}`}
+                onChange={setCurrentPage}
+                size='small'
+                compact={isSm}
+                hideLabels={isSm}
+              />
+            )}
         </>
       );
     }

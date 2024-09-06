@@ -192,7 +192,8 @@
     "faulty_recipient_error_title": "Kan ikkje delegere til mottakar",
     "faulty_recipient_error_message": "Oppgitt mottakar kan ikkje delegerast til. Ver venleg og gå tilbake til profilsida og vel ein annan. Mottakar må vere ein organisasjon, ein verksemdsbrukar, eller ein person registrert med fødselsnummer. Sjølvregistrerte brukarar kan ikkje delegerast til.",
     "no_resources chosen": "Ingen valde tenester",
-    "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde."
+    "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
+    "popular_services": "Populære tenester:"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
