@@ -32,6 +32,7 @@ export class apiDelegation {
   public apiDelegationHeading: Locator;
   public overviewHeadingLocator: Locator;
   public giveAccessToNewApiHeading: Locator;
+  public previousButton: Locator;
 
   constructor(public page: Page) {
     this.apiAccessButton = page.getByText('Tilgang til programmeringsgrensesnitt - API', {
@@ -41,39 +42,44 @@ export class apiDelegation {
       name: no_nb.api_delegation.confirmation_page_content_top_text,
     });
     this.giveAccessButton = page.getByRole('button', { name: 'Gi og fjerne API tilganger' });
-    this.nextButton = page.getByRole('button', { name: 'Neste' });
-    this.searchApiLabel = page.getByLabel('Søk etter API'); //api_delegation: search_for_api
-    this.searchOrgNumberLabel = page.getByLabel('Søk på organisasjonsnummer'); //api_delegation: search_for_buisness
-    this.addButton = page.getByLabel('Legg til'); //common_add
-    this.confirmButton = page.getByRole('button', { name: 'Bekreft' }); //common_confirm
-    this.totalOverviewButton = page.getByRole('button', { name: 'Til totaloversikt' }); //api delegation: receipt_page_main_button
+    this.nextButton = page.getByRole('button', { name: no_nb.common.next });
+    this.previousButton = page.getByRole('button', { name: no_nb.common.previous });
+    this.searchApiLabel = page.getByLabel(no_nb.api_delegation.search_for_api);
+    this.searchOrgNumberLabel = page.getByLabel(no_nb.api_delegation.search_for_buisness);
+    this.addButton = page.getByLabel(no_nb.common.add);
+    this.confirmButton = page.getByRole('button', { name: no_nb.common.confirm });
+    this.totalOverviewButton = page.getByRole('button', {
+      name: no_nb.api_delegation.receipt_page_main_button,
+    });
     this.actionBar = page.getByTestId('action-bar');
-    this.delegateNewApiButton = page.getByRole('button', { name: 'Deleger nytt API' }); //api_delegation: delegate_new_org
-    this.editRightsButton = page.getByRole('button', { name: 'Rediger tilganger' }); //api_delegation: edit_accesses
-    this.deleteButton = page.getByText('Slett', { exact: true }); //common_delete
-    this.saveButton = page.getByRole('button', { name: 'Lagre' }); //api_delegation: save
-    this.cancelButton = page.getByLabel('Avbryt'); //common_cancel
-    this.receivedApiAccessButton = page.getByRole('button', { name: 'Mottatte API tilganger' }); //usikker
-    this.filterByAgencyButton = page.getByRole('button', { name: 'Filtrer på etat' }); //api_delegation: filter_label
-    this.resetSelectionButton = page.getByRole('button', { name: 'Nullstill valg' }); //common_reset_choices
-    this.applyButton = page.getByRole('button', { name: 'Bruk' }); //common_apply
-    this.searchApiInput = page.getByLabel('Søk etter API'); //api_delegation: search_for_api
-    this.searchOrgNumberInput = page.getByLabel('Søk på organisasjonsnummer'); //api_delegation: search_for_buisness
-    this.addOrgButton = page.getByRole('button', { name: 'Legg til' }); //common_add
-    this.confirmAccessHeading = page.getByRole('heading', { name: 'API-tilgangene blir gitt til' }); //api_delegation: confirm_access_heading
+    this.delegateNewApiButton = page.getByRole('button', {
+      name: no_nb.api_delegation.delegate_new_org,
+    });
+    this.editRightsButton = page.getByRole('button', { name: no_nb.api_delegation.edit_accesses });
+    this.deleteButton = page.getByText(no_nb.common.delete, { exact: true });
+    this.saveButton = page.getByRole('button', { name: no_nb.api_delegation.save });
+    this.cancelButton = page.getByLabel(no_nb.common.cancel);
+    this.receivedApiAccessButton = page.getByRole('button', { name: 'Mottatte API tilganger' });
+    this.filterByAgencyButton = page.getByRole('button', {
+      name: no_nb.api_delegation.filter_label,
+    });
+    this.resetSelectionButton = page.getByRole('button', { name: no_nb.common.reset_choices });
+    this.applyButton = page.getByRole('button', { name: no_nb.common.apply });
+    this.searchApiInput = page.getByLabel(no_nb.api_delegation.search_for_api);
+    this.searchOrgNumberInput = page.getByLabel(no_nb.api_delegation.search_for_buisness);
+    this.addOrgButton = page.getByRole('button', { name: no_nb.common.add });
+    this.confirmAccessHeading = page.getByRole('heading', { name: 'API-tilgangene blir gitt til' });
     this.apiDelegationHeading = page.getByRole('heading', {
-      name: 'Disse api-delegeringene ble gitt',
+      name: no_nb.api_delegation.succesful_delegations,
     });
     this.overviewHeadingLocator = this.page.getByRole('heading', {
       name: 'Her finner du oversikt over',
     });
 
     this.giveAccessToNewApiHeading = page.getByRole('heading', {
-      // give_access_to_new_api
-      name: 'Gi tilgang til nytt API',
+      name: no_nb.api_delegation.give_access_to_new_api,
     });
 
-    // delegate_page_content_text
     this.selectApiHeader = page.getByRole('heading', {
       name: no_nb.api_delegation.new_api_content_text2,
     });
@@ -94,14 +100,31 @@ export class apiDelegation {
         exact: true,
       })
       .click();
+
+    await this.page.pause();
     await this.nextButton.last().click();
   }
 
   async goToAccessToApiPageFromFrontPage() {
-    await this.apiAccessButton.waitFor({ state: 'visible' });
-    await this.apiAccessButton.click();
-    await this.giveAccessButton.waitFor({ state: 'visible' });
-    await this.giveAccessButton.click();
+    for (let i = 0; i < 3; i++) {
+      await this.page.waitForTimeout(1000);
+      try {
+        await this.apiAccessButton.waitFor({ state: 'visible' });
+        await this.apiAccessButton.click();
+        await this.page.waitForTimeout(1000); // Wait for the animation to finish
+        await this.giveAccessButton.waitFor({ state: 'visible' });
+        await this.giveAccessButton.click();
+
+        break; // Exit loop if successful
+      } catch (error) {
+        if (i === 2) {
+          console.error('Failed to navigate to the API access page after 3 attempts:', error);
+          throw error;
+        }
+        console.log(`Retrying... (${i + 1}/3)`);
+        await this.page.waitForTimeout(1000); // Wait for 1 second before retrying
+      }
+    }
   }
 
   async verifyDelegatedApiLandingPage() {
@@ -115,7 +138,7 @@ export class apiDelegation {
 
     await expect(
       this.page.getByRole('heading', {
-        name: 'Her finner du oversikt over de API-tilganger din virksomhet har delegert til andre virksomheter.',
+        name: no_nb.api_delegation.api_overview_text,
       }),
     ).toBeVisible();
 
@@ -140,6 +163,10 @@ export class apiDelegation {
     await this.searchOrgNumberLabel.click();
     await this.searchOrgNumberLabel.fill(orgNumber);
     await this.addButton.click();
+
+    //Verify previous and next buttons work
+    await this.previousButton.click();
+    await this.nextButton.click();
     await this.nextButton.click();
   }
 
@@ -147,12 +174,7 @@ export class apiDelegation {
     await this.goToAccessToApiPageFromFrontPage();
     await this.page.waitForTimeout(1000);
 
-    await this.page.pause();
-
     if ((await this.editRightsButton.count()) > 0) {
-      console.log(
-        `Found ${await this.editRightsButton.count()} elements to delete, attempting to clean up`,
-      );
       await this.editRightsButton.click();
       await this.page.waitForTimeout(1000);
 
@@ -167,7 +189,6 @@ export class apiDelegation {
       await this.saveButton.click();
       await this.cancelButton.click();
     } else {
-      console.log('Found no elements to delete, navigating to profile');
       await this.page.goto(process.env.BASE_URL + '/ui/profile');
     }
   }

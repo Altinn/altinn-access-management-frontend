@@ -17,8 +17,8 @@ const standardOrgUser = {
   reportee: 'INTERESSANT KOMPATIBEL TIGER AS',
 };
 
-test.describe('API-Delegations to organization user', () => {
-  test('Delegate api to an organization and verify it in its delegations overview page DEBUG', async ({
+test.describe('API-Delegations to organization user DEBUG', () => {
+  test('Delegate api to an organization and verify it in its delegations overview page', async ({
     login,
     apiDelegations,
   }) => {
@@ -78,7 +78,6 @@ test.describe('API-Delegations to organization user', () => {
     //Delegate API to same Org to which API was delegated before
     await page.goto(process.env.BASE_URL + '/ui/profile');
     await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
-
     await apiDelegations.verifyConfirmationPage(standardApiDetails, standardOrgUser);
   });
 
@@ -133,6 +132,7 @@ test.describe('API-Delegations to organization user', () => {
 test('Verify adding multiple organizations and APIs and deleting them', async ({
   login,
   apiDelegations,
+  page,
 }) => {
   //Login and cleanup state before running test
   await login.loginWithUser(standardDaglUser.id);
@@ -144,7 +144,8 @@ test('Verify adding multiple organizations and APIs and deleting them', async ({
 
   await apiDelegations.delegateNewApiButton.click();
   await apiDelegations.filterByAgencyButton.click();
-  await apiDelegations.testDepartmentLabel.click();
+
+  await page.getByLabel(standardApiDetails.department).click();
   await apiDelegations.applyButton.click();
 
   const apiNames = [
@@ -196,7 +197,6 @@ test('Verify reportee with Programmeringsgrensesnitt (API) role does have access
   const user = '14824497789';
   const reporteeWithAPIRole = 'AKTVERDIG RETORISK APE';
   await login.loginWithUser(user);
-  await page.pause();
   await login.chooseReportee(reporteeWithAPIRole);
 
   await page.goto((process.env.BASE_URL as string) + '/ui/profile');
