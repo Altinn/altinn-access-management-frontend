@@ -17,7 +17,7 @@ const standardOrgUser = {
   reportee: 'INTERESSANT KOMPATIBEL TIGER AS',
 };
 
-test.describe('API-Delegations to organization user DEBUG', () => {
+test.describe('API-Delegations to organization user', () => {
   test('Delegate api to an organization and verify it in its delegations overview page', async ({
     login,
     apiDelegations,
