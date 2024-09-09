@@ -205,7 +205,9 @@
     "user_no_search_result": "No users found"
   },
   "user_rights_page": {
-    "page_title": "User access - Altinn"
+    "page_title": "User access - Altinn",
+    "single_rights_title": "Single rights",
+    "resource_type_text": "Single right"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",

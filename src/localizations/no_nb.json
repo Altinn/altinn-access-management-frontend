@@ -204,7 +204,9 @@
     "user_no_search_result": "Ingen brukere funnet"
   },
   "user_rights_page": {
-    "page_title": "Brukertilganger - Altinn"
+    "page_title": "Brukertilganger - Altinn",
+    "single_rights_title": "Tjenester",
+    "resource_type_text": "Enkelttjeneste"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

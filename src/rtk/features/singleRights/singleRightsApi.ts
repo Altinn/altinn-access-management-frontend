@@ -58,6 +58,12 @@ export const singleRightsApi = createApi({
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
       },
     }),
+    getSingleRightsForRightholder: builder.query<
+      ServiceResource[],
+      { party: string; userId: string }
+    >({
+      query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
+    }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
         return {
@@ -70,6 +76,10 @@ export const singleRightsApi = createApi({
   }),
 });
 
-export const { useGetPaginatedSearchQuery, useClearAccessCacheMutation } = singleRightsApi;
+export const {
+  useGetSingleRightsForRightholderQuery,
+  useGetPaginatedSearchQuery,
+  useClearAccessCacheMutation,
+} = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

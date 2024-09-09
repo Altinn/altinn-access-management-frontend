@@ -263,5 +263,23 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
             return response;
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
+        {
+            try
+            {
+                string endpointUrl = $"internal/{party}/rights/singleright/{userId}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // GetSingleRightsForRightholder // Exception");
+                throw;
+            }
+        }
     }
 }

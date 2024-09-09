@@ -248,6 +248,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
+        {
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations");
+
+            var data = await GetMockedHttpResponse(dataPath, "List");
+            return data;
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();

@@ -134,5 +134,36 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
+        
+        /// <summary>
+        ///     Endpoint for getting single rights for a right holder
+        /// </summary>
+        /// <param name="party">The party identifier</param>
+        /// <param name="userId">The user identifier</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("{party}/rightholder/{userId}")]
+        public async Task<IActionResult> GetSingleRightsForRightholder([FromRoute] string party, [FromRoute] string userId)
+        {
+            try
+            {
+                var rights = await _singleRightService.GetSingleRightsForRightholder(party, userId);
+
+                if (rights == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(rights);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: " + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
     }
 }
