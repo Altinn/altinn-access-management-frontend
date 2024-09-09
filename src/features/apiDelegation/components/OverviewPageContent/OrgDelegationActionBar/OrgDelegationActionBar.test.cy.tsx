@@ -69,6 +69,29 @@ const deletedOverviewOrgs: OverviewOrg = {
 
 describe('OrgDelegationActionBar', () => {
   describe('AccordionHeader', () => {
+    it("should render the ActionBar with the organization's correct information", () => {
+      cy.mount(
+        <OrgDelegationActionBar
+          softRestoreAllCallback={() => null}
+          softDeleteAllCallback={() => null}
+          organization={overviewOrgs}
+          isEditable={false}
+          delegateToOrgCallback={() => null}
+          setScreenreaderMsg={() => null}
+          softRestoreCallback={() => null}
+          softDeleteCallback={() => null}
+          checkIfItemIsSoftDeleted={() => false}
+          checkIfAllItmesAreSoftDeleted={() => false}
+        />,
+      );
+      cy.contains(overviewOrgs.name);
+      cy.contains('common.org_nr' + ' ' + overviewOrgs.orgNumber);
+      cy.contains(overviewOrgs.name).click(); // open the bar to check the content information
+      cy.contains(overviewOrgs.apiList[0].apiName);
+      cy.contains(overviewOrgs.apiList[0].description);
+      cy.contains(overviewOrgs.apiList[0].owner);
+      cy.contains(overviewOrgs.apiList[0].scopes[0]);
+    });
     it('should show delegateNewApi-button on render when delegateToOrgCallback is set', () => {
       cy.mount(
         <OrgDelegationActionBar
