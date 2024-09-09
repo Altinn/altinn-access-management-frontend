@@ -139,7 +139,7 @@ export const OrgDelegationActionBar = ({
             [classes.actionBarSubtitle__softDelete]: isAllSoftDeleted,
           })}
         >
-          {t('common.org_nr') + ' ' + organization.name}
+          {t('common.org_nr') + ' ' + organization.orgNumber}
         </div>
       }
       additionalText={
