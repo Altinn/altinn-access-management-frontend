@@ -47,12 +47,12 @@
 }
 
 .singleRightItem > .action {
-  font-size: 2rem;
+  font-size: 1.5rem;
   grid-area: action;
   justify-content: center;
 }
 
 .singleRightItem > .icon {
-  font-size: 1.9rem;
+  font-size: 2.1rem;
   grid-area: icon;
 }
