@@ -251,6 +251,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
         {
+
+            ThrowExceptionIfTriggerParty(party);
+
             string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations");
 
             var data = await GetMockedHttpResponse(dataPath, "List");

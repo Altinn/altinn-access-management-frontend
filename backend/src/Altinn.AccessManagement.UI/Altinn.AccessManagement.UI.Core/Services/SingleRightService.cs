@@ -45,20 +45,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string party, string userId)
+        public Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string party, string userId)
         {
-            var result = await _accessManagementClient.GetSingleRightsForRightholder(party, userId);
-
-            if (result.IsSuccessStatusCode)
-            {
-                var content = await result.Content.ReadAsStringAsync();
-                List<ServiceResourceFE> rights = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
-                return rights;
-            }
-            else
-            {
-                throw new Exception("Failed to get single rights for rightholder");
-            }
+           throw new NotImplementedException();
         }
     }
 }
