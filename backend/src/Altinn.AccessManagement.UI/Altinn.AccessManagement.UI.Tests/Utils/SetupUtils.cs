@@ -32,8 +32,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+            };
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient();
+            var client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+
+            return client;
         }
 
         /// <summary>
@@ -51,8 +59,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true,
+            };
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient();
+            var client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+
+            return client;
         }
 
         /// <summary>
@@ -93,6 +109,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Adds an the altinnPersistentContext language cookie to the request (with norwegian bokmål as language)
+        /// </summary>
+        /// <param name="requestMessage">the request message</param>
+        public static void AddLanguageCookie(HttpRequestMessage requestMessage)
+        {
+            requestMessage.Headers.Add("Cookie", "altinnPersistentContext=UL=1044");
+
+        }
+
+        /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for</param>
@@ -116,7 +142,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 AllowAutoRedirect = allowRedirect,
             };
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient(opts);
+            var client = factory.CreateClient(opts);
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+
+            return client;
         }
     }
 }
