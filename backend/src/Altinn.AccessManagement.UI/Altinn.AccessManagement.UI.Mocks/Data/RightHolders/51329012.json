@@ -33,6 +33,20 @@
     "subunits": []
   },
   {
+    "partyUuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "name": "Intelligent Albatross",
+    "organizationNumber": null,
+    "personId": "19895199357",
+    "partyId": 50707389,
+    "type": "Person",
+    "unitType": null,
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  },
+  {
     "partyUuid": "bab5d1f0-0599-589f-3852-9959156108eb",
     "name": "Kevin O'Hara",
     "organizationNumber": null,

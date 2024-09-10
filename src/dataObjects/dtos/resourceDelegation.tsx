@@ -55,3 +55,13 @@ export type ApiDelegationResult = {
   apiName: string;
   success: boolean;
 };
+
+export type ResourceReference = {
+  resource: IdValuePair[];
+  action?: string;
+};
+
+export enum RightStatus {
+  Delegable = 'Delegable',
+  NotDelegable = 'NotDelegable',
+}

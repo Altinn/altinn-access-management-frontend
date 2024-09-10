@@ -1,6 +1,7 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 import type { ReactNode } from 'react';
 import React from 'react';
+
 import classes from './List.module.css';
 
 interface ListProps extends React.HTMLAttributes<HTMLElement> {
@@ -12,17 +13,27 @@ interface ListProps extends React.HTMLAttributes<HTMLElement> {
   spacing?: boolean;
   /** Whether the list should be transparent or have a background color */
   background?: boolean;
+  /** className for styling the list */
+  className?: string;
 }
 
-export const List = ({ children, heading, spacing, background = true, ...props }: ListProps) => {
+export const List = ({
+  children,
+  heading,
+  spacing,
+  className,
+  background = true,
+  ...props
+}: ListProps) => {
   return (
     <>
       {heading}
       <ul
-        className={classNames(
+        className={cn(
           classes.list,
           spacing ? classes.spacious : classes.compact,
           background && classes.background,
+          className,
         )}
         {...props}
       >

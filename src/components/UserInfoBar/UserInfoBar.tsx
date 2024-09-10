@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Buildings3FillIcon } from '@navikt/aksel-icons';
 
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
-import classes from './UserInfoBar.module.css';
 import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
+
+import classes from './UserInfoBar.module.css';
 
 export const UserInfoBar = () => {
   const { data: userData } = useGetUserInfoQuery();

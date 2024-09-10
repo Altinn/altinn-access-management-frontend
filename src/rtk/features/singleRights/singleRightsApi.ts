@@ -3,6 +3,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
+import type {
+  DelegationAccessResult,
+  ResourceReference,
+} from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
   page: number;
@@ -58,6 +62,16 @@ export const singleRightsApi = createApi({
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
       },
     }),
+    delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
+      query: (resourceRef) => ({
+        url: `singleright/checkdelegationaccesses/${getCookie('AltinnPartyId')}`,
+        method: 'POST',
+        body: JSON.stringify(resourceRef),
+      }),
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
         return {
@@ -70,6 +84,10 @@ export const singleRightsApi = createApi({
   }),
 });
 
-export const { useGetPaginatedSearchQuery, useClearAccessCacheMutation } = singleRightsApi;
+export const {
+  useGetPaginatedSearchQuery,
+  useClearAccessCacheMutation,
+  useDelegationCheckMutation,
+} = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;
