@@ -101,13 +101,11 @@ export class apiDelegation {
       })
       .click();
 
-    await this.page.pause();
     await this.nextButton.last().click();
   }
 
   async goToAccessToApiPageFromFrontPage() {
     for (let i = 0; i < 3; i++) {
-      await this.page.waitForTimeout(1000);
       try {
         await this.apiAccessButton.waitFor({ state: 'visible' });
         await this.apiAccessButton.click();
@@ -151,6 +149,30 @@ export class apiDelegation {
     await expect(this.giveAccessToNewApiHeading).toBeVisible();
     await this.selectApiToDelegate(apiName);
     await this.selectUsersThatShouldGetAccess(orgNumber);
+  }
+
+  async attemptToDelegateNonDelegableApi(apiName: string) {
+    await this.verifyDelegatedApiLandingPage();
+
+    await this.delegateNewApiButton.click();
+    await expect(this.giveAccessToNewApiHeading).toBeVisible();
+    await this.verifyErrorOnDelegate(apiName);
+  }
+
+  async verifyErrorOnDelegate(apiName: string) {
+    await expect(this.selectApiHeader).toBeVisible();
+
+    // Wait for the search label to be visible and clickable
+    await this.searchApiLabel.waitFor({ state: 'visible' });
+    await this.searchApiLabel.click();
+    await this.searchApiLabel.fill(apiName);
+
+    await this.page.waitForLoadState('networkidle');
+
+    const addButton = this.page.getByRole('button', { name: `Legg til ${apiName}` });
+    await addButton.waitFor({ state: 'visible' });
+    await addButton.scrollIntoViewIfNeeded();
+    await addButton.click({ timeout: 10000 });
   }
 
   async selectUsersThatShouldGetAccess(orgNumber: string) {
@@ -207,10 +229,9 @@ export class apiDelegation {
     await expect(this.overviewHeadingLocator).toBeVisible();
     await this.actionBar.first().click();
 
-    //TODO: THIS IS A BUG NOW, SKIP UNTIL FIXED
-    // await expect(this.actionBar.first()).toContainText(
-    //   `${orgUser.reportee}Org.nr. ${orgUser.orgNumber}`,
-    // );
+    await expect(this.actionBar.first()).toContainText(
+      `${orgUser.reportee}Org.nr. ${orgUser.orgNumber}`,
+    );
   }
 
   async verifyConfirmationPage(
@@ -297,7 +318,6 @@ export class apiDelegation {
       const orgNameElements = this.page.locator(`text=${orgName}`);
       await expect(orgNameElements.first()).toBeVisible();
     }
-
     await this.totalOverviewButton.click();
   }
 }

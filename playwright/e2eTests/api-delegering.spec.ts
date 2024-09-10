@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 
 import { test } from './../fixture/pomFixture';
 
-const standardDaglUser = {
+const orgUser = {
   id: '14824497789',
   reportee: 'AKTVERDIG RETORISK APE',
 };
@@ -12,7 +12,7 @@ const standardApiDetails = {
   department: 'Testdepartement',
 };
 
-const standardOrgUser = {
+const orgUserToDelegateTo = {
   orgNumber: '310661414',
   reportee: 'INTERESSANT KOMPATIBEL TIGER AS',
 };
@@ -22,12 +22,12 @@ test.describe('API-Delegations to organization user', () => {
     login,
     apiDelegations,
   }) => {
-    await login.loginWithUser(standardDaglUser.id);
-    await login.chooseReportee(standardDaglUser.reportee);
+    await login.loginWithUser(orgUser.id);
+    await login.chooseReportee(orgUser.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
-    await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
-    await apiDelegations.verifyConfirmationPage(standardApiDetails, standardOrgUser);
+    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
+    await apiDelegations.verifyConfirmationPage(standardApiDetails, orgUserToDelegateTo);
   });
 
   test('Delegate api to an organization and supplierOrg verifies it in its Delegations overview page and delete APIs it received', async ({
@@ -36,20 +36,20 @@ test.describe('API-Delegations to organization user', () => {
     apiDelegations,
     context,
   }) => {
-    await login.loginWithUser(standardDaglUser.id);
-    await login.chooseReportee(standardDaglUser.reportee);
+    await login.loginWithUser(orgUser.id);
+    await login.chooseReportee(orgUser.reportee);
 
     //delete delegated API
     await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
-    await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
+    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
 
     await apiDelegations.verifyConfirmationPage(
       { name: standardApiDetails.name, department: standardApiDetails.department },
-      { orgNumber: standardOrgUser.orgNumber, reportee: standardOrgUser.reportee },
+      { orgNumber: orgUserToDelegateTo.orgNumber, reportee: orgUserToDelegateTo.reportee },
     );
-    await logoutUser.gotoLogoutPage(standardDaglUser.reportee);
+    await logoutUser.gotoLogoutPage(orgUser.reportee);
     await context.clearCookies();
 
     //login as DAGL of supplierOrg who recieved API delegation
@@ -57,7 +57,7 @@ test.describe('API-Delegations to organization user', () => {
     const supplierOrg = 'INTERESSANT KOMPATIBEL TIGER AS';
     await login.loginWithUser(userDagl);
     await login.chooseReportee(supplierOrg);
-    await apiDelegations.verifyAPIOverviewPage(standardDaglUser.reportee, standardApiDetails.name);
+    await apiDelegations.verifyAPIOverviewPage(orgUser.reportee, standardApiDetails.name);
   });
 
   test('Delegate api to organization to which api was delegated before', async ({
@@ -65,37 +65,37 @@ test.describe('API-Delegations to organization user', () => {
     apiDelegations,
     page,
   }) => {
-    await login.loginWithUser(standardDaglUser.id);
-    await login.chooseReportee(standardDaglUser.reportee);
+    await login.loginWithUser(orgUser.id);
+    await login.chooseReportee(orgUser.reportee);
 
     //delete delegated API
     await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
-    await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
-    await apiDelegations.verifyConfirmationPage(standardApiDetails, standardOrgUser);
+    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
+    await apiDelegations.verifyConfirmationPage(standardApiDetails, orgUserToDelegateTo);
 
     //Delegate API to same Org to which API was delegated before
     await page.goto(process.env.BASE_URL + '/ui/profile');
-    await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
-    await apiDelegations.verifyConfirmationPage(standardApiDetails, standardOrgUser);
+    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
+    await apiDelegations.verifyConfirmationPage(standardApiDetails, orgUserToDelegateTo);
   });
 
   test('Verify filtering of API providers in API delagation and verify Forrige/ Neste buttons', async ({
     login,
     apiDelegations,
   }) => {
-    await login.loginWithUser(standardDaglUser.id);
-    await login.chooseReportee(standardDaglUser.reportee);
+    await login.loginWithUser(orgUser.id);
+    await login.chooseReportee(orgUser.reportee);
 
     //delete delegated API
     await apiDelegations.deleteDelegatedAPIs();
 
     //API-delegations
-    await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
+    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
     await apiDelegations.verifyConfirmationPage(
       { name: standardApiDetails.name, department: standardApiDetails.department },
-      { orgNumber: standardOrgUser.orgNumber, reportee: standardOrgUser.reportee },
+      { orgNumber: orgUserToDelegateTo.orgNumber, reportee: orgUserToDelegateTo.reportee },
     );
   });
 
@@ -105,18 +105,18 @@ test.describe('API-Delegations to organization user', () => {
     page,
   }) => {
     //Login and cleanup state before running test
-    await login.loginWithUser(standardDaglUser.id);
-    await login.chooseReportee(standardDaglUser.reportee);
+    await login.loginWithUser(orgUser.id);
+    await login.chooseReportee(orgUser.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     //Replace this pls?
-    await apiDelegations.delegateAPI(standardApiDetails.name, standardOrgUser.orgNumber);
+    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
 
     await expect(apiDelegations.giveAccessToNewApiHeading).toBeVisible();
 
     await expect(page.getByText(standardApiDetails.name)).toBeVisible();
     await expect(page.getByText(standardApiDetails.department)).toBeVisible();
-    await expect(page.getByText(`Org.nr. ${standardOrgUser.orgNumber}`)).toBeVisible();
+    await expect(page.getByText(`Org.nr. ${orgUserToDelegateTo.orgNumber}`)).toBeVisible();
 
     await page.getByRole('button', { name: 'Bekreft' }).click();
 
@@ -124,19 +124,19 @@ test.describe('API-Delegations to organization user', () => {
       page.getByRole('heading', { name: 'Disse api-delegeringene ble gitt' }),
     ).toBeVisible();
 
-    await expect(page.getByText(standardOrgUser.reportee)).toBeVisible();
+    await expect(page.getByText(orgUserToDelegateTo.reportee)).toBeVisible();
     await expect(page.getByText(standardApiDetails.name)).toBeVisible();
   });
 });
 
-test('Verify adding multiple organizations and APIs and deleting them', async ({
+test('Verify adding multiple organizations and APIs and deleting them VEG', async ({
   login,
   apiDelegations,
   page,
 }) => {
   //Login and cleanup state before running test
-  await login.loginWithUser(standardDaglUser.id);
-  await login.chooseReportee(standardDaglUser.reportee);
+  await login.loginWithUser(orgUser.id);
+  await login.chooseReportee(orgUser.reportee);
 
   await apiDelegations.deleteDelegatedAPIs();
 
@@ -173,9 +173,8 @@ test('Verify that Tilgangsstyrer does NOT have access to API delegering panel', 
   login,
   apiDelegations,
 }) => {
-  const testUser = '14824497789';
   const reporteeWithoutAccess = 'BLÅVEIS SKRAVLETE';
-  await login.loginWithUser(testUser);
+  await login.loginWithUser(orgUser.id);
   await login.chooseReportee(reporteeWithoutAccess);
 
   await page.goto((process.env.BASE_URL as string) + '/ui/profile');
@@ -210,19 +209,27 @@ test('Verify reportee with Programmeringsgrensesnitt (API) role does have access
   await expect(apiDelegations.getApiAccessButton).toBeVisible();
 });
 
-//Create a test that verifies that user gets an error when trying to delegate an API without the correct rights
-test('Verify reportee without API role does not have access to delegate an API', async ({
+test('User is not able to delegate an API if they do not have the rights to the API it attempts to delegate', async ({
   page,
   login,
+  apiDelegations,
 }) => {
-  const user = '14824497789';
-  const reporteeWithoutAccess = 'AKTVERDIG RETORISK APE';
-  await login.loginWithUser(user);
-  await login.chooseReportee(reporteeWithoutAccess);
+  await login.loginWithUser(orgUser.id);
+  await login.chooseReportee(orgUser.reportee);
 
   await page.goto((process.env.BASE_URL as string) + '/ui/profile');
   //Make sure the user is on the correct page
+  await expect(page.getByRole('heading', { name: `Profil for ${orgUser.reportee}` })).toBeVisible();
+
+  //Cleanup
+  await apiDelegations.deleteDelegatedAPIs();
+
+  //Attempt to delegate NUF API
+  await apiDelegations.attemptToDelegateNonDelegableApi('Maskinporten Schema - AM - K6 - NUF');
+
   await expect(
-    page.getByRole('heading', { name: `Profil for ${reporteeWithoutAccess}` }),
+    page.getByText(
+      `Du har ikke de nødvendige rettighetene til å gjennomføre denne delegeringen. Daglig leder eller hovedadministrator kan hjelpe deg med dette`,
+    ),
   ).toBeVisible();
 });
