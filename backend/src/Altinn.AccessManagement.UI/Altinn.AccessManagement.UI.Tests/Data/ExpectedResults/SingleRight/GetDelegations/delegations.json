@@ -1,0 +1,470 @@
+[
+  {
+    "title": "Det magiske klesskapet - lenketjeneste",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-502",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Det magiske klesskapet",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til Narnia.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-502"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "NRNA",
+      "organization": "777777777",
+      "name": "NARNIA"
+    }
+  },
+  {
+    "title": "Snarveien - lenketjeneste",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-503",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Snarveien som lenketjeneste",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til snarveier.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-503"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "PAA",
+      "organization": "130000000",
+      "name": "PÅFUNNSETATEN"
+    }
+  },
+  {
+    "title": "A3 app",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "app_ttd_a3-app",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "En Altinn 3 app",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til en A3 app.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "a3-app"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "123456789",
+      "name": "Testdepartementet"
+    }
+  },
+  {
+    "title": "A2 skjema",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "se_3225_1596",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Et Altinn 2 skjema",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til et A2 skjema.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "3225"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "123456789",
+      "name": "Testdepartementet"
+    }
+  },
+  {
+    "title": "A3 app 2",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "app_ttd_a3-app2",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "En Altinn 3 app",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til en A3 app.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "a3-app2"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "123456789",
+      "name": "Testdepartementet"
+    }
+  },
+  {
+    "title": "A2 skjema 2",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "se_322a_159b",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Et Altinn 2 skjema",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til et A2 skjema.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "322a"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "123456789",
+      "name": "Testdepartementet"
+    }
+  },
+  {
+    "title": "Brannbilen i Brønnøysund",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-508",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Brannbilen - det er bare én ja",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til brannbilen.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-508"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "FD",
+      "organization": "110110110",
+      "name": "Brannvesenet"
+    }
+  },
+  {
+    "title": "Kaffemaskinen i 4. etasje",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-509",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til kaffemaskinen.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-509"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "OP",
+      "organization": "904111111",
+      "name": "ØkernPortal"
+    }
+  },
+  {
+    "title": "DigDir WiFi",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-510",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "DIGDIR",
+      "organization": "991825827",
+      "name": "Digitaliseringsdirektoratet"
+    }
+  },
+  {
+    "title": "DigDir Sommerfest",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-511",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-511"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "DIGDIR",
+      "organization": "991825827",
+      "name": "Digitaliseringsdirektoratet"
+    }
+  },
+  {
+    "title": "Lønningsoversikt",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-512",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-512"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "DIGDIR",
+      "organization": "991825827",
+      "name": "Digitaliseringsdirektoratet"
+    }
+  },
+  {
+    "title": "Inngangsdøra på kontoret",
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": null,
+    "identifier": "appid-513",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Her er en beskrivelse.",
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-513"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "DIGDIR",
+      "organization": "991825827",
+      "name": "Digitaliseringsdirektoratet"
+    }
+  }
+]

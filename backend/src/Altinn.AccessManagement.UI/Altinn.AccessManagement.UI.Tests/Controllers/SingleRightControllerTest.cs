@@ -6,6 +6,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -19,6 +20,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     [Collection("SingleRightControllerTest")]
     public class SingleRightControllerTest : IClassFixture<CustomWebApplicationFactory<SingleRightController>>
     {
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<SingleRightController> _factory;
         private readonly string mockFolder;
@@ -317,20 +323,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
 
             // Expected response data
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "List.json");
-            List<ServiceResource> expectedResponse = Util.GetMockData<List<ServiceResource>>(path);
-
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
+            string content = File.ReadAllText(Path.Combine(path));
+            List<ServiceResourceFE> expectedResponse = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
-            List<ServiceResource> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResource>>();
+            List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
 
 
             // Assert
             Assert.Equal(expectedResponse.Count, actualResponse.Count);
             foreach (var right in expectedResponse)
             {
-                Assert.Contains(actualResponse, r => r.Identifier  == right.Identifier);
+                var actual = actualResponse.FirstOrDefault(r => r.Identifier == right.Identifier);
+                Assert.NotNull(actual);
+                Assert.Equal(right.Title, actual.Title);
+                Assert.Equal(right.Description, actual.Description);
             }
         }
 
@@ -483,8 +492,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             BaseAttribute recipient = new BaseAttribute
             {
-                    Type = "urn:altinn:person:uuid",
-                    Value = userUUID,
+                Type = "urn:altinn:person:uuid",
+                Value = userUUID,
             };
 
             string jsonDto = JsonSerializer.Serialize(recipient);

@@ -1,0 +1,65 @@
+{
+  "title": {
+    "en": "A3 app",
+    "nb": "A3 app",
+    "nn": "A3 app"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "app_ttd_a3-app",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "An Altinn 3 app",
+    "nb": "En Altinn 3 app",
+    "nn": "En Altinn 3 app"
+  },
+  "resourceType": "AltinnApp",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Gives access an A3 app.",
+    "nb": "Gir tilgang til en A3 app.",
+    "nn": "Gir tilgang til en A3 app."
+  },
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn3",
+      "reference": "ttd/a3-app",
+      "referenceType": "ApplicationId"
+    }
+  ],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:app",
+      "value": "a3-app"
+    },
+    {
+      "id": "urn:altinn:org",
+      "value": "ttd"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "TTD",
+    "organization": "123456789",
+    "name": {
+      "en": "Testdepartementet",
+      "nb": "Testdepartementet",
+      "nn": "Testdepartementet"
+    }
+  }
+}

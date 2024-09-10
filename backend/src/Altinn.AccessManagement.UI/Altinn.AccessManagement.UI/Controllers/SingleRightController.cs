@@ -1,7 +1,10 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -21,13 +24,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<SingleRightController> _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly ISingleRightService _singleRightService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SingleRightController" /> class
         /// </summary>
-        public SingleRightController(ISingleRightService singleRightService, ILogger<SingleRightController> logger)
+        public SingleRightController(
+            ISingleRightService singleRightService,
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<SingleRightController> logger)
         {
             _singleRightService = singleRightService;
+            _httpContextAccessor = httpContextAccessor;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _logger = logger;
         }
@@ -134,7 +142,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
-        
+
         /// <summary>
         ///     Endpoint for getting single rights for a right holder
         /// </summary>
@@ -148,9 +156,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("{party}/rightholder/{userId}")]
         public async Task<IActionResult> GetSingleRightsForRightholder([FromRoute] string party, [FromRoute] string userId)
         {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                var rights = await _singleRightService.GetSingleRightsForRightholder(party, userId);
+                List<ServiceResourceFE> rights = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
 
                 if (rights == null)
                 {

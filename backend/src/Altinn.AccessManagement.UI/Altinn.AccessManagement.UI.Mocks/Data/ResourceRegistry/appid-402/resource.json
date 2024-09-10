@@ -1,0 +1,79 @@
+{
+  "title": {
+    "en": "The Magic Closet",
+    "nb": "Det magiske klesskapet",
+    "nn": "Det magiske klesskapet"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "appid-402",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "description": {
+    "en": "The Magic Closet",
+    "nb": "Det magiske klesskapet",
+    "nn": "Det magiske klesskapet"
+  },
+  "resourceType": "MaskinportenSchema",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Gives access to Narnia.",
+    "nb": "Gir tilgang til Narnia.",
+    "nn": "Gir tilgang til Narnia."
+  },
+  "resourceReferences": [
+    {
+      "reference": "8f08210a-d792-48f5-9e27-0f029e41111e",
+      "referenceType": "DelegationSchemeId",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "nav:nrna/v1/kaape/otp",
+      "referenceType": "MaskinportenScope",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "nav:nrna/huset/dettommerommet",
+      "referenceType": "MaskinportenScope",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "AppId:402",
+      "referenceType": "ServiceCode",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "1",
+      "referenceType": "ServiceEditionCode",
+      "referenceSource": "Altinn2"
+    }
+  ],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "appid-402"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "NRNA",
+    "organization": "777777777",
+    "name": {
+      "en": "NARNIA",
+      "nb": "NARNIA",
+      "nn": "NARNIA"
+    }
+  }
+}

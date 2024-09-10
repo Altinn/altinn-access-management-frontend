@@ -54,6 +54,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         ///     The user id of the rightholder
         /// </param>
         /// <returns></returns>
-        Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string party, string userId);
+        Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
     }
 }

@@ -1,0 +1,75 @@
+{
+  "title": {
+    "en": "Automation Regression",
+    "nb": "Automation Regression",
+    "nn": "Automation Regression"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "appid-136",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "description": null,
+  "resourceType": "MaskinportenSchema",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Allows you to test maskinporten changes as part of automation testing",
+    "nb": "Gir anledning til a teste maskinporten som en del av automatiserte tester",
+    "nn": "Gjer hove til a teste maskinporten som en del av automatiserte tester"
+  },
+  "resourceReferences": [
+    {
+      "reference": "911f9e93-1541-429d-a8c6-a06f9a52d827",
+      "referenceType": "DelegationSchemeId",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "altinn:test/theworld.write",
+      "referenceType": "MaskinportenScope",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "altinn:test/theworld.admin",
+      "referenceType": "MaskinportenScope",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "AppId:136",
+      "referenceType": "ServiceCode",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "1",
+      "referenceType": "ServiceEditionCode",
+      "referenceSource": "Altinn2"
+    }
+  ],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "appid-136"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "SKD",
+    "organization": "974761076",
+    "name": {
+      "en": "Skatteetaten",
+      "nb": "Skatteetaten",
+      "nn": "Skatteetaten"
+    }
+  }
+}

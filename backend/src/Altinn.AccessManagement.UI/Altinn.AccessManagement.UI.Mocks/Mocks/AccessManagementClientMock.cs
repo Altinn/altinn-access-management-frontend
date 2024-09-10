@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Common.PEP.Configuration;
@@ -256,9 +257,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations");
 
-            var data = await GetMockedHttpResponse(dataPath, "List");
-            return data;
+            return await GetMockedHttpResponse(dataPath, "delegations");
         }
+
+
+
+
 
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
