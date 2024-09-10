@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -301,6 +302,36 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+
+        /// <summary>
+        /// Test case: GetSingleRightsForUser returns the single-rights for a user
+        /// Expected: GetSingleRightsForUser returns the single-rights for a user
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsForUser_returnsExpectedRights()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            // Expected response data
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "List.json");
+            List<ServiceResource> expectedResponse = Util.GetMockData<List<ServiceResource>>(path);
+
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+            List<ServiceResource> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResource>>();
+
+
+            // Assert
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+            foreach (var right in expectedResponse)
+            {
+                Assert.Contains(actualResponse, r => r.Identifier  == right.Identifier);
+            }
         }
 
         /// <summary>

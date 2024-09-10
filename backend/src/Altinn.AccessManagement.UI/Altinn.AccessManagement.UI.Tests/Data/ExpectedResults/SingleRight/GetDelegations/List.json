@@ -1,0 +1,352 @@
+[
+  {
+    "identifier": "appid-502",
+    "title": "Det magiske klesskapet - lenketjeneste",
+    "description": "Det magiske klesskapet",
+    "rightDescription": "Gir tilgang til Narnia.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "NARNIA",
+    "resourceOwnerOrgNumber": "777777777",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Default",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-502"
+      }
+    ]
+  },
+  {
+    "identifier": "appid-503",
+    "title": "Snarveien - lenketjeneste",
+    "description": "Snarveien som lenketjeneste",
+    "rightDescription": "Gir tilgang til snarveier.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "PÅFUNNSETATEN",
+    "resourceOwnerOrgNumber": "130000000",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Default",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-503"
+      }
+    ]
+  },
+  {
+    "identifier": "app_ttd_a3-app",
+    "title": "A3 app",
+    "description": "En Altinn 3 app",
+    "rightDescription": "Gir tilgang til en A3 app.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789",
+    "resourceReferences": [
+      {
+        "referenceSource": "Altinn3",
+        "reference": "ttd/a3-app",
+        "referenceType": "ApplicationId"
+      }
+    ],
+    "priorityCounter": null,
+    "resourceType": "AltinnApp",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ]
+  },
+  {
+    "identifier": "se_3225_1596",
+    "title": "A2 skjema",
+    "description": "Et Altinn 2 skjema",
+    "rightDescription": "Gir tilgang til et A2 skjema.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789",
+    "resourceReferences": [
+      {
+        "referenceSource": "Altinn2",
+        "reference": "3225",
+        "referenceType": "ServiceCode"
+      },
+      {
+        "referenceSource": "Altinn2",
+        "reference": "1596",
+        "referenceType": "ServiceEditionCode"
+      }
+    ],
+    "priorityCounter": null,
+    "resourceType": "Altinn2Service",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "3225"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "1596"
+      }
+    ]
+  },
+  {
+    "identifier": "app_ttd_a3-app2",
+    "title": "A3 app 2",
+    "description": "En Altinn 3 app",
+    "rightDescription": "Gir tilgang til en A3 app.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789",
+    "resourceReferences": [
+      {
+        "referenceSource": "Altinn3",
+        "reference": "ttd/a3-app2",
+        "referenceType": "ApplicationId"
+      }
+    ],
+    "priorityCounter": null,
+    "resourceType": "AltinnApp",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:app",
+        "value": "a3-app2"
+      },
+      {
+        "id": "urn:altinn:org",
+        "value": "ttd"
+      }
+    ]
+  },
+  {
+    "identifier": "se_322a_159b",
+    "title": "A2 skjema 2",
+    "description": "Et Altinn 2 skjema",
+    "rightDescription": "Gir tilgang til et A2 skjema.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgNumber": "123456789",
+    "resourceReferences": [
+      {
+        "referenceSource": "Altinn2",
+        "reference": "322a",
+        "referenceType": "ServiceCode"
+      },
+      {
+        "referenceSource": "Altinn2",
+        "reference": "159b",
+        "referenceType": "ServiceEditionCode"
+      }
+    ],
+    "priorityCounter": null,
+    "resourceType": "Altinn2Service",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:servicecode",
+        "value": "322a"
+      },
+      {
+        "id": "urn:altinn:serviceeditioncode",
+        "value": "159b"
+      }
+    ]
+  },
+  {
+    "identifier": "appid-508",
+    "title": "Brannbilen i Brønnøysund",
+    "description": "Brannbilen - det er bare én ja",
+    "rightDescription": "Gir tilgang til brannbilen.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Brannvesenet",
+    "resourceOwnerOrgNumber": "110110110",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Default",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-508"
+      }
+    ]
+  },
+  {
+    "identifier": "appid-509",
+    "title": "Kaffemaskinen i 4. etasje",
+    "description": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
+    "rightDescription": "Gir tilgang til kaffemaskinen.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "ØkernPortal",
+    "resourceOwnerOrgNumber": "904111111",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Default",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-509"
+      }
+    ]
+  },
+  {
+    "identifier": "appid-510",
+    "title": "DigDir WiFi",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "rightDescription": "Her er en beskrivelse.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Default",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ]
+  },
+  {
+    "identifier": "appid-511",
+    "title": "DigDir Sommerfest",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "rightDescription": "Her er en beskrivelse.",
+    "homepage": null,
+    "status": null,
+    "spatial": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "resourceOwnerName": "Digitaliseringsdirektoratet",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceReferences": [],
+    "priorityCounter": null,
+    "resourceType": "Default",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-511"
+      }
+    ]
+  }
+]
