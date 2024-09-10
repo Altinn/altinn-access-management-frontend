@@ -1,4 +1,4 @@
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Pagination } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRigh
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/components/List/List';
 import { ListItem } from '@/components/List/ListItem';
+import usePagination from '@/resources/hooks/usePagination';
 
 import classes from './SingleRightsSection.module.css';
 
@@ -23,6 +24,8 @@ export const SingleRightsSection = () => {
     party: getCookie('AltinnPartyId'),
     userId: id || '',
   });
+
+  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights || [], 5);
 
   return (
     <div className={classes.singleRightsSectionContainer}>
@@ -42,7 +45,7 @@ export const SingleRightsSection = () => {
         className={classes.singleRightsList}
         aria-labelledby='single_rights_title'
       >
-        {singleRights?.map((singleRight) => (
+        {paginatedData?.map((singleRight) => (
           <ListItem
             key={singleRight.identifier}
             className={classes.singleRightItem}
@@ -59,6 +62,18 @@ export const SingleRightsSection = () => {
           </ListItem>
         ))}
       </List>
+      {totalPages > 1 && (
+        <Pagination
+          className={classes.pagination}
+          size='sm'
+          hideLabels={true}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onChange={(page) => goToPage(page)}
+          nextLabel={t('common.next')}
+          previousLabel={t('common.previous')}
+        />
+      )}
     </div>
   );
 };
