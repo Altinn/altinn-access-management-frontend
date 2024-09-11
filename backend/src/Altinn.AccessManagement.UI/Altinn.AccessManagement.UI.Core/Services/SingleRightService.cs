@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     continue;
                 }
-                
+
                 var resource = await _resourceService.GetResource(resourceId);
                 serviceResourceFE.Add(new ServiceResourceFE(
                 resource.Identifier,
@@ -77,6 +77,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 spatial: resource.Spatial,
                 authorizationReference: resource.AuthorizationReference));
             }
+            
             return serviceResourceFE;
         }
     }
