@@ -50,42 +50,33 @@ namespace Altinn.AccessManagement.UI.Core.Services
             var res = await _accessManagementClient.GetSingleRightsForRightholder(party, userId);
             var results = await res.Content.ReadAsStringAsync();
 
-            if (res.IsSuccessStatusCode)
+            var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
+            List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
+            foreach (var item in delegationOutput)
             {
-                var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
-                List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
-                foreach (var item in delegationOutput)
+                var resourceId = item.RightDelegationResults?.FirstOrDefault()?.Resource?.FirstOrDefault()?.Value;
+                if (string.IsNullOrEmpty(resourceId))
                 {
-                    var resourceId = item.RightDelegationResults?.FirstOrDefault()?.Resource?.FirstOrDefault()?.Value;
-
-                    if (string.IsNullOrEmpty(resourceId))
-                    {
-                        continue;
-                    }
-
-                    var resource = await _resourceService.GetResource(resourceId);
-
-                    serviceResourceFE.Add(new ServiceResourceFE(
-                    resource.Identifier,
-                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                    resourceType: resource.ResourceType,
-                    status: resource.Status,
-                    resourceReferences: resource.ResourceReferences,
-                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                    visible: resource.Visible,
-                    delegable: resource.Delegable,
-                    contactPoints: resource.ContactPoints,
-                    spatial: resource.Spatial,
-                    authorizationReference: resource.AuthorizationReference));
+                    continue;
                 }
-
-                return serviceResourceFE;
+                var resource = await _resourceService.GetResource(resourceId);
+                serviceResourceFE.Add(new ServiceResourceFE(
+                resource.Identifier,
+                resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
+                resourceType: resource.ResourceType,
+                status: resource.Status,
+                resourceReferences: resource.ResourceReferences,
+                resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
+                visible: resource.Visible,
+                delegable: resource.Delegable,
+                contactPoints: resource.ContactPoints,
+                spatial: resource.Spatial,
+                authorizationReference: resource.AuthorizationReference));
             }
-
-            return null;
+            return serviceResourceFE;
         }
     }
 }
