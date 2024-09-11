@@ -21,6 +21,13 @@
   min-height: 500px;
 }
 
+.resultCountAndChips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--fds-spacing-2);
+}
+
 .pagination {
   margin-top: 16px;
   margin: auto;
@@ -92,37 +99,6 @@
 .infoView {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 15px;
-}
-
-.rightsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: #e2eaf8;
-  padding: 20px 15px 30px 15px;
-}
-
-.rightChips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.completeButton {
-  width: fit-content;
-  margin-top: 16px;
-}
-
-.infoHeading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.infoView {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
   gap: 20px;
 }
 
@@ -130,7 +106,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background-color: white;
   padding: 0px 15px 15px 0;
 }
 
