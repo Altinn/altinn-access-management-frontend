@@ -160,12 +160,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 List<ServiceResourceFE> rights = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
-
-                if (rights == null)
-                {
-                    return NotFound();
-                }
-
                 return Ok(rights);
             }
             catch (Exception ex)
