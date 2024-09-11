@@ -20,9 +20,13 @@ const config: PlaywrightTestConfig = {
   timeout: 3 * 60 * 1000,
   use: {
     headless: true,
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    launchOptions: {},
+    // screenshot: 'only-on-failure',
+    screenshot: { mode: 'only-on-failure', fullPage: true },
+    video: { mode: 'retain-on-failure' },
+    launchOptions: {
+      args: ['--start-maximized'],
+    },
+    viewport: null, // Disable Playwright's default viewport setting, required to utilize maximum screen. Mostly useful for viewing test results / screenshots to be able to view the entire screen
   },
   reporter: [
     ['dot'],

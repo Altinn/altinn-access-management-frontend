@@ -149,6 +149,7 @@ export class revokeRights {
       await this.page.getByRole('link', { name: reporteeName }).click();
 
       if (await reporteeLink.isVisible()) {
+        await reporteeLink.waitFor({ state: 'visible', timeout: 5000 });
         await reporteeLink.click();
         const removeButton = this.page
           .getByRole('button')
