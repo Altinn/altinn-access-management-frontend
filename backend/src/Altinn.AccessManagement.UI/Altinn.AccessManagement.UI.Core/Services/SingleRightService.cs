@@ -1,12 +1,8 @@
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
-using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -16,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IResourceService _resourceService;
 
-        JsonSerializerOptions options = new JsonSerializerOptions
+        private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
         };
@@ -54,53 +50,42 @@ namespace Altinn.AccessManagement.UI.Core.Services
             var res = await _accessManagementClient.GetSingleRightsForRightholder(party, userId);
             var results = await res.Content.ReadAsStringAsync();
 
-            try
+            if (res.IsSuccessStatusCode)
             {
-                if (res.IsSuccessStatusCode)
+                var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
+                List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
+                foreach (var item in delegationOutput)
                 {
-                    var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
-                    List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
-                    foreach (var item in delegationOutput)
+                    var resoureId = item.RightDelegationResults.FirstOrDefault().Resource.FirstOrDefault().Value;
+
+                    if (string.IsNullOrEmpty(resoureId))
                     {
-                        var resoureId = item.RightDelegationResults.FirstOrDefault().Resource.FirstOrDefault().Value;
-
-                        if (string.IsNullOrEmpty(resoureId))
-                        {
-                            continue;
-                        }
-
-                        var resource = await _resourceService.GetResource(resoureId);
-
-                        serviceResourceFE.Add(new ServiceResourceFE(
-                        resource.Identifier,
-                        resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                        resourceType: resource.ResourceType,
-                        status: resource.Status,
-                        resourceReferences: resource.ResourceReferences,
-                        resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                        rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                        description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                        visible: resource.Visible,
-                        delegable: resource.Delegable,
-                        contactPoints: resource.ContactPoints,
-                        spatial: resource.Spatial,
-                        authorizationReference: resource.AuthorizationReference));
+                        continue;
                     }
 
-                    // string responseContent = JsonSerializer.Serialize(serviceResourceFE);
-                    return serviceResourceFE;
+                    var resource = await _resourceService.GetResource(resoureId);
+
+                    serviceResourceFE.Add(new ServiceResourceFE(
+                    resource.Identifier,
+                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
+                    resourceType: resource.ResourceType,
+                    status: resource.Status,
+                    resourceReferences: resource.ResourceReferences,
+                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
+                    visible: resource.Visible,
+                    delegable: resource.Delegable,
+                    contactPoints: resource.ContactPoints,
+                    spatial: resource.Spatial,
+                    authorizationReference: resource.AuthorizationReference));
                 }
-                else
-                {
-                    throw new Exception("Error while fetching single rights for rightholder");
-                }
+
+                return serviceResourceFE;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            return null;
         }
     }
-
 }

@@ -47,6 +47,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         ///     Gets the single-rights for a given rightholder
         /// </summary>
+        /// <param name="languageCode">
+        ///     The language code for the request
+        /// </param>
         /// <param name="party">
         ///     The party from which the rights have been given (delegator)
         /// </param>
