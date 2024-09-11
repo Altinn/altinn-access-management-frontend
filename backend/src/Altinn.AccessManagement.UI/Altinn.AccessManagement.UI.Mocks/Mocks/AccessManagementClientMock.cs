@@ -260,9 +260,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await GetMockedHttpResponse(dataPath, "delegations");
         }
 
-
-
-
+        public Task<HttpResponseMessage> RevokeSingleRightsDelegation(string party, DelegationInput delegationObject)
+        {
+            throw new NotImplementedException();
+        }
 
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
@@ -334,5 +335,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return new List<AuthorizedParty>();
                 });
         }
+
     }
 }
