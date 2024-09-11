@@ -343,6 +343,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             }
         }
 
+
+        /// <summary>
+        ///    Test case: GetSingleRightsForUser handles error
+        ///    Expected: GetSingleRightsForUser returns internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsForUser_handles_error()
+        {
+            // Arrange
+            string partyId = "********";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
         /// <summary>
         ///     Test case: CreateDelegation delegates the actions of an altinn 2 form
         ///     Expected: CreateDelegation returns the delegated actions of the altinn 2 form
