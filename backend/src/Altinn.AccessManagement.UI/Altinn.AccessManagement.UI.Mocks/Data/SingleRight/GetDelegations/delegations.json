@@ -94,6 +94,97 @@
     "from": [
       {
         "id": "urn:altinn:organizationnumber",
+        "value": "777777777"
+      }
+    ],
+    "to": [
+      {
+        "id": "urn:altinn:ssn",
+        "value": "50019992"
+      }
+    ],
+    "rightDelegationResults": [
+      {
+        "rightKey": "ttd-somereasourceid/read",
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": ""
+          }
+        ],
+        "action": "read",
+        "status": "Delegated",
+        "details": [
+          {
+            "code": "",
+            "description": "",
+            "parameters": {
+              "roleRequirementsMatches": [
+                {
+                  "id": "",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "rightKey": "ttd-somereasourceid/write",
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "appid-502"
+          }
+        ],
+        "action": "write",
+        "status": "Delegated",
+        "details": [
+          {
+            "code": "",
+            "description": "",
+            "parameters": {
+              "roleRequirementsMatches": [
+                {
+                  "id": "",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "rightKey": "ttd-somereasourceid/sign",
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "appid-502"
+          }
+        ],
+        "action": "sign",
+        "status": "Delegated",
+        "details": [
+          {
+            "code": "",
+            "description": "",
+            "parameters": {
+              "roleRequirementsMatches": [
+                {
+                  "id": "",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "from": [
+      {
+        "id": "urn:altinn:organizationnumber",
         "value": "130000000"
       }
     ],
