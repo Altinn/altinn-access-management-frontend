@@ -42,12 +42,12 @@ export class apiDelegation {
       name: no_nb.api_delegation.confirmation_page_content_top_text,
     });
     this.giveAccessButton = page.getByRole('button', { name: 'Gi og fjerne API tilganger' });
-    this.nextButton = page.getByRole('button', { name: no_nb.common.next });
-    this.previousButton = page.getByRole('button', { name: no_nb.common.previous });
+    this.nextButton = page.getByRole('button', { name: no_nb.common.next, exact: true });
+    this.previousButton = page.getByRole('button', { name: no_nb.common.previous, exact: true });
     this.searchApiLabel = page.getByLabel(no_nb.api_delegation.search_for_api);
     this.searchOrgNumberLabel = page.getByLabel(no_nb.api_delegation.search_for_buisness);
     this.addButton = page.getByLabel(no_nb.common.add);
-    this.confirmButton = page.getByRole('button', { name: no_nb.common.confirm });
+    this.confirmButton = page.getByRole('button', { name: no_nb.common.confirm, exact: true });
     this.totalOverviewButton = page.getByRole('button', {
       name: no_nb.api_delegation.receipt_page_main_button,
     });
@@ -63,11 +63,14 @@ export class apiDelegation {
     this.filterByAgencyButton = page.getByRole('button', {
       name: no_nb.api_delegation.filter_label,
     });
-    this.resetSelectionButton = page.getByRole('button', { name: no_nb.common.reset_choices });
-    this.applyButton = page.getByRole('button', { name: no_nb.common.apply });
+    this.resetSelectionButton = page.getByRole('button', {
+      name: no_nb.common.reset_choices,
+      exact: true,
+    });
+    this.applyButton = page.getByRole('button', { name: no_nb.common.apply, exact: true });
     this.searchApiInput = page.getByLabel(no_nb.api_delegation.search_for_api);
     this.searchOrgNumberInput = page.getByLabel(no_nb.api_delegation.search_for_buisness);
-    this.addOrgButton = page.getByRole('button', { name: no_nb.common.add });
+    this.addOrgButton = page.getByRole('button', { name: no_nb.common.add, exact: true });
     this.confirmAccessHeading = page.getByRole('heading', { name: 'API-tilgangene blir gitt til' });
     this.apiDelegationHeading = page.getByRole('heading', {
       name: no_nb.api_delegation.succesful_delegations,
@@ -186,6 +189,7 @@ export class apiDelegation {
     await this.searchOrgNumberLabel.fill(orgNumber);
     await this.addButton.click();
 
+    await this.page.pause();
     //Verify previous and next buttons work
     await this.previousButton.click();
     await this.nextButton.click();
