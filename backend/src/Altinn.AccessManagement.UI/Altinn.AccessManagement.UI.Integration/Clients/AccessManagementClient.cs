@@ -280,10 +280,5 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _logger.LogError("Getting single rights from accessmanagement failed with {StatusCode}", response.StatusCode);
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
-
-        public Task<HttpResponseMessage> RevokeSingleRightsDelegation(string party, DelegationInput delegationObject)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
