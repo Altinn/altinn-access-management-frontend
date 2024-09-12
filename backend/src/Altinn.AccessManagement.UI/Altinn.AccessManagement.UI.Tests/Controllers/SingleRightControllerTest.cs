@@ -330,16 +330,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
             List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
-
+            var actualResponseJson = JsonSerializer.Serialize(actualResponse);
 
             // Assert
             Assert.Equal(expectedResponse.Count, actualResponse.Count);
             foreach (var right in expectedResponse)
             {
                 var actual = actualResponse.FirstOrDefault(r => r.Identifier == right.Identifier);
-                Assert.NotNull(actual);
-                Assert.Equal(right.Title, actual.Title);
-                Assert.Equal(right.Description, actual.Description);
+                AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
             }
         }
 
