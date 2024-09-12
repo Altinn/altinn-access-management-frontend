@@ -5,7 +5,7 @@ namespace Altinn.AccessManagement.UI.Core.Enums
     /// <summary>
     /// Enum for the different reference sources for resources in the resource registry
     /// </summary>
-    public enum ReferenceSource : int
+    public enum ReferenceSource
     {
         /// <summary>
         /// Default

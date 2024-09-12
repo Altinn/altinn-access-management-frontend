@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Heading, Pagination, Search, Paragraph } from '@digdir/designsystemet-react';
-import classes from './UsersList.module.css';
 import { useTranslation } from 'react-i18next';
-import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 
+import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 import { ListItem } from '@/components/List/ListItem';
 import { List } from '@/components/List/List';
-import { useFilteredRightHolders } from './useFilteredRightHolders';
 import { debounce } from '@/resources/utils';
+
+import { useFilteredRightHolders } from './useFilteredRightHolders';
+import classes from './UsersList.module.css';
 import { UserItem } from './UserItem';
 
 export const UsersList = () => {

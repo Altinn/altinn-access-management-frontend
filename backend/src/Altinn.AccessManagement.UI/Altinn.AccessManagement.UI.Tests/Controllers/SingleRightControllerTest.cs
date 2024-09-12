@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -18,6 +20,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     [Collection("SingleRightControllerTest")]
     public class SingleRightControllerTest : IClassFixture<CustomWebApplicationFactory<SingleRightController>>
     {
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<SingleRightController> _factory;
         private readonly string mockFolder;
@@ -303,6 +310,56 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
+
+        /// <summary>
+        /// Test case: GetSingleRightsForUser returns the single-rights for a user
+        /// Expected: GetSingleRightsForUser returns the single-rights for a user
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsForUser_returnsExpectedRights()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            // Expected response data
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
+            string content = File.ReadAllText(Path.Combine(path));
+            List<ServiceResourceFE> expectedResponse = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+            List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
+            var actualResponseJson = JsonSerializer.Serialize(actualResponse);
+
+            // Assert
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+            foreach (var right in expectedResponse)
+            {
+                var actual = actualResponse.FirstOrDefault(r => r.Identifier == right.Identifier);
+                AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            }
+        }
+
+
+        /// <summary>
+        ///    Test case: GetSingleRightsForUser handles error
+        ///    Expected: GetSingleRightsForUser returns internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsForUser_handles_error()
+        {
+            // Arrange
+            string partyId = "********";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
         /// <summary>
         ///     Test case: CreateDelegation delegates the actions of an altinn 2 form
         ///     Expected: CreateDelegation returns the delegated actions of the altinn 2 form
@@ -452,8 +509,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             BaseAttribute recipient = new BaseAttribute
             {
-                    Type = "urn:altinn:person:uuid",
-                    Value = userUUID,
+                Type = "urn:altinn:person:uuid",
+                Value = userUUID,
             };
 
             string jsonDto = JsonSerializer.Serialize(recipient);

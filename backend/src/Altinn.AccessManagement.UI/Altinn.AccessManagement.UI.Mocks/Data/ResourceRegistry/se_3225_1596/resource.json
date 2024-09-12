@@ -1,0 +1,70 @@
+{
+  "title": {
+    "en": "A2 form",
+    "nb": "A2 skjema",
+    "nn": "A2 skjema"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "se_3225_1596",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "An Altinn 2 form",
+    "nb": "Et Altinn 2 skjema",
+    "nn": "Et Altinn 2 skjema"
+  },
+  "resourceType": "Altinn2Service",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Gives access an A2 form.",
+    "nb": "Gir tilgang til et A2 skjema.",
+    "nn": "Gir tilgang til et A2 skjema."
+  },
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "3225",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1596",
+      "referenceType": "ServiceEditionCode"
+    }
+  ],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:servicecode",
+      "value": "3225"
+    },
+    {
+      "id": "urn:altinn:serviceeditioncode",
+      "value": "1596"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "TTD",
+    "organization": "123456789",
+    "name": {
+      "en": "Testdepartementet",
+      "nb": "Testdepartementet",
+      "nn": "Testdepartementet"
+    }
+  }
+}

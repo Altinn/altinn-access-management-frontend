@@ -1,0 +1,55 @@
+{
+  "title": {
+    "en": "Coffee machine on 4th floor",
+    "nb": "Kaffemaskinen i 4. etasje",
+    "nn": "Kaffemaskinen i 4. etasje"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "appid-509",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
+    "nb": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice.",
+    "nn": "Barista, mazagran and sit barista mazagran, trifecta roast sweet single origin froth. French press, and cinnamon, eu beans ristretto, viennese, and crema roast decaffeinated whipped. Extraction sweet as trifecta java half and half crema rich arabica. Rich, instant, to go sugar macchiato froth, mug macchiato wings iced pumpkin spice."
+  },
+  "resourceType": "Default",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Gives access to the coffee mashine.",
+    "nb": "Gir tilgang til kaffemaskinen.",
+    "nn": "Gir tilgang til kaffemaskinen."
+  },
+  "resourceReferences": [],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "appid-509"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "OP",
+    "organization": "904111111",
+    "name": {
+      "en": "ØkernPortal",
+      "nb": "ØkernPortal",
+      "nn": "ØkernPortal"
+    }
+  }
+}

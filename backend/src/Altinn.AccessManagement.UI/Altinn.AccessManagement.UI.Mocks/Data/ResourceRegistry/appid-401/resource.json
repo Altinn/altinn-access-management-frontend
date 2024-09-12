@@ -1,0 +1,79 @@
+{
+  "title": {
+    "en": "The Flowergarden",
+    "nb": "Blomsterhagen",
+    "nn": "Blomsterhagen"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "appid-401",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "description": {
+    "en": "The Flowergarden",
+    "nb": "Blomsterhagen",
+    "nn": "Blomsterhagen"
+  },
+  "resourceType": "MaskinportenSchema",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Gives access to beautiful flowers.",
+    "nb": "Gir tilgang til vakre blomster.",
+    "nn": "Gir tilgang til vakre blomster."
+  },
+  "resourceReferences": [
+    {
+      "reference": "8f08210a-d792-48f5-9e27-0f029e41111e",
+      "referenceType": "DelegationSchemeId",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "nav:aareg/v1/arbeidsforhold/otp",
+      "referenceType": "MaskinportenScope",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "nav:bfinn/v1/hagen",
+      "referenceType": "MaskinportenScope",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "AppId:401",
+      "referenceType": "ServiceCode",
+      "referenceSource": "Altinn2"
+    },
+    {
+      "reference": "1",
+      "referenceType": "ServiceEditionCode",
+      "referenceSource": "Altinn2"
+    }
+  ],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "appid-401"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "BFINN",
+    "organization": "994598759",
+    "name": {
+      "en": "BLOMSTERFINN",
+      "nb": "BLOMSTERFINN",
+      "nn": "BLOMSTERFINN"
+    }
+  }
+}
