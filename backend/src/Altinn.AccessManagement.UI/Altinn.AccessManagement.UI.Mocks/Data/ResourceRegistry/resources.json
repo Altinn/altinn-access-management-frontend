@@ -393,7 +393,10 @@
     "EnterpriseUserEnabled": false,
     "homepage": null,
     "isPartOf": null,
-    "keywords": null,
+    "keywords": [
+      { "language": "nb", "word": "klesskapet_kw" },
+      { "language": "en", "word": "closet_kw" }
+    ],
     "identifier": "appid-502",
     "contactPoints": [
       {
