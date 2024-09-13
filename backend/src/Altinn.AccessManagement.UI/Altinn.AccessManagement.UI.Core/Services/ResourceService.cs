@@ -353,7 +353,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     || StringUtils.NotNullAndContains(res.Description, word)
                     || StringUtils.NotNullAndContains(res.RightDescription, word)
                     || StringUtils.NotNullAndContains(res.ResourceOwnerName, word)
-                    || (res.Keywords != null && res.Keywords.Any((kw) => StringUtils.NotNullAndContains(kw, word))))
+                    || (res.Keywords != null && res.Keywords.Exists((kw) => StringUtils.NotNullAndContains(kw, word))))
                     {
                         numMatches++;
                     }

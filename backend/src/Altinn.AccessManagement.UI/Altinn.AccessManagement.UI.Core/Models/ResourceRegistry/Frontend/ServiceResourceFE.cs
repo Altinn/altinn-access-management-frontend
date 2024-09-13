@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public List<IdValuePair> AuthorizationReference { get; set; }
 
         /// <summary>
-        /// Keywords s
+        /// Keywords to be used in search
         /// </summary>
         public List<string> Keywords { get; set; }
 
@@ -105,7 +105,24 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public ServiceResourceFE(string identifier, string title, string description, string rightDescription, string status, string resourceOwnerName, string resourceOwnerOrgNumber, List<ResourceReference> resourceReferences, ResourceType resourceType, List<ContactPoint> contactPoints, List<string> spatial, List<IdValuePair> authorizationReference, string homepage = null, int? priorityCounter = null, bool visible = true, bool delegable = true, List<string> keywords = null)
+        public ServiceResourceFE(
+            string identifier, 
+            string title, 
+            string description, 
+            string rightDescription, 
+            string status, 
+            string resourceOwnerName, 
+            string resourceOwnerOrgNumber, 
+            List<ResourceReference> resourceReferences, 
+            ResourceType resourceType, 
+            List<ContactPoint> contactPoints, 
+            List<string> spatial, 
+            List<IdValuePair> authorizationReference, 
+            string homepage = null, 
+            int? priorityCounter = null, 
+            bool visible = true, 
+            bool delegable = true, 
+            List<string> keywords = null)
         {
             Identifier = identifier;
             Title = title;
