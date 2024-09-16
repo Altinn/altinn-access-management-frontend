@@ -35,5 +35,15 @@
         /// GenericAccessResource
         /// </summary>
         GenericAccessResource = 16,
+
+        /// <summary>
+        /// BrokerService
+        /// </summary>
+        BrokerService = 32,
+
+        /// <summary>
+        /// CorrespondenceService
+        /// </summary>
+        CorrespondenceService = 64
     }
 }
