@@ -1,0 +1,27 @@
+[
+  {
+    "rightKey": "appid-502/access",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-502"
+      }
+    ],
+    "action": "access",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

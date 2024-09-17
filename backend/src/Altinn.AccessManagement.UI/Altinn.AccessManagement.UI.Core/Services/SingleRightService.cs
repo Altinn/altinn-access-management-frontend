@@ -54,13 +54,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
             foreach (var item in delegationOutput)
             {
-                var resourceId = item.RightDelegationResults?.FirstOrDefault()?.Resource?.FirstOrDefault()?.Value;
-                if (string.IsNullOrEmpty(resourceId))
+                var resoureId = item.RightDelegationResults.FirstOrDefault().Resource.FirstOrDefault().Value;
+
+                if (string.IsNullOrEmpty(resoureId))
                 {
                     continue;
                 }
 
-                var resource = await _resourceService.GetResource(resourceId);
+                var resource = await _resourceService.GetResource(resoureId);
+
                 serviceResourceFE.Add(new ServiceResourceFE(
                 resource.Identifier,
                 resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
@@ -77,8 +79,38 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 spatial: resource.Spatial,
                 authorizationReference: resource.AuthorizationReference));
             }
-            
+
             return serviceResourceFE;
+        }
+
+        /// <summary>
+        /// Revokes a single right for a rightholder.
+        /// </summary>
+        /// <param name="party">The party ID.</param>
+        /// <param name="delegationDTO">The delegation DTO.</param>
+        /// <param name="type">The type of delegation.</param>
+        /// <returns>The task representing the asynchronous operation.</returns>
+        public Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeSingleRightDelegationDTO delegationDTO, DelegationType type)
+        {
+            var delegationObject = new DelegationInput
+            {
+                To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:userId", Value = delegationDTO.UserId } },
+                Rights = new List<Right>
+                        {
+                            new Right
+                            {
+                                Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = delegationDTO.ResourceId } }
+                            }
+                        }
+            };
+            if (type == DelegationType.Offered)
+            {
+                return _accessManagementClient.RevokeOfferedSingleRightsDelegation(party, delegationObject);
+            }
+            else
+            {
+                return _accessManagementClient.RevokeRecievedSingleRightsDelegation(party, delegationObject);
+            }
         }
     }
 }

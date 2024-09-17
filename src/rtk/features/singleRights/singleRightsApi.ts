@@ -34,10 +34,16 @@ interface searchParams {
   resultsPerPage: number;
 }
 
+enum DelegationType {
+  Offered,
+  Received,
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
   reducerPath: 'singleRightsApi',
+  tagTypes: ['singleRights'],
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers) => {
@@ -73,6 +79,22 @@ export const singleRightsApi = createApi({
         };
       },
     }),
+    revokeRights: builder.mutation<
+      void,
+      { type: DelegationType; party: string; userId: string; resourceId: string }
+    >({
+      query({ type, party, userId, resourceId }) {
+        return {
+          url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'recieved'}/revoke`,
+          method: 'POST',
+          body: JSON.stringify({
+            userId: userId,
+            resourceId: resourceId,
+          }),
+        };
+      },
+      invalidatesTags: ['singleRights'],
+    }),
   }),
 });
 
@@ -80,6 +102,7 @@ export const {
   useGetSingleRightsForRightholderQuery,
   useGetPaginatedSearchQuery,
   useClearAccessCacheMutation,
+  useRevokeRightsMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

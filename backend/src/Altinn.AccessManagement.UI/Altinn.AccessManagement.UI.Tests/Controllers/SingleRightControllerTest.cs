@@ -361,6 +361,81 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+
+
+        /// </summary>
+        [Fact]
+        public async Task RevokeSingleRightsForUser_handles_error()
+        {
+            // Arrange
+            string partyId = "********";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+            var revokeDto = new RevokeSingleRightDelegationDTO
+            {
+                ResourceId = resourceId,
+                UserId = userUUID
+            };
+            string jsonDto = JsonSerializer.Serialize(revokeDto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/offered/revoke", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// </summary>
+        [Fact]
+        public async Task RevokeSingleRightsForUser_offered_returns_ok_on_valid_input()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+            var revokeDto = new RevokeSingleRightDelegationDTO
+            {
+                ResourceId = resourceId,
+                UserId = userUUID
+            };
+            string jsonDto = JsonSerializer.Serialize(revokeDto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/offered/revoke", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// </summary>
+        [Fact]
+        public async Task RevokeSingleRightsForUser_recieved_returns_ok_on_valid_input()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+            var revokeDto = new RevokeSingleRightDelegationDTO
+            {
+                ResourceId = resourceId,
+                UserId = userUUID
+            };
+            string jsonDto = JsonSerializer.Serialize(revokeDto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/recieved/revoke", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: CreateDelegation delegates the actions of an altinn 2 form
         ///     Expected: CreateDelegation returns the delegated actions of the altinn 2 form
         /// </summary>

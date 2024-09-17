@@ -260,9 +260,37 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await GetMockedHttpResponse(dataPath, "delegations");
         }
 
-        public Task<HttpResponseMessage> RevokeSingleRightsDelegation(string party, DelegationInput delegationObject)
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegation)
         {
-            throw new NotImplementedException();
+            ThrowExceptionIfTriggerParty(party);
+
+            string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
+            
+            var mockResponse = await GetMockedHttpResponse(dataPath, resourceFileName);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return mockResponse;
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+
+          /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeRecievedSingleRightsDelegation(string party, DelegationInput delegation)
+        {
+            ThrowExceptionIfTriggerParty(party);
+
+            string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
+            
+            var mockResponse = await GetMockedHttpResponse(dataPath, resourceFileName);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return mockResponse;
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
 
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
