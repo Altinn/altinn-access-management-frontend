@@ -14,7 +14,7 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 import { FakePageWrapper } from '../common/FakePageWrapper';
 
 import classes from './UserRightsPage.module.css';
-import { SingleRightsSection } from './SingleRightsSection';
+import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();

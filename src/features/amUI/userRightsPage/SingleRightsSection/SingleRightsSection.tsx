@@ -1,20 +1,15 @@
-import { Button, Heading, Pagination } from '@digdir/designsystemet-react';
+import { Heading, Pagination } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { FileIcon, TrashIcon } from '@navikt/aksel-icons';
 
-import {
-  useGetSingleRightsForRightholderQuery,
-  useRevokeRightsMutation,
-} from '@/rtk/features/singleRights/singleRightsApi';
+import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/components/List/List';
-import { ListItem } from '@/components/List/ListItem';
 import usePagination from '@/resources/hooks/usePagination';
-import { DelegationType } from '@/features/apiDelegation/components/DelegationType';
 
 import classes from './SingleRightsSection.module.css';
+import SingleRightItem from './SingleRightItem';
 
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
@@ -28,17 +23,6 @@ export const SingleRightsSection = () => {
     party: getCookie('AltinnPartyId'),
     userId: id || '',
   });
-
-  const [revokeRights] = useRevokeRightsMutation();
-
-  const handleRevkokeRights = (resourceId: string) => {
-    revokeRights({
-      type: DelegationType.Offered,
-      party: getCookie('AltinnPartyId'),
-      userId: id || '',
-      resourceId,
-    });
-  };
 
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights || [], 5);
 
@@ -61,29 +45,12 @@ export const SingleRightsSection = () => {
         aria-labelledby='single_rights_title'
       >
         {paginatedData?.map((singleRight) => (
-          <ListItem
+          <SingleRightItem
             key={singleRight.identifier}
-            className={classes.singleRightItem}
-          >
-            <div className={classes.icon}>
-              <FileIcon />
-            </div>
-            <div className={classes.title}>{singleRight.title}</div>
-            <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
-            <div className={classes.resourceOwnerName}>{singleRight.resourceOwnerName}</div>
-
-            <Button
-              variant='tertiary'
-              color='danger'
-              icon
-              size='md'
-              className={classes.action}
-              onClick={() => handleRevkokeRights(singleRight.identifier)}
-            >
-              <TrashIcon />
-              {t('common.delete')}
-            </Button>
-          </ListItem>
+            identifier={singleRight.identifier}
+            title={singleRight.title}
+            resourceOwnerName={singleRight.resourceOwnerName}
+          />
         ))}
       </List>
       {totalPages > 1 && (
