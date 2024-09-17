@@ -64,6 +64,12 @@ export const singleRightsApi = createApi({
         return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${searchString}${filterUrl}`;
       },
     }),
+    getSingleRightsForRightholder: builder.query<
+      ServiceResource[],
+      { party: string; userId: string }
+    >({
+      query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
+    }),
     delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
       query: (resourceRef) => ({
         url: `singleright/checkdelegationaccesses/${getCookie('AltinnPartyId')}`,
@@ -99,6 +105,7 @@ export const singleRightsApi = createApi({
 
 export const {
   useGetPaginatedSearchQuery,
+  useGetSingleRightsForRightholderQuery,
   useClearAccessCacheMutation,
   useDelegationCheckMutation,
   useDelegateRightsMutation,

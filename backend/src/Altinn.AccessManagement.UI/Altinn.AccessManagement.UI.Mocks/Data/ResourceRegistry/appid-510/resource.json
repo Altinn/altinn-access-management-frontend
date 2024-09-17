@@ -1,0 +1,55 @@
+{
+  "title": {
+    "en": "Digdir WiFi",
+    "nb": "DigDir WiFi",
+    "nn": "DigDir WiFi"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "appid-510",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "nb": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
+    "nn": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis"
+  },
+  "resourceType": "Default",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Here's a description'",
+    "nb": "Her er en beskrivelse.",
+    "nn": "Her er en beskrivelse."
+  },
+  "resourceReferences": [],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "appid-510"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "DIGDIR",
+    "organization": "991825827",
+    "name": {
+      "en": "Digitaliseringsdirektoratet",
+      "nb": "Digitaliseringsdirektoratet",
+      "nn": "Digitaliseringsdirektoratet"
+    }
+  }
+}

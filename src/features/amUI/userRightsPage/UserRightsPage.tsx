@@ -15,6 +15,7 @@ import { FakePageWrapper } from '../common/FakePageWrapper';
 
 import classes from './UserRightsPage.module.css';
 import { DelegateSingleRightsModal } from './DelegateSingleRightsModule';
+import { SingleRightsSection } from './SingleRightsSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -45,6 +46,7 @@ export const UserRightsPage = () => {
               {party?.name}
             </Heading>
           </div>
+          <SingleRightsSection />
           {party && <DelegateSingleRightsModal toParty={party} />}
         </PageContainer>
       </FakePageWrapper>

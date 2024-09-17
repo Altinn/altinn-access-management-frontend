@@ -3,12 +3,17 @@ import cn from 'classnames';
 
 import classes from './List.module.css';
 
-export const ListItem = ({
-  children,
-  className,
-}: {
+interface ListItemProps extends React.HtmlHTMLAttributes<HTMLLIElement> {
   children: React.ReactNode;
-  className: string;
-}) => {
-  return <li className={cn(classes.listItem, className)}>{children}</li>;
+}
+
+export const ListItem = ({ children, className, ...props }: ListItemProps) => {
+  return (
+    <li
+      className={cn(classes.listItem, className)}
+      {...props}
+    >
+      {children}
+    </li>
+  );
 };

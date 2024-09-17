@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 
@@ -42,5 +43,20 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </param>
         /// <returns></returns>
         Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient);
+
+        /// <summary>
+        ///     Gets the single-rights for a given rightholder
+        /// </summary>
+        /// <param name="languageCode">
+        ///     The language code for the request
+        /// </param>
+        /// <param name="party">
+        ///     The party from which the rights have been given (delegator)
+        /// </param>
+        /// <param name="userId">
+        ///     The user id of the rightholder
+        /// </param>
+        /// <returns></returns>
+        Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
     }
 }

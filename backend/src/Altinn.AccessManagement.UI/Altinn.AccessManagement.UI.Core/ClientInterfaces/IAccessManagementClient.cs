@@ -112,5 +112,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </param>
         /// <returns></returns>
         Task<HttpResponseMessage> CreateSingleRightsDelegation(string party, DelegationInput delegation);
+
+        /// <summary>
+        ///     Retrieves the single rights for a specific right holder.
+        /// </summary>
+        /// <param name="party">The party identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId);
     }
 }

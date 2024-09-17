@@ -6,7 +6,7 @@ import classes from './List.module.css';
 
 interface ListProps extends React.HTMLAttributes<HTMLElement> {
   /** children element(s) to be listed */
-  children: React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[];
   /** The heading to go above the list */
   heading?: ReactNode;
   /** Enable spacing between list items */

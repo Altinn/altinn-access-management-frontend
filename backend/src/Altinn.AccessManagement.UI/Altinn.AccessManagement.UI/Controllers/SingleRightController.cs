@@ -1,7 +1,10 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -21,13 +24,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly ILogger<SingleRightController> _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly ISingleRightService _singleRightService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SingleRightController" /> class
         /// </summary>
-        public SingleRightController(ISingleRightService singleRightService, ILogger<SingleRightController> logger)
+        public SingleRightController(
+            ISingleRightService singleRightService,
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<SingleRightController> logger)
         {
             _singleRightService = singleRightService;
+            _httpContextAccessor = httpContextAccessor;
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
             _logger = logger;
         }
@@ -131,6 +139,32 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting single rights for a right holder
+        /// </summary>
+        /// <param name="party">The party identifier</param>
+        /// <param name="userId">The user identifier</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("{party}/rightholder/{userId}")]
+        public async Task<IActionResult> GetSingleRightsForRightholder([FromRoute] string party, [FromRoute] string userId)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                List<ServiceResourceFE> rights = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
+                return Ok(rights);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

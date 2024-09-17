@@ -1,0 +1,55 @@
+{
+  "title": {
+    "en": "The firetruck in Brønnøysund",
+    "nb": "Brannbilen i Brønnøysund",
+    "nn": "Brannbilen i Brønnøysund"
+  },
+  "sector": null,
+  "status": null,
+  "limitedByRRR": false,
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "homepage": null,
+  "isPartOf": null,
+  "keywords": null,
+  "identifier": "appid-508",
+  "contactPoints": [
+    {
+      "category": "Some category",
+      "email": "email@someemaildigdir.no",
+      "telephone": "12345678",
+      "contactPage": "Some page (webpage maybe?)"
+    }
+  ],
+  "visible": true,
+  "delegable": true,
+  "description": {
+    "en": "The Firetruck",
+    "nb": "Brannbilen - det er bare én ja",
+    "nn": "Brannbilen - det er bare én ja"
+  },
+  "resourceType": "Default",
+  "thematicArea": null,
+  "isPublicService": true,
+  "rightDescription": {
+    "en": "Gives access to the Firetruck.",
+    "nb": "Gir tilgang til brannbilen.",
+    "nn": "Gir tilgang til brannbilen."
+  },
+  "resourceReferences": [],
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "appid-508"
+    }
+  ],
+  "hasCompetentAuthority": {
+    "orgcode": "FD",
+    "organization": "110110110",
+    "name": {
+      "en": "Fire Department",
+      "nb": "Brannvesenet",
+      "nn": "Brannvesenet"
+    }
+  }
+}

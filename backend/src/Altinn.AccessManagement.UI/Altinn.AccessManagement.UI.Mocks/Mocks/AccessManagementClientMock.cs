@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Common.PEP.Configuration;
@@ -248,6 +249,22 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
+        {
+
+            ThrowExceptionIfTriggerParty(party);
+
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations");
+
+            return await GetMockedHttpResponse(dataPath, "delegations");
+        }
+
+        public Task<HttpResponseMessage> RevokeSingleRightsDelegation(string party, DelegationInput delegationObject)
+        {
+            throw new NotImplementedException();
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();
@@ -318,5 +335,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return new List<AuthorizedParty>();
                 });
         }
+
     }
 }
