@@ -19,17 +19,22 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import {
   useDelegationCheckMutation,
   useGetPaginatedSearchQuery,
+  useDelegateRightsMutation,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
 import { Filter, List, ListItem } from '@/components';
+import type { DelegationInputDto } from '@/dataObjects/dtos/resourceDelegation';
 import {
+  DelegationRequestDto,
   RightStatus,
+  ServiceDto,
   type DelegationAccessResult,
   type ResourceReference,
 } from '@/dataObjects/dtos/resourceDelegation';
-import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
+import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
 
 import classes from './DelegateSingleRightsModal.module.css';
 
@@ -50,6 +55,8 @@ export const DelegateSingleRightsModal = ({ toParty }: DelegateSingleRightsModal
     setResourceToView(resource);
   };
 
+  const closeModal = () => modalRef.current?.close();
+
   const onClose = () => {
     setInfoView(false);
   };
@@ -65,7 +72,7 @@ export const DelegateSingleRightsModal = ({ toParty }: DelegateSingleRightsModal
       <Modal.Dialog
         ref={modalRef}
         className={classes.modalDialog}
-        onInteractOutside={() => modalRef.current?.close()}
+        onInteractOutside={closeModal}
         onClose={onClose}
       >
         <Modal.Header>
@@ -92,6 +99,7 @@ export const DelegateSingleRightsModal = ({ toParty }: DelegateSingleRightsModal
             <ResourceInfo
               resource={resourceToView}
               toParty={toParty}
+              onDelegate={closeModal}
             />
           ) : (
             <SearchSection onSelection={onSelection} />
@@ -314,9 +322,18 @@ export type ChipRight = {
   resourceReference: IdValuePair[];
 };
 
-const ResourceInfo = ({ resource, toParty }: { resource?: ServiceResource; toParty: Party }) => {
+const ResourceInfo = ({
+  resource,
+  toParty,
+  onDelegate,
+}: {
+  resource?: ServiceResource;
+  toParty: Party;
+  onDelegate: () => void;
+}) => {
   const { t } = useTranslation();
   const [delegationCheck] = useDelegationCheckMutation();
+  const [delegateRights] = useDelegateRightsMutation();
   const [rights, setRights] = useState<ChipRight[]>([]);
   const resourceRef: ResourceReference | null =
     resource !== undefined
@@ -342,34 +359,83 @@ const ResourceInfo = ({ resource, toParty }: { resource?: ServiceResource; toPar
     }
   }, []);
 
-  const chips = rights.map((right: ChipRight) => {
-    const actionText = Object.values(LocalizedAction).includes(right.action as LocalizedAction)
-      ? t(`common.action_${right.action}`)
-      : right.action;
-    return (
-      <div key={right.rightKey}>
-        <Chip.Toggle
-          size='sm'
-          checkmark
-          selected={right.checked}
-          disabled={!right.delegable}
-          onClick={() => {
-            setRights(
-              rights.map((r) => {
-                if (r.rightKey == right.rightKey && right.delegable) {
-                  return { ...r, checked: !r.checked };
-                } else {
-                  return r;
-                }
-              }),
-            );
-          }}
-        >
-          {actionText}
-        </Chip.Toggle>
-      </div>
+  const chips =
+    resource?.resourceType === 'AltinnApp' ? (
+      <Chip.Toggle
+        size='small'
+        checkmark
+        selected={rights.some((r) => r.checked === true)}
+        disabled={!rights.some((r) => r.delegable === true)}
+        onClick={() => {
+          setRights(rights.map((r) => ({ ...r, checked: r.delegable ? !r.checked : r.checked })));
+        }}
+      >
+        {t('common.action_access')}
+      </Chip.Toggle>
+    ) : (
+      rights.map((right: ChipRight) => {
+        const actionText = Object.values(LocalizedAction).includes(right.action as LocalizedAction)
+          ? t(`common.action_${right.action}`)
+          : right.action;
+        return (
+          <div key={right.rightKey}>
+            <Chip.Toggle
+              size='sm'
+              checkmark
+              selected={right.checked}
+              disabled={!right.delegable}
+              onClick={() => {
+                setRights(
+                  rights.map((r) => {
+                    if (r.rightKey == right.rightKey && r.delegable) {
+                      return { ...r, checked: !r.checked };
+                    } else {
+                      return r;
+                    }
+                  }),
+                );
+              }}
+            >
+              {actionText}
+            </Chip.Toggle>
+          </div>
+        );
+      })
     );
-  });
+
+  const delegateChosenRights = () => {
+    let recipient: IdValuePair[];
+
+    if (toParty.partyTypeName === PartyType.Person) {
+      recipient = [new IdValuePair('urn:altinn:person:uuid', toParty.partyUuid)];
+    } else if (toParty.partyTypeName === PartyType.Organization) {
+      recipient = [new IdValuePair('urn:altinn:organization:uuid', toParty.partyUuid)];
+    } else if (toParty.partyTypeName === PartyType.SelfIdentified) {
+      recipient = [new IdValuePair('urn:altinn:enterpriseuser:uuid', toParty.partyUuid)];
+    } else {
+      throw new Error('Cannot delegate. User type not defined');
+    }
+
+    const rightsToDelegate = rights
+      .filter((right: ChipRight) => right.checked)
+      .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
+
+    if (resource && rightsToDelegate.length > 0) {
+      const delegationInput: DelegationInputDto = {
+        To: recipient,
+        Rights: rightsToDelegate,
+        serviceDto: new ServiceDto(
+          resource.title,
+          resource.resourceOwnerName,
+          resource.resourceType,
+        ),
+      };
+
+      delegateRights(delegationInput).then(() => {
+        onDelegate();
+      });
+    }
+  };
 
   return (
     <>
@@ -400,6 +466,8 @@ const ResourceInfo = ({ resource, toParty }: { resource?: ServiceResource; toPar
           <Button
             className={classes.completeButton}
             fullWidth={false}
+            disabled={!rights.some((r) => r.checked === true)}
+            onClick={delegateChosenRights}
           >
             Gi fullmakt
           </Button>

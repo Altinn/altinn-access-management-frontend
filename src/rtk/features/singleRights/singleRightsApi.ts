@@ -5,6 +5,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import type {
   DelegationAccessResult,
+  DelegationInputDto,
   ResourceReference,
 } from '@/dataObjects/dtos/resourceDelegation';
 
@@ -50,6 +51,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['SingleRights', 'overview'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -81,6 +83,17 @@ export const singleRightsApi = createApi({
         };
       },
     }),
+    delegateRights: builder.mutation<void, DelegationInputDto>({
+      query: (delegation) => ({
+        url: `singleright/delegate/${getCookie('AltinnPartyId')}`,
+        method: 'POST',
+        body: JSON.stringify(delegation),
+      }),
+      invalidatesTags: ['overview'],
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
   }),
 });
 
@@ -88,6 +101,7 @@ export const {
   useGetPaginatedSearchQuery,
   useClearAccessCacheMutation,
   useDelegationCheckMutation,
+  useDelegateRightsMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;
