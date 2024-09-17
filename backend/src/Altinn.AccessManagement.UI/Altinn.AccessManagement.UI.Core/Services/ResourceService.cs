@@ -277,7 +277,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<ServiceResource>> GetResources()
         {
             string cacheKey = "resources:all";
-            
+
             if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
             {
                 resources = await _resourceRegistryClient.GetResources();
@@ -349,7 +349,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 foreach (string word in searchWords)
                 {
-                    if (StringUtils.NotNullAndContains(res.Title, word) || StringUtils.NotNullAndContains(res.Description, word) || StringUtils.NotNullAndContains(res.RightDescription, word) || StringUtils.NotNullAndContains(res.ResourceOwnerName, word))
+                    if (StringUtils.NotNullAndContains(res.Title, word)
+                    || StringUtils.NotNullAndContains(res.Description, word)
+                    || StringUtils.NotNullAndContains(res.RightDescription, word)
+                    || StringUtils.NotNullAndContains(res.ResourceOwnerName, word)
+                    || (res.Keywords != null && res.Keywords.Exists((kw) => StringUtils.NotNullAndContains(kw, word))))
                     {
                         numMatches++;
                     }
@@ -359,7 +363,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     res.PriorityCounter = numMatches;
 
-                    if (res.Title != null && searchString.Trim().ToLower() == res.Title.Trim().ToLower())
+                    if (res.Title != null && searchString.Trim().Equals(searchString.Trim(), StringComparison.CurrentCultureIgnoreCase))
                     {
                         res.PriorityCounter++; // Prioritize resources who's title is an exact match
                     }
@@ -402,7 +406,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         delegable: resource.Delegable,
                         contactPoints: resource.ContactPoints,
                         spatial: resource.Spatial,
-                        authorizationReference: resource.AuthorizationReference);
+                        authorizationReference: resource.AuthorizationReference,
+                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? new List<string>());
 
                     resourceList.Add(resourceFE);
                 }

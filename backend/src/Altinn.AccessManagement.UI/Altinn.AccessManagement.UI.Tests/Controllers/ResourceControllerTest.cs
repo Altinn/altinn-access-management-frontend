@@ -100,6 +100,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
 
+
         /// <summary>
         ///     Test case: PaginatedSearch with pagination and filters
         ///     Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered
@@ -130,6 +131,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
             AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
         }
+        
 
         /// <summary>
         ///     Test case: PaginatedSearch with pagination and search string
@@ -148,6 +150,38 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => r.Title.ToLower().Contains(searchString));
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={page}&SearchString={searchString}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            PaginatedList<ServiceResourceFE> actualResources = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Equal(expectedResult.Page, actualResources.Page);
+            Assert.Equal(expectedResult.NumEntriesTotal, actualResources.NumEntriesTotal);
+            AssertionUtil.AssertCollections(expectedResult.PageList, actualResources.PageList, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: PaginatedSearch with pagination and search string 
+        ///     Expected: PaginatedSearch returns a list of resources matching on keyword the search string in paginated form with language
+        ///     filtered for the authenticated users selected language
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_searchStringSet_ReturnsKeywordMatch()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+            int page = 1;
+            int resultsPerPage = 1;
+            string searchString = "klesskapet_kw";
+
+            List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources();
+            List<ServiceResourceFE> filterd = allExpectedResources.FindAll(r => r.Keywords != null && r.Keywords.Any(kw => kw.Equals(searchString, StringComparison.CurrentCultureIgnoreCase)));
+            PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(filterd.GetRange(0, resultsPerPage), page, filterd.Count);
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/resources/search?ResultsPerPage={resultsPerPage}&Page={page}&SearchString={searchString}");
