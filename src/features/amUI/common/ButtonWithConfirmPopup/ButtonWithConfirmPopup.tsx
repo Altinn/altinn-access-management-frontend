@@ -5,13 +5,16 @@ import { useTranslation } from 'react-i18next';
 
 import classes from './ButtonWithConfirmPopup.module.css';
 
-interface ButtonWithConfirmPopupProps extends PopoverProps {
+interface ButtonWithConfirmPopupProps extends Omit<PopoverProps, 'children'> {
   onConfirm: () => void;
   message: string;
   confirmButtonProps?: ButtonProps;
   cancelButtonProps?: ButtonProps;
   triggerButtonProps?: PopoverTriggerProps;
   popoverProps?: PopoverProps;
+  confirmButtonContent?: JSX.Element | string;
+  cancelButtonContent?: JSX.Element | string;
+  triggerButtonContent?: JSX.Element | string;
 }
 
 export const ButtonWithConfirmPopup = ({
@@ -19,9 +22,11 @@ export const ButtonWithConfirmPopup = ({
   message,
   confirmButtonProps,
   cancelButtonProps,
-  children,
   triggerButtonProps,
   popoverProps,
+  confirmButtonContent,
+  cancelButtonContent,
+  triggerButtonContent,
   ...props
 }: ButtonWithConfirmPopupProps) => {
   const { t } = useTranslation();
@@ -37,7 +42,7 @@ export const ButtonWithConfirmPopup = ({
           {...triggerButtonProps}
           onClick={() => setOpen(!open)}
         >
-          {children}
+          {triggerButtonContent}
         </Popover.Trigger>
         <Popover.Content {...popoverProps}>
           <div className={classes.confirmPopupMessage}>{message}</div>
@@ -47,7 +52,7 @@ export const ButtonWithConfirmPopup = ({
               {...cancelButtonProps}
               onClick={() => setOpen(false)}
             >
-              {t('common.cancel')}
+              {cancelButtonContent || t('common.cancel')}
             </Button>
             <Button
               {...confirmButtonProps}
@@ -56,7 +61,7 @@ export const ButtonWithConfirmPopup = ({
                 setOpen(false);
               }}
             >
-              {t('common.confirm')}
+              {confirmButtonContent || t('common.confirm')}
             </Button>
           </div>
         </Popover.Content>

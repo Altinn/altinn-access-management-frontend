@@ -206,7 +206,8 @@
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
     "single_rights_title": "Tjenester",
-    "resource_type_text": "Enkelttjeneste"
+    "resource_type_text": "Enkelttjeneste",
+    "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

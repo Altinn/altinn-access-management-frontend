@@ -26,7 +26,8 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
   const { t } = useTranslation();
   const { id } = useParams();
 
-  const [revokeRights, { isLoading }] = useRevokeRightsMutation();
+  const [revokeRights, { isLoading, isError, isSuccess, error }] = useRevokeRightsMutation();
+  console.log('🚀 ~ isError, isSuccess, error:', isError, isSuccess, error);
 
   const handleRevokeRights = (resourceId: string) => {
     revokeRights({
@@ -47,24 +48,29 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
       <div className={classes.resourceOwnerName}>{resourceOwnerName}</div>
       <div className={classes.action}>
         <ButtonWithConfirmPopup
+          message={t('user_rights_page.delete_ingleRight_confirm_message')}
           triggerButtonProps={{
             disabled: isLoading,
             variant: 'tertiary',
             color: 'danger',
             icon: true,
-            size: 'md',
+            size: 'sm',
           }}
-          onConfirm={() => handleRevokeRights(identifier)}
-          message={'Er du sikker på at du vil slette denne?'}
+          triggerButtonContent={
+            <>
+              <TrashIcon />
+              {t('common.delete')}
+            </>
+          }
           confirmButtonProps={{
             variant: 'primary',
             color: 'danger',
           }}
-          cancelButtonProps={{ variant: 'secondary' }}
-        >
-          <TrashIcon />
-          {t('common.delete')}
-        </ButtonWithConfirmPopup>
+          confirmButtonContent={t('common.delete')}
+          cancelButtonProps={{ variant: 'tertiary' }}
+          cancelButtonContent={t('common.cancel')}
+          onConfirm={() => handleRevokeRights(identifier)}
+        />
       </div>
     </ListItem>
   );
