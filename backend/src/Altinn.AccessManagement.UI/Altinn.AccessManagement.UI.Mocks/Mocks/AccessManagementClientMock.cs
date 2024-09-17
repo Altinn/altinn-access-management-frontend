@@ -277,7 +277,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
 
-          /// <inheritdoc />
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeRecievedSingleRightsDelegation(string party, DelegationInput delegation)
         {
             ThrowExceptionIfTriggerParty(party);

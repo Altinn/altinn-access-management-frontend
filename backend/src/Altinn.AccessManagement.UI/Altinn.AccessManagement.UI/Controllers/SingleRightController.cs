@@ -170,8 +170,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for revoking a maskinporten scope delegation on behalf of the party having received the delegation
+        ///     Endpoint for revoking a maskinporten scope delegation on behalf of the party having received the delegation.
         /// </summary>
+        /// <param name="party">The party identifier</param>
+        /// <param name="type">The type of delegation to revoke</param>
+        /// <param name="delegationDTO">The delegation data transfer object</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]

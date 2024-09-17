@@ -85,7 +85,7 @@ export const singleRightsApi = createApi({
     >({
       query({ type, party, userId, resourceId }) {
         return {
-          url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'recieved'}/revoke`,
+          url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'received'}/revoke`,
           method: 'POST',
           body: JSON.stringify({
             userId: userId,

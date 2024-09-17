@@ -1,7 +1,7 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Models
 {
     /// <summary>
-    /// Represents a set of APIs given to or recieved from an organization.
+    /// Represents a set of APIs given to or received from an organization.
     /// </summary>
     public class OrganizationApiSet
     {
@@ -21,7 +21,7 @@
         public string OrgNumber { get; set; }
     
         /// <summary>
-        /// Gets or sets a set of APIs given to or recieved from an organization
+        /// Gets or sets a set of APIs given to or received from an organization
         /// </summary>
         public List<ApiListItem> ApiList { get; set; } = new List<ApiListItem>();
     }

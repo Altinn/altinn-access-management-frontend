@@ -361,8 +361,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-
-
+        ///  Test case: RevokeSingleRightsForUser revokes the rights of a user
+        ///  Expected: RevokeSingleRightsForUser returns internal server error if revoke request failed
         /// </summary>
         [Fact]
         public async Task RevokeSingleRightsForUser_handles_error()
@@ -387,6 +387,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        ///    Test case: RevokeSingleRightsForUser revokes the rights of a user
+        ///    Expected: RevokeSingleRightsForUser offered returns ok on valid input
         /// </summary>
         [Fact]
         public async Task RevokeSingleRightsForUser_offered_returns_ok_on_valid_input()
@@ -412,6 +415,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// </summary>
+        ///   Test case: RevokeSingleRightsForUser revokes the rights of a user
+        ///   Expected: RevokeSingleRightsForUser received returns ok on valid input
+        /// </summary>
         [Fact]
         public async Task RevokeSingleRightsForUser_recieved_returns_ok_on_valid_input()
         {
@@ -429,7 +435,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/recieved/revoke", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/received/revoke", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

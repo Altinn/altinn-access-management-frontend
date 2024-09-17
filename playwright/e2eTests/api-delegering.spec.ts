@@ -47,7 +47,7 @@ test.describe('API-Delegations to organization user', () => {
     await logoutUser.gotoLogoutPage(orgUser.reportee);
     await context.clearCookies();
 
-    //login as DAGL of supplierOrg who recieved API delegation
+    //login as DAGL of supplierOrg who received API delegation
     const userDagl = '26856499412';
     const supplierOrg = 'INTERESSANT KOMPATIBEL TIGER AS';
     await login.loginWithUser(userDagl);

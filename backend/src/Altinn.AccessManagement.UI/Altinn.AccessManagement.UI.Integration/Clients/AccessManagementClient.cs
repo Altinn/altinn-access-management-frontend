@@ -311,7 +311,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
         public async Task<HttpResponseMessage> RevokeRecievedSingleRightsDelegation(string party, DelegationInput delegationObject)
         {
-            string endpointUrl = $"todo/revoke/recieved/{party}/"; // TODO: Switch with actual backend endpoint when available
+            string endpointUrl = $"todo/revoke/received/{party}/"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegationObject, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
