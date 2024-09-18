@@ -22,21 +22,20 @@ jobs:
       - name: Running yarn tests
         working-directory: playwright
         run: yarn run env:${{ inputs.environment }} --grep "Debug" --timeout=4000
-      #DEBUGGING STEP to find directory
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: playwright-report/run-${{ github.run_id }}-${{ github.run_attempt }}
+          path: playwright/playwright-report/run-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 30
       - name: List report directory contents for debugging
         if: always()
-        run: ls -R
+        run: ls -R playwright
       - name: Upload HTML report to Azure
         if: always()
         shell: bash
         run: |
-          REPORT_DIR=playwright-report/run-${{ github.run_id }}-${{ github.run_attempt }}
+          REPORT_DIR=playwright/playwright-report/run-${{ github.run_id }}-${{ github.run_attempt }}
           azcopy cp --recursive "./playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
           echo "::notice title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_DIR/index.html"
         env:
