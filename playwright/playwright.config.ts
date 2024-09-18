@@ -40,6 +40,7 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
+        outputDir: 'playwright-report',
       },
     ],
   ],
