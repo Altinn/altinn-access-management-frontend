@@ -31,6 +31,10 @@ jobs:
       - name: List report directory contents for debugging
         if: always()
         run: ls -R playwright/playwright-report
+      - name: Debug secrets
+        run: |
+          echo "Application ID: $AZCOPY_SPA_APPLICATION_ID"
+          echo "Tenant ID: $AZCOPY_TENANT_ID"
       - name: Upload HTML report to Azure
         if: always()
         shell: bash
