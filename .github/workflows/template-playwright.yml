@@ -22,6 +22,9 @@ jobs:
       - name: Running yarn tests
         working-directory: playwright
         run: yarn run env:${{ inputs.environment }} --grep "Debug"
+      #DEBUGGING STEP to find directory
+      - name: List report directory contents for debugging
+        run: ls -R playwright-report
       - uses: actions/upload-artifact@v4
         if: always()
         with:
