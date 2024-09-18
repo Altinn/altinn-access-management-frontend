@@ -19,8 +19,6 @@ jobs:
         run: yarn --immutable
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: List report directory contents for debugging
-        run: ls -R playwright-report
       - name: Running yarn tests
         working-directory: playwright
         run: yarn run env:${{ inputs.environment }} --grep "Debug" --timeout=4000
@@ -33,16 +31,16 @@ jobs:
           retention-days: 30
       - name: List report directory contents for debugging
         if: always()
-        run: ls -R playwright-report
+        run: ls -R
       - name: Upload HTML report to Azure
         if: always()
         shell: bash
         run: |
-          REPORT_DIR='playwright-report/run-${{ github.run_id }}-${{ github.run_attempt }}'
+          REPORT_DIR=playwright-report/run-${{ github.run_id }}-${{ github.run_attempt }}
           azcopy cp --recursive "./playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
           echo "::notice title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_DIR/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
-          AZCOPY_SPA_APPLICATION_ID: '${{ secrets.AZCOPY_SPA_APPLICATION_ID }}'
-          AZCOPY_SPA_CLIENT_SECRET: '${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}'
-          AZCOPY_TENANT_ID: '${{ secrets.AZCOPY_TENANT_ID }}'
+          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
