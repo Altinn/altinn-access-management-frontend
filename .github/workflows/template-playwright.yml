@@ -34,8 +34,10 @@ jobs:
       - name: Debug secrets
         if: always()
         run: |
-          echo "Application ID: $AZCOPY_SPA_APPLICATION_ID"
           echo "Tenant ID: $AZCOPY_TENANT_ID"
+        env:
+         AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+
       - name: Upload HTML report to Azure
         if: always()
         shell: bash
