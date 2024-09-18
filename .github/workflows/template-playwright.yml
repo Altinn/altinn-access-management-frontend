@@ -32,6 +32,7 @@ jobs:
         if: always()
         run: ls -R playwright/playwright-report
       - name: Debug secrets
+        if: always()
         run: |
           echo "Application ID: $AZCOPY_SPA_APPLICATION_ID"
           echo "Tenant ID: $AZCOPY_TENANT_ID"
@@ -40,8 +41,8 @@ jobs:
         shell: bash
         run: |
           REPORT_DIR='playwright/playwright-report'
-          azcopy cp --recursive "./playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
-          echo "::notice title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_DIR/index.html"
+          azcopy cp --recursive "./playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/playwright/playwright-report"
+          echo "::notice title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/playwright/playwright-report/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
