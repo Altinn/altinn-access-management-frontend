@@ -23,7 +23,7 @@ jobs:
         run: ls -R playwright-report
       - name: Running yarn tests
         working-directory: playwright
-        run: yarn run env:${{ inputs.environment }} --grep "Debug"
+        run: yarn run env:${{ inputs.environment }} --grep "Debug" --timeout=4000
       #DEBUGGING STEP to find directory
       - uses: actions/upload-artifact@v4
         if: always()
