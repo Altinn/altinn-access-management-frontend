@@ -189,7 +189,6 @@ export class apiDelegation {
     await this.searchOrgNumberLabel.fill(orgNumber);
     await this.addButton.click();
 
-    await this.page.pause();
     //Verify previous and next buttons work
     await this.previousButton.click();
     await this.nextButton.click();
