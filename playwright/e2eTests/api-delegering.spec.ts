@@ -24,7 +24,7 @@ test.describe('API-Delegations to organization user', () => {
     await apiDelegations.deleteDelegatedAPIs();
   });
 
-  test('Delegate api to an organization and verify it in its delegations overview page', async ({
+  test('Delegate api to an organization and verify it in its delegations overview page Debug', async ({
     apiDelegations,
   }) => {
     await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
