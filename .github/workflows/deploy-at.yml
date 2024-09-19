@@ -4,7 +4,7 @@ run-name: 'AT environments: ${{ github.sha }}'
 
 on:
   push:
-    branches: ['test/fix-playwright-reports-github/1076']
+    branches: ['main']
 
 jobs:
   containerize:
@@ -30,11 +30,11 @@ jobs:
     name: 'Playwright'
     secrets: inherit
     uses: './.github/workflows/template-playwright.yml'
-    # needs: deploy-main
+    needs: deploy-main
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT24]
+        environment: [AT23, AT24]
 
     with:
       environment: ${{ matrix.environment }}
