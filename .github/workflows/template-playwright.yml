@@ -24,8 +24,7 @@ jobs:
       - name: Running yarn tests
         working-directory: playwright
         run: |
-          yarn run env:${{ inputs.environment }} --grep "Debug" --timeout=10000
-        continue-on-error: true
+          yarn run env:${{ inputs.environment }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
