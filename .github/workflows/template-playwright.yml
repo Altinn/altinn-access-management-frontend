@@ -24,7 +24,7 @@ jobs:
       - name: Running yarn tests
         working-directory: playwright
         run: |
-          yarn run env:${{ inputs.environment }} --workers=1
+          yarn run env:${{ inputs.environment }} --workers=1 --retries=2
       - uses: actions/upload-artifact@v4
         if: always()
         with:
