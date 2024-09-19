@@ -80,7 +80,7 @@ export const singleRightsApi = createApi({
       },
     }),
     revokeRights: builder.mutation<
-      void,
+      { isSuccessStatusCode: boolean },
       { type: DelegationType; party: string; userId: string; resourceId: string }
     >({
       query({ type, party, userId, resourceId }) {

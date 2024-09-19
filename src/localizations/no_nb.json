@@ -207,7 +207,9 @@
     "page_title": "Brukertilganger - Altinn",
     "single_rights_title": "Tjenester",
     "resource_type_text": "Enkelttjeneste",
-    "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?"
+    "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?",
+    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

@@ -9,6 +9,8 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { DelegationType } from '@/features/apiDelegation/components/DelegationType';
 
 import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
+import { useSnackbar } from '../../common/Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
 
 import classes from './SingleRightsSection.module.css';
 
@@ -25,17 +27,30 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
 }) => {
   const { t } = useTranslation();
   const { id } = useParams();
+  const { openSnackbar } = useSnackbar();
 
-  const [revokeRights, { isLoading, isError, isSuccess, error }] = useRevokeRightsMutation();
-  console.log('🚀 ~ isError, isSuccess, error:', isError, isSuccess, error);
+  const [revokeRights, { isLoading }] = useRevokeRightsMutation();
 
-  const handleRevokeRights = (resourceId: string) => {
-    revokeRights({
+  const handleRevokeRights = async (resourceId: string) => {
+    const { data } = await revokeRights({
       type: DelegationType.Offered,
       party: getCookie('AltinnPartyId'),
       userId: id || '',
       resourceId,
     });
+
+    const isSuccessful = data?.isSuccessStatusCode;
+    const snakbarData = {
+      message: t(
+        isSuccessful
+          ? 'user_rights_page.delete_singleRight_success_message'
+          : 'user_rights_page.delete_singleRight_error_message',
+        { servicename: title },
+      ),
+      variant: isSuccessful ? SnackbarMessageVariant.Success : SnackbarMessageVariant.Error,
+      duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
+    };
+    openSnackbar(snakbarData);
   };
 
   return (
