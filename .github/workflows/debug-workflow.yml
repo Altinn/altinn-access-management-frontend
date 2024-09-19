@@ -1,0 +1,11 @@
+name: 'Test AZCOPY'
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug AZCOPY_TENANT_ID
+        run: |
+          echo "Tenant ID: ${AZCOPY_TENANT_ID:-'Secret not set or empty'}"
+        env:
+          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
