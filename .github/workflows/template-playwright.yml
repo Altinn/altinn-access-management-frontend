@@ -34,9 +34,9 @@ jobs:
       - name: Debug secrets
         if: always()
         run: |
-          echo "Tenant ID: $AZCOPY_TENANT_ID"
+          echo "Tenant ID: ${AZCOPY_TENANT_ID:-'Secret not set or empty'}"
         env:
-         AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
 
       - name: Upload HTML report to Azure
         if: always()

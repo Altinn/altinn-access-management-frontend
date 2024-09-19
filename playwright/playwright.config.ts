@@ -22,7 +22,7 @@ const config: PlaywrightTestConfig = {
     headless: true,
     // screenshot: 'only-on-failure',
     screenshot: { mode: 'only-on-failure', fullPage: true },
-    video: { mode: 'retain-on-failure' },
+    video: { mode: 'retain-on-failure', size: { width: 1600, height: 1300 } },
     launchOptions: {
       args: ['--start-maximized'],
     },
