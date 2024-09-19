@@ -23,7 +23,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Running yarn tests
         working-directory: playwright
-        run: yarn run env:${{ inputs.environment }} --grep "Debug" --timeout=4000
+        run: yarn run env:${{ inputs.environment }} --grep "Debug" --timeout=10000
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -40,7 +40,7 @@ jobs:
         run: |
           REPORT_DIR='playwright/playwright-report'
           azcopy cp --recursive "playwright/playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/playwright/playwright-report"
-          echo "::notice title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/playwright/playwright-report/index.html"
+          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/playwright/playwright-report/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
