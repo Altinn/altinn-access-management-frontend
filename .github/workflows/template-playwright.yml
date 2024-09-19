@@ -38,9 +38,9 @@ jobs:
         if: always()
         shell: bash
         run: |
-          REPORT_DIR='playwright/playwright-report'
-          azcopy cp --recursive "playwright/playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/playwright/playwright-report"
-          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/playwright/playwright-report/index.html"
+          REPORT_DIR='run-${{ github.run_id }}-${{ github.run_attempt }}'
+          azcopy cp --recursive "playwright/playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
+          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_DIR/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}

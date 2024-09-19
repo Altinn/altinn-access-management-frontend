@@ -29,7 +29,7 @@ const config: PlaywrightTestConfig = {
     viewport: null, // Disable Playwright's default viewport setting, required to utilize maximum screen. Mostly useful for viewing test results / screenshots to be able to view the entire screen
   },
   reporter: [
-    ['dot'],
+    process.env.CI ? ['line'] : ['dot'],
     [
       'json',
       {
@@ -41,6 +41,7 @@ const config: PlaywrightTestConfig = {
       {
         open: 'on-failure',
         outputDir: 'playwright-report',
+        outputFolder: 'playwright-report',
       },
     ],
   ],
