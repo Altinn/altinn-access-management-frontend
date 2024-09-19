@@ -1,15 +1,15 @@
-name: 'Deploy: AT'
+name: "Deploy: AT"
 
-run-name: 'AT environments: ${{ github.sha }}'
+run-name: "AT environments: ${{ github.sha }}"
 
 on:
   push:
-    branches: ['test/fix-playwright-reports-github/1076']
+    branches: ["test/fix-playwright-reports-github/1076"]
 
 jobs:
   containerize:
-    name: 'Containerize'
-    uses: './.github/workflows/template-build-and-push-container.yml'
+    name: "Containerize"
+    uses: "./.github/workflows/template-build-and-push-container.yml"
     with:
       tag: ${{ github.sha }}
 
@@ -27,14 +27,14 @@ jobs:
   #     tag: ${{ github.sha }}
 
   playwright-main:
-    name: 'Playwright'
+    name: "Playwright"
+    secrets: inherit
+    uses: "./.github/workflows/template-playwright.yml"
     # needs: deploy-main
     strategy:
       fail-fast: false
       matrix:
         environment: [AT24]
-
-    uses: './.github/workflows/template-playwright.yml'
 
     with:
       environment: ${{ matrix.environment }}

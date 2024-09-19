@@ -1,4 +1,5 @@
 name: template-playwright.yml
+
 on:
   workflow_call:
     inputs:
@@ -6,9 +7,10 @@ on:
         type: string
         required: true
         description: Environment
+
 jobs:
   e2e-tests:
-    name: 'Playwright end to end tests'
+    name: Playwright end to end tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
