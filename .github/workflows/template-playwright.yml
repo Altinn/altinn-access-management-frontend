@@ -33,21 +33,13 @@ jobs:
       - name: List report directory contents for debugging
         if: always()
         run: ls -R playwright/playwright-report
-      - name: Debug secrets
-        if: always()
-        run: |
-          echo "Tenant ID: ${AZCOPY_TENANT_ID:-'Secret not set or empty'}"
-          echo "Github Secret: ${GITHUB_TOKEN:-'Secret not set or empty'}"
-        env:
-          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload HTML report to Azure
         if: always()
         shell: bash
         run: |
           REPORT_DIR='playwright/playwright-report'
-          azcopy cp --recursive "./playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/playwright/playwright-report"
+          azcopy cp --recursive "playwright/playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/playwright/playwright-report"
           echo "::notice title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/playwright/playwright-report/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
