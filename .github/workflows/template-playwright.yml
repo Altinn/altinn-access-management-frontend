@@ -35,8 +35,10 @@ jobs:
         if: always()
         run: |
           echo "Tenant ID: ${AZCOPY_TENANT_ID:-'Secret not set or empty'}"
+          echo "Github Secret: ${GITHUB_TOKEN:-'Secret not set or empty'}"
         env:
           AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload HTML report to Azure
         if: always()
