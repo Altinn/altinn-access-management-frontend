@@ -267,7 +267,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
-            
+
             var mockResponse = await GetMockedHttpResponse(dataPath, resourceFileName);
             if (mockResponse.IsSuccessStatusCode)
             {
@@ -277,14 +277,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
 
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRecievedSingleRightsDelegation(string party, DelegationInput delegation)
+        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegation)
         {
-            ThrowExceptionIfTriggerParty(party);
+             ThrowExceptionIfTriggerParty(party);
 
             string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
-            
+
             var mockResponse = await GetMockedHttpResponse(dataPath, resourceFileName);
             if (mockResponse.IsSuccessStatusCode)
             {
@@ -363,6 +362,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return new List<AuthorizedParty>();
                 });
         }
-
     }
 }

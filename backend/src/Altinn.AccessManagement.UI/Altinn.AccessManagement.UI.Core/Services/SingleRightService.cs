@@ -109,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             else
             {
-                return _accessManagementClient.RevokeRecievedSingleRightsDelegation(party, delegationObject);
+                return _accessManagementClient.RevokeReceivedSingleRightsDelegation(party, delegationObject);
             }
         }
     }

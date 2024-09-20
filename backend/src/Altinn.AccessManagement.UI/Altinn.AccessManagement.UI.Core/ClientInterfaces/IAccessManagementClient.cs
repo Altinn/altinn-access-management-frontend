@@ -143,6 +143,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     The delegation object to be revoked
         /// </param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeRecievedSingleRightsDelegation(string party, DelegationInput delegationObject);
+        Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegationObject);
     }
 }
