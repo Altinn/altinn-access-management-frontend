@@ -4,7 +4,6 @@
   min-height: var(--avatar-size);
   display: grid;
   place-content: center;
-  border: #23262a 2px solid;
   background-color: #00315d;
   color: #ffffff;
   text-align: center;
@@ -21,7 +20,6 @@
 
 .avatar.serviceOwner {
   border-radius: 4%;
-  border: #5590e9 2px solid;
   background-color: #5590e9;
 }
 
@@ -32,17 +30,17 @@
 }
 
 .lg {
-  --avatar-size: 2.5rem;
+  --avatar-size: 2.6rem;
   --iconFontSize: 2.3em;
 }
 
 .md {
-  --avatar-size: 2rem;
+  --avatar-size: 2.1rem;
   --iconFontSize: 1.8em;
 }
 
 .sm {
-  --avatar-size: 1.75rem;
+  --avatar-size: 1.8rem;
   --iconFontSize: 1.5em;
 }
 
