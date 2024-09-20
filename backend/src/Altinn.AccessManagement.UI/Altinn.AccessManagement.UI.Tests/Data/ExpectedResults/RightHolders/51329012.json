@@ -25,6 +25,16 @@
     "inheritingRightHolders": []
   },
   {
+    "partyUuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+    "partyType": "Person",
+    "name": "Intelligent Albatross",
+    "registryRoles": [],
+    "personId": "19895199357",
+    "organizationNumber": null,
+    "unitType": null,
+    "inheritingRightHolders": []
+  },
+  {
     "partyUuid": "bab5d1f0-0599-589f-3852-9959156108eb",
     "partyType": "Person",
     "name": "Kevin O'Hara",
