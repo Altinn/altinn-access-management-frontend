@@ -209,6 +209,11 @@
     "single_rights_title": "Services",
     "resource_type_text": "Single right"
   },
+  "delegation_modal": {
+    "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "name_will_receive": "<strong>{{name}}</strong> will receive:",
+    "give_poa": "Give power of attorney"
+  },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
     "FGRP": "Part of enterprise group with",

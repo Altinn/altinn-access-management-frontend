@@ -1,0 +1,51 @@
+.avatar {
+  --avatar-size: 2rem;
+  min-width: var(--avatar-size);
+  min-height: var(--avatar-size);
+  display: grid;
+  place-content: center;
+  border: #23262a 2px solid;
+  background-color: #00315d;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.avatar.person {
+  border-radius: 50%;
+}
+
+.avatar.organization {
+  border-radius: 0.25em;
+}
+
+.avatar.serviceOwner {
+  border-radius: 4%;
+  border: #5590e9 2px solid;
+  background-color: #5590e9;
+}
+
+.icon {
+  font-size: var(--iconFontSize);
+  display: grid;
+  place-content: center;
+}
+
+.lg {
+  --avatar-size: 2.5rem;
+  --iconFontSize: 2.3em;
+}
+
+.md {
+  --avatar-size: 2rem;
+  --iconFontSize: 1.8em;
+}
+
+.sm {
+  --avatar-size: 1.75rem;
+  --iconFontSize: 1.5em;
+}
+
+.initial {
+  color: #ffffff;
+}

@@ -1,8 +1,3 @@
-.modalDialog {
-  max-width: 1100px;
-  padding: 0 15px 20px 15px;
-}
-
 .searchInputs {
   width: 100%;
   display: flex;
@@ -48,7 +43,7 @@
 }
 
 .resourceItem {
-  padding: 5px 8px 5px 0;
+  padding: 5px 10px 5px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,11 +55,10 @@
   align-items: center;
 }
 
-.resourceIcon {
-  padding: 3px;
-  border-radius: 2px;
-  color: white;
-  background-color: #5590e9;
+.resourceHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 .resourceSubtitle {
@@ -88,34 +82,4 @@
   .filter {
     padding-bottom: 10px;
   }
-}
-
-.infoHeading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.infoView {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 20px;
-}
-
-.rightsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 0px 15px 15px 0;
-}
-
-.rightChips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.completeButton {
-  width: fit-content;
-  margin-top: 5px;
 }
