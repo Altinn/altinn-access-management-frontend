@@ -30,7 +30,7 @@ jobs:
     name: 'Playwright'
     secrets: inherit
     uses: './.github/workflows/template-playwright.yml'
-    needs: deploy-main
+    #needs: deploy-main
     strategy:
       fail-fast: false
       matrix:
