@@ -25,17 +25,24 @@ jobs:
         working-directory: playwright
         run: |
           yarn run env:${{ inputs.environment }} --workers=1 --retries=2 --grep "VEGARD"
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: |
-            playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
-            - run: ls playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
-          retention-days: 30
+      - name: List contents of the report directory
+        run: |
+          REPORT_DIR="playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}"
+          if [ -d "$REPORT_DIR" ]; then
+            echo "Contents of $REPORT_DIR:"
+            ls -R "$REPORT_DIR"  # List all contents recursively
+          else
+            echo "Directory $REPORT_DIR does not exist."
+          fi
+          - uses: actions/upload-artifact@v4
+            if: always()
+            with:
+              name: playwright-report
+              path: |
+                playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
+            retention-days: 30
 
       - name: Upload HTML report to Azure
-        if: always()
         shell: bash
         run: |
           REPORT_DIR='${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}'
