@@ -31,6 +31,7 @@ jobs:
           name: playwright-report
           path: |
             playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
+            - run: ls playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
           retention-days: 30
 
       - name: Upload HTML report to Azure
