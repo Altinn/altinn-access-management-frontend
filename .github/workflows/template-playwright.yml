@@ -38,7 +38,7 @@ jobs:
           REPORT_NAME=${{ inputs.environment }}
           REPORT_ID=${{ github.sha }}
           azcopy cp --recursive "playwright/playwright-report/$REPORT_NAME" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_ID/"
-          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_ID/index.html"
+          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
