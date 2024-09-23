@@ -24,20 +24,21 @@ jobs:
       - name: Running yarn tests
         working-directory: playwright
         run: |
-          yarn run env:${{ inputs.environment }} --workers=1 --retries=2
+          yarn run env:${{ inputs.environment }} --workers=1 --retries=2 --grep "VEGARD"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: playwright/playwright-report
+          path: |
+            playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
           retention-days: 30
 
       - name: Upload HTML report to Azure
         if: always()
         shell: bash
         run: |
-          REPORT_DIR='run-${{ github.run_number }}-${{ github.run_attempt }}'
-          azcopy cp --recursive "playwright/playwright-report/*" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
+          REPORT_DIR='${{ inputs.environment }}-run-${{ github.run_number }}-${{ github.run_attempt }}'
+          azcopy cp --recursive "playwright/playwright-report/$REPORT_DIR" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
           echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_DIR/index.html"
         env:
           AZCOPY_AUTO_LOGIN_TYPE: SPN
