@@ -25,14 +25,12 @@ jobs:
         working-directory: playwright
         run: |
           yarn run env:${{ inputs.environment }} --workers=1 --retries=2 --grep "VEGARD"
-      - name: List contents of the report directory
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-              name: playwright-report
-              path: |
-                playwright/playwright-report/${{ inputs.environment }}
-            retention-days: 30
+          name: playwright-report
+          path: 'playwright/playwright-report/${{ inputs.environment }}'
+          retention-days: 30
 
       - name: Upload HTML report to Azure
         shell: bash
