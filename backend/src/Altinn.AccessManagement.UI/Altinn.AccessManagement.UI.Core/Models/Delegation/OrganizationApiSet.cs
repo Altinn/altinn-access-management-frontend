@@ -65,11 +65,11 @@
         /// <summary>
         /// Offered delegation type.
         /// </summary>
-        Offered,
+        Offered = "offered",
 
         /// <summary>
         /// Received delegation type.
         /// </summary>
-        Received
+        Received = "received"
     }
 }
