@@ -40,8 +40,8 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
-        outputDir: `playwright-report/${process.env.ENVIRONMENT?.toUpperCase() ?? 'AT24'}`,
-        outputFolder: `playwright-report/${process.env.ENVIRONMENT?.toUpperCase() ?? 'AT24'}`,
+        outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
+        outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
       },
     ],
   ],
