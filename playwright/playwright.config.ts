@@ -40,7 +40,8 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
-        outputDir: `playwright-report/${process.env.environment ?? 'at24'}/run-${process.env.github_run_number ?? '1'}-${process.env.github_run_attempt ?? '1'}`,
+        //outputDir: `playwright-report/${process.env.environment ?? 'at24'}/run-${process.env.github_run_number ?? '1'}-${process.env.github_run_attempt ?? '1'}`,
+        outputFolder: `playwright-report/${process.env.environment ?? 'at24'}/run-${process.env.github_run_number ?? '1'}-${process.env.github_run_attempt ?? '1'}`,
       },
     ],
   ],
