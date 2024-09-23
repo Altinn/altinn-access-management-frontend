@@ -39,13 +39,13 @@ jobs:
             with:
               name: playwright-report
               path: |
-                playwright/playwright-report/${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}
+                playwright/playwright-report/${{ inputs.environment }}
             retention-days: 30
 
       - name: Upload HTML report to Azure
         shell: bash
         run: |
-          REPORT_DIR='${{ inputs.environment }}/run-${{ github.run_number }}-${{ github.run_attempt }}'
+          REPORT_DIR='${{ inputs.environment }}'
           azcopy cp --recursive "playwright/playwright-report/$REPORT_DIR" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_DIR"
           echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_DIR/index.html"
         env:
