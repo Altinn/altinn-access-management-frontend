@@ -180,11 +180,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{party}/{type}/revoke")]
-        public async Task<ActionResult> RevokeSingleRightForRightholder([FromRoute] string party, [FromRoute] DelegationType delegateType, [FromBody] RevokeSingleRightDelegationDTO delegationDTO)
+        public async Task<ActionResult> RevokeSingleRightForRightholder([FromRoute] string party, [FromRoute] string delegateType, [FromBody] RevokeSingleRightDelegationDTO delegationDTO)
         {
             try
             {
-                var response = await _singleRightService.RevokeSingleRightForRightholder(party, delegationDTO, delegateType);
+                var response = await _singleRightService.RevokeSingleRightForRightholder(party, delegationDTO, DelegationTypeParser.Parse(delegateType));
                 return Ok(response);
             }
             catch (Exception ex)
