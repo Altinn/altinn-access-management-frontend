@@ -179,7 +179,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("{party}/{type}/revoke")]
+        [Route("{party}/{delegateType}/revoke")]
         public async Task<ActionResult> RevokeSingleRightForRightholder([FromRoute] string party, [FromRoute] string delegateType, [FromBody] RevokeSingleRightDelegationDTO delegationDTO)
         {
             try
