@@ -29,7 +29,7 @@ jobs:
         if: always()
         with:
           name: playwright-report-${{ inputs.environment }}
-          path: playwright/playwright-report/${{ inputs.environment }}'
+          path: playwright/playwright-report/${{ inputs.environment }}
           retention-days: 30
 
       - name: Upload HTML report to Azure
