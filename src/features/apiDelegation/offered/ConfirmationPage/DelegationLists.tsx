@@ -1,18 +1,21 @@
-import { BorderedList, CompactDeletableListItem } from '@/components';
-import React, { Key } from 'react';
-import classes from './ConfirmationPage.module.css';
-import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
-import { ApiDelegationResult } from '@/dataObjects/dtos/resourceDelegation';
+import type { Key } from 'react';
+import React from 'react';
+import { CogIcon, Buildings3Icon } from '@navikt/aksel-icons';
+import { t } from 'i18next';
+
+import type { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
+import type { ApiDelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import {
+import type {
   DelegableApi,
   ApiDelegation,
-  softRemoveApi,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import { Organization } from '@/rtk/features/lookup/lookupApi';
-import { CogIcon, Buldings3Icon } from '@navikt/aksel-icons';
-import { t } from 'i18next';
+import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
+import type { Organization } from '@/rtk/features/lookup/lookupApi';
+import { BorderedList, CompactDeletableListItem } from '@/components';
+
+import classes from './ConfirmationPage.module.css';
 
 interface DelegationReceiptListProps {
   items: ApiDelegationResult[];
@@ -63,7 +66,7 @@ export const DelegableOrgList = () => {
         {chosenOrgs?.map((org: Organization, index: Key | null | undefined) => (
           <CompactDeletableListItem
             key={index}
-            startIcon={<Buldings3Icon />}
+            startIcon={<Buildings3Icon />}
             removeCallback={chosenOrgs.length > 1 ? () => dispatch(removeOrg(org)) : null}
             leftText={org.name}
             middleText={t('common.org_nr') + ' ' + org.orgNumber}
