@@ -2,57 +2,71 @@ import { expect } from '@playwright/test';
 
 import { test } from './../fixture/pomFixture';
 
-const orgUser = {
-  id: '14824497789',
-  reportee: 'AKTVERDIG RETORISK APE',
-};
-
 const standardApiDetails = {
   name: 'Maskinporten Schema - AM - K6',
   department: 'Testdepartement',
 };
 
-const orgUserToDelegateTo = {
-  orgNumber: '310661414',
-  reportee: 'INTERESSANT KOMPATIBEL TIGER AS',
-};
-
 test.describe('API-Delegations to organization user', () => {
-  test.beforeEach(async ({ apiDelegations, login }) => {
-    await login.loginWithUser(orgUser.id);
-    await login.chooseReportee(orgUser.reportee);
+  test('Delegate api to an organization', async ({ apiDelegations, login }) => {
+    const user = {
+      id: '12917198150',
+      reportee: 'AKSEPTABEL MOTLØS TIGER AS',
+      orgNumber: '213920812',
+    };
+
+    const userToDelegateTo = {
+      id: '16880097982',
+      reportee: 'NØYTRAL NÆR TIGER AS',
+      orgNumber: '312792680',
+    };
+
+    await login.loginWithUser(user.id);
+    await login.chooseReportee(user.reportee);
     await apiDelegations.deleteDelegatedAPIs();
+
+    await apiDelegations.delegateAPI(standardApiDetails.name, userToDelegateTo.orgNumber);
+    await apiDelegations.verifyConfirmationPage(standardApiDetails, userToDelegateTo);
   });
 
-  test('Delegate api to an organization and verify it in its delegations overview page', async ({
-    apiDelegations,
-  }) => {
-    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
-    await apiDelegations.verifyConfirmationPage(standardApiDetails, orgUserToDelegateTo);
-  });
-
-  test('Delegate api to an organization and supplierOrg verifies it in its Delegations overview page and delete APIs it received', async ({
+  test('Delegate api to an organization and receiver verifies it TEST TWO', async ({
     login,
     logoutUser,
     apiDelegations,
     context,
   }) => {
+    const userThatDelegates = {
+      id: '10896594430',
+      reportee: 'EFFEKTIV SPESIFIKK MUS',
+      orgNumber: '312930846',
+    };
+
+    const userThatReceivesDelegation = {
+      id: '26856499412',
+      reportee: 'INTERESSANT KOMPATIBEL TIGER AS',
+      orgNumber: '310661414',
+    };
+
+    await login.loginWithUser(userThatDelegates.id);
+    await login.chooseReportee(userThatDelegates.reportee);
+    await apiDelegations.deleteDelegatedAPIs();
+
     //API-delegations
-    await apiDelegations.delegateAPI(standardApiDetails.name, orgUserToDelegateTo.orgNumber);
+    await apiDelegations.delegateAPI(standardApiDetails.name, userThatReceivesDelegation.orgNumber);
 
     await apiDelegations.verifyConfirmationPage(
       { name: standardApiDetails.name, department: standardApiDetails.department },
-      { orgNumber: orgUserToDelegateTo.orgNumber, reportee: orgUserToDelegateTo.reportee },
+      {
+        orgNumber: userThatReceivesDelegation.orgNumber,
+        reportee: userThatReceivesDelegation.reportee,
+      },
     );
-    await logoutUser.gotoLogoutPage(orgUser.reportee);
+    await logoutUser.gotoLogoutPage(userThatDelegates.reportee);
     await context.clearCookies();
 
-    //login as DAGL of supplierOrg who recieved API delegation
-    const userDagl = '26856499412';
-    const supplierOrg = 'INTERESSANT KOMPATIBEL TIGER AS';
-    await login.loginWithUser(userDagl);
-    await login.chooseReportee(supplierOrg);
-    await apiDelegations.verifyAPIOverviewPage(orgUser.reportee, standardApiDetails.name);
+    await login.loginWithUser(userThatReceivesDelegation.id);
+    await login.chooseReportee(userThatReceivesDelegation.reportee);
+    await apiDelegations.verifyAPIOverviewPage(userThatDelegates.reportee, standardApiDetails.name);
   });
 
   test('Delegate api to organization to which api was delegated before', async ({

@@ -146,12 +146,12 @@ export class apiDelegation {
     await expect(this.delegateNewApiButton).toBeVisible();
   }
 
-  async delegateAPI(apiName: string, orgNumber: string) {
+  async delegateAPI(apiNameToDelegate: string, receivingOrgNumber: string) {
     await this.verifyDelegatedApiLandingPage();
     await this.delegateNewApiButton.click();
     await expect(this.giveAccessToNewApiHeading).toBeVisible();
-    await this.selectApiToDelegate(apiName);
-    await this.selectUsersThatShouldGetAccess(orgNumber);
+    await this.selectApiToDelegate(apiNameToDelegate);
+    await this.selectUsersThatShouldGetAccess(receivingOrgNumber);
   }
 
   async attemptToDelegateNonDelegableApi(apiName: string) {
@@ -238,17 +238,17 @@ export class apiDelegation {
   }
 
   async verifyConfirmationPage(
-    apiDetails: { name: string; department: string },
-    orgUser: { orgNumber: string; reportee: string },
+    delegatedApiDetails: { name: string; department: string },
+    OrgUserThatDelegates: { orgNumber: string; reportee: string },
   ) {
-    const apiNameLocator = this.page.getByText(apiDetails.name);
-    await expect(apiNameLocator).toHaveText(apiDetails.name);
-    const orgNameLocator = this.page.getByText(orgUser.reportee);
-    await expect(orgNameLocator).toContainText(orgUser.reportee);
+    const apiNameLocator = this.page.getByText(delegatedApiDetails.name);
+    await expect(apiNameLocator).toHaveText(delegatedApiDetails.name);
+    const orgNameLocator = this.page.getByText(OrgUserThatDelegates.reportee);
+    await expect(orgNameLocator).toContainText(OrgUserThatDelegates.reportee);
 
     await this.confirmButton.click();
-    await this.verifyApiDelegationsGiven(apiDetails, orgUser);
-    await this.verifyDelegatedApisFinalPage(orgUser);
+    await this.verifyApiDelegationsGiven(delegatedApiDetails, OrgUserThatDelegates);
+    await this.verifyDelegatedApisFinalPage(OrgUserThatDelegates);
   }
 
   async verifyAPIOverviewPage(reportee: string, receivedApiName: string) {
