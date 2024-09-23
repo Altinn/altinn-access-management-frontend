@@ -27,7 +27,7 @@ jobs:
           yarn run env:${{ inputs.environment }} --workers=1 --retries=2 --grep "VEGARD"
       - name: List contents of the report directory
         run: |
-          REPORT_DIR=git stplaywright/playwright-report/
+          REPORT_DIR=playwright/playwright-report/
           if [ -d "$REPORT_DIR" ]; then
             echo "Contents of $REPORT_DIR:"
             ls -R "$REPORT_DIR"  # List all contents recursively
