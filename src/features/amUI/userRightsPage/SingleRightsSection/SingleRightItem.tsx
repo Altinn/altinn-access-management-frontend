@@ -40,7 +40,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
     });
 
     const isSuccessful = data?.isSuccessStatusCode;
-    const snakbarData = {
+    const snackbarData = {
       message: t(
         isSuccessful
           ? 'user_rights_page.delete_singleRight_success_message'
