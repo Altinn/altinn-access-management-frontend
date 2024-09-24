@@ -25,8 +25,9 @@ import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 import { ChooseServiceSkeleton } from '../../components/ChooseServiceSkeleton/ChooseServiceSkeleton';
-import classes from './ChooseServicePage.module.css';
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
+
+import classes from './ChooseServicePage.module.css';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();

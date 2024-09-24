@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content);
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 return Task.FromResult(new List<Party>() { partyList?.FirstOrDefault(p => p.PartyUuid == uuidList[0]) });
             }
 

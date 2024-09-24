@@ -1,19 +1,30 @@
 import React from 'react';
-import classNames from 'classnames';
+import cn from 'classnames';
 
 import classes from './List.module.css';
 
 interface ListItemProps extends React.HtmlHTMLAttributes<HTMLLIElement> {
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
-export const ListItem = ({ children, className, ...props }: ListItemProps) => {
+// TODO: Make this into a complete ListItem component with avatars, title and subtitle as designed
+export const ListItem = ({ children, onClick, className, ...props }: ListItemProps) => {
   return (
     <li
-      className={classNames(classes.listItem, className)}
+      className={cn(classes.listItem)}
       {...props}
     >
-      {children}
+      {onClick ? (
+        <button
+          className={cn(classes.clickableItem, className)}
+          onClick={onClick}
+        >
+          {children}
+        </button>
+      ) : (
+        <div className={className}>{children}</div>
+      )}
     </li>
   );
 };
