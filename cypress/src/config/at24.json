@@ -1,8 +1,0 @@
-{
-    "$schema": "https://on.cypress.io/cypress.schema.json",
-    "baseUrl": "https://at24.altinn.cloud",
-    "prodløpserver" : ["at24-app03"],
-    "testløpserver" : ["at24-app04"],
-    "UserAPIKey" : "F515FCD5-8CBF-415C-A927-BE867C39A89A",
-    "KystbasenOrgAPIKey": "51C2FD9A-33F6-406B-92F8-2613FCB51B22"
-  }

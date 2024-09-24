@@ -16,20 +16,19 @@ dotenv.config({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   testMatch: ['playwright/e2eTests/*.spec.ts'],
-  //timeout: 5000,
-  timeout: 3 * 60 * 1000,
+  timeout: 30 * 1000, //30 seconds default timeout
   use: {
     headless: true,
     // screenshot: 'only-on-failure',
     screenshot: { mode: 'only-on-failure', fullPage: true },
-    video: { mode: 'retain-on-failure' },
+    video: { mode: 'retain-on-failure', size: { width: 1600, height: 1300 } },
     launchOptions: {
       args: ['--start-maximized'],
     },
     viewport: null, // Disable Playwright's default viewport setting, required to utilize maximum screen. Mostly useful for viewing test results / screenshots to be able to view the entire screen
   },
   reporter: [
-    ['dot'],
+    process.env.CI ? ['line'] : ['dot'],
     [
       'json',
       {
@@ -40,6 +39,8 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
+        outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
+        outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
       },
     ],
   ],

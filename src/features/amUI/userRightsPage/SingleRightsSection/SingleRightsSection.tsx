@@ -1,4 +1,4 @@
-import { Heading, Pagination } from '@digdir/designsystemet-react';
+import { Heading, ListItem, Pagination } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -7,8 +7,12 @@ import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRigh
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/components/List/List';
 import usePagination from '@/resources/hooks/usePagination';
+import { Avatar } from '@/components/Avatar/Avatar';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 
 import classes from './SingleRightsSection.module.css';
+import { DelegationModal } from '../DelegationModal/DelegationModal';
+import { FileIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import SingleRightItem from './SingleRightItem';
 
 export const SingleRightsSection = () => {
@@ -24,6 +28,7 @@ export const SingleRightsSection = () => {
     userId: id || '',
   });
 
+  const { data: party } = useGetPartyByUUIDQuery(id ?? '');
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights || [], 5);
 
   return (
@@ -47,24 +52,43 @@ export const SingleRightsSection = () => {
         {paginatedData?.map((singleRight) => (
           <SingleRightItem
             key={singleRight.identifier}
-            identifier={singleRight.identifier}
-            title={singleRight.title}
-            resourceOwnerName={singleRight.resourceOwnerName}
+            {...singleRight}
           />
+          // <ListItem
+          //   key={singleRight.identifier}
+          //   className={classes.singleRightItem}
+          // >
+          //   <Avatar
+          //     size='md'
+          //     profile='serviceOwner'
+          //     icon={<FileIcon />}
+          //     className={classes.icon}
+          //   />
+          //   <div className={classes.title}>{singleRight.title}</div>
+          //   <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
+          //   <div className={classes.resourceOwnerName}>{singleRight.resourceOwnerName}</div>
+          //   <div className={classes.action}>
+          //     <MenuElipsisVerticalIcon />
+          //   </div>
+          // </ListItem>
         ))}
       </List>
-      {totalPages > 1 && (
-        <Pagination
-          className={classes.pagination}
-          size='sm'
-          hideLabels={true}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onChange={(page) => goToPage(page)}
-          nextLabel={t('common.next')}
-          previousLabel={t('common.previous')}
-        />
-      )}
+      <div className={classes.tools}>
+        {party && <DelegationModal toParty={party} />}
+        {totalPages > 1 && (
+          <Pagination
+            className={classes.pagination}
+            size='sm'
+            compact
+            hideLabels={true}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onChange={(page) => goToPage(page)}
+            nextLabel={t('common.next')}
+            previousLabel={t('common.previous')}
+          />
+        )}
+      </div>
     </div>
   );
 };

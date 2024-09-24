@@ -212,6 +212,11 @@
     "delete_singleRight_success_message": "Access to service: {{servicename}} was successfully deleted",
     "delete_singleRight_error_message": "Failed to delete access to service: {{servicename}}"
   },
+  "delegation_modal": {
+    "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "name_will_receive": "<strong>{{name}}</strong> will receive:",
+    "give_poa": "Give power of attorney"
+  },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
     "FGRP": "Part of enterprise group with",

@@ -1,4 +1,5 @@
 name: template-playwright.yml
+
 on:
   workflow_call:
     inputs:
@@ -6,25 +7,41 @@ on:
         type: string
         required: true
         description: Environment
+
 jobs:
   e2e-tests:
-    name: 'Playwright end to end tests'
+    name: Playwright end to end tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: yarn --immutable
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Running yarn tests
-      working-directory: playwright
-      run: yarn run env:${{ inputs.environment }}
-    - uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/playwright-report
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: yarn --immutable
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Running yarn tests
+        working-directory: playwright
+        run: |
+          yarn run env:${{ inputs.environment }} --retries=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ inputs.environment }}
+          path: playwright/playwright-report/${{ inputs.environment }}
+          retention-days: 30
+
+      - name: Upload HTML report to Azure
+        if: always()
+        shell: bash
+        run: |
+          REPORT_NAME=${{ inputs.environment }}
+          REPORT_ID=${{ github.sha }}
+          azcopy cp --recursive "playwright/playwright-report/$REPORT_NAME" "https://playwrightreporting.blob.core.windows.net/\$web/$REPORT_ID/"
+          echo "::Link to Playwright test results: title=HTML report url::https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/index.html"
+        env:
+          AZCOPY_AUTO_LOGIN_TYPE: SPN
+          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+          AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}

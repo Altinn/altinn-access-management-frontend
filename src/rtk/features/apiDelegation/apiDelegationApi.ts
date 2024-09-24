@@ -4,17 +4,13 @@ import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import type {
   ApiDelegationResult,
   DelegationAccessResult,
+  ResourceReference,
 } from '@/dataObjects/dtos/resourceDelegation';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { Organization } from '../lookup/lookupApi';
 
 import type { DelegableApi } from './delegableApi/delegableApiSlice';
-
-export type ResourceReference = {
-  resource: IdValuePair[];
-  action?: string;
-};
 
 export interface BatchApiDelegationRequest {
   partyId: string;

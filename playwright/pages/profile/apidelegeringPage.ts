@@ -108,24 +108,12 @@ export class apiDelegation {
   }
 
   async goToAccessToApiPageFromFrontPage() {
-    for (let i = 0; i < 3; i++) {
-      try {
-        await this.apiAccessButton.waitFor({ state: 'visible' });
-        await this.apiAccessButton.click();
-        await this.page.waitForTimeout(1000); // Wait for the animation to finish
-        await this.giveAccessButton.waitFor({ state: 'visible' });
-        await this.giveAccessButton.click();
-
-        break; // Exit loop if successful
-      } catch (error) {
-        if (i === 2) {
-          console.error('Failed to navigate to the API access page after 3 attempts:', error);
-          throw error;
-        }
-        console.log(`Retrying... (${i + 1}/3)`);
-        await this.page.waitForTimeout(1000); // Wait for 1 second before retrying
-      }
-    }
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.apiAccessButton.waitFor({ state: 'visible' });
+    await this.apiAccessButton.click();
+    await this.page.waitForTimeout(1500); // Wait for the animation to finish
+    await this.giveAccessButton.waitFor({ state: 'visible' });
+    await this.giveAccessButton.click();
   }
 
   async verifyDelegatedApiLandingPage() {
@@ -146,12 +134,12 @@ export class apiDelegation {
     await expect(this.delegateNewApiButton).toBeVisible();
   }
 
-  async delegateAPI(apiName: string, orgNumber: string) {
+  async delegateAPI(apiNameToDelegate: string, receivingOrgNumber: string) {
     await this.verifyDelegatedApiLandingPage();
     await this.delegateNewApiButton.click();
     await expect(this.giveAccessToNewApiHeading).toBeVisible();
-    await this.selectApiToDelegate(apiName);
-    await this.selectUsersThatShouldGetAccess(orgNumber);
+    await this.selectApiToDelegate(apiNameToDelegate);
+    await this.selectUsersThatShouldGetAccess(receivingOrgNumber);
   }
 
   async attemptToDelegateNonDelegableApi(apiName: string) {
@@ -189,7 +177,6 @@ export class apiDelegation {
     await this.searchOrgNumberLabel.fill(orgNumber);
     await this.addButton.click();
 
-    await this.page.pause();
     //Verify previous and next buttons work
     await this.previousButton.click();
     await this.nextButton.click();
@@ -239,17 +226,17 @@ export class apiDelegation {
   }
 
   async verifyConfirmationPage(
-    apiDetails: { name: string; department: string },
-    orgUser: { orgNumber: string; reportee: string },
+    delegatedApiDetails: { name: string; department: string },
+    OrgUserThatDelegates: { orgNumber: string; reportee: string },
   ) {
-    const apiNameLocator = this.page.getByText(apiDetails.name);
-    await expect(apiNameLocator).toHaveText(apiDetails.name);
-    const orgNameLocator = this.page.getByText(orgUser.reportee);
-    await expect(orgNameLocator).toContainText(orgUser.reportee);
+    const apiNameLocator = this.page.getByText(delegatedApiDetails.name);
+    await expect(apiNameLocator).toHaveText(delegatedApiDetails.name);
+    const orgNameLocator = this.page.getByText(OrgUserThatDelegates.reportee);
+    await expect(orgNameLocator).toContainText(OrgUserThatDelegates.reportee);
 
     await this.confirmButton.click();
-    await this.verifyApiDelegationsGiven(apiDetails, orgUser);
-    await this.verifyDelegatedApisFinalPage(orgUser);
+    await this.verifyApiDelegationsGiven(delegatedApiDetails, OrgUserThatDelegates);
+    await this.verifyDelegatedApisFinalPage(OrgUserThatDelegates);
   }
 
   async verifyAPIOverviewPage(reportee: string, receivedApiName: string) {

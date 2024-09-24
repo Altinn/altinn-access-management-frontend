@@ -17,6 +17,7 @@ const SnackbarItem = ({ item, closeSnackbarItem }: SnackbarItemProps): JSX.Eleme
       className={cx(styles.snackbarItem, styles.bottomLeft, styles[item.variant])}
       key={item.id}
       role='status'
+      aria-live='polite'
     >
       <div className={styles.snackbarItemContent}>
         <span

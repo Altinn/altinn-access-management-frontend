@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useRevokeRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { DelegationType } from '@/features/apiDelegation/components/DelegationType';
+import { Avatar } from '@/components/Avatar/Avatar';
 
 import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { useSnackbar } from '../../common/Snackbar';
@@ -55,9 +56,12 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
 
   return (
     <ListItem className={classes.singleRightItem}>
-      <div className={classes.icon}>
-        <FileIcon />
-      </div>
+      <Avatar
+        size='md'
+        profile='serviceOwner'
+        icon={<FileIcon />}
+        className={classes.icon}
+      />
       <div className={classes.title}>{title}</div>
       <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
       <div className={classes.resourceOwnerName}>{resourceOwnerName}</div>
