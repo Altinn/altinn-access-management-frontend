@@ -15,7 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Altinn.App.Common" Version="6.0.2" />
     <PackageReference Include="Altinn.Common.PEP" Version="4.0.0" />
-    <PackageReference Include="Bogus" Version="35.6.0" />
+    <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="JWTCookieAuthentication" Version="4.0.1" />
   </ItemGroup>
 
