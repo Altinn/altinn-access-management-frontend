@@ -26,24 +26,24 @@
 }
 
 .pageHeader.dark {
-  --component-page_header-background-color: var(--fds-semantic-surface-action-first-active);
-  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+  --component-page_header-background-color: var(--ds-color-accent-13);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.light {
-  --component-page_header-background-color: var(--fds-semantic-surface-neutral-default);
-  --component-page_header-color: var(--fds-semantic-text-neutral-default);
-  border-bottom: solid 1px var(--fds-semantic-border-neutral-subtle);
+  --component-page_header-background-color: var(--ds-color-neutral-contrast-1);
+  --component-page_header-color: var(--ds-color-neutral-base-default);
+  border-bottom: solid 1px var(--ds-color-neutral-border-subtle);
 }
 
 .pageHeader.success {
-  --component-page_header-background-color: var(--fds-semantic-surface-success-default);
-  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+  --component-page_header-background-color: var(--ds-color-success-surface-default);
+  --component-page_header-color: var(--ds-color-success-text-default);
 }
 
 .pageHeader.danger {
-  --component-page_header-background-color: var(--fds-semantic-surface-danger-default);
-  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+  --component-page_header-background-color: var(--ds-color-danger-surface-default);
+  --component-page_header-color: var(--ds-color-danger-text-default);
 }
 
 .pageHeader.small {

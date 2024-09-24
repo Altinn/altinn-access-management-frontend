@@ -20,26 +20,29 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
   ({ additionalText, subtitle, title, actions, headingLevel }, ref) => {
     const { open, toggleOpen, contentId, headerId, color, size } = useActionBarContext();
 
-    let paragraphSize: 'small' | 'medium' | 'large' | 'xsmall';
+    let paragraphSize: 'sm' | 'md' | 'lg' | 'xs';
+    let headingSize: 'sm' | 'md' | 'lg';
     switch (size) {
       case 'large':
         headingLevel = headingLevel || 3;
-        paragraphSize = 'large';
+        paragraphSize = 'lg';
+        headingSize = 'lg';
         break;
       case 'medium':
         headingLevel = headingLevel || 4;
-        paragraphSize = 'small';
+        paragraphSize = 'sm';
+        headingSize = 'md';
         break;
       case 'small':
         headingLevel = headingLevel || 5;
-        paragraphSize = 'xsmall';
+        paragraphSize = 'xs';
+        headingSize = 'sm';
         break;
     }
-
     return (
       <Heading
         level={headingLevel}
-        size={size}
+        size={headingSize}
         ref={ref}
         className={cn(classes.actionBar, classes[color], classes[size], {
           [classes.subtitle]: subtitle,
@@ -69,7 +72,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 </Paragraph>
                 {subtitle && (
                   <Paragraph
-                    size='xsmall'
+                    size='xs'
                     className={classes.subtitle}
                   >
                     {subtitle}
@@ -89,7 +92,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               </Paragraph>
               {subtitle && (
                 <Paragraph
-                  size='xsmall'
+                  size='xs'
                   className={classes.subtitle}
                 >
                   {subtitle}

@@ -1,5 +1,5 @@
-import type { ListProps } from '@digdir/designsystemet-react';
-import { List } from '@digdir/designsystemet-react';
+import type { ListUnorderedProps } from '@digdir/designsystemet-react';
+import { ListUnordered } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import * as React from 'react';
 
@@ -10,7 +10,7 @@ export type BorderedListProps = {
    * Style of the border separating the items
    */
   borderStyle?: 'solid' | 'dashed';
-} & ListProps;
+} & ListUnorderedProps;
 
 export const BorderedList = ({
   borderStyle = 'dashed',
@@ -19,12 +19,12 @@ export const BorderedList = ({
   ...rest
 }: BorderedListProps) => {
   return (
-    <List.Root
+    <ListUnordered
       className={cn(classes.borderedList, { [classes[borderStyle]]: borderStyle }, className)}
       style={{ paddingLeft: 0 }}
       {...rest}
     >
       {children}
-    </List.Root>
+    </ListUnordered>
   );
 };

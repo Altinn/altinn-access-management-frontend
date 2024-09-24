@@ -1,5 +1,5 @@
 import type { ListItemProps } from '@digdir/designsystemet-react';
-import { List } from '@digdir/designsystemet-react';
+import { ListItem } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import * as React from 'react';
 
@@ -18,13 +18,13 @@ export const BorderedListItem = ({
   ...rest
 }: BorderedListItemProps) => {
   return (
-    <List.Item
+    <ListItem
       className={cn(classes.borderedListItem, { [classes[borderStyle]]: borderStyle })}
       style={{ marginBottom: 0 }}
       {...rest}
     >
       {children}
-    </List.Item>
+    </ListItem>
   );
 };
 

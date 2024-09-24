@@ -1,7 +1,7 @@
 .actionBar {
-  --border-color: var(--fds-semantic-border-neutral-subtle);
-  --background-color: var(--fds-semantic-surface-neutral-default);
-  --text-color: var(--fds-semantic-text-neutral-default);
+  --border-color: var(--ds-color-neutral-border-subtle);
+  --background-color: var(--ds-color-neutral-background-subtle);
+  --text-color: var(--ds-color-neutral-base-default);
   display: flex;
   border-width: 1px;
   border-radius: 6px;
@@ -48,58 +48,78 @@
 }
 
 .actionBar.light {
-  --border-color: var(--fds-semantic-border-neutral-subtle);
-  --background-color: var(--fds-semantic-surface-neutral-default);
+  --border-color: var(--ds-color-neutral-border-subtle);
+  --background-color: var(--ds-color-neutral-base-default);
 }
 
 .actionBar.light.clickable:hover {
-  --background-color: var(--fds-semantic-surface-neutral-subtle-hover);
+  --background-color: var(--ds-color-accent-base-hover);
 }
 
 .actionBar.dark {
-  --text-color: var(--fds-semantic-text-neutral-on_inverted);
-  --border-color: var(--fds-semantic-surface-action-first-active);
-  --background-color: var(--fds-semantic-surface-action-first-active);
+  --text-color: #fff;
+  --border-color: #67707c;
+  --background-color: #243142;
 }
 
 .actionBar.dark.clickable:hover {
-  --background-color: var(--fds-semantic-surface-action-first-hover);
+  --background-color: #333e4e;
+}
+
+.actionBar.dark.clickable:active {
+  --background-color: #424d5b;
 }
 
 .actionBar.neutral {
-  --border-color: var(--fds-semantic-border-neutral-subtle);
-  --background-color: var(--fds-semantic-surface-neutral-subtle);
+  --border-color: var(--ds-color-neutral-border-default);
+  --background-color: var(--ds-color-neutral-surface-default);
 }
 
 .actionBar.neutral.clickable:hover {
-  --background-color: var(--fds-semantic-surface-neutral-subtle-hover);
+  --background-color: var(--ds-color-neutral-surface-hover);
+}
+
+.actionBar.neutral.clickable:active {
+  --background-color: var(--ds-color-neutral-surface-active);
 }
 
 .actionBar.warning {
-  --border-color: var(--fds-semantic-border-warning-default);
-  --background-color: var(--fds-semantic-surface-warning-subtle);
+  --border-color: var(--ds-color-warning-border-default);
+  --background-color: var(--ds-color-warning-surface-default);
 }
 
 .actionBar.warning.clickable:hover {
-  --background-color: var(--fds-semantic-surface-warning-subtle-hover);
+  --background-color: var(--ds-color-warning-surface-hover);
+}
+
+.actionBar.warning.clickable:active {
+  --background-color: var(--ds-color-warning-surface-active);
 }
 
 .actionBar.success {
-  --border-color: var(--fds-semantic-border-success-default);
-  --background-color: var(--fds-semantic-surface-success-subtle);
+  --border-color: var(--ds-color-success-border-default);
+  --background-color: var(--ds-color-success-surface-default);
 }
 
 .actionBar.success.clickable:hover {
-  --background-color: var(--fds-semantic-surface-success-subtle-hover);
+  --background-color: var(--ds-color-success-surface-hover);
+}
+
+.actionBar.success.clickable:active {
+  --background-color: var(--ds-color-success-surface-active);
 }
 
 .actionBar.danger {
-  --border-color: var(--fds-semantic-border-danger-default);
-  --background-color: var(--fds-semantic-surface-danger-subtle);
+  --border-color: var(--ds-color-brand3-border-default);
+  --background-color: var(--ds-color-brand3-surface-default);
 }
 
 .actionBar.danger.clickable:hover {
-  --background-color: var(--fds-semantic-surface-danger-subtle-hover);
+  --background-color: var(--ds-color-brand3-surface-hover);
+}
+
+.actionBar.danger.clickable:active {
+  --background-color: var(--ds-color-brand3-surface-active);
 }
 
 .actionBarHeader {

@@ -20,19 +20,20 @@
 
 .additionalTextContainer {
   display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .warningIcon {
-  margin-left: 5px;
   min-width: 25px;
   min-height: 25px;
-  color: var(--fds-semantic-text-danger-default);
+  color: var(--ds-color-danger-text-default);
 }
 
 .warningIconRejected {
   min-width: 25px;
   min-height: 25px;
-  color: var(--fds-semantic-text-danger-default);
+  color: var(--ds-color-danger-text-default);
 }
 
 .successText {
