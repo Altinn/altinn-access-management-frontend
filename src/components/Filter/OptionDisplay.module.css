@@ -9,16 +9,16 @@
   display: flex;
   align-items: start;
   flex-direction: column;
-  border-left: 1px solid var(--fds-semantic-border-divider-default);
-  border-right: 1px solid var(--fds-semantic-border-divider-default);
-  border-top: 1px solid var(--fds-semantic-border-divider-default);
+  border-left: 1px solid var(--ds-color-neutral-contrast-subtle);
+  border-right: 1px solid var(--ds-color-neutral-contrast-subtle);
+  border-top: 1px solid var(--ds-color-neutral-contrast-subtle);
 }
 
 .option {
   width: 100%;
   border: none;
-  border-bottom: 1px solid var(--fds-semantic-border-divider-default);
-  background-color: var(--fds-semantic-background-default);
+  border-bottom: 1px solid var(--ds-color-neutral-contrast-subtle);
+  background-color: var(--ds-color-neutral-contrast-default);
   cursor: pointer;
   font: inherit;
   text-align: left;
@@ -32,26 +32,25 @@
 }
 
 .optionCheckbox:hover > input {
-  box-shadow: inset 0 0 0 2px var(--fds-semantic-border-input-hover);
+  box-shadow: inset 0 0 0 2px var(--ds-color-accent-border-default);
 }
 
 .option:hover {
-  background-color: var(--fds-semantic-surface-info-subtle);
-  border-bottom: 2px solid var(--fds-semantic-border-input-hover);
+  background-color: var(--ds-global-blue-2);
+  border-bottom: 2px solid var(--ds-color-accent-border-default);
   padding: 4px 0 3px 0;
 }
 
 .option:hover > .optionCheckbox {
-  --fds-checkbox-border-color: var(--fds-semantic-border-input-hover);
+  --ds-color-accent-border-default: var(--ds-color-accent-base-hover);
 }
 
 .option:hover > .optionLabel {
-  color: var(--fds-semantic-text-action-hover);
   cursor: pointer;
 }
 
 .option:active {
-  background-color: var(--fds-semantic-surface-info-subtle-hover);
+  background-color: var(--ds-color-accent-base-hover);
 }
 
 .scrollContainer {
