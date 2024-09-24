@@ -20,7 +20,6 @@ interface AvatarProps {
 }
 
 export const Avatar = ({ icon, name, size = 'md', profile = 'person', className }: AvatarProps) => {
-  console.log(name?.charAt(0));
   return (
     <div
       className={cn(classes.avatar, classes[size], classes[profile], className)}

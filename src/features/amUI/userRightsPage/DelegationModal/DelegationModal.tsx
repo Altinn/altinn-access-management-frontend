@@ -71,7 +71,7 @@ export const DelegationModal = ({ toParty }: DelegationModalProps) => {
             </Heading>
           )}
         </Modal.Header>
-        <Modal.Content>
+        <Modal.Content className={classes.content}>
           {infoView ? (
             <ResourceInfo
               resource={resourceToView}
