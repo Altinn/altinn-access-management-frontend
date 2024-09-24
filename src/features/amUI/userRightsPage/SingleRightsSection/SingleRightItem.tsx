@@ -50,7 +50,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
       variant: isSuccessful ? SnackbarMessageVariant.Success : SnackbarMessageVariant.Error,
       duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
-    openSnackbar(snakbarData);
+    openSnackbar(snackbarData);
   };
 
   return (

@@ -17,7 +17,6 @@ const SnackbarItem = ({ item, closeSnackbarItem }: SnackbarItemProps): JSX.Eleme
       className={cx(styles.snackbarItem, styles.bottomLeft, styles[item.variant])}
       key={item.id}
       role='status'
-      aria-live='polite'
     >
       <div className={styles.snackbarItemContent}>
         <span
@@ -53,7 +52,11 @@ const SnackbarItem = ({ item, closeSnackbarItem }: SnackbarItemProps): JSX.Eleme
 export const Snackbar = (): JSX.Element | null => {
   const { storedMessages, closeSnackbarItem } = useSnackbar();
   return (
-    <div className={styles.snackbarContainer}>
+    <div
+      className={styles.snackbarContainer}
+      role='alert'
+      aria-live='assertive'
+    >
       {(storedMessages || []).map((item) => (
         <SnackbarItem
           key={item.id}
