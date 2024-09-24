@@ -1,8 +1,0 @@
-{
-    "$schema": "https://on.cypress.io/cypress.schema.json",
-    "baseUrl": "https://tt02.altinn.no",
-    "prodløpserver" : ["AI-TT02-APP02","AI-TT02-APP01"],
-    "testløpserver" : ["AI-TT02-APP01"],
-    "UserAPIKey" : "FA25E473-BA70-4972-BDBA-E3C984E94B10",
-    "KystbasenOrgAPIKey": "91E7AD27-E748-476A-9DBA-DE850B685E6B"
-  }
