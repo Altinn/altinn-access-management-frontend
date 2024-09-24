@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, ErrorMessage, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Button, ErrorSummary, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -78,7 +78,7 @@ export const ResourceActionBar = ({
   const addButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'large' : 'medium'}
+      size={compact ? 'lg' : 'md'}
       onClick={() => {
         onAddClick?.();
       }}
@@ -96,7 +96,7 @@ export const ResourceActionBar = ({
   const undoButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'large' : 'medium'}
+      size={compact ? 'lg' : 'md'}
       onClick={onRemoveClick}
       icon={compact}
     >
@@ -112,7 +112,7 @@ export const ResourceActionBar = ({
     <Paragraph className={classes.loadingText}>
       <Spinner
         title={t('common.loading')}
-        variant='interaction'
+        size={compact ? 'lg' : 'md'}
       />
       {!compact && t('common.loading')}
     </Paragraph>
@@ -126,14 +126,14 @@ export const ResourceActionBar = ({
         setOpen(!open);
       }}
     >
-      {!compact && <ErrorMessage>{errorText} </ErrorMessage>}
-      <ErrorMessage>
+      {!compact && <ErrorSummary>{errorText} </ErrorSummary>}
+      <ErrorSummary>
         <ExclamationmarkTriangleIcon
           className={classes.notDelegableIcon}
           fontSize={getButtonIconSize(!compact)}
           aria-label={errorText}
         />
-      </ErrorMessage>
+      </ErrorSummary>
     </div>
   );
 

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ErrorMessage, Ingress, Paragraph } from '@digdir/designsystemet-react';
+import { ErrorSummary, Ingress, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
@@ -79,22 +79,22 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         if (numFailedDelegations > 1) {
           return (
             <div className={classes.additionalTextContainer}>
-              <ErrorMessage className={classes.additionalText}>
+              <ErrorSummary className={classes.additionalText}>
                 {numFailedDelegations +
                   '/' +
                   pd.bffResponseList?.length +
                   ' ' +
                   t('common.failed_lowercase')}
-              </ErrorMessage>
+              </ErrorSummary>
               <ExclamationmarkTriangleIcon className={classes.warningIcon} />
             </div>
           );
         } else if (isRejectedDelegation) {
           return (
             <div className={classes.additionalTextContainer}>
-              <ErrorMessage className={classes.additionalTextRejected}>
+              <ErrorSummary className={classes.additionalTextRejected}>
                 {t('common.failed')}
-              </ErrorMessage>
+              </ErrorSummary>
               <ExclamationmarkTriangleIcon className={classes.warningIconRejected} />
             </div>
           );
