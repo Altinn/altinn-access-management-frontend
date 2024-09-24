@@ -5,10 +5,10 @@
 }
 
 .serviceResources {
-  margin-top: var(--fds-spacing-2);
+  margin-top: var(--ds-spacing-2);
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-spacing-2);
 }
 
 .navigationContainer {

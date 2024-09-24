@@ -137,11 +137,26 @@ export const ChooseApiPage = () => {
     const skeletonHeight = '66px';
     return (
       <>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
       </>
     );
   };
@@ -149,10 +164,11 @@ export const ChooseApiPage = () => {
   const ChosenApiSkeleton = () => {
     const skeletonHeight = '66px';
     return Array.from(urlParams).map((_, index) => (
-      <Skeleton.Rectangle
+      <Skeleton
+        variant='rectangle'
         key={index}
         height={skeletonHeight}
-      ></Skeleton.Rectangle>
+      />
     ));
   };
 
@@ -179,7 +195,7 @@ export const ChooseApiPage = () => {
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     debouncedSearch(event.target.value);
                   }}
-                  size='medium'
+                  size='md'
                   onClear={() => {
                     setSearchString('');
                   }}
@@ -247,13 +263,13 @@ export const ChooseApiPage = () => {
                       ApiDelegationPath.Overview,
                   )
                 }
-                fullWidth={isSm}
+                // fullWidth={isSm}
               >
                 {t('common.cancel')}
               </Button>
               <Button
                 disabled={chosenApis.length < 1}
-                fullWidth={isSm}
+                // fullWidth={isSm}
                 onClick={() =>
                   navigate(
                     '/' +

@@ -1,4 +1,12 @@
-import { Button, List, Paragraph, Spinner, Alert, Heading } from '@digdir/designsystemet-react';
+import {
+  Button,
+  List,
+  Paragraph,
+  Spinner,
+  Alert,
+  Heading,
+  ListUnordered,
+} from '@digdir/designsystemet-react';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -77,16 +85,15 @@ export const ApiActionBar = ({
         (isLoading === true ? (
           <Spinner
             title={t('common.loading')}
-            variant='interaction'
-            size='medium'
+            size='md'
           />
         ) : (
           <Button
             variant={'tertiary'}
-            color={'second'}
+            color='accent'
             onClick={onAddClick}
             aria-label={t('common.add') + ' ' + api.apiName}
-            size='large'
+            size='lg'
             icon
           >
             <PlusCircleIcon fontSize={getButtonIconSize(false)} />
@@ -98,7 +105,7 @@ export const ApiActionBar = ({
           color={'danger'}
           onClick={onRemove}
           aria-label={t('common.remove') + ' ' + api.apiName}
-          size='large'
+          size='lg'
           className={classes.actionButton}
           icon
         >
@@ -114,7 +121,7 @@ export const ApiActionBar = ({
         {api.scopes?.length > 0 && (
           <>
             <Heading
-              size='xxsmall'
+              size='xs'
               level={5}
               spacing
             >
@@ -126,7 +133,7 @@ export const ApiActionBar = ({
         {api.rightDescription && (
           <>
             <Heading
-              size='xxsmall'
+              size='xs'
               level={5}
               spacing
             >
@@ -141,7 +148,7 @@ export const ApiActionBar = ({
         {api.description && (
           <>
             <Heading
-              size='xxsmall'
+              size='xs'
               level={5}
               spacing
             >
@@ -162,7 +169,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          severity='danger'
+          color='danger'
           className={classes.errorContent}
         >
           <Paragraph spacing>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
@@ -172,27 +179,25 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          severity='danger'
+          color='danger'
           className={classes.errorContent}
         >
           <Paragraph spacing>
             {t(`${getErrorCodeTextKey(ErrorCode.InsufficientAuthenticationLevel)}`)}
           </Paragraph>
-          <List.Root>
-            <List.Unordered>
-              <List.Item>{t('common.minid')}</List.Item>
-              <List.Item>{t('common.bankid')}</List.Item>
-              <List.Item>{t('common.commfides')}</List.Item>
-              <List.Item>{t('common.buypass')}</List.Item>
-            </List.Unordered>
-          </List.Root>
+          <ListUnordered>
+            <List.Item>{t('common.minid')}</List.Item>
+            <List.Item>{t('common.bankid')}</List.Item>
+            <List.Item>{t('common.commfides')}</List.Item>
+            <List.Item>{t('common.buypass')}</List.Item>
+          </ListUnordered>
         </Alert>
       );
     } else if (accessResult?.details[0].code === ErrorCode.MissingRoleAccess) {
       return (
         <Alert
           role='alert'
-          severity='danger'
+          color='danger'
           className={classes.errorContent}
         >
           <Paragraph>
@@ -205,7 +210,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          severity='danger'
+          color='danger'
           className={classes.errorContent}
         >
           <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>

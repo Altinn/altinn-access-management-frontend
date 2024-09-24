@@ -50,7 +50,7 @@
 }
 
 .option:active {
-  background-color: var(--ds-color-accent-base-hover);
+  background-color: #b3d0ea;
 }
 
 .scrollContainer {

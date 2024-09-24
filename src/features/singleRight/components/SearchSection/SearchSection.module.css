@@ -25,8 +25,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: end;
-  gap: var(--fds-spacing-2);
-  margin-top: var(--fds-spacing-8);
+  gap: var(--ds-spacing-2);
+  margin-top: var(--ds-spacing-8);
 }
 
 .filterChips {
@@ -35,10 +35,10 @@
 }
 
 .serviceResources {
-  margin-top: var(--fds-spacing-2);
+  margin-top: var(--ds-spacing-2);
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-spacing-2);
   list-style-type: none;
   margin-left: 0;
   padding: 0;
