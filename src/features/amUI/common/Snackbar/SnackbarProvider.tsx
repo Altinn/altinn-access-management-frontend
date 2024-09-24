@@ -60,7 +60,6 @@ export const SnackbarProvider = ({ children }: { children: JSX.Element }) => {
     duration = defaultDuration,
   }: SnackbarInput): string => {
     const id = btoa(String(Math.random())).substring(0, 12);
-    console.log('🚀 ~ SnackbarProvider ~ id:', id);
     setSnackbarConfig((prevConfig) => ({
       isOpen: true,
       storedMessages: [
