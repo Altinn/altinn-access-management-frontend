@@ -4,7 +4,7 @@ run-name: 'AT environments: ${{ github.sha }}'
 
 on:
   push:
-    branches: ['test/rewrite-delegation-tests']
+    branches: ['main']
 
 jobs:
   containerize:
