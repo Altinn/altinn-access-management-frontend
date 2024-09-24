@@ -17,7 +17,7 @@
   grid-template-areas:
     'icon title type action'
     'icon owner type action';
-  grid-template-columns: 35px minmax(30px, auto) minmax(30px, 120px) 30px;
+  grid-template-columns: 35px minmax(30px, auto) minmax(30px, 120px) 80px;
   gap: 0.5rem;
   align-items: center;
   padding: 0.5rem 0;
