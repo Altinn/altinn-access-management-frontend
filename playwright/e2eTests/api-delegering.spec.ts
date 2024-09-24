@@ -211,19 +211,21 @@ test.describe('API-Delegations to organization user', () => {
 });
 
 test.describe('API Delegation Access Control Tests', () => {
-  test('Verify that Tilgangsstyrer does NOT have access to API delegering panel DEBUG', async ({
+  test('Verify that Tilgangsstyrer does NOT have access to API delegering panel', async ({
     page,
     login,
     apiDelegations,
   }) => {
-    const reporteeWithoutAccess = 'BLÅVEIS SKRAVLETE';
-    await login.loginWithUser('14824497789');
+    const reporteeWithoutAccess = 'AMBASSADERÅD HUMORISTISK';
+    await login.loginWithUser('02828698497');
     await login.chooseReportee(reporteeWithoutAccess);
 
     await page.goto((process.env.BASE_URL as string) + '/ui/profile');
 
     //Make sure the user is on the correct page
-    await expect(page.getByRole('heading', { name: `Profil for SKRAVLETE BLÅVEIS` })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: `Profil for HUMORISTISK AMBASSADERÅD` }),
+    ).toBeVisible();
 
     //Verify that the user does not have access to the API delegering panel
     await expect(apiDelegations.getApiAccessButton).not.toBeVisible();
