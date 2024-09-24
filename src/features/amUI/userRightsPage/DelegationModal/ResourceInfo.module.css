@@ -1,0 +1,36 @@
+.infoHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.resourceIcon {
+  padding: 3px;
+  border-radius: 2px;
+  color: white;
+  background-color: #5590e9;
+}
+
+.infoView {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 20px;
+}
+
+.rightsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0px 15px 15px 0;
+}
+
+.rightChips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.completeButton {
+  width: fit-content;
+  margin-top: 5px;
+}

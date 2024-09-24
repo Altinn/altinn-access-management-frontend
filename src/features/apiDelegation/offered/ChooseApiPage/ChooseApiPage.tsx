@@ -17,13 +17,15 @@ import {
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { Filter, type FilterOption } from '@/components/Filter';
 import { debounce } from '@/resources/utils';
-import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import {
   useDelegationCheckMutation,
   useSearchQuery,
 } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+import type {
+  DelegationAccessResult,
+  ResourceReference,
+} from '@/dataObjects/dtos/resourceDelegation';
 import type { ResourceOwner } from '@/rtk/features/resourceApi';
 import { ResourceType, useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';

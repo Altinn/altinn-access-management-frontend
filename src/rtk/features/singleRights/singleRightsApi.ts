@@ -3,6 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
+import type {
+  DelegationAccessResult,
+  DelegationInputDto,
+  ResourceReference,
+} from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
   page: number;
@@ -46,6 +51,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['SingleRights', 'overview'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -64,6 +70,16 @@ export const singleRightsApi = createApi({
     >({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
     }),
+    delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
+      query: (resourceRef) => ({
+        url: `singleright/checkdelegationaccesses/${getCookie('AltinnPartyId')}`,
+        method: 'POST',
+        body: JSON.stringify(resourceRef),
+      }),
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
         return {
@@ -73,13 +89,26 @@ export const singleRightsApi = createApi({
         };
       },
     }),
+    delegateRights: builder.mutation<void, DelegationInputDto>({
+      query: (delegation) => ({
+        url: `singleright/delegate/${getCookie('AltinnPartyId')}`,
+        method: 'POST',
+        body: JSON.stringify(delegation),
+      }),
+      invalidatesTags: ['overview'],
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
   }),
 });
 
 export const {
-  useGetSingleRightsForRightholderQuery,
   useGetPaginatedSearchQuery,
+  useGetSingleRightsForRightholderQuery,
   useClearAccessCacheMutation,
+  useDelegationCheckMutation,
+  useDelegateRightsMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

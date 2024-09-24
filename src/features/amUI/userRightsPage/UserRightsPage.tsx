@@ -4,10 +4,10 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { UserIcon } from '@/components/UserIcon/UserIcon';
+import { Avatar } from '@/components/Avatar/Avatar';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
@@ -26,16 +26,17 @@ export const UserRightsPage = () => {
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
 
   useDocumentTitle(t('user_rights_page.page_title'));
-  const avatar = id ? <span>{party?.name?.charAt(0)}</span> : '';
+  const name = id ? party?.name : '';
 
   return (
     <PageWrapper>
       <FakePageWrapper reporteeName={reportee?.name || ''}>
         <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
           <div className={classes.headingRow}>
-            <UserIcon
-              icon={avatar}
+            <Avatar
+              name={name}
               size={'lg'}
+              profile={party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'}
             />
             <Heading
               level={1}

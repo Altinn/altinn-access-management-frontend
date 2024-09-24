@@ -2,9 +2,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
+import type { PartyType } from '../userInfo/userInfoApi';
+
 export type UserProfile = {
   userId: string;
-  userUUID: string;
+  userUuid: string;
   userType: UserType;
   userName: string;
   phoneNumber: string;
@@ -15,11 +17,12 @@ export type UserProfile = {
 
 export type Party = {
   partyId: number;
-  partyUUID: string;
+  partyUuid: string;
   orgNumber?: string;
   ssn?: string;
   unitType?: string;
   name: string;
+  partyTypeName: PartyType;
 };
 
 export enum UserType {

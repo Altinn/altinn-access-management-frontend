@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 import { useTranslation } from 'react-i18next';
-import classes from './UserItem.module.css';
-import { UserIcon } from '@/components/UserIcon/UserIcon';
 import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
+
+import { Avatar } from '@/components/Avatar/Avatar';
+
 import type { FilteredRightHolder } from '../useFilteredRightHolders';
+
+import classes from './UserItem.module.css';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -49,8 +51,6 @@ export const UserItem = ({
   );
 
   const isExpanable = !!(user.inheritingRightHolders && user.inheritingRightHolders.length > 0);
-
-  const avatar = <span>{user.name.charAt(0)}</span>;
 
   const UserListRole = ({ role }: { role: string }) => {
     const { t } = useTranslation();
@@ -107,9 +107,10 @@ export const UserItem = ({
             fullWidth
           >
             {icon && (
-              <UserIcon
+              <Avatar
                 size={size}
-                icon={isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                profile='organization'
+                name={user.name}
                 className={classes.icon}
               />
             )}
@@ -127,9 +128,9 @@ export const UserItem = ({
             )}
           >
             {icon && (
-              <UserIcon
+              <Avatar
                 size={size}
-                icon={avatar}
+                name={user.name}
                 className={classes.icon}
               />
             )}

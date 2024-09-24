@@ -9,8 +9,11 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/components/List/List';
 import { ListItem } from '@/components/List/ListItem';
 import usePagination from '@/resources/hooks/usePagination';
+import { Avatar } from '@/components/Avatar/Avatar';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 
 import classes from './SingleRightsSection.module.css';
+import { DelegationModal } from './DelegationModal/DelegationModal';
 
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
@@ -25,6 +28,7 @@ export const SingleRightsSection = () => {
     userId: id || '',
   });
 
+  const { data: party } = useGetPartyByUUIDQuery(id ?? '');
   const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights || [], 5);
 
   return (
@@ -50,9 +54,12 @@ export const SingleRightsSection = () => {
             key={singleRight.identifier}
             className={classes.singleRightItem}
           >
-            <div className={classes.icon}>
-              <FileIcon />
-            </div>
+            <Avatar
+              size='md'
+              profile='serviceOwner'
+              icon={<FileIcon />}
+              className={classes.icon}
+            />
             <div className={classes.title}>{singleRight.title}</div>
             <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
             <div className={classes.resourceOwnerName}>{singleRight.resourceOwnerName}</div>
@@ -62,18 +69,22 @@ export const SingleRightsSection = () => {
           </ListItem>
         ))}
       </List>
-      {totalPages > 1 && (
-        <Pagination
-          className={classes.pagination}
-          size='sm'
-          hideLabels={true}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onChange={(page) => goToPage(page)}
-          nextLabel={t('common.next')}
-          previousLabel={t('common.previous')}
-        />
-      )}
+      <div className={classes.tools}>
+        {party && <DelegationModal toParty={party} />}
+        {totalPages > 1 && (
+          <Pagination
+            className={classes.pagination}
+            size='sm'
+            compact
+            hideLabels={true}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onChange={(page) => goToPage(page)}
+            nextLabel={t('common.next')}
+            previousLabel={t('common.previous')}
+          />
+        )}
+      </div>
     </div>
   );
 };
