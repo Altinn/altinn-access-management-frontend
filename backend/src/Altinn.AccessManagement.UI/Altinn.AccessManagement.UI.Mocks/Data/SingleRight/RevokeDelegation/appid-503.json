@@ -1,76 +1,15 @@
 [
   {
-    "rightKey": "appid-503/read",
     "resource": [
       {
         "id": "urn:altinn:resource",
         "value": "appid-503"
       }
     ],
-    "action": "read",
-    "status": "Delegable",
-    "details": [
+    "to": [
       {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "rightKey": "appid-503/write",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-503"
-      }
-    ],
-    "action": "write",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "rightKey": "appid-503/sign",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-503"
-      }
-    ],
-    "action": "sign",
-    "status": "Delegable",
-    "details": [
-      {
-        "code": "DelegationAccess",
-        "description": "The user have access through delegation(s) of the right to the recipient(s)",
-        "parameters": {
-          "roleRequirementsMatches": [
-            {
-              "id": "urn:altinn:role",
-              "value": "DAGL"
-            }
-          ]
-        }
+        "id": "urn:altinn:organizationnumber",
+        "value": "810418192"
       }
     ]
   }
