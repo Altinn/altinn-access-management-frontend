@@ -263,13 +263,11 @@ export const ChooseApiPage = () => {
                       ApiDelegationPath.Overview,
                   )
                 }
-                // fullWidth={isSm}
               >
                 {t('common.cancel')}
               </Button>
               <Button
                 disabled={chosenApis.length < 1}
-                // fullWidth={isSm}
                 onClick={() =>
                   navigate(
                     '/' +

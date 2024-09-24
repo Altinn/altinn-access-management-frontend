@@ -35,7 +35,7 @@
 .singleRightItem > .resourceType {
   grid-area: type;
   justify-content: center;
-  color: var(--fds-colors-grey-700);
+  color: var(--ds-color-neutral-8);
   font-size: 15px;
 }
 
@@ -44,7 +44,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--fds-colors-grey-700);
+  color: var(--ds-color-neutral-8);
   font-size: 12px;
 }
 

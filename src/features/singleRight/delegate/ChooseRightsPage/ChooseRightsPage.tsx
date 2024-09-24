@@ -129,8 +129,9 @@ export const ChooseRightsPage = () => {
   }, []);
 
   useEffect(() => {
-    processedDelegationsRatio() === 100 &&
+    if (processedDelegationsRatio() === 100) {
       navigate(`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.Receipt}?${urlParams}`);
+    }
   }, [processedDelegations]);
 
   const updateDelegationCount = (services: Service[]) => {
@@ -197,22 +198,21 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <GroupElements>
-        <Popover
-          variant={'info'}
-          placement={'top'}
-          open={popoverOpen}
-          onClose={() => setPopoverOpen(false)}
-        >
+        <Popover.Context>
           <Popover.Trigger
             variant='primary'
-            color='first'
-            fullWidth={isSm}
+            color='neutral'
             disabled={delegationCount < 1}
             onClick={() => setPopoverOpen(!popoverOpen)}
           >
             {t('common.finish_delegation')}
           </Popover.Trigger>
-          <Popover.Content>
+          <Popover
+            onClose={() => setPopoverOpen(false)}
+            open={popoverOpen}
+            variant={'info'}
+            placement={'top'}
+          >
             <Paragraph>
               {t('single_rights.confirm_delegation_text', { name: recipientName })}
             </Paragraph>
@@ -225,12 +225,11 @@ export const ChooseRightsPage = () => {
                 {t('common.confirm')}
               </Button>
             </div>
-          </Popover.Content>
-        </Popover>
+          </Popover>
+        </Popover.Context>
         <Button
           variant='secondary'
-          color='first'
-          fullWidth={isSm}
+          color='neutral'
           onClick={() => {
             navigate(
               `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,
@@ -318,6 +317,7 @@ export const ChooseRightsPage = () => {
             <RestartPrompter
               title={t('single_rights.no_resources chosen')}
               ingress={t('single_rights.restart_prompter_no_resources_chosen_ingress')}
+              severity='warning'
             />
           ) : !isLoading && recipientError ? (
             <RecipientErrorAlert

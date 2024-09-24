@@ -3,7 +3,7 @@ import { t } from 'i18next';
 import type { HTMLAttributes } from 'react';
 import React, { useState } from 'react';
 
-import { useMediaQuery } from '@/resources/hooks';
+// import { useMediaQuery } from '@/resources/hooks';
 
 import classes from './NavigationSection.module.css';
 
@@ -28,13 +28,13 @@ export const NavigationSection = ({
   ...props
 }: NavigationSectionProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const isSm = useMediaQuery('(max-width: 768px)');
+  // const isSm = useMediaQuery('(max-width: 768px)');
   return (
     <div {...props}>
       <Button
         variant='primary'
-        color='first'
-        fullWidth={isSm}
+        color='neutral'
+        // fullWidth={isSm}
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
       >
@@ -48,8 +48,8 @@ export const NavigationSection = ({
       >
         <Popover.Trigger
           variant='tertiary'
-          color={cancelButtonProps.showWarning ? 'danger' : 'first'}
-          size='medium'
+          color={cancelButtonProps.showWarning ? 'danger' : 'neutral'}
+          size='md'
           onClick={
             cancelButtonProps.showWarning
               ? () => setPopoverOpen(!popoverOpen)
@@ -58,14 +58,14 @@ export const NavigationSection = ({
         >
           {t('common.cancel')}
         </Popover.Trigger>
-        <Popover.Content>
+        <Popover>
           <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
           <div className={classes.NavigationSection}>
             <Button
               onClick={cancelButtonProps.onCancel}
               color={'danger'}
               variant={'primary'}
-              fullWidth
+              // fullWidth
             >
               {t('common.yes')}
             </Button>
@@ -73,12 +73,12 @@ export const NavigationSection = ({
               onClick={() => setPopoverOpen(false)}
               color={'danger'}
               variant={'tertiary'}
-              fullWidth
+              // fullWidth
             >
               {t('single_rights.no_stay_here')}
             </Button>
           </div>
-        </Popover.Content>
+        </Popover>
       </Popover>
     </div>
   );

@@ -1,5 +1,5 @@
 .user {
-  --backgroundColor: var(--fds-semantic-surface-neutral-default);
+  --backgroundColor: var(--ds-color-neutral-background-subtle);
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -13,24 +13,24 @@
 }
 
 .subtle {
-  --backgroundColor: var(--fds-semantic-surface-neutral-subtle);
+  --backgroundColor: var(--ds-color-neutral-background-subtle);
 }
 
 .light {
-  --backgroundColor: var(--fds-semantic-surface-neutral-default);
+  --backgroundColor: var(--ds-color-neutral-background-default);
 }
 
 .user.clickable:hover {
-  --backgroundColor: var(--fds-semantic-surface-neutral-subtle-hover);
+  --backgroundColor: var(--ds-color-neutral-surface-hover);
 }
 
 .user.clickable:active {
-  --backgroundColor: var(--fds-semantic-surface-neutral-selected);
+  --backgroundColor: var(--ds-color-neutral-surface-active);
 }
 
 .user.lg {
   padding: 1.25rem 1.25rem;
-  border: 1px solid var(--fds-semantic-border-neutral-subtle);
+  border: 1px solid var(--ds-color-neutral-border-subtle);
   border-radius: 2px;
 }
 
@@ -61,5 +61,5 @@
 }
 
 .expandedContent {
-  background-color: var(--fds-semantic-surface-neutral-subtle);
+  background-color: var(--ds-color-neutral-background-subtle);
 }
