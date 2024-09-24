@@ -11,7 +11,7 @@ test.describe.configure({ mode: 'parallel' });
 
 test.describe('API-Delegations to organization user', () => {
   test('Delegate api to an organization', async ({ apiDelegations, login }) => {
-    const user = {
+    const userThatDelegates = {
       id: '12917198150',
       reportee: 'AKSEPTABEL MOTLØS TIGER AS',
       orgNumber: '213920812',
@@ -23,8 +23,8 @@ test.describe('API-Delegations to organization user', () => {
       orgNumber: '312792680',
     };
 
-    await login.loginWithUser(user.id);
-    await login.chooseReportee(user.reportee);
+    await login.loginWithUser(userThatDelegates.id);
+    await login.chooseReportee(userThatDelegates.reportee);
     await apiDelegations.deleteDelegatedAPIs();
 
     await apiDelegations.delegateAPI(standardApiDetails.name, userToDelegateTo.orgNumber);
