@@ -31,7 +31,7 @@ test.describe('API-Delegations to organization user', () => {
     await apiDelegations.verifyConfirmationPage(standardApiDetails, userToDelegateTo);
   });
 
-  test('Delegate api to an organization and receiver verifies it TEST TWO', async ({
+  test('Delegate api to an organization and receiver verifies it', async ({
     login,
     logoutUser,
     apiDelegations,
