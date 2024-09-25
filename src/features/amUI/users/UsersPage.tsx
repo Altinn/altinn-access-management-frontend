@@ -1,19 +1,20 @@
 import * as React from 'react';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useTranslation } from 'react-i18next';
-
-import { PageWrapper } from '@/components';
 import { Heading } from '@digdir/designsystemet-react';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
-import { UsersList } from './UsersList';
 import { FakePageWrapper } from '../common/FakePageWrapper';
+
+import { UsersList } from './UsersList';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
 
-  const { data: reportee } = useGetReporteeQuery({ partyId: undefined });
+  const { data: reportee } = useGetReporteeQuery();
 
   return (
     <PageWrapper>

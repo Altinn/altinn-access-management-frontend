@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - src/**
+    paths-ignore:
+      - backend/**
 
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - src/**
+    paths-ignore:
+      - backend/**
 
 jobs:
   ci:
