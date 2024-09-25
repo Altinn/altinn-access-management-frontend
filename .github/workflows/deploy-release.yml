@@ -26,6 +26,7 @@ jobs:
     name: 'Playwright'
     needs: deploy-release-to-tt02
     uses: './.github/workflows/template-playwright.yml'
+    secrets: inherit
     with:
       environment: TT02
 
