@@ -2619,10 +2619,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:~11.1.0":
-  version: 11.1.0
-  resolution: "commander@npm:11.1.0"
-  checksum: 10/66bd2d8a0547f6cb1d34022efb25f348e433b0e04ad76a65279b1b09da108f59a4d3001ca539c60a7a46ea38bcf399fc17d91adad76a8cf43845d8dcbaf5cda1
+"commander@npm:~12.0.0":
+  version: 12.0.0
+  resolution: "commander@npm:12.0.0"
+  checksum: 10/62062e2ffe6abd5aa42a551e62fd5eb9b2620f6ac4299382b2aa9fb02f95cda0242d7e84acb890479bd6491edb805f7f91aecb5b4f5c70dc57df49ed7f02ef14
   languageName: node
   linkType: hard
 
@@ -2949,7 +2949,7 @@ __metadata:
     dayjs: "npm:^1.11.5"
     fs-extra: "npm:^11.0.0"
     get-ssl-certificate: "npm:^2.3.3"
-    junit-report-merger: "npm:^6.0.0"
+    junit-report-merger: "npm:^7.0.0"
     mocha-junit-reporter: "npm:^2.1.0"
     pdf-parse: "npm:^1.1.1"
   languageName: unknown
@@ -5801,17 +5801,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"junit-report-merger@npm:^6.0.0":
-  version: 6.0.4
-  resolution: "junit-report-merger@npm:6.0.4"
+"junit-report-merger@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "junit-report-merger@npm:7.0.0"
   dependencies:
-    commander: "npm:~11.1.0"
+    commander: "npm:~12.0.0"
     fast-glob: "npm:~3.3.0"
     xmlbuilder2: "npm:3.1.1"
   bin:
     jrm: cli.js
     junit-report-merger: cli.js
-  checksum: 10/9c833781a5e56b384e857d4ce09d5accedb7c54cdd63e3f040f0fe87ccbcc2ce07dce8f8f5b2b17c12f733d61362b0b6a0f1e44512f3b3e9587d20dba1518af0
+  checksum: 10/a9b0063761a072e8708fabc66949eb67086a035c729789d3db170faf0153f7abb5675e15bb4e8beda3c3e1a740355dab4938d76020d26db5f2c6bb331e085b25
   languageName: node
   linkType: hard
 
