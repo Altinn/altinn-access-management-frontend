@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="delegation">delegation to be revoked</param>
         /// <returns></returns>
         Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation);
-        
+
         /// <summary>
         /// Endpoint for performing a check if the user can delegate a maskinporten schema service to a specified reportee.
         /// </summary>
@@ -120,5 +120,29 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
         Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId);
+
+        /// <summary>
+        ///     Revokes a single rights delegation
+        /// </summary>
+        /// <param name="party">
+        ///    The party from which the rights have been given (delegator)
+        /// </param>
+        /// <param name="delegationObject">
+        ///     The delegation object to be revoked
+        /// </param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegationObject);
+
+        /// <summary>
+        ///     Revokes a single rights delegation
+        /// </summary>
+        /// <param name="party">
+        ///    The party from which the rights have been given (delegator)
+        /// </param>
+        /// <param name="delegationObject">
+        ///     The delegation object to be revoked
+        /// </param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegationObject);
     }
 }

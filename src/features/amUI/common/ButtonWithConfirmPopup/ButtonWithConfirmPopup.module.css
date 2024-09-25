@@ -1,0 +1,11 @@
+.confirmPopupMessage {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  text-align: start;
+}
+
+.confirmPopupButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1;
+}

@@ -12,9 +12,10 @@ import { amUIPath } from '@/routes/paths';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { FakePageWrapper } from '../common/FakePageWrapper';
+import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
 
 import classes from './UserRightsPage.module.css';
-import { SingleRightsSection } from './SingleRightsSection';
+import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -29,26 +30,30 @@ export const UserRightsPage = () => {
   const name = id ? party?.name : '';
 
   return (
-    <PageWrapper>
-      <FakePageWrapper reporteeName={reportee?.name || ''}>
-        <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
-          <div className={classes.headingRow}>
-            <Avatar
-              name={name}
-              size={'lg'}
-              profile={party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'}
-            />
-            <Heading
-              level={1}
-              size='sm'
-              className={classes.heading}
-            >
-              {party?.name}
-            </Heading>
-          </div>
-          <SingleRightsSection />
-        </PageContainer>
-      </FakePageWrapper>
-    </PageWrapper>
+    <SnackbarProvider>
+      <PageWrapper>
+        <FakePageWrapper reporteeName={reportee?.name || ''}>
+          <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
+            <div className={classes.headingRow}>
+              <Avatar
+                name={name}
+                size={'lg'}
+                profile={
+                  party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'
+                }
+              />
+              <Heading
+                level={1}
+                size='sm'
+                className={classes.heading}
+              >
+                {party?.name}
+              </Heading>
+            </div>
+            <SingleRightsSection />
+          </PageContainer>
+        </FakePageWrapper>
+      </PageWrapper>
+    </SnackbarProvider>
   );
 };

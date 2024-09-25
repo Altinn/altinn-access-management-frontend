@@ -1,19 +1,19 @@
-import { Heading, Pagination } from '@digdir/designsystemet-react';
+import { Heading, ListItem, Pagination } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { FileIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/components/List/List';
-import { ListItem } from '@/components/List/ListItem';
 import usePagination from '@/resources/hooks/usePagination';
 import { Avatar } from '@/components/Avatar/Avatar';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 
 import classes from './SingleRightsSection.module.css';
-import { DelegationModal } from './DelegationModal/DelegationModal';
+import { DelegationModal } from '../DelegationModal/DelegationModal';
+import { FileIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import SingleRightItem from './SingleRightItem';
 
 export const SingleRightsSection = () => {
   const { t } = useTranslation();
@@ -50,23 +50,27 @@ export const SingleRightsSection = () => {
         aria-labelledby='single_rights_title'
       >
         {paginatedData?.map((singleRight) => (
-          <ListItem
+          <SingleRightItem
             key={singleRight.identifier}
-            className={classes.singleRightItem}
-          >
-            <Avatar
-              size='md'
-              profile='serviceOwner'
-              icon={<FileIcon />}
-              className={classes.icon}
-            />
-            <div className={classes.title}>{singleRight.title}</div>
-            <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
-            <div className={classes.resourceOwnerName}>{singleRight.resourceOwnerName}</div>
-            <div className={classes.action}>
-              <MenuElipsisVerticalIcon />
-            </div>
-          </ListItem>
+            {...singleRight}
+          />
+          // <ListItem
+          //   key={singleRight.identifier}
+          //   className={classes.singleRightItem}
+          // >
+          //   <Avatar
+          //     size='md'
+          //     profile='serviceOwner'
+          //     icon={<FileIcon />}
+          //     className={classes.icon}
+          //   />
+          //   <div className={classes.title}>{singleRight.title}</div>
+          //   <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
+          //   <div className={classes.resourceOwnerName}>{singleRight.resourceOwnerName}</div>
+          //   <div className={classes.action}>
+          //     <MenuElipsisVerticalIcon />
+          //   </div>
+          // </ListItem>
         ))}
       </List>
       <div className={classes.tools}>
