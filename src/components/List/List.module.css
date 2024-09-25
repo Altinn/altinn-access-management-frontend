@@ -28,3 +28,20 @@
 .listItem:last-child {
   border-bottom: none;
 }
+
+.clickableItem {
+  background-color: var(--backgroundColor);
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+
+.clickableItem:hover {
+  --backgroundColor: var(--fds-semantic-surface-neutral-subtle-hover);
+}
+
+.clickableItem:active {
+  --backgroundColor: var(--fds-semantic-surface-neutral-selected);
+}

@@ -58,5 +58,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </param>
         /// <returns></returns>
         Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
+
+        /// <summary>
+        /// Revokes a single right for a rightholder.
+        /// </summary>
+        /// <param name="party">The party from which the rights have been given (delegator).</param>
+        /// <param name="delegationDTO">The delegation data transfer object containing the details of the revocation.</param>
+        /// <param name="delegationType">The type of delegation to be revoked.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
+        Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeSingleRightDelegationDTO delegationDTO, DelegationType delegationType);
     }
 }

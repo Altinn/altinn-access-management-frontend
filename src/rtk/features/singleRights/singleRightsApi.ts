@@ -3,6 +3,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
+import type {
+  DelegationAccessResult,
+  DelegationInputDto,
+  ResourceReference,
+} from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
   page: number;
@@ -34,6 +39,11 @@ interface searchParams {
   resultsPerPage: number;
 }
 
+enum DelegationType {
+  Offered,
+  Received,
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -46,6 +56,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
+  tagTypes: ['SingleRights', 'overview'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -64,6 +75,16 @@ export const singleRightsApi = createApi({
     >({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
     }),
+    delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
+      query: (resourceRef) => ({
+        url: `singleright/checkdelegationaccesses/${getCookie('AltinnPartyId')}`,
+        method: 'POST',
+        body: JSON.stringify(resourceRef),
+      }),
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
         return {
@@ -73,13 +94,43 @@ export const singleRightsApi = createApi({
         };
       },
     }),
+    delegateRights: builder.mutation<void, DelegationInputDto>({
+      query: (delegation) => ({
+        url: `singleright/delegate/${getCookie('AltinnPartyId')}`,
+        method: 'POST',
+        body: JSON.stringify(delegation),
+      }),
+      invalidatesTags: ['overview'],
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
+      },
+    }),
+    revokeRights: builder.mutation<
+      { isSuccessStatusCode: boolean },
+      { type: DelegationType; party: string; userId: string; resourceId: string }
+    >({
+      query({ type, party, userId, resourceId }) {
+        return {
+          url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'received'}/revoke`,
+          method: 'POST',
+          body: JSON.stringify({
+            userId: userId,
+            resourceId: resourceId,
+          }),
+        };
+      },
+      invalidatesTags: ['overview'],
+    }),
   }),
 });
 
 export const {
-  useGetSingleRightsForRightholderQuery,
   useGetPaginatedSearchQuery,
+  useGetSingleRightsForRightholderQuery,
   useClearAccessCacheMutation,
+  useDelegationCheckMutation,
+  useDelegateRightsMutation,
+  useRevokeRightsMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

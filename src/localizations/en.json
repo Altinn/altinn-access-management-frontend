@@ -207,7 +207,15 @@
   "user_rights_page": {
     "page_title": "User access - Altinn",
     "single_rights_title": "Services",
-    "resource_type_text": "Single right"
+    "resource_type_text": "Single right",
+    "delete_ingleRight_confirm_message": "Are you sure you want to delete this?",
+    "delete_singleRight_success_message": "Access to service: {{servicename}} was successfully deleted",
+    "delete_singleRight_error_message": "Failed to delete access to service: {{servicename}}"
+  },
+  "delegation_modal": {
+    "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "name_will_receive": "<strong>{{name}}</strong> will receive:",
+    "give_poa": "Give power of attorney"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",

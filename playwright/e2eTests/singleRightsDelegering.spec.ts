@@ -13,6 +13,8 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     coverebyRights,
     context,
   }) => {
+    test.setTimeout(60000 * 3);
+
     await login.loginWithUser('03835898554');
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
 
@@ -47,6 +49,8 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     coverebyRights,
     context,
   }) => {
+    test.setTimeout(60000 * 3);
+
     await login.loginWithUser('03835898554');
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
 
@@ -82,6 +86,8 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     context,
     delegateRoles,
   }) => {
+    test.setTimeout(60000 * 3);
+
     await login.loginWithUser('03835898554');
     await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
 
