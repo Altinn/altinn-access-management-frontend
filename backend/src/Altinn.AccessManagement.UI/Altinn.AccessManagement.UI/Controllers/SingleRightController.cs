@@ -168,5 +168,30 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
+
+        /// <summary>
+        ///     Endpoint for revoking a maskinporten scope delegation on behalf of the party having received the delegation.
+        /// </summary>
+        /// <param name="party">The party identifier</param>
+        /// <param name="delegateType">The type of delegation to revoke</param>
+        /// <param name="delegationDTO">The delegation data transfer object</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("{party}/{delegateType}/revoke")]
+        public async Task<ActionResult> RevokeSingleRightForRightholder([FromRoute] string party, [FromRoute] string delegateType, [FromBody] RevokeSingleRightDelegationDTO delegationDTO)
+        {
+            try
+            {
+                var response = await _singleRightService.RevokeSingleRightForRightholder(party, delegationDTO, DelegationTypeParser.Parse(delegateType));
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during revoke of single right");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
     }
 }

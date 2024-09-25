@@ -13,7 +13,6 @@ import { UsersList } from './UsersList';
 export const UsersPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('users_page.page_title'));
-
   const { data: reportee } = useGetReporteeQuery();
 
   return (
