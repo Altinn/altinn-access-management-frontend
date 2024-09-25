@@ -54,14 +54,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
             foreach (var item in delegationOutput)
             {
-                var resoureId = item.RightDelegationResults.FirstOrDefault().Resource.FirstOrDefault().Value;
+                var firstRightDelegationResult = item.RightDelegationResults?.First();
+                var firstResource = firstRightDelegationResult?.Resource?.First();
+                var resourceId = firstResource?.Value;
 
-                if (string.IsNullOrEmpty(resoureId))
+                if (string.IsNullOrEmpty(resourceId))
                 {
                     continue;
                 }
 
-                var resource = await _resourceService.GetResource(resoureId);
+                var resource = await _resourceService.GetResource(resourceId);
 
                 serviceResourceFE.Add(new ServiceResourceFE(
                 resource.Identifier,
