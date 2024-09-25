@@ -21,7 +21,7 @@
     "@digdir/designsystemet-css": "0.10.0",
     "@digdir/designsystemet-react": "0.63.0",
     "@digdir/designsystemet-theme": "^0.15.0",
-    "@navikt/aksel-icons": "^6.0.0",
+    "@navikt/aksel-icons": "^7.0.0",
     "@reduxjs/toolkit": "^2.2.5",
     "@tanstack/react-query": "^5.0.0",
     "axios": "^1.7.2",
