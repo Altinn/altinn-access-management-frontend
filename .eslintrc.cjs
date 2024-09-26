@@ -13,19 +13,7 @@ module.exports = {
     es2021: true,
     "cypress/globals": true
   },
-  extends: [
-    'plugin:react/recommended',
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:prettier/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:jsx-a11y/recommended',
-    'plugin:react/recommended',
-    'plugin:prettier/recommended',
-    "plugin:cypress/recommended",
-    "plugin:prettier/recommended"
-    
-  ],
+  extends: ['plugin:react/recommended', 'eslint:recommended', 'plugin:react/recommended', 'plugin:prettier/recommended', 'plugin:@typescript-eslint/recommended', 'plugin:jsx-a11y/recommended', 'plugin:react/recommended', 'plugin:prettier/recommended', 'plugin:cypress/recommended', 'plugin:prettier/recommended', 'plugin:storybook/recommended'],
   overrides: [],
   plugins: ['react' , 'cypress', 'import'],
   rules: {

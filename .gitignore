@@ -380,3 +380,4 @@ backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.i
 playwright/playwright-report
 playwright/test-results
 playwright/jsonReports
+*storybook.log

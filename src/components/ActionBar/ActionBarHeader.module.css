@@ -48,12 +48,16 @@
 }
 
 .actionBar.light {
-  --border-color: var(--ds-color-neutral-border-subtle);
-  --background-color: var(--ds-color-neutral-base-default);
+  --border-color: var(--ds-color-neutral-border-default);
+  --background-color: #fff;
 }
 
 .actionBar.light.clickable:hover {
-  --background-color: var(--ds-color-accent-base-hover);
+  --background-color: var(--ds-color-neutral-surface-hover);
+}
+
+.actionBar.light.clickable:active {
+  --background-color: var(--ds-color-neutral-surface-active);
 }
 
 .actionBar.dark {
@@ -73,6 +77,7 @@
 .actionBar.neutral {
   --border-color: var(--ds-color-neutral-border-default);
   --background-color: var(--ds-color-neutral-surface-default);
+  --text-color: var(--ds-color-neutral-text-default);
 }
 
 .actionBar.neutral.clickable:hover {
@@ -86,6 +91,7 @@
 .actionBar.warning {
   --border-color: var(--ds-color-warning-border-default);
   --background-color: var(--ds-color-warning-surface-default);
+  --text-color: var(--ds-color-warning-text-default);
 }
 
 .actionBar.warning.clickable:hover {
@@ -99,6 +105,7 @@
 .actionBar.success {
   --border-color: var(--ds-color-success-border-default);
   --background-color: var(--ds-color-success-surface-default);
+  --text-color: var(--ds-color-success-text-default);
 }
 
 .actionBar.success.clickable:hover {
@@ -110,16 +117,17 @@
 }
 
 .actionBar.danger {
-  --border-color: var(--ds-color-brand3-border-default);
-  --background-color: var(--ds-color-brand3-surface-default);
+  --border-color: var(---ds-color-danger-border-default);
+  --background-color: var(--ds-color-danger-surface-default);
+  --text-color: var(--ds-color-danger-text-default);
 }
 
 .actionBar.danger.clickable:hover {
-  --background-color: var(--ds-color-brand3-surface-hover);
+  --background-color: var(--ds-color-danger-surface-hover);
 }
 
 .actionBar.danger.clickable:active {
-  --background-color: var(--ds-color-brand3-surface-active);
+  --background-color: var(--ds-color-danger-surface-active);
 }
 
 .actionBarHeader {

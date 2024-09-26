@@ -26,7 +26,7 @@
 
 .actionBarContent.light {
   border-color: var(--border-color);
-  --border-color: var(--ds-color-neutral-border-subtle);
+  --border-color: var(--ds-color-neutral-border-default);
   --header-color: var(--ds-color-neutral-contrast-1);
   border-top-width: 1px;
 }
@@ -60,7 +60,7 @@
 }
 
 .actionBarContent.danger {
-  --border-color: var(--ds-color-brand3-border-default);
-  --header-color: var(--ds-color-brand3-surface-default);
+  --border-color: var(--ds-color-danger-border-default);
+  --header-color: var(--ds-color-danger-surface-default);
   border-top-color: var(--header-color);
 }
