@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import classes from './ErrorPanel.module.css';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 
 export interface ErrorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -23,7 +23,7 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
 
   return (
     <Alert
-      severity='danger'
+      color='danger'
       size='lg'
       {...props}
     >

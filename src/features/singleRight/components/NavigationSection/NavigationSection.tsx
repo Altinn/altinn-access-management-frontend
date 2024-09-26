@@ -40,12 +40,7 @@ export const NavigationSection = ({
       >
         {t('common.proceed')}
       </Button>
-      <Popover
-        variant={'warning'}
-        placement='top'
-        open={popoverOpen}
-        onClose={() => setPopoverOpen(false)}
-      >
+      <Popover.Context>
         <Popover.Trigger
           variant='tertiary'
           color={cancelButtonProps.showWarning ? 'danger' : 'neutral'}
@@ -58,7 +53,11 @@ export const NavigationSection = ({
         >
           {t('common.cancel')}
         </Popover.Trigger>
-        <Popover>
+        <Popover
+          placement='top'
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
+        >
           <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
           <div className={classes.NavigationSection}>
             <Button
@@ -79,7 +78,7 @@ export const NavigationSection = ({
             </Button>
           </div>
         </Popover>
-      </Popover>
+      </Popover.Context>
     </div>
   );
 };

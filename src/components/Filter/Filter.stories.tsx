@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FilterIcon } from '@navikt/aksel-icons';
-import { action } from '@storybook/addon-actions';
 
 import type { FilterProps } from './Filter';
 import { Filter } from './Filter';
@@ -16,30 +15,35 @@ const filterOptions = [
 const selectedFilters = ['A', 'C'];
 
 const exampleArgs: FilterProps = {
+  fullScreenModal: false,
+  searchable: true,
+  isLoading: false,
   label: 'Filter',
   applyButtonLabel: 'Apply',
   resetButtonLabel: 'Reset',
-  icon: <FilterIcon />,
-  values: selectedFilters,
-  fullScreenModal: false,
   closeButtonAriaLabel: 'Close filter',
   options: filterOptions,
-  onApply: action('apply'),
+  values: selectedFilters,
+  icon: <FilterIcon />,
+  onApply: (value) => console.log('Applied filters:', value),
 };
 
 export default {
   title: 'Components/Filter',
   component: Filter,
   argTypes: {
-    options: { control: { disable: true } },
     onApply: { control: { disable: true } },
-    values: { control: { type: 'multi-select' } },
     icon: { control: { disable: true } },
-    isLoading: { control: { type: 'check' } },
+    values: { control: { disable: true } },
+    options: { control: { disable: true } },
+    className: { control: { disable: true } },
   },
   render: (args) => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-      <Filter {...args} />
+      <Filter
+        {...exampleArgs}
+        {...args}
+      />
     </div>
   ),
 } as Meta;

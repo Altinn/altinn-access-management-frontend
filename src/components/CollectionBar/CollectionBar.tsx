@@ -57,7 +57,7 @@ export const CollectionBar = ({
           !compact && (
             <Paragraph
               role='status'
-              size='small'
+              size='sm'
               className={cn(classes.counterText, classes[color])}
             >
               <FilesFillIcon
@@ -72,7 +72,7 @@ export const CollectionBar = ({
           !compact && (
             <Button
               variant='tertiary'
-              size='small'
+              size='sm'
               className={cn(classes.buttonText, classes[color])}
               onClick={proceedClick}
               disabled={disabledProceedButton}
@@ -90,7 +90,7 @@ export const CollectionBar = ({
         <Button
           className={classes.compactProceedButton}
           variant='tertiary'
-          size='small'
+          size='sm'
           onClick={proceedClick}
           disabled={disabledProceedButton}
         >
