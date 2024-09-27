@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Router } from 'react-router-dom';
 import { fn } from '@storybook/test';
 import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
@@ -7,17 +6,6 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { ActionBar } from '../ActionBar';
 
 import { CollectionBar } from './CollectionBar';
-
-const mockNavigator = {
-  push: () => {},
-  replace: () => {},
-  go: () => {},
-  back: () => {},
-  forward: () => {},
-  createHref: () => '',
-  block: () => () => {},
-  listen: () => () => {},
-};
 
 type CollectionBarPropsAndCustomArgs = React.ComponentProps<typeof CollectionBar>;
 
@@ -92,15 +80,10 @@ export default {
   },
   render: (args) => (
     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-      <Router
-        navigator={mockNavigator}
-        location={''}
-      >
-        <CollectionBar
-          {...exampleArgs}
-          {...args}
-        />
-      </Router>
+      <CollectionBar
+        {...exampleArgs}
+        {...args}
+      />
     </div>
   ),
 } as Meta;

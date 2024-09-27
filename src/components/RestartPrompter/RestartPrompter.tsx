@@ -7,9 +7,11 @@ import { useTranslation } from 'react-i18next';
 
 import classes from './RestartPrompter.module.css';
 
-interface RestartPrompterProps extends Pick<AlertProps, 'severity'> {
+interface RestartPrompterProps extends AlertProps {
   /* Sets spacing on the bottom of the component */
   spacingBottom?: boolean;
+
+  severity?: 'info' | 'success' | 'warning' | 'danger';
 
   /* Title to be displayed */
   title: string;
@@ -33,11 +35,11 @@ export const RestartPrompter = ({
 
   return (
     <Alert
-      severity={severity}
+      color={severity}
       className={cn({ [classes.spacing]: spacingBottom })}
     >
       <Heading
-        size='small'
+        size='sm'
         level={2}
       >
         {title}
@@ -47,8 +49,8 @@ export const RestartPrompter = ({
         <div className={classes.restartButton}>
           <Button
             variant='primary'
-            color='first'
-            size='medium'
+            color='accent'
+            size='md'
             onClick={() => {
               navigate(restartPath);
             }}

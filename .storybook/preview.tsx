@@ -11,6 +11,8 @@ import no_nb from '../src/localizations/no_nb.json';
 import no_nn from '../src/localizations/no_nn.json';
 import en from '../src/localizations/en.json';
 import { Suspense, useEffect } from 'react';
+import React from 'react';
+import { Router } from 'react-router-dom';
 
 const preview: Preview = {
   parameters: {
@@ -57,6 +59,17 @@ export const globalTypes = {
   },
 };
 
+const mockNavigator = {
+  push: () => {},
+  replace: () => {},
+  go: () => {},
+  back: () => {},
+  forward: () => {},
+  createHref: () => '',
+  block: () => () => {},
+  listen: () => () => {},
+};
+
 const withI18next = (Story, context) => {
   const { locale } = context.globals;
 
@@ -69,7 +82,12 @@ const withI18next = (Story, context) => {
   return (
     <Suspense fallback={<div>loading translations...</div>}>
       <I18nextProvider i18n={i18n}>
-        <Story />
+        <Router
+          navigator={mockNavigator}
+          location={''}
+        >
+          <Story />
+        </Router>
       </I18nextProvider>
     </Suspense>
   );

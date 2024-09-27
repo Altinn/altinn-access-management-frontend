@@ -16,7 +16,6 @@
   height: var(--page-header-height);
   background-color: var(--component-page_header-background-color);
   display: flex;
-  width: 100%;
   color: var(--component-page_header-color);
   padding-right: 2rem;
   box-sizing: inherit;
