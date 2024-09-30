@@ -10,7 +10,6 @@ import {
 } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon, FileIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -20,6 +19,7 @@ import { Filter, List, ListItem } from '@/components';
 import { Avatar } from '@/components/Avatar/Avatar';
 
 import classes from './ResourceSearch.module.css';
+import { useDelegationModalContext } from './DelegationModalContext';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
@@ -29,9 +29,15 @@ const searchResultsPerPage = 7;
 
 export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   const { t } = useTranslation();
-  const [filters, setFilters] = useState<string[]>([]);
-  const [searchString, setSearchString] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    searchString = '',
+    setSearchString,
+    filters,
+    setFilters,
+    currentPage,
+    setCurrentPage,
+  } = useDelegationModalContext();
 
   const {
     data: searchData,
