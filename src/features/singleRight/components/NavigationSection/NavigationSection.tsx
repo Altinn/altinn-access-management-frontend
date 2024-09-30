@@ -33,7 +33,7 @@ export const NavigationSection = ({
     <div {...props}>
       <Button
         variant='primary'
-        color='neutral'
+        color='accent'
         // fullWidth={isSm}
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
@@ -64,7 +64,6 @@ export const NavigationSection = ({
               onClick={cancelButtonProps.onCancel}
               color={'danger'}
               variant={'primary'}
-              // fullWidth
             >
               {t('common.yes')}
             </Button>
@@ -72,7 +71,6 @@ export const NavigationSection = ({
               onClick={() => setPopoverOpen(false)}
               color={'danger'}
               variant={'tertiary'}
-              // fullWidth
             >
               {t('single_rights.no_stay_here')}
             </Button>
