@@ -149,6 +149,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           openSnackbar({
             message: t('delegation_modal.success_message', { name: toParty.name }),
             variant: SnackbarMessageVariant.Success,
+            duration: SnackbarDuration.long,
           });
           onDelegate();
         })
