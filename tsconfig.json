@@ -28,7 +28,7 @@
   "**/*.tsx",
   "**/*.js",
   "**/.eslintrc.js"
-],
+, "public/mockServiceWorker.js"],
 "exclude": [
   "node_modules",
   "dist",

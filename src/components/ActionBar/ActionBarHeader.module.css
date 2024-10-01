@@ -75,17 +75,17 @@
 }
 
 .actionBar.neutral {
-  --border-color: var(--ds-color-neutral-border-default);
-  --background-color: var(--ds-color-neutral-surface-default);
+  --border-color: #d2d5d8; /*var(--ds-color-neutral-border-default); */
+  --background-color: #f4f5f6; /*var(--ds-color-neutral-background-default); */
   --text-color: var(--ds-color-neutral-text-default);
 }
 
 .actionBar.neutral.clickable:hover {
-  --background-color: var(--ds-color-neutral-surface-hover);
+  --background-color: #e9eaec /*var(--ds-color-neutral-surface-hover);*/;
 }
 
 .actionBar.neutral.clickable:active {
-  --background-color: var(--ds-color-neutral-surface-active);
+  --background-color: e9eaec; /*var(--ds-color-neutral-surface-active);*/
 }
 
 .actionBar.warning {

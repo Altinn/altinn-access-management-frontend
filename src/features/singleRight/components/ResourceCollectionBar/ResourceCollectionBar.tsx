@@ -42,7 +42,7 @@ export const ResourceCollectionBar = ({
   compact = false,
 }: ResourceCollectionBarProps) => {
   const { t } = useTranslation();
-
+  console.log(resources);
   const selectedResourcesActionBars = resources.map((resource, index) => (
     <ActionBar
       key={index}

@@ -16,9 +16,11 @@ import { ActionBar, type ActionBarProps } from '@/components';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import { type DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { useDelegationCheckMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
-import type { ResourceReference } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { DelegationAccessResult } from '@/dataObjects/dtos/resourceDelegation';
+import type {
+  DelegationAccessResult,
+  ResourceReference,
+} from '@/dataObjects/dtos/resourceDelegation';
 import ScopeList from '@/components/ScopeList/ScopeList';
 import { getButtonIconSize } from '@/resources/utils';
 

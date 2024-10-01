@@ -14,16 +14,8 @@ import { Suspense, useEffect } from 'react';
 import React from 'react';
 import { Router } from 'react-router-dom';
 
-const preview: Preview = {
-  parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
-  },
-};
+import { worker } from '../src/mock/browser';
+worker.start();
 
 // Initialise i18next; start application when ready
 i18n
@@ -50,8 +42,8 @@ export const globalTypes = {
     toolbar: {
       icon: 'globe',
       items: [
-        { value: 'no_nb', title: 'NN' },
-        { value: 'no_nn', title: 'NB' },
+        { value: 'no_nb', title: 'NB' },
+        { value: 'no_nn', title: 'NN' },
         { value: 'en', title: 'EN' },
       ],
       showName: true,
@@ -94,4 +86,3 @@ const withI18next = (Story, context) => {
 };
 
 export const decorators = [withI18next];
-export default preview;
