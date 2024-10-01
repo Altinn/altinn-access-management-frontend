@@ -19,7 +19,8 @@ export interface DelegationModalProps {
 
 export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
   const { t } = useTranslation();
-  const { setInfoView, setResourceToView, resourceToView, infoView } = useDelegationModalContext();
+  const { setInfoView, setResourceToView, resourceToView, infoView, setSearchString, setFilters } =
+    useDelegationModalContext();
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const onSelection = (resource: ServiceResource) => {
@@ -31,6 +32,8 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
 
   const onClose = () => {
     setInfoView(false);
+    setSearchString('');
+    setFilters([]);
   };
 
   return (

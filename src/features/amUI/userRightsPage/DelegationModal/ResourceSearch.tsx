@@ -10,6 +10,7 @@ import {
 } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon, FileIcon } from '@navikt/aksel-icons';
+import { useRef } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -30,14 +31,8 @@ const searchResultsPerPage = 7;
 export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   const { t } = useTranslation();
 
-  const {
-    searchString = '',
-    setSearchString,
-    filters,
-    setFilters,
-    currentPage,
-    setCurrentPage,
-  } = useDelegationModalContext();
+  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
+    useDelegationModalContext();
 
   const {
     data: searchData,
@@ -56,6 +51,14 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   const resources = searchData?.pageList;
   const totalNumberOfResults = searchData?.numEntriesTotal;
   const { data: ROdata } = useGetResourceOwnersQuery();
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.value = searchString;
+    }
+  }, []);
 
   const filterOptions = ROdata
     ? ROdata.map((ro) => {
@@ -199,6 +202,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           <Search
             label={t('single_rights.search_label')}
             hideLabel={false}
+            ref={searchInputRef}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               debouncedSearch(event.target.value);
             }}

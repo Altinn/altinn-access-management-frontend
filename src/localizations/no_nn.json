@@ -208,12 +208,14 @@
     "resource_type_text": "Enkelttjeneste",
     "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?",
     "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
+    "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tjenesten {{servicename}}"
   },
   "delegation_modal": {
     "give_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
-    "give_poa": "Gi fullmakt"
+    "give_poa": "Gi fullmakt",
+    "success_message": "Fullmakt gitt til {{name}}",
+    "error_message": "Kunne ikkje gi fullmakt til {{name}}"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
