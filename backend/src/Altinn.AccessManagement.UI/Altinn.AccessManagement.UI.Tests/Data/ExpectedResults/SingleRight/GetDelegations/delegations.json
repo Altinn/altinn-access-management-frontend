@@ -68,15 +68,25 @@
     "Delegable": true,
     "Visible": true,
     "ResourceOwnerName": "Testdepartementet",
-    "ResourceOwnerOrgNumber": "123456789",
+    "ResourceOwnerOrgNumber": "974760746",
     "ResourceReferences": [
-      { "ReferenceSource": "Altinn3", "Reference": "ttd/a3-app", "ReferenceType": "ApplicationId" }
+      {
+        "ReferenceSource": "Altinn3",
+        "Reference": "ttd/a3-app",
+        "ReferenceType": "ApplicationId"
+      }
     ],
     "PriorityCounter": null,
     "ResourceType": "AltinnApp",
     "AuthorizationReference": [
-      { "Id": "urn:altinn:app", "Value": "a3-app" },
-      { "Id": "urn:altinn:org", "Value": "ttd" }
+      {
+        "Id": "urn:altinn:app",
+        "Value": "a3-app"
+      },
+      {
+        "Id": "urn:altinn:org",
+        "Value": "ttd"
+      }
     ]
   },
   {
@@ -98,16 +108,30 @@
     "Delegable": true,
     "Visible": true,
     "ResourceOwnerName": "Testdepartementet",
-    "ResourceOwnerOrgNumber": "123456789",
+    "ResourceOwnerOrgNumber": "974760746",
     "ResourceReferences": [
-      { "ReferenceSource": "Altinn2", "Reference": "3225", "ReferenceType": "ServiceCode" },
-      { "ReferenceSource": "Altinn2", "Reference": "1596", "ReferenceType": "ServiceEditionCode" }
+      {
+        "ReferenceSource": "Altinn2",
+        "Reference": "3225",
+        "ReferenceType": "ServiceCode"
+      },
+      {
+        "ReferenceSource": "Altinn2",
+        "Reference": "1596",
+        "ReferenceType": "ServiceEditionCode"
+      }
     ],
     "PriorityCounter": null,
     "ResourceType": "Altinn2Service",
     "AuthorizationReference": [
-      { "Id": "urn:altinn:servicecode", "Value": "3225" },
-      { "Id": "urn:altinn:serviceeditioncode", "Value": "1596" }
+      {
+        "Id": "urn:altinn:servicecode",
+        "Value": "3225"
+      },
+      {
+        "Id": "urn:altinn:serviceeditioncode",
+        "Value": "1596"
+      }
     ]
   },
   {
@@ -129,15 +153,25 @@
     "Delegable": true,
     "Visible": true,
     "ResourceOwnerName": "Testdepartementet",
-    "ResourceOwnerOrgNumber": "123456789",
+    "ResourceOwnerOrgNumber": "974760746",
     "ResourceReferences": [
-      { "ReferenceSource": "Altinn3", "Reference": "ttd/a3-app2", "ReferenceType": "ApplicationId" }
+      {
+        "ReferenceSource": "Altinn3",
+        "Reference": "ttd/a3-app2",
+        "ReferenceType": "ApplicationId"
+      }
     ],
     "PriorityCounter": null,
     "ResourceType": "AltinnApp",
     "AuthorizationReference": [
-      { "Id": "urn:altinn:app", "Value": "a3-app2" },
-      { "Id": "urn:altinn:org", "Value": "ttd" }
+      {
+        "Id": "urn:altinn:app",
+        "Value": "a3-app2"
+      },
+      {
+        "Id": "urn:altinn:org",
+        "Value": "ttd"
+      }
     ]
   },
   {
@@ -159,16 +193,30 @@
     "Delegable": true,
     "Visible": true,
     "ResourceOwnerName": "Testdepartementet",
-    "ResourceOwnerOrgNumber": "123456789",
+    "ResourceOwnerOrgNumber": "974760746",
     "ResourceReferences": [
-      { "ReferenceSource": "Altinn2", "Reference": "322a", "ReferenceType": "ServiceCode" },
-      { "ReferenceSource": "Altinn2", "Reference": "159b", "ReferenceType": "ServiceEditionCode" }
+      {
+        "ReferenceSource": "Altinn2",
+        "Reference": "322a",
+        "ReferenceType": "ServiceCode"
+      },
+      {
+        "ReferenceSource": "Altinn2",
+        "Reference": "159b",
+        "ReferenceType": "ServiceEditionCode"
+      }
     ],
     "PriorityCounter": null,
     "ResourceType": "Altinn2Service",
     "AuthorizationReference": [
-      { "Id": "urn:altinn:servicecode", "Value": "322a" },
-      { "Id": "urn:altinn:serviceeditioncode", "Value": "159b" }
+      {
+        "Id": "urn:altinn:servicecode",
+        "Value": "322a"
+      },
+      {
+        "Id": "urn:altinn:serviceeditioncode",
+        "Value": "159b"
+      }
     ]
   },
   {

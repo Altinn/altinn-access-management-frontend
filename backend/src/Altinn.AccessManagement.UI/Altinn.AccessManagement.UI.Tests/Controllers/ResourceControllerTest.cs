@@ -115,7 +115,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             int page = 1;
             int resultsPerPage = 4;
             // Narnia and testdepartementet
-            string[] roFilters = { "777777777", "123456789" };
+            string[] roFilters = { "777777777", "974760746" };
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
             PaginatedList<ServiceResourceFE> expectedResult = new PaginatedList<ServiceResourceFE>(allExpectedResources.GetRange(0, resultsPerPage), page, allExpectedResources.Count);
@@ -210,7 +210,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             int resultsPerPage = 4;
             string searchString = "gir tilgang til brannbilen";
             // Brannvesenet and Testdepartementet
-            string[] roFilters = { "110110110", "123456789" };
+            string[] roFilters = { "110110110", "974760746" };
 
             List<ServiceResourceFE> allExpectedResources = TestDataUtil.GetSingleRightsResources().FindAll(r => roFilters.Contains(r.ResourceOwnerOrgNumber));
             // The most relevant resource to our search will be the Brannvesenet service, which is stored last
@@ -329,7 +329,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 new ResourceOwnerFE("NARNIA", "777777777"),
                 new ResourceOwnerFE("PÅFUNNSETATEN", "985399077"),
                 new ResourceOwnerFE("Skatteetaten", "974761076"),
-                new ResourceOwnerFE("Testdepartementet", "123456789"),
+                new ResourceOwnerFE("Testdepartementet", "974760746"),
             };
 
             // Act
