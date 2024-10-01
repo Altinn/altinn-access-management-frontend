@@ -215,7 +215,9 @@
   "delegation_modal": {
     "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
-    "give_poa": "Give power of attorney"
+    "give_poa": "Give power of attorney",
+    "success_message": "Power of attorney was successfully given to {{name}}",
+    "error_message": "Failed to give power of attorney to {{name}}"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",

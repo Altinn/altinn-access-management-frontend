@@ -23,6 +23,9 @@ import { LocalizedAction } from '@/resources/utils/localizedActions';
 import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
 import { Avatar } from '@/components/Avatar/Avatar';
 
+import { useSnackbar } from '../../common/Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
+
 import classes from './ResourceInfo.module.css';
 
 export type ChipRight = {
@@ -44,6 +47,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const [delegationCheck] = useDelegationCheckMutation();
   const [delegateRights] = useDelegateRightsMutation();
   const [rights, setRights] = useState<ChipRight[]>([]);
+  const { openSnackbar } = useSnackbar();
   const resourceRef: ResourceReference | null =
     resource !== undefined
       ? {
@@ -140,9 +144,22 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         ),
       };
 
-      delegateRights(delegationInput).then(() => {
-        onDelegate();
-      });
+      delegateRights(delegationInput)
+        .then(() => {
+          openSnackbar({
+            message: t('delegation_modal.success_message', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Success,
+            duration: SnackbarDuration.long,
+          });
+          onDelegate();
+        })
+        .catch(() => {
+          openSnackbar({
+            message: t('delegation_modal.error_message', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Error,
+            duration: SnackbarDuration.infinite,
+          });
+        });
     }
   };
 
