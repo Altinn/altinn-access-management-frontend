@@ -123,7 +123,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           role='alert'
           className={classes.searchError}
           color='danger'
-          // iconTitle={t('common.error')}
         >
           <Heading
             level={2}

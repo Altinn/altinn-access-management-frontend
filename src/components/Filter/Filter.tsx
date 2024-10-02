@@ -196,7 +196,6 @@ export const Filter = ({
                 className={classes.resetButton}
                 size={fullScreenModal ? 'md' : 'sm'}
                 variant='tertiary'
-                // fullWidth={false}
                 aria-disabled={checkedFilters.length === 0}
                 onClick={checkedFilters.length === 0 ? undefined : handleReset}
               >

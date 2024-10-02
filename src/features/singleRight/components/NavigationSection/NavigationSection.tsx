@@ -28,13 +28,11 @@ export const NavigationSection = ({
   ...props
 }: NavigationSectionProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  // const isSm = useMediaQuery('(max-width: 768px)');
   return (
     <div {...props}>
       <Button
         variant='primary'
         color='accent'
-        // fullWidth={isSm}
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
       >

@@ -1,5 +1,3 @@
-import { fail } from 'assert';
-
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -121,10 +119,7 @@ export const OverviewPageContent = ({
     } else if (loading) {
       return (
         <div className={classes.spinnerContainer}>
-          <Spinner
-            title={t('common.loading')}
-            variant='interaction'
-          />
+          <Spinner title={t('common.loading')} />
         </div>
       );
     } else if (overviewOrgs && overviewOrgs.length < 1) {
@@ -179,15 +174,14 @@ export const OverviewPageContent = ({
             onClick={() =>
               navigate(`/${ApiDelegationPath.OfferedApiDelegations}/${ApiDelegationPath.ChooseApi}`)
             }
-            fullWidth={isSm}
-            size='medium'
+            size='md'
           >
             <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_api')}
           </Button>
         </div>
       )}
       <Alert
-        severity='info'
+        color='danger'
         size='lg'
       >
         <Heading
@@ -210,7 +204,7 @@ export const OverviewPageContent = ({
       {deletedItems && deletedItems?.failedDeleteions?.length > 0 && (
         <Alert
           role='alert'
-          severity='danger'
+          color='danger'
           title={t('api_delegation.revoke_delegation_failed')}
         >
           <Heading
@@ -249,7 +243,7 @@ export const OverviewPageContent = ({
                   softRestoreAll();
                   setIsEditable(!isEditable);
                 }}
-                size='medium'
+                size='md'
               >
                 {!isEditable ? (
                   <>
@@ -272,8 +266,7 @@ export const OverviewPageContent = ({
           <Button
             disabled={loading || itemsToDelete.length === 0}
             onClick={confirmRevoke}
-            color='success'
-            fullWidth={isSm}
+            color='accent'
           >
             {t('api_delegation.save')}
           </Button>

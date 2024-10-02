@@ -93,7 +93,7 @@ export const RightsActionBarContent = ({
         {serviceType === 'AltinnApp' ? (
           <div>
             <Chip.Toggle
-              size='small'
+              size='sm'
               checkmark
               selected={altinnAppAccess}
               onClick={toggleAllDelegableRights}
@@ -113,7 +113,7 @@ export const RightsActionBarContent = ({
               return (
                 <div key={index}>
                   <Chip.Toggle
-                    size='small'
+                    size='sm'
                     checkmark
                     selected={right.checked}
                     onClick={() => {
@@ -132,9 +132,9 @@ export const RightsActionBarContent = ({
 
   const alertContainer = hasUndelegableRights && (
     <div className={classes.alertContainer}>
-      <Alert severity='warning'>
+      <Alert color='warning'>
         <Heading
-          size={'xsmall'}
+          size={'xs'}
           level={4}
           spacing
         >
@@ -150,7 +150,7 @@ export const RightsActionBarContent = ({
         <Paragraph spacing>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
         <>
           <Heading
-            size={'xxsmall'}
+            size='xs'
             level={5}
           >
             {t('single_rights.you_cant_delegate_these_rights')}
@@ -166,7 +166,7 @@ export const RightsActionBarContent = ({
                   : right.action;
                 return (
                   <Chip.Toggle
-                    size='small'
+                    size='sm'
                     key={index}
                   >
                     {actionText}

@@ -6,7 +6,7 @@ import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
 
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import type { FilteredRightHolder } from '../useFilteredRightHolders';
 

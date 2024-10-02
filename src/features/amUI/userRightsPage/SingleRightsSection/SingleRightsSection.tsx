@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { List } from '@/components/List/List';
+import { List } from '@/features/amUI/common/List/List';
 import usePagination from '@/resources/hooks/usePagination';
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 
 import classes from './SingleRightsSection.module.css';

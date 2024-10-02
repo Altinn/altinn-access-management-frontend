@@ -50,11 +50,11 @@ export const ReceiptActionBarContent = ({
       <div className={classes.alertContainer}>
         {failedDelegations && failedDelegations?.length > 1 && (
           <Alert
-            severity='danger'
+            color='danger'
             role='alert'
           >
             <Heading
-              size={'xsmall'}
+              size={'xs'}
               level={2}
               spacing
             >
@@ -62,13 +62,13 @@ export const ReceiptActionBarContent = ({
             </Heading>
             <Paragraph spacing>{t('single_rights.some_failed_technical_problem')}</Paragraph>
             <Heading
-              size={'xxsmall'}
+              size={'xs'}
               level={3}
             >
               {t('single_rights.these_rights_were_not_delegated')}
             </Heading>
             <div className={classes.chipContainer}>
-              <Chip.Group size='small'>
+              <Chip.Group size='sm'>
                 {failedDelegations?.map((failedRight: Right, innerIndex) => {
                   const chipText = Object.values(LocalizedAction).includes(
                     failedRight.action as LocalizedAction,
@@ -91,13 +91,13 @@ export const ReceiptActionBarContent = ({
     return (
       <div className={classes.successfulChipsContainer}>
         <Heading
-          size={'xxsmall'}
+          size={'xs'}
           level={3}
         >
           {t('single_rights.these_rights_were_delegated')}
         </Heading>
         <div className={classes.chipContainer}>
-          <Chip.Group size='small'>
+          <Chip.Group size='sm'>
             {serviceType === 'AltinnApp' ? (
               <Chip.Toggle
                 selected={true}

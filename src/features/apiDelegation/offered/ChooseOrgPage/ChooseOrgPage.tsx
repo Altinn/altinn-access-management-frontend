@@ -99,17 +99,14 @@ export const ChooseOrgPage = () => {
                   handleSearch(event.target.value);
                 }}
                 value={searchString}
-                size='medium'
+                size='md'
                 onClear={() => {
                   handleSearch('');
                 }}
               />
               {viewLoading ? (
                 <div className={cn(common.spinnerContainer, classes.viewLoadingSection)}>
-                  <Spinner
-                    title={t('common.loading')}
-                    variant='interaction'
-                  />
+                  <Spinner title={t('common.loading')} />
                 </div>
               ) : (
                 <>
@@ -137,10 +134,7 @@ export const ChooseOrgPage = () => {
 
                     {isFetching ? (
                       <div className={common.spinnerContainer}>
-                        <Spinner
-                          title={t('common.loading')}
-                          variant='interaction'
-                        />
+                        <Spinner title={t('common.loading')} />
                       </div>
                     ) : (
                       <DelegableOrgItems
@@ -176,7 +170,6 @@ export const ChooseOrgPage = () => {
                   '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseApi,
                 )
               }
-              fullWidth={isSm}
             >
               {t('common.previous')}
             </Button>
@@ -190,7 +183,6 @@ export const ChooseOrgPage = () => {
                     ApiDelegationPath.Confirmation,
                 )
               }
-              fullWidth={isSm}
             >
               {t('common.next')}
             </Button>

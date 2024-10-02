@@ -4,7 +4,7 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
