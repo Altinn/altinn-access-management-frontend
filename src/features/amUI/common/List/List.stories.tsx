@@ -20,7 +20,7 @@ const exampleListArgs = {
 };
 
 export default {
-  title: 'Components/List',
+  title: 'Features/AMUI/List',
   component: List,
   argTypes: {
     borderStyle: {

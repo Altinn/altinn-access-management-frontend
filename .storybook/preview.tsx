@@ -14,10 +14,10 @@ import { Suspense, useEffect } from 'react';
 import React from 'react';
 import { Router } from 'react-router-dom';
 
-import { worker } from '../src/mock/browser';
+import { worker } from '../.mock/browser';
 worker.start();
 
-// Initialise i18next; start application when ready
+// Initialise i18next;
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -51,6 +51,7 @@ export const globalTypes = {
   },
 };
 
+// mock react router for components that use it
 const mockNavigator = {
   push: () => {},
   replace: () => {},
@@ -64,7 +65,6 @@ const mockNavigator = {
 
 const withI18next = (Story, context) => {
   const { locale } = context.globals;
-
   // When the locale global changes
   // Set the new locale in i18n
   useEffect(() => {
