@@ -1,7 +1,7 @@
 .actionBar {
   --border-color: var(--a2-color-neutral-border-default);
   --background-color: var(--a2-color-neutral-surface-default);
-  --text-color: #000;
+  --text-color: var(--a2-semantic-text-neutral-on_inverted);
   display: flex;
   border-width: 1px;
   border-radius: 6px;

@@ -20,13 +20,13 @@ body {
 
   --a2-color-warning-border-default: #e9bf89;
   --a2-color-warning-surface-default: #fffbe6;
-  --a2-color-warning-text-default: #000;
+  --a2-color-neutral-text-default: var(--a2-semantic-text-neutral-on_inverted);
   --a2-color-warning-surface-hover: #ffed83;
   --a2-color-warning-surface-active: #ffed83;
 
   --a2-color-danger-border-default: #de3c51;
   --a2-color-danger-surface-default: #f9d5db;
-  --a2-color-danger-text-default: #000;
+  --a2-color-neutral-text-default: var(--a2-semantic-text-neutral-on_inverted);
   --a2-color-danger-surface-hover: #f3abb6;
   --a2-color-danger-surface-active: #f3abb6;
   --a2-semantic-surface-danger-default: #e02e49;
@@ -35,7 +35,7 @@ body {
   --a2-color-neutral-surface-default: #f4f5f6;
   --a2-color-neutral-surface-hover: #e9eaec;
   --a2-color-neutral-surface-active: #e9eaec;
-  --a2-color-neutral-text-default: #000;
+  --a2-color-neutral-text-default: var(--a2-semantic-text-neutral-on_inverted);
 }
 
 body {

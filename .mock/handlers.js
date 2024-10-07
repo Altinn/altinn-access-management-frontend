@@ -4,8 +4,6 @@ const BASE_URL = 'http://localhost:6006';
 
 export const handlers = [
   http.get(BASE_URL + '/accessmanagement/api/v1/resources/search', () => {
-    console.log('resources/search');
-
     return HttpResponse.json({
       page: 1,
       numEntriesTotal: 2,

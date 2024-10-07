@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
 import { Button } from '@digdir/designsystemet-react';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
@@ -51,7 +50,7 @@ const exampleCollection = sampleList.map((item) => (
       <Button
         variant='tertiary'
         size={'sm'}
-        onClick={fn()}
+        onClick={() => console.log('Remove')}
         icon
       >
         <MinusCircleIcon />

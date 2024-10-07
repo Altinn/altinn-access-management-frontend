@@ -26,23 +26,23 @@
 
 .pageHeader.dark {
   --component-page_header-background-color: var(--a2-semantic-surface-action-first-no_fill);
-  --component-page_header-color: var(--a2-semantic-text-neutral-on_inverted);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.light {
   --component-page_header-background-color: var(--ds-color-neutral-contrast-1);
-  --component-page_header-color: var(--ds-color-neutral-base-default);
+  --component-page_header-color: var(--a2-semantic-surface-action-first-no_fill);
   border-bottom: solid 1px var(--ds-color-neutral-border-subtle);
 }
 
 .pageHeader.success {
   --component-page_header-background-color: var(--a2-semantic-surface-success-default);
-  --component-page_header-color: var(--a2-semantic-text-neutral-on_inverted);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.danger {
   --component-page_header-background-color: var(--a2-semantic-surface-danger-default);
-  --component-page_header-color: var(--a2-semantic-text-neutral-on_inverted);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.small {

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, Paragraph } from '@digdir/designsystemet-react';
 
@@ -13,7 +12,7 @@ const ExampleActions = (
       variant='tertiary'
       color='accent'
       icon
-      onClick={fn()}
+      onClick={() => console.log('Edit')}
     >
       <PencilIcon />
     </Button>
@@ -21,7 +20,7 @@ const ExampleActions = (
       variant='tertiary'
       color='danger'
       icon
-      onClick={fn()}
+      onClick={() => console.log('Delete')}
     >
       <TrashIcon />
     </Button>
