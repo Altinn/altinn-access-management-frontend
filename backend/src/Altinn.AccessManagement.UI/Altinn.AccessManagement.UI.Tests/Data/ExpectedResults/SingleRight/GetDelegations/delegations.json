@@ -310,7 +310,7 @@
         "ContactPage": "Some page (webpage maybe?)"
       }
     ],
-    "Delegable": true,
+    "Delegable": false,
     "Visible": true,
     "ResourceOwnerName": "Digitaliseringsdirektoratet",
     "ResourceOwnerOrgNumber": "991825827",

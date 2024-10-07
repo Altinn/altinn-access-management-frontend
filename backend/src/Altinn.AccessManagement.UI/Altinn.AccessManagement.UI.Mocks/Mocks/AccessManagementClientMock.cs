@@ -234,6 +234,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
         {
+            ThrowExceptionIfTriggerParty(partyId);
+
             string resourceFileName = GetMockDataFilenameFromUrn(request.Resource);
             string path = Path.Combine(dataFolder, "SingleRight", "DelegationAccessCheckResponse");
 

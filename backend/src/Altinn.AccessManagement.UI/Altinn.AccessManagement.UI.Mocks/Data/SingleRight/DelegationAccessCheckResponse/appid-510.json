@@ -8,10 +8,10 @@
       }
     ],
     "action": "read",
-    "status": "Delegable",
+    "status": "NotDelegable",
     "details": [
       {
-        "code": "DelegationAccess",
+        "code": "MissingSrrRightAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
@@ -33,10 +33,10 @@
       }
     ],
     "action": "write",
-    "status": "Delegable",
+    "status": "NotDelegable",
     "details": [
       {
-        "code": "DelegationAccess",
+        "code": "MissingSrrRightAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
@@ -58,10 +58,10 @@
       }
     ],
     "action": "sign",
-    "status": "Delegable",
+    "status": "NotDelegable",
     "details": [
       {
-        "code": "DelegationAccess",
+        "code": "MissingSrrRightAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [

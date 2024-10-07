@@ -220,7 +220,17 @@
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
     "give_poa": "Give power of attorney",
     "success_message": "Power of attorney was successfully given to {{name}}",
-    "error_message": "Failed to give power of attorney to {{name}}"
+    "error_message": "Failed to give power of attorney to {{name}}",
+    "service_error": {
+      "general_heading": "You cannot give access to this service",
+      "technical_error_heading": "Something went wrong",
+      "undelegable_service": "{{resourceOwner}} has determined that this service cannot be given to others.",
+      "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
+      "time_of_error": "Error occured at time: {{time}}",
+      "error_status": "Status: {{status}}",
+      "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
+      "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
+    }
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
