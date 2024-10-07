@@ -181,7 +181,7 @@ export const OverviewPageContent = ({
         </div>
       )}
       <Alert
-        color='danger'
+        color='info'
         size='lg'
       >
         <Heading

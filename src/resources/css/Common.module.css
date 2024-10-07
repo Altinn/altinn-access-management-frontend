@@ -6,6 +6,33 @@ body {
   font-family: 'Inter', sans-serif;
   --backgroundColorA2: #1eadf7;
   --backgroundColorA3: #e6eff8;
+
+  --a2-color-success-border-default: #2d9257;
+  --a2-color-success-surface-default: #d1f4e1;
+  --a2-color-success-text-default: #000;
+  --a2-color-success-surface-hover: #8be4b5;
+  --a2-color-success-surface-active: #8be4b5;
+
+  --a2-semantic-surface-success-default: #118849;
+  --a2-semantic-text-neutral-on_inverted: #fff;
+
+  --a2-color-warning-border-default: #e9bf89;
+  --a2-color-warning-surface-default: #fffbe6;
+  --a2-color-warning-text-default: #000;
+  --a2-color-warning-surface-hover: #ffed83;
+  --a2-color-warning-surface-active: #ffed83;
+
+  --a2-color-danger-border-default: #de3c51;
+  --a2-color-danger-surface-default: #f9d5db;
+  --a2-color-danger-text-default: #000;
+  --a2-color-danger-surface-hover: #f3abb6;
+  --a2-color-danger-surface-active: #f3abb6;
+
+  --a2-color-neutral-border-default: #d2d5d8;
+  --a2-color-neutral-surface-default: #f4f5f6;
+  --a2-color-neutral-surface-hover: #e9eaec;
+  --a2-color-neutral-surface-active: #e9eaec;
+  --a2-color-neutral-text-default: #000;
 }
 
 body {
@@ -32,4 +59,8 @@ body {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.unstyledListItem {
+  position: relative;
 }

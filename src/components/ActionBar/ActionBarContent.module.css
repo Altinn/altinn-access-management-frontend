@@ -5,8 +5,8 @@
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   background-color: var(#ffffff);
-  --border-color: var(--ds-color-neutral-border-subtle);
-  --header-color: var(--ds-color-neutral-contrast-1);
+  --border-color: var(--a2-color-neutral-border-default);
+  --header-color: var(--a2-color-neutral-surface-default);
 }
 
 .actionBarContent.small {
@@ -26,8 +26,8 @@
 
 .actionBarContent.light {
   border-color: var(--border-color);
-  --border-color: var(--ds-color-neutral-border-default);
-  --header-color: var(--ds-color-neutral-contrast-1);
+  --border-color: var(--a2-color-neutral-border-default);
+  --header-color: var(--a2-color-neutral-surface-default);
   border-top-width: 1px;
 }
 
@@ -48,19 +48,19 @@
 }
 
 .actionBarContent.warning {
-  --border-color: var(--ds-color-warning-border-default);
-  --header-color: var(--ds-color-warning-surface-default);
+  --border-color: var(--a2-color-warning-border-default);
+  --header-color: var(--a2-color-warning-surface-default);
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.success {
-  --border-color: var(--ds-color-success-border-default);
-  --header-color: var(--ds-color-success-surface-default);
+  --border-color: var(--a2-color-success-border-default);
+  --header-color: var(--a2-color-success-surface-default);
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.danger {
-  --border-color: var(--ds-color-danger-border-default);
-  --header-color: var(--ds-color-danger-surface-default);
+  --border-color: var(--a2-color-danger-border-default);
+  --header-color: var(--a2-color-danger-surface-default);
   border-top-color: var(--header-color);
 }

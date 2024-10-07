@@ -36,8 +36,8 @@
 }
 
 .pageHeader.success {
-  --component-page_header-background-color: var(--ds-color-success-surface-default);
-  --component-page_header-color: var(--ds-color-success-text-default);
+  --component-page_header-background-color: var(--a2-semantic-surface-success-default);
+  --component-page_header-color: var(--a2-semantic-text-neutral-on_inverted);
 }
 
 .pageHeader.danger {

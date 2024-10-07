@@ -61,7 +61,10 @@ export const ApiSearchResults = ({
         {unchosenApis?.map((api: DelegableApi, index) => {
           const initWithDelegationCheck = prechosenApis.includes(api.identifier);
           return (
-            <li key={`${api.identifier}${index}`}>
+            <li
+              className={cn(common.unstyledListItem)}
+              key={`${api.identifier}${index}`}
+            >
               <ApiActionBar
                 variant={'add'}
                 color={'neutral'}
