@@ -201,7 +201,7 @@ export const ChooseRightsPage = () => {
         <Popover.Context>
           <Popover.Trigger
             variant='primary'
-            color='neutral'
+            color='accent'
             disabled={delegationCount < 1}
             onClick={() => setPopoverOpen(!popoverOpen)}
           >
