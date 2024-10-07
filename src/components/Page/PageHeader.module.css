@@ -25,8 +25,8 @@
 }
 
 .pageHeader.dark {
-  --component-page_header-background-color: var(--ds-color-accent-13);
-  --component-page_header-color: var(--ds-color-accent-contrast-1);
+  --component-page_header-background-color: var(--a2-semantic-surface-action-first-no_fill);
+  --component-page_header-color: var(--a2-semantic-text-neutral-on_inverted);
 }
 
 .pageHeader.light {
@@ -41,8 +41,8 @@
 }
 
 .pageHeader.danger {
-  --component-page_header-background-color: var(--ds-color-danger-surface-default);
-  --component-page_header-color: var(--ds-color-danger-text-default);
+  --component-page_header-background-color: var(--a2-semantic-surface-danger-default);
+  --component-page_header-color: var(--a2-semantic-text-neutral-on_inverted);
 }
 
 .pageHeader.small {
