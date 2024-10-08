@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             try
             {
                 List<ServiceResource> resources = await GetFullResourceList();
-                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.SystemResource && r.Delegable && r.Visible);
+                List<ServiceResource> resourceList = resources.FindAll(r => r.ResourceType != ResourceType.MaskinportenSchema && r.ResourceType != ResourceType.SystemResource && r.Visible);
                 List<ServiceResourceFE> resourcesFE = MapResourceToFrontendModel(resourceList, languageCode);
 
                 bool displayPopularServicesOnly = _featureFlags.DisplayPopularSingleRightsServices;

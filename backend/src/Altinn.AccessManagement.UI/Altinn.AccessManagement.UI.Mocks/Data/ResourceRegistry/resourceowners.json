@@ -1,5 +1,19 @@
 {
   "orgs": {
+    "nar": {
+      "name": {
+        "en": "Narnia",
+        "nb": "Narnia",
+        "nn": "Narnia"
+      },
+      "logo": "https://altinncdn.no/orgs/nbib/nasjonalbiblioteket.png",
+      "orgnr": "777777777",
+      "homepage": "https://en.wikipedia.org/wiki/The_Chronicles_of_Narnia",
+      "environments": [
+        "tt02",
+        "production"
+      ]
+    },
     "brg": {
       "name": {
         "en": "Brønnøysund Register Centre",
@@ -495,7 +509,7 @@
         "nn": "Testdepartementet"
       },
       "logo": "",
-      "orgnr": "",
+      "orgnr": "974760746",
       "homepage": "",
       "environments": [
         "at21",

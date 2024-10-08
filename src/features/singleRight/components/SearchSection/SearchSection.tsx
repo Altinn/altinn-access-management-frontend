@@ -28,6 +28,7 @@ import {
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { arraysEqual, debounce } from '@/resources/utils';
+import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -50,6 +51,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const chosenServices = useAppSelector((state) => state.singleRightsSlice.servicesWithStatus);
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const {
     data: searchData,
@@ -210,7 +212,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           }}
           errorText={
             prioritizedErrorCodes?.length > 0
-              ? t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_title`)
+              ? t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}_label`)
               : undefined
           }
           compact={isSm}
@@ -231,12 +233,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 <Paragraph>
                   {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
                     you: t('common.you_uppercase'),
+                    serviceowner: resource.resourceOwnerName,
+                    reporteeorg: reporteeData?.name,
                   })}
                 </Paragraph>
-                {prioritizedErrorCodes[0] !== ServiceStatus.HTTPError &&
-                  prioritizedErrorCodes[0] !== ServiceStatus.Unauthorized && (
-                    <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
-                  )}
               </Alert>
             )}
             <Paragraph size='sm'>{resource.description}</Paragraph>

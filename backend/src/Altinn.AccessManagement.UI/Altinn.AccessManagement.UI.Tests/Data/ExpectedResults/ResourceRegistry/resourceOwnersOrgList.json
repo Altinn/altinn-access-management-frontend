@@ -1,5 +1,9 @@
 [
   {
+    "OrganisationName": "Narnia",
+    "OrganisationNumber": "777777777"
+  },
+  {
     "OrganisationName": "Brønnøysundregistrene",
     "OrganisationNumber": "974760673"
   },
@@ -145,7 +149,7 @@
   },
   {
     "OrganisationName": "Testdepartementet",
-    "OrganisationNumber": ""
+    "OrganisationNumber": "974760746"
   },
   {
     "OrganisationName": "Utlendingsdirektoratet",

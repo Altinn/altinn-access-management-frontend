@@ -10,7 +10,6 @@ import {
 } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon, FileIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -20,6 +19,7 @@ import { Filter, List, ListItem } from '@/components';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import classes from './ResourceSearch.module.css';
+import { useDelegationModalContext } from './DelegationModalContext';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
@@ -29,16 +29,16 @@ const searchResultsPerPage = 7;
 
 export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   const { t } = useTranslation();
-  const [filters, setFilters] = useState<string[]>([]);
-  const [searchString, setSearchString] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
 
+  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
+    useDelegationModalContext();
+  const [debouncedSearchString, setDebouncedSearchString] = React.useState(searchString);
   const {
     data: searchData,
     error,
     isFetching,
   } = useGetPaginatedSearchQuery({
-    searchString,
+    searchString: debouncedSearchString,
     ROfilters: filters,
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
@@ -180,7 +180,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   });
 
   const debouncedSearch = debounce((searchString: string) => {
-    setSearchString(searchString);
+    setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
 
@@ -191,12 +191,15 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           <Search
             label={t('single_rights.search_label')}
             hideLabel={false}
+            value={searchString}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchString(event.target.value);
               debouncedSearch(event.target.value);
             }}
             size='sm'
             onClear={() => {
               setSearchString('');
+              setDebouncedSearchString('');
               setCurrentPage(1);
             }}
           />
