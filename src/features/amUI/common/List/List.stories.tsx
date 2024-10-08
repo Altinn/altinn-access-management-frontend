@@ -22,12 +22,6 @@ const exampleListArgs = {
 export default {
   title: 'Features/AMUI/List',
   component: List,
-  argTypes: {
-    borderStyle: {
-      options: ['solid', 'dashed'],
-      control: { type: 'radio' },
-    },
-  },
   render: (args) => (
     <List {...args}>
       <ListItem {...args}>
