@@ -3,8 +3,6 @@ import { t } from 'i18next';
 import type { HTMLAttributes } from 'react';
 import React, { useState } from 'react';
 
-// import { useMediaQuery } from '@/resources/hooks';
-
 import classes from './NavigationSection.module.css';
 
 interface NextButtonProps {
@@ -41,7 +39,7 @@ export const NavigationSection = ({
       <Popover.Context>
         <Popover.Trigger
           variant='tertiary'
-          color={cancelButtonProps.showWarning ? 'danger' : 'neutral'}
+          color={cancelButtonProps.showWarning ? 'danger' : 'accent'}
           size='md'
           onClick={
             cancelButtonProps.showWarning

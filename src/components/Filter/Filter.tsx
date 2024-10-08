@@ -176,7 +176,6 @@ export const Filter = ({
           <div className={classes.loadingContainer}>
             <Spinner
               title={t('common.loading')}
-              // variant='primary'
               size='md'
             />
           </div>
