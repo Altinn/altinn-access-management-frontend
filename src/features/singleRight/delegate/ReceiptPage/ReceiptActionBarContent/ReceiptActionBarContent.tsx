@@ -54,7 +54,7 @@ export const ReceiptActionBarContent = ({
             role='alert'
           >
             <Heading
-              size={'xs'}
+              size={'2xs'}
               level={2}
               spacing
             >
@@ -62,7 +62,7 @@ export const ReceiptActionBarContent = ({
             </Heading>
             <Paragraph spacing>{t('single_rights.some_failed_technical_problem')}</Paragraph>
             <Heading
-              size={'xs'}
+              size={'2xs'}
               level={3}
             >
               {t('single_rights.these_rights_were_not_delegated')}
@@ -91,7 +91,7 @@ export const ReceiptActionBarContent = ({
     return (
       <div className={classes.successfulChipsContainer}>
         <Heading
-          size={'xs'}
+          size={'2xs'}
           level={3}
         >
           {t('single_rights.these_rights_were_delegated')}
