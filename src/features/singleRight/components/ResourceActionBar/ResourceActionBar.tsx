@@ -110,10 +110,7 @@ export const ResourceActionBar = ({
 
   const loadingText = (
     <Paragraph className={classes.loadingText}>
-      <Spinner
-        title={t('common.loading')}
-        size={compact ? 'lg' : 'md'}
-      />
+      <Spinner title={t('common.loading')} />
       {!compact && t('common.loading')}
     </Paragraph>
   );

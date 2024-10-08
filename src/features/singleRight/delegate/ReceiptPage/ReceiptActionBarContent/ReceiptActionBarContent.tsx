@@ -54,7 +54,7 @@ export const ReceiptActionBarContent = ({
             role='alert'
           >
             <Heading
-              size={'2xs'}
+              size={'xs'}
               level={2}
               spacing
             >
