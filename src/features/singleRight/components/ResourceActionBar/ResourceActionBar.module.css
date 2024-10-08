@@ -16,7 +16,7 @@
   justify-content: center;
   margin-right: 10px;
   gap: 5px;
-  color: var(--ds-global-orange-10);
+  color: var(--ds-color-danger-text-default);
 }
 
 .loadingText {

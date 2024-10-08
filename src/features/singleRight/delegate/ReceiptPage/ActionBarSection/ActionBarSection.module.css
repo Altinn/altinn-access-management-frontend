@@ -12,7 +12,7 @@
 
 .additionalText {
   min-width: 65px;
-  color: var(--ds-global-orange-10);
+  color: var(--ds-color-danger-text-default);
   display: flex;
   align-items: center;
   gap: 7px;
@@ -20,7 +20,7 @@
 
 .additionalTextRejected {
   min-width: 50px;
-  color: var(--ds-global-orange-10);
+  color: var(--ds-color-danger-text-default);
   display: flex;
   align-items: center;
   gap: 7px;
