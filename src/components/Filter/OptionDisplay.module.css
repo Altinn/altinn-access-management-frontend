@@ -22,7 +22,7 @@
   cursor: pointer;
   font: inherit;
   text-align: left;
-  padding: 4px 0;
+  padding: 8px 0;
   display: flex;
   align-items: center;
 }
@@ -38,7 +38,7 @@
 .option:hover {
   background-color: var(--ds-global-blue-2);
   border-bottom: 2px solid var(--ds-color-accent-border-default);
-  padding: 4px 0 3px 0;
+  padding: 8px 0 7px 0;
 }
 
 .option:hover > .optionCheckbox {
