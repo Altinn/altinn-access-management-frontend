@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import {
-  Button,
-  ErrorSummary,
-  Paragraph,
-  Spinner,
-  ValidationMessage,
-} from '@digdir/designsystemet-react';
+import { Button, Paragraph, Spinner, ValidationMessage } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
