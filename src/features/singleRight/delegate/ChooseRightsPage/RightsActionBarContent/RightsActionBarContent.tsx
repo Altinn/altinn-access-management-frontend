@@ -150,7 +150,7 @@ export const RightsActionBarContent = ({
         <Paragraph spacing>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
         <>
           <Heading
-            size='xs'
+            size='2xs'
             level={5}
           >
             {t('single_rights.you_cant_delegate_these_rights')}
