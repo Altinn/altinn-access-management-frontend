@@ -201,7 +201,7 @@ export const ChooseRightsPage = () => {
         <Popover.Context>
           <Popover.Trigger
             variant='primary'
-            color='neutral'
+            color='accent'
             disabled={delegationCount < 1}
             onClick={() => setPopoverOpen(!popoverOpen)}
           >
@@ -229,7 +229,7 @@ export const ChooseRightsPage = () => {
         </Popover.Context>
         <Button
           variant='secondary'
-          color='neutral'
+          color='accent'
           onClick={() => {
             navigate(
               `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,

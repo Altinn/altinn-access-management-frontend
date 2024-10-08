@@ -225,24 +225,22 @@ export const ChooseApiPage = () => {
                 </StatusMessageForScreenReader>
                 <h3 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h3>
                 <div className={classes.delegableApisContainer}>
-                  <div className={classes.actionBarWrapper}>
-                    {showSkeleton ? (
-                      DelegableApiSkeleton()
-                    ) : (
-                      <ApiSearchResults
-                        addApi={(api) => {
-                          addApiToParams(api);
-                          dispatch(softAddApi(api));
-                          setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
-                        }}
-                        error={error}
-                        isFetching={isFetching}
-                        urlParams={urlParams}
-                        searchResults={searchResults || []}
-                        chosenApis={chosenApis}
-                      />
-                    )}
-                  </div>
+                  {showSkeleton ? (
+                    DelegableApiSkeleton()
+                  ) : (
+                    <ApiSearchResults
+                      addApi={(api) => {
+                        addApiToParams(api);
+                        dispatch(softAddApi(api));
+                        setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
+                      }}
+                      error={error}
+                      isFetching={isFetching}
+                      urlParams={urlParams}
+                      searchResults={searchResults || []}
+                      chosenApis={chosenApis}
+                    />
+                  )}
                 </div>
               </div>
             </search>

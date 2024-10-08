@@ -1,6 +1,10 @@
 .NavigationSection {
   display: flex;
-  gap: 30px;
+  gap: 15px;
   padding: 0;
   margin-top: 2rem;
+}
+
+.NavigationSection > * {
+  flex: 1;
 }
