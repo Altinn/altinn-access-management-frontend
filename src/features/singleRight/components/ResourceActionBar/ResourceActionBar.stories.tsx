@@ -32,3 +32,26 @@ export const Default: StoryObj = {
     errorText: { control: { type: 'text' } },
   },
 };
+
+export const Error: StoryObj = {
+  args: {
+    compact: false,
+    isLoading: false,
+    subtitle: 'subtitle',
+    title: 'title',
+    children: 'children',
+    status: 'status',
+    errorText: 'errorText',
+    onAddClick: () => console.log('onAddClick'),
+    onRemoveClick: () => console.log('onRemoveClick'),
+  },
+  argTypes: {
+    compact: { control: { type: 'boolean' } },
+    isLoading: { control: { type: 'boolean' } },
+    subtitle: { control: { type: 'text' } },
+    title: { control: { type: 'text' } },
+    children: { control: { type: 'text' } },
+    status: { control: { type: 'text' } },
+    errorText: { control: { type: 'text' } },
+  },
+};

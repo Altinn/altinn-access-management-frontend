@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, ErrorSummary, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import {
+  Button,
+  ErrorSummary,
+  Paragraph,
+  Spinner,
+  ValidationMessage,
+} from '@digdir/designsystemet-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -100,7 +106,7 @@ export const ResourceActionBar = ({
       onClick={onRemoveClick}
       icon={compact}
     >
-      {!compact && t('common.undo')}{' '}
+      {!compact && t('common.undo')}
       <ArrowUndoIcon
         title={t('common.undo')}
         fontSize={getButtonIconSize(!compact)}
@@ -116,22 +122,18 @@ export const ResourceActionBar = ({
   );
 
   const notDelegableLabel = (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div
+    <ValidationMessage
       className={classes.notDelegableContainer}
       onClick={() => {
         setOpen(!open);
       }}
     >
-      {!compact && <ErrorSummary>{errorText} </ErrorSummary>}
-      <ErrorSummary>
-        <ExclamationmarkTriangleIcon
-          className={classes.notDelegableIcon}
-          fontSize={getButtonIconSize(!compact)}
-          aria-label={errorText}
-        />
-      </ErrorSummary>
-    </div>
+      {!compact && errorText}
+      <ExclamationmarkTriangleIcon
+        fontSize={getButtonIconSize(!compact)}
+        aria-label={errorText}
+      />
+    </ValidationMessage>
   );
 
   const action = () => {

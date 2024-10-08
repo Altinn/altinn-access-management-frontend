@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ErrorSummary, Ingress, Paragraph } from '@digdir/designsystemet-react';
+import { ErrorSummary, Ingress, Paragraph, ValidationMessage } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
@@ -79,23 +79,29 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
         if (numFailedDelegations > 1) {
           return (
             <div className={classes.additionalTextContainer}>
-              <ErrorSummary className={classes.additionalText}>
+              <ValidationMessage
+                error
+                className={classes.additionalText}
+              >
                 {numFailedDelegations +
                   '/' +
                   pd.bffResponseList?.length +
                   ' ' +
                   t('common.failed_lowercase')}
-              </ErrorSummary>
-              <ExclamationmarkTriangleIcon className={classes.warningIcon} />
+                <ExclamationmarkTriangleIcon className={classes.warningIcon} />
+              </ValidationMessage>
             </div>
           );
         } else if (isRejectedDelegation) {
           return (
             <div className={classes.additionalTextContainer}>
-              <ErrorSummary className={classes.additionalTextRejected}>
+              <ValidationMessage
+                error
+                className={classes.additionalTextRejected}
+              >
                 {t('common.failed')}
-              </ErrorSummary>
-              <ExclamationmarkTriangleIcon className={classes.warningIconRejected} />
+                <ExclamationmarkTriangleIcon className={classes.warningIconRejected} />
+              </ValidationMessage>
             </div>
           );
         } else {
