@@ -54,7 +54,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
           {infoView ? (
             <Button
               variant='tertiary'
-              color='second'
+              color='accent'
               onClick={() => setInfoView(false)}
               icon
             >
