@@ -55,7 +55,10 @@ export const UsersList = () => {
         hideLabel
         label={t('users_page.user_search_placeholder')}
       />
-      <List aria-labelledby='user_list_heading_id'>
+      <List
+        spacing
+        aria-labelledby='user_list_heading_id'
+      >
         {pageEntries.map((user) => (
           <UserListItem
             key={user.partyUuid}
@@ -93,13 +96,12 @@ const UserListItem = ({ user }: { user: RightHolder }) => {
       <ListItem>
         <UserItem user={user}>
           {hasChildren && (
-            <List background={false}>
+            <List>
               {user.inheritingRightHolders.map((user) => (
                 <ListItem key={user.partyUuid}>
                   <UserItem
                     user={user}
                     size='sm'
-                    color='subtle'
                     className={classes.inheritingUsers}
                     icon={false}
                     showRoles={false}

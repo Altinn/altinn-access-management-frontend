@@ -1,4 +1,4 @@
-import { Heading, ListItem, Pagination } from '@digdir/designsystemet-react';
+import { Heading, Pagination } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -7,12 +7,11 @@ import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRigh
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/components/List/List';
 import usePagination from '@/resources/hooks/usePagination';
-import { Avatar } from '@/components/Avatar/Avatar';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 
-import classes from './SingleRightsSection.module.css';
 import { DelegationModal } from '../DelegationModal/DelegationModal';
-import { FileIcon, MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+
+import classes from './SingleRightsSection.module.css';
 import SingleRightItem from './SingleRightItem';
 
 export const SingleRightsSection = () => {
@@ -48,11 +47,14 @@ export const SingleRightsSection = () => {
       <List
         className={classes.singleRightsList}
         aria-labelledby='single_rights_title'
+        spacing
+        background
       >
         {paginatedData?.map((singleRight) => (
           <SingleRightItem
             key={singleRight.identifier}
-            {...singleRight}
+            toParty={party}
+            resource={singleRight}
           />
           // <ListItem
           //   key={singleRight.identifier}

@@ -13,13 +13,6 @@
   --backgroundColor: var(--fds-semantic-surface-neutral-default);
 }
 
-.spacious {
-  gap: 0.5rem;
-}
-.spacious > .listItem {
-  padding: 0.5rem;
-}
-
 .listItem {
   background-color: var(--backgroundColor);
   border-bottom: 1px solid #e1e4e8;
@@ -29,8 +22,21 @@
   border-bottom: none;
 }
 
+.spacious {
+  gap: 0.5rem;
+}
+
+.spacious > .listItem {
+  border-bottom: none;
+}
+
+.spacious > .listItem > .clickableItem {
+  padding: 0.5rem;
+}
+
 .clickableItem {
   background-color: var(--backgroundColor);
+  border-radius: 0;
   border: none;
   padding: 0;
   font: inherit;
