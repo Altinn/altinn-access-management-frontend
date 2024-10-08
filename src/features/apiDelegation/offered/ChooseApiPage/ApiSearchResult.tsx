@@ -62,7 +62,7 @@ export const ApiSearchResults = ({
           const initWithDelegationCheck = prechosenApis.includes(api.identifier);
           return (
             <li
-              className={cn(common.unstyledListItem)}
+              className={cn(classes.unstyledListItem)}
               key={`${api.identifier}${index}`}
             >
               <ApiActionBar
