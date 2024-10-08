@@ -217,3 +217,20 @@ We use standard camelCase for classnames to enable linking of the stylesheets di
 
 1. Sometimes it's needed to restart eslint for it to work properly. E.g. When switching branches, eslint hangs sometimes. To fix this problem in vs code: Do the hot key for workbench.action.quickNaviagtePreviousInFilePicker and run command 'restart eslint server' or restart vs code.
 2. It's a common problem when writing reducers in rtk; invalid typescript-errors, prettier and lint-errors occurs. To fix this you could try to restart vs code or ignore the error.
+
+
+## Running Storybook with MSW Mock
+
+You can define stories for components by adding a file with the *.stories.tsx extension.  
+
+**Start Storybook**: Use the following command to start Storybook:
+
+```sh
+yarn storybook
+```
+
+This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API requests in Storybook. The mock handlers are defined in [`.mock/handlers.js`](.mock/handlers.js) and the worker is set up in [`.mock/browser.js`](.mock/browser.js).
+
+### Documentation: 
+*  For more information on writing stories, see the [Storybook Docs](https://storybook.js.org/docs/react/get-started/introduction).
+*  To learn about using MSW with Storybook, check out the [MSW documentation](https://mswjs.io/docs/getting-started/integrate/storybook).
