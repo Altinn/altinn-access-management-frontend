@@ -123,7 +123,7 @@ export const ApiActionBar = ({
         {api.scopes?.length > 0 && (
           <>
             <Heading
-              size='xs'
+              size='2xs'
               level={5}
               spacing
             >
@@ -135,7 +135,7 @@ export const ApiActionBar = ({
         {api.rightDescription && (
           <>
             <Heading
-              size='xs'
+              size='2xs'
               level={5}
               spacing
             >
@@ -150,7 +150,7 @@ export const ApiActionBar = ({
         {api.description && (
           <>
             <Heading
-              size='xs'
+              size='2xs'
               level={5}
               spacing
             >
