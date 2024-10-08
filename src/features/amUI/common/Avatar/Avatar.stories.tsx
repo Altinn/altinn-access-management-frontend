@@ -5,7 +5,7 @@ import { Avatar } from './Avatar';
 type AvatarProps = React.ComponentProps<typeof Avatar>;
 
 export default {
-  title: 'Features/AMUI/AvatarS',
+  title: 'Features/AMUI/Avatar',
   component: Avatar,
   argTypes: {
     size: {
