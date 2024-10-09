@@ -20,12 +20,10 @@ export default {
   component: NavigationSection,
   argTypes: {},
   render: (args) => (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <NavigationSection
-        {...exampleArgs}
-        {...args}
-      />
-    </div>
+    <NavigationSection
+      {...exampleArgs}
+      {...args}
+    />
   ),
 } as Meta;
 

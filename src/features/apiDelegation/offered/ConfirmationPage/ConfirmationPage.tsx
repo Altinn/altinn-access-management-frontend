@@ -7,14 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
-import {
-  GroupElements,
-  Page,
-  PageContainer,
-  PageContent,
-  PageHeader,
-  RestartPrompter,
-} from '@/components';
+import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import type { BatchApiDelegationRequest } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
