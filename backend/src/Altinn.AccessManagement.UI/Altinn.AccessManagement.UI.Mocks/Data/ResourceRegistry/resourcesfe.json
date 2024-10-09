@@ -667,7 +667,7 @@
     "identifier": "appid-511",
 
     "visible": true,
-    "delegable": true,
+    "delegable": false,
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum, lectus arcu tempor est, et tempor lorem elit ut nunc. Donec eu bibendum leo. Ut ac dolor erat. Vestibulum posuere fringilla iaculis",
     "resourceType": "Default",
     "thematicArea": null,

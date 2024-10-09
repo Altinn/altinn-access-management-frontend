@@ -101,7 +101,7 @@ export const OptionDisplay = ({
           onChange={() => {
             handleSelection(option.value);
           }}
-          size={compact ? 'small' : 'medium'}
+          size={compact ? 'sm' : 'md'}
           value={option.value}
           checked={isSelected}
           aria-label={option.label}
@@ -109,7 +109,7 @@ export const OptionDisplay = ({
         <Paragraph
           asChild
           className={classes.optionLabel}
-          size={compact ? 'small' : 'medium'}
+          size={compact ? 'sm' : 'md'}
         >
           <label>{option.label}</label>
         </Paragraph>
@@ -122,7 +122,7 @@ export const OptionDisplay = ({
       {searchable && (
         <div className={classes.searchField}>
           <Search
-            size='small'
+            size='sm'
             label={String(t('common.search'))}
             hideLabel
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

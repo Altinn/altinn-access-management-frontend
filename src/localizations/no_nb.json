@@ -219,7 +219,17 @@
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "give_poa": "Gi fullmakt",
     "success_message": "Fullmakt gitt til {{name}}",
-    "error_message": "Kunne ikke gi fullmakt til {{name}}"
+    "error_message": "Kunne ikke gi fullmakt til {{name}}",
+    "service_error": {
+      "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
+      "technical_error_heading": "Noe gikk galt",
+      "undelegable_service": "{{resourceOwner}} har bestemt at denne tjenesten kan ikke gis videre til andre.",
+      "technical_error": "Beklager, det har skjedd en teknisk feil. Vennligst ta kontakt med Altinn brukerservice hvis problemet fortsetter.",
+      "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
+      "error_status": "Status: {{status}}",
+      "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
+      "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler den selv. Daglig leder eller hovedadministrator kan hjelpe deg med dette."
+    }
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

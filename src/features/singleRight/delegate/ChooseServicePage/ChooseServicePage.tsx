@@ -2,11 +2,11 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button, Ingress, Paragraph, Popover } from '@digdir/designsystemet-react';
+import { Ingress } from '@digdir/designsystemet-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 
-import { Page, PageHeader, PageContent, PageContainer, GroupElements } from '@/components';
+import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useMediaQuery, useFetchRecipientInfo } from '@/resources/hooks';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';

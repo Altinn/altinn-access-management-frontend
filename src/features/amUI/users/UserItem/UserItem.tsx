@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
 
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import type { FilteredRightHolder } from '../useFilteredRightHolders';
 
 import classes from './UserItem.module.css';
+import { ListItem } from '../../common/List';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -91,12 +91,11 @@ export const UserItem = ({
     user && (
       <>
         {isExpanable ? (
-          <Button
+          <ListItem
             id={headerId}
             aria-expanded={isExpanded}
             aria-controls={contentId}
             onClick={() => setIsExpanded((oldExpanded) => !oldExpanded)}
-            variant='tertiary'
             className={cn(
               classes.user,
               classes[size],
@@ -104,7 +103,6 @@ export const UserItem = ({
               classes.clickable,
               className,
             )}
-            fullWidth
           >
             {icon && (
               <Avatar
@@ -115,7 +113,7 @@ export const UserItem = ({
               />
             )}
             {headerContent}
-          </Button>
+          </ListItem>
         ) : (
           <Link
             to={`${user.partyUuid}`}

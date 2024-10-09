@@ -21,7 +21,7 @@ interface SnackbarConfig {
   storedMessages: SnackbarMessage[];
 }
 
-interface SnackbarInput {
+export interface SnackbarInput {
   message: string;
   variant: SnackbarMessageVariant;
   dismissable?: boolean;

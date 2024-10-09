@@ -7,6 +7,9 @@
     margin-bottom: 1.3rem;
     margin-top: 0rem;
   }
+  .delegateNewButton > * {
+    width: 100%;
+  }
 
   .activeDelegationsHeader {
     margin-top: 0.1rem;
@@ -16,6 +19,18 @@
     align-items: center;
     justify-content: end;
     margin-bottom: 0.3rem;
+  }
+  .editButton > * {
+    width: 100%;
+  }
+
+  .saveSection {
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .saveSection > * {
+    width: 100%;
   }
 }
 

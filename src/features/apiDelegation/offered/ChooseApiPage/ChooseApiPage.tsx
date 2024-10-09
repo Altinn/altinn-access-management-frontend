@@ -139,11 +139,26 @@ export const ChooseApiPage = () => {
     const skeletonHeight = '66px';
     return (
       <>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
-        <Skeleton.Rectangle height={skeletonHeight}></Skeleton.Rectangle>
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
+        <Skeleton
+          variant='rectangle'
+          height={skeletonHeight}
+        />
       </>
     );
   };
@@ -151,10 +166,11 @@ export const ChooseApiPage = () => {
   const ChosenApiSkeleton = () => {
     const skeletonHeight = '66px';
     return Array.from(urlParams).map((_, index) => (
-      <Skeleton.Rectangle
+      <Skeleton
+        variant='rectangle'
         key={index}
         height={skeletonHeight}
-      ></Skeleton.Rectangle>
+      />
     ));
   };
 
@@ -181,7 +197,7 @@ export const ChooseApiPage = () => {
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     debouncedSearch(event.target.value);
                   }}
-                  size='medium'
+                  size='md'
                   onClear={() => {
                     setSearchString('');
                   }}
@@ -209,24 +225,22 @@ export const ChooseApiPage = () => {
                 </StatusMessageForScreenReader>
                 <h3 className={classes.explanationTexts}>{t('api_delegation.delegable_apis')}:</h3>
                 <div className={classes.delegableApisContainer}>
-                  <div className={classes.actionBarWrapper}>
-                    {showSkeleton ? (
-                      DelegableApiSkeleton()
-                    ) : (
-                      <ApiSearchResults
-                        addApi={(api) => {
-                          addApiToParams(api);
-                          dispatch(softAddApi(api));
-                          setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
-                        }}
-                        error={error}
-                        isFetching={isFetching}
-                        urlParams={urlParams}
-                        searchResults={searchResults || []}
-                        chosenApis={chosenApis}
-                      />
-                    )}
-                  </div>
+                  {showSkeleton ? (
+                    DelegableApiSkeleton()
+                  ) : (
+                    <ApiSearchResults
+                      addApi={(api) => {
+                        addApiToParams(api);
+                        dispatch(softAddApi(api));
+                        setChosenItemsStatusMessage(`${t('common.added')}: ${api.apiName}`);
+                      }}
+                      error={error}
+                      isFetching={isFetching}
+                      urlParams={urlParams}
+                      searchResults={searchResults || []}
+                      chosenApis={chosenApis}
+                    />
+                  )}
                 </div>
               </div>
             </search>
@@ -249,13 +263,11 @@ export const ChooseApiPage = () => {
                       ApiDelegationPath.Overview,
                   )
                 }
-                fullWidth={isSm}
               >
                 {t('common.cancel')}
               </Button>
               <Button
                 disabled={chosenApis.length < 1}
-                fullWidth={isSm}
                 onClick={() =>
                   navigate(
                     '/' +

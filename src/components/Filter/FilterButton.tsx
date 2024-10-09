@@ -2,9 +2,9 @@ import * as React from 'react';
 import { forwardRef, type ReactNode } from 'react';
 import cn from 'classnames';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { Button } from '@digdir/designsystemet-react';
 
 import classes from './FilterButton.module.css';
-import { Button } from '@digdir/designsystemet-react';
 
 export interface FilterButtonProps {
   onClick?: () => void;

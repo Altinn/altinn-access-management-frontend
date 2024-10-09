@@ -28,7 +28,7 @@ export const PageContainer = ({
           {onNavigateBack && (
             <Button
               variant='tertiary'
-              color='second'
+              color='accent'
               onClick={onNavigateBack}
               icon
             >

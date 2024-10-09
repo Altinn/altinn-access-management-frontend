@@ -42,7 +42,6 @@ export const ResourceCollectionBar = ({
   compact = false,
 }: ResourceCollectionBarProps) => {
   const { t } = useTranslation();
-
   const selectedResourcesActionBars = resources.map((resource, index) => (
     <ActionBar
       key={index}
@@ -53,7 +52,7 @@ export const ResourceCollectionBar = ({
       actions={
         <Button
           variant='tertiary'
-          size={compact ? 'medium' : 'small'}
+          size={compact ? 'md' : 'sm'}
           onClick={() => {
             onRemove(resource.identifier);
           }}

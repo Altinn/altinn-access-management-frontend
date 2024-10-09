@@ -7,15 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/rtk/app/hooks';
 import { ApiDelegationPath } from '@/routes/paths';
 import ApiIcon from '@/assets/Api.svg?react';
-import {
-  GroupElements,
-  Page,
-  PageContainer,
-  PageContent,
-  PageHeader,
-  RestartPrompter,
-} from '@/components';
-import { useMediaQuery } from '@/resources/hooks';
+import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import type { BatchApiDelegationRequest } from '@/rtk/features/apiDelegation/apiDelegationApi';
 import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDelegationApi';
@@ -31,7 +23,6 @@ export const ConfirmationPage = () => {
   const chosenApis = useAppSelector((state) => state.delegableApi.chosenApis);
   const chosenOrgs = useAppSelector((state) => state.apiDelegation.chosenOrgs);
 
-  const isSm = useMediaQuery('(max-width: 768px)');
   const { t } = useTranslation();
 
   useDocumentTitle(t('api_delegation.delegate_page_title'));
@@ -72,7 +63,7 @@ export const ConfirmationPage = () => {
         {failedApiDelegations.length > 0 && (
           <>
             <Heading
-              size='medium'
+              size='md'
               level={2}
               spacing
             >
@@ -87,7 +78,7 @@ export const ConfirmationPage = () => {
         {successfulApiDelegations.length > 0 && (
           <>
             <Heading
-              size='medium'
+              size='md'
               level={2}
               spacing
             >
@@ -104,14 +95,15 @@ export const ConfirmationPage = () => {
             ? t('api_delegation.receipt_page_failed_text')
             : t('api_delegation.receipt_page_bottom_text')}
         </Paragraph>
-        <Button
-          color='first'
-          variant='primary'
-          onClick={navigateToOverview}
-          fullWidth={isSm}
-        >
-          {t('api_delegation.receipt_page_main_button')}
-        </Button>
+        <div className={classes.navigationSection}>
+          <Button
+            color='accent'
+            variant='primary'
+            onClick={navigateToOverview}
+          >
+            {t('api_delegation.receipt_page_main_button')}
+          </Button>
+        </div>
       </>
     );
   };
@@ -126,27 +118,24 @@ export const ConfirmationPage = () => {
     ) : (
       <>
         <Heading
-          size='medium'
+          size='md'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_top_text')}
         </Heading>
         <DelegableApiList />
         <Heading
-          size='medium'
+          size='md'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_second_text')}
         </Heading>
         <DelegableOrgList />
-        <Paragraph size='large'>
-          {t('api_delegation.confirmation_page_content_bottom_text')}
-        </Paragraph>
-        <GroupElements>
+        <Paragraph size='lg'>{t('api_delegation.confirmation_page_content_bottom_text')}</Paragraph>
+        <div className={classes.navigationSection}>
           <Button
-            color='first'
+            color='accent'
             variant='secondary'
-            fullWidth={isSm}
             onClick={() =>
               navigate(
                 '/' + ApiDelegationPath.OfferedApiDelegations + '/' + ApiDelegationPath.ChooseOrg,
@@ -157,18 +146,12 @@ export const ConfirmationPage = () => {
           </Button>
           <Button
             onClick={handleConfirm}
-            color={'success'}
-            fullWidth={isSm}
+            color='accent'
           >
-            {isLoading && (
-              <Spinner
-                title={t('common.loading')}
-                variant='interaction'
-              />
-            )}
+            {isLoading && <Spinner title={t('common.loading')} />}
             {t('common.confirm')}
           </Button>
-        </GroupElements>
+        </div>
       </>
     );
   };
@@ -184,7 +167,6 @@ export const ConfirmationPage = () => {
                 ? 'success'
                 : 'dark'
           }
-          size={isSm ? 'small' : 'medium'}
         >
           <PageHeader icon={<ApiIcon />}>{t('api_delegation.give_access_to_new_api')}</PageHeader>
           <PageContent>
@@ -203,9 +185,9 @@ export const ConfirmationPage = () => {
             {isError && (
               <Alert
                 title={t('common.general_error_title')}
-                severity='danger'
+                color='danger'
               >
-                <Heading size='xsmall'>{t('common.general_error_title')}</Heading>
+                <Heading size='xs'>{t('common.general_error_title')}</Heading>
                 {`${t('common.general_error_paragraph')}`}
               </Alert>
             )}

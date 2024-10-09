@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { List } from '@/components/List/List';
+import { List } from '@/features/amUI/common/List/List';
 import usePagination from '@/resources/hooks/usePagination';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 

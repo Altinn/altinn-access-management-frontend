@@ -5,17 +5,33 @@
 }
 
 .serviceResources {
-  margin-top: var(--fds-spacing-2);
+  margin-top: var(--ds-spacing-2);
   display: flex;
   flex-direction: column;
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-spacing-2);
 }
 
 .navigationContainer {
   margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 20px;
 }
 
 .secondaryText {
   margin-top: 20px;
   margin-bottom: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .navigationContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .navigationContainer > button {
+    flex-grow: 1;
+    width: 100%;
+  }
 }

@@ -11,6 +11,11 @@
   background-color: #5590e9;
 }
 
+.resource {
+  display: flex;
+  flex-direction: column;
+}
+
 .infoView {
   display: grid;
   grid-template-rows: auto 1fr auto;

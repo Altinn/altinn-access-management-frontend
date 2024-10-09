@@ -5,8 +5,26 @@
 }
 
 .actionBars {
-  gap: var(--fds-spacing-2);
+  gap: var(--ds-spacing-2);
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+}
+
+.navigationContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .navigationContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .navigationContainer > * {
+    flex-grow: 1;
+    width: 100%;
+  }
 }

@@ -10,7 +10,7 @@
 }
 
 .background {
-  --backgroundColor: var(--fds-semantic-surface-neutral-default);
+  --backgroundColor: var(--ds-color-neutral-contrast-1);
 }
 
 .listItem {
@@ -45,9 +45,9 @@
 }
 
 .clickableItem:hover {
-  --backgroundColor: var(--fds-semantic-surface-neutral-subtle-hover);
+  --backgroundColor: var(--ds-color-neutral-surface-hover);
 }
 
 .clickableItem:active {
-  --backgroundColor: var(--fds-semantic-surface-neutral-selected);
+  --backgroundColor: var(--ds-color-neutral-surface-hover);
 }

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { CircularProgress } from '../CircularProgress';
 import { Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Dialog, DialogContent, type DialogProps } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
+
+import { CircularProgress } from '../CircularProgress';
 
 import classes from './ProgressModal.module.css';
 
@@ -63,10 +64,7 @@ export const ProgressModal = ({
               <div className={classes.loadingText}>
                 <Paragraph>{loadingText}</Paragraph>
               </div>
-              <Spinner
-                title={t('common.loading')}
-                variant='interaction'
-              />
+              <Spinner title={t('common.loading')} />
             </div>
           )}
         </div>

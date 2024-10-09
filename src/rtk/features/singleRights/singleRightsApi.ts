@@ -24,6 +24,7 @@ export interface ServiceResource {
   resourceReferences: resourceReference[];
   authorizationReference: IdValuePair[];
   resourceType: string;
+  delegable: boolean;
 }
 
 interface resourceReference {

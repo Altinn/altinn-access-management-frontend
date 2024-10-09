@@ -16,7 +16,6 @@
   height: var(--page-header-height);
   background-color: var(--component-page_header-background-color);
   display: flex;
-  width: 100%;
   color: var(--component-page_header-color);
   padding-right: 2rem;
   box-sizing: inherit;
@@ -26,24 +25,24 @@
 }
 
 .pageHeader.dark {
-  --component-page_header-background-color: var(--fds-semantic-surface-action-first-active);
-  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+  --component-page_header-background-color: var(--a2-semantic-surface-action-first-no_fill);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.light {
-  --component-page_header-background-color: var(--fds-semantic-surface-neutral-default);
-  --component-page_header-color: var(--fds-semantic-text-neutral-default);
-  border-bottom: solid 1px var(--fds-semantic-border-neutral-subtle);
+  --component-page_header-background-color: var(--ds-color-neutral-contrast-1);
+  --component-page_header-color: var(--a2-semantic-surface-action-first-no_fill);
+  border-bottom: solid 1px var(--ds-color-neutral-border-subtle);
 }
 
 .pageHeader.success {
-  --component-page_header-background-color: var(--fds-semantic-surface-success-default);
-  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+  --component-page_header-background-color: var(--a2-semantic-surface-success-default);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.danger {
-  --component-page_header-background-color: var(--fds-semantic-surface-danger-default);
-  --component-page_header-color: var(--fds-semantic-text-neutral-on_inverted);
+  --component-page_header-background-color: var(--a2-semantic-surface-danger-default);
+  --component-page_header-color: var(--ds-color-accent-contrast-1);
 }
 
 .pageHeader.small {

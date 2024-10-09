@@ -2,8 +2,9 @@ import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import classes from './ChooseOrgPage.module.css';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+
+import classes from './ChooseOrgPage.module.css';
 
 interface InfoPanelProps {
   searchString: string;
@@ -24,11 +25,11 @@ export const ChooseOrgInfoPanel = ({
   if (reporteeData?.organizationNumber === searchString && searchString.length > 0) {
     return (
       <Alert
-        severity='warning'
+        color='warning'
         role='alert'
       >
         <Heading
-          size={'xsmall'}
+          size={'xs'}
           level={2}
           spacing
         >
@@ -40,7 +41,7 @@ export const ChooseOrgInfoPanel = ({
   } else if (!searchLoading && searchOrgNotExist) {
     return (
       <Alert
-        severity='danger'
+        color='danger'
         size='lg'
       >
         <Heading
@@ -66,7 +67,7 @@ export const ChooseOrgInfoPanel = ({
   } else if (!searchLoading && promptOrgNumber) {
     return (
       <Alert
-        severity='info'
+        color='info'
         size='lg'
       >
         <Heading

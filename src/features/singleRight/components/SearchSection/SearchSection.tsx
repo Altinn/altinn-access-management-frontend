@@ -92,7 +92,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
 
   const filterChips = () => (
     <Chip.Group
-      size='small'
+      size='sm'
       className={classes.filterChips}
     >
       {filters.map((filterValue: string) => (
@@ -115,8 +115,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <div className={classes.spinner}>
           <Spinner
             title={t('common.loading')}
-            size='xlarge'
-            variant='interaction'
+            size='xl'
           />
         </div>
       );
@@ -125,12 +124,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <Alert
           role='alert'
           className={classes.searchError}
-          severity='danger'
-          iconTitle={t('common.error')}
+          color='danger'
         >
           <Heading
             level={2}
-            size='xsmall'
+            size='xs'
             spacing
           >
             {t('common.general_error_title')}
@@ -163,7 +161,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 previousLabel={t('common.previous')}
                 itemLabel={(num: number) => `Side ${num}`}
                 onChange={setCurrentPage}
-                size='small'
+                size='sm'
                 compact={isSm}
                 hideLabels={isSm}
               />
@@ -223,12 +221,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
             {prioritizedErrorCodes?.length > 0 && (
               <Alert
                 role='alert'
-                severity='danger'
-                elevated={false}
+                color='danger'
                 className={classes.notDelegableAlert}
               >
                 <Heading
-                  size='xsmall'
+                  size='xs'
                   spacing
                 >
                   {t('single_rights.cannot_delegate_alert_heading')}
@@ -242,8 +239,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 </Paragraph>
               </Alert>
             )}
-            <Paragraph size='small'>{resource.description}</Paragraph>
-            <Paragraph size='small'>{resource.rightDescription}</Paragraph>
+            <Paragraph size='sm'>{resource.description}</Paragraph>
+            <Paragraph size='sm'>{resource.rightDescription}</Paragraph>
           </div>
         </ResourceActionBar>
       </li>
@@ -265,7 +262,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               debouncedSearch(event.target.value);
             }}
-            size='medium'
+            size='md'
             onClear={() => {
               setSearchString('');
               setCurrentPage(1);

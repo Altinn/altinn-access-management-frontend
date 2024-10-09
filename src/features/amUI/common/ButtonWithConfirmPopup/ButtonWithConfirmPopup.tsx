@@ -33,18 +33,18 @@ export const ButtonWithConfirmPopup = ({
   const [open, setOpen] = React.useState(false);
   return (
     <>
-      <Popover
-        {...props}
-        open={open}
-        onClose={() => setOpen(false)}
-      >
+      <Popover.Context {...props}>
         <Popover.Trigger
           {...triggerButtonProps}
           onClick={() => setOpen(!open)}
         >
           {triggerButtonContent}
         </Popover.Trigger>
-        <Popover.Content {...popoverProps}>
+        <Popover
+          open={open}
+          onClose={() => setOpen(false)}
+          {...popoverProps}
+        >
           <div className={classes.confirmPopupMessage}>{message}</div>
           <div className={classes.confirmPopupButtons}>
             <Button
@@ -64,8 +64,8 @@ export const ButtonWithConfirmPopup = ({
               {confirmButtonContent || t('common.confirm')}
             </Button>
           </div>
-        </Popover.Content>
-      </Popover>
+        </Popover>
+      </Popover.Context>
     </>
   );
 };
