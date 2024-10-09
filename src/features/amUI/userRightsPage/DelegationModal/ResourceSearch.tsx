@@ -16,7 +16,7 @@ import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRi
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
 import { Filter, List, ListItem } from '@/components';
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import classes from './ResourceSearch.module.css';
 import { useDelegationModalContext } from './DelegationModalContext';
@@ -72,7 +72,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
 
   const filterChips = () => (
     <Chip.Group
-      size='small'
+      size='sm'
       className={classes.filterChips}
     >
       {filters.map((filterValue: string) => (
@@ -96,7 +96,6 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           <Spinner
             title={t('common.loading')}
             size='md'
-            variant='interaction'
           />
         </div>
       );
@@ -105,12 +104,11 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
         <Alert
           role='alert'
           className={classes.searchError}
-          severity='danger'
-          iconTitle={t('common.error')}
+          color='danger'
         >
           <Heading
             level={2}
-            size='xsmall'
+            size='xs'
             spacing
           >
             {t('common.general_error_title')}

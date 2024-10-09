@@ -2,8 +2,7 @@ import { Button, Popover, Paragraph } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
 import type { HTMLAttributes } from 'react';
 import React, { useState } from 'react';
-
-import { useMediaQuery } from '@/resources/hooks';
+import cn from 'classnames';
 
 import classes from './NavigationSection.module.css';
 
@@ -20,36 +19,34 @@ interface CancelButtonProps {
 interface NavigationSectionProps extends HTMLAttributes<HTMLDivElement> {
   nextButtonProps: NextButtonProps;
   cancelButtonProps: CancelButtonProps;
+  className?: string;
 }
 
 export const NavigationSection = ({
   nextButtonProps,
   cancelButtonProps,
+  className,
   ...props
 }: NavigationSectionProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const isSm = useMediaQuery('(max-width: 768px)');
   return (
-    <div {...props}>
+    <div
+      className={cn([classes.navigationSectionContainer, className])}
+      {...props}
+    >
       <Button
         variant='primary'
-        color='first'
-        fullWidth={isSm}
+        color='accent'
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
       >
         {t('common.proceed')}
       </Button>
-      <Popover
-        variant={'warning'}
-        placement='top'
-        open={popoverOpen}
-        onClose={() => setPopoverOpen(false)}
-      >
+      <Popover.Context>
         <Popover.Trigger
           variant='tertiary'
-          color={cancelButtonProps.showWarning ? 'danger' : 'first'}
-          size='medium'
+          color={cancelButtonProps.showWarning ? 'danger' : 'accent'}
+          size='md'
           onClick={
             cancelButtonProps.showWarning
               ? () => setPopoverOpen(!popoverOpen)
@@ -58,14 +55,17 @@ export const NavigationSection = ({
         >
           {t('common.cancel')}
         </Popover.Trigger>
-        <Popover.Content>
+        <Popover
+          placement='top'
+          open={popoverOpen}
+          onClose={() => setPopoverOpen(false)}
+        >
           <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
           <div className={classes.NavigationSection}>
             <Button
               onClick={cancelButtonProps.onCancel}
               color={'danger'}
               variant={'primary'}
-              fullWidth
             >
               {t('common.yes')}
             </Button>
@@ -73,13 +73,12 @@ export const NavigationSection = ({
               onClick={() => setPopoverOpen(false)}
               color={'danger'}
               variant={'tertiary'}
-              fullWidth
             >
               {t('single_rights.no_stay_here')}
             </Button>
           </div>
-        </Popover.Content>
-      </Popover>
+        </Popover>
+      </Popover.Context>
     </div>
   );
 };

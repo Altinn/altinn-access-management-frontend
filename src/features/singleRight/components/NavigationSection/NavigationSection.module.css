@@ -1,6 +1,24 @@
 .NavigationSection {
   display: flex;
-  gap: 30px;
+  gap: 15px;
   padding: 0;
   margin-top: 2rem;
+}
+
+.NavigationSection > * {
+  flex: 1;
+}
+
+.navigationSectionContainer {
+  display: flex;
+  gap: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .navigationSectionContainer {
+    flex-direction: column;
+  }
+  .navigationSectionContainer > * {
+    width: 100%;
+  }
 }

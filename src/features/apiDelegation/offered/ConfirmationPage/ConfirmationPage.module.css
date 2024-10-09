@@ -59,3 +59,19 @@
 .list {
   margin-bottom: 40px;
 }
+
+.navigationSection {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .navigationSection {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

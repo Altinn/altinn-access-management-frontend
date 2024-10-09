@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useRevokeRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { DelegationType } from '@/features/apiDelegation/components/DelegationType';
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { useSnackbar } from '../../common/Snackbar';

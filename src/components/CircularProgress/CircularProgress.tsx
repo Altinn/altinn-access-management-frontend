@@ -1,4 +1,5 @@
 import React from 'react';
+
 import classes from './CircularProgress.module.css';
 
 export interface CircularProgressProps {

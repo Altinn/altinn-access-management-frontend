@@ -60,16 +60,18 @@
 }
 
 .success {
-  background: var(--fds-brand-alt1-900, #2c3e50);
+  background: var(--ds-color-success-background-subtle);
+  color: var(--ds-color-success-text-default);
 }
 
 .error {
-  background: var(--fds-colors-red-700, #861c2c);
+  background: var(--ds-color-danger-background-subtle);
+  color: var(--ds-color-danger-text-default);
 }
 
 .info {
-  background: #fff;
-  color: #000;
+  background: var(--ds-color-info-background-subtle);
+  color: var(--ds-color-info-text-default);
 }
 
 .snackbarContainer {

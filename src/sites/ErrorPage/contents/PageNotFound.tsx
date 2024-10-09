@@ -12,7 +12,7 @@ export const PageNotFound = () => {
   return (
     <div>
       <Heading
-        size='xlarge'
+        size='xl'
         level={1}
         spacing
         className={classes.header}
@@ -22,7 +22,7 @@ export const PageNotFound = () => {
       <div className={classes.flexContainer}>
         <div className={classes.leftContainer}>
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >
@@ -30,7 +30,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >
@@ -38,7 +38,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >
@@ -46,7 +46,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >
@@ -56,7 +56,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >

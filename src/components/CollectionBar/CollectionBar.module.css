@@ -6,10 +6,10 @@
 }
 
 .counterText.dark {
-  color: var(--fds-semantic-text-neutral-on_inverted);
+  color: var(--ds-global-blue-contrast-1);
 }
 .buttonText.dark {
-  color: var(--fds-semantic-text-neutral-on_inverted);
+  color: var(--ds-global-blue-contrast-1);
 }
 
 .content {

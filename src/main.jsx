@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import '@digdir/designsystemet-theme/brand/altinn/tokens.css';
+import '@digdir/designsystemet-theme/altinn.css';
 import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';

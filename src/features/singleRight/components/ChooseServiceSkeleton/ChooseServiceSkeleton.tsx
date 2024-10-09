@@ -10,7 +10,8 @@ export const ChooseServiceSkeleton = () => {
   const actionBars = Array(10)
     .fill(1)
     .map((elem, index) => (
-      <Skeleton.Rectangle
+      <Skeleton
+        variant='rectangle'
         key={index}
         height='66px'
       />
@@ -19,21 +20,34 @@ export const ChooseServiceSkeleton = () => {
   return (
     <>
       <Ingress spacing>
-        <Skeleton.Text />
-        <Skeleton.Text width='80%' />
+        <Skeleton variant='text' />
+        <Skeleton
+          variant='text'
+          width='80%'
+        />
       </Ingress>
 
-      <Skeleton.Rectangle height={'100px'} />
+      <Skeleton
+        variant='rectangle'
+        height={'100px'}
+      />
 
       <div className={searchClasses.searchSection}>
         <div className={searchClasses.searchInputs}>
           <div className={searchClasses.searchField}>
             <Paragraph>
-              <Skeleton.Text width='200px' />
+              <Skeleton
+                variant='text'
+                width='200px'
+              />
             </Paragraph>
-            <Skeleton.Rectangle height='42px' />
+            <Skeleton
+              variant='rectangle'
+              height='42px'
+            />
           </div>
-          <Skeleton.Rectangle
+          <Skeleton
+            variant='rectangle'
             height='30px'
             width='187px'
             className={searchClasses.filter}
@@ -42,11 +56,15 @@ export const ChooseServiceSkeleton = () => {
 
         <div className={searchClasses.resultCountAndChips}>
           <Paragraph>
-            <Skeleton.Text width='200px' />
+            <Skeleton
+              variant='text'
+              width='200px'
+            />
           </Paragraph>
           {actionBars}
           <div className={cn(searchClasses.pagination, classes.pagination)}>
-            <Skeleton.Rectangle
+            <Skeleton
+              variant='rectangle'
               width='500px'
               height='50px'
             />
@@ -55,11 +73,13 @@ export const ChooseServiceSkeleton = () => {
       </div>
 
       <div className={classes.navButtons}>
-        <Skeleton.Rectangle
+        <Skeleton
+          variant='rectangle'
           width='120px'
           height='44px'
         />
-        <Skeleton.Rectangle
+        <Skeleton
+          variant='rectangle'
           width='120px'
           height='44px'
         />

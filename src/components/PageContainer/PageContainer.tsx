@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { getRedirectToProfileUrl } from '@/resources/utils';
-import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
-import classes from './PageContainer.module.css';
 import { Button } from '@digdir/designsystemet-react';
+
+import { getRedirectToProfileUrl } from '@/resources/utils';
+
+import { UserInfoBar } from '../UserInfoBar/UserInfoBar';
+
+import classes from './PageContainer.module.css';
 
 export interface PageContainerProps {
   children: React.ReactNode;
@@ -22,7 +25,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
             icon={true}
             title={t('common.close')}
             className={classes.closeButton}
-            size='small'
+            size='sm'
             aria-label={String(t('common.cancel'))}
             asChild
           >

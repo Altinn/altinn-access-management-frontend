@@ -31,19 +31,19 @@ export const ErrorPage = () => {
           <PageContent>
             <div className={classes.errorPageWrapper}>
               <Paragraph
-                size='small'
+                size='sm'
                 className={classes.errorMessage}
               >
                 {t('common.time')}: {timestamp.toLocaleString('no-NO')}
               </Paragraph>
               <Paragraph
-                size='small'
+                size='sm'
                 className={classes.errorMessage}
               >
                 {t('common.error_status_code')}: {error.status}
               </Paragraph>
               <Paragraph
-                size='small'
+                size='sm'
                 spacing
                 className={classes.errorMessage}
               >

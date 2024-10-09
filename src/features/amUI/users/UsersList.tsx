@@ -3,8 +3,8 @@ import { Heading, Pagination, Search, Paragraph } from '@digdir/designsystemet-r
 import { useTranslation } from 'react-i18next';
 
 import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { ListItem } from '@/components/List/ListItem';
-import { List } from '@/components/List/List';
+import { ListItem } from '@/features/amUI/common/List/ListItem';
+import { List } from '@/features/amUI/common/List/List';
 import { debounce } from '@/resources/utils';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';

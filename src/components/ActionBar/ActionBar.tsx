@@ -108,7 +108,11 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
       toggleOpen = undefined;
     } else {
       toggleOpen = () => {
-        onClick !== undefined ? onClick() : setInternalOpen((openState) => !openState);
+        if (onClick !== undefined) {
+          onClick();
+        } else {
+          setInternalOpen((openState) => !openState);
+        }
       };
     }
 

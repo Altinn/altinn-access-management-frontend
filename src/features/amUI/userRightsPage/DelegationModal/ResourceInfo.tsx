@@ -21,7 +21,7 @@ import {
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -82,7 +82,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const chips =
     resource?.resourceType === 'AltinnApp' ? (
       <Chip.Toggle
-        size='small'
+        size='sm'
         checkmark
         selected={rights.some((r) => r.checked === true)}
         disabled={!rights.some((r) => r.delegable === true)}
@@ -223,7 +223,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           )}
           <Button
             className={classes.completeButton}
-            fullWidth={false}
             disabled={displayResourceAlert || !rights.some((r) => r.checked === true)}
             onClick={delegateChosenRights}
           >

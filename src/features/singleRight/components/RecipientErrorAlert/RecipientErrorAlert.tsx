@@ -12,10 +12,10 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
 
   if (!userUUID && !partyUUID) {
     return (
-      <Alert severity='danger'>
+      <Alert color='danger'>
         <Heading
           level={3}
-          size='small'
+          size='sm'
         >
           {t('single_rights.missing_recipient_error_title')}
         </Heading>
@@ -26,11 +26,11 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
     return (
       <Alert
         role='alert'
-        severity='danger'
+        color='danger'
       >
         <Heading
           level={3}
-          size='small'
+          size='sm'
         >
           {t('single_rights.faulty_recipient_error_title')}
         </Heading>

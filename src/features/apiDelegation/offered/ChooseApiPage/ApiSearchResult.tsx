@@ -9,11 +9,11 @@ import common from '@/resources/css/Common.module.css';
 import type { DelegableApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { ErrorPanel } from '@/components';
+import type { CustomError } from '@/dataObjects';
 
 import { ApiActionBar } from '../../components/ApiActionBar';
 
 import classes from './ChooseApiPage.module.css';
-import type { CustomError } from '@/dataObjects';
 
 interface ApiSearchResultsProps {
   error?: FetchBaseQueryError | SerializedError | CustomError;
@@ -33,7 +33,6 @@ export const ApiSearchResults = ({
   addApi,
 }: ApiSearchResultsProps) => {
   const { t } = useTranslation();
-
   const { statusMessage, unchosenApis } = useMemo(() => {
     const unchosenApis = searchResults?.filter(
       (searchResultApi) => !chosenApis.some((api) => api.identifier === searchResultApi.identifier),
@@ -50,10 +49,7 @@ export const ApiSearchResults = ({
     if (isFetching) {
       return (
         <div className={common.spinnerContainer}>
-          <Spinner
-            title={t('common.loading')}
-            variant='interaction'
-          />
+          <Spinner title={t('common.loading')} />
         </div>
       );
     }
@@ -65,7 +61,10 @@ export const ApiSearchResults = ({
         {unchosenApis?.map((api: DelegableApi, index) => {
           const initWithDelegationCheck = prechosenApis.includes(api.identifier);
           return (
-            <li key={`${api.identifier}${index}`}>
+            <li
+              className={cn(classes.unstyledListItem)}
+              key={`${api.identifier}${index}`}
+            >
               <ApiActionBar
                 variant={'add'}
                 color={'neutral'}

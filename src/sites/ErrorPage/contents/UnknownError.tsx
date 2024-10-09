@@ -12,7 +12,7 @@ export const UnknownError = () => {
   return (
     <div>
       <Heading
-        size='xlarge'
+        size='xl'
         spacing
         className={classes.header}
       >
@@ -21,7 +21,7 @@ export const UnknownError = () => {
       <div className={classes.flexContainer}>
         <div className={classes.leftContainer}>
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >
@@ -29,7 +29,7 @@ export const UnknownError = () => {
           </Paragraph>
 
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >
@@ -37,7 +37,7 @@ export const UnknownError = () => {
           </Paragraph>
 
           <Paragraph
-            size='large'
+            size='lg'
             spacing
             className={classes.contentText}
           >

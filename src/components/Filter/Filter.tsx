@@ -130,17 +130,17 @@ export const Filter = ({
   const modalHeader = () => (
     <div className={classes.modalHeader}>
       <Heading
-        size='xsmall'
+        size='xs'
         level={3}
       >
         {label}
       </Heading>
       <Button
         variant='tertiary'
-        color='second'
+        color='neutral'
         onClick={handleOpenOrClose}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
-        size='medium'
+        size='md'
         icon={true}
       >
         <XMarkIcon
@@ -176,8 +176,7 @@ export const Filter = ({
           <div className={classes.loadingContainer}>
             <Spinner
               title={t('common.loading')}
-              variant='interaction'
-              size='medium'
+              size='md'
             />
           </div>
         ) : (
@@ -194,16 +193,15 @@ export const Filter = ({
             <div className={cn(classes.filterActions, { [classes.modal]: fullScreenModal })}>
               <Button
                 className={classes.resetButton}
-                size={fullScreenModal ? 'medium' : 'small'}
+                size={fullScreenModal ? 'md' : 'sm'}
                 variant='tertiary'
-                fullWidth={false}
                 aria-disabled={checkedFilters.length === 0}
                 onClick={checkedFilters.length === 0 ? undefined : handleReset}
               >
                 {resetButtonLabel}
               </Button>
               <Button
-                size={fullScreenModal ? 'medium' : 'small'}
+                size={fullScreenModal ? 'md' : 'sm'}
                 onClick={hasChanges ? handleOpenOrClose : undefined}
                 aria-disabled={!hasChanges}
               >

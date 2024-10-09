@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { Button, ErrorMessage, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Button, Paragraph, Spinner, ValidationMessage } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, ExclamationmarkTriangleIcon, ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -78,7 +78,7 @@ export const ResourceActionBar = ({
   const addButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'large' : 'medium'}
+      size={compact ? 'lg' : 'md'}
       onClick={() => {
         onAddClick?.();
       }}
@@ -96,11 +96,11 @@ export const ResourceActionBar = ({
   const undoButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'large' : 'medium'}
+      size={compact ? 'lg' : 'md'}
       onClick={onRemoveClick}
       icon={compact}
     >
-      {!compact && t('common.undo')}{' '}
+      {!compact && t('common.undo')}
       <ArrowUndoIcon
         title={t('common.undo')}
         fontSize={getButtonIconSize(!compact)}
@@ -110,31 +110,24 @@ export const ResourceActionBar = ({
 
   const loadingText = (
     <Paragraph className={classes.loadingText}>
-      <Spinner
-        title={t('common.loading')}
-        variant='interaction'
-      />
+      <Spinner title={t('common.loading')} />
       {!compact && t('common.loading')}
     </Paragraph>
   );
 
   const notDelegableLabel = (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-    <div
+    <ValidationMessage
       className={classes.notDelegableContainer}
       onClick={() => {
         setOpen(!open);
       }}
     >
-      {!compact && <ErrorMessage>{errorText} </ErrorMessage>}
-      <ErrorMessage>
-        <ExclamationmarkTriangleIcon
-          className={classes.notDelegableIcon}
-          fontSize={getButtonIconSize(!compact)}
-          aria-label={errorText}
-        />
-      </ErrorMessage>
-    </div>
+      {!compact && errorText}
+      <ExclamationmarkTriangleIcon
+        fontSize={getButtonIconSize(!compact)}
+        aria-label={errorText}
+      />
+    </ValidationMessage>
   );
 
   const action = () => {

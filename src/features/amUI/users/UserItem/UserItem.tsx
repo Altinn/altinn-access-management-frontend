@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
 
-import { Avatar } from '@/components/Avatar/Avatar';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import type { FilteredRightHolder } from '../useFilteredRightHolders';
 
@@ -104,7 +103,6 @@ export const UserItem = ({
               classes.clickable,
               className,
             )}
-            fullWidth
           >
             {icon && (
               <Avatar

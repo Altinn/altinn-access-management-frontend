@@ -5,8 +5,8 @@
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   background-color: var(#ffffff);
-  --border-color: var(--fds-semantic-border-neutral-subtle);
-  --header-color: var(--fds-semantic-surface-neutral-default);
+  --border-color: var(--a2-color-neutral-border-default);
+  --header-color: var(--a2-color-neutral-surface-default);
 }
 
 .actionBarContent.small {
@@ -26,8 +26,8 @@
 
 .actionBarContent.light {
   border-color: var(--border-color);
-  --border-color: var(--fds-semantic-border-neutral-subtle);
-  --header-color: var(--fds-semantic-surface-neutral-default);
+  --border-color: var(--a2-color-neutral-border-default);
+  --header-color: var(--a2-color-neutral-surface-default);
   border-top-width: 1px;
 }
 
@@ -36,31 +36,31 @@
 }
 
 .actionBarContent.dark {
-  --border-color: var(--fds-semantic-surface-action-first-active);
-  --header-color: var(--fds-semantic-surface-action-first-active);
+  --border-color: #67707c;
+  --header-color: #243142;
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.neutral {
-  --border-color: var(--fds-semantic-border-neutral-subtle);
-  --header-color: var(--fds-semantic-surface-neutral-subtle);
+  --border-color: #d2d5d8; /*var(--ds-color-neutral-border-default); */
+  --header-color: #f4f5f6; /*var(--ds-color-neutral-surface-default); */
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.warning {
-  --border-color: var(--fds-semantic-border-warning-default);
-  --header-color: var(--fds-semantic-surface-warning-subtle);
+  --border-color: var(--a2-color-warning-border-default);
+  --header-color: var(--a2-color-warning-surface-default);
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.success {
-  --border-color: var(--fds-semantic-border-success-default);
-  --header-color: var(--fds-semantic-surface-success-subtle);
+  --border-color: var(--a2-color-success-border-default);
+  --header-color: var(--a2-color-success-surface-default);
   border-top-color: var(--header-color);
 }
 
 .actionBarContent.danger {
-  --border-color: var(--fds-semantic-border-danger-default);
-  --header-color: var(--fds-semantic-surface-danger-subtle);
+  --border-color: var(--a2-color-danger-border-default);
+  --header-color: var(--a2-color-danger-surface-default);
   border-top-color: var(--header-color);
 }
