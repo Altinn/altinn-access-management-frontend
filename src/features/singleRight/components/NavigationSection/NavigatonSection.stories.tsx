@@ -19,12 +19,6 @@ export default {
   title: 'Features/SingleRight/NavigationSection',
   component: NavigationSection,
   argTypes: {},
-  render: (args) => (
-    <NavigationSection
-      {...exampleArgs}
-      {...args}
-    />
-  ),
 } as Meta;
 
 export const Default: StoryObj<NavigationSectionPropsAndCustomArgs> = {
