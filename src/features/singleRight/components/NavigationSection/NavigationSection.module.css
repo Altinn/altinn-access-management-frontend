@@ -8,3 +8,17 @@
 .NavigationSection > * {
   flex: 1;
 }
+
+.navigationSectionContainer {
+  display: flex;
+  gap: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .navigationSectionContainer {
+    flex-direction: column;
+  }
+  .navigationSectionContainer > * {
+    width: 100%;
+  }
+}

@@ -68,10 +68,83 @@ export const handlers = [
       },
     ]);
   }),
+  http.get(BASE_URL + '/accessmanagement/api/v1/apidelegation/:id/offered', () => {
+    return HttpResponse.json([
+      {
+        id: 'LIVLIG DYREBAR TIGER AS',
+        name: 'LIVLIG DYREBAR TIGER AS',
+        orgNumber: '313357120',
+        apiList: [
+          {
+            id: 'digdir-maskinportenschemaid-302',
+            apiName: 'Automation Regression',
+            owner: 'Digitaliseringsdirektoratet',
+            description:
+              'Gir anledning til a teste maskinporten som en del av automatiserte tester_Endret',
+            scopes: [],
+          },
+        ],
+      },
+    ]);
+  }),
+  http.get(BASE_URL + '/accessmanagement/api/v1/apidelegation/:id/received', () => {
+    return HttpResponse.json([
+      {
+        id: 'LIVLIG DYREBAR TIGER AS',
+        name: 'LIVLIG DYREBAR TIGER AS',
+        orgNumber: '313357120',
+        apiList: [
+          {
+            id: 'digdir-maskinportenschemaid-302',
+            apiName: 'Automation Regression',
+            owner: 'Digitaliseringsdirektoratet',
+            description:
+              'Gir anledning til a teste maskinporten som en del av automatiserte tester_Endret',
+            scopes: [],
+          },
+          {
+            id: 'digdir-maskinportenschemaid-302',
+            apiName: 'Automation Regression 2 ',
+            owner: 'Digitaliseringsdirektoratet',
+            description:
+              'Gir anledning til a teste maskinporten som en del av automatiserte tester_Endret',
+            scopes: [],
+          },
+        ],
+      },
+    ]);
+  }),
+  http.post(BASE_URL + '/accessmanagement/api/v1/apidelegation/:id/received/revoke/batch', () => {
+    return HttpResponse.json([
+      {
+        orgNumber: '313357120',
+        apiId: 'digdir-maskinportenschemaid-302',
+        success: true,
+      },
+      {
+        orgNumber: '313357120',
+        apiId: 'digdir-maskinportenschemaid-302',
+        success: false,
+      },
+    ]);
+  }),
+  http.post(BASE_URL + '/accessmanagement/api/v1/apidelegation/:id/offered/revoke/batch', () => {
+    return HttpResponse.json([
+      {
+        orgNumber: '313357120',
+        apiId: 'digdir-maskinportenschemaid-302',
+        success: true,
+      },
+      {
+        orgNumber: '313357120',
+        apiId: 'digdir-maskinportenschemaid-302',
+        success: false,
+      },
+    ]);
+  }),
   http.post(
     `${BASE_URL}/accessmanagement/api/v1/apidelegation/:id/delegationcheck`,
     ({ params }) => {
-      console.log('delegationcheck', params.id);
       return HttpResponse.json([
         {
           rightKey: 'appid-136:ScopeAccess',

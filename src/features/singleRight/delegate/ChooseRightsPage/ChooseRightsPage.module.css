@@ -13,9 +13,25 @@
 
 .navigationContainer {
   margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 20px;
 }
 
 .secondaryText {
   margin-top: 20px;
   margin-bottom: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .navigationContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .navigationContainer > button {
+    flex-grow: 1;
+    width: 100%;
+  }
 }

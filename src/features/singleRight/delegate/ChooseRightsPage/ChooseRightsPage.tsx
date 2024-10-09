@@ -7,7 +7,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import {
-  GroupElements,
   Page,
   PageContainer,
   PageContent,
@@ -197,7 +196,7 @@ export const ChooseRightsPage = () => {
 
   const navigationButtons = () => {
     return (
-      <GroupElements>
+      <>
         <Popover.Context>
           <Popover.Trigger
             variant='primary'
@@ -238,7 +237,7 @@ export const ChooseRightsPage = () => {
         >
           {t('single_rights.add_more_services')}
         </Button>
-      </GroupElements>
+      </>
     );
   };
 

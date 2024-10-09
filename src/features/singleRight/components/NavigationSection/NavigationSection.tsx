@@ -2,6 +2,7 @@ import { Button, Popover, Paragraph } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
 import type { HTMLAttributes } from 'react';
 import React, { useState } from 'react';
+import cn from 'classnames';
 
 import classes from './NavigationSection.module.css';
 
@@ -18,16 +19,21 @@ interface CancelButtonProps {
 interface NavigationSectionProps extends HTMLAttributes<HTMLDivElement> {
   nextButtonProps: NextButtonProps;
   cancelButtonProps: CancelButtonProps;
+  className?: string;
 }
 
 export const NavigationSection = ({
   nextButtonProps,
   cancelButtonProps,
+  className,
   ...props
 }: NavigationSectionProps) => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   return (
-    <div {...props}>
+    <div
+      className={cn([classes.navigationSectionContainer, className])}
+      {...props}
+    >
       <Button
         variant='primary'
         color='accent'

@@ -41,6 +41,14 @@
   margin: 15px 0;
 }
 
+@media screen and (max-width: 768px) {
+  .navigationSection {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 .searchFormTextInputSection {
   grid-area: searchFormTextInput;
 }

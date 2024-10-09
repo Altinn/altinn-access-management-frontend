@@ -102,13 +102,15 @@ export const ConfirmationPage = () => {
             ? t('api_delegation.receipt_page_failed_text')
             : t('api_delegation.receipt_page_bottom_text')}
         </Paragraph>
-        <Button
-          color='accent'
-          variant='primary'
-          onClick={navigateToOverview}
-        >
-          {t('api_delegation.receipt_page_main_button')}
-        </Button>
+        <div className={classes.navigationSection}>
+          <Button
+            color='accent'
+            variant='primary'
+            onClick={navigateToOverview}
+          >
+            {t('api_delegation.receipt_page_main_button')}
+          </Button>
+        </div>
       </>
     );
   };
@@ -137,7 +139,7 @@ export const ConfirmationPage = () => {
         </Heading>
         <DelegableOrgList />
         <Paragraph size='lg'>{t('api_delegation.confirmation_page_content_bottom_text')}</Paragraph>
-        <GroupElements>
+        <div className={classes.navigationSection}>
           <Button
             color='accent'
             variant='secondary'
@@ -156,7 +158,7 @@ export const ConfirmationPage = () => {
             {isLoading && <Spinner title={t('common.loading')} />}
             {t('common.confirm')}
           </Button>
-        </GroupElements>
+        </div>
       </>
     );
   };

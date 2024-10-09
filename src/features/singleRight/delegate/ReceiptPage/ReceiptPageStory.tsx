@@ -62,7 +62,6 @@ export const ReceiptPage = () => {
                 <Button
                   onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                   color={'accent'}
-                  // fullWidth
                 >
                   {t('common.finished')}
                 </Button>
@@ -74,7 +73,6 @@ export const ReceiptPage = () => {
                   }}
                   color={'accent'}
                   variant={'secondary'}
-                  // fullWidth
                 >
                   {t('single_rights.give_more_rights')}
                 </Button>

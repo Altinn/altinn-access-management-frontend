@@ -11,4 +11,7 @@
     flex-direction: column;
     align-items: center;
   }
+  .navigationContainer > button {
+    width: 100%;
+  }
 }

@@ -10,7 +10,6 @@ import { Page, PageContainer, PageContent, PageHeader, RestartPrompter } from '@
 import { useFetchRecipientInfo, useMediaQuery } from '@/resources/hooks';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { resetServicesWithStatus } from '@/rtk/features/singleRights/singleRightsSlice';
-import { GroupElements } from '@/components/GroupElements/GroupElements';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
@@ -58,11 +57,10 @@ export const ReceiptPage = () => {
               <div className={classes.actionBars}>
                 <ActionBarSection recipientName={String(recipientName)} />
               </div>
-              <GroupElements>
+              <div className={classes.navigationContainer}>
                 <Button
                   onClick={() => redirectToSevicesAvailableForUser(userID, partyID)}
                   color={'accent'}
-                  // fullWidth
                 >
                   {t('common.finished')}
                 </Button>
@@ -74,11 +72,10 @@ export const ReceiptPage = () => {
                   }}
                   color={'accent'}
                   variant={'secondary'}
-                  // fullWidth
                 >
                   {t('single_rights.give_more_rights')}
                 </Button>
-              </GroupElements>
+              </div>
             </>
           )}
         </PageContent>
