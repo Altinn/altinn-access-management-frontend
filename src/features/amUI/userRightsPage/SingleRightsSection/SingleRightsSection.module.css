@@ -18,7 +18,7 @@
     'icon title type action'
     'icon owner type action';
   grid-template-columns: 35px 1fr minmax(30px, 120px) 80px;
-  gap: 0.6rem;
+  gap: 0 0.5rem;
   align-items: center;
 }
 

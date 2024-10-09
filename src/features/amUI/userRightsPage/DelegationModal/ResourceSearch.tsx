@@ -10,13 +10,18 @@ import {
 } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon, FileIcon } from '@navikt/aksel-icons';
+import { useParams } from 'react-router-dom';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRightsApi';
+import {
+  useGetPaginatedSearchQuery,
+  useGetSingleRightsForRightholderQuery,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
 import { Filter, List, ListItem } from '@/components';
 import { Avatar } from '@/components/Avatar/Avatar';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import classes from './ResourceSearch.module.css';
 import { useDelegationModalContext } from './DelegationModalContext';
@@ -29,6 +34,7 @@ const searchResultsPerPage = 7;
 
 export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   const { t } = useTranslation();
+  const { id } = useParams();
 
   const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
     useDelegationModalContext();
@@ -42,6 +48,10 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
     ROfilters: filters,
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
+  });
+  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery({
+    party: getCookie('AltinnPartyId'),
+    userId: id || '',
   });
 
   const displayPopularResources =
@@ -176,7 +186,19 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
             </Paragraph>
           </span>
         </span>
-        <ChevronRightIcon fontSize='1.5em' />
+        <div className={classes.listItemRight}>
+          {delegatedResources?.some(
+            (delegated) => delegated.identifier === resource.identifier,
+          ) && (
+            <Paragraph
+              size='xs'
+              className={classes.infoText}
+            >
+              Har fullmakt
+            </Paragraph>
+          )}
+          <ChevronRightIcon fontSize='1.5em' />
+        </div>
       </ListItem>
     );
   });
