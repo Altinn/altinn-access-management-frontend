@@ -3,11 +3,13 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -22,13 +24,23 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _httpClient;
         private readonly ILogger<IResourceRegistryClient> _logger;
 
+        private readonly CacheConfig _cacheConfig;
+        private readonly IMemoryCache _memoryCache;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ResourceRegistryClient" /> classß
         /// </summary>
         /// <param name="settings">The resource registry config settings</param>
         /// <param name="httpClient">Http client</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
-        public ResourceRegistryClient(IOptions<PlatformSettings> settings, HttpClient httpClient, ILogger<IResourceRegistryClient> logger)
+        /// <param name="memoryCache">the handler for cache</param>
+        /// <param name="cacheConfig">the handler for cache configuration</param>
+        public ResourceRegistryClient(
+            IOptions<PlatformSettings> settings,
+            HttpClient httpClient,
+            ILogger<IResourceRegistryClient> logger,
+            IMemoryCache memoryCache,
+            IOptions<CacheConfig> cacheConfig)
         {
             PlatformSettings platformSettings = settings.Value;
             _httpClient = httpClient;
@@ -37,6 +49,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _logger = logger;
+            _memoryCache = memoryCache;
+            _cacheConfig = cacheConfig.Value;
         }
 
         /// <inheritdoc />
@@ -92,35 +106,45 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<OrgList> GetAllResourceOwners()
         {
-            OrgList resourceOwners = new OrgList();
+            // OrgList resourceOwners = new OrgList();
 
             string endpointUrl = "resource/orgs";
-
-            try
+            string cacheKey = "all_resource_owners";
+            if (!_memoryCache.TryGetValue(cacheKey, out OrgList resourceOwners))
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
-
-                if (response.StatusCode == HttpStatusCode.OK)
+                try
                 {
-                    JsonSerializerOptions options = new JsonSerializerOptions
+                    HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        PropertyNameCaseInsensitive = true,
-                    };
-                    string content = await response.Content.ReadAsStringAsync();
-                    resourceOwners = JsonSerializer.Deserialize<OrgList>(content, options);
+                        JsonSerializerOptions options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true,
+                        };
+                        string content = await response.Content.ReadAsStringAsync();
+                        var ro = JsonSerializer.Deserialize<OrgList>(content, options);
+                        MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                            .SetPriority(CacheItemPriority.High)
+                            .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceOwnerCacheTimeout, 0));
+
+                        _memoryCache.Set(cacheKey, resourceOwners, cacheEntryOptions);
+                        return ro;
+                    }
+                    else
+                    {
+                        _logger.LogError("Getting service owners from resourceregistry/api/v1/resource/orgs failed with {StatusCode}", response.StatusCode);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    _logger.LogError("Getting service owners from resourceregistry/api/v1/resource/orgs failed with {StatusCode}", response.StatusCode);
+                    _logger.LogError(e, "AccessManagement.UI // ResourceClient // SearchResources // Exception");
+                    throw;
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "AccessManagement.UI // ResourceClient // SearchResources // Exception");
-                throw;
             }
 
             return resourceOwners;
+
         }
 
         /// <summary>

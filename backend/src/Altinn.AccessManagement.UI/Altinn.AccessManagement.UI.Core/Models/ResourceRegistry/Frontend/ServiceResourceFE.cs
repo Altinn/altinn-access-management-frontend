@@ -75,6 +75,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string ResourceOwnerLogoUrl { get; set; }
 
         /// <summary>
+        /// Orgcode of the resource owner
+        /// </summary>
+        public string ResourceOwnerOrgcode { get; set; }
+
+
+        /// <summary>
         /// ResourceReference
         /// </summary>
         public List<ResourceReference> ResourceReferences { get; set; }
@@ -128,7 +134,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             bool visible = true, 
             bool delegable = true, 
             List<string> keywords = null,
-            string resourceOwnerLogoUrl = null)
+            string resourceOwnerLogoUrl = null,
+            string resourceOwnerOrgcode = null)
         {
             Identifier = identifier;
             Title = title;
@@ -148,6 +155,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Spatial = spatial;
             AuthorizationReference = authorizationReference;
             Keywords = keywords ?? new List<string>();
+            ResourceOwnerOrgcode = resourceOwnerOrgcode;
         }
 
         /// <summary>
@@ -174,6 +182,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Spatial = serviceResourceFE.Spatial;
             AuthorizationReference = serviceResourceFE.AuthorizationReference;
             Keywords = serviceResourceFE.Keywords ?? new List<string>();
+            ResourceOwnerOrgcode = serviceResourceFE.ResourceOwnerOrgcode;
         }
     }
 }

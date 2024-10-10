@@ -77,16 +77,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                     var paginatedResult = PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
                     
-                    // Create a Lookup to map orgnr to org details
-                    var orgnrToOrgLookup = orgList.Orgs.Values.ToLookup(org => org.Orgnr);
-
+                    // Add logo to each resource if it exists
                     foreach (ServiceResourceFE resource in paginatedResult.PageList)
                     {
-                        // Find the logo based on the orgnr in the orgnrToOrgLookup
-                        var orgs = orgnrToOrgLookup[resource.ResourceOwnerOrgNumber];
-                        if (orgs.Any())
+                        orgList.Orgs.TryGetValue(resource.ResourceOwnerOrgcode.ToLower(), out var org);
+                        if (org?.Logo != null)
                         {
-                            resource.ResourceOwnerLogoUrl = orgs.First().Logo; // Assuming you want the first match
+                            resource.ResourceOwnerLogoUrl = org.Logo;
                         }
                     }
 
@@ -417,6 +414,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         resourceReferences: resource.ResourceReferences,
                         resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
                         resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                        resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
                         rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                         description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                         visible: resource.Visible,
