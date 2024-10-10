@@ -2,7 +2,9 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Azure;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -11,19 +13,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IResourceService _resourceService;
+        private readonly IResourceRegistryClient _resourceRegistryClient;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
         };
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingleRightService" /> class.
-        /// </summary>
-        public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService)
+        public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
         {
             _accessManagementClient = accessManagementClient;
             _resourceService = resourceService;
+            _resourceRegistryClient = resourceRegistryClient;
         }
 
         /// <inheritdoc />
@@ -52,6 +53,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
             List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
+
+            // Create a Lookup to map orgnr to org details
+            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+
             foreach (var item in delegationOutput)
             {
                 var firstRightDelegationResult = item.RightDelegationResults?.First();
@@ -65,21 +70,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 var resource = await _resourceService.GetResource(resourceId);
 
+                // Find the logo based on the orgnr in the orgnrToOrgLookup
+                orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
+
                 serviceResourceFE.Add(new ServiceResourceFE(
-                resource.Identifier,
-                resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                resourceType: resource.ResourceType,
-                status: resource.Status,
-                resourceReferences: resource.ResourceReferences,
-                resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                visible: resource.Visible,
-                delegable: resource.Delegable,
-                contactPoints: resource.ContactPoints,
-                spatial: resource.Spatial,
-                authorizationReference: resource.AuthorizationReference));
+                    resource.Identifier,
+                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
+                    resourceType: resource.ResourceType,
+                    status: resource.Status,
+                    resourceReferences: resource.ResourceReferences,
+                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
+                    visible: resource.Visible,
+                    delegable: resource.Delegable,
+                    contactPoints: resource.ContactPoints,
+                    spatial: resource.Spatial,
+                    authorizationReference: resource.AuthorizationReference,
+                    resourceOwnerLogoUrl: org?.Logo));
             }
 
             return serviceResourceFE;

@@ -1,6 +1,6 @@
 {
   "orgs": {
-    "nar": {
+    "nrna": {
       "name": {
         "en": "Narnia",
         "nb": "Narnia",
@@ -9,6 +9,20 @@
       "logo": "https://altinncdn.no/orgs/nbib/nasjonalbiblioteket.png",
       "orgnr": "777777777",
       "homepage": "https://en.wikipedia.org/wiki/The_Chronicles_of_Narnia",
+      "environments": [
+        "tt02",
+        "production"
+      ]
+    },
+    "paa": {
+      "name": {
+        "en": "DEPARTMENT OF HUMBUG",
+        "nb": "PÅFUNNSETATEN",
+        "nn": "PÅFUNNSETATEN"
+      },
+      "logo": "https://altinncdn.no/orgs/udir/udir.png",
+      "orgnr": "974760746",
+      "homepage": "",
       "environments": [
         "tt02",
         "production"
@@ -508,7 +522,7 @@
         "nb": "Testdepartementet",
         "nn": "Testdepartementet"
       },
-      "logo": "",
+      "logo": "https://altinncdn.no/orgs/stami/stami.png",
       "orgnr": "974760746",
       "homepage": "",
       "environments": [

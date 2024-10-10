@@ -73,7 +73,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     // Perform search/filtering and return matches
                     List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
                     List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
-                    return PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                    OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+
+                    var paginatedResult = PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                    
+                    // Create a Lookup to map orgnr to org details
+                    var orgnrToOrgLookup = orgList.Orgs.Values.ToLookup(org => org.Orgnr);
+
+                    foreach (ServiceResourceFE resource in paginatedResult.PageList)
+                    {
+                        // Find the logo based on the orgnr in the orgnrToOrgLookup
+                        var orgs = orgnrToOrgLookup[resource.ResourceOwnerOrgNumber];
+                        if (orgs.Any())
+                        {
+                            resource.ResourceOwnerLogoUrl = orgs.First().Logo; // Assuming you want the first match
+                        }
+                    }
+
+                    return paginatedResult;
                 }
             }
             catch (Exception ex)
@@ -197,8 +214,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .GroupBy(sr => sr.HasCompetentAuthority.Orgcode.ToUpper())
                     .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
                     .Select(sr => new ResourceOwnerFE(
-                        sr.HasCompetentAuthority.Name[languageCode],
-                        sr.HasCompetentAuthority.Organization))
+                            sr.HasCompetentAuthority.Name[languageCode],
+                            sr.HasCompetentAuthority.Organization))
                     .OrderBy(resourceOwner => resourceOwner.OrganisationName) // Order alphabetically
                     .ToList();
 

@@ -4,23 +4,44 @@
   min-height: var(--avatar-size);
   display: grid;
   place-content: center;
-  background-color: #00315d;
+  background-color: var(--background-color);
   color: #ffffff;
   text-align: center;
   text-transform: uppercase;
+  overflow: hidden;
+}
+
+.avatar img {
+  object-fit: fill;
+  max-width: var(--avatar-size);
+  max-height: var(--avatar-size);
+}
+
+.avatar.serviceOwner.logo {
+  --background-color: transparent;
+}
+
+.avatar.person.logo {
+  --background-color: transparent;
+}
+
+.avatar.organization.logo {
+  --background-color: transparent;
 }
 
 .avatar.person {
   border-radius: 50%;
+  --background-color: #00315d;
 }
 
 .avatar.organization {
   border-radius: 0.25em;
+  --background-color: #00315d;
 }
 
 .avatar.serviceOwner {
   border-radius: 4%;
-  background-color: #5590e9;
+  --background-color: #5590e9;
 }
 
 .icon {

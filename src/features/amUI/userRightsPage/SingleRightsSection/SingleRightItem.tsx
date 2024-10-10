@@ -1,9 +1,10 @@
 import { ListItem } from '@digdir/designsystemet-react';
-import { FileIcon, TrashIcon } from '@navikt/aksel-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { DelegationType } from '@/features/apiDelegation/components/DelegationType';
@@ -16,16 +17,10 @@ import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/
 import classes from './SingleRightsSection.module.css';
 
 interface SingleRightItemProps {
-  identifier: string;
-  title: string;
-  resourceOwnerName: string;
+  resource: ServiceResource;
 }
 
-const SingleRightItem: React.FC<SingleRightItemProps> = ({
-  identifier,
-  title,
-  resourceOwnerName,
-}) => {
+const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { openSnackbar } = useSnackbar();
@@ -46,7 +41,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
         isSuccessful
           ? 'user_rights_page.delete_singleRight_success_message'
           : 'user_rights_page.delete_singleRight_error_message',
-        { servicename: title },
+        { servicename: resource.title },
       ),
       variant: isSuccessful ? SnackbarMessageVariant.Success : SnackbarMessageVariant.Error,
       duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
@@ -59,12 +54,13 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
       <Avatar
         size='md'
         profile='serviceOwner'
-        icon={<FileIcon />}
         className={classes.icon}
+        logoUrl={resource.resourceOwnerLogoUrl}
+        name={resource.resourceOwnerName}
       />
-      <div className={classes.title}>{title}</div>
+      <div className={classes.title}>{resource.title}</div>
       <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
-      <div className={classes.resourceOwnerName}>{resourceOwnerName}</div>
+      <div className={classes.resourceOwnerName}>{resource.resourceOwnerName}</div>
       <div className={classes.action}>
         <ButtonWithConfirmPopup
           message={t('user_rights_page.delete_ingleRight_confirm_message')}
@@ -88,7 +84,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({
           confirmButtonContent={t('common.delete')}
           cancelButtonProps={{ variant: 'tertiary' }}
           cancelButtonContent={t('common.cancel')}
-          onConfirm={() => handleRevokeRights(identifier)}
+          onConfirm={() => handleRevokeRights(resource.identifier)}
         />
       </div>
     </ListItem>

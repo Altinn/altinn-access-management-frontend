@@ -163,6 +163,8 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
             size='md'
             profile='serviceOwner'
             icon={<FileIcon />}
+            logoUrl={resource.resourceOwnerLogoUrl}
+            name={resource.resourceOwnerName}
           />
           <span className={classes.resourceHeading}>
             <Paragraph>{resource.title}</Paragraph>
