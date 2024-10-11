@@ -20,6 +20,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             PropertyNameCaseInsensitive = true,
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingleRightService"/> class.
+        /// </summary>
+        /// <param name="accessManagementClient">The access management client.</param>
+        /// <param name="resourceService">The resource service.</param>
+        /// <param name="resourceRegistryClient">The resource registry client.</param>
         public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
         {
             _accessManagementClient = accessManagementClient;
