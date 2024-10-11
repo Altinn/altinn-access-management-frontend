@@ -106,8 +106,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<OrgList> GetAllResourceOwners()
         {
-            // OrgList resourceOwners = new OrgList();
-
             string endpointUrl = "resource/orgs";
             string cacheKey = "all_resource_owners";
             if (!_memoryCache.TryGetValue(cacheKey, out OrgList resourceOwners))

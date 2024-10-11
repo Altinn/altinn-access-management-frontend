@@ -308,7 +308,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<ServiceResource>> GetFullResourceList()
         {
-            return await _resourceRegistryClient.GetResourceList();
+            string cacheKey = "resourcesList:all";
+
+            if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
+            {
+                resources = await _resourceRegistryClient.GetResourceList();
+
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetPriority(CacheItemPriority.High)
+                    .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+
+                _memoryCache.Set(cacheKey, resources, cacheEntryOptions); 
+            }     
+            
+            return resources;
         }
 
         /// <summary>
