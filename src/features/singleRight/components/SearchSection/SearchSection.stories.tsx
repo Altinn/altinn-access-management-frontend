@@ -13,7 +13,7 @@ export default {
   component: SearchSection,
   render: (args) => (
     <Provider store={store}>
-      <SearchSection {...(args as SearchSectionPropsAndCustomArgs)} />,
+      <SearchSection {...(args as SearchSectionPropsAndCustomArgs)} />
     </Provider>
   ),
 } as Meta;

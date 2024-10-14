@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Heading, Pagination, Search, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Search, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
 import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
 import { ListItem } from '@/features/amUI/common/List/ListItem';
 import { List } from '@/features/amUI/common/List/List';
 import { debounce } from '@/resources/utils';
+import { AmPagination } from '@/components/Paginering';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import classes from './UsersList.module.css';
@@ -39,7 +40,6 @@ export const UsersList = () => {
       <Heading
         level={2}
         size='sm'
-        spacing
         id='user_list_heading_id'
       >
         {t('users_page.user_list_heading')}
@@ -70,15 +70,13 @@ export const UsersList = () => {
         {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
       </Paragraph>
       {numOfPages > 1 && (
-        <Pagination
+        <AmPagination
           className={classes.pagination}
           size='sm'
           hideLabels={true}
           currentPage={currentPage}
           totalPages={numOfPages}
-          onChange={(newPage) => setCurrentPage(newPage)}
-          nextLabel='Neste'
-          previousLabel='Forrige'
+          setCurrentPage={setCurrentPage}
         />
       )}
     </div>

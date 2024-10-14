@@ -4,15 +4,7 @@ import * as React from 'react';
 import { FilterIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Chip,
-  Heading,
-  Paragraph,
-  Pagination,
-  Spinner,
-  Alert,
-  Search,
-} from '@digdir/designsystemet-react';
+import { Chip, Heading, Paragraph, Spinner, Alert, Search } from '@digdir/designsystemet-react';
 
 import { Filter } from '@/components';
 import { useMediaQuery } from '@/resources/hooks';
@@ -29,6 +21,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { arraysEqual, debounce } from '@/resources/utils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { AmPagination } from '@/components/Paginering';
 
 import { ResourceActionBar } from '../ResourceActionBar';
 
@@ -91,12 +84,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
   };
 
   const filterChips = () => (
-    <Chip.Group
-      size='sm'
-      className={classes.filterChips}
-    >
+    <div className={classes.filterChips}>
       {filters.map((filterValue: string) => (
         <Chip.Removable
+          size='sm'
           key={filterValue}
           aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
           onClick={() => {
@@ -106,7 +97,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           {getFilterLabel(filterValue)}
         </Chip.Removable>
       ))}
-    </Chip.Group>
+    </div>
   );
 
   const searchResults = () => {
@@ -129,7 +120,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <Heading
             level={2}
             size='xs'
-            spacing
           >
             {t('common.general_error_title')}
           </Heading>
@@ -137,6 +127,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         </Alert>
       );
     } else {
+      const totalPages =
+        totalNumberOfResults && Math.ceil(totalNumberOfResults / searchResultsPerPage);
       return (
         <>
           <div className={classes.resultCountAndChips}>
@@ -152,17 +144,15 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <ul className={classes.serviceResources}> {serviceResouces}</ul>
           {totalNumberOfResults !== undefined &&
             totalNumberOfResults > 0 &&
-            !displayPopularResources && (
-              <Pagination
+            !displayPopularResources &&
+            totalPages &&
+            totalPages > 1 && (
+              <AmPagination
                 className={classes.pagination}
                 currentPage={currentPage}
-                totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-                nextLabel={t('common.next')}
-                previousLabel={t('common.previous')}
-                itemLabel={(num: number) => `Side ${num}`}
-                onChange={setCurrentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
                 size='sm'
-                compact={isSm}
                 hideLabels={isSm}
               />
             )}
@@ -224,12 +214,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 color='danger'
                 className={classes.notDelegableAlert}
               >
-                <Heading
-                  size='xs'
-                  spacing
-                >
-                  {t('single_rights.cannot_delegate_alert_heading')}
-                </Heading>
+                <Heading size='xs'>{t('single_rights.cannot_delegate_alert_heading')}</Heading>
                 <Paragraph>
                   {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
                     you: t('common.you_uppercase'),

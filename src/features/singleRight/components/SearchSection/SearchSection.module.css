@@ -32,6 +32,8 @@
 .filterChips {
   display: flex;
   flex-wrap: wrap;
+  border: none;
+  align-items: center;
 }
 
 .serviceResources {

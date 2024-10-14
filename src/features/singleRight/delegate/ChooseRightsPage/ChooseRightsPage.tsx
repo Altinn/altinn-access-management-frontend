@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
-import { Button, Ingress, Paragraph, Popover } from '@digdir/designsystemet-react';
+import { Button, Paragraph, Popover } from '@digdir/designsystemet-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -324,9 +324,9 @@ export const ChooseRightsPage = () => {
             />
           ) : (
             <>
-              <Ingress>
+              <Paragraph variant='long'>
                 {t('single_rights.choose_rights_page_top_text', { name: recipientName })}
-              </Ingress>
+              </Paragraph>
               <div className={classes.secondaryText}>
                 <Paragraph>{t('single_rights.choose_rights_page_secondary_text')}</Paragraph>
               </div>
