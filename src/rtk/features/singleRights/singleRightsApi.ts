@@ -6,6 +6,7 @@ import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import type {
   DelegationAccessResult,
   DelegationInputDto,
+  DelegationResult,
   ResourceReference,
 } from '@/dataObjects/dtos/resourceDelegation';
 
@@ -25,6 +26,11 @@ export interface ServiceResource {
   authorizationReference: IdValuePair[];
   resourceType: string;
   delegable: boolean;
+}
+
+export interface ResourceDelegation {
+  resource: ServiceResource;
+  delegation: DelegationResult;
 }
 
 interface resourceReference {
@@ -71,7 +77,7 @@ export const singleRightsApi = createApi({
       },
     }),
     getSingleRightsForRightholder: builder.query<
-      ServiceResource[],
+      ResourceDelegation[],
       { party: string; userId: string }
     >({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,

@@ -2,6 +2,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -45,16 +46,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId)
+        public async Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId)
         {
             var res = await _accessManagementClient.GetSingleRightsForRightholder(party, userId);
             var results = await res.Content.ReadAsStringAsync();
 
-            var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
-            List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
-            foreach (var item in delegationOutput)
+            var delegationOutputs = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
+            List<ResourceDelegation> delegationsFE = new List<ResourceDelegation>();
+            foreach (var delegation in delegationOutputs)
             {
-                var firstRightDelegationResult = item.RightDelegationResults?.First();
+                var firstRightDelegationResult = delegation.RightDelegationResults?.First();
                 var firstResource = firstRightDelegationResult?.Resource?.First();
                 var resourceId = firstResource?.Value;
 
@@ -65,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 var resource = await _resourceService.GetResource(resourceId);
 
-                serviceResourceFE.Add(new ServiceResourceFE(
+                ServiceResourceFE resourceFE = new ServiceResourceFE(
                 resource.Identifier,
                 resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
                 resourceType: resource.ResourceType,
@@ -79,10 +80,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 delegable: resource.Delegable,
                 contactPoints: resource.ContactPoints,
                 spatial: resource.Spatial,
-                authorizationReference: resource.AuthorizationReference));
+                authorizationReference: resource.AuthorizationReference);
+
+                delegationsFE.Add(new ResourceDelegation(resourceFE, delegation));
             }
 
-            return serviceResourceFE;
+            return delegationsFE;
         }
 
         /// <summary>

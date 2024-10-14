@@ -45,7 +45,7 @@ type details = {
 export type DelegationResult = {
   from: IdValuePair;
   to: IdValuePair;
-  delegationResult: DelegationAccessResult[];
+  rightDelegationResults: DelegationAccessResult[];
 };
 
 export type ApiDelegationResult = {

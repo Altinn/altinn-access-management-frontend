@@ -49,5 +49,5 @@
 }
 
 .clickableItem:active {
-  --backgroundColor: var(--ds-color-neutral-surface-hover);
+  --backgroundColor: var(--ds-color-neutral-surface-active);
 }

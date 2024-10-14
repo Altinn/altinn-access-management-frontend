@@ -3,12 +3,14 @@ import { Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { FileIcon } from '@navikt/aksel-icons';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useDelegationCheckMutation,
   useDelegateRightsMutation,
+  useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import type { DelegationInputDto } from '@/dataObjects/dtos/resourceDelegation';
 import {
@@ -22,6 +24,8 @@ import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -40,16 +44,19 @@ export type ChipRight = {
 
 export interface ResourceInfoProps {
   resource?: ServiceResource;
-  toParty: Party;
+  toParty?: Party;
   onDelegate: () => void;
 }
 
 export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProps) => {
   const { t } = useTranslation();
   const [delegationCheck, error] = useDelegationCheckMutation();
+  const [hasAccess, setHasAccess] = useState(false);
   const [delegateRights] = useDelegateRightsMutation();
+  const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
+  const { id } = useParams();
   const displayResourceAlert =
     error.isError ||
     resource?.delegable === false ||
@@ -61,23 +68,63 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         }
       : null;
 
+  console.log(rights);
+
+  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery({
+    party: getCookie('AltinnPartyId'),
+    userId: id || '',
+  });
+
+  const userHasResource = delegatedResources?.some(
+    (delegation) => delegation.resource.identifier == resource?.identifier,
+  );
+  useEffect(() => {
+    if (delegatedResources) {
+      const resourceDelegation = delegatedResources.find(
+        (delegation) => delegation.resource.identifier === resource?.identifier,
+      );
+      if (resourceDelegation) {
+        setHasAccess(true);
+        const rightKeys = resourceDelegation.delegation.rightDelegationResults.map(
+          (r) => r.rightKey,
+        );
+        setCurrentRights(rightKeys);
+      } else {
+        setHasAccess(false);
+        setCurrentRights([]);
+      }
+    }
+  }, [delegatedResources, userHasResource]);
+
   useEffect(() => {
     if (resourceRef) {
       delegationCheck(resourceRef)
         .unwrap()
         .then((response: DelegationAccessResult[]) => {
-          const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
-            action: right.action,
-            rightKey: right.rightKey,
-            delegable: right.status === RightStatus.Delegable,
-            checked: right.status === RightStatus.Delegable,
-            resourceReference: right.resource,
-            delegationReason: right.details[0].code,
-          }));
-          setRights(chipRights);
+          if (hasAccess) {
+            const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
+              action: right.action,
+              rightKey: right.rightKey,
+              delegable: right.status === RightStatus.Delegable,
+              checked: currentRights.some((key) => key === right.rightKey) ? true : false,
+              resourceReference: right.resource,
+              delegationReason: right.details[0].code,
+            }));
+            setRights(chipRights);
+          } else {
+            const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
+              action: right.action,
+              rightKey: right.rightKey,
+              delegable: right.status === RightStatus.Delegable,
+              checked: right.status === RightStatus.Delegable,
+              resourceReference: right.resource,
+              delegationReason: right.details[0].code,
+            }));
+            setRights(chipRights);
+          }
         });
     }
-  }, []);
+  }, [delegatedResources, currentRights]);
 
   const chips =
     resource?.resourceType === 'AltinnApp' ? (
@@ -126,11 +173,11 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const delegateChosenRights = () => {
     let recipient: IdValuePair[];
 
-    if (toParty.partyTypeName === PartyType.Person) {
+    if (toParty && toParty.partyTypeName === PartyType.Person) {
       recipient = [new IdValuePair('urn:altinn:person:uuid', toParty.partyUuid)];
-    } else if (toParty.partyTypeName === PartyType.Organization) {
+    } else if (toParty && toParty.partyTypeName === PartyType.Organization) {
       recipient = [new IdValuePair('urn:altinn:organization:uuid', toParty.partyUuid)];
-    } else if (toParty.partyTypeName === PartyType.SelfIdentified) {
+    } else if (toParty && toParty.partyTypeName === PartyType.SelfIdentified) {
       recipient = [new IdValuePair('urn:altinn:enterpriseuser:uuid', toParty.partyUuid)];
     } else {
       throw new Error('Cannot delegate. User type not defined');
@@ -211,11 +258,19 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                   size='xs'
                   level={4}
                 >
-                  <Trans
-                    i18nKey='delegation_modal.name_will_receive'
-                    values={{ name: toParty.name }}
-                    components={{ strong: <strong /> }}
-                  />
+                  {hasAccess ? (
+                    <Trans
+                      i18nKey='delegation_modal.name_has_the_following'
+                      values={{ name: toParty?.name }}
+                      components={{ strong: <strong /> }}
+                    />
+                  ) : (
+                    <Trans
+                      i18nKey='delegation_modal.name_will_receive'
+                      values={{ name: toParty?.name }}
+                      components={{ strong: <strong /> }}
+                    />
+                  )}
                 </Heading>
                 <div className={classes.rightChips}>{chips}</div>
               </div>
@@ -223,10 +278,17 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           )}
           <Button
             className={classes.completeButton}
-            disabled={displayResourceAlert || !rights.some((r) => r.checked === true)}
+            disabled={
+              displayResourceAlert ||
+              !rights.some((r) => r.checked === true) ||
+              arraysEqualUnordered(
+                rights.filter((r) => r.checked).map((r) => r.rightKey),
+                currentRights,
+              )
+            }
             onClick={delegateChosenRights}
           >
-            Gi fullmakt
+            {hasAccess ? 'Oppdater fullmakt' : 'Gi fullmakt'}
           </Button>
         </div>
       )}

@@ -186,7 +186,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
         </span>
         <div className={classes.listItemRight}>
           {delegatedResources?.some(
-            (delegated) => delegated.identifier === resource.identifier,
+            (delegation) => delegation.resource.identifier === resource.identifier,
           ) && (
             <Paragraph
               size='xs'

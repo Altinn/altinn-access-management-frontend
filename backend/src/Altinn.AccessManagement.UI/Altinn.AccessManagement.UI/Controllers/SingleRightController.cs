@@ -159,8 +159,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                List<ServiceResourceFE> rights = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
-                return Ok(rights);
+                List<ResourceDelegation> delegations = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
+                return Ok(delegations);
             }
             catch (Exception ex)
             {

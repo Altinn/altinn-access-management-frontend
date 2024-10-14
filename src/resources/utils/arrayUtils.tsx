@@ -15,6 +15,29 @@ export function arraysEqual<T>(array1?: T[], array2?: T[]): boolean {
 }
 
 /**
+ * Checks if the content of two arrays is equal, where the order of the content is irrelevant.
+ * @param array1 The first array to compare.
+ * @param array2 The second array to compare.
+ * @returns `true` if the arrays have the same content (but not nessecarily in the same spaces), `false` otherwise.
+ */
+export function arraysEqualUnordered<T>(arr1: T[], arr2: T[]) {
+  if (arr1.length !== arr2.length) return false;
+  const countMap = new Map<T, number>();
+
+  for (const item of arr1) {
+    countMap.set(item, (countMap.get(item) || 0) + 1);
+  }
+
+  for (const item of arr2) {
+    if (!countMap.has(item)) return false;
+    countMap.set(item, countMap.get(item)! - 1);
+    if (countMap.get(item) === 0) countMap.delete(item);
+  }
+
+  return countMap.size === 0;
+}
+
+/**
  * Paginates an array, returning the array elements pertaining to the given page.
  * @param array The array to be paginated.
  * @param page The page number of the returned elements. (Indexation starts at 1)

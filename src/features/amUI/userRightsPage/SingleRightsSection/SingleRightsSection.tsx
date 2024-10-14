@@ -28,7 +28,10 @@ export const SingleRightsSection = () => {
   });
 
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
-  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights || [], 5);
+  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(
+    singleRights?.map((sr) => sr.resource) || [],
+    5,
+  );
 
   return (
     <div className={classes.singleRightsSectionContainer}>
@@ -50,11 +53,11 @@ export const SingleRightsSection = () => {
         spacing
         background
       >
-        {paginatedData?.map((singleRight) => (
+        {paginatedData?.map((resource) => (
           <SingleRightItem
-            key={singleRight.identifier}
+            key={resource.identifier}
             toParty={party}
-            resource={singleRight}
+            resource={resource}
           />
           // <ListItem
           //   key={singleRight.identifier}

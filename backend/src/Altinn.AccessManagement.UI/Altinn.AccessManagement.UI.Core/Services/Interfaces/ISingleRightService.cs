@@ -57,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         ///     The user id of the rightholder
         /// </param>
         /// <returns></returns>
-        Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
+        Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
 
         /// <summary>
         /// Revokes a single right for a rightholder.
