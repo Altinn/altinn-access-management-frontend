@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
-import { FileIcon } from '@navikt/aksel-icons';
 import { useEffect, useState } from 'react';
 
 import type { Party } from '@/rtk/features/lookup/lookupApi';
@@ -178,7 +177,8 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
             <Avatar
               size='lg'
               profile='serviceOwner'
-              icon={<FileIcon />}
+              logoUrl={resource.resourceOwnerLogoUrl}
+              name={resource.resourceOwnerName}
             />
             <div className={classes.resource}>
               <Heading

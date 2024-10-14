@@ -9,7 +9,7 @@ import {
   Spinner,
 } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import { FilterIcon, ChevronRightIcon, FileIcon } from '@navikt/aksel-icons';
+import { FilterIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetPaginatedSearchQuery } from '@/rtk/features/singleRights/singleRightsApi';
@@ -162,7 +162,8 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           <Avatar
             size='md'
             profile='serviceOwner'
-            icon={<FileIcon />}
+            logoUrl={resource.resourceOwnerLogoUrl}
+            name={resource.resourceOwnerName}
           />
           <span className={classes.resourceHeading}>
             <Paragraph>{resource.title}</Paragraph>

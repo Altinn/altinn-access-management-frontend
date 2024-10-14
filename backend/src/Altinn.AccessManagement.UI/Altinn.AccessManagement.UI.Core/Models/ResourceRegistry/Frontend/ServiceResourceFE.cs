@@ -70,6 +70,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string ResourceOwnerOrgNumber { get; set; }
 
         /// <summary>
+        /// URL of the resource owner's logo
+        /// </summary>
+        public string ResourceOwnerLogoUrl { get; set; }
+
+        /// <summary>
+        /// Orgcode of the resource owner
+        /// </summary>
+        public string ResourceOwnerOrgcode { get; set; }
+
+        /// <summary>
         /// ResourceReference
         /// </summary>
         public List<ResourceReference> ResourceReferences { get; set; }
@@ -112,17 +122,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             string rightDescription, 
             string status, 
             string resourceOwnerName, 
-            string resourceOwnerOrgNumber, 
+            string resourceOwnerOrgNumber,
             List<ResourceReference> resourceReferences, 
             ResourceType resourceType, 
             List<ContactPoint> contactPoints, 
             List<string> spatial, 
             List<IdValuePair> authorizationReference, 
-            string homepage = null, 
+            string homepage = null,
             int? priorityCounter = null, 
             bool visible = true, 
             bool delegable = true, 
-            List<string> keywords = null)
+            List<string> keywords = null,
+            string resourceOwnerLogoUrl = null,
+            string resourceOwnerOrgcode = null)
         {
             Identifier = identifier;
             Title = title;
@@ -131,6 +143,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Homepage = homepage;
             Status = status;
             ResourceOwnerName = resourceOwnerName;
+            ResourceOwnerLogoUrl = resourceOwnerLogoUrl;
             ResourceOwnerOrgNumber = resourceOwnerOrgNumber;
             ResourceReferences = resourceReferences;
             PriorityCounter = priorityCounter;
@@ -141,6 +154,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Spatial = spatial;
             AuthorizationReference = authorizationReference;
             Keywords = keywords ?? new List<string>();
+            ResourceOwnerOrgcode = resourceOwnerOrgcode;
         }
 
         /// <summary>
@@ -156,6 +170,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Homepage = serviceResourceFE.Homepage;
             Status = serviceResourceFE.Status;
             ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
+            ResourceOwnerLogoUrl = serviceResourceFE.ResourceOwnerLogoUrl;
             ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
             PriorityCounter = serviceResourceFE.PriorityCounter;
             ResourceReferences = serviceResourceFE.ResourceReferences;
@@ -166,6 +181,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Spatial = serviceResourceFE.Spatial;
             AuthorizationReference = serviceResourceFE.AuthorizationReference;
             Keywords = serviceResourceFE.Keywords ?? new List<string>();
+            ResourceOwnerOrgcode = serviceResourceFE.ResourceOwnerOrgcode;
         }
     }
 }

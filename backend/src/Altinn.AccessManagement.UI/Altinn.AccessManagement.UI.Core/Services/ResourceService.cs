@@ -73,7 +73,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     // Perform search/filtering and return matches
                     List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, resourceOwnerFilters);
                     List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchString);
-                    return PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                    OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+
+                    var paginatedResult = PaginationUtils.GetListPage(searchResults, page, resultsPerPage);
+                    
+                    // Add logo to each resource if it exists
+                    foreach (ServiceResourceFE resource in paginatedResult.PageList)
+                    {
+                        orgList.Orgs.TryGetValue(resource.ResourceOwnerOrgcode.ToLower(), out var org);
+                        if (org?.Logo != null)
+                        {
+                            resource.ResourceOwnerLogoUrl = org.Logo;
+                        }
+                    }
+
+                    return paginatedResult;
                 }
             }
             catch (Exception ex)
@@ -197,8 +211,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .GroupBy(sr => sr.HasCompetentAuthority.Orgcode.ToUpper())
                     .Select(g => g.First()) // Take the first item from each group to eliminate duplicates
                     .Select(sr => new ResourceOwnerFE(
-                        sr.HasCompetentAuthority.Name[languageCode],
-                        sr.HasCompetentAuthority.Organization))
+                            sr.HasCompetentAuthority.Name[languageCode],
+                            sr.HasCompetentAuthority.Organization))
                     .OrderBy(resourceOwner => resourceOwner.OrganisationName) // Order alphabetically
                     .ToList();
 
@@ -294,7 +308,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<ServiceResource>> GetFullResourceList()
         {
-            return await _resourceRegistryClient.GetResourceList();
+            string cacheKey = "resourcesList:all";
+
+            if (!_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> resources))
+            {
+                resources = await _resourceRegistryClient.GetResourceList();
+
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetPriority(CacheItemPriority.High)
+                    .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceRegistryResourceCacheTimeout, 0));
+
+                _memoryCache.Set(cacheKey, resources, cacheEntryOptions); 
+            }     
+            
+            return resources;
         }
 
         /// <summary>
@@ -400,6 +427,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                         resourceReferences: resource.ResourceReferences,
                         resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
                         resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                        resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
                         rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
                         description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
                         visible: resource.Visible,
