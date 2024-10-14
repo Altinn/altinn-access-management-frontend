@@ -142,7 +142,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
 
             return resourceOwners;
-
         }
 
         /// <summary>
