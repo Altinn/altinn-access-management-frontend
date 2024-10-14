@@ -23,8 +23,6 @@ interface AvatarProps {
   logoUrl?: string;
 }
 
-// className={cn([classes.icon, resource.resourceOwnerLogoUrl && classes.logo])}
-
 export const Avatar = ({
   icon,
   name,
