@@ -20,6 +20,8 @@ export interface ServiceResource {
   title: string;
   identifier: string;
   resourceOwnerName: string;
+  resourceOwnerLogoUrl: string;
+  resourceOwnerOrgNumber: string;
   rightDescription: string;
   description?: string;
   resourceReferences: resourceReference[];

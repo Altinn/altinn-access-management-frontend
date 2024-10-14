@@ -2,8 +2,10 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Azure;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -12,6 +14,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IResourceService _resourceService;
+        private readonly IResourceRegistryClient _resourceRegistryClient;
 
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
@@ -19,12 +22,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleRightService" /> class.
+        /// Initializes a new instance of the <see cref="SingleRightService"/> class.
         /// </summary>
-        public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService)
+        /// <param name="accessManagementClient">The access management client.</param>
+        /// <param name="resourceService">The resource service.</param>
+        /// <param name="resourceRegistryClient">The resource registry client.</param>
+        public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
         {
             _accessManagementClient = accessManagementClient;
             _resourceService = resourceService;
+            _resourceRegistryClient = resourceRegistryClient;
         }
 
         /// <inheritdoc />
@@ -53,6 +60,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             var delegationOutputs = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
             List<ResourceDelegation> delegationsFE = new List<ResourceDelegation>();
+
+            // Create a Lookup to map orgnr to org details
+            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+
             foreach (var delegation in delegationOutputs)
             {
                 var firstRightDelegationResult = delegation.RightDelegationResults?.First();
@@ -65,6 +76,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
 
                 var resource = await _resourceService.GetResource(resourceId);
+
+                // Find the logo based on the orgnr in the orgnrToOrgLookup
+                orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
 
                 ServiceResourceFE resourceFE = new ServiceResourceFE(
                 resource.Identifier,
@@ -80,7 +94,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 delegable: resource.Delegable,
                 contactPoints: resource.ContactPoints,
                 spatial: resource.Spatial,
-                authorizationReference: resource.AuthorizationReference);
+                authorizationReference: resource.AuthorizationReference,
+                resourceOwnerLogoUrl: org?.Logo);
 
                 delegationsFE.Add(new ResourceDelegation(resourceFE, delegation));
             }

@@ -1,4 +1,4 @@
-import { FileIcon, TrashIcon } from '@navikt/aksel-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -19,12 +19,11 @@ import classes from './SingleRightsSection.module.css';
 import { EditModal } from './EditModal';
 
 interface SingleRightItemProps {
-  identifier: string;
   resource: ServiceResource;
   toParty: Party;
 }
 
-const SingleRightItem: React.FC<SingleRightItemProps> = ({ identifier, resource, toParty }) => {
+const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -63,8 +62,9 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ identifier, resource,
         <Avatar
           size='md'
           profile='serviceOwner'
-          icon={<FileIcon />}
           className={classes.icon}
+          logoUrl={resource.resourceOwnerLogoUrl}
+          name={resource.resourceOwnerName}
         />
         <div className={classes.title}>{resource.title}</div>
         <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
@@ -92,7 +92,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ identifier, resource,
             confirmButtonContent={t('common.delete')}
             cancelButtonProps={{ variant: 'tertiary' }}
             cancelButtonContent={t('common.cancel')}
-            onConfirm={() => handleRevokeRights(identifier)}
+            onConfirm={() => handleRevokeRights(resource.identifier)}
           />
         </div>
       </ListItem>

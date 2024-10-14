@@ -1,6 +1,6 @@
 {
   "orgs": {
-    "nar": {
+    "nrna": {
       "name": {
         "en": "Narnia",
         "nb": "Narnia",
@@ -508,7 +508,7 @@
         "nb": "Testdepartementet",
         "nn": "Testdepartementet"
       },
-      "logo": "",
+      "logo": "https://altinncdn.no/img/illustration-help-circle.svg",
       "orgnr": "974760746",
       "homepage": "",
       "environments": [

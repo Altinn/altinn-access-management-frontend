@@ -59,23 +59,6 @@ export const SingleRightsSection = () => {
             toParty={party}
             resource={resource}
           />
-          // <ListItem
-          //   key={singleRight.identifier}
-          //   className={classes.singleRightItem}
-          // >
-          //   <Avatar
-          //     size='md'
-          //     profile='serviceOwner'
-          //     icon={<FileIcon />}
-          //     className={classes.icon}
-          //   />
-          //   <div className={classes.title}>{singleRight.title}</div>
-          //   <div className={classes.resourceType}>{t('user_rights_page.resource_type_text')}</div>
-          //   <div className={classes.resourceOwnerName}>{singleRight.resourceOwnerName}</div>
-          //   <div className={classes.action}>
-          //     <MenuElipsisVerticalIcon />
-          //   </div>
-          // </ListItem>
         ))}
       </List>
       <div className={classes.tools}>
