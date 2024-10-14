@@ -121,13 +121,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                             PropertyNameCaseInsensitive = true,
                         };
                         string content = await response.Content.ReadAsStringAsync();
-                        var ro = JsonSerializer.Deserialize<OrgList>(content, options);
+                        resourceOwners = JsonSerializer.Deserialize<OrgList>(content, options);
                         MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                             .SetPriority(CacheItemPriority.High)
                             .SetAbsoluteExpiration(new TimeSpan(0, _cacheConfig.ResourceOwnerCacheTimeout, 0));
 
                         _memoryCache.Set(cacheKey, resourceOwners, cacheEntryOptions);
-                        return ro;
+                        return resourceOwners;
                     }
                     else
                     {
