@@ -14,20 +14,6 @@
         "production"
       ]
     },
-    "paa": {
-      "name": {
-        "en": "DEPARTMENT OF HUMBUG",
-        "nb": "PÅFUNNSETATEN",
-        "nn": "PÅFUNNSETATEN"
-      },
-      "logo": "https://altinncdn.no/orgs/udir/udir.png",
-      "orgnr": "974760746",
-      "homepage": "",
-      "environments": [
-        "tt02",
-        "production"
-      ]
-    },
     "brg": {
       "name": {
         "en": "Brønnøysund Register Centre",
