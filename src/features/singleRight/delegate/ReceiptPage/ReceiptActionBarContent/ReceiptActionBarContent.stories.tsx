@@ -199,7 +199,6 @@ export const AllBad: StoryObj = {
 
 export const isRejectedDelegation: StoryObj = {
   args: {
-    failedDelegations: [],
     isRejectedDelegation: true,
     index: 1,
     serviceType: '',
