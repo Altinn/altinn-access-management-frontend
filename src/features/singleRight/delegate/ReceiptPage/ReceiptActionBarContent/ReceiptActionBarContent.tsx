@@ -1,4 +1,4 @@
-import { Alert, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -56,11 +56,10 @@ export const ReceiptActionBarContent = ({
             <Heading
               size={'xs'}
               level={2}
-              spacing
             >
               {t('single_rights.woops_something_went_wrong_alert')}
             </Heading>
-            <Paragraph spacing>{t('single_rights.some_failed_technical_problem')}</Paragraph>
+            <Paragraph>{t('single_rights.some_failed_technical_problem')}</Paragraph>
             <Heading
               size={'2xs'}
               level={3}
@@ -68,18 +67,22 @@ export const ReceiptActionBarContent = ({
               {t('single_rights.these_rights_were_not_delegated')}
             </Heading>
             <div className={classes.chipContainer}>
-              <Chip.Group size='sm'>
-                {failedDelegations?.map((failedRight: Right, innerIndex) => {
-                  const chipText = Object.values(LocalizedAction).includes(
-                    failedRight.action as LocalizedAction,
-                  )
-                    ? t(`common.action_${failedRight.action}`)
-                    : failedRight.action;
-                  return (
-                    <Chip.Toggle key={`failed-${index}-${innerIndex}`}>{chipText}</Chip.Toggle>
-                  );
-                })}
-              </Chip.Group>
+              {failedDelegations?.map((failedRight: Right, innerIndex) => {
+                const chipText = Object.values(LocalizedAction).includes(
+                  failedRight.action as LocalizedAction,
+                )
+                  ? t(`common.action_${failedRight.action}`)
+                  : failedRight.action;
+                return (
+                  <Tag
+                    color='brand1'
+                    size='sm'
+                    key={`failed-${index}-${innerIndex}`}
+                  >
+                    {chipText}
+                  </Tag>
+                );
+              })}
             </div>
           </Alert>
         )}
@@ -97,33 +100,31 @@ export const ReceiptActionBarContent = ({
           {t('single_rights.these_rights_were_delegated')}
         </Heading>
         <div className={classes.chipContainer}>
-          <Chip.Group size='sm'>
-            {serviceType === 'AltinnApp' ? (
-              <Chip.Toggle
-                selected={true}
-                checkmark
-              >
-                {t('common.action_access')}
-              </Chip.Toggle>
-            ) : (
-              successfulDelegations?.map((right: Right, innerIndex) => {
-                const chipText = Object.values(LocalizedAction).includes(
-                  right.action as LocalizedAction,
-                )
-                  ? t(`common.action_${right.action}`)
-                  : right.action;
-                return (
-                  <Chip.Toggle
-                    selected={true}
-                    checkmark
-                    key={`successful-${index}-${innerIndex}`}
-                  >
-                    {chipText}
-                  </Chip.Toggle>
-                );
-              })
-            )}
-          </Chip.Group>
+          {serviceType === 'AltinnApp' ? (
+            <Tag
+              size='sm'
+              color='brand1'
+            >
+              {t('common.action_access')}
+            </Tag>
+          ) : (
+            successfulDelegations?.map((right: Right, innerIndex) => {
+              const chipText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.action_${right.action}`)
+                : right.action;
+              return (
+                <Tag
+                  key={`successful-${index}-${innerIndex}`}
+                  color='brand1'
+                  size='sm'
+                >
+                  {chipText}
+                </Tag>
+              );
+            })
+          )}
         </div>
       </div>
     );

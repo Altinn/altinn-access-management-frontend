@@ -1,5 +1,4 @@
 import { Heading } from '@digdir/designsystemet-react';
-import { Heading, Pagination } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -10,8 +9,6 @@ import { List } from '@/features/amUI/common/List/List';
 import usePagination from '@/resources/hooks/usePagination';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { AmPagination } from '@/components/Paginering';
-
-import { DelegationModal } from '../DelegationModal/DelegationModal';
 
 import { DelegationModal } from '../DelegationModal/DelegationModal';
 

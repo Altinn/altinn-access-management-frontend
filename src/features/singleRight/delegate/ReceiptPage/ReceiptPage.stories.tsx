@@ -6,7 +6,7 @@ import store from '@/rtk/app/store';
 import { ReceiptPage } from './ReceiptPage';
 
 export default {
-  title: 'Features/SingleRight/ReceiptPage',
+  title: 'Features/SingleRight/ReceiptPage/ReceiptPage',
   component: ReceiptPage,
   render: (args) => (
     <Provider store={store}>

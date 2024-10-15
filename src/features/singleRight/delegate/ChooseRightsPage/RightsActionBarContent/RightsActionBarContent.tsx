@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Paragraph, Heading, Chip, Alert } from '@digdir/designsystemet-react';
+import { Paragraph, Heading, Chip, Alert, Tag } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
@@ -92,14 +92,13 @@ export const RightsActionBarContent = ({
       <div className={classes.chipContainer}>
         {serviceType === 'AltinnApp' ? (
           <div>
-            <Chip.Toggle
+            <Chip.Checkbox
               size='sm'
-              checkmark
-              selected={altinnAppAccess}
+              checked={altinnAppAccess}
               onClick={toggleAllDelegableRights}
             >
               {t('common.action_access')}
-            </Chip.Toggle>
+            </Chip.Checkbox>
           </div>
         ) : (
           rights
@@ -112,16 +111,15 @@ export const RightsActionBarContent = ({
                 : right.action;
               return (
                 <div key={index}>
-                  <Chip.Toggle
+                  <Chip.Checkbox
                     size='sm'
-                    checkmark
-                    selected={right.checked}
+                    checked={right.checked}
                     onClick={() => {
                       toggleRight(serviceIdentifier, right.rightKey);
                     }}
                   >
                     {actionText}
-                  </Chip.Toggle>
+                  </Chip.Checkbox>
                 </div>
               );
             })
@@ -136,18 +134,17 @@ export const RightsActionBarContent = ({
         <Heading
           size={'xs'}
           level={4}
-          spacing
         >
           {t('single_rights.alert_partially_delegable_header')}
         </Heading>
-        <Paragraph spacing>
+        <Paragraph variant='long'>
           {t('single_rights.one_or_more_rights_is_undelegable', {
             reason: t(`${getErrorCodeTextKey(errorList[0])}`, {
               you: t('common.you_lowercase'),
             }),
           })}
         </Paragraph>
-        <Paragraph spacing>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
+        <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
         <>
           <Heading
             size='2xs'
@@ -165,12 +162,12 @@ export const RightsActionBarContent = ({
                   ? t(`common.action_${right.action}`)
                   : right.action;
                 return (
-                  <Chip.Toggle
+                  <Tag
                     size='sm'
                     key={index}
                   >
                     {actionText}
-                  </Chip.Toggle>
+                  </Tag>
                 );
               })}
           </div>
