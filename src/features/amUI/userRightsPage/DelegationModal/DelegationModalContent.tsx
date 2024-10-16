@@ -37,20 +37,21 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
   };
 
   return (
-    <Modal.Root>
+    <Modal.Context>
       <Modal.Trigger
         size='md'
         variant='primary'
       >
         {t('common.add')} <PlusIcon />
       </Modal.Trigger>
-      <Modal.Dialog
+      <Modal
         ref={modalRef}
         className={classes.modalDialog}
-        onInteractOutside={closeModal}
-        onClose={onClose}
+        backdropClose
+        onClose={() => onClose()}
+        closeButton={t('common.close')}
       >
-        <Modal.Header>
+        <Modal.Block>
           {infoView ? (
             <Button
               variant='tertiary'
@@ -73,8 +74,8 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
               />
             </Heading>
           )}
-        </Modal.Header>
-        <Modal.Content className={classes.content}>
+        </Modal.Block>
+        <Modal.Block className={classes.content}>
           {infoView ? (
             <ResourceInfo
               resource={resourceToView}
@@ -84,8 +85,8 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
           ) : (
             <ResourceSearch onSelection={onSelection} />
           )}
-        </Modal.Content>
-      </Modal.Dialog>
-    </Modal.Root>
+        </Modal.Block>
+      </Modal>
+    </Modal.Context>
   );
 };
