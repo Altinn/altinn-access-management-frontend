@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@cypress/react18": "^2.0.0",
-    "@digdir/designsystemet-css": "1.0.0-next.34",
+    "@digdir/designsystemet-css": "1.0.0-next.35",
     "@digdir/designsystemet-react": "1.0.0-next.34",
     "@digdir/designsystemet-theme": "1.0.0-next.34",
     "@navikt/aksel-icons": "^7.0.0",

@@ -553,10 +553,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-css@npm:1.0.0-next.34":
-  version: 1.0.0-next.34
-  resolution: "@digdir/designsystemet-css@npm:1.0.0-next.34"
-  checksum: 10/b8ab551ccf9563044500747ac712e650b0e3fea57b27ec979143a35516b846d1be6f0b5257858dae0862b4614aa8a0f2544a6cf7d68be9a64bc39426f379f3ad
+"@digdir/designsystemet-css@npm:1.0.0-next.35":
+  version: 1.0.0-next.35
+  resolution: "@digdir/designsystemet-css@npm:1.0.0-next.35"
+  checksum: 10/783800a6e0b775efd7874f792f99ea138eafbe7fdb090de4407138476a2de244ad7706e666a966a2d301c1784f756c6aa690c1d6fb3f0216ee21b81f6f96e327
   languageName: node
   linkType: hard
 
@@ -2757,7 +2757,7 @@ __metadata:
   resolution: "access-management@workspace:."
   dependencies:
     "@cypress/react18": "npm:^2.0.0"
-    "@digdir/designsystemet-css": "npm:1.0.0-next.34"
+    "@digdir/designsystemet-css": "npm:1.0.0-next.35"
     "@digdir/designsystemet-react": "npm:1.0.0-next.34"
     "@digdir/designsystemet-theme": "npm:1.0.0-next.34"
     "@navikt/aksel-icons": "npm:^7.0.0"
