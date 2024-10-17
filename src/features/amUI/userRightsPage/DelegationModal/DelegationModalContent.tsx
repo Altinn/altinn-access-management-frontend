@@ -28,9 +28,8 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
     setResourceToView(resource);
   };
 
-  const closeModal = () => modalRef.current?.close();
-
   const onClose = () => {
+    console.log('onClose');
     setInfoView(false);
     setSearchString('');
     setFilters([]);
@@ -48,7 +47,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
         ref={modalRef}
         className={classes.modalDialog}
         backdropClose
-        onClose={() => onClose()}
+        onClose={onClose}
         closeButton={t('common.close')}
       >
         <Modal.Block>
@@ -80,7 +79,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
             <ResourceInfo
               resource={resourceToView}
               toParty={toParty}
-              onDelegate={closeModal}
+              onDelegate={onClose}
             />
           ) : (
             <ResourceSearch onSelection={onSelection} />

@@ -175,6 +175,36 @@ export const handlers = [
       ]);
     },
   ),
+  http.post(`${BASE_URL}/accessmanagement/api/v1/singleright/checkdelegationaccesses/:id`, () => {
+    return HttpResponse.json([
+      {
+        rightKey: 'test_resource_local:read',
+        resource: [
+          {
+            id: 'urn:altinn:resource',
+            value: 'test_resource_local',
+          },
+        ],
+        action: 'read',
+        status: 'Delegable',
+        details: [
+          {
+            code: 'RoleAccess',
+            description:
+              'Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:dagl. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.',
+            parameters: {
+              RoleRequirementsMatches: [
+                {
+                  id: 'urn:altinn:rolecode',
+                  value: 'dagl',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ]);
+  }),
   http.get('*', () => {
     return passthrough();
   }),

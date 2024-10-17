@@ -72,6 +72,7 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
 
       const numFailedDelegations = failedDelegations?.length ?? 0;
 
+      // if there are more than one failed delegations, we want to show the failed delegations
       const isRejectedDelegation = !!pd.bffResponseList?.find(
         (resp) => resp.reduxStatus === ReduxStatusResponse.Rejected,
       );

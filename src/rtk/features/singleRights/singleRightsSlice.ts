@@ -117,6 +117,7 @@ const createDelegationResponseData = (
   detailsDescription?: string,
 ): Right => {
   return {
+    rightKey: `${resourceId}-${action}`,
     resource: [{ id: resourceId, value: resourceValue || '' }],
     action: action,
     status: status,
@@ -290,6 +291,7 @@ const singleRightSlice = createSlice({
                     code: errorCode,
                   },
                 ],
+                rightKey: '',
               },
             ];
 
