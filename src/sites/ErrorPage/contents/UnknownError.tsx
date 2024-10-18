@@ -13,7 +13,6 @@ export const UnknownError = () => {
     <div>
       <Heading
         size='xl'
-        spacing
         className={classes.header}
       >
         {t('error_page.unknown_error_header')}
@@ -22,7 +21,7 @@ export const UnknownError = () => {
         <div className={classes.leftContainer}>
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             {t('error_page.unknown_error_description')}
@@ -30,7 +29,7 @@ export const UnknownError = () => {
 
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             {t('error_page.if_persistent_contact_service')}
@@ -38,7 +37,7 @@ export const UnknownError = () => {
 
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             <Link href='https://www.altinn.no/help'>{t('error_page.go_to_help')}</Link>

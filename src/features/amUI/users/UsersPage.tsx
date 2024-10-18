@@ -21,7 +21,6 @@ export const UsersPage = () => {
         <Heading
           level={1}
           size='md'
-          spacing
         >
           {t('users_page.main_page_heading', { name: reportee?.name || '' })}
         </Heading>

@@ -65,7 +65,6 @@ export const ConfirmationPage = () => {
             <Heading
               size='md'
               level={2}
-              spacing
             >
               {t('api_delegation.failed_delegations')}
             </Heading>
@@ -80,7 +79,6 @@ export const ConfirmationPage = () => {
             <Heading
               size='md'
               level={2}
-              spacing
             >
               {t('api_delegation.succesful_delegations')}
             </Heading>
@@ -88,7 +86,7 @@ export const ConfirmationPage = () => {
           </>
         )}
         <Paragraph
-          spacing
+          variant='long'
           className={classes.list}
         >
           {successfulApiDelegations.length === 0
