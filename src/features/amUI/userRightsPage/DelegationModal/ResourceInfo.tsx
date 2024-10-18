@@ -8,7 +8,6 @@ import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useDelegationCheckMutation,
-  useDelegateRightsMutation,
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import type { DelegationInputDto } from '@/dataObjects/dtos/resourceDelegation';
@@ -19,12 +18,13 @@ import {
   type DelegationAccessResult,
   type ResourceReference,
 } from '@/dataObjects/dtos/resourceDelegation';
-import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
+import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -42,8 +42,8 @@ export type ChipRight = {
 };
 
 export interface ResourceInfoProps {
-  resource?: ServiceResource;
-  toParty?: Party;
+  resource: ServiceResource;
+  toParty: Party;
   onDelegate: () => void;
 }
 
@@ -51,7 +51,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const { t } = useTranslation();
   const [delegationCheck, error] = useDelegationCheckMutation();
   const [hasAccess, setHasAccess] = useState(false);
-  const [delegateRights] = useDelegateRightsMutation();
+  const delegateRights = useDelegateRights();
   const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
@@ -66,8 +66,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           resource: resource.authorizationReference,
         }
       : null;
-
-  console.log(rights);
 
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery({
     party: getCookie('AltinnPartyId'),
@@ -169,51 +167,53 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
       })
     );
 
-  const delegateChosenRights = () => {
-    let recipient: IdValuePair[];
+  const saveEditedRights = () => {
+    const toDelete = rights.filter((r) => !r.checked && currentRights.includes(r.rightKey));
+    const toDelegate = rights.filter((r) => r.checked && !currentRights.includes(r.rightKey));
 
-    if (toParty && toParty.partyTypeName === PartyType.Person) {
-      recipient = [new IdValuePair('urn:altinn:person:uuid', toParty.partyUuid)];
-    } else if (toParty && toParty.partyTypeName === PartyType.Organization) {
-      recipient = [new IdValuePair('urn:altinn:organization:uuid', toParty.partyUuid)];
-    } else if (toParty && toParty.partyTypeName === PartyType.SelfIdentified) {
-      recipient = [new IdValuePair('urn:altinn:enterpriseuser:uuid', toParty.partyUuid)];
-    } else {
-      throw new Error('Cannot delegate. User type not defined');
-    }
-
-    const rightsToDelegate = rights
-      .filter((right: ChipRight) => right.checked)
-      .map((right: ChipRight) => new DelegationRequestDto(right.resourceReference, right.action));
-
-    if (resource && rightsToDelegate.length > 0) {
-      const delegationInput: DelegationInputDto = {
-        To: recipient,
-        Rights: rightsToDelegate,
-        serviceDto: new ServiceDto(
-          resource.title,
-          resource.resourceOwnerName,
-          resource.resourceType,
-        ),
-      };
-
-      delegateRights(delegationInput)
-        .then(() => {
-          openSnackbar({
-            message: t('delegation_modal.success_message', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Success,
-            duration: SnackbarDuration.long,
-          });
-          onDelegate();
-        })
-        .catch(() => {
-          openSnackbar({
-            message: t('delegation_modal.error_message', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Error,
-            duration: SnackbarDuration.infinite,
-          });
+    delegateRights(
+      toDelegate,
+      toParty,
+      resource,
+      () => {
+        openSnackbar({
+          message: t('delegation_modal.edit_success', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Success,
+          duration: SnackbarDuration.long,
         });
-    }
+        onDelegate?.();
+      },
+      () =>
+        openSnackbar({
+          message: t('delegation_modal.error_message', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Error,
+          duration: SnackbarDuration.infinite,
+        }),
+    );
+  };
+
+  const delegateChosenRights = () => {
+    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
+
+    delegateRights(
+      rightsToDelegate,
+      toParty,
+      resource,
+      () => {
+        openSnackbar({
+          message: t('delegation_modal.success_message', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Success,
+          duration: SnackbarDuration.long,
+        });
+        onDelegate?.();
+      },
+      () =>
+        openSnackbar({
+          message: t('delegation_modal.error_message', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Error,
+          duration: SnackbarDuration.infinite,
+        }),
+    );
   };
 
   return (
@@ -286,7 +286,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                 currentRights,
               )
             }
-            onClick={delegateChosenRights}
+            onClick={hasAccess ? saveEditedRights : delegateChosenRights}
           >
             {hasAccess ? 'Oppdater fullmakt' : 'Gi fullmakt'}
           </Button>

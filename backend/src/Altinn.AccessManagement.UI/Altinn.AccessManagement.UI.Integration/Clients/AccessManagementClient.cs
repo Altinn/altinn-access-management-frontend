@@ -287,7 +287,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="party">The party identifier.</param>
         /// <param name="delegationObject">The delegation input object.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegationObject)
+        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, RevokeOfferedDelegation delegationObject)
         {
             string endpointUrl = $"todo/revoke/offered/{party}/"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -309,7 +309,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="party">The party identifier.</param>
         /// <param name="delegationObject">The delegation input object.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegationObject)
+        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, RevokeReceivedDelegation delegationObject)
         {
             string endpointUrl = $"todo/revoke/received/{party}/"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

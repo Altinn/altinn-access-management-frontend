@@ -110,26 +110,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="delegationDTO">The delegation DTO.</param>
         /// <param name="delegationType">The type of delegation.</param>
         /// <returns>The task representing the asynchronous operation.</returns>
-        public Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeSingleRightDelegationDTO delegationDTO, DelegationType delegationType)
+        public Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeOfferedDelegation delegationDTO, DelegationType delegationType)
         {
-            var delegationObject = new DelegationInput
-            {
-                To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:userId", Value = delegationDTO.UserId } },
-                Rights = new List<Right>
-                        {
-                            new Right
-                            {
-                                Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = delegationDTO.ResourceId } }
-                            }
-                        }
-            };
             if (delegationType == DelegationType.Offered)
             {
-                return _accessManagementClient.RevokeOfferedSingleRightsDelegation(party, delegationObject);
+                return _accessManagementClient.RevokeOfferedSingleRightsDelegation(party, delegationDTO);
             }
             else
             {
-                return _accessManagementClient.RevokeReceivedSingleRightsDelegation(party, delegationObject);
+                return _accessManagementClient.RevokeReceivedSingleRightsDelegation(party, new RevokeReceivedDelegation(delegationDTO.To, delegationDTO.Rights));
             }
         }
     }

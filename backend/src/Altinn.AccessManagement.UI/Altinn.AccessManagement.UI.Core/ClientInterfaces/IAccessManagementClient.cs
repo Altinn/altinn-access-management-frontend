@@ -131,7 +131,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     The delegation object to be revoked
         /// </param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegationObject);
+        Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, RevokeOfferedDelegation delegationObject);
 
         /// <summary>
         ///     Revokes a single rights delegation
@@ -143,6 +143,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     The delegation object to be revoked
         /// </param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegationObject);
+        Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, RevokeReceivedDelegation delegationObject);
     }
 }

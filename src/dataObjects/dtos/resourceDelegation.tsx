@@ -6,6 +6,11 @@ export interface DelegationInputDto {
   serviceDto: ServiceDto;
 }
 
+export interface RevokeDelegationDto {
+  To: IdValuePair[];
+  Rightkeys: string[];
+}
+
 export class ServiceDto {
   serviceTitle: string;
   serviceOwner: string;

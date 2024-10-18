@@ -10,6 +10,7 @@ import { DelegationType } from '@/features/apiDelegation/components/DelegationTy
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { ListItem } from '@/features/amUI/common/List';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 
 import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { useSnackbar } from '../../common/Snackbar';
@@ -21,9 +22,10 @@ import { EditModal } from './EditModal';
 interface SingleRightItemProps {
   resource: ServiceResource;
   toParty: Party;
+  delegationData: DelegationResult;
 }
 
-const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) => {
+const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty, delegationData }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -31,12 +33,17 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) 
 
   const [revokeRights, { isLoading }] = useRevokeRightsMutation();
 
-  const handleRevokeRights = async (resourceId: string) => {
+  const handleRevokeRights = async () => {
     const { data } = await revokeRights({
       type: DelegationType.Offered,
       party: getCookie('AltinnPartyId'),
-      userId: id || '',
-      resourceId,
+      delegationToRevoke: {
+        To: [delegationData.to],
+        Rights: delegationData.rightDelegationResults.map((res) => ({
+          Resource: res.resource,
+          Action: res.action,
+        })),
+      },
     });
 
     const isSuccessful = data?.isSuccessStatusCode;

@@ -8,6 +8,7 @@ import type {
   DelegationInputDto,
   DelegationResult,
   ResourceReference,
+  RevokeDelegationDto,
 } from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
@@ -116,16 +117,13 @@ export const singleRightsApi = createApi({
     }),
     revokeRights: builder.mutation<
       { isSuccessStatusCode: boolean },
-      { type: DelegationType; party: string; userId: string; resourceId: string }
+      { type: DelegationType; party: string; delegationToRevoke: RevokeDelegationDto }
     >({
-      query({ type, party, userId, resourceId }) {
+      query({ type, party, delegationToRevoke }) {
         return {
           url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'received'}/revoke`,
           method: 'POST',
-          body: JSON.stringify({
-            userId: userId,
-            resourceId: resourceId,
-          }),
+          body: JSON.stringify(delegationToRevoke),
         };
       },
       invalidatesTags: ['overview'],

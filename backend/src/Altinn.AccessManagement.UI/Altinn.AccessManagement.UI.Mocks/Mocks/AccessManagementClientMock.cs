@@ -263,7 +263,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegation)
+        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, RevokeOfferedDelegation delegation)
         {
             ThrowExceptionIfTriggerParty(party);
 
@@ -279,7 +279,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
 
-        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegation)
+        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, RevokeReceivedDelegation delegation)
         {
              ThrowExceptionIfTriggerParty(party);
 

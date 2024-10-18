@@ -66,6 +66,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="delegationDTO">The delegation data transfer object containing the details of the revocation.</param>
         /// <param name="delegationType">The type of delegation to be revoked.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeSingleRightDelegationDTO delegationDTO, DelegationType delegationType);
+        Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeOfferedDelegation delegationDTO, DelegationType delegationType);
     }
 }

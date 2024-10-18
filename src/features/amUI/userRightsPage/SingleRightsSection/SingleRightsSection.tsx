@@ -28,55 +28,55 @@ export const SingleRightsSection = () => {
   });
 
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
-  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(
-    singleRights?.map((sr) => sr.resource) || [],
-    5,
-  );
+  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
 
   return (
-    <div className={classes.singleRightsSectionContainer}>
-      <Heading
-        level={2}
-        size='md'
-        spacing={false}
-        id='single_rights_title'
-      >
-        {t('user_rights_page.single_rights_title')}
-      </Heading>
+    party && (
+      <div className={classes.singleRightsSectionContainer}>
+        <Heading
+          level={2}
+          size='md'
+          spacing={false}
+          id='single_rights_title'
+        >
+          {t('user_rights_page.single_rights_title')}
+        </Heading>
 
-      {isError && <div>{t('user_rights_page.error')}</div>}
-      {isLoading && <div>{t('user_rights_page.loading')}</div>}
+        {isError && <div>{t('user_rights_page.error')}</div>}
+        {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
-      <List
-        className={classes.singleRightsList}
-        aria-labelledby='single_rights_title'
-        spacing
-        background
-      >
-        {paginatedData?.map((resource) => (
-          <SingleRightItem
-            key={resource.identifier}
-            toParty={party}
-            resource={resource}
-          />
-        ))}
-      </List>
-      <div className={classes.tools}>
-        {party && <DelegationModal toParty={party} />}
-        {totalPages > 1 && (
-          <Pagination
-            className={classes.pagination}
-            size='sm'
-            compact
-            hideLabels={true}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onChange={(page) => goToPage(page)}
-            nextLabel={t('common.next')}
-            previousLabel={t('common.previous')}
-          />
-        )}
+        <List
+          className={classes.singleRightsList}
+          aria-labelledby='single_rights_title'
+          spacing
+          background
+        >
+          {paginatedData?.map((delegation) => (
+            <SingleRightItem
+              key={delegation.resource.identifier}
+              toParty={party}
+              resource={delegation.resource}
+              delegationData={delegation.delegation}
+            />
+          ))}
+        </List>
+        <div className={classes.tools}>
+          {party && <DelegationModal toParty={party} />}
+          {totalPages > 1 && (
+            <Pagination
+              className={classes.pagination}
+              size='sm'
+              compact
+              hideLabels={true}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onChange={(page) => goToPage(page)}
+              nextLabel={t('common.next')}
+              previousLabel={t('common.previous')}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 };
