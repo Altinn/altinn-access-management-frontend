@@ -117,6 +117,7 @@ const createDelegationResponseData = (
   detailsDescription?: string,
 ): Right => {
   return {
+    rightKey: `${resourceId}:${action}`,
     resource: [{ id: resourceId, value: resourceValue || '' }],
     action: action,
     status: status,
@@ -282,6 +283,7 @@ const singleRightSlice = createSlice({
           if (sws.service?.identifier === serviceID) {
             const delegationResponseList: Right[] = [
               {
+                rightKey: `${action.meta.arg.resourceReference[0].id}:${action.meta.arg.resourceReference[0].value}`,
                 resource: action.meta.arg.resourceReference,
                 action: '',
                 status: errorCode,

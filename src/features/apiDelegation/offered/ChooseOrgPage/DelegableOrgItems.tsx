@@ -40,13 +40,13 @@ export const DelegableOrgItems = ({
               actions={
                 <Button
                   variant={'tertiary'}
-                  color={'second'}
+                  color={'accent'}
                   onClick={() => {
                     dispatch(addOrg(org));
                     setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgNumber}`);
                   }}
                   aria-label={t('common.add') + ' ' + org.orgNumber}
-                  size='large'
+                  size='lg'
                   icon={true}
                 >
                   <PlusCircleIcon fontSize={getButtonIconSize(false)} />
