@@ -283,7 +283,7 @@ const singleRightSlice = createSlice({
           if (sws.service?.identifier === serviceID) {
             const delegationResponseList: Right[] = [
               {
-                rightKey: `${action.meta.arg.resourceReference[0].id}:${action.meta.arg.resourceReference[0].value}`,
+                rightKey: ``,
                 resource: action.meta.arg.resourceReference,
                 action: '',
                 status: errorCode,
