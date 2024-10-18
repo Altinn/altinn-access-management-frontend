@@ -3,7 +3,7 @@ import { Button, Heading, Modal } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -21,12 +21,13 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
   const { t } = useTranslation();
   const { setInfoView, setResourceToView, resourceToView, infoView, setSearchString, setFilters } =
     useDelegationModalContext();
-  const modalRef = useRef<HTMLDialogElement>(null);
 
   const onSelection = (resource: ServiceResource) => {
     setInfoView(true);
     setResourceToView(resource);
   };
+
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   const onClose = () => {
     console.log('onClose');
@@ -34,6 +35,13 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
     setSearchString('');
     setFilters([]);
   };
+
+  /* handle closing */
+  useEffect(() => {
+    const handleClose = () => onClose?.();
+    modalRef.current?.addEventListener('close', handleClose);
+    return () => modalRef.current?.removeEventListener('close', handleClose);
+  }, [onClose]);
 
   return (
     <Modal.Context>
@@ -44,11 +52,11 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
         {t('common.add')} <PlusIcon />
       </Modal.Trigger>
       <Modal
-        ref={modalRef}
         className={classes.modalDialog}
         backdropClose
-        onClose={onClose}
         closeButton={t('common.close')}
+        onClose={onClose}
+        ref={modalRef}
       >
         <Modal.Block>
           {infoView ? (
