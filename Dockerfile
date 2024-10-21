@@ -1,6 +1,7 @@
 # Building accessmanagement frontend
-FROM node:alpine AS generate-accessmanagement-frontend
-#FROM node:lts as generate-accessmanagement-frontend
+FROM node:18-alpine AS generate-accessmanagement-frontend
+# FROM node:lts as generate-accessmanagement-frontend
+
 WORKDIR /build
 COPY . .
 RUN corepack enable
