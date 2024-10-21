@@ -228,7 +228,7 @@ export const OverviewPageContent = ({
           <>
             <Heading
               level={3}
-              size={isSm ? 'sm' : 'lg'}
+              size={isSm ? 'sm' : 'md'}
               className={classes.apiSubheading}
             >
               {delegationType === DelegationType.Offered
