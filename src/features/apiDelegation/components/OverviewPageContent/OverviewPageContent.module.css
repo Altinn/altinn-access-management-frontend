@@ -68,6 +68,10 @@
   }
 }
 
+.alertHeading {
+  margin-bottom: 10px;
+}
+
 .noActiveDelegations {
   margin-top: 1.5rem;
 }

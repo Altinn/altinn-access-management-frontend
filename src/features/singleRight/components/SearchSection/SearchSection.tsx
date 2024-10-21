@@ -120,6 +120,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
           <Heading
             level={2}
             size='xs'
+            className={classes.searchErrorHeading}
           >
             {t('common.general_error_title')}
           </Heading>

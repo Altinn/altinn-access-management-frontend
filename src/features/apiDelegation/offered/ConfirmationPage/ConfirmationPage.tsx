@@ -185,7 +185,13 @@ export const ConfirmationPage = () => {
                 title={t('common.general_error_title')}
                 color='danger'
               >
-                <Heading size='xs'>{t('common.general_error_title')}</Heading>
+                <Heading
+                  level={2}
+                  size='xs'
+                  className={classes.alertHeading}
+                >
+                  {t('common.general_error_title')}
+                </Heading>
                 {`${t('common.general_error_paragraph')}`}
               </Alert>
             )}

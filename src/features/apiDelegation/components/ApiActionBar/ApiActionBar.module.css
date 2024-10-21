@@ -22,3 +22,7 @@
 .errorContent {
   margin: 20px;
 }
+
+.scopeList {
+  display: block;
+}

@@ -1,12 +1,17 @@
 .alertContainer {
-  margin-top: 30px;
+  margin: 20px 0;
 }
 
 .chipContainer {
-  display: flex;
-  gap: 5px;
-  margin-top: 15px;
-  flex: 0;
+  margin: 15px 0;
+}
+
+.headerSpacing {
+  margin-bottom: 10px;
+}
+
+.paragraphSpacing {
+  margin-bottom: 15px;
 }
 
 .successfulChipsContainer {

@@ -41,6 +41,7 @@ export const RestartPrompter = ({
       <Heading
         size='sm'
         level={2}
+        className={classes.title}
       >
         {title}
       </Heading>

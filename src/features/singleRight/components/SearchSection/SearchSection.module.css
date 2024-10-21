@@ -70,6 +70,10 @@
   margin-top: 32px;
 }
 
+.searchErrorHeading {
+  margin-bottom: 10px;
+}
+
 .navigationButtons {
   margin-top: 4rem;
 }

@@ -134,44 +134,40 @@ export const RightsActionBarContent = ({
         <Heading
           size={'xs'}
           level={4}
+          className={classes.alertHeader}
         >
           {t('single_rights.alert_partially_delegable_header')}
         </Heading>
-        <Paragraph variant='long'>
+        <Paragraph>
           {t('single_rights.one_or_more_rights_is_undelegable', {
             reason: t(`${getErrorCodeTextKey(errorList[0])}`, {
               you: t('common.you_lowercase'),
             }),
           })}
         </Paragraph>
-        <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
-        <>
-          <Heading
-            size='2xs'
-            level={5}
-          >
-            {t('single_rights.you_cant_delegate_these_rights')}
-          </Heading>
-          <div className={classes.chipContainer}>
-            {rights
-              .filter((right: ChipRight) => right.delegable === false)
-              .map((right: ChipRight, index: number) => {
-                const actionText = Object.values(LocalizedAction).includes(
-                  right.action as LocalizedAction,
-                )
-                  ? t(`common.action_${right.action}`)
-                  : right.action;
-                return (
-                  <Tag
-                    size='sm'
-                    key={index}
-                  >
-                    {actionText}
-                  </Tag>
-                );
-              })}
-          </div>
-        </>
+        <Paragraph className={classes.alertParagraph}>
+          {t('single_rights.ceo_or_main_admin_can_help')}
+        </Paragraph>
+
+        <Heading
+          size='2xs'
+          level={5}
+        >
+          {t('single_rights.you_cant_delegate_these_rights')}
+        </Heading>
+        <div className={classes.chipContainer}>
+          {rights
+            .filter((right: ChipRight) => right.delegable === false)
+            .map((right: ChipRight) => {
+              const actionText = Object.values(LocalizedAction).includes(
+                right.action as LocalizedAction,
+              )
+                ? t(`common.action_${right.action}`)
+                : right.action;
+              return actionText;
+            })
+            .join(', ')}
+        </div>
       </Alert>
     </div>
   );

@@ -4,7 +4,7 @@
   border-top-right-radius: 0px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  background-color: var(#ffffff);
+  background-color: #fff;
   --border-color: var(--a2-color-neutral-border-default);
   --header-color: var(--a2-color-neutral-surface-default);
 }
@@ -42,8 +42,8 @@
 }
 
 .actionBarContent.neutral {
-  --border-color: #d2d5d8; /*var(--ds-color-neutral-border-default); */
-  --header-color: #f4f5f6; /*var(--ds-color-neutral-surface-default); */
+  --border-color: #d2d5d8;
+  --header-color: #f4f5f6;
   border-top-color: var(--header-color);
 }
 

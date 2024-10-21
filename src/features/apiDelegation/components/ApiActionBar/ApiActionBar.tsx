@@ -121,15 +121,15 @@ export const ApiActionBar = ({
     return (
       <div className={classes.content}>
         {api.scopes?.length > 0 && (
-          <>
+          <div className={classes.scopeList}>
             <Heading
               size='2xs'
               level={5}
             >
-              {t('api_delegation.scopes')}:
+              <>{t('api_delegation.scopes')}:</>
             </Heading>
             <ScopeList scopeList={api.scopes} />
-          </>
+          </div>
         )}
         {api.rightDescription && (
           <>

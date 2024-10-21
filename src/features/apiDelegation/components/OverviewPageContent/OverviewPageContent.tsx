@@ -182,11 +182,12 @@ export const OverviewPageContent = ({
       )}
       <Alert
         color='info'
-        size='lg'
+        size='md'
       >
         <Heading
           level={2}
           size='sm'
+          className={classes.alertHeading}
         >
           {t('api_delegation.card_title')}
         </Heading>
