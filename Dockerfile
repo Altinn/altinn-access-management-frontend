@@ -1,5 +1,5 @@
 # Building accessmanagement frontend
-FROM node:18-alpine AS generate-accessmanagement-frontend
+FROM node:20-alpine AS generate-accessmanagement-frontend
 # FROM node:lts as generate-accessmanagement-frontend
 
 WORKDIR /build
