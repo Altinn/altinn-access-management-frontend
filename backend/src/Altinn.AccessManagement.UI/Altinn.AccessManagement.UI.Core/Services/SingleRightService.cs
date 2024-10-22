@@ -103,23 +103,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return delegationsFE;
         }
 
-        /// <summary>
-        /// Revokes a single right for a rightholder.
-        /// </summary>
-        /// <param name="party">The party ID.</param>
-        /// <param name="delegationDTO">The delegation DTO.</param>
-        /// <param name="delegationType">The type of delegation.</param>
-        /// <returns>The task representing the asynchronous operation.</returns>
-        public Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeOfferedDelegation delegationDTO, DelegationType delegationType)
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> RevokeResourceAccess(string from, string to, string resourceId)
         {
-            if (delegationType == DelegationType.Offered)
+            return _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> EditResourceAccess(string from, string to, string resourceId, RightChanges update)
+        {
+            foreach (rightKey in update.RightsToDelegate)
             {
-                return _accessManagementClient.RevokeOfferedSingleRightsDelegation(party, delegationDTO);
+
             }
-            else
-            {
-                return _accessManagementClient.RevokeReceivedSingleRightsDelegation(party, new RevokeReceivedDelegation(delegationDTO.To, delegationDTO.Rights));
-            }
+            return _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
         }
     }
 }

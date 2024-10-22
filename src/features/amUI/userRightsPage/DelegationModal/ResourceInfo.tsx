@@ -10,17 +10,13 @@ import {
   useDelegationCheckMutation,
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import type { DelegationInputDto } from '@/dataObjects/dtos/resourceDelegation';
 import {
-  DelegationRequestDto,
   RightStatus,
-  ServiceDto,
   type DelegationAccessResult,
   type ResourceReference,
 } from '@/dataObjects/dtos/resourceDelegation';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
-import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
@@ -28,6 +24,7 @@ import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
+import { DeleteResourceButton } from '../SingleRightsSection/DeleteResourceButton';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
@@ -44,7 +41,7 @@ export type ChipRight = {
 export interface ResourceInfoProps {
   resource: ServiceResource;
   toParty: Party;
-  onDelegate: () => void;
+  onDelegate?: () => void;
 }
 
 export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProps) => {
@@ -67,7 +64,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         }
       : null;
 
-  const { data: delegatedResources } = useGetSingleRightsForRightholderQuery({
+  const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery({
     party: getCookie('AltinnPartyId'),
     userId: id || '',
   });
@@ -76,7 +73,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     (delegation) => delegation.resource.identifier == resource?.identifier,
   );
   useEffect(() => {
-    if (delegatedResources) {
+    if (delegatedResources && !isFetching) {
       const resourceDelegation = delegatedResources.find(
         (delegation) => delegation.resource.identifier === resource?.identifier,
       );
@@ -91,7 +88,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         setCurrentRights([]);
       }
     }
-  }, [delegatedResources, userHasResource]);
+  }, [delegatedResources, userHasResource, isFetching]);
 
   useEffect(() => {
     if (resourceRef) {
@@ -276,20 +273,29 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               </div>
             </>
           )}
-          <Button
-            className={classes.completeButton}
-            disabled={
-              displayResourceAlert ||
-              !rights.some((r) => r.checked === true) ||
-              arraysEqualUnordered(
-                rights.filter((r) => r.checked).map((r) => r.rightKey),
-                currentRights,
-              )
-            }
-            onClick={hasAccess ? saveEditedRights : delegateChosenRights}
-          >
-            {hasAccess ? 'Oppdater fullmakt' : 'Gi fullmakt'}
-          </Button>
+          <div className={classes.editButtons}>
+            <Button
+              size='sm'
+              disabled={
+                displayResourceAlert ||
+                !rights.some((r) => r.checked === true) ||
+                arraysEqualUnordered(
+                  rights.filter((r) => r.checked).map((r) => r.rightKey),
+                  currentRights,
+                )
+              }
+              onClick={hasAccess ? saveEditedRights : delegateChosenRights}
+            >
+              {hasAccess ? 'Oppdater fullmakt' : 'Gi fullmakt'}
+            </Button>
+            {hasAccess && (
+              <DeleteResourceButton
+                resource={resource}
+                toParty={toParty}
+                fullText
+              />
+            )}
+          </div>
         </div>
       )}
     </>

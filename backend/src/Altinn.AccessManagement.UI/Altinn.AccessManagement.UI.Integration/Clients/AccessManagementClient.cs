@@ -281,39 +281,44 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
-        /// <summary>
-        /// Revokes a single rights delegation for a specified party.
-        /// </summary>
-        /// <param name="party">The party identifier.</param>
-        /// <param name="delegationObject">The delegation input object.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, RevokeOfferedDelegation delegationObject)
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId)
         {
-            string endpointUrl = $"todo/revoke/offered/{party}/"; // TODO: Switch with actual backend endpoint when available
+            string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegationObject, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
 
             if (response.IsSuccessStatusCode)
             {
                 return response;
             }
 
-            _logger.LogError("Revoke single rights delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            _logger.LogError("Revoke resource delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
-        /// <summary>
-        /// Revokes a single rights delegation for a specified party.
-        /// </summary>
-        /// <param name="party">The party identifier.</param>
-        /// <param name="delegationObject">The delegation input object.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, RevokeReceivedDelegation delegationObject)
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
         {
-            string endpointUrl = $"todo/revoke/received/{party}/"; // TODO: Switch with actual backend endpoint when available
+            string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights/{rightKey}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegationObject, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response;
+            }
+
+            _logger.LogError("Revoke right delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
+        {
+            string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(rightKeys, _serializerOptions), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
 
             if (response.IsSuccessStatusCode)
@@ -321,7 +326,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 return response;
             }
 
-            _logger.LogError("Revoke single rights delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            _logger.LogError("Revoke right delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
     }

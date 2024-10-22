@@ -8,7 +8,7 @@ import type {
   DelegationInputDto,
   DelegationResult,
   ResourceReference,
-  RevokeDelegationDto,
+  RightChangesDto,
 } from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
@@ -49,11 +49,6 @@ interface searchParams {
   resultsPerPage: number;
 }
 
-enum DelegationType {
-  Offered,
-  Received,
-}
-
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -84,6 +79,7 @@ export const singleRightsApi = createApi({
       { party: string; userId: string }
     >({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
+      providesTags: ['overview'],
     }),
     delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
       query: (resourceRef) => ({
@@ -115,15 +111,27 @@ export const singleRightsApi = createApi({
         return response.status;
       },
     }),
-    revokeRights: builder.mutation<
+    revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
-      { type: DelegationType; party: string; delegationToRevoke: RevokeDelegationDto }
+      { from: string; to: string; resourceId: string }
     >({
-      query({ type, party, delegationToRevoke }) {
+      query({ from, to, resourceId }) {
         return {
-          url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'received'}/revoke`,
+          url: `singleright/${from}/${to}/${resourceId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['overview'],
+    }),
+    editResource: builder.mutation<
+      { isSuccessStatusCode: boolean },
+      { from: string; to: string; resourceId: string; edits: RightChangesDto }
+    >({
+      query({ from, to, resourceId, edits }) {
+        return {
+          url: `singleright/${from}/${to}/${resourceId}/edit`,
           method: 'POST',
-          body: JSON.stringify(delegationToRevoke),
+          body: JSON.stringify(edits),
         };
       },
       invalidatesTags: ['overview'],
@@ -137,7 +145,8 @@ export const {
   useClearAccessCacheMutation,
   useDelegationCheckMutation,
   useDelegateRightsMutation,
-  useRevokeRightsMutation,
+  useRevokeResourceMutation,
+  useEditResourceMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;
