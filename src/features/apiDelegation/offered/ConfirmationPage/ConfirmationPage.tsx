@@ -65,6 +65,7 @@ export const ConfirmationPage = () => {
             <Heading
               size='md'
               level={2}
+              className={classes.alertHeading}
             >
               {t('api_delegation.failed_delegations')}
             </Heading>
@@ -79,6 +80,7 @@ export const ConfirmationPage = () => {
             <Heading
               size='md'
               level={2}
+              className={classes.alertHeading}
             >
               {t('api_delegation.succesful_delegations')}
             </Heading>
