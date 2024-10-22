@@ -118,14 +118,14 @@ export const ConfirmationPage = () => {
     ) : (
       <>
         <Heading
-          size='md'
+          size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_top_text')}
         </Heading>
         <DelegableApiList />
         <Heading
-          size='md'
+          size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_second_text')}

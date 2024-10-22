@@ -33,6 +33,7 @@
   display: flex;
   margin-left: 10px;
   min-height: 40px;
+  align-items: center;
 }
 
 .deleteSection {
@@ -53,6 +54,11 @@
   display: flex;
   justify-content: flex-start;
   word-break: break-word;
+}
+
+.listItemIcon {
+  display: flex;
+  align-items: center;
 }
 
 .listItemIcon > * {
