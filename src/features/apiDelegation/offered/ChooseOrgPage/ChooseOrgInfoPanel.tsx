@@ -31,6 +31,7 @@ export const ChooseOrgInfoPanel = ({
         <Heading
           size={'xs'}
           level={2}
+          className={classes.alertHeading}
         >
           {t('api_delegation.own_orgnumber_delegation_heading')}
         </Heading>
@@ -46,6 +47,7 @@ export const ChooseOrgInfoPanel = ({
         <Heading
           level={2}
           size='sm'
+          className={classes.alertHeading}
         >
           {t('api_delegation.buisness_search_notfound_title')}
         </Heading>
@@ -71,6 +73,7 @@ export const ChooseOrgInfoPanel = ({
         <Heading
           level={2}
           size='sm'
+          className={classes.alertHeading}
         >
           {String(t('api_delegation.buisness_search_info_title'))}
         </Heading>

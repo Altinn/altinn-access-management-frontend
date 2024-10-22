@@ -74,16 +74,25 @@ export const handlers = [
         id: 'LIVLIG DYREBAR TIGER AS',
         name: 'LIVLIG DYREBAR TIGER AS',
         orgNumber: '313357120',
-        apiList: [
-          {
-            id: 'digdir-maskinportenschemaid-302',
-            apiName: 'Automation Regression',
-            owner: 'Digitaliseringsdirektoratet',
-            description:
-              'Gir anledning til a teste maskinporten som en del av automatiserte tester_Endret',
-            scopes: [],
-          },
-        ],
+        apiList: [],
+      },
+      {
+        id: 'MAGISK FANTASTISK KATT AS',
+        name: 'MAGISK FANTASTISK KATT AS',
+        orgNumber: '123456789',
+        apiList: [],
+      },
+      {
+        id: 'EVENTYR SKOGEN AS',
+        name: 'EVENTYR SKOGEN AS',
+        orgNumber: '987654321',
+        apiList: [],
+      },
+      {
+        id: 'STORSLATT HAV AS',
+        name: 'STORSLATT HAV AS',
+        orgNumber: '112233445',
+        apiList: [],
       },
     ]);
   }),
@@ -93,24 +102,25 @@ export const handlers = [
         id: 'LIVLIG DYREBAR TIGER AS',
         name: 'LIVLIG DYREBAR TIGER AS',
         orgNumber: '313357120',
-        apiList: [
-          {
-            id: 'digdir-maskinportenschemaid-302',
-            apiName: 'Automation Regression',
-            owner: 'Digitaliseringsdirektoratet',
-            description:
-              'Gir anledning til a teste maskinporten som en del av automatiserte tester_Endret',
-            scopes: [],
-          },
-          {
-            id: 'digdir-maskinportenschemaid-302',
-            apiName: 'Automation Regression 2 ',
-            owner: 'Digitaliseringsdirektoratet',
-            description:
-              'Gir anledning til a teste maskinporten som en del av automatiserte tester_Endret',
-            scopes: [],
-          },
-        ],
+        apiList: [],
+      },
+      {
+        id: 'MAGISK FANTASTISK KATT AS',
+        name: 'MAGISK FANTASTISK KATT AS',
+        orgNumber: '123456789',
+        apiList: [],
+      },
+      {
+        id: 'EVENTYR SKOGEN AS',
+        name: 'EVENTYR SKOGEN AS',
+        orgNumber: '987654321',
+        apiList: [],
+      },
+      {
+        id: 'STORSLATT HAV AS',
+        name: 'STORSLATT HAV AS',
+        orgNumber: '112233445',
+        apiList: [],
       },
     ]);
   }),
@@ -204,6 +214,46 @@ export const handlers = [
         ],
       },
     ]);
+  }),
+  http.get(`${BASE_URL}/accessmanagement/api/v1/lookup/org/:id`, () => {
+    return HttpResponse.json({
+      orgNumber: '991825827',
+      name: 'Digitaliseringsdirektoratet',
+    });
+  }),
+  http.get(`${BASE_URL}/accessmanagement/api/v1/user/reporteelist/:id`, () => {
+    return HttpResponse.json({
+      partyUuid: '54f128f7-ca7c-4a57-ad49-3787eb79b506',
+      name: 'DISKRET NÆR TIGER AS',
+      organizationNumber: '310202398',
+      subunits: [
+        {
+          partyUuid: '0020c970-ba68-44cd-8440-0894b594f58a',
+          name: 'DISKRET NÆR TIGER AS',
+          organizationNumber: '311312294',
+          subunits: [],
+        },
+      ],
+    });
+  }),
+  http.get(`${BASE_URL}/accessmanagement/api/v1/user/profile`, () => {
+    return HttpResponse.json({
+      userId: 20010996,
+      userUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
+      userName: 'GullMedalje',
+      partyId: 50789533,
+      party: {
+        partyId: 50789533,
+        partyUuid: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
+        name: 'SITRONGUL MEDALJONG',
+      },
+      userType: 1,
+      profileSettingPreference: {
+        language: 'nb',
+        preSelectedPartyId: 0,
+        doNotPromptForParty: false,
+      },
+    });
   }),
   http.get('*', () => {
     return passthrough();

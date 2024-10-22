@@ -1,4 +1,4 @@
-import { Button, Spinner, Search } from '@digdir/designsystemet-react';
+import { Button, Spinner, Search, Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState } from 'react';
@@ -88,9 +88,13 @@ export const ChooseOrgPage = () => {
           <StatusMessageForScreenReader>{chosenItemsStatusMessage}</StatusMessageForScreenReader>
           <div className={classes.pageContentContainer}>
             <search className={classes.semanticOnlyTag}>
-              <h2 className={classes.chooseOrgSecondHeader}>
+              <Heading
+                size='md'
+                level={2}
+                className={classes.chooseOrgSecondHeader}
+              >
                 {t('api_delegation.new_org_content_text')}
-              </h2>
+              </Heading>
 
               <Search
                 label={t('api_delegation.search_for_buisness')}
@@ -112,13 +116,21 @@ export const ChooseOrgPage = () => {
                 <>
                   <div className={classes.searchResultsSection}>
                     {searchString === '' ? (
-                      <h4 className={classes.actionBarContainerText}>
+                      <Heading
+                        size='2xs'
+                        level={4}
+                        className={classes.actionBarContainerText}
+                      >
                         {t('api_delegation.businesses_previously_delegated_to')}
-                      </h4>
+                      </Heading>
                     ) : (
-                      <h4 className={classes.actionBarContainerText}>
+                      <Heading
+                        size='2xs'
+                        level={4}
+                        className={classes.actionBarContainerText}
+                      >
                         {t('api_delegation.businesses_search_results')}
-                      </h4>
+                      </Heading>
                     )}
                     <StatusMessageForScreenReader>
                       {!isFetching &&
@@ -149,9 +161,13 @@ export const ChooseOrgPage = () => {
             <div className={classes.selectedSearchResultsSection}>
               {chosenOrgs.length > 0 && (
                 <>
-                  <h4 className={classes.chosenOrgsHeader}>
+                  <Heading
+                    level={4}
+                    size='2xs'
+                    className={classes.chosenOrgsHeader}
+                  >
                     {t('api_delegation.businesses_going_to_get_access')}
-                  </h4>
+                  </Heading>
                   <ChosenItems
                     chosenOrgs={chosenOrgs}
                     handleSoftRemove={handleSoftRemove}
