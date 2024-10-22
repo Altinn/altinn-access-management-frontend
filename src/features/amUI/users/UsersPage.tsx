@@ -9,6 +9,7 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { FakePageWrapper } from '../common/FakePageWrapper';
 
 import { UsersList } from './UsersList';
+import classes from './UsersList.module.css';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ export const UsersPage = () => {
         <Heading
           level={1}
           size='md'
+          className={classes.usersListHeading}
         >
           {t('users_page.main_page_heading', { name: reportee?.name || '' })}
         </Heading>

@@ -125,6 +125,7 @@ export const ApiActionBar = ({
             <Heading
               size='2xs'
               level={5}
+              className={classes.actionBarContentHeading}
             >
               <>{t('api_delegation.scopes')}:</>
             </Heading>
@@ -136,6 +137,7 @@ export const ApiActionBar = ({
             <Heading
               size='2xs'
               level={5}
+              className={classes.actionBarContentHeading}
             >
               {t('api_delegation.description')}
             </Heading>
@@ -150,6 +152,7 @@ export const ApiActionBar = ({
             <Heading
               size='2xs'
               level={5}
+              className={classes.actionBarContentHeading}
             >
               {t('api_delegation.additional_description')}
             </Heading>

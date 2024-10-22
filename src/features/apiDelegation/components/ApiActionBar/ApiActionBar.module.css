@@ -5,7 +5,14 @@
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+}
+
+.actionBarContentHeading {
+  margin: 20px 0 5px 0;
+}
+
+.actionBarContentHeading:first-child {
+  margin-top: 0;
 }
 
 .scopeItems {

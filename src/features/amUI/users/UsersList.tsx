@@ -41,6 +41,7 @@ export const UsersList = () => {
         level={2}
         size='sm'
         id='user_list_heading_id'
+        className={classes.usersListHeading}
       >
         {t('users_page.user_list_heading')}
       </Heading>
