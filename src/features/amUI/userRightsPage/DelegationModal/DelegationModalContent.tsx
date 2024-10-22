@@ -30,7 +30,6 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const onClose = () => {
-    console.log('onClose');
     setInfoView(false);
     setSearchString('');
     setFilters([]);
