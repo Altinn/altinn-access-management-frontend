@@ -33,7 +33,10 @@ export const useEditResource = () => {
       edits,
     })
       .unwrap()
-      .then(() => {
+      .then((fulfilled) => {
+        if (fulfilled.failedEdits.length > 0) {
+          onError?.();
+        }
         onSuccess?.();
       })
       .catch((error) => {

@@ -57,7 +57,11 @@
     "bankid": "BankID",
     "commifides": "Commifides",
     "buypass": "Buypass",
-    "org_nr": "Org.no."
+    "org_nr": "Org.no.",
+    "update_poa": "Update power of attorney",
+    "give_poa": "Give power of attorney",
+    "delete_poa": "Delete power of attorney",
+    "has_poa": "Has power of attorney"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -221,6 +225,7 @@
     "give_poa": "Give power of attorney",
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
+    "edit_success": "The power of attorney was updated",
     "service_error": {
       "general_heading": "You cannot give access to this service",
       "technical_error_heading": "Something went wrong",

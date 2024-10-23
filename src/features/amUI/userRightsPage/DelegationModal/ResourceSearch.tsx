@@ -193,7 +193,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
               size='xs'
               className={classes.infoText}
             >
-              Har fullmakt
+              {t('common.has_poa')}
             </Paragraph>
           )}
           <ChevronRightIcon fontSize='1.5em' />

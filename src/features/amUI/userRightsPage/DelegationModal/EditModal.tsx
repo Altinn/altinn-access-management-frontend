@@ -7,7 +7,7 @@ import type { Party } from '@/rtk/features/lookup/lookupApi';
 
 import { ResourceInfo } from '../DelegationModal/ResourceInfo';
 
-import classes from './EditModal.module.css';
+import classes from './DelegationModal.module.css';
 
 export interface EditModalProps {
   resource: ServiceResource;

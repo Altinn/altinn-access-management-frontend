@@ -2,8 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookup/lookupApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetReporteePartyQuery } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 
@@ -24,7 +23,7 @@ export const DeleteResourceButton = ({
 }: DeleteResourceButton) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
-  const { data: representingParty } = useGetPartyByUUIDQuery(getCookie('AltinnPartyUuid'));
+  const { data: representingParty } = useGetReporteePartyQuery();
   const revoke = useRevokeResource();
 
   const snackbar = (isSuccessful: boolean) => {
@@ -51,7 +50,7 @@ export const DeleteResourceButton = ({
           color: 'danger',
           size: 'sm',
         }}
-        triggerButtonContent={<>{fullText ? 'Slett fullmakt' : t('common.delete')}</>}
+        triggerButtonContent={<>{fullText ? t('common.delete_poa') : t('common.delete')}</>}
         confirmButtonProps={{
           variant: 'primary',
           color: 'danger',

@@ -146,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
         /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
-        /// <param name="rightKey">The identifier of the right that is to be revoked</param>
+        /// <param name="rightKeys">List of identifiers for the rights to be delegated</param>
         /// <returns></returns>
         Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
     }

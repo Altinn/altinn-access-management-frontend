@@ -8,8 +8,9 @@ import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { ListItem } from '@/features/amUI/common/List';
 import { type Party } from '@/rtk/features/lookup/lookupApi';
 
+import { EditModal } from '../DelegationModal/EditModal';
+
 import classes from './SingleRightsSection.module.css';
-import { EditModal } from './EditModal';
 import { DeleteResourceButton } from './DeleteResourceButton';
 
 interface SingleRightItemProps {

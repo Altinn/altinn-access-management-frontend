@@ -110,13 +110,36 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> EditResourceAccess(string from, string to, string resourceId, RightChanges update)
+        public async Task<List<string>> EditResourceAccess(string from, string to, string resourceId, RightChanges update)
         {
-            foreach (rightKey in update.RightsToDelegate)
-            {
+            List<string> failedEdits = new List<string>();
 
+            var delResponse = await _accessManagementClient.DelegateResourceRights(from, to, resourceId, update.RightsToDelegate);
+            var delegationResult = await delResponse.Content.ReadAsStringAsync();
+
+            DelegationOutput delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(delegationResult, options);
+
+            var failingDelegations = delegationOutput.RightDelegationResults.Where(right => right.Status != "Delegated").Select(right => right.RightKey).ToList();
+
+            if (failingDelegations != null && failingDelegations.Count > 0)
+            {
+                failedEdits.AddRange(failingDelegations);
             }
-            return _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
+
+            foreach (string rightKey in update.RightsToRevoke)
+            {
+                var revokeResponse = _accessManagementClient.RevokeRightDelegation(from, to, resourceId, rightKey);
+                var revokeResult = await delResponse.Content.ReadAsStringAsync();
+
+                bool deleted = JsonSerializer.Deserialize<bool>(revokeResult, options);
+
+                if (!deleted)
+                {
+                    failedEdits.Add(rightKey);
+                }
+            }
+
+            return failedEdits;
         }
     }
 }

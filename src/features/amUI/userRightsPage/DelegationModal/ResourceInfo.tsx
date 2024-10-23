@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import { useGetReporteePartyQuery, type Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useDelegationCheckMutation,
@@ -21,6 +21,7 @@ import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
+import { useEditResource } from '@/resources/hooks/useEditResource';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -49,10 +50,12 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const [delegationCheck, error] = useDelegationCheckMutation();
   const [hasAccess, setHasAccess] = useState(false);
   const delegateRights = useDelegateRights();
+  const editResource = useEditResource();
   const [currentRights, setCurrentRights] = useState<string[]>([]);
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
+  const { data: representingParty } = useGetReporteePartyQuery();
   const displayResourceAlert =
     error.isError ||
     resource?.delegable === false ||
@@ -165,28 +168,30 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     );
 
   const saveEditedRights = () => {
-    const toDelete = rights.filter((r) => !r.checked && currentRights.includes(r.rightKey));
-    const toDelegate = rights.filter((r) => r.checked && !currentRights.includes(r.rightKey));
-
-    delegateRights(
-      toDelegate,
-      toParty,
-      resource,
-      () => {
-        openSnackbar({
-          message: t('delegation_modal.edit_success', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Success,
-          duration: SnackbarDuration.long,
-        });
-        onDelegate?.();
-      },
-      () =>
-        openSnackbar({
-          message: t('delegation_modal.error_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Error,
-          duration: SnackbarDuration.infinite,
-        }),
-    );
+    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
+    if (representingParty) {
+      editResource(
+        resource.identifier,
+        representingParty,
+        toParty,
+        currentRights,
+        newRights,
+        () => {
+          openSnackbar({
+            message: t('delegation_modal.edit_success', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Success,
+            duration: SnackbarDuration.long,
+          });
+          onDelegate?.();
+        },
+        () =>
+          openSnackbar({
+            message: t('delegation_modal.error_message', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Error,
+            duration: SnackbarDuration.infinite,
+          }),
+      );
+    }
   };
 
   const delegateChosenRights = () => {
@@ -286,7 +291,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               }
               onClick={hasAccess ? saveEditedRights : delegateChosenRights}
             >
-              {hasAccess ? 'Oppdater fullmakt' : 'Gi fullmakt'}
+              {hasAccess ? t('common.update_poa') : t('common.give_poa')}
             </Button>
             {hasAccess && (
               <DeleteResourceButton

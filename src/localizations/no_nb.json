@@ -56,7 +56,11 @@
     "bankid": "BankID",
     "commifides": "Commifides",
     "buypass": "Buypass",
-    "org_nr": "Org.nr."
+    "org_nr": "Org.nr.",
+    "update_poa": "Oppdater fullmakt",
+    "give_poa": "Gi fullmakt",
+    "delete_poa": "Slett fullmakt",
+    "has_poa": "Har fullmakt"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -221,6 +225,7 @@
     "give_poa": "Gi fullmakt",
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
+    "edit_success": "Fullmakt oppdatert",
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
       "technical_error_heading": "Noe gikk galt",

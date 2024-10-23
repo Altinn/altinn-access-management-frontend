@@ -124,7 +124,7 @@ export const singleRightsApi = createApi({
       invalidatesTags: ['overview'],
     }),
     editResource: builder.mutation<
-      { isSuccessStatusCode: boolean },
+      { failedEdits: string[] },
       { from: string; to: string; resourceId: string; edits: RightChangesDto }
     >({
       query({ from, to, resourceId, edits }) {

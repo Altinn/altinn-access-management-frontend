@@ -314,7 +314,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
+        public async Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys)
         {
             string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -326,7 +326,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 return response;
             }
 
-            _logger.LogError("Revoke right delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            _logger.LogError($"Delegation of rights to resource {resourceId} failed in accessmanagement with status code {response.StatusCode}");
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
     }

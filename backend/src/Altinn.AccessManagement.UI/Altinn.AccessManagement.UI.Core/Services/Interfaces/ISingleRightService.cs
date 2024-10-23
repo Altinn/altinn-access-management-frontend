@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <param name="rightsUpdate">The changes in right accesses that is to be made</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        Task<HttpResponseMessage> EditResourceAccess(string from, string to, string resourceId, RightChanges rightsUpdate);
+        /// <returns>A list of right keys whose edits failed, if any</returns>
+        Task<List<string>> EditResourceAccess(string from, string to, string resourceId, RightChanges rightsUpdate);
     }
 }
