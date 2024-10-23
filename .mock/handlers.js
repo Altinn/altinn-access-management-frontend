@@ -28,7 +28,13 @@ export const handlers = [
           visible: true,
           resourceOwnerName: 'NARNIA',
           resourceOwnerOrgNumber: '777777777',
-          resourceReferences: [],
+          resourceReferences: [
+            {
+              ReferenceSource: 'Altinn3',
+              Reference: 'ttd/a3-app',
+              ReferenceType: 'ApplicationId',
+            },
+          ],
           priorityCounter: 2,
           resourceType: 'Default',
           authorizationReference: [
@@ -56,6 +62,34 @@ export const handlers = [
             },
           ],
           delegable: true,
+        },
+        {
+          identifier: 'missing_role_access',
+          title: 'Manglende Rolle Tilgang',
+          description: 'Denne ressursen krever spesifikke roller for tilgang.',
+          rightDescription: 'Tilgang er begrenset på grunn av manglende roller.',
+          delegable: true,
+          resourceOwnerName: 'Myndighet for Manglende Rolle',
+          authorizationReference: [
+            {
+              id: 'urn:altinn:resource',
+              value: 'missing_role_access',
+            },
+          ],
+        },
+        {
+          identifier: 'missing_srr_rightAccess',
+          title: 'Manglende SRR Tilgang',
+          description: 'Denne ressursen krever SRR rettigheter for tilgang.',
+          rightDescription: 'Tilgang er begrenset på grunn av manglende SRR rettigheter.',
+          delegable: true,
+          resourceOwnerName: 'Myndighet for Manglende SRR Rettigheter',
+          authorizationReference: [
+            {
+              id: 'urn:altinn:resource',
+              value: 'missing_srr_rightAccess',
+            },
+          ],
         },
       ],
     });
@@ -185,36 +219,217 @@ export const handlers = [
       ]);
     },
   ),
-  http.post(`${BASE_URL}/accessmanagement/api/v1/singleright/checkdelegationaccesses/:id`, () => {
-    return HttpResponse.json([
-      {
-        rightKey: 'test_resource_local:read',
-        resource: [
+  http.post(
+    `${BASE_URL}/accessmanagement/api/v1/singleright/checkdelegationaccesses/:id`,
+    async (req, res, ctx) => {
+      const requestBody = await req.request.json();
+      const val = requestBody?.resource?.[0]?.value;
+      if (val === 'missing_role_access') {
+        return HttpResponse.json([
           {
-            id: 'urn:altinn:resource',
-            value: 'test_resource_local',
-          },
-        ],
-        action: 'read',
-        status: 'Delegable',
-        details: [
-          {
-            code: 'RoleAccess',
-            description:
-              'Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:dagl. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.',
-            parameters: {
-              RoleRequirementsMatches: [
-                {
-                  id: 'urn:altinn:rolecode',
-                  value: 'dagl',
+            rightKey: 'a3-app/read',
+            resource: [
+              {
+                id: 'urn:altinn:app',
+                value: 'a3-app',
+              },
+              {
+                id: 'urn:altinn:org',
+                value: 'ttd',
+              },
+            ],
+            action: 'read',
+            status: 'Delegable',
+            details: [
+              {
+                code: 'RoleAccess',
+                description:
+                  'Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:dagl. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.',
+                parameters: {
+                  RoleRequirementsMatches: [
+                    {
+                      id: 'urn:altinn:rolecode',
+                      value: 'dagl',
+                    },
+                  ],
                 },
-              ],
-            },
+              },
+            ],
           },
-        ],
-      },
-    ]);
-  }),
+          {
+            rightKey: 'a3-app/write',
+            resource: [
+              {
+                id: 'urn:altinn:app',
+                value: 'a3-app',
+              },
+              {
+                id: 'urn:altinn:org',
+                value: 'ttd',
+              },
+            ],
+            action: 'write',
+            status: 'NotDelegable',
+            details: [
+              {
+                code: 'MissingRoleAccess',
+                description:
+                  'The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.',
+                parameters: {
+                  roleRequirementsMatches: [
+                    {
+                      id: 'urn:altinn:role',
+                      value: 'DAGL',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            rightKey: 'a3-app/sign',
+            resource: [
+              {
+                id: 'urn:altinn:app',
+                value: 'a3-app',
+              },
+              {
+                id: 'urn:altinn:org',
+                value: 'ttd',
+              },
+            ],
+            action: 'sign',
+            status: 'NotDelegable',
+            details: [
+              {
+                code: 'MissingRoleAccess',
+                description:
+                  'The user does not have any required role(s) for the reportee party. (urn:altinn:rolecode:HADM, urn:altinn:location:garage), would give access to delegate the service.',
+                parameters: {
+                  roleRequirementsMatches: [
+                    {
+                      id: 'urn:altinn:role',
+                      value: 'DAGL',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ]);
+      }
+      if (val === 'missing_srr_rightAccess') {
+        return HttpResponse.json([
+          {
+            rightKey: 'appid-510/read',
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: 'appid-510',
+              },
+            ],
+            action: 'read',
+            status: 'Delegable',
+            details: [
+              {
+                code: 'RoleAccess',
+                description:
+                  'Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:dagl. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.',
+                parameters: {
+                  RoleRequirementsMatches: [
+                    {
+                      id: 'urn:altinn:rolecode',
+                      value: 'dagl',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            rightKey: 'appid-510/write',
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: 'appid-510',
+              },
+            ],
+            action: 'write',
+            status: 'NotDelegable',
+            details: [
+              {
+                code: 'MissingSrrRightAccess',
+                description:
+                  'The user have access through delegation(s) of the right to the recipient(s)',
+                parameters: {
+                  roleRequirementsMatches: [
+                    {
+                      id: 'urn:altinn:role',
+                      value: 'DAGL',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            rightKey: 'appid-510/sign',
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: 'appid-510',
+              },
+            ],
+            action: 'sign',
+            status: 'NotDelegable',
+            details: [
+              {
+                code: 'MissingSrrRightAccess',
+                description:
+                  'The user have access through delegation(s) of the right to the recipient(s)',
+                parameters: {
+                  roleRequirementsMatches: [
+                    {
+                      id: 'urn:altinn:role',
+                      value: 'DAGL',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ]);
+      }
+      return HttpResponse.json([
+        {
+          rightKey: 'test_resource_local:read',
+          resource: [
+            {
+              id: 'urn:altinn:resource',
+              value: 'test_resource_local',
+            },
+          ],
+          action: 'read',
+          status: 'Delegable',
+          details: [
+            {
+              code: 'RoleAccess',
+              description:
+                'Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:dagl. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.',
+              parameters: {
+                RoleRequirementsMatches: [
+                  {
+                    id: 'urn:altinn:rolecode',
+                    value: 'dagl',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ]);
+    },
+  ),
   http.get(`${BASE_URL}/accessmanagement/api/v1/lookup/org/:id`, () => {
     return HttpResponse.json({
       orgNumber: '991825827',

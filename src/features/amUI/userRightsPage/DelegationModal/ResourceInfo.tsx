@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +19,7 @@ import {
 } from '@/dataObjects/dtos/resourceDelegation';
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
-import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
+import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import { useSnackbar } from '../../common/Snackbar';
@@ -49,10 +49,14 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const [delegateRights] = useDelegateRightsMutation();
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
+  const { data: reportee } = useGetReporteeQuery();
+
+  const [missingAccessMessage, setMissingAccessMessage] = useState<string | null>(null);
   const displayResourceAlert =
     error.isError ||
     resource?.delegable === false ||
     (rights.length > 0 && !rights.some((r) => r.delegable === true));
+
   const resourceRef: ResourceReference | null =
     resource !== undefined
       ? {
@@ -60,11 +64,35 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         }
       : null;
 
+  const getMissingAccessMessage = (response: DelegationAccessResult[]) => {
+    const hasMissingRoleAccess = response.some((result) =>
+      result.details?.some((detail) => detail.code === 'MissingRoleAccess'),
+    );
+
+    const hasMissingSrrRightAccess = response.some(
+      (result) =>
+        !hasMissingRoleAccess &&
+        result.details?.some((detail) => detail.code === 'MissingSrrRightAccess'),
+    );
+
+    if (hasMissingRoleAccess) {
+      return t('delegation_modal.service_error.missing_role_access_message');
+    } else if (hasMissingSrrRightAccess) {
+      return t('delegation_modal.service_error.missing_srr_right_access_message', {
+        resourceOwner: resource?.resourceOwnerName,
+        reportee: reportee?.name,
+      });
+    }
+    return null;
+  };
+
   useEffect(() => {
     if (resourceRef) {
       delegationCheck(resourceRef)
         .unwrap()
         .then((response: DelegationAccessResult[]) => {
+          setMissingAccessMessage(getMissingAccessMessage(response));
+
           const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
             action: right.action,
             rightKey: right.rightKey,
@@ -189,6 +217,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
             </div>
           </div>
           <Paragraph>{resource.rightDescription}</Paragraph>
+          {missingAccessMessage && <Alert color='info'>{missingAccessMessage}</Alert>}
           {displayResourceAlert ? (
             <ResourceAlert
               error={

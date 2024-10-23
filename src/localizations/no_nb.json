@@ -228,7 +228,9 @@
       "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
-      "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler den selv. Daglig leder eller hovedadministrator kan hjelpe deg med dette."
+      "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler den selv. Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
+      "missing_role_access_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv. Daglig leder eller hovedadministrator kan gi deg tilgang.",
+      "missing_srr_right_access_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette. "
     }
   },
   "user_role": {

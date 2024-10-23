@@ -227,7 +227,9 @@
       "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
       "error_status": "Status: {{status}}",
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
-      "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette."
+      "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette.",
+      "missing_role_access_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
+      "missing_srr_right_access_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
     }
   },
   "user_role": {
