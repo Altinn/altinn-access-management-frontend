@@ -67,7 +67,7 @@ export const handlers = [
           identifier: 'missing_role_access',
           title: 'Manglende Rolle Tilgang',
           description: 'Denne ressursen krever spesifikke roller for tilgang.',
-          rightDescription: 'Tilgang er begrenset på grunn av manglende roller.',
+          rightDescription: 'Denne ressursen krever spesifikke roller for tilgang.',
           delegable: true,
           resourceOwnerName: 'Myndighet for Manglende Rolle',
           authorizationReference: [
@@ -81,7 +81,7 @@ export const handlers = [
           identifier: 'missing_srr_rightAccess',
           title: 'Manglende SRR Tilgang',
           description: 'Denne ressursen krever SRR rettigheter for tilgang.',
-          rightDescription: 'Tilgang er begrenset på grunn av manglende SRR rettigheter.',
+          rightDescription: 'Denne ressursen krever SRR rettigheter for tilgang.',
           delegable: true,
           resourceOwnerName: 'Myndighet for Manglende SRR Rettigheter',
           authorizationReference: [
