@@ -27,6 +27,14 @@
   padding-top: 5px;
 }
 
+.alertHeader {
+  margin-bottom: 10px;
+}
+
+.alertParagraph {
+  margin-bottom: 15px;
+}
+
 .alertErrorContainer {
   margin-bottom: 35px;
 }

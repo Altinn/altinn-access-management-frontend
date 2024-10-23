@@ -1,5 +1,5 @@
 import type { AlertProps } from '@digdir/designsystemet-react';
-import { Alert, Button, Heading, Ingress } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
@@ -41,10 +41,11 @@ export const RestartPrompter = ({
       <Heading
         size='sm'
         level={2}
+        className={classes.title}
       >
         {title}
       </Heading>
-      {ingress && <Ingress>{ingress}</Ingress>}
+      {ingress && <Paragraph variant='long'>{ingress}</Paragraph>}
       {restartPath && (
         <div className={classes.restartButton}>
           <Button

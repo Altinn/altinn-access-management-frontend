@@ -1,4 +1,4 @@
-import { Skeleton, Ingress, Paragraph } from '@digdir/designsystemet-react';
+import { Skeleton, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
 
@@ -19,13 +19,13 @@ export const ChooseServiceSkeleton = () => {
 
   return (
     <>
-      <Ingress spacing>
+      <Paragraph variant='long'>
         <Skeleton variant='text' />
         <Skeleton
           variant='text'
           width='80%'
         />
-      </Ingress>
+      </Paragraph>
 
       <Skeleton
         variant='rectangle'

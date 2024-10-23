@@ -68,6 +68,10 @@
   margin-top: 40px;
 }
 
+.alertHeading {
+  margin-bottom: 10px;
+}
+
 @media screen and (max-width: 768px) {
   .navigationSection {
     display: flex;

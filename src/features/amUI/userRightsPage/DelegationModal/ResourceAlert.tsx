@@ -34,7 +34,7 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
     headingText = t('delegation_modal.service_error.technical_error_heading');
     content = (
       <>
-        <Paragraph spacing>{t('delegation_modal.service_error.technical_error')}</Paragraph>
+        <Paragraph variant='long'>{t('delegation_modal.service_error.technical_error')}</Paragraph>
         <Paragraph>
           {t('delegation_modal.service_error.time_of_error', {
             time: new Date(error.time).toLocaleDateString('nb-NO', {

@@ -19,3 +19,7 @@
 .searchBar {
   max-width: 27rem;
 }
+
+.usersListHeading {
+  margin-bottom: 10px;
+}

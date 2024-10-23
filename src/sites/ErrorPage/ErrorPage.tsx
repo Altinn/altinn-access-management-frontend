@@ -44,7 +44,7 @@ export const ErrorPage = () => {
               </Paragraph>
               <Paragraph
                 size='sm'
-                spacing
+                variant='long'
                 className={classes.errorMessage}
               >
                 {t('common.error_message')}: {error.error?.message ?? error?.message}

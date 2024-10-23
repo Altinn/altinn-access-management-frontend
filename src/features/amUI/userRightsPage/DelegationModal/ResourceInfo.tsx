@@ -80,17 +80,16 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   const chips =
     resource?.resourceType === 'AltinnApp' ? (
-      <Chip.Toggle
+      <Chip.Checkbox
         size='sm'
-        checkmark
-        selected={rights.some((r) => r.checked === true)}
+        checked={rights.some((r) => r.checked === true)}
         disabled={!rights.some((r) => r.delegable === true)}
         onClick={() => {
           setRights(rights.map((r) => ({ ...r, checked: r.delegable ? !r.checked : r.checked })));
         }}
       >
         {t('common.action_access')}
-      </Chip.Toggle>
+      </Chip.Checkbox>
     ) : (
       rights.map((right: ChipRight) => {
         const actionText = Object.values(LocalizedAction).includes(right.action as LocalizedAction)
@@ -98,10 +97,9 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           : right.action;
         return (
           <div key={right.rightKey}>
-            <Chip.Toggle
+            <Chip.Checkbox
               size='sm'
-              checkmark
-              selected={right.checked}
+              checked={right.checked}
               disabled={!right.delegable}
               onClick={() => {
                 setRights(
@@ -116,7 +114,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               }}
             >
               {actionText}
-            </Chip.Toggle>
+            </Chip.Checkbox>
           </div>
         );
       })

@@ -14,7 +14,6 @@ export const PageNotFound = () => {
       <Heading
         size='xl'
         level={1}
-        spacing
         className={classes.header}
       >
         {t('error_page.not_found_site_header')}
@@ -23,7 +22,7 @@ export const PageNotFound = () => {
         <div className={classes.leftContainer}>
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             {t('error_page.not_found_site_upper_text')}
@@ -31,7 +30,7 @@ export const PageNotFound = () => {
 
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             <Link href='https://www.altinn.no/ui/MessageBox'>{t('error_page.go_to_inbox')}</Link>
@@ -39,7 +38,7 @@ export const PageNotFound = () => {
 
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             <Link href='https://www.altinn.no/ui/Profile'>{t('error_page.go_to_profile')}</Link>
@@ -47,7 +46,7 @@ export const PageNotFound = () => {
 
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             <Link href='https://www.altinn.no/skjemaoversikt/'>
@@ -57,7 +56,7 @@ export const PageNotFound = () => {
 
           <Paragraph
             size='lg'
-            spacing
+            variant='long'
             className={classes.contentText}
           >
             {t('error_page.not_found_site_lower_text')}

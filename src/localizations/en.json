@@ -179,7 +179,7 @@
     "you_cant_delegate_these_rights": "You can't delegate these rights:",
     "processing_delegations": "Processing delegations",
     "woops_something_went_wrong_ingress": "Woops, something  wen wrong with one or more services. These are marked in red. You can try again later.",
-    "all_failed_techncal_problem": "A technical problem has arised delegating this service. We recommend that you start a new delegation and try one more time. If the problem persists we ask you to contact user service on phone number 75 00 60 00. We're sorry!",
+    "all_failed_techncal_problem_paragraph": "A technical problem has arised delegating this service. We recommend that you start a new delegation and try one more time. If the problem persists we ask you to contact user service on phone number 75 00 60 00. We're sorry!",
     "woops_something_went_wrong_alert": "Woops! Something went wrong",
     "some_failed_technical_problem": "Because of a technical error all rights weren't delegated. We recommend that you retry delegating the service by going to the delegation page.",
     "these_rights_were_not_delegated": "These rights couldn't be delegated:",

@@ -28,7 +28,6 @@ export default {
           <Paragraph
             variant='long'
             size='sm'
-            spacing={true}
           >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a
             dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum,
