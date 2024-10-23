@@ -57,31 +57,29 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
         onClose={onClose}
         ref={modalRef}
       >
-        <Modal.Block>
-          {infoView ? (
-            <Button
-              variant='tertiary'
-              color='accent'
-              onClick={() => setInfoView(false)}
-              icon
-            >
-              <ArrowLeftIcon fontSize='1.5em' />
-              {t('common.back')}
-            </Button>
-          ) : (
-            <Heading
-              level={2}
-              size='sm'
-            >
-              <Trans
-                i18nKey='delegation_modal.give_to_name'
-                values={{ name: toParty.name }}
-                components={{ strong: <strong /> }}
-              />
-            </Heading>
-          )}
-        </Modal.Block>
-        <Modal.Block className={classes.content}>
+        {infoView ? (
+          <Button
+            variant='tertiary'
+            color='accent'
+            onClick={() => setInfoView(false)}
+            icon
+          >
+            <ArrowLeftIcon fontSize='1.5em' />
+            {t('common.back')}
+          </Button>
+        ) : (
+          <Heading
+            level={2}
+            size='sm'
+          >
+            <Trans
+              i18nKey='delegation_modal.give_to_name'
+              values={{ name: toParty.name }}
+              components={{ strong: <strong /> }}
+            />
+          </Heading>
+        )}
+        <div className={classes.content}>
           {infoView ? (
             <ResourceInfo
               resource={resourceToView}
@@ -91,7 +89,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
           ) : (
             <ResourceSearch onSelection={onSelection} />
           )}
-        </Modal.Block>
+        </div>
       </Modal>
     </Modal.Context>
   );

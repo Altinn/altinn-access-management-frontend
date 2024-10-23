@@ -85,7 +85,10 @@ export const ChooseServicePage = () => {
                 />
               ) : (
                 <>
-                  <Paragraph variant='long'>
+                  <Paragraph
+                    variant='long'
+                    className={classes.servicePageTopText}
+                  >
                     {t('single_rights.delegate_choose_service_page_top_text', {
                       name: recipientName,
                     })}

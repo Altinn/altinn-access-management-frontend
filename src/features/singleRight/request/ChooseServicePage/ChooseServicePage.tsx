@@ -77,7 +77,10 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.request_single_rights')}</PageHeader>
         <PageContent>
-          <Paragraph variant='long'>
+          <Paragraph
+            variant='long'
+            className={classes.servicePageTopText}
+          >
             {t('single_rights.request_choose_service_page_top_text', { name: requestee })}
           </Paragraph>
           <ResourceCollectionBar
