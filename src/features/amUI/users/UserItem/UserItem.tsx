@@ -10,6 +10,7 @@ import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import type { FilteredRightHolder } from '../useFilteredRightHolders';
 
 import classes from './UserItem.module.css';
+import { ListItem } from '../../common/List';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -90,12 +91,11 @@ export const UserItem = ({
     user && (
       <>
         {isExpanable ? (
-          <Button
+          <ListItem
             id={headerId}
             aria-expanded={isExpanded}
             aria-controls={contentId}
             onClick={() => setIsExpanded((oldExpanded) => !oldExpanded)}
-            variant='tertiary'
             className={cn(
               classes.user,
               classes[size],
@@ -113,7 +113,7 @@ export const UserItem = ({
               />
             )}
             {headerContent}
-          </Button>
+          </ListItem>
         ) : (
           <Link
             to={`${user.partyUuid}`}

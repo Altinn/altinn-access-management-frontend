@@ -159,8 +159,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                List<ServiceResourceFE> rights = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
-                return Ok(rights);
+                List<ResourceDelegation> delegations = await _singleRightService.GetSingleRightsForRightholder(languageCode, party, userId);
+                return Ok(delegations);
             }
             catch (Exception ex)
             {
@@ -170,21 +170,47 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for revoking a maskinporten scope delegation on behalf of the party having received the delegation.
+        ///     Endpoint for revoking all rights on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="party">The party identifier</param>
-        /// <param name="delegateType">The type of delegation to revoke</param>
-        /// <param name="delegationDTO">The delegation data transfer object</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("{from}/{to}/{resourceId}/revoke")]
+        public async Task<ActionResult> RevokeResourceAccess([FromRoute] string from, [FromRoute] string to, [FromRoute] string resourceId)
+        {
+            try
+            {
+                var response = await _singleRightService.RevokeResourceAccess(to, from, resourceId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during revoke of single right");
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for editing what rights are granted from one party to another on a specific resource.
+        /// </summary>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <param name="update">The rights to be edited (delegated and deleted)</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("{party}/{delegateType}/revoke")]
-        public async Task<ActionResult> RevokeSingleRightForRightholder([FromRoute] string party, [FromRoute] string delegateType, [FromBody] RevokeSingleRightDelegationDTO delegationDTO)
+        [Route("{from}/{to}/{resourceId}/edit")]
+        public async Task<ActionResult> EditResourceAccess([FromRoute] string from, [FromRoute] string to, [FromRoute] string resourceId, [FromBody] RightChanges update)
         {
             try
             {
-                var response = await _singleRightService.RevokeSingleRightForRightholder(party, delegationDTO, DelegationTypeParser.Parse(delegateType));
+                var response = await _singleRightService.EditResourceAccess(from, to, resourceId, update);
                 return Ok(response);
             }
             catch (Exception ex)

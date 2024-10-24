@@ -48,10 +48,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(3, cookieHeaders.Count());
+            Assert.Equal(4, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
-            Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("AltinnPartyUuid", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(3));
             Assert.StartsWith("deny", xframeHeaders.ElementAt(0));
             Assert.StartsWith("nosniff", contentTypeHeaders.ElementAt(0));
             Assert.StartsWith("0", xxsProtectionHeaders.ElementAt(0));
@@ -100,10 +101,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         
             // Verify that 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(3, cookieHeaders.Count());
+            Assert.Equal(4, cookieHeaders.Count());
             Assert.StartsWith("AS-", cookieHeaders.ElementAt(0));
             Assert.StartsWith("XSR", cookieHeaders.ElementAt(1));
-            Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("AltinnPartyUuid", cookieHeaders.ElementAt(2));
+            Assert.StartsWith("selectedLanguage", cookieHeaders.ElementAt(3));
         }
 
 

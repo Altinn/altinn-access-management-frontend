@@ -122,27 +122,32 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId);
 
         /// <summary>
-        ///     Revokes a single rights delegation
+        /// Revokes all rights on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="party">
-        ///    The party from which the rights have been given (delegator)
-        /// </param>
-        /// <param name="delegationObject">
-        ///     The delegation object to be revoked
-        /// </param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegationObject);
+        Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId);
 
         /// <summary>
-        ///     Revokes a single rights delegation
+        /// Revokes a single right on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="party">
-        ///    The party from which the rights have been given (delegator)
-        /// </param>
-        /// <param name="delegationObject">
-        ///     The delegation object to be revoked
-        /// </param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <param name="rightKey">The identifier of the right that is to be revoked</param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegationObject);
+        Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey);
+
+        /// <summary>
+        /// Revokes a single right on a resource that has been granted from one party to another.
+        /// </summary>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <param name="rightKeys">List of identifiers for the rights to be delegated</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
     }
 }

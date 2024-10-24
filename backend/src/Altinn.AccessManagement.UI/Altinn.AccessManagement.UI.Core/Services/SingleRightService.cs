@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Azure;
 
@@ -52,20 +53,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId)
+        public async Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId)
         {
             var res = await _accessManagementClient.GetSingleRightsForRightholder(party, userId);
             var results = await res.Content.ReadAsStringAsync();
 
-            var delegationOutput = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
-            List<ServiceResourceFE> serviceResourceFE = new List<ServiceResourceFE>();
+            var delegationOutputs = JsonSerializer.Deserialize<List<DelegationOutput>>(results, options);
+            List<ResourceDelegation> delegationsFE = new List<ResourceDelegation>();
 
             // Create a Lookup to map orgnr to org details
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
 
-            foreach (var item in delegationOutput)
+            foreach (var delegation in delegationOutputs)
             {
-                var firstRightDelegationResult = item.RightDelegationResults?.First();
+                var firstRightDelegationResult = delegation.RightDelegationResults?.First();
                 var firstResource = firstRightDelegationResult?.Resource?.First();
                 var resourceId = firstResource?.Value;
 
@@ -79,55 +80,66 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // Find the logo based on the orgnr in the orgnrToOrgLookup
                 orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
 
-                serviceResourceFE.Add(new ServiceResourceFE(
-                    resource.Identifier,
-                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                    resourceType: resource.ResourceType,
-                    status: resource.Status,
-                    resourceReferences: resource.ResourceReferences,
-                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                    visible: resource.Visible,
-                    delegable: resource.Delegable,
-                    contactPoints: resource.ContactPoints,
-                    spatial: resource.Spatial,
-                    authorizationReference: resource.AuthorizationReference,
-                    resourceOwnerLogoUrl: org?.Logo));
+                ServiceResourceFE resourceFE = new ServiceResourceFE(
+                resource.Identifier,
+                resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
+                resourceType: resource.ResourceType,
+                status: resource.Status,
+                resourceReferences: resource.ResourceReferences,
+                resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
+                visible: resource.Visible,
+                delegable: resource.Delegable,
+                contactPoints: resource.ContactPoints,
+                spatial: resource.Spatial,
+                authorizationReference: resource.AuthorizationReference,
+                resourceOwnerLogoUrl: org?.Logo);
+
+                delegationsFE.Add(new ResourceDelegation(resourceFE, delegation));
             }
 
-            return serviceResourceFE;
+            return delegationsFE;
         }
 
-        /// <summary>
-        /// Revokes a single right for a rightholder.
-        /// </summary>
-        /// <param name="party">The party ID.</param>
-        /// <param name="delegationDTO">The delegation DTO.</param>
-        /// <param name="delegationType">The type of delegation.</param>
-        /// <returns>The task representing the asynchronous operation.</returns>
-        public Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeSingleRightDelegationDTO delegationDTO, DelegationType delegationType)
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> RevokeResourceAccess(string from, string to, string resourceId)
         {
-            var delegationObject = new DelegationInput
+            return _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<string>> EditResourceAccess(string from, string to, string resourceId, RightChanges update)
+        {
+            List<string> failedEdits = new List<string>();
+
+            var delResponse = await _accessManagementClient.DelegateResourceRights(from, to, resourceId, update.RightsToDelegate);
+            var delegationResult = await delResponse.Content.ReadAsStringAsync();
+
+            DelegationOutput delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(delegationResult, options);
+
+            var failingDelegations = delegationOutput.RightDelegationResults.Where(right => right.Status != "Delegated").Select(right => right.RightKey).ToList();
+
+            if (failingDelegations != null && failingDelegations.Count > 0)
             {
-                To = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:userId", Value = delegationDTO.UserId } },
-                Rights = new List<Right>
-                        {
-                            new Right
-                            {
-                                Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = delegationDTO.ResourceId } }
-                            }
-                        }
-            };
-            if (delegationType == DelegationType.Offered)
-            {
-                return _accessManagementClient.RevokeOfferedSingleRightsDelegation(party, delegationObject);
+                failedEdits.AddRange(failingDelegations);
             }
-            else
+
+            foreach (string rightKey in update.RightsToRevoke)
             {
-                return _accessManagementClient.RevokeReceivedSingleRightsDelegation(party, delegationObject);
+                var revokeResponse = await _accessManagementClient.RevokeRightDelegation(from, to, resourceId, rightKey);
+                var revokeResult = await revokeResponse.Content.ReadAsStringAsync();
+
+                bool deleted = JsonSerializer.Deserialize<bool>(revokeResult, options);
+
+                if (!deleted)
+                {
+                    failedEdits.Add(rightKey);
+                }
             }
+
+            return failedEdits;
         }
     }
 }

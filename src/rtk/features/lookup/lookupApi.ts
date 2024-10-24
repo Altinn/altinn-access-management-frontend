@@ -65,9 +65,18 @@ export const lookupApi = createApi({
     getOrganization: builder.query<Organization, string>({
       query: (orgNumber) => `org/${orgNumber}`,
     }),
+    getReporteeParty: builder.query<Party, void>({
+      query: () => `party/${getCookie('AltinnPartyUuid')}`,
+      keepUnusedDataFor: 300,
+    }),
   }),
 });
 
-export const { useGetUserByUUIDQuery, useGetPartyByUUIDQuery, useGetOrganizationQuery } = lookupApi;
+export const {
+  useGetUserByUUIDQuery,
+  useGetPartyByUUIDQuery,
+  useGetOrganizationQuery,
+  useGetReporteePartyQuery,
+} = lookupApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = lookupApi;

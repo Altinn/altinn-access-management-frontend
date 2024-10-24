@@ -13,7 +13,7 @@
   ],
   "rightDelegationResults": [
     {
-      "rightKey": "ttd-somereasourceid/read",
+      "rightKey": "appid-502/read",
       "resource": [
         {
           "id": "urn:altinn:resource",
@@ -21,7 +21,7 @@
         }
       ],
       "action": "read",
-      "status": "Delegated",
+      "status": "NotDelegated",
       "details": [
         {
           "code": "",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "rightKey": "ttd-somereasourceid/write",
+      "rightKey": "appid-502/write",
       "resource": [
         {
           "id": "urn:altinn:resource",
@@ -46,32 +46,7 @@
         }
       ],
       "action": "write",
-      "status": "NotDelegated",
-      "details": [
-        {
-          "code": "Unknown",
-          "description": "Unknown",
-          "parameters": {
-            "roleRequirementsMatches": [
-              {
-                "id": "urn:altinn:role",
-                "value": "DAGL"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "rightKey": "ttd-somereasourceid/sign",
-      "resource": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-502"
-        }
-      ],
-      "action": "sign",
-      "status": "NotDelegated",
+      "status": "Delegated",
       "details": [
         {
           "code": "Unknown",

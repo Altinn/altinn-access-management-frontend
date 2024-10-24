@@ -6,7 +6,9 @@ import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import type {
   DelegationAccessResult,
   DelegationInputDto,
+  DelegationResult,
   ResourceReference,
+  RightChangesDto,
 } from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
@@ -29,6 +31,11 @@ export interface ServiceResource {
   delegable: boolean;
 }
 
+export interface ResourceDelegation {
+  resource: ServiceResource;
+  delegation: DelegationResult;
+}
+
 interface resourceReference {
   reference: string;
   referenceType: string;
@@ -40,11 +47,6 @@ interface searchParams {
   ROfilters: string[];
   page: number;
   resultsPerPage: number;
-}
-
-enum DelegationType {
-  Offered,
-  Received,
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
@@ -73,10 +75,11 @@ export const singleRightsApi = createApi({
       },
     }),
     getSingleRightsForRightholder: builder.query<
-      ServiceResource[],
+      ResourceDelegation[],
       { party: string; userId: string }
     >({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
+      providesTags: ['overview'],
     }),
     delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
       query: (resourceRef) => ({
@@ -108,18 +111,27 @@ export const singleRightsApi = createApi({
         return response.status;
       },
     }),
-    revokeRights: builder.mutation<
+    revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
-      { type: DelegationType; party: string; userId: string; resourceId: string }
+      { from: string; to: string; resourceId: string }
     >({
-      query({ type, party, userId, resourceId }) {
+      query({ from, to, resourceId }) {
         return {
-          url: `singleright/${party}/${type === DelegationType.Offered ? 'offered' : 'received'}/revoke`,
+          url: `singleright/${from}/${to}/${resourceId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['overview'],
+    }),
+    editResource: builder.mutation<
+      { failedEdits: string[] },
+      { from: string; to: string; resourceId: string; edits: RightChangesDto }
+    >({
+      query({ from, to, resourceId, edits }) {
+        return {
+          url: `singleright/${from}/${to}/${resourceId}/edit`,
           method: 'POST',
-          body: JSON.stringify({
-            userId: userId,
-            resourceId: resourceId,
-          }),
+          body: JSON.stringify(edits),
         };
       },
       invalidatesTags: ['overview'],
@@ -133,7 +145,8 @@ export const {
   useClearAccessCacheMutation,
   useDelegationCheckMutation,
   useDelegateRightsMutation,
-  useRevokeRightsMutation,
+  useRevokeResourceMutation,
+  useEditResourceMutation,
 } = singleRightsApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = singleRightsApi;

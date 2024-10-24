@@ -29,44 +29,50 @@ export const SingleRightsSection = () => {
   });
 
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
-  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights || [], 5);
+  const { paginatedData, totalPages, currentPage, goToPage } = usePagination(singleRights ?? [], 5);
 
   return (
-    <div className={classes.singleRightsSectionContainer}>
-      <Heading
-        level={2}
-        size='md'
-        id='single_rights_title'
-      >
-        {t('user_rights_page.single_rights_title')}
-      </Heading>
+    party && (
+      <div className={classes.singleRightsSectionContainer}>
+        <Heading
+          level={2}
+          size='md'
+          id='single_rights_title'
+        >
+          {t('user_rights_page.single_rights_title')}
+        </Heading>
 
-      {isError && <div>{t('user_rights_page.error')}</div>}
-      {isLoading && <div>{t('user_rights_page.loading')}</div>}
+        {isError && <div>{t('user_rights_page.error')}</div>}
+        {isLoading && <div>{t('user_rights_page.loading')}</div>}
 
-      <List
-        className={classes.singleRightsList}
-        aria-labelledby='single_rights_title'
-      >
-        {paginatedData?.map((singleRight) => (
-          <SingleRightItem
-            key={singleRight.identifier}
-            resource={singleRight}
-          />
-        ))}
-      </List>
-      <div className={classes.tools}>
-        {party && <DelegationModal toParty={party} />}
-        {totalPages > 1 && (
-          <AmPagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setCurrentPage={goToPage}
-            size='sm'
-            hideLabels
-          />
-        )}
+        <List
+          className={classes.singleRightsList}
+          aria-labelledby='single_rights_title'
+          spacing
+          background
+        >
+          {paginatedData?.map((delegation) => (
+            <SingleRightItem
+              key={delegation.resource.identifier}
+              toParty={party}
+              resource={delegation.resource}
+            />
+          ))}
+        </List>
+        <div className={classes.tools}>
+          {party && <DelegationModal toParty={party} />}
+          {totalPages > 1 && (
+            <AmPagination
+              className={classes.pagination}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              setCurrentPage={goToPage}
+              size='sm'
+              hideLabels
+            />
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 };

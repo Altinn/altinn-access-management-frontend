@@ -1,18 +1,15 @@
 name: 'Continuous Integration: Frontend'
-
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger
   push:
     branches: [main]
     paths-ignore:
       - backend/**
-
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:
       - backend/**
-
 jobs:
   ci:
-    name: 'Continous Integration'
+    name: 'Continuous Integration'
     uses: './.github/workflows/template-build-and-test-frontend.yml'
