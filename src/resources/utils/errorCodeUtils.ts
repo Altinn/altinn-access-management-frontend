@@ -1,5 +1,6 @@
 export enum ErrorCode {
   MissingRoleAccess = 'MissingRoleAccess',
+  MissingRightAccess = 'MissingRightAccess',
   MissingDelegationAccess = 'MissingDelegationAccess',
   MissingSrrRightAccess = 'MissingSrrRightAccess',
   HTTPError = 'HTTPError',

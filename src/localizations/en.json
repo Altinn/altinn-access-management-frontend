@@ -221,6 +221,10 @@
     "give_poa": "Give power of attorney",
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
+    "specific_rights": {
+      "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
+      "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
+    },
     "service_error": {
       "general_heading": "You cannot give access to this service",
       "technical_error_heading": "Something went wrong",

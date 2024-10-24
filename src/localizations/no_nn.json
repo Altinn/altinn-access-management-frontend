@@ -219,6 +219,10 @@
     "give_poa": "Gi fullmakt",
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
+    "specific_rights" : {
+      "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
+      "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
+    },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
       "technical_error_heading": "Noko gjekk gale",
