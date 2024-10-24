@@ -21,6 +21,7 @@ import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
+import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -66,19 +67,22 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   const getMissingAccessMessage = (response: DelegationAccessResult[]) => {
     const hasMissingRoleAccess = response.some((result) =>
-      result.details?.some((detail) => detail.code === 'MissingRoleAccess' || detail.code === 'MissingRightAccess'),
+      result.details?.some(
+        (detail) =>
+          detail.code === ErrorCode.MissingRoleAccess ||
+          detail.code === ErrorCode.MissingRightAccess,
+      ),
     );
-
     const hasMissingSrrRightAccess = response.some(
       (result) =>
         !hasMissingRoleAccess &&
-        result.details?.some((detail) => detail.code === 'MissingSrrRightAccess'),
+        result.details?.some((detail) => detail.code === ErrorCode.MissingSrrRightAccess),
     );
 
     if (hasMissingRoleAccess) {
-      return t('delegation_modal.service_error.missing_role_access_message');
+      return t('delegation_modal.specific_rights.missing_role_message');
     } else if (hasMissingSrrRightAccess) {
-      return t('delegation_modal.service_error.missing_srr_right_access_message', {
+      return t('delegation_modal.specific_rights.missing_srr_right_message', {
         resourceOwner: resource?.resourceOwnerName,
         reportee: reportee?.name,
       });
