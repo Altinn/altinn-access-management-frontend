@@ -66,7 +66,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   const getMissingAccessMessage = (response: DelegationAccessResult[]) => {
     const hasMissingRoleAccess = response.some((result) =>
-      result.details?.some((detail) => detail.code === 'MissingRoleAccess'),
+      result.details?.some((detail) => detail.code === 'MissingRoleAccess' || detail.code === 'MissingRightAccess'),
     );
 
     const hasMissingSrrRightAccess = response.some(
