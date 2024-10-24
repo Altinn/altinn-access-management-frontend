@@ -230,7 +230,7 @@
       "error_status": "Status: {{status}}",
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this.",
-      "missing_role_access_message": "You don't have the necessary delegation accesses to perform this delegation. CEO or main administrator can help you with this.",
+      "missing_role_access_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_access_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
     }
   },
