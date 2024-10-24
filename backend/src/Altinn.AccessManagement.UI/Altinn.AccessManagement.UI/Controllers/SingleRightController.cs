@@ -200,6 +200,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
         /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <param name="update">The rights to be edited (delegated and deleted)</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
