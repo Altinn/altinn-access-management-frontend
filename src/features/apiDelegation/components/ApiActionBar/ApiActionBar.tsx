@@ -121,23 +121,23 @@ export const ApiActionBar = ({
     return (
       <div className={classes.content}>
         {api.scopes?.length > 0 && (
-          <>
+          <div className={classes.scopeList}>
             <Heading
               size='2xs'
               level={5}
-              spacing
+              className={classes.actionBarContentHeading}
             >
-              {t('api_delegation.scopes')}:
+              <>{t('api_delegation.scopes')}:</>
             </Heading>
             <ScopeList scopeList={api.scopes} />
-          </>
+          </div>
         )}
         {api.rightDescription && (
           <>
             <Heading
               size='2xs'
               level={5}
-              spacing
+              className={classes.actionBarContentHeading}
             >
               {t('api_delegation.description')}
             </Heading>
@@ -152,7 +152,7 @@ export const ApiActionBar = ({
             <Heading
               size='2xs'
               level={5}
-              spacing
+              className={classes.actionBarContentHeading}
             >
               {t('api_delegation.additional_description')}
             </Heading>
@@ -174,7 +174,7 @@ export const ApiActionBar = ({
           color='danger'
           className={classes.errorContent}
         >
-          <Paragraph spacing>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
+          <Paragraph variant='long'>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
         </Alert>
       );
     } else if (accessResult?.details[0].code === ErrorCode.InsufficientAuthenticationLevel) {
@@ -184,7 +184,7 @@ export const ApiActionBar = ({
           color='danger'
           className={classes.errorContent}
         >
-          <Paragraph spacing>
+          <Paragraph variant='long'>
             {t(`${getErrorCodeTextKey(ErrorCode.InsufficientAuthenticationLevel)}`)}
           </Paragraph>
           <ListUnordered>

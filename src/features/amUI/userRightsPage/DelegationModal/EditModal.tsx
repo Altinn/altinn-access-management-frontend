@@ -16,28 +16,21 @@ export interface EditModalProps {
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
   ({ toParty, resource }, ref) => {
-    const closeModal = () => {
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.close();
-      }
-    };
-
     return (
-      <Modal.Root>
-        <Modal.Dialog
+      <Modal.Context>
+        <Modal
           ref={ref}
           className={classes.modalDialog}
-          onInteractOutside={closeModal}
+          backdropClose
         >
-          <Modal.Header></Modal.Header>
-          <Modal.Content className={classes.content}>
+          <div className={classes.content}>
             <ResourceInfo
               resource={resource}
               toParty={toParty}
             />
-          </Modal.Content>
-        </Modal.Dialog>
-      </Modal.Root>
+          </div>
+        </Modal>
+      </Modal.Context>
     );
   },
 );

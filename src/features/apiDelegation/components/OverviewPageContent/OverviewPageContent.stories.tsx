@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 import React from 'react';
+import { Heading } from '@digdir/designsystemet-react';
 
 import store from '@/rtk/app/store';
+import { PageContainer, PageContent, PageHeader } from '@/components';
 
 import { DelegationType } from '../DelegationType';
 
@@ -33,7 +35,19 @@ export const Offered: StoryObj = {
   args: {},
   render: () => (
     <Provider store={store}>
-      <OverviewPageContent delegationType={DelegationType.Offered} />
+      <PageContainer>
+        <PageHeader>
+          <Heading
+            level={1}
+            size='sm'
+          >
+            API
+          </Heading>
+        </PageHeader>
+        <PageContent>
+          <OverviewPageContent delegationType={DelegationType.Offered} />
+        </PageContent>
+      </PageContainer>
     </Provider>
   ),
 };

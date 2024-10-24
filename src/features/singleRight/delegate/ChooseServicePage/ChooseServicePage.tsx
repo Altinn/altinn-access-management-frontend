@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Ingress } from '@digdir/designsystemet-react';
+import { Paragraph } from '@digdir/designsystemet-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLayoutEffect } from 'react';
 
@@ -85,11 +85,14 @@ export const ChooseServicePage = () => {
                 />
               ) : (
                 <>
-                  <Ingress spacing>
+                  <Paragraph
+                    variant='long'
+                    className={classes.servicePageTopText}
+                  >
                     {t('single_rights.delegate_choose_service_page_top_text', {
                       name: recipientName,
                     })}
-                  </Ingress>
+                  </Paragraph>
                   <ResourceCollectionBar
                     resources={
                       delegableChosenServices

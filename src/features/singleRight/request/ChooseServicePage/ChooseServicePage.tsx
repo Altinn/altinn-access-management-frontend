@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
+import { Paragraph } from '@digdir/designsystemet-react';
 
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
@@ -15,13 +16,13 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
 import { NavigationSection } from '../../components/NavigationSection/NavigationSection';
+
 import classes from './ChooseServicePage.module.css';
-import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
-import { Ingress } from '@digdir/designsystemet-react';
 
 export const ChooseServicePage = () => {
   const { t } = useTranslation();
@@ -76,9 +77,12 @@ export const ChooseServicePage = () => {
       >
         <PageHeader icon={<PersonIcon />}>{t('single_rights.request_single_rights')}</PageHeader>
         <PageContent>
-          <Ingress spacing>
+          <Paragraph
+            variant='long'
+            className={classes.servicePageTopText}
+          >
             {t('single_rights.request_choose_service_page_top_text', { name: requestee })}
-          </Ingress>
+          </Paragraph>
           <ResourceCollectionBar
             resources={
               delegableChosenServices

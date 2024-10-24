@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { type Organization } from '../lookup/lookupApi';
 
 export interface InitialState {

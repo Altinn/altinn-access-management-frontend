@@ -1,4 +1,4 @@
-import { Alert, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -40,7 +40,6 @@ export const ReceiptActionBarContent = ({
   failedDelegations,
   successfulDelegations,
   isRejectedDelegation,
-  index,
   serviceType,
 }: ReceiptActionBarContent) => {
   const { t } = useTranslation();
@@ -56,30 +55,34 @@ export const ReceiptActionBarContent = ({
             <Heading
               size={'xs'}
               level={2}
-              spacing
+              className={classes.headerSpacing}
             >
               {t('single_rights.woops_something_went_wrong_alert')}
             </Heading>
-            <Paragraph spacing>{t('single_rights.some_failed_technical_problem')}</Paragraph>
+            <Paragraph
+              variant='long'
+              className={classes.paragraphSpacing}
+            >
+              {t('single_rights.some_failed_technical_problem')}
+            </Paragraph>
             <Heading
               size={'2xs'}
               level={3}
+              className={classes.headerSpacing}
             >
               {t('single_rights.these_rights_were_not_delegated')}
             </Heading>
             <div className={classes.chipContainer}>
-              <Chip.Group size='sm'>
-                {failedDelegations?.map((failedRight: Right, innerIndex) => {
+              {failedDelegations
+                ?.map((failedRight: Right) => {
                   const chipText = Object.values(LocalizedAction).includes(
                     failedRight.action as LocalizedAction,
                   )
                     ? t(`common.action_${failedRight.action}`)
                     : failedRight.action;
-                  return (
-                    <Chip.Toggle key={`failed-${index}-${innerIndex}`}>{chipText}</Chip.Toggle>
-                  );
-                })}
-              </Chip.Group>
+                  return chipText;
+                })
+                .join(', ')}
             </div>
           </Alert>
         )}
@@ -97,33 +100,18 @@ export const ReceiptActionBarContent = ({
           {t('single_rights.these_rights_were_delegated')}
         </Heading>
         <div className={classes.chipContainer}>
-          <Chip.Group size='sm'>
-            {serviceType === 'AltinnApp' ? (
-              <Chip.Toggle
-                selected={true}
-                checkmark
-              >
-                {t('common.action_access')}
-              </Chip.Toggle>
-            ) : (
-              successfulDelegations?.map((right: Right, innerIndex) => {
-                const chipText = Object.values(LocalizedAction).includes(
-                  right.action as LocalizedAction,
-                )
-                  ? t(`common.action_${right.action}`)
-                  : right.action;
-                return (
-                  <Chip.Toggle
-                    selected={true}
-                    checkmark
-                    key={`successful-${index}-${innerIndex}`}
-                  >
-                    {chipText}
-                  </Chip.Toggle>
-                );
-              })
-            )}
-          </Chip.Group>
+          {serviceType === 'AltinnApp'
+            ? t('common.action_access')
+            : successfulDelegations
+                ?.map((right: Right) => {
+                  const chipText = Object.values(LocalizedAction).includes(
+                    right.action as LocalizedAction,
+                  )
+                    ? t(`common.action_${right.action}`)
+                    : right.action;
+                  return chipText;
+                })
+                .join(', ')}
         </div>
       </div>
     );

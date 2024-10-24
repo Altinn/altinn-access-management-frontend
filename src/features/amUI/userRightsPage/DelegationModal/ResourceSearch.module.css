@@ -34,8 +34,10 @@
 }
 
 .filterChips {
+  margin-left: 5px;
   display: flex;
   flex-wrap: wrap;
+  gap: 5px;
 }
 
 .resourceList {

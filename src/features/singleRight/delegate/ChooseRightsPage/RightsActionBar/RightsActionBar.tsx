@@ -30,7 +30,7 @@ export const RightsActionBar = ({
   const removeButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'large' : 'medium'}
+      size={compact ? 'lg' : 'md'}
       onClick={onRemoveClick}
       icon={compact}
     >

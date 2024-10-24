@@ -23,9 +23,9 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
 
   return (
     <Alert
-      color='danger'
-      size='lg'
       {...props}
+      color={'danger'}
+      size='lg'
     >
       <Heading
         level={2}

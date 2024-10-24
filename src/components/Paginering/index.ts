@@ -1,0 +1,1 @@
+export { AmPagination } from './AmPaginering';

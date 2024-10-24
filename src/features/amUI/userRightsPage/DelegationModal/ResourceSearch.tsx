@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Alert,
-  Chip,
-  Heading,
-  Pagination,
-  Paragraph,
-  Search,
-  Spinner,
-} from '@digdir/designsystemet-react';
+import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router-dom';
@@ -22,6 +14,7 @@ import { arraysEqual, debounce } from '@/resources/utils';
 import { Filter, List, ListItem } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
+import { AmPagination } from '@/components/Paginering/AmPaginering';
 
 import classes from './ResourceSearch.module.css';
 import { useDelegationModalContext } from './DelegationModalContext';
@@ -81,12 +74,10 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   };
 
   const filterChips = () => (
-    <Chip.Group
-      size='sm'
-      className={classes.filterChips}
-    >
+    <div className={classes.filterChips}>
       {filters.map((filterValue: string) => (
         <Chip.Removable
+          size='sm'
           key={filterValue}
           aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
           onClick={() => {
@@ -96,7 +87,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           {getFilterLabel(filterValue)}
         </Chip.Removable>
       ))}
-    </Chip.Group>
+    </div>
   );
 
   const searchResults = () => {
@@ -119,7 +110,6 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           <Heading
             level={2}
             size='xs'
-            spacing
           >
             {t('common.general_error_title')}
           </Heading>
@@ -143,16 +133,12 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           {totalNumberOfResults !== undefined &&
             totalNumberOfResults > searchResultsPerPage &&
             !displayPopularResources && (
-              <Pagination
+              <AmPagination
                 className={classes.pagination}
                 currentPage={currentPage}
                 totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-                nextLabel={t('common.next')}
-                previousLabel={t('common.previous')}
-                itemLabel={(num: number) => `Side ${num}`}
-                onChange={setCurrentPage}
+                setCurrentPage={setCurrentPage}
                 size='sm'
-                compact={true}
                 hideLabels={true}
               />
             )}

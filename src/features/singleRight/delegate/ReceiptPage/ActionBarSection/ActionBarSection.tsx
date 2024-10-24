@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { ErrorSummary, Ingress, Paragraph, ValidationMessage } from '@digdir/designsystemet-react';
+import { Paragraph } from '@digdir/designsystemet-react';
+import { ValidationMessage } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
@@ -71,6 +72,7 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
 
       const numFailedDelegations = failedDelegations?.length ?? 0;
 
+      // if there are more than one failed delegations, we want to show the failed delegations
       const isRejectedDelegation = !!pd.bffResponseList?.find(
         (resp) => resp.reduxStatus === ReduxStatusResponse.Rejected,
       );
@@ -111,23 +113,23 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
 
       const failedDelegationIngress = () => {
         return (
-          <Ingress
+          <Paragraph
+            variant='long'
             className={classes.failedText}
-            spacing
           >
             {t('single_rights.woops_something_went_wrong_ingress')}
-          </Ingress>
+          </Paragraph>
         );
       };
 
       const successfulDelegationParagraph = (extraSpacing: boolean) => {
         return (
-          <Ingress
+          <Paragraph
+            variant='long'
             className={cn(extraSpacing && classes.successText)}
-            spacing
           >
             {t('single_rights.has_received_these_rights', { name: recipientName })}
-          </Ingress>
+          </Paragraph>
         );
       };
 
@@ -164,7 +166,7 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
     <>
       {actionBars}
       {hasSuccessfullDelegations && (
-        <Paragraph spacing>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
+        <Paragraph variant='long'>{t('single_rights.rights_are_valid_until_deletion')}</Paragraph>
       )}
     </>
   );

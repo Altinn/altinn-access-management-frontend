@@ -13,6 +13,10 @@
   --backgroundColor: var(--ds-color-neutral-contrast-1);
 }
 
+a {
+  color: inherit;
+}
+
 .listItem {
   background-color: var(--backgroundColor);
   border-bottom: 1px solid #e1e4e8;

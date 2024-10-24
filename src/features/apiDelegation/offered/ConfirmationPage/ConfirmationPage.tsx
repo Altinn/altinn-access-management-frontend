@@ -65,7 +65,7 @@ export const ConfirmationPage = () => {
             <Heading
               size='md'
               level={2}
-              spacing
+              className={classes.alertHeading}
             >
               {t('api_delegation.failed_delegations')}
             </Heading>
@@ -80,7 +80,7 @@ export const ConfirmationPage = () => {
             <Heading
               size='md'
               level={2}
-              spacing
+              className={classes.alertHeading}
             >
               {t('api_delegation.succesful_delegations')}
             </Heading>
@@ -88,7 +88,7 @@ export const ConfirmationPage = () => {
           </>
         )}
         <Paragraph
-          spacing
+          variant='long'
           className={classes.list}
         >
           {successfulApiDelegations.length === 0
@@ -118,14 +118,14 @@ export const ConfirmationPage = () => {
     ) : (
       <>
         <Heading
-          size='md'
+          size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_top_text')}
         </Heading>
         <DelegableApiList />
         <Heading
-          size='md'
+          size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_second_text')}
@@ -187,7 +187,13 @@ export const ConfirmationPage = () => {
                 title={t('common.general_error_title')}
                 color='danger'
               >
-                <Heading size='xs'>{t('common.general_error_title')}</Heading>
+                <Heading
+                  level={2}
+                  size='xs'
+                  className={classes.alertHeading}
+                >
+                  {t('common.general_error_title')}
+                </Heading>
                 {`${t('common.general_error_paragraph')}`}
               </Alert>
             )}

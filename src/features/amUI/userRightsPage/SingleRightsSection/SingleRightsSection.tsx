@@ -1,4 +1,4 @@
-import { Heading, Pagination } from '@digdir/designsystemet-react';
+import { Heading } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/features/amUI/common/List/List';
 import usePagination from '@/resources/hooks/usePagination';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
+import { AmPagination } from '@/components/Paginering';
 
 import { DelegationModal } from '../DelegationModal/DelegationModal';
 
@@ -36,7 +37,6 @@ export const SingleRightsSection = () => {
         <Heading
           level={2}
           size='md'
-          spacing={false}
           id='single_rights_title'
         >
           {t('user_rights_page.single_rights_title')}
@@ -56,23 +56,19 @@ export const SingleRightsSection = () => {
               key={delegation.resource.identifier}
               toParty={party}
               resource={delegation.resource}
-              delegationData={delegation.delegation}
             />
           ))}
         </List>
         <div className={classes.tools}>
           {party && <DelegationModal toParty={party} />}
           {totalPages > 1 && (
-            <Pagination
+            <AmPagination
               className={classes.pagination}
-              size='sm'
-              compact
-              hideLabels={true}
-              currentPage={currentPage}
               totalPages={totalPages}
-              onChange={(page) => goToPage(page)}
-              nextLabel={t('common.next')}
-              previousLabel={t('common.previous')}
+              currentPage={currentPage}
+              setCurrentPage={goToPage}
+              size='sm'
+              hideLabels
             />
           )}
         </div>
