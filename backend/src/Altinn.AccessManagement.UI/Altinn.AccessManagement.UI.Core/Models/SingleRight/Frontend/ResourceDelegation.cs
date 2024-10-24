@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight
         /// <summary>
         ///     Constructor
         /// </summary>
-        public ResourceDelegation (ServiceResourceFE resource, DelegationOutput delegation)
+        public ResourceDelegation(ServiceResourceFE resource, DelegationOutput delegation)
         {
             Resource = resource;
             Delegation = delegation;

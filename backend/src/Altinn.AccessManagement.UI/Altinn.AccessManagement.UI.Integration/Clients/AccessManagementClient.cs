@@ -325,7 +325,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 return response;
             }
-            string sanitizedResourceId = resourceId.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+
+            string sanitizedResourceId = resourceId.Replace(Environment.NewLine, string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty);
             _logger.LogError($"Delegation of rights to resource {sanitizedResourceId} failed in accessmanagement with status code {response.StatusCode}");
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
