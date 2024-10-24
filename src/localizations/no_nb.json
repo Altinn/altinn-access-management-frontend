@@ -226,6 +226,11 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
+    "specific_rights": {
+      "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv. Daglig leder eller hovedadministrator kan gi deg tilgang.",
+      "missing_srr_right_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette."
+    },
+
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
       "technical_error_heading": "Noe gikk galt",
