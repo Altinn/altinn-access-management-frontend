@@ -65,7 +65,7 @@ export const handlers = [
         },
         {
           identifier: 'missing_role_access',
-          title: 'Manglende Rolle Tilgang',
+          title: 'Krever Rolle',
           description: 'Denne ressursen krever spesifikke roller for tilgang.',
           rightDescription: 'Denne ressursen krever spesifikke roller for tilgang.',
           delegable: true,
@@ -78,8 +78,22 @@ export const handlers = [
           ],
         },
         {
+          identifier: 'missing_right_access',
+          title: 'Krever Rettighet',
+          description: 'Denne ressursen krever spesifikke rettigheter for tilgang.',
+          rightDescription: 'Denne ressursen krever spesifikke rettigheter for tilgang.',
+          delegable: true,
+          resourceOwnerName: 'Myndighet for Manglende Rettigheter',
+          authorizationReference: [
+            {
+              id: 'urn:altinn:resource',
+              value: 'missing_right_access',
+            },
+          ],
+        },
+        {
           identifier: 'missing_srr_rightAccess',
-          title: 'Manglende SRR Tilgang',
+          title: 'Krever SRR Tilgang',
           description: 'Denne ressursen krever SRR rettigheter for tilgang.',
           rightDescription: 'Denne ressursen krever SRR rettigheter for tilgang.',
           delegable: true,
@@ -395,6 +409,64 @@ export const handlers = [
                     },
                   ],
                 },
+              },
+            ],
+          },
+        ]);
+      }
+      if (val === 'missing_right_access') {
+        return HttpResponse.json([
+          {
+            rightKey: 'appid-510/read',
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: 'appid-510',
+              },
+            ],
+            action: 'read',
+            status: 'Delegable',
+            details: [
+              {
+                code: 'RoleAccess',
+                description: '',
+                parameters: {},
+              },
+            ],
+          },
+          {
+            rightKey: 'appid-510/write',
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: 'appid-510',
+              },
+            ],
+            action: 'write',
+            status: 'NotDelegable',
+            details: [
+              {
+                code: 'MissingRightAccess',
+                description: '',
+                parameters: {},
+              },
+            ],
+          },
+          {
+            rightKey: 'appid-510/sign',
+            resource: [
+              {
+                id: 'urn:altinn:resource',
+                value: 'appid-510',
+              },
+            ],
+            action: 'sign',
+            status: 'NotDelegable',
+            details: [
+              {
+                code: 'MissingRightAccess',
+                description: '',
+                parameters: {},
               },
             ],
           },
