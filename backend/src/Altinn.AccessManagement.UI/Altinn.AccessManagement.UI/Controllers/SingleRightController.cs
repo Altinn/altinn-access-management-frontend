@@ -209,7 +209,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             try
             {
-                var response = await _singleRightService.EditResourceAccess(to, from, resourceId, update);
+                var response = await _singleRightService.EditResourceAccess(from, to, resourceId, update);
                 return Ok(response);
             }
             catch (Exception ex)

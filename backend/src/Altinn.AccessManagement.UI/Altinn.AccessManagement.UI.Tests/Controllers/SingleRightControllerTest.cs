@@ -437,6 +437,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "appid-502";
 
+            List<string> expectedResult = new List<string> { "appid-502/write" };
+
             RightChanges edits = new RightChanges()
             {
                 RightsToDelegate = new List<string> { "appid-502/write" },
@@ -452,7 +454,37 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Empty(failingEdits);
+            Assert.Equal(failingEdits, expectedResult);
+        }
+
+        /// <summary>
+        ///    Test case: An internal error happens
+        ///    Expected: EditResourceAccess returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_handles_internal_errors()
+        {
+            // Arrange
+            string from = "********"; // Triggers exception in mock
+            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+
+            List<string> expectedResult = new List<string> { "appid-502/write" };
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-502/write" },
+                RightsToRevoke = new List<string> { "appid-502/read" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
         /// <summary>
