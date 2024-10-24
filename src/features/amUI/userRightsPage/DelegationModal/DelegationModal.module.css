@@ -5,3 +5,9 @@
 .content {
   margin-bottom: 1em;
 }
+
+.backButton {
+  padding-left: 0;
+  padding-top: 0;
+  margin-top: -12px;
+}

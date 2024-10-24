@@ -59,6 +59,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
       >
         {infoView ? (
           <Button
+            className={classes.backButton}
             variant='tertiary'
             color='neutral'
             onClick={() => setInfoView(false)}
