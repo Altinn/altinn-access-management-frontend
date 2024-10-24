@@ -21,7 +21,7 @@
         }
       ],
       "action": "read",
-      "status": "Delegated",
+      "status": "NotDelegated",
       "details": [
         {
           "code": "",
@@ -46,7 +46,7 @@
         }
       ],
       "action": "write",
-      "status": "NotDelegated",
+      "status": "Delegated",
       "details": [
         {
           "code": "Unknown",

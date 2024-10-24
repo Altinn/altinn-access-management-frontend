@@ -281,8 +281,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
         {
-            ThrowExceptionIfTriggerParty(from);
-
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
             var mockResponse = await GetMockedHttpResponse(dataPath, rightKey);

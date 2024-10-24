@@ -437,12 +437,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "appid-502";
 
-            List<string> expectedResult = new List<string> { "appid-502/write" };
+            List<string> expectedResult = new List<string> { "appid-502/read", "appid-502/write" };
 
             RightChanges edits = new RightChanges()
             {
-                RightsToDelegate = new List<string> { "appid-502/write" },
-                RightsToRevoke = new List<string> { "appid-502/read" }
+                RightsToDelegate = new List<string> { "appid-502/read" },
+                RightsToRevoke = new List<string> { "appid-502/write" }
             };
 
             string jsonDto = JsonSerializer.Serialize(edits);
@@ -465,11 +465,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task EditResourceAccess_returns_handles_internal_errors()
         {
             // Arrange
-            string from = "********"; // Triggers exception in mock
+            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
             string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "appid-502";
-
-            List<string> expectedResult = new List<string> { "appid-502/write" };
+            string resourceId = "invalid-resource";
 
             RightChanges edits = new RightChanges()
             {
