@@ -222,6 +222,7 @@
   "delegation_modal": {
     "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
+    "name_has_the_following": "<strong>{{name}}</strong> has the following:",
     "give_poa": "Give power of attorney",
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",

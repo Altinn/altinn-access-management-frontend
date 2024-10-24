@@ -56,6 +56,10 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
   const { data: representingParty } = useGetReporteePartyQuery();
+  const hasUnsavedChanges = !arraysEqualUnordered(
+    rights.filter((r) => r.checked).map((r) => r.rightKey),
+    currentRights,
+  );
   const displayResourceAlert =
     error.isError ||
     resource?.delegable === false ||
@@ -260,7 +264,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                   size='xs'
                   level={4}
                 >
-                  {hasAccess ? (
+                  {hasAccess && !hasUnsavedChanges ? (
                     <Trans
                       i18nKey='delegation_modal.name_has_the_following'
                       values={{ name: toParty?.name }}
@@ -284,10 +288,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               disabled={
                 displayResourceAlert ||
                 !rights.some((r) => r.checked === true) ||
-                arraysEqualUnordered(
-                  rights.filter((r) => r.checked).map((r) => r.rightKey),
-                  currentRights,
-                )
+                !hasUnsavedChanges
               }
               onClick={hasAccess ? saveEditedRights : delegateChosenRights}
             >

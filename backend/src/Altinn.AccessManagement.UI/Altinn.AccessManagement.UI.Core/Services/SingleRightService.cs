@@ -128,8 +128,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (string rightKey in update.RightsToRevoke)
             {
-                var revokeResponse = _accessManagementClient.RevokeRightDelegation(from, to, resourceId, rightKey);
-                var revokeResult = await delResponse.Content.ReadAsStringAsync();
+                var revokeResponse = await _accessManagementClient.RevokeRightDelegation(from, to, resourceId, rightKey);
+                var revokeResult = await revokeResponse.Content.ReadAsStringAsync();
 
                 bool deleted = JsonSerializer.Deserialize<bool>(revokeResult, options);
 
