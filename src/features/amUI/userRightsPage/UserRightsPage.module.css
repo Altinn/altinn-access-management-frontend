@@ -1,5 +1,4 @@
 .heading {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-grow: 0;
@@ -7,6 +6,15 @@
 
 .headingRow {
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 1rem;
+  padding-bottom: 10px;
+}
+
+.subheading {
+  color: var(--ds-color-neutral-text-subtle);
+}
+
+.tabs {
+  justify-content: space-between;
 }

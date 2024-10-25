@@ -82,14 +82,16 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     userId: id || '',
   });
 
-  const userHasResource = delegatedResources?.some(
-    (delegation) => delegation.resource.identifier == resource?.identifier,
-  );
+  const userHasResource =
+    !!delegatedResources &&
+    delegatedResources.some((delegation) => delegation.resource.identifier == resource.identifier);
   useEffect(() => {
     if (delegatedResources && !isFetching) {
-      const resourceDelegation = delegatedResources.find(
-        (delegation) => delegation.resource.identifier === resource?.identifier,
-      );
+      const resourceDelegation =
+        !!delegatedResources &&
+        delegatedResources.find(
+          (delegation) => delegation.resource.identifier === resource.identifier,
+        );
       if (resourceDelegation) {
         setHasAccess(true);
         const rightKeys = resourceDelegation.delegation.rightDelegationResults.map(
@@ -255,7 +257,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   return (
     <>
-      {resource && (
+      {!!resource && (
         <div className={classes.infoView}>
           <div className={classes.infoHeading}>
             <Avatar

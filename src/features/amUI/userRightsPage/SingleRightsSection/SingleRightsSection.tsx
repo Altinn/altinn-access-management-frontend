@@ -36,7 +36,7 @@ export const SingleRightsSection = () => {
       <div className={classes.singleRightsSectionContainer}>
         <Heading
           level={2}
-          size='md'
+          size='sm'
           id='single_rights_title'
         >
           {t('user_rights_page.single_rights_title')}
@@ -44,6 +44,7 @@ export const SingleRightsSection = () => {
 
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
+        <DelegationModal toParty={party} />
 
         <List
           className={classes.singleRightsList}
@@ -51,16 +52,15 @@ export const SingleRightsSection = () => {
           spacing
           background
         >
-          {paginatedData?.map((delegation) => (
+          {paginatedData.map((delegation) => (
             <SingleRightItem
-              key={delegation.resource.identifier}
+              key={delegation.resource?.identifier}
               toParty={party}
               resource={delegation.resource}
             />
           ))}
         </List>
         <div className={classes.tools}>
-          {party && <DelegationModal toParty={party} />}
           {totalPages > 1 && (
             <AmPagination
               className={classes.pagination}

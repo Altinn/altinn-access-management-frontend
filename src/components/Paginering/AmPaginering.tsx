@@ -18,6 +18,7 @@ export const AmPagination = ({
   setCurrentPage,
   hideLabels = false,
   size = 'md',
+  className,
 }: AmPaginationProps) => {
   const { t } = useTranslation();
   const { pages, prevButtonProps, nextButtonProps } = usePagination({
@@ -29,7 +30,10 @@ export const AmPagination = ({
   });
 
   return (
-    <Pagination size={size}>
+    <Pagination
+      size={size}
+      className={className}
+    >
       <Pagination.List>
         <Pagination.Item>
           <Pagination.Button {...prevButtonProps}>

@@ -45,10 +45,11 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
   return (
     <Modal.Context>
       <Modal.Trigger
-        size='md'
-        variant='primary'
+        size='sm'
+        variant='secondary'
+        className={classes.triggerButton}
       >
-        {t('common.add')} <PlusIcon />
+        {t('single_rights.give_new_single_right')} <PlusIcon />
       </Modal.Trigger>
       <Modal
         className={classes.modalDialog}

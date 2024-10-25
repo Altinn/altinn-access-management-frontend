@@ -2,8 +2,8 @@
   max-width: 992px;
 }
 
-.content {
-  margin-bottom: 1em;
+.triggerButton {
+  width: fit-content;
 }
 
 .backButton {
