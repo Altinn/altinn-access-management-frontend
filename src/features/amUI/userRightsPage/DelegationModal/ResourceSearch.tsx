@@ -172,16 +172,17 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
           </span>
         </span>
         <div className={classes.listItemRight}>
-          {delegatedResources?.some(
-            (delegation) => delegation.resource.identifier === resource.identifier,
-          ) && (
-            <Paragraph
-              size='xs'
-              className={classes.infoText}
-            >
-              {t('common.has_poa')}
-            </Paragraph>
-          )}
+          {!!delegatedResources &&
+            delegatedResources.some(
+              (delegation) => delegation.resource?.identifier === resource.identifier,
+            ) && (
+              <Paragraph
+                size='xs'
+                className={classes.infoText}
+              >
+                {t('common.has_poa')}
+              </Paragraph>
+            )}
           <ChevronRightIcon fontSize='1.5em' />
         </div>
       </ListItem>
@@ -199,7 +200,7 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
         <div className={classes.searchField}>
           <Search
             label={t('single_rights.search_label')}
-            hideLabel={false}
+            hideLabel={true}
             value={searchString}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setSearchString(event.target.value);

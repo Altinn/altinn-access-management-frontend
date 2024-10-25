@@ -202,7 +202,8 @@
     "faulty_recipient_error_message": "The given recipient cannot be delegated to. Please go back to the profile page and select another. The recipient must be an organization, a business user, or a person registered with a birth number. Self-registered users cannot be delegated to.",
     "no_resources chosen": "No services selected",
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected.",
-    "popular_services": "Popular services"
+    "popular_services": "Popular services",
+    "give_new_single_right": "Give power of attorney to new service"
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -213,6 +214,7 @@
   },
   "user_rights_page": {
     "page_title": "User access - Altinn",
+    "access_packages_title": "Access packages",
     "single_rights_title": "Services",
     "resource_type_text": "Single right",
     "delete_ingleRight_confirm_message": "Are you sure you want to delete this?",

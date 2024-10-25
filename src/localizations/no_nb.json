@@ -201,7 +201,8 @@
     "faulty_recipient_error_message": "Oppgitt mottaker kan ikke delegeres til. Vennligst gå tilbake til profilsiden og velg en annen. Mottaker må være en organisasjon, en virksomhetsbruker, eller en person registrert med fødselsnummer. Selvregistrerte brukere kan ikke delegeres til.",
     "no_resources chosen": "Ingen valgte tjenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
-    "popular_services": "Populære tjenester:"
+    "popular_services": "Populære tjenester:",
+    "give_new_single_right": "Gi fullmakt til ny tjeneste"
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -212,6 +213,7 @@
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
+    "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "resource_type_text": "Enkelttjeneste",
     "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?",

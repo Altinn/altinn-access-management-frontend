@@ -200,7 +200,8 @@
     "faulty_recipient_error_message": "Oppgitt mottakar kan ikkje delegerast til. Ver venleg og gå tilbake til profilsida og vel ein annan. Mottakar må vere ein organisasjon, ein verksemdsbrukar, eller ein person registrert med fødselsnummer. Sjølvregistrerte brukarar kan ikkje delegerast til.",
     "no_resources chosen": "Ingen valde tenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
-    "popular_services": "Populære tenester:"
+    "popular_services": "Populære tenester:",
+    "give_new_single_right": "Gi fullmakt til ny teneste"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -211,6 +212,7 @@
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",
+    "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "resource_type_text": "Enkelttjeneste",
     "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?",
@@ -225,7 +227,7 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "specific_rights" : {
+    "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
     },
