@@ -32,5 +32,16 @@ namespace Altinn.AccessManagement.UI.Core.Models
             From = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:organizationnumber", Value = dto.OrgNumber } };
             Rights = new List<Right> { new Right { Resource = new List<IdValuePair> { new IdValuePair { Id = "urn:altinn:resource", Value = dto.ApiId } } } };
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RevokeReceivedDelegation"/> class.
+        /// </summary>
+        /// <param name="from">The party from which the delegation is received</param>
+        /// <param name="rights">The rights that are to be revoked</param>
+        public RevokeReceivedDelegation(List<IdValuePair> from, List<Right> rights)
+        {
+            From = from;
+            Rights = rights;
+        }
     }
 }

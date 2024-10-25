@@ -56,7 +56,11 @@
     "bankid": "BankID",
     "commfides": "Commfides",
     "buypass": "Buypass",
-    "org_nr": "Org.nr."
+    "org_nr": "Org.nr.",
+    "update_poa": "Oppdater fullmakt",
+    "give_poa": "Gi fullmakt",
+    "delete_poa": "Slett fullmakt",
+    "has_poa": "Har fullmakt"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -216,9 +220,11 @@
   "delegation_modal": {
     "give_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
+    "name_has_the_following": "<strong>{{name}}</strong> har:",
     "give_poa": "Gi fullmakt",
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
+    "edit_success": "Fullmakt oppdatert",
     "specific_rights" : {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."

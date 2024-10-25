@@ -6,6 +6,11 @@ export interface DelegationInputDto {
   serviceDto: ServiceDto;
 }
 
+export interface RightChangesDto {
+  RightsToDelegate: string[];
+  RightsToRevoke: string[];
+}
+
 export class ServiceDto {
   serviceTitle: string;
   serviceOwner: string;
@@ -45,7 +50,7 @@ type details = {
 export type DelegationResult = {
   from: IdValuePair;
   to: IdValuePair;
-  delegationResult: DelegationAccessResult[];
+  rightDelegationResults: DelegationAccessResult[];
 };
 
 export type ApiDelegationResult = {

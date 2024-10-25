@@ -59,8 +59,9 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
       >
         {infoView ? (
           <Button
+            className={classes.backButton}
             variant='tertiary'
-            color='accent'
+            color='neutral'
             onClick={() => setInfoView(false)}
             icon
           >
@@ -80,7 +81,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
           </Heading>
         )}
         <div className={classes.content}>
-          {infoView ? (
+          {infoView && resourceToView ? (
             <ResourceInfo
               resource={resourceToView}
               toParty={toParty}

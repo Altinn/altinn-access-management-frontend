@@ -1,7 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight.CheckDelegationAccess;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -57,15 +55,25 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         ///     The user id of the rightholder
         /// </param>
         /// <returns></returns>
-        Task<List<ServiceResourceFE>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
+        Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
 
         /// <summary>
-        /// Revokes a single right for a rightholder.
+        /// Revokes all rights on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="party">The party from which the rights have been given (delegator).</param>
-        /// <param name="delegationDTO">The delegation data transfer object containing the details of the revocation.</param>
-        /// <param name="delegationType">The type of delegation to be revoked.</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        Task<HttpResponseMessage> RevokeSingleRightForRightholder(string party, RevokeSingleRightDelegationDTO delegationDTO, DelegationType delegationType);
+        Task<HttpResponseMessage> RevokeResourceAccess(string from, string to, string resourceId);
+
+        /// <summary>
+        /// Makes requested changes to the rights on a resource that has been granted from one party to another.
+        /// </summary>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <param name="rightsUpdate">The changes in right accesses that is to be made</param>
+        /// <returns>A list of right keys whose edits failed, if any</returns>
+        Task<List<string>> EditResourceAccess(string from, string to, string resourceId, RightChanges rightsUpdate);
     }
 }

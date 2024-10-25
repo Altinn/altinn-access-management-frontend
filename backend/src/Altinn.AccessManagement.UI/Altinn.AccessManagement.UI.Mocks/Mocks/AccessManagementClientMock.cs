@@ -1,4 +1,5 @@
 ﻿using System.CodeDom.Compiler;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -263,14 +264,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeOfferedSingleRightsDelegation(string party, DelegationInput delegation)
+        public async Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId)
         {
-            ThrowExceptionIfTriggerParty(party);
+            ThrowExceptionIfTriggerParty(from);
 
-            string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
-            var mockResponse = await GetMockedHttpResponse(dataPath, resourceFileName);
+            var mockResponse = await GetMockedHttpResponse(dataPath, resourceId);
             if (mockResponse.IsSuccessStatusCode)
             {
                 return mockResponse;
@@ -278,15 +278,27 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
         }
 
-
-        public async Task<HttpResponseMessage> RevokeReceivedSingleRightsDelegation(string party, DelegationInput delegation)
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
         {
-             ThrowExceptionIfTriggerParty(party);
-
-            string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
-            var mockResponse = await GetMockedHttpResponse(dataPath, resourceFileName);
+            var mockResponse = await GetMockedHttpResponse(dataPath, rightKey);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return mockResponse;
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys)
+        {
+            ThrowExceptionIfTriggerParty(from);
+
+            string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation");
+
+            var mockResponse = await GetMockedHttpResponse(dataPath, resourceId);
             if (mockResponse.IsSuccessStatusCode)
             {
                 return mockResponse;
