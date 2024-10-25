@@ -17,10 +17,9 @@
   grid-template-areas:
     'icon title type action'
     'icon owner type action';
-  grid-template-columns: 35px minmax(30px, auto) minmax(30px, 120px) 80px;
-  gap: 0.5rem;
+  grid-template-columns: 35px 1fr minmax(30px, 120px) 80px;
+  gap: 0 0.5rem;
   align-items: center;
-  padding: 0.5rem 0;
 }
 
 .singleRightItem > .title {
@@ -30,6 +29,7 @@
   text-overflow: ellipsis;
   font-weight: 500;
   font-size: 16px;
+  text-align: left;
 }
 
 .singleRightItem > .resourceType {
@@ -46,6 +46,7 @@
   text-overflow: ellipsis;
   color: var(--ds-color-neutral-8);
   font-size: 12px;
+  text-align: left;
 }
 
 .singleRightItem > .action {

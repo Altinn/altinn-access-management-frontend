@@ -325,20 +325,17 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Expected response data
             string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
             string content = File.ReadAllText(Path.Combine(path));
-            List<ServiceResourceFE> expectedResponse = JsonSerializer.Deserialize<List<ServiceResourceFE>>(content, options);
+            List<ResourceDelegation> expectedResponse = JsonSerializer.Deserialize<List<ResourceDelegation>>(content, options);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
-            List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
-            var actualResponseJson = JsonSerializer.Serialize(actualResponse);
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
 
             // Assert
             Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            foreach (var right in expectedResponse)
-            {
-                var actual = actualResponse.FirstOrDefault(r => r.Identifier == right.Identifier);
-                AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
-            }
+            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Resource).ToList(), actualResponse.Select(r => r.Resource).ToList(), AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Delegation).ToList().ToList(), actualResponse.Select(r => r.Delegation).ToList(), AssertionUtil.AssertEqual);
+
         }
 
 
@@ -361,112 +358,131 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///  Test case: RevokeSingleRightsForUser revokes the rights of a user
-        ///  Expected: RevokeSingleRightsForUser returns internal server error if revoke request failed
+        ///  Test case: Call RevokeResourceAccess with non-existent resource
+        ///  Expected: RevokeResourceAccess returns internal server error when revoke request fails
         /// </summary>
         [Fact]
-        public async Task RevokeSingleRightsForUserr_offered_handles_error()
+        public async Task RevokeResourceAccess_handles_error()
         {
             // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "invalid_appid";
-            var revokeDto = new RevokeSingleRightDelegationDTO
-            {
-                ResourceId = resourceId,
-                UserId = userUUID
-            };
-            string jsonDto = JsonSerializer.Serialize(revokeDto);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/offered/revoke", content);
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
         /// <summary>
-        ///  Test case: RevokeSingleRightsForUser revokes the rights of a user
-        ///  Expected: RevokeSingleRightsForUser returns internal server error if revoke request failed
+        ///    Test case: RevokeResourceAccess revokes the resource of a user
+        ///    Expected: RevokeResourceAccess returns ok on valid input
         /// </summary>
         [Fact]
-        public async Task RevokeSingleRightsForUserr_received_handles_error()
+        public async Task RevokeResourceAccess_returns_ok_on_valid_input()
         {
             // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "invalid_appid";
-            var revokeDto = new RevokeSingleRightDelegationDTO
-            {
-                ResourceId = resourceId,
-                UserId = userUUID
-            };
-            string jsonDto = JsonSerializer.Serialize(revokeDto);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
+            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/received/revoke", content);
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: EditResourceAccess successfully makes the requested edits
+        ///    Expected: EditResourceAccess returns ok with no failed edits
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_ok_on_valid_input()
+        {
+            // Arrange
+            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-503";
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-503/read", "appid-503/write" },
+                RightsToRevoke = new List<string> { "appid-503/sign" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
+            List<string> failingEdits = await httpResponse.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Empty(failingEdits);
+        }
+
+        /// <summary>
+        ///    Test case: Backend returns unsuccessfull edits
+        ///    Expected: EditResourceAccess returns ok but with failed edits
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_unsuccessfull_edits()
+        {
+            // Arrange
+            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+
+            List<string> expectedResult = new List<string> { "appid-502/read", "appid-502/write" };
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-502/read" },
+                RightsToRevoke = new List<string> { "appid-502/write" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
+            List<string> failingEdits = await httpResponse.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(failingEdits, expectedResult);
+        }
+
+        /// <summary>
+        ///    Test case: An internal error happens
+        ///    Expected: EditResourceAccess returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_handles_internal_errors()
+        {
+            // Arrange
+            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "invalid-resource";
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-502/write" },
+                RightsToRevoke = new List<string> { "appid-502/read" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
-        }
-
-
-        /// <summary>
-        ///    Test case: RevokeSingleRightsForUser revokes the rights of a user
-        ///    Expected: RevokeSingleRightsForUser offered returns ok on valid input
-        /// </summary>
-        [Fact]
-        public async Task RevokeSingleRightsForUser_offered_returns_ok_on_valid_input()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "appid-502";
-            var revokeDto = new RevokeSingleRightDelegationDTO
-            {
-                ResourceId = resourceId,
-                UserId = userUUID
-            };
-            string jsonDto = JsonSerializer.Serialize(revokeDto);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/offered/revoke", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-        }
-
-        /// </summary>
-        ///   Test case: RevokeSingleRightsForUser revokes the rights of a user
-        ///   Expected: RevokeSingleRightsForUser received returns ok on valid input
-        /// </summary>
-        [Fact]
-        public async Task RevokeSingleRightsForUser_received_returns_ok_on_valid_input()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "appid-502";
-            var revokeDto = new RevokeSingleRightDelegationDTO
-            {
-                ResourceId = resourceId,
-                UserId = userUUID
-            };
-            string jsonDto = JsonSerializer.Serialize(revokeDto);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{partyId}/received/revoke", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
         /// <summary>

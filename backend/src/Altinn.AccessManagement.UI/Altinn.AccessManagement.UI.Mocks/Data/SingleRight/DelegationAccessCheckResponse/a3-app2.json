@@ -1,10 +1,10 @@
 [
   {
-    "rightKey": "a3-app2,skd:instantiate",
+    "rightKey": "a3-app2,ttd:instantiate",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -16,7 +16,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:skd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -25,7 +25,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -53,7 +53,7 @@
             },
             {
               "id": "urn:altinn:org",
-              "value": "skd"
+              "value": "ttd"
             }
           ]
         }
@@ -61,11 +61,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,skd:read",
+    "rightKey": "a3-app2,ttd:read",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -77,7 +77,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:skd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -86,7 +86,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -114,7 +114,7 @@
             },
             {
               "id": "urn:altinn:org",
-              "value": "skd"
+              "value": "ttd"
             }
           ]
         }
@@ -122,11 +122,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,skd,Task_1:read",
+    "rightKey": "a3-app2,ttd,Task_1:read",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -142,7 +142,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -151,7 +151,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -183,11 +183,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,skd,Task_1:write",
+    "rightKey": "a3-app2,ttd,Task_1:write",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -203,7 +203,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -212,7 +212,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -244,11 +244,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,EndEvent_1,skd:read",
+    "rightKey": "a3-app2,EndEvent_1,ttd:read",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -264,7 +264,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -273,7 +273,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -305,11 +305,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,EndEvent_1,skd:write",
+    "rightKey": "a3-app2,EndEvent_1,ttd:write",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -325,7 +325,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -334,7 +334,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -366,11 +366,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,skd:delete",
+    "rightKey": "a3-app2,ttd:delete",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -382,7 +382,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -391,7 +391,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -423,11 +423,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,skd:write",
+    "rightKey": "a3-app2,ttd:write",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -439,12 +439,12 @@
     "details": [
       {
         "code": "MissingRoleAccess",
-        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:skd), which would give access to delegate the right.",
+        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:ttd), which would give access to delegate the right.",
         "parameters": {
           "RequiredRoles": [
             {
               "id": "urn:altinn:org",
-              "value": "skd"
+              "value": "ttd"
             }
           ]
         }
@@ -457,11 +457,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,EndEvent_1,skd:complete",
+    "rightKey": "a3-app2,EndEvent_1,ttd:complete",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -477,12 +477,12 @@
     "details": [
       {
         "code": "MissingRoleAccess",
-        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:skd), which would give access to delegate the right.",
+        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:ttd), which would give access to delegate the right.",
         "parameters": {
           "RequiredRoles": [
             {
               "id": "urn:altinn:org",
-              "value": "skd"
+              "value": "ttd"
             }
           ]
         }
@@ -495,11 +495,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,events,skd:read",
+    "rightKey": "a3-app2,events,ttd:read",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -515,7 +515,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:skd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -524,7 +524,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",
@@ -552,7 +552,7 @@
             },
             {
               "id": "urn:altinn:org",
-              "value": "skd"
+              "value": "ttd"
             }
           ]
         }
@@ -560,11 +560,11 @@
     ]
   },
   {
-    "rightKey": "a3-app2,skd,Task_3:read",
+    "rightKey": "a3-app2,ttd,Task_3:read",
     "resource": [
       {
         "id": "urn:altinn:org",
-        "value": "skd"
+        "value": "ttd"
       },
       {
         "id": "urn:altinn:app",
@@ -580,7 +580,7 @@
     "details": [
       {
         "code": "RoleAccess",
-        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SISKD, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:KNUF. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:KNUF. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
         "parameters": {
           "RoleRequirementsMatches": [
             {
@@ -589,7 +589,7 @@
             },
             {
               "id": "urn:altinn:rolecode",
-              "value": "SISKD"
+              "value": "SIttd"
             },
             {
               "id": "urn:altinn:rolecode",

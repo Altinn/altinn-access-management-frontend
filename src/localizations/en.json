@@ -57,7 +57,11 @@
     "bankid": "BankID",
     "commifides": "Commifides",
     "buypass": "Buypass",
-    "org_nr": "Org.no."
+    "org_nr": "Org.no.",
+    "update_poa": "Update power of attorney",
+    "give_poa": "Give power of attorney",
+    "delete_poa": "Delete power of attorney",
+    "has_poa": "Has power of attorney"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
@@ -218,9 +222,11 @@
   "delegation_modal": {
     "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
+    "name_has_the_following": "<strong>{{name}}</strong> has the following:",
     "give_poa": "Give power of attorney",
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
+    "edit_success": "The power of attorney was updated",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
