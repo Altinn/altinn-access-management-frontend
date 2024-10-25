@@ -9,14 +9,14 @@
 }
 
 .menuButton {
-  width: 6rem;
+  width: 5rem;
   border-radius: 6px;
   background-color: #111d46;
   color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  padding: 12px;
 }
 
 .companySquare {
@@ -54,4 +54,28 @@
 
 .pageContent {
   flex: 1;
+}
+
+@media only screen and (max-width: 900px) {
+  .sideMenu {
+    display: none;
+  }
+  .pageWrapper {
+    padding: 1em;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .sideMenu {
+    display: none;
+  }
+  .pageWrapper {
+    padding: 1em;
+  }
+}
+
+@media only screen and (max-width: 769px) {
+  .pageWrapper {
+    padding: 0.5em;
+  }
 }

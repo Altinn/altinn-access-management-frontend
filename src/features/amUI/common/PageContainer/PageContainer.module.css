@@ -1,6 +1,5 @@
 .container {
   min-height: 100vh;
-  width: 100%;
   background-color: var(--ds-color-neutral-contrast-1);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
   padding: 1rem;

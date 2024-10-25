@@ -9,6 +9,8 @@ import {
 
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
 
+import { Avatar } from '../Avatar/Avatar';
+
 import classes from './FakePageWrapper.module.css';
 
 interface FakePageWrapperProps {
@@ -24,19 +26,24 @@ export const FakePageWrapper = ({
     <div className={classes.pageWrapper}>
       <div className={classes.topBar}>
         <AltinnTextLogo title='Altinn' />
-        <div>
-          <Search placeholder='Søk i Altinn' />
-        </div>
         <div className={classes.menuButton}>
           <span>Meny</span>
-          <div className={classes.companySquare} />
+          <Avatar
+            profile='organization'
+            size='sm'
+            name={reporteeName}
+          />
         </div>
       </div>
       <div className={classes.contentWrapper}>
         <div className={classes.sideMenu}>
           <Label className={classes.companyTitle}>
-            <span className={classes.companySquare} />
-            {reporteeName}
+            <Avatar
+              profile='serviceOwner'
+              size='lg'
+              name='Tilgangsstyring'
+            />
+            Tilgangsstyring
           </Label>
           <Divider />
           {[

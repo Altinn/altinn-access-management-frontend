@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Paragraph, Tabs } from '@digdir/designsystemet-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
@@ -20,6 +21,7 @@ import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
+  const [chosenTab, setChosenTab] = useState<'packages | singleRights'>('packages');
 
   const navigate = useNavigate();
 
@@ -42,15 +44,36 @@ export const UserRightsPage = () => {
                   party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'
                 }
               />
-              <Heading
-                level={1}
-                size='sm'
-                className={classes.heading}
-              >
-                {party?.name}
-              </Heading>
+              <div>
+                <Heading
+                  level={1}
+                  size='sm'
+                  className={classes.heading}
+                >
+                  {party?.name}
+                </Heading>
+                <Paragraph
+                  className={classes.subheading}
+                  size='xs'
+                >
+                  for {reportee?.name}
+                </Paragraph>
+              </div>
             </div>
-            <SingleRightsSection />
+            <Tabs
+              defaultValue='packages'
+              size='sm'
+              className={classes.tabs}
+            >
+              <Tabs.List>
+                <Tabs.Tab value='packages'>Tilgangspakker</Tabs.Tab>
+                <Tabs.Tab value='singleRights'>Tjenester</Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panel value='packages'>Tilgangspakker</Tabs.Panel>
+              <Tabs.Panel value='singleRights'>
+                <SingleRightsSection />
+              </Tabs.Panel>
+            </Tabs>
           </PageContainer>
         </FakePageWrapper>
       </PageWrapper>
