@@ -1,5 +1,8 @@
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
-import type { DelegationInputDto } from '@/dataObjects/dtos/resourceDelegation';
+import type {
+  DelegationAccessResult,
+  DelegationInputDto,
+} from '@/dataObjects/dtos/resourceDelegation';
 import { DelegationRequestDto, ServiceDto } from '@/dataObjects/dtos/resourceDelegation';
 import type { ChipRight } from '@/features/amUI/userRightsPage/DelegationModal/ResourceInfo';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
@@ -14,11 +17,10 @@ export const useDelegateRights = () => {
     rights: ChipRight[],
     toParty: Party,
     resource: ServiceResource,
-    onSuccess?: () => void,
-    onError?: () => void,
+    onSuccess?: (response: DelegationAccessResult[]) => void,
+    onError?: (status: string | number) => void,
   ) => {
     let recipient: IdValuePair[];
-
     if (toParty && toParty.partyTypeName === PartyType.Person) {
       recipient = [new IdValuePair('urn:altinn:person:uuid', toParty.partyUuid)];
     } else if (toParty && toParty.partyTypeName === PartyType.Organization) {
@@ -45,11 +47,12 @@ export const useDelegateRights = () => {
       };
 
       delegate(delegationInput)
-        .then(() => {
-          onSuccess?.();
+        .unwrap()
+        .then((response) => {
+          onSuccess?.(response);
         })
-        .catch(() => {
-          onError?.();
+        .catch((status) => {
+          onError?.(status);
         });
     }
   };

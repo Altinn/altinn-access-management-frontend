@@ -64,6 +64,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   );
   const { data: reportee } = useGetReporteeQuery();
 
+  const [delegationErrorMessage, setDelegationErrorMessage] = useState<string | null>(null);
   const [missingAccessMessage, setMissingAccessMessage] = useState<string | null>(null);
   const displayResourceAlert =
     error.isError ||
@@ -162,6 +163,70 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     }
   }, [delegatedResources, currentRights]);
 
+  const saveEditedRights = () => {
+    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
+    if (representingParty) {
+      editResource(
+        resource.identifier,
+        representingParty,
+        toParty,
+        currentRights,
+        newRights,
+        () => {
+          openSnackbar({
+            message: t('delegation_modal.edit_success', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Success,
+            duration: SnackbarDuration.long,
+          });
+          onDelegate?.();
+        },
+        () =>
+          openSnackbar({
+            message: t('delegation_modal.error_message', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Error,
+            duration: SnackbarDuration.infinite,
+          }),
+      );
+    }
+  };
+
+  const delegateChosenRights = async () => {
+    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
+
+    await delegateRights(
+      rightsToDelegate,
+      toParty,
+      resource,
+      (response: DelegationAccessResult[]) => {
+        const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
+          action: right.action,
+          rightKey: right.rightKey,
+          delegable: right.status === RightStatus.Delegable,
+          checked: right.status === RightStatus.Delegable,
+          resourceReference: right.resource,
+          delegationReason: right.details[0].code,
+        }));
+        setRights(chipRights);
+
+        openSnackbar({
+          message: t('delegation_modal.success_message', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Success,
+          duration: SnackbarDuration.long,
+        });
+        onDelegate?.();
+      },
+      () => {
+        setDelegationErrorMessage(t('delegation_modal.error_message', { name: toParty.name }));
+
+        openSnackbar({
+          message: t('delegation_modal.error_message', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Error,
+          duration: SnackbarDuration.infinite,
+        });
+      },
+    );
+  };
+
   const chips =
     resource?.resourceType === 'AltinnApp' ? (
       <Chip.Checkbox
@@ -204,57 +269,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
       })
     );
 
-  const saveEditedRights = () => {
-    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
-    if (representingParty) {
-      editResource(
-        resource.identifier,
-        representingParty,
-        toParty,
-        currentRights,
-        newRights,
-        () => {
-          openSnackbar({
-            message: t('delegation_modal.edit_success', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Success,
-            duration: SnackbarDuration.long,
-          });
-          onDelegate?.();
-        },
-        () =>
-          openSnackbar({
-            message: t('delegation_modal.error_message', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Error,
-            duration: SnackbarDuration.infinite,
-          }),
-      );
-    }
-  };
-
-  const delegateChosenRights = () => {
-    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
-
-    delegateRights(
-      rightsToDelegate,
-      toParty,
-      resource,
-      () => {
-        openSnackbar({
-          message: t('delegation_modal.success_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Success,
-          duration: SnackbarDuration.long,
-        });
-        onDelegate?.();
-      },
-      () =>
-        openSnackbar({
-          message: t('delegation_modal.error_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Error,
-          duration: SnackbarDuration.infinite,
-        }),
-    );
-  };
-
   return (
     <>
       {!!resource && (
@@ -292,6 +306,14 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
             />
           ) : (
             <>
+              {delegationErrorMessage && (
+                <Alert
+                  color='danger'
+                  size='sm'
+                >
+                  {delegationErrorMessage}
+                </Alert>
+              )}
               {missingAccessMessage && (
                 <Alert
                   color='info'
