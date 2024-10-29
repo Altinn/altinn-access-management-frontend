@@ -20,6 +20,7 @@ import {
 import { SingleRightPath } from '@/routes/paths';
 import { redirectToSevicesAvailableForUser } from '@/resources/utils';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { ReloadAlert } from '@/components/ReloadAlert/ReloadAlert';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';
@@ -67,67 +68,70 @@ export const ChooseServicePage = () => {
   };
 
   return (
-    <PageContainer>
-      <Page
-        color='dark'
-        size={isSm ? 'small' : 'medium'}
-      >
-        <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
-        <PageContent>
-          {recipientIsLoading ? (
-            <ChooseServiceSkeleton />
-          ) : (
-            <>
-              {recipientError ? (
-                <RecipientErrorAlert
-                  userUUID={urlParams.get('userUUID')}
-                  partyUUID={urlParams.get('partyUUID')}
-                />
-              ) : (
-                <>
-                  <Paragraph
-                    variant='long'
-                    className={classes.servicePageTopText}
-                  >
-                    {t('single_rights.delegate_choose_service_page_top_text', {
-                      name: recipientName,
-                    })}
-                  </Paragraph>
-                  <ResourceCollectionBar
-                    resources={
-                      delegableChosenServices
-                        .map((servicewithStatus) => servicewithStatus.service)
-                        .filter(Boolean) as ServiceResource[]
-                    }
-                    onRemove={onRemove}
-                    compact={isSm}
-                    proceedToPath={`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`}
+    <>
+      <ReloadAlert />
+      <PageContainer>
+        <Page
+          color='dark'
+          size={isSm ? 'small' : 'medium'}
+        >
+          <PageHeader icon={<PersonIcon />}>{t('single_rights.delegate_single_rights')}</PageHeader>
+          <PageContent>
+            {recipientIsLoading ? (
+              <ChooseServiceSkeleton />
+            ) : (
+              <>
+                {recipientError ? (
+                  <RecipientErrorAlert
+                    userUUID={urlParams.get('userUUID')}
+                    partyUUID={urlParams.get('partyUUID')}
                   />
-                  <SearchSection
-                    onAdd={onAdd}
-                    onUndo={onRemove}
-                  />
-                  <NavigationSection
-                    className={classes.navigationContainer}
-                    cancelButtonProps={{
-                      onCancel: () => redirectToSevicesAvailableForUser(userID, partyID),
-                      showWarning: delegableChosenServices.length > 0,
-                    }}
-                    nextButtonProps={{
-                      onNext: () => {
-                        navigate(
-                          `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`,
-                        );
-                      },
-                      disabled: delegableChosenServices.length < 1,
-                    }}
-                  />
-                </>
-              )}
-            </>
-          )}
-        </PageContent>
-      </Page>
-    </PageContainer>
+                ) : (
+                  <>
+                    <Paragraph
+                      variant='long'
+                      className={classes.servicePageTopText}
+                    >
+                      {t('single_rights.delegate_choose_service_page_top_text', {
+                        name: recipientName,
+                      })}
+                    </Paragraph>
+                    <ResourceCollectionBar
+                      resources={
+                        delegableChosenServices
+                          .map((servicewithStatus) => servicewithStatus.service)
+                          .filter(Boolean) as ServiceResource[]
+                      }
+                      onRemove={onRemove}
+                      compact={isSm}
+                      proceedToPath={`/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`}
+                    />
+                    <SearchSection
+                      onAdd={onAdd}
+                      onUndo={onRemove}
+                    />
+                    <NavigationSection
+                      className={classes.navigationContainer}
+                      cancelButtonProps={{
+                        onCancel: () => redirectToSevicesAvailableForUser(userID, partyID),
+                        showWarning: delegableChosenServices.length > 0,
+                      }}
+                      nextButtonProps={{
+                        onNext: () => {
+                          navigate(
+                            `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseRights}?${urlParams}`,
+                          );
+                        },
+                        disabled: delegableChosenServices.length < 1,
+                      }}
+                    />
+                  </>
+                )}
+              </>
+            )}
+          </PageContent>
+        </Page>
+      </PageContainer>
+    </>
   );
 };

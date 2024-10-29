@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 export function getCookie(cname: string) {
   const name = cname + '=';
   const decodedCookie = decodeURIComponent(document.cookie);
@@ -13,3 +15,22 @@ export function getCookie(cname: string) {
   }
   return '';
 }
+
+export const useCookieListener = (cookieName: string, interval = 1000) => {
+  const [cookie, setCookie] = useState(getCookie(cookieName));
+  const [displayAlert, setDisplayAlert] = useState(false);
+
+  useEffect(() => {
+    const checkCookie = setInterval(() => {
+      const currentCookie = getCookie(cookieName);
+      if (currentCookie !== cookie) {
+        setCookie(currentCookie);
+        setDisplayAlert(true);
+      }
+    }, interval); // Check every second
+
+    return () => clearInterval(checkCookie);
+  }, [cookie, cookieName]);
+
+  return displayAlert;
+};

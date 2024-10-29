@@ -60,7 +60,8 @@
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
     "delete_poa": "Slett fullmakt",
-    "has_poa": "Har fullmakt"
+    "has_poa": "Har fullmakt",
+    "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt."
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",

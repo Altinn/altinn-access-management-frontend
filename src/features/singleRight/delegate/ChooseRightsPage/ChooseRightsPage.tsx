@@ -33,6 +33,7 @@ import { useClearAccessCacheMutation } from '@/rtk/features/singleRights/singleR
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { ReloadAlert } from '@/components/ReloadAlert/ReloadAlert';
 
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
@@ -306,6 +307,7 @@ export const ChooseRightsPage = () => {
 
   return (
     <PageContainer>
+      <ReloadAlert />
       <Page
         color='dark'
         size={isSm ? 'small' : 'medium'}

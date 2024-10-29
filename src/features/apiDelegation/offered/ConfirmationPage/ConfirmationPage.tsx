@@ -14,6 +14,7 @@ import { usePostApiDelegationMutation } from '@/rtk/features/apiDelegation/apiDe
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { ListTextColor } from '@/components/CompactDeletableListItem/CompactDeletableListItem';
 import { overviewOrgApi } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+import { ReloadAlert } from '@/components/ReloadAlert/ReloadAlert';
 
 import classes from './ConfirmationPage.module.css';
 import { DelegableApiList, DelegableOrgList, DelegationReceiptList } from './DelegationLists';
@@ -158,6 +159,7 @@ export const ConfirmationPage = () => {
 
   return (
     <div>
+      <ReloadAlert />
       <PageContainer>
         <Page
           color={
