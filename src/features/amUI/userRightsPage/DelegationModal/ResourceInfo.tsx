@@ -10,6 +10,7 @@ import {
   useDelegationCheckMutation,
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import {
   RightStatus,
   type DelegationAccessResult,
@@ -24,6 +25,7 @@ import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useEditResource } from '@/resources/hooks/useEditResource';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -163,6 +165,10 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     }
   }, [delegatedResources, currentRights]);
 
+  const actionsNotDelegated = (response: DelegationAccessResult[]) => {
+    return response.filter((result) => result.status === BFFDelegatedStatus.NotDelegated);
+  };
+
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
     if (representingParty) {
@@ -193,27 +199,29 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const delegateChosenRights = async () => {
     const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
 
-    await delegateRights(
+    delegateRights(
       rightsToDelegate,
       toParty,
       resource,
-      (response: DelegationAccessResult[]) => {
-        const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
-          action: right.action,
-          rightKey: right.rightKey,
-          delegable: right.status === RightStatus.Delegable,
-          checked: right.status === RightStatus.Delegable,
-          resourceReference: right.resource,
-          delegationReason: right.details[0].code,
-        }));
-        setRights(chipRights);
+      (response: DelegationResult) => {
+        setDelegationErrorMessage(null);
 
         openSnackbar({
           message: t('delegation_modal.success_message', { name: toParty.name }),
           variant: SnackbarMessageVariant.Success,
           duration: SnackbarDuration.long,
         });
-        onDelegate?.();
+
+        const notDelegatedActions = actionsNotDelegated(response.rightDelegationResults);
+        if (notDelegatedActions.length > 0) {
+          setDelegationErrorMessage(
+            t('delegation_modal.technical_error_message.some_failed', {
+              actions: notDelegatedActions.map((action) => action.action).join(', '),
+            }),
+          );
+        } else {
+          onDelegate?.();
+        }
       },
       () => {
         setDelegationErrorMessage(t('delegation_modal.error_message', { name: toParty.name }));
@@ -227,7 +235,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     );
   };
 
-  const chips =
+  const chips = () =>
     resource?.resourceType === 'AltinnApp' ? (
       <Chip.Checkbox
         size='sm'
@@ -311,6 +319,13 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                   color='danger'
                   size='sm'
                 >
+                  <Heading
+                    level={3}
+                    size='xs'
+                  >
+                    {t('delegation_modal.technical_error_message.heading')}
+                  </Heading>
+                  <Paragraph>{t('delegation_modal.technical_error_message.message')}</Paragraph>
                   {delegationErrorMessage}
                 </Alert>
               )}
@@ -341,7 +356,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                     />
                   )}
                 </Heading>
-                <div className={classes.rightChips}>{chips}</div>
+                <div className={classes.rightChips}>{chips()}</div>
               </div>
             </>
           )}

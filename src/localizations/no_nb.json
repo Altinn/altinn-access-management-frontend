@@ -232,7 +232,7 @@
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
       "all_failed": "Ingen ny fullmakt er gitt til {{name}}",
-      "some_failed": "Følgende tilganger ble ikke gitt"
+      "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
     },
     "specific_rights": {
       "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv. Daglig leder eller hovedadministrator kan gi deg tilgang.",

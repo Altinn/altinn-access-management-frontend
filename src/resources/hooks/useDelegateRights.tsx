@@ -1,8 +1,5 @@
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
-import type {
-  DelegationAccessResult,
-  DelegationInputDto,
-} from '@/dataObjects/dtos/resourceDelegation';
+import type { DelegationInputDto, DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import { DelegationRequestDto, ServiceDto } from '@/dataObjects/dtos/resourceDelegation';
 import type { ChipRight } from '@/features/amUI/userRightsPage/DelegationModal/ResourceInfo';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
@@ -17,7 +14,7 @@ export const useDelegateRights = () => {
     rights: ChipRight[],
     toParty: Party,
     resource: ServiceResource,
-    onSuccess?: (response: DelegationAccessResult[]) => void,
+    onSuccess?: (response: DelegationResult) => void,
     onError?: (status: string | number) => void,
   ) => {
     let recipient: IdValuePair[];
