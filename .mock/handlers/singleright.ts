@@ -9,7 +9,8 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   }),
   http.post(`${ACCESSMANAGEMENT_BASE_URL}/singleright/delegate/:id`, async (req: any) => {
     const requestBody = await req.request.json();
-    const val = requestBody?.Rights?.[0]?.Resource?.[0]?.value;
+    const rights = requestBody?.Rights;
+    const val = rights?.[0]?.Resource?.[0]?.value;
     if (val === 'delegation_error') {
       return HttpResponse.json(
         {
@@ -35,7 +36,7 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           ],
           rightDelegationResults: [
             {
-              rightKey: 'ttd-somereasourceid/read',
+              rightKey: 'partial_delegation_error/read',
               resource: [
                 {
                   id: 'urn:altinn:resource',
@@ -60,7 +61,7 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
               ],
             },
             {
-              rightKey: 'ttd-somereasourceid/read',
+              rightKey: 'partial_delegation_error/write',
               resource: [
                 {
                   id: 'urn:altinn:resource',
@@ -86,7 +87,7 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
             },
           ],
         },
-        { status: 207 },
+        { status: 200 },
       );
     }
     return HttpResponse.json(
@@ -138,7 +139,7 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
               },
             ],
             action: 'sign',
-            status: 'NotDelegated',
+            status: 'Delegated',
             details: [
               {
                 code: 'error',
