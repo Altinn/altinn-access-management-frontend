@@ -1029,7 +1029,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.0.0":
+"@navikt/aksel-icons@npm:^7.0.0, @navikt/aksel-icons@npm:^7.2.1":
   version: 7.4.0
   resolution: "@navikt/aksel-icons@npm:7.4.0"
   checksum: 10/cb9b7a9dc95a55a58ba4304bcb43a9c3c7a162633a59040f735ab5022f271e5044843c1edef73d2dd21dc62ff4e60643d0138143e910d8f7f51c1011bbcdbee5
@@ -2704,6 +2704,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@vitejs/plugin-react": "npm:^4.0.0"
+    altinn-components: ../altinn-components/
     axios: "npm:^1.7.2"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^7.0.3"
@@ -2806,6 +2807,19 @@ __metadata:
     json-schema-traverse: "npm:^0.4.1"
     uri-js: "npm:^4.2.2"
   checksum: 10/48d6ad21138d12eb4d16d878d630079a2bda25a04e745c07846a4ad768319533031e28872a9b3c5790fa1ec41aabdf2abed30a56e5a03ebc2cf92184b8ee306c
+  languageName: node
+  linkType: hard
+
+"altinn-components@file:../altinn-components/::locator=access-management%40workspace%3A.":
+  version: 0.0.1
+  resolution: "altinn-components@file:../altinn-components/#../altinn-components/::hash=3ac896&locator=access-management%40workspace%3A."
+  dependencies:
+    "@navikt/aksel-icons": "npm:^7.2.1"
+    classnames: "npm:^2.5.1"
+    react: "npm:^18.3.1"
+  peerDependencies:
+    react: ">=18"
+  checksum: 10/40d548b5c0567142f8f852d098aa620ecef60abe4d271c86ca9dc25e22146ce6e8385286658935709c658f21fc8c96d5dbe4dc69cadf06d17482177cfc8dc3bf
   languageName: node
   linkType: hard
 

@@ -1,17 +1,5 @@
 import React from 'react';
-import { Divider, Label, Search } from '@digdir/designsystemet-react';
-import {
-  ClockDashedIcon,
-  HandshakeIcon,
-  PersonGroupIcon,
-  RobotSmileIcon,
-} from '@navikt/aksel-icons';
-
-import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
-
-import { Avatar } from '../Avatar/Avatar';
-
-import classes from './FakePageWrapper.module.css';
+import { Layout } from 'altinn-components/lib/components/Layout/Layout';
 
 interface FakePageWrapperProps {
   reporteeName: string;
@@ -23,49 +11,72 @@ export const FakePageWrapper = ({
   children,
 }: FakePageWrapperProps): React.ReactNode => {
   return (
-    <div className={classes.pageWrapper}>
-      <div className={classes.topBar}>
-        <AltinnTextLogo title='Altinn' />
-        <div className={classes.menuButton}>
-          <span>Meny</span>
-          <Avatar
-            profile='organization'
-            size='sm'
-            name={reporteeName}
-          />
-        </div>
-      </div>
-      <div className={classes.contentWrapper}>
-        <div className={classes.sideMenu}>
-          <Label className={classes.companyTitle}>
-            <Avatar
-              profile='serviceOwner'
-              size='lg'
-              name='Tilgangsstyring'
-            />
-            Tilgangsstyring
-          </Label>
-          <Divider />
-          {[
-            { title: 'Brukere og grupper', icon: <PersonGroupIcon /> },
-            { title: 'Fullmakter', icon: <HandshakeIcon /> },
-            { title: 'Maskintilganger', icon: <RobotSmileIcon /> },
-            { title: 'Aktivitetslogg', icon: <ClockDashedIcon /> },
-            { title: 'Virksomhetsprofil', icon: <HandshakeIcon /> },
-          ].map((item) => {
-            return (
-              <div
-                key={item.title}
-                className={classes.sideMenuItem}
-              >
-                {item.icon}
-                {item.title}
-              </div>
-            );
-          })}
-        </div>
-        <div className={classes.pageContent}>{children}</div>
-      </div>
-    </div>
+    <Layout
+      theme={'neutral'}
+      header={{
+        menu: {
+          accounts: [
+            {
+              name: reporteeName,
+              selected: true,
+              type: 'person',
+            },
+          ],
+          expanded: false,
+          onToggle: () => {},
+          items: [],
+        },
+      }}
+      sidebar={{
+        menu: {
+          groups: {},
+          items: [
+            {
+              badge: '4',
+              group: 1,
+              icon: 'buildings2',
+              id: '1',
+              size: 'lg',
+              title: 'Bedriftsprofil',
+            },
+            {
+              group: 2,
+              icon: 'person-group',
+              id: '2',
+              title: 'Brukere',
+            },
+            {
+              badge: '2',
+              group: 2,
+              icon: 'handshake',
+              id: '3',
+              title: 'Fullmakter',
+            },
+            {
+              badge: '11',
+              group: 3,
+              icon: 'inbox',
+              id: '4',
+              title: 'Våre tilganger hos andre',
+            },
+            {
+              group: 3,
+              icon: 'database',
+              id: '5',
+              title: 'Klientdelegering',
+            },
+            {
+              group: 4,
+              icon: 'clock-dashed',
+              id: '6',
+              title: 'Aktivitetslogg',
+            },
+          ],
+        },
+      }}
+      content={{ theme: 'neutral' }}
+    >
+      {children}
+    </Layout>
   );
 };
