@@ -12,7 +12,6 @@ import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfo
 import { amUIPath } from '@/routes/paths';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { ReloadAlert } from '@/components/ReloadAlert/ReloadAlert';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { FakePageWrapper } from '../common/FakePageWrapper';
@@ -40,80 +39,77 @@ export const UserRightsPage = () => {
   });
 
   return (
-    <>
-      <ReloadAlert />
-      <SnackbarProvider>
-        <PageWrapper>
-          <FakePageWrapper reporteeName={reportee?.name || ''}>
-            <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
-              {!isLoading && singleRights ? (
-                <>
-                  <div className={classes.headingRow}>
-                    <Avatar
-                      name={name}
-                      size={'lg'}
-                      profile={
-                        party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'
-                      }
-                    />
-                    <div>
-                      <Heading
-                        level={1}
-                        size='sm'
-                        className={classes.heading}
-                      >
-                        {party?.name}
-                      </Heading>
-                      <Paragraph
-                        className={classes.subheading}
-                        size='xs'
-                      >
-                        for {reportee?.name}
-                      </Paragraph>
-                    </div>
+    <SnackbarProvider>
+      <PageWrapper>
+        <FakePageWrapper reporteeName={reportee?.name || ''}>
+          <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
+            {!isLoading && singleRights ? (
+              <>
+                <div className={classes.headingRow}>
+                  <Avatar
+                    name={name}
+                    size={'lg'}
+                    profile={
+                      party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'
+                    }
+                  />
+                  <div>
+                    <Heading
+                      level={1}
+                      size='sm'
+                      className={classes.heading}
+                    >
+                      {party?.name}
+                    </Heading>
+                    <Paragraph
+                      className={classes.subheading}
+                      size='xs'
+                    >
+                      for {reportee?.name}
+                    </Paragraph>
                   </div>
-                  <Tabs
-                    defaultValue='packages'
-                    size='sm'
-                    value={chosenTab}
-                    onChange={setChosenTab}
-                    className={classes.tabs}
-                  >
-                    <Tabs.List>
-                      <Tabs.Tab value='packages'>
-                        <Badge
-                          size='sm'
-                          color={chosenTab === 'packages' ? 'accent' : 'neutral'}
-                          count={0}
-                          maxCount={99}
-                        ></Badge>
-                        {t('user_rights_page.access_packages_title')}
-                      </Tabs.Tab>
-                      <Tabs.Tab value='singleRights'>
-                        <Badge
-                          size='sm'
-                          color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-                          count={singleRights.length}
-                          maxCount={99}
-                        ></Badge>
-                        {t('user_rights_page.single_rights_title')}
-                      </Tabs.Tab>
-                    </Tabs.List>
-                    <Tabs.Panel value='packages'>
+                </div>
+                <Tabs
+                  defaultValue='packages'
+                  size='sm'
+                  value={chosenTab}
+                  onChange={setChosenTab}
+                  className={classes.tabs}
+                >
+                  <Tabs.List>
+                    <Tabs.Tab value='packages'>
+                      <Badge
+                        size='sm'
+                        color={chosenTab === 'packages' ? 'accent' : 'neutral'}
+                        count={0}
+                        maxCount={99}
+                      ></Badge>
                       {t('user_rights_page.access_packages_title')}
-                    </Tabs.Panel>
-                    <Tabs.Panel value='singleRights'>
-                      <SingleRightsSection />
-                    </Tabs.Panel>
-                  </Tabs>
-                </>
-              ) : (
-                <Spinner title='loading' />
-              )}
-            </PageContainer>
-          </FakePageWrapper>
-        </PageWrapper>
-      </SnackbarProvider>
-    </>
+                    </Tabs.Tab>
+                    <Tabs.Tab value='singleRights'>
+                      <Badge
+                        size='sm'
+                        color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
+                        count={singleRights.length}
+                        maxCount={99}
+                      ></Badge>
+                      {t('user_rights_page.single_rights_title')}
+                    </Tabs.Tab>
+                  </Tabs.List>
+                  <Tabs.Panel value='packages'>
+                    {t('user_rights_page.access_packages_title')}
+                  </Tabs.Panel>
+                  <Tabs.Panel value='singleRights'>
+                    <SingleRightsSection />
+                  </Tabs.Panel>
+                </Tabs>
+              </>
+            ) : (
+              <Spinner title='loading' />
+            )}
+          </PageContainer>
+        </FakePageWrapper>
+      </PageWrapper>
+    </SnackbarProvider>
   );
 };

@@ -16,7 +16,7 @@ export function getCookie(cname: string) {
   return '';
 }
 
-export const useCookieListener = (cookieName: string, interval = 1000) => {
+export const useCookieListener = (cookieName: string, interval = 2000) => {
   const [cookie, setCookie] = useState(getCookie(cookieName));
   const [displayAlert, setDisplayAlert] = useState(false);
 
@@ -27,7 +27,7 @@ export const useCookieListener = (cookieName: string, interval = 1000) => {
         setCookie(currentCookie);
         setDisplayAlert(true);
       }
-    }, interval); // Check every second
+    }, interval); // Check every interval
 
     return () => clearInterval(checkCookie);
   }, [cookie, cookieName]);
