@@ -1092,5 +1092,62 @@
         "nn": "Digitaliseringsdirektoratet"
       }
     }
-  }
+  },
+  {
+    "title": {
+      "en": "A resource that fails on delegation",
+      "nb": "En ressurs som feiler på delegering",
+      "nn": "En ressurs som feiler på delegering"
+    },
+    "sector": null,
+    "status": null,
+    "limitedByRRR": false,
+    "SelfIdentifiedUserEnabled": false,
+    "EnterpriseUserEnabled": false,
+    "homepage": null,
+    "isPartOf": null,
+    "keywords": [
+      { "language": "en", "word": "delegation" }
+    ],
+    "identifier": "app_actions_that_fail",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "A resource that fails on delegation",
+      "nb": "En ressurs som feiler på delegering",
+      "nn": "En ressurs som feiler på delegering"
+    },
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": {
+      "en": "Fails on delegation",
+      "nb": "Feiler på delegering",
+      "nn": "Feiler på delegering"
+    },
+    "resourceReferences": [],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "app_actions_that_fail"
+      }
+    ],
+    "hasCompetentAuthority": {
+      "orgcode": "fd",
+      "organization": "777777777",
+      "name": {
+        "en": "FD",
+        "nb": "FD",
+        "nn": "FD"
+      }
+    }
+  }  
 ]

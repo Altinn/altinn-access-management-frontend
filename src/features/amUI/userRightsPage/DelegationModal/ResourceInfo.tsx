@@ -133,6 +133,21 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     return null;
   };
 
+  const mapRightsToChipRights = (
+    rights: DelegationAccessResult[],
+    checked: (right: DelegationAccessResult) => boolean,
+  ): ChipRight[] => {
+    return rights.map((right: DelegationAccessResult) => ({
+      action: right.action,
+      rightKey: right.rightKey,
+      delegable:
+        right.status === RightStatus.Delegable || right.status === BFFDelegatedStatus.Delegated,
+      checked: checked(right) || false,
+      resourceReference: right.resource,
+      delegationReason: right.details[0].code,
+    }));
+  };
+
   useEffect(() => {
     if (resourceRef) {
       delegationCheck(resourceRef)
@@ -141,24 +156,15 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           setMissingAccessMessage(getMissingAccessMessage(response));
 
           if (hasAccess) {
-            const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
-              action: right.action,
-              rightKey: right.rightKey,
-              delegable: right.status === RightStatus.Delegable,
-              checked: currentRights.some((key) => key === right.rightKey) ? true : false,
-              resourceReference: right.resource,
-              delegationReason: right.details[0].code,
-            }));
+            const chipRights: ChipRight[] = mapRightsToChipRights(response, (right) =>
+              currentRights.some((key) => key === right.rightKey) ? true : false,
+            );
             setRights(chipRights);
           } else {
-            const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
-              action: right.action,
-              rightKey: right.rightKey,
-              delegable: right.status === RightStatus.Delegable,
-              checked: right.status === RightStatus.Delegable,
-              resourceReference: right.resource,
-              delegationReason: right.details[0].code,
-            }));
+            const chipRights: ChipRight[] = mapRightsToChipRights(
+              response,
+              (right) => right.status === RightStatus.Delegable,
+            );
             setRights(chipRights);
           }
         });
@@ -214,6 +220,14 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
         const notDelegatedActions = actionsNotDelegated(response.rightDelegationResults);
         if (notDelegatedActions.length > 0) {
+          setHasAccess(true);
+          setRights(
+            mapRightsToChipRights(
+              response.rightDelegationResults,
+              (right) => right.status === BFFDelegatedStatus.Delegated,
+            ),
+          );
+
           setDelegationErrorMessage(
             t('delegation_modal.technical_error_message.some_failed', {
               actions: notDelegatedActions.map((action) => action.action).join(', '),
@@ -225,12 +239,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
       },
       () => {
         setDelegationErrorMessage(t('delegation_modal.error_message', { name: toParty.name }));
-
-        openSnackbar({
-          message: t('delegation_modal.error_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Error,
-          duration: SnackbarDuration.infinite,
-        });
       },
     );
   };
