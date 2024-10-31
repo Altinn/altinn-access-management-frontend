@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Label, Search } from '@digdir/designsystemet-react';
+import { Divider, Label } from '@digdir/designsystemet-react';
 import {
   ClockDashedIcon,
   HandshakeIcon,

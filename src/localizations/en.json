@@ -203,7 +203,8 @@
     "no_resources chosen": "No services selected",
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected.",
     "popular_services": "Popular services",
-    "give_new_single_right": "Give power of attorney to new service"
+    "give_new_single_right": "Give power of attorney to new service",
+    "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
