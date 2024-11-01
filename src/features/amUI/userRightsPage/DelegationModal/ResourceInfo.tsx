@@ -171,10 +171,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     }
   }, [delegatedResources, currentRights]);
 
-  const actionsNotDelegated = (response: DelegationAccessResult[]) => {
-    return response.filter((result) => result.status === BFFDelegatedStatus.NotDelegated);
-  };
-
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
     if (representingParty) {
@@ -202,7 +198,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     }
   };
 
-  const delegateChosenRights = async () => {
+  const delegateChosenRights = () => {
     const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
 
     delegateRights(
@@ -218,7 +214,12 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           duration: SnackbarDuration.long,
         });
 
-        const notDelegatedActions = actionsNotDelegated(response.rightDelegationResults);
+        const notDelegatedActions = response.rightDelegationResults.filter(
+          (result) =>
+            rightsToDelegate.find((r) => r.rightKey === result.rightKey) &&
+            result.status === BFFDelegatedStatus.NotDelegated,
+        );
+
         if (notDelegatedActions.length > 0) {
           setHasAccess(true);
           setRights(

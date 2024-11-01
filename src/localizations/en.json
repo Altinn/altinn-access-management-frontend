@@ -233,6 +233,12 @@
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
     },
+    "technical_error_message": {
+      "heading": "Oops! Something went wrong.",
+      "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
+      "all_failed": "No rights were granted to {{name}}",
+      "some_failed": "We couldn't grant these rights: {{actions}}"
+    },
     "service_error": {
       "general_heading": "You cannot give access to this service",
       "technical_error_heading": "Something went wrong",

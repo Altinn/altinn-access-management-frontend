@@ -10,18 +10,6 @@
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:8080",
       "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": ".NET on remote Altinn.AccessManagement.UI",
-      "type": "coreclr",
-      "request": "attach",
-      "processName": "Altinn.AccessManagement.UI.exe" 
-    },
-    {
-      "name": ".NET on remote seelct process ",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:pickRemoteProcess}",
     }
   ]
 }
