@@ -26,6 +26,7 @@ import { useEditResource } from '@/resources/hooks/useEditResource';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
@@ -289,6 +290,9 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   return (
     <>
+      <StatusMessageForScreenReader politenessSetting='assertive'>
+        {delegationErrorMessage ?? missingAccessMessage ?? ''}
+      </StatusMessageForScreenReader>
       {!!resource && (
         <div className={classes.infoView}>
           <div className={classes.infoHeading}>
