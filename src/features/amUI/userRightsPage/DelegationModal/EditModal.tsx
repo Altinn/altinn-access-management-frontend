@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 
-import { ResourceInfo } from '../DelegationModal/ResourceInfo';
+import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
 
 import classes from './DelegationModal.module.css';
 

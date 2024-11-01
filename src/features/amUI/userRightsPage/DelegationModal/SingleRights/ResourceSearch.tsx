@@ -17,7 +17,7 @@ import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 
 import classes from './ResourceSearch.module.css';
-import { useDelegationModalContext } from './DelegationModalContext';
+import { useDelegationModalContext } from './../DelegationModalContext';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;

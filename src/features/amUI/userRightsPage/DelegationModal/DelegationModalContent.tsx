@@ -9,12 +9,14 @@ import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import classes from './DelegationModal.module.css';
-import { ResourceSearch } from './ResourceSearch';
-import { ResourceInfo } from './ResourceInfo';
+import { ResourceSearch } from './SingleRights/ResourceSearch';
+import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+import type { DelegationType } from './DelegationModal';
 
 export interface DelegationModalProps {
   toParty: Party;
+  delegationType: DelegationType;
 }
 
 export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {

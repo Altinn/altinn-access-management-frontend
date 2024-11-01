@@ -25,9 +25,12 @@ import { useEditResource } from '@/resources/hooks/useEditResource';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
-import { useSnackbar } from '../../common/Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
-import { DeleteResourceButton } from '../SingleRightsSection/DeleteResourceButton';
+import { useSnackbar } from '../../../common/Snackbar';
+import {
+  SnackbarDuration,
+  SnackbarMessageVariant,
+} from '../../../common/Snackbar/SnackbarProvider';
+import { DeleteResourceButton } from '../../SingleRightsSection/DeleteResourceButton';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
