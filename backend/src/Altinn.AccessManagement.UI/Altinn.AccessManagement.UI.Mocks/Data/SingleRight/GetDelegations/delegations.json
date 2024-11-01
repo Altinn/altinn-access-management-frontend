@@ -142,46 +142,5 @@
         ]
       }
     ]
-  },
-  {
-    "from": [
-      {
-        "id": "urn:altinn:organizationnumber",
-        "value": "123456789"
-      }
-    ],
-    "to": [
-      {
-        "id": "urn:altinn:ssn",
-        "value": "50019992"
-      }
-    ],
-    "rightDelegationResults": [
-      {
-        "rightKey": "app_actions_that_fail/write",
-        "resource": [
-          {
-            "id": "urn:altinn:resource",
-            "value": "app_actions_that_fail"
-          }
-        ],
-        "action": "write",
-        "status": "Delegated",
-        "details": [
-          {
-            "code": "Unknown",
-            "description": "Unknown",
-            "parameters": {
-              "roleRequirementsMatches": [
-                {
-                  "id": "urn:altinn:role",
-                  "value": "DAGL"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    ]
   }
 ]

@@ -174,6 +174,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
     if (representingParty) {
+      setDelegationErrorMessage(null);
       editResource(
         resource.identifier,
         representingParty,
