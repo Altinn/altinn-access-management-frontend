@@ -339,8 +339,10 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                   >
                     {t('delegation_modal.technical_error_message.heading')}
                   </Heading>
-                  <Paragraph>{t('delegation_modal.technical_error_message.message')}</Paragraph>
-                  {delegationErrorMessage}
+                  <Paragraph>
+                  {t('delegation_modal.technical_error_message.message')}
+                  {delegationErrorMessage} 
+                  </Paragraph>
                 </Alert>
               )}
               {missingAccessMessage && (
