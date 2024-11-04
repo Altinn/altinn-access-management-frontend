@@ -8,6 +8,8 @@ import { useEffect, useRef } from 'react';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
+import { SnackbarProvider } from '../../common/Snackbar';
+
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './ResourceSearch';
 import { ResourceInfo } from './ResourceInfo';
@@ -58,40 +60,44 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
         onClose={onClose}
         ref={modalRef}
       >
-        {infoView ? (
-          <Button
-            className={classes.backButton}
-            variant='tertiary'
-            color='neutral'
-            onClick={() => setInfoView(false)}
-            icon
-          >
-            <ArrowLeftIcon fontSize='1.5em' />
-            {t('common.back')}
-          </Button>
-        ) : (
-          <Heading
-            level={2}
-            size='sm'
-          >
-            <Trans
-              i18nKey='delegation_modal.give_to_name'
-              values={{ name: toParty.name }}
-              components={{ strong: <strong /> }}
-            />
-          </Heading>
-        )}
-        <div className={classes.content}>
-          {infoView && resourceToView ? (
-            <ResourceInfo
-              resource={resourceToView}
-              toParty={toParty}
-              onDelegate={onClose}
-            />
-          ) : (
-            <ResourceSearch onSelection={onSelection} />
-          )}
-        </div>
+        <SnackbarProvider>
+          <>
+            {infoView ? (
+              <Button
+                className={classes.backButton}
+                variant='tertiary'
+                color='neutral'
+                onClick={() => setInfoView(false)}
+                icon
+              >
+                <ArrowLeftIcon fontSize='1.5em' />
+                {t('common.back')}
+              </Button>
+            ) : (
+              <Heading
+                level={2}
+                size='sm'
+              >
+                <Trans
+                  i18nKey='delegation_modal.give_to_name'
+                  values={{ name: toParty.name }}
+                  components={{ strong: <strong /> }}
+                />
+              </Heading>
+            )}
+            <div className={classes.content}>
+              {infoView && resourceToView ? (
+                <ResourceInfo
+                  resource={resourceToView}
+                  toParty={toParty}
+                  onDelegate={onClose}
+                />
+              ) : (
+                <ResourceSearch onSelection={onSelection} />
+              )}
+            </div>
+          </>
+        </SnackbarProvider>
       </Modal>
     </Modal.Context>
   );
