@@ -223,7 +223,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         );
 
         if (notDelegatedActions.length > 0) {
-          setHasAccess(true);
           setRights(
             mapRightsToChipRights(
               response.rightDelegationResults,
@@ -241,7 +240,9 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         }
       },
       () => {
-        setDelegationErrorMessage(t('delegation_modal.error_message', { name: toParty.name }));
+        setDelegationErrorMessage(
+          t('delegation_modal.technical_error_message.all_failed', { name: toParty.name }),
+        );
       },
     );
   };
@@ -340,8 +341,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                     {t('delegation_modal.technical_error_message.heading')}
                   </Heading>
                   <Paragraph>
-                  {t('delegation_modal.technical_error_message.message')}
-                  {delegationErrorMessage} 
+                    {t('delegation_modal.technical_error_message.message')} {delegationErrorMessage}
                   </Paragraph>
                 </Alert>
               )}
