@@ -6,6 +6,7 @@ import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsAp
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 
 import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
+import { SnackbarProvider } from '../../common/Snackbar';
 
 import classes from './DelegationModal.module.css';
 
@@ -23,12 +24,14 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           className={classes.modalDialog}
           backdropClose
         >
-          <div className={classes.content}>
-            <ResourceInfo
-              resource={resource}
-              toParty={toParty}
-            />
-          </div>
+          <SnackbarProvider>
+            <div className={classes.content}>
+              <ResourceInfo
+                resource={resource}
+                toParty={toParty}
+              />
+            </div>
+          </SnackbarProvider>
         </Modal>
       </Modal.Context>
     );

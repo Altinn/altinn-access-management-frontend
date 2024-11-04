@@ -33,6 +33,7 @@ interface SnackbarOutput {
   storedMessages: SnackbarMessage[];
   closeSnackbarItem: (id: string) => void;
   openSnackbar: (input: SnackbarInput) => string;
+  closeAllSnackbars: () => void;
 }
 
 const SnackbarContext = createContext<SnackbarOutput | undefined>(undefined);
@@ -80,6 +81,13 @@ export const SnackbarProvider = ({ children }: { children: JSX.Element }) => {
     });
   }, []);
 
+  const closeAllSnackbars = () => {
+    setSnackbarConfig({
+      isOpen: false,
+      storedMessages: [],
+    });
+  };
+
   useEffect(() => {
     const storedMessageItem = snackbarConfig.storedMessages.find((item) => item.duration > 0);
     if (storedMessageItem) {
@@ -96,7 +104,9 @@ export const SnackbarProvider = ({ children }: { children: JSX.Element }) => {
   }, [snackbarConfig.storedMessages, closeSnackbarItem]);
 
   return (
-    <SnackbarContext.Provider value={{ ...snackbarConfig, closeSnackbarItem, openSnackbar }}>
+    <SnackbarContext.Provider
+      value={{ ...snackbarConfig, closeSnackbarItem, openSnackbar, closeAllSnackbars }}
+    >
       {children}
       <Snackbar />
     </SnackbarContext.Provider>

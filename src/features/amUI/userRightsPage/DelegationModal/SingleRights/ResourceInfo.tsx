@@ -10,6 +10,7 @@ import {
   useDelegationCheckMutation,
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import {
   RightStatus,
   type DelegationAccessResult,
@@ -24,6 +25,8 @@ import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useEditResource } from '@/resources/hooks/useEditResource';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
+import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
+import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
 import { useSnackbar } from '../../../common/Snackbar';
 import {
@@ -67,6 +70,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   );
   const { data: reportee } = useGetReporteeQuery();
 
+  const [delegationErrorMessage, setDelegationErrorMessage] = useState<string | null>(null);
   const [missingAccessMessage, setMissingAccessMessage] = useState<string | null>(null);
   const displayResourceAlert =
     error.isError ||
@@ -133,6 +137,21 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     return null;
   };
 
+  const mapRightsToChipRights = (
+    rights: DelegationAccessResult[],
+    checked: (right: DelegationAccessResult) => boolean,
+  ): ChipRight[] => {
+    return rights.map((right: DelegationAccessResult) => ({
+      action: right.action,
+      rightKey: right.rightKey,
+      delegable:
+        right.status === RightStatus.Delegable || right.status === BFFDelegatedStatus.Delegated,
+      checked: checked(right) || false,
+      resourceReference: right.resource,
+      delegationReason: right.details[0].code,
+    }));
+  };
+
   useEffect(() => {
     if (resourceRef) {
       delegationCheck(resourceRef)
@@ -141,31 +160,97 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           setMissingAccessMessage(getMissingAccessMessage(response));
 
           if (hasAccess) {
-            const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
-              action: right.action,
-              rightKey: right.rightKey,
-              delegable: right.status === RightStatus.Delegable,
-              checked: currentRights.some((key) => key === right.rightKey) ? true : false,
-              resourceReference: right.resource,
-              delegationReason: right.details[0].code,
-            }));
+            const chipRights: ChipRight[] = mapRightsToChipRights(response, (right) =>
+              currentRights.some((key) => key === right.rightKey) ? true : false,
+            );
             setRights(chipRights);
           } else {
-            const chipRights: ChipRight[] = response.map((right: DelegationAccessResult) => ({
-              action: right.action,
-              rightKey: right.rightKey,
-              delegable: right.status === RightStatus.Delegable,
-              checked: right.status === RightStatus.Delegable,
-              resourceReference: right.resource,
-              delegationReason: right.details[0].code,
-            }));
+            const chipRights: ChipRight[] = mapRightsToChipRights(
+              response,
+              (right) => right.status === RightStatus.Delegable,
+            );
             setRights(chipRights);
           }
         });
     }
   }, [delegatedResources, currentRights]);
 
-  const chips =
+  const saveEditedRights = () => {
+    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
+    if (representingParty) {
+      setDelegationErrorMessage(null);
+      editResource(
+        resource.identifier,
+        representingParty,
+        toParty,
+        currentRights,
+        newRights,
+        () => {
+          openSnackbar({
+            message: t('delegation_modal.edit_success', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Success,
+            duration: SnackbarDuration.long,
+          });
+          onDelegate?.();
+        },
+        () =>
+          openSnackbar({
+            message: t('delegation_modal.error_message', { name: toParty.name }),
+            variant: SnackbarMessageVariant.Error,
+            duration: SnackbarDuration.infinite,
+          }),
+      );
+    }
+  };
+
+  const delegateChosenRights = () => {
+    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
+
+    delegateRights(
+      rightsToDelegate,
+      toParty,
+      resource,
+      (response: DelegationResult) => {
+        setDelegationErrorMessage(null);
+
+        openSnackbar({
+          message: t('delegation_modal.success_message', { name: toParty.name }),
+          variant: SnackbarMessageVariant.Success,
+          duration: SnackbarDuration.long,
+        });
+
+        const notDelegatedActions = response.rightDelegationResults.filter(
+          (result) =>
+            rightsToDelegate.find((r) => r.rightKey === result.rightKey) &&
+            result.status === BFFDelegatedStatus.NotDelegated,
+        );
+
+        if (notDelegatedActions.length > 0) {
+          setRights(
+            mapRightsToChipRights(
+              response.rightDelegationResults,
+              (right) => right.status === BFFDelegatedStatus.Delegated,
+            ),
+          );
+
+          setDelegationErrorMessage(
+            t('delegation_modal.technical_error_message.some_failed', {
+              actions: notDelegatedActions.map((action) => action.action).join(', '),
+            }),
+          );
+        } else {
+          onDelegate?.();
+        }
+      },
+      () => {
+        setDelegationErrorMessage(
+          t('delegation_modal.technical_error_message.all_failed', { name: toParty.name }),
+        );
+      },
+    );
+  };
+
+  const chips = () =>
     resource?.resourceType === 'AltinnApp' ? (
       <Chip.Checkbox
         size='sm'
@@ -207,59 +292,11 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
       })
     );
 
-  const saveEditedRights = () => {
-    const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
-    if (representingParty) {
-      editResource(
-        resource.identifier,
-        representingParty,
-        toParty,
-        currentRights,
-        newRights,
-        () => {
-          openSnackbar({
-            message: t('delegation_modal.edit_success', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Success,
-            duration: SnackbarDuration.long,
-          });
-          onDelegate?.();
-        },
-        () =>
-          openSnackbar({
-            message: t('delegation_modal.error_message', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Error,
-            duration: SnackbarDuration.infinite,
-          }),
-      );
-    }
-  };
-
-  const delegateChosenRights = () => {
-    const rightsToDelegate = rights.filter((right: ChipRight) => right.checked);
-
-    delegateRights(
-      rightsToDelegate,
-      toParty,
-      resource,
-      () => {
-        openSnackbar({
-          message: t('delegation_modal.success_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Success,
-          duration: SnackbarDuration.long,
-        });
-        onDelegate?.();
-      },
-      () =>
-        openSnackbar({
-          message: t('delegation_modal.error_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Error,
-          duration: SnackbarDuration.infinite,
-        }),
-    );
-  };
-
   return (
     <>
+      <StatusMessageForScreenReader politenessSetting='assertive'>
+        {delegationErrorMessage ?? missingAccessMessage ?? ''}
+      </StatusMessageForScreenReader>
       {!!resource && (
         <div className={classes.infoView}>
           <div className={classes.infoHeading}>
@@ -295,6 +332,22 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
             />
           ) : (
             <>
+              {delegationErrorMessage && (
+                <Alert
+                  color='danger'
+                  size='sm'
+                >
+                  <Heading
+                    level={3}
+                    size='xs'
+                  >
+                    {t('delegation_modal.technical_error_message.heading')}
+                  </Heading>
+                  <Paragraph>
+                    {t('delegation_modal.technical_error_message.message')} {delegationErrorMessage}
+                  </Paragraph>
+                </Alert>
+              )}
               {missingAccessMessage && (
                 <Alert
                   color='info'
@@ -322,7 +375,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
                     />
                   )}
                 </Heading>
-                <div className={classes.rightChips}>{chips}</div>
+                <div className={classes.rightChips}>{chips()}</div>
               </div>
             </>
           )}

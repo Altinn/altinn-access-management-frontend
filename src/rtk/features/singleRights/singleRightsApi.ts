@@ -100,7 +100,7 @@ export const singleRightsApi = createApi({
         };
       },
     }),
-    delegateRights: builder.mutation<void, DelegationInputDto>({
+    delegateRights: builder.mutation<DelegationResult, DelegationInputDto>({
       query: (delegation) => ({
         url: `singleright/delegate/${getCookie('AltinnPartyId')}`,
         method: 'POST',
