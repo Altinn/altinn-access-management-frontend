@@ -230,7 +230,7 @@
     "edit_success": "Fullmakt oppdatert",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
-      "message": "Pga en teknisk ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
+      "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
       "all_failed": "Ingen ny fullmakt er gitt til {{name}}",
       "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
     },
