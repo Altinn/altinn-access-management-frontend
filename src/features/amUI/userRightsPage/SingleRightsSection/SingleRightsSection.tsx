@@ -10,7 +10,7 @@ import usePagination from '@/resources/hooks/usePagination';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { AmPagination } from '@/components/Paginering';
 
-import { DelegationModal } from '../DelegationModal/DelegationModal';
+import { DelegationModal, DelegationType } from '../DelegationModal/DelegationModal';
 
 import classes from './SingleRightsSection.module.css';
 import SingleRightItem from './SingleRightItem';
@@ -44,7 +44,10 @@ export const SingleRightsSection = () => {
 
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
-        <DelegationModal toParty={party} />
+        <DelegationModal
+          toParty={party}
+          delegationType={DelegationType.SingleRights}
+        />
 
         <List
           className={classes.singleRightsList}

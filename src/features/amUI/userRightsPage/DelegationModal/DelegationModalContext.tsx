@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 export interface DelegationModalProps {
   children: React.ReactNode;
 }
 
 interface DelegationModalContextProps {
   resourceToView: ServiceResource | undefined;
+  packageToView: AccessPackage | undefined;
   infoView: boolean;
   filters: string[];
   searchString: string;
@@ -17,6 +18,7 @@ interface DelegationModalContextProps {
   setSearchString: React.Dispatch<React.SetStateAction<string>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setResourceToView: React.Dispatch<React.SetStateAction<ServiceResource | undefined>>;
+  setPackageToView: React.Dispatch<React.SetStateAction<AccessPackage | undefined>>;
   onSelection: (resource: ServiceResource) => void;
 }
 
@@ -27,17 +29,24 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [resourceToView, setResourceToView] = useState<ServiceResource | undefined>(undefined);
+  const [packageToView, setPackageToView] = useState<AccessPackage | undefined>(undefined);
   const [infoView, setInfoView] = useState(false);
 
-  const onSelection = (resource: ServiceResource) => {
-    setInfoView(true);
-    setResourceToView(resource);
+  const onSelection = (resource?: ServiceResource, pack?: AccessPackage) => {
+    if (resource) {
+      setInfoView(true);
+      setResourceToView(resource);
+    } else if (pack) {
+      setInfoView(true);
+      setPackageToView(pack);
+    }
   };
 
   return (
     <DelegationModalContext.Provider
       value={{
         resourceToView,
+        packageToView,
         infoView,
         setInfoView,
         onSelection,
@@ -48,6 +57,7 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
         currentPage,
         setCurrentPage,
         setResourceToView,
+        setPackageToView,
       }}
     >
       {children}

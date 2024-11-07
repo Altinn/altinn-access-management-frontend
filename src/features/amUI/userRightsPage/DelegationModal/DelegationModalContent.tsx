@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react';
 
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { SnackbarProvider } from '../../common/Snackbar';
 
@@ -14,21 +15,35 @@ import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
-import type { DelegationType } from './DelegationModal';
+import { DelegationType } from './DelegationModal';
+import { PackageSearch } from './AccessPackages/PackageSearch';
 
 export interface DelegationModalProps {
   toParty: Party;
   delegationType: DelegationType;
 }
 
-export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
+export const DelegationModalContent = ({ toParty, delegationType }: DelegationModalProps) => {
   const { t } = useTranslation();
-  const { setInfoView, setResourceToView, resourceToView, infoView, setSearchString, setFilters } =
-    useDelegationModalContext();
+  const {
+    setInfoView,
+    setResourceToView,
+    resourceToView,
+    setPackageToView,
+    packageToView,
+    infoView,
+    setSearchString,
+    setFilters,
+  } = useDelegationModalContext();
 
-  const onSelection = (resource: ServiceResource) => {
+  const onResourceSelection = (resource?: ServiceResource) => {
     setInfoView(true);
     setResourceToView(resource);
+  };
+
+  const onPackageSelection = (accessPackage?: AccessPackage) => {
+    setInfoView(true);
+    setPackageToView(accessPackage);
   };
 
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -45,6 +60,35 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
     modalRef.current?.addEventListener('close', handleClose);
     return () => modalRef.current?.removeEventListener('close', handleClose);
   }, [onClose]);
+
+  let searchViewContent;
+  let infoViewContent;
+
+  switch (delegationType) {
+    case DelegationType.AccessPackage:
+      searchViewContent = (
+        <PackageSearch
+          onSelection={onPackageSelection}
+          toParty={toParty}
+        />
+      );
+      infoViewContent = <></>; // TODO: Add info view for chosen access package
+      break;
+    default:
+      searchViewContent = (
+        <ResourceSearch
+          onSelection={onResourceSelection}
+          toParty={toParty}
+        />
+      );
+      infoViewContent = resourceToView && (
+        <ResourceInfo
+          resource={resourceToView}
+          toParty={toParty}
+          onDelegate={onClose}
+        />
+      );
+  }
 
   return (
     <Modal.Context>
@@ -64,7 +108,7 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
       >
         <SnackbarProvider>
           <>
-            {infoView ? (
+            {infoView && (
               <Button
                 className={classes.backButton}
                 variant='tertiary'
@@ -75,29 +119,8 @@ export const DelegationModalContent = ({ toParty }: DelegationModalProps) => {
                 <ArrowLeftIcon fontSize='1.5em' />
                 {t('common.back')}
               </Button>
-            ) : (
-              <Heading
-                level={2}
-                size='sm'
-              >
-                <Trans
-                  i18nKey='delegation_modal.give_to_name'
-                  values={{ name: toParty.name }}
-                  components={{ strong: <strong /> }}
-                />
-              </Heading>
             )}
-            <div className={classes.content}>
-              {infoView && resourceToView ? (
-                <ResourceInfo
-                  resource={resourceToView}
-                  toParty={toParty}
-                  onDelegate={onClose}
-                />
-              ) : (
-                <ResourceSearch onSelection={onSelection} />
-              )}
-            </div>
+            <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
           </>
         </SnackbarProvider>
       </Modal>
