@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
@@ -214,7 +215,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     ApiName = resource.Title.GetValueOrDefault(languageCode),
                     Owner = resource.HasCompetentAuthority?.Name.GetValueOrDefault(languageCode),
                     Description = resource.RightDescription.GetValueOrDefault(languageCode),
-                    Scopes = resource.ResourceReferences?.Where(r => r.ReferenceType.Equals("MaskinportenScope")).Select(r => r.Reference).ToList() ?? new List<string>()
+                    Scopes = resource.ResourceReferences?.Where(r => r.ReferenceType.Equals(ReferenceType.MaskinportenScope)).Select(r => r.Reference).ToList() ?? new List<string>()
                 };
 
                 // Determine the organization name and number based on the delegation type.
