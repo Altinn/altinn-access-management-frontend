@@ -6,13 +6,6 @@ export class loginWithUser {
 
   async loginWithUser(testUser: string) {
     await this.page.goto(process.env.BASE_URL as string);
-    await this.page.route('https://www.google.com/recaptcha/api2/*', (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ success: true }),
-      }),
-    );
     await this.page.click("'Logg inn/Min profil'");
     await this.page.getByText('TestID Lag din egen').click();
     await this.page.locator("input[name='pid']").fill(testUser);
