@@ -3,7 +3,7 @@
     /// <summary>
     /// Model for representing an access package
     /// </summary>
-    internal class AccessPackage
+    public class AccessPackage
     {
         /// <summary>
         /// Identifier for the access package

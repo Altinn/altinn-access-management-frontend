@@ -7,7 +7,7 @@ using Altinn.Platform.Register.Models;
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
-    ///     Interface for client to integrate with maskinporten schema delegations API in platform
+    ///     Interface for client to integrate with access management
     /// </summary>
     public interface IAccessManagementClient
     {
