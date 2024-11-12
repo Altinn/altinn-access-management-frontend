@@ -34,7 +34,7 @@ export const DeleteResourceButton = ({
           : 'user_rights_page.delete_singleRight_error_message',
         { servicename: resource.title },
       ),
-      variant: isSuccessful ? SnackbarMessageVariant.Success : SnackbarMessageVariant.Error,
+      variant: SnackbarMessageVariant.Default,
       duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
     openSnackbar(snackbarData);
