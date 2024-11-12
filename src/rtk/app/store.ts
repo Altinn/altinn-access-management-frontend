@@ -37,6 +37,7 @@ const store = configureStore({
       overviewOrgApi.middleware,
       resourceApi.middleware,
       userInfoApi.middleware,
+      accessPackageApi.middleware,
     ),
 });
 

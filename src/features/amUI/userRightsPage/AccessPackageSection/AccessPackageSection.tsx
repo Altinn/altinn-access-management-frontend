@@ -20,7 +20,7 @@ export const AccessPackageSection = () => {
       <div className={classes.singleRightsSectionContainer}>
         <Heading
           level={2}
-          size='sm'
+          size='xs'
           id='access_packages_title'
         >
           {t('user_rights_page.access_packages_title')}

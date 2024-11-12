@@ -200,6 +200,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     {
         services.AddHttpClient<IProfileClient, ProfileClientMock>();
         services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();
+        services.AddHttpClient<IAccessPackageClient, AccessPackageClientMock>();
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
@@ -208,6 +209,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     {
         services.AddHttpClient<IProfileClient, ProfileClient>();
         services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
+        services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
         services.AddHttpClient<IRegisterClient, RegisterClient>();
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
         services.AddSingleton<IKeyVaultService, KeyVaultService>();
@@ -221,6 +223,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
+    services.AddSingleton<IAccessPackageService, AccessPackageService>();
 
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 

@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The <see cref="AccessPackageController"/> provides the API endpoints related to access packages.
     /// </summary>
     [Route("accessmanagement/api/v1/accesspackage")]
-    public class AccessPackageController : ControllerBase
+    public class AccessPackageController : Controller
     {
         private readonly IAccessPackageService _accessPackageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Search through all access packages and returns matches
+        ///     Search through all access packages and return matches
         /// </summary>
         /// <returns>Paginated search results</returns>
         [HttpGet]
@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
-            {
+           {
                 return await _accessPackageService.GetSearch(languageCode, searchString);
             }
             catch (HttpStatusException ex)

@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -43,5 +44,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Utils
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return content;
         }
+        public static Task<HttpResponseMessage> GetMockedHttpResponse(string path, string resourceFileName)
+        {
+            try
+            {
+                string data = GetMockDataSerialized(path, resourceFileName + ".json");
+                return Task.FromResult(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) });
+            }
+            catch
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+        }
+
     }
 }

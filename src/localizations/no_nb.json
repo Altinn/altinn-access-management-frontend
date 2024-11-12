@@ -203,7 +203,11 @@
     "no_resources chosen": "Ingen valgte tjenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
     "popular_services": "Populære tjenester:",
-    "give_new_single_right": "Gi fullmakt til ny tjeneste"
+    "give_new_single_right": "Gi fullmakt til ny tjeneste",
+    "current_services_title": "Fullmakt til {{count}} tjenester"
+  },
+  "access_packages": {
+    "give_new_button": "Gi fullmakt til ny tilgangspakke"
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -222,7 +226,8 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
   },
   "delegation_modal": {
-    "give_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
+    "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
+    "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
     "give_poa": "Gi fullmakt",

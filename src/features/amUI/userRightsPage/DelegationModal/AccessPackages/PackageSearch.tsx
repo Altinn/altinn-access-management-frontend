@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Heading, Search } from '@digdir/designsystemet-react';
-import { FilterIcon } from '@navikt/aksel-icons';
 
-import { Filter } from '@/components';
-import { arraysEqual, debounce } from '@/resources/utils';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { debounce } from '@/resources/utils';
+import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
+import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
@@ -22,15 +20,15 @@ const searchResultsPerPage = 5;
 
 export const PackageSearch = ({ onSelection, toParty }: PackageSearchProps) => {
   const { t } = useTranslation();
-  const { id } = useParams();
 
-  const { searchString, setSearchString, filters, setFilters, currentPage, setCurrentPage } =
-    useDelegationModalContext();
+  const { searchString, setSearchString, setCurrentPage } = useDelegationModalContext();
 
   const debouncedSearch = debounce((searchString: string) => {
     setSearchString(searchString);
     setCurrentPage(1);
   }, 300);
+
+  const { data } = useSearchQuery(searchString);
 
   return (
     <>
@@ -39,7 +37,7 @@ export const PackageSearch = ({ onSelection, toParty }: PackageSearchProps) => {
         size='sm'
       >
         <Trans
-          i18nKey='delegation_modal.give_to_name'
+          i18nKey='delegation_modal.give_package_to_name'
           values={{ name: toParty.name }}
           components={{ strong: <strong /> }}
         />
@@ -61,25 +59,26 @@ export const PackageSearch = ({ onSelection, toParty }: PackageSearchProps) => {
               }}
             />
           </div>
-          <Filter
-            className={classes.filter}
-            icon={<FilterIcon />}
-            label={t('single_rights.filter_label')}
-            options={[]}
-            applyButtonLabel={t('common.apply')}
-            resetButtonLabel={t('common.reset_choices')}
-            closeButtonAriaLabel={t('common.close')}
-            searchable
-            values={filters}
-            onApply={(filtersToApply: string[]) => {
-              if (!arraysEqual(filtersToApply, filters)) {
-                setFilters(filtersToApply);
-                setCurrentPage(1);
-              }
-            }}
-          />
         </div>
-        <div className={classes.searchResults}>test</div>
+        <div className={classes.searchResults}>
+          {data?.map((a) => (
+            <ul key={a.id}>
+              <div className={classes.packageArea}>
+                <Avatar
+                  size='sm'
+                  logoUrl={a.iconUrl}
+                  profile={'serviceOwner'}
+                />
+                {a.name}{' '}
+              </div>
+              <div className={classes.packages}>
+                {a.accessPackages.map((p) => (
+                  <ul key={p.id}>{p.name}</ul>
+                ))}
+              </div>
+            </ul>
+          ))}
+        </div>
       </search>
     </>
   );

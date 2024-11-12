@@ -39,6 +39,12 @@
   gap: 5px;
 }
 
+.packageArea {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 @media only screen and (max-width: 768px) {
   .searchInputs {
     flex-direction: column;

@@ -240,7 +240,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string resourceFileName = GetMockDataFilenameFromUrn(request.Resource);
             string path = Path.Combine(dataFolder, "SingleRight", "DelegationAccessCheckResponse");
 
-            return await GetMockedHttpResponse(path, resourceFileName);
+            return await Util.GetMockedHttpResponse(path, resourceFileName);
         }
 
         /// <inheritdoc />
@@ -249,7 +249,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
             string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation");
 
-            return await GetMockedHttpResponse(dataPath, resourceFileName);
+            return await Util.GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
         /// <inheritdoc />
@@ -260,7 +260,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "GetDelegations");
 
-            return await GetMockedHttpResponse(dataPath, "delegations");
+            return await Util.GetMockedHttpResponse(dataPath, "delegations");
         }
 
         /// <inheritdoc />
@@ -270,7 +270,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
-            var mockResponse = await GetMockedHttpResponse(dataPath, resourceId);
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
             if (mockResponse.IsSuccessStatusCode)
             {
                 return mockResponse;
@@ -283,7 +283,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
-            var mockResponse = await GetMockedHttpResponse(dataPath, rightKey);
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, rightKey);
             if (mockResponse.IsSuccessStatusCode)
             {
                 return mockResponse;
@@ -298,7 +298,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation");
 
-            var mockResponse = await GetMockedHttpResponse(dataPath, resourceId);
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
             if (mockResponse.IsSuccessStatusCode)
             {
                 return mockResponse;
@@ -321,19 +321,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return resourceReference[1].Value;
                 default:
                     return "Unknown";
-            }
-        }
-
-        private static Task<HttpResponseMessage> GetMockedHttpResponse(string path, string resourceFileName)
-        {
-            try
-            {
-                string data = Util.GetMockDataSerialized(path, resourceFileName + ".json");
-                return Task.FromResult(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(data) });
-            }
-            catch
-            {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
         }
 

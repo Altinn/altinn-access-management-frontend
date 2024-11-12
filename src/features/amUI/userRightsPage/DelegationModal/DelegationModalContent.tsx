@@ -63,6 +63,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
 
   let searchViewContent;
   let infoViewContent;
+  let triggerButtonText;
 
   switch (delegationType) {
     case DelegationType.AccessPackage:
@@ -73,6 +74,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
         />
       );
       infoViewContent = <></>; // TODO: Add info view for chosen access package
+      triggerButtonText = t('access_packages.give_new_button');
       break;
     default:
       searchViewContent = (
@@ -85,9 +87,9 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
         <ResourceInfo
           resource={resourceToView}
           toParty={toParty}
-          onDelegate={onClose}
         />
       );
+      triggerButtonText = t('single_rights.give_new_single_right');
   }
 
   return (
@@ -97,7 +99,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
         variant='secondary'
         className={classes.triggerButton}
       >
-        {t('single_rights.give_new_single_right')} <PlusIcon />
+        {triggerButtonText} <PlusIcon />
       </Modal.Trigger>
       <Modal
         className={classes.modalDialog}

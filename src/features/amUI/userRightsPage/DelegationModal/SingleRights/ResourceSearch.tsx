@@ -203,7 +203,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         size='sm'
       >
         <Trans
-          i18nKey='delegation_modal.give_to_name'
+          i18nKey='delegation_modal.give_service_to_name'
           values={{ name: toParty.name }}
           components={{ strong: <strong /> }}
         />

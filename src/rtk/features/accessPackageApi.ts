@@ -7,16 +7,16 @@ export interface AccessArea {
   name: string;
   description: string;
   iconUrl: string;
+  accessPackages: AccessPackage[];
 }
 
 export interface AccessPackage {
   id: string;
   name: string;
   description: string;
-  area: AccessArea;
 }
 
-const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'accesspackages';
+const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'accesspackage';
 
 export const accessPackageApi = createApi({
   reducerPath: 'accessPackageApi',
@@ -30,9 +30,9 @@ export const accessPackageApi = createApi({
   }),
   tagTypes: ['AccessPackages'],
   endpoints: (builder) => ({
-    search: builder.query<AccessPackage[], string>({
+    search: builder.query<AccessArea[], string>({
       query: (searchString) => {
-        return `search?&SearchString=${searchString}`;
+        return `search?&searchString=${searchString}`;
       },
     }),
   }),

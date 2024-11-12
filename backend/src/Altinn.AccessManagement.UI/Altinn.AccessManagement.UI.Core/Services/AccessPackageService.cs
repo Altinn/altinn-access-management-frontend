@@ -1,13 +1,8 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Text.Json;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -42,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (AccessPackage searchMatch in searchMatches)
             {
-                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Id);
+                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Area.Id);
 
                 if (premadeAreaIndex < 0)
                 {
