@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Badge, Heading, Paragraph, Spinner, Tabs } from '@digdir/designsystemet-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { Avatar } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
@@ -47,9 +47,9 @@ export const UserRightsPage = () => {
               <>
                 <div className={classes.headingRow}>
                   <Avatar
-                    name={name}
+                    name={name || ''}
                     size={'lg'}
-                    profile={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
+                    type={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
                   <div>
                     <Heading
