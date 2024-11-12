@@ -1,5 +1,5 @@
+import { Layout } from '@altinn/altinn-components';
 import React from 'react';
-import { Layout } from 'altinn-components/lib/components/Layout/Layout';
 
 interface FakePageWrapperProps {
   reporteeName: string;
@@ -10,6 +10,7 @@ export const FakePageWrapper = ({
   reporteeName,
   children,
 }: FakePageWrapperProps): React.ReactNode => {
+  const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <Layout
       theme={'neutral'}
@@ -23,8 +24,11 @@ export const FakePageWrapper = ({
             },
           ],
           expanded: false,
-          onToggle: () => {},
+          onToggle: () => {
+            setMenuOpen(!menuOpen);
+          },
           items: [],
+          variant: 'dropdown',
         },
       }}
       sidebar={{
@@ -32,7 +36,6 @@ export const FakePageWrapper = ({
           groups: {},
           items: [
             {
-              badge: '4',
               group: 1,
               icon: 'buildings2',
               id: '1',
@@ -46,14 +49,12 @@ export const FakePageWrapper = ({
               title: 'Brukere',
             },
             {
-              badge: '2',
               group: 2,
               icon: 'handshake',
               id: '3',
               title: 'Fullmakter',
             },
             {
-              badge: '11',
               group: 3,
               icon: 'inbox',
               id: '4',

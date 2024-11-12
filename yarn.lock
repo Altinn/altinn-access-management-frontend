@@ -12,6 +12,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@altinn/altinn-components@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@altinn/altinn-components@npm:0.4.1"
+  dependencies:
+    "@navikt/aksel-icons": "npm:^7.2.1"
+    classnames: "npm:^2.5.1"
+    react: "npm:^18.3.1"
+  peerDependencies:
+    react: ">=18"
+  checksum: 10/1fdf2fa27d78bd770ea4c3b867b037837521db09496338f2d9e1ad8a7b0f560e41c425871c219aedbdd529d2e76f28d860ddaa0644b4d79438c261c83dff84f6
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -2513,6 +2526,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
+    "@altinn/altinn-components": "npm:^0.4.1"
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/designsystemet-css": "npm:1.0.0-next.35"
     "@digdir/designsystemet-react": "npm:1.0.0-next.35"
@@ -2533,7 +2547,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@vitejs/plugin-react": "npm:^4.0.0"
-    altinn-components: ../altinn-components/
     axios: "npm:^1.7.2"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^7.0.3"
@@ -2629,19 +2642,6 @@ __metadata:
     json-schema-traverse: "npm:^0.4.1"
     uri-js: "npm:^4.2.2"
   checksum: 10/48d6ad21138d12eb4d16d878d630079a2bda25a04e745c07846a4ad768319533031e28872a9b3c5790fa1ec41aabdf2abed30a56e5a03ebc2cf92184b8ee306c
-  languageName: node
-  linkType: hard
-
-"altinn-components@file:../altinn-components/::locator=access-management%40workspace%3A.":
-  version: 0.4.1
-  resolution: "altinn-components@file:../altinn-components/#../altinn-components/::hash=daea24&locator=access-management%40workspace%3A."
-  dependencies:
-    "@navikt/aksel-icons": "npm:^7.2.1"
-    classnames: "npm:^2.5.1"
-    react: "npm:^18.3.1"
-  peerDependencies:
-    react: ">=18"
-  checksum: 10/5af77d433e3bdba7543c6d7cd2580fd249ac71ec62f0fb6a5ee9adeb9d171204886b4696963882b757d2e2c471a4408c6e066ff892de98c64e30bba3e22d57f2
   languageName: node
   linkType: hard
 
