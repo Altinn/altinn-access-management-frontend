@@ -60,7 +60,8 @@
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
     "delete_poa": "Slett fullmakt",
-    "has_poa": "Har fullmakt"
+    "has_poa": "Har fullmakt",
+    "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt."
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -228,6 +229,12 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
+    "technical_error_message": {
+      "heading": "Oi! Noe gikk galt",
+      "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
+      "all_failed": "Ingen ny fullmakt er gitt til {{name}}",
+      "some_failed": "Følgende tilganger ble ikke gitt: {{actions}}"
+    },
     "specific_rights": {
       "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv. Daglig leder eller hovedadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette."

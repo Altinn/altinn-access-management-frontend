@@ -203,7 +203,8 @@
     "no_resources chosen": "No services selected",
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected.",
     "popular_services": "Popular services",
-    "give_new_single_right": "Give power of attorney to new service"
+    "give_new_single_right": "Give power of attorney to new service",
+    "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -232,6 +233,12 @@
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
+    },
+    "technical_error_message": {
+      "heading": "Oops! Something went wrong.",
+      "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
+      "all_failed": "No rights were granted to {{name}}",
+      "some_failed": "We couldn't grant these rights: {{actions}}"
     },
     "service_error": {
       "general_heading": "You cannot give access to this service",

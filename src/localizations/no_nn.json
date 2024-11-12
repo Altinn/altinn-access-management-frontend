@@ -60,7 +60,8 @@
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
     "delete_poa": "Slett fullmakt",
-    "has_poa": "Har fullmakt"
+    "has_poa": "Har fullmakt",
+    "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt."
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -230,6 +231,12 @@
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
+    },
+    "technical_error_message": {
+      "heading": "Oi! Noko gjekk gale",
+      "message": "Grunna ein teknisk feil vart ikkje tenesta delegert. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram.",
+      "all_failed": "Ingen ny fullmakt er gjeven til {{name}}",
+      "some_failed": "Fylgjande tilgangar vart ikkje gjevne: {{actions}}"
     },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",

@@ -60,13 +60,11 @@
 }
 
 .success {
-  background: var(--ds-color-success-background-subtle);
-  color: var(--ds-color-success-text-default);
+  background: #111d46;
 }
 
 .error {
-  background: var(--ds-color-danger-background-subtle);
-  color: var(--ds-color-danger-text-default);
+  background: #861c2c;
 }
 
 .info {

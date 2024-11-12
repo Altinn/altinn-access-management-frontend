@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
-import type { UnknownAction } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
 
 import {
@@ -23,8 +22,7 @@ export const Default: StoryObj = {
     <Provider
       store={configureStore({
         preloadedState: initialMockState,
-        reducer: function (state: unknown, action: UnknownAction) {
-          console.log(action);
+        reducer: function (state: unknown) {
           return state;
         },
       })}
