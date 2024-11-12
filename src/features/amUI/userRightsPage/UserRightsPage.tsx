@@ -49,9 +49,7 @@ export const UserRightsPage = () => {
                   <Avatar
                     name={name}
                     size={'lg'}
-                    profile={
-                      party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'
-                    }
+                    profile={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
                   <div>
                     <Heading
