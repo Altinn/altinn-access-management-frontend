@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import type { ButtonProps } from '@digdir/designsystemet-react';
 import { Button } from '@digdir/designsystemet-react';
 
-import { Snackbar } from './Snackbar';
+import { SnackbarContainer } from './Snackbar';
 import type { SnackbarInput } from './SnackbarProvider';
 import { SnackbarMessageVariant, SnackbarProvider, useSnackbar } from './SnackbarProvider';
 
@@ -26,7 +26,7 @@ const SnackbarTrigger = ({ children, snackbarMessageProps, ...props }: SnackbarT
 
 export default {
   title: 'Features/AMUI/Snackbar',
-  component: Snackbar,
+  component: SnackbarContainer,
   render: (args) => (
     <div
       style={{
@@ -44,36 +44,36 @@ export default {
           <SnackbarTrigger
             snackbarMessageProps={{
               message: 'Success message',
-              variant: SnackbarMessageVariant.Success,
+              variant: SnackbarMessageVariant.Default,
               dismissable: true,
               duration: 5000,
             }}
           >
-            Trigger success
-          </SnackbarTrigger>
-          <SnackbarTrigger
-            color='danger'
-            snackbarMessageProps={{
-              message: 'Error message',
-              variant: SnackbarMessageVariant.Error,
-              dismissable: true,
-              duration: 5000,
-            }}
-          >
-            Trigger error
+            Trigger default
           </SnackbarTrigger>
           <SnackbarTrigger
             color='neutral'
             snackbarMessageProps={{
-              message: 'Info message',
-              variant: SnackbarMessageVariant.Info,
+              message: 'Error message',
+              variant: SnackbarMessageVariant.Accent,
               dismissable: true,
               duration: 5000,
             }}
           >
-            Trigger info
+            Trigger accent
           </SnackbarTrigger>
-          <Snackbar {...args} />
+          <SnackbarTrigger
+            color='neutral'
+            snackbarMessageProps={{
+              message: 'Error message',
+              variant: SnackbarMessageVariant.Accent,
+              dismissable: false,
+              duration: 5000,
+            }}
+          >
+            Trigger not dismissable
+          </SnackbarTrigger>
+          <SnackbarContainer {...args} />
         </>
       </SnackbarProvider>
     </div>

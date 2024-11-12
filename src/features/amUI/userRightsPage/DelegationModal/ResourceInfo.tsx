@@ -185,7 +185,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         () => {
           openSnackbar({
             message: t('delegation_modal.edit_success', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Success,
+            variant: SnackbarMessageVariant.Default,
             duration: SnackbarDuration.long,
           });
           onDelegate?.();
@@ -193,7 +193,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         () =>
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Error,
+            variant: SnackbarMessageVariant.Default,
             duration: SnackbarDuration.infinite,
           }),
       );
@@ -212,7 +212,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
         openSnackbar({
           message: t('delegation_modal.success_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Success,
+          variant: SnackbarMessageVariant.Default,
           duration: SnackbarDuration.long,
         });
 
