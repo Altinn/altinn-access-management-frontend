@@ -1,21 +1,24 @@
 import { Layout } from '@altinn/altinn-components';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface FakePageWrapperProps {
+interface PageLayoutWrapperProps {
   reporteeName: string;
   children?: React.ReactNode;
 }
 
-export const FakePageWrapper = ({
+export const PageLayoutWrapper = ({
   reporteeName,
   children,
-}: FakePageWrapperProps): React.ReactNode => {
+}: PageLayoutWrapperProps): React.ReactNode => {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <Layout
       theme={'neutral'}
       header={{
         menu: {
+          menuLabel: t('header.menu-label'),
           accounts: [
             {
               name: reporteeName,

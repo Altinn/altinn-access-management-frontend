@@ -14,7 +14,7 @@ import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRigh
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
-import { FakePageWrapper } from '../common/FakePageWrapper';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
 
 import classes from './UserRightsPage.module.css';
@@ -41,7 +41,7 @@ export const UserRightsPage = () => {
   return (
     <SnackbarProvider>
       <PageWrapper>
-        <FakePageWrapper reporteeName={reportee?.name || ''}>
+        <PageLayoutWrapper reporteeName={reportee?.name || ''}>
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
             {!isLoading && singleRights ? (
               <>
@@ -106,7 +106,7 @@ export const UserRightsPage = () => {
               <Spinner title='loading' />
             )}
           </PageContainer>
-        </FakePageWrapper>
+        </PageLayoutWrapper>
       </PageWrapper>
     </SnackbarProvider>
   );
