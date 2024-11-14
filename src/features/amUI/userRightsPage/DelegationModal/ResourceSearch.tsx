@@ -3,6 +3,7 @@ import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/design
 import { useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router-dom';
+import { Avatar } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -13,7 +14,6 @@ import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
 import { Filter, List, ListItem } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 
 import classes from './ResourceSearch.module.css';
@@ -157,8 +157,8 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
         <span className={classes.resource}>
           <Avatar
             size='md'
-            profile='serviceOwner'
-            logoUrl={resource.resourceOwnerLogoUrl}
+            type='company'
+            imageUrl={resource.resourceOwnerLogoUrl}
             name={resource.resourceOwnerName}
           />
           <span className={classes.resourceHeading}>

@@ -63,6 +63,9 @@
     "delete_poa": "Delete power of attorney",
     "has_poa": "Has power of attorney"
   },
+  "header": {
+    "menu-label": "Menu"
+  },
   "error_page": {
     "not_found_site_type": "Error 404",
     "not_found_site_header": "Oops! You have tried to reach a page we do not know",

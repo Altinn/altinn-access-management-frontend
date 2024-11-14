@@ -2,9 +2,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React, { useRef } from 'react';
+import { Avatar } from '@altinn/altinn-components';
 
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { ListItem } from '@/features/amUI/common/List';
 import { type Party } from '@/rtk/features/lookup/lookupApi';
 
@@ -29,9 +29,9 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) 
       >
         <Avatar
           size='md'
-          profile='serviceOwner'
+          type='company'
           className={classes.icon}
-          logoUrl={resource.resourceOwnerLogoUrl}
+          imageUrl={resource.resourceOwnerLogoUrl}
           name={resource.resourceOwnerName}
         />
         <div className={classes.title}>{resource.title}</div>
