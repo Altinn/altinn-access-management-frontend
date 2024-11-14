@@ -1,9 +1,9 @@
-﻿using Altinn.AccessManagement.UI.Core.Helpers;
+﻿using System.Net;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {

@@ -30,13 +30,23 @@
         /// </summary>
         public List<AccessPackage> AccessPackages { get; set; }
 
-        public AccessAreaFE( AccessArea area, List<AccessPackage> packages)
+        /// <summary>
+        /// Constructor for enritching an area with access packages to make it into an AccessAreaFE
+        /// </summary>
+        public AccessAreaFE(AccessArea area, List<AccessPackage> packages)
         {
             Id = area.Id;
             Name = area.Name;
             Description = area.Description;
             IconUrl = area.IconUrl;
             AccessPackages = packages;
+        }
+
+        /// <summary>
+        /// Default contructor
+        /// </summary>
+        public AccessAreaFE()
+        {
         }
     }
 }

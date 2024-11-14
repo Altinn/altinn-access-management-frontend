@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
+import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -16,19 +17,18 @@ export interface PackageSearchProps {
   toParty: Party;
 }
 
-const searchResultsPerPage = 5;
-
-export const PackageSearch = ({ onSelection, toParty }: PackageSearchProps) => {
+export const PackageSearch = ({ toParty }: PackageSearchProps) => {
   const { t } = useTranslation();
+  const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
   const { searchString, setSearchString, setCurrentPage } = useDelegationModalContext();
 
   const debouncedSearch = debounce((searchString: string) => {
-    setSearchString(searchString);
+    setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
 
-  const { data } = useSearchQuery(searchString);
+  const { data } = useSearchQuery(debouncedSearchString);
 
   return (
     <>
@@ -51,9 +51,11 @@ export const PackageSearch = ({ onSelection, toParty }: PackageSearchProps) => {
               value={searchString}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 debouncedSearch(event.target.value);
+                setSearchString(event.target.value);
               }}
               size='sm'
               onClear={() => {
+                setDebouncedSearchString('');
                 setSearchString('');
                 setCurrentPage(1);
               }}
