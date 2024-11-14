@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Heading, Search } from '@digdir/designsystemet-react';
+import { Heading, Paragraph, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
 import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
+import { List, ListItem } from '@/components';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
@@ -62,25 +63,36 @@ export const PackageSearch = ({ toParty }: PackageSearchProps) => {
             />
           </div>
         </div>
-        <div className={classes.searchResults}>
+        <List
+          spacing
+          className={classes.searchResults}
+        >
           {data?.map((a) => (
-            <ul key={a.id}>
+            <ListItem key={a.id}>
               <div className={classes.packageArea}>
                 <Avatar
                   size='sm'
                   logoUrl={a.iconUrl}
                   profile={'serviceOwner'}
                 />
-                {a.name}{' '}
+                <Heading size='2xs'>{a.name}</Heading>
               </div>
-              <div className={classes.packages}>
+              <Paragraph size='xs'>{a.description}</Paragraph>
+              <List
+                spacing
+                className={classes.packages}
+              >
                 {a.accessPackages.map((p) => (
-                  <ul key={p.id}>{p.name}</ul>
+                  <ListItem key={p.id}>
+                    <Paragraph size='xs'>
+                      <i>{p.name}</i>
+                    </Paragraph>
+                  </ListItem>
                 ))}
-              </div>
-            </ul>
+              </List>
+            </ListItem>
           ))}
-        </div>
+        </List>
       </search>
     </>
   );

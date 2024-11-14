@@ -14,6 +14,12 @@ type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
 export default {
   title: 'Features/AMUI/DelegationModal',
   component: DelegationModal,
+  argTypes: {
+    delegationType: {
+      options: [DelegationType.SingleRights, DelegationType.AccessPackage],
+      control: { type: 'inline-radio' },
+    },
+  },
   render: (props) => (
     <SnackbarProvider>
       <Provider store={store}>

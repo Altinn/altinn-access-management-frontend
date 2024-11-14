@@ -90,15 +90,5 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<AccessAreaFE> actualResources = JsonSerializer.Deserialize<List<AccessAreaFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-
-        private static IHttpContextAccessor GetHttpContextAccessorMock(string partytype, string id)
-        {
-            HttpContext httpContext = new DefaultHttpContext();
-            httpContext.Request.RouteValues.Add(partytype, id);
-
-            Mock<IHttpContextAccessor> httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-            httpContextAccessorMock.Setup(h => h.HttpContext).Returns(httpContext);
-            return httpContextAccessorMock.Object;
-        }
     }
 }
