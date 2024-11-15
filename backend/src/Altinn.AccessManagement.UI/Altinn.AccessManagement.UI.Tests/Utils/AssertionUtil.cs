@@ -1,5 +1,7 @@
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -299,7 +301,31 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 Assert.Single(a);
             }
         }
-           public static void AssertEqual(List<OrganizationApiSet> expected, List<OrganizationApiSet> actual)
+
+        public static void AssertEqual(AccessAreaFE expected, AccessAreaFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+            Assert.Equal(expected.IconUrl, actual.IconUrl);
+            AssertCollections(expected.AccessPackages, actual.AccessPackages, AssertEqual);
+
+        }
+
+        public static void AssertEqual(AccessPackage expected, AccessPackage actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+        }
+
+        public static void AssertEqual(List<OrganizationApiSet> expected, List<OrganizationApiSet> actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

@@ -19,6 +19,7 @@ import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
 
 import classes from './UserRightsPage.module.css';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
+import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -95,7 +96,7 @@ export const UserRightsPage = () => {
                     </Tabs.Tab>
                   </Tabs.List>
                   <Tabs.Panel value='packages'>
-                    {t('user_rights_page.access_packages_title')}
+                    <AccessPackageSection />
                   </Tabs.Panel>
                   <Tabs.Panel value='singleRights'>
                     <SingleRightsSection />

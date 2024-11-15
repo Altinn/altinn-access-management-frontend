@@ -9,6 +9,7 @@ import singleRightsReducer from '../features/singleRights/singleRightsSlice';
 import { apiDelegationApi } from '../features/apiDelegation/apiDelegationApi';
 import { overviewOrgApi } from '../features/apiDelegation/overviewOrg/overviewOrgApi';
 import { resourceApi } from '../features/resourceApi';
+import { accessPackageApi } from '../features/accessPackageApi';
 import { lookupApi } from '../features/lookup/lookupApi';
 import { userInfoApi } from '../features/userInfo/userInfoApi';
 
@@ -25,6 +26,7 @@ const store = configureStore({
     [apiDelegationApi.reducerPath]: apiDelegationApi.reducer,
     [overviewOrgApi.reducerPath]: overviewOrgApi.reducer,
     [resourceApi.reducerPath]: resourceApi.reducer,
+    [accessPackageApi.reducerPath]: accessPackageApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -35,6 +37,7 @@ const store = configureStore({
       overviewOrgApi.middleware,
       resourceApi.middleware,
       userInfoApi.middleware,
+      accessPackageApi.middleware,
     ),
 });
 

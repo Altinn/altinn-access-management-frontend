@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/designsystemet-react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { FilterIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router-dom';
 import { Avatar } from '@altinn/altinn-components';
@@ -15,17 +15,19 @@ import { arraysEqual, debounce } from '@/resources/utils';
 import { Filter, List, ListItem } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
+import type { Party } from '@/rtk/features/lookup/lookupApi';
 
 import classes from './ResourceSearch.module.css';
-import { useDelegationModalContext } from './DelegationModalContext';
+import { useDelegationModalContext } from './../DelegationModalContext';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
+  toParty: Party;
 }
 
 const searchResultsPerPage = 7;
 
-export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
+export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) => {
   const { t } = useTranslation();
   const { id } = useParams();
 
@@ -195,44 +197,56 @@ export const ResourceSearch = ({ onSelection }: ResourceSearchProps) => {
   }, 300);
 
   return (
-    <search className={classes.searchSection}>
-      <div className={classes.searchInputs}>
-        <div className={classes.searchField}>
-          <Search
-            label={t('single_rights.search_label')}
-            hideLabel={true}
-            value={searchString}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchString(event.target.value);
-              debouncedSearch(event.target.value);
-            }}
-            size='sm'
-            onClear={() => {
-              setSearchString('');
-              setDebouncedSearchString('');
-              setCurrentPage(1);
+    <>
+      <Heading
+        level={2}
+        size='sm'
+      >
+        <Trans
+          i18nKey='delegation_modal.give_service_to_name'
+          values={{ name: toParty.name }}
+          components={{ strong: <strong /> }}
+        />
+      </Heading>
+      <search className={classes.searchSection}>
+        <div className={classes.searchInputs}>
+          <div className={classes.searchField}>
+            <Search
+              label={t('single_rights.search_label')}
+              hideLabel={true}
+              value={searchString}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setSearchString(event.target.value);
+                debouncedSearch(event.target.value);
+              }}
+              size='sm'
+              onClear={() => {
+                setSearchString('');
+                setDebouncedSearchString('');
+                setCurrentPage(1);
+              }}
+            />
+          </div>
+          <Filter
+            className={classes.filter}
+            icon={<FilterIcon />}
+            label={t('single_rights.filter_label')}
+            options={filterOptions}
+            applyButtonLabel={t('common.apply')}
+            resetButtonLabel={t('common.reset_choices')}
+            closeButtonAriaLabel={t('common.close')}
+            searchable
+            values={filters}
+            onApply={(filtersToApply: string[]) => {
+              if (!arraysEqual(filtersToApply, filters)) {
+                setFilters(filtersToApply);
+                setCurrentPage(1);
+              }
             }}
           />
         </div>
-        <Filter
-          className={classes.filter}
-          icon={<FilterIcon />}
-          label={t('single_rights.filter_label')}
-          options={filterOptions}
-          applyButtonLabel={t('common.apply')}
-          resetButtonLabel={t('common.reset_choices')}
-          closeButtonAriaLabel={t('common.close')}
-          searchable
-          values={filters}
-          onApply={(filtersToApply: string[]) => {
-            if (!arraysEqual(filtersToApply, filters)) {
-              setFilters(filtersToApply);
-              setCurrentPage(1);
-            }
-          }}
-        />
-      </div>
-      <div className={classes.searchResults}>{searchResults()}</div>
-    </search>
+        <div className={classes.searchResults}>{searchResults()}</div>
+      </search>
+    </>
   );
 };

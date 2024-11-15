@@ -61,7 +61,8 @@
     "update_poa": "Update power of attorney",
     "give_poa": "Give power of attorney",
     "delete_poa": "Delete power of attorney",
-    "has_poa": "Has power of attorney"
+    "has_poa": "Has power of attorney",
+    "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload."
   },
   "header": {
     "menu-label": "Menu"
@@ -207,7 +208,10 @@
     "restart_prompter_no_resources_chosen_ingress": "We cannot see that any services have been selected.",
     "popular_services": "Popular services",
     "give_new_single_right": "Give power of attorney to new service",
-    "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload."
+    "current_services_title": "Power of attorney to {{count}} services"
+  },
+  "access_packages": {
+    "give_new_button": "Give power of attorney to new access package"
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -226,7 +230,8 @@
     "delete_singleRight_error_message": "Failed to delete access to service: {{servicename}}"
   },
   "delegation_modal": {
-    "give_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
+    "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
     "name_will_receive": "<strong>{{name}}</strong> will receive:",
     "name_has_the_following": "<strong>{{name}}</strong> has the following:",
     "give_poa": "Give power of attorney",

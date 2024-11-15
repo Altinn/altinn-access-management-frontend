@@ -205,7 +205,11 @@
     "no_resources chosen": "Ingen valde tenester",
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
     "popular_services": "Populære tenester:",
-    "give_new_single_right": "Gi fullmakt til ny teneste"
+    "give_new_single_right": "Gi fullmakt til ny teneste",
+    "current_services_title": "Fullmakt til {{count}} tenester"
+  },
+  "access_packages": {
+    "give_new_button": "Gi fullmakt til ny tilgangspakke"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -224,7 +228,8 @@
     "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tenesta {{servicename}}"
   },
   "delegation_modal": {
-    "give_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
+    "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
+    "give_package_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tilgangspakke",
     "name_will_receive": "<strong>{{name}}</strong> vil få:",
     "name_has_the_following": "<strong>{{name}}</strong> har:",
     "give_poa": "Gi fullmakt",

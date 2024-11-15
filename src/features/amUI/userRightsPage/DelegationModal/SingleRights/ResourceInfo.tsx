@@ -28,9 +28,12 @@ import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 
-import { useSnackbar } from '../../common/Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
-import { DeleteResourceButton } from '../SingleRightsSection/DeleteResourceButton';
+import { useSnackbar } from '../../../common/Snackbar';
+import {
+  SnackbarDuration,
+  SnackbarMessageVariant,
+} from '../../../common/Snackbar/SnackbarProvider';
+import { DeleteResourceButton } from '../../SingleRightsSection/DeleteResourceButton';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
