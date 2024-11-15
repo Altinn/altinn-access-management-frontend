@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Badge, Heading, Paragraph, Spinner, Tabs } from '@digdir/designsystemet-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { Avatar } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
 import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
@@ -14,7 +14,7 @@ import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRigh
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
-import { FakePageWrapper } from '../common/FakePageWrapper';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
 
 import classes from './UserRightsPage.module.css';
@@ -42,17 +42,15 @@ export const UserRightsPage = () => {
   return (
     <SnackbarProvider>
       <PageWrapper>
-        <FakePageWrapper reporteeName={reportee?.name || ''}>
+        <PageLayoutWrapper reporteeName={reportee?.name || ''}>
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
             {!isLoading && singleRights ? (
               <>
                 <div className={classes.headingRow}>
                   <Avatar
-                    name={name}
+                    name={name || ''}
                     size={'lg'}
-                    profile={
-                      party?.partyTypeName === PartyType.Organization ? 'organization' : 'person'
-                    }
+                    type={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
                   <div>
                     <Heading
@@ -109,7 +107,7 @@ export const UserRightsPage = () => {
               <Spinner title='loading' />
             )}
           </PageContainer>
-        </FakePageWrapper>
+        </PageLayoutWrapper>
       </PageWrapper>
     </SnackbarProvider>
   );

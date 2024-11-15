@@ -4,6 +4,8 @@ import '@digdir/designsystemet-theme/altinn.css';
 import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
 
+import '@altinn/altinn-components/lib/css/global.css';
+
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next } from 'react-i18next';

@@ -6,7 +6,7 @@ import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 
-import { FakePageWrapper } from '../common/FakePageWrapper';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 import { UsersList } from './UsersList';
 import classes from './UsersList.module.css';
@@ -18,7 +18,7 @@ export const UsersPage = () => {
 
   return (
     <PageWrapper>
-      <FakePageWrapper reporteeName={reportee?.name || ''}>
+      <PageLayoutWrapper reporteeName={reportee?.name || ''}>
         <Heading
           level={1}
           size='md'
@@ -27,7 +27,7 @@ export const UsersPage = () => {
           {t('users_page.main_page_heading', { name: reportee?.name || '' })}
         </Heading>
         <UsersList />
-      </FakePageWrapper>
+      </PageLayoutWrapper>
     </PageWrapper>
   );
 };

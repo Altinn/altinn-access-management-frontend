@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
+import type { IconName } from '@altinn/altinn-components';
 
-import { Snackbar } from './Snackbar';
+import { SnackbarContainer } from './Snackbar';
 
 export enum SnackbarMessageVariant {
-  Success = 'success',
-  Error = 'error',
-  Info = 'info',
+  Default = 'default',
+  Accent = 'accent',
 }
 
 export interface SnackbarMessage {
@@ -14,6 +14,7 @@ export interface SnackbarMessage {
   variant: SnackbarMessageVariant;
   duration: number;
   dismissable: boolean;
+  icon?: IconName;
 }
 
 interface SnackbarConfig {
@@ -56,7 +57,7 @@ export const SnackbarProvider = ({ children }: { children: JSX.Element }) => {
 
   const openSnackbar = ({
     message,
-    variant = SnackbarMessageVariant.Info,
+    variant = SnackbarMessageVariant.Default,
     dismissable = true,
     duration = defaultDuration,
   }: SnackbarInput): string => {
@@ -108,7 +109,7 @@ export const SnackbarProvider = ({ children }: { children: JSX.Element }) => {
       value={{ ...snackbarConfig, closeSnackbarItem, openSnackbar, closeAllSnackbars }}
     >
       {children}
-      <Snackbar />
+      <SnackbarContainer />
     </SnackbarContext.Provider>
   );
 };

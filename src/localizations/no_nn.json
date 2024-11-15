@@ -63,6 +63,9 @@
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt."
   },
+  "header" : {
+    "menu-label": "Meny"
+  },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
     "not_found_site_header": "Oi! Du prøvde å komme til ei side vi ikkje veit om",

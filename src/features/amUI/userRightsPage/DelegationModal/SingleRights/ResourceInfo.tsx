@@ -3,6 +3,7 @@ import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Avatar } from '@altinn/altinn-components';
 
 import { useGetReporteePartyQuery, type Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -18,7 +19,6 @@ import {
 } from '@/dataObjects/dtos/resourceDelegation';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
@@ -188,7 +188,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         () => {
           openSnackbar({
             message: t('delegation_modal.edit_success', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Success,
+            variant: SnackbarMessageVariant.Default,
             duration: SnackbarDuration.long,
           });
           onDelegate?.();
@@ -196,7 +196,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         () =>
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty.name }),
-            variant: SnackbarMessageVariant.Error,
+            variant: SnackbarMessageVariant.Default,
             duration: SnackbarDuration.infinite,
           }),
       );
@@ -215,7 +215,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
         openSnackbar({
           message: t('delegation_modal.success_message', { name: toParty.name }),
-          variant: SnackbarMessageVariant.Success,
+          variant: SnackbarMessageVariant.Default,
           duration: SnackbarDuration.long,
         });
 
@@ -302,8 +302,8 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
           <div className={classes.infoHeading}>
             <Avatar
               size='lg'
-              profile='serviceOwner'
-              logoUrl={resource.resourceOwnerLogoUrl}
+              type='company'
+              imageUrl={resource.resourceOwnerLogoUrl}
               name={resource.resourceOwnerName}
             />
             <div className={classes.resource}>

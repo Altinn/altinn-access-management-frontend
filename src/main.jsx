@@ -2,6 +2,7 @@
 import '@digdir/designsystemet-theme/altinn.css';
 import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
+import '@altinn/altinn-components/lib/css/global.css';
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -11,6 +12,7 @@ import { initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { use } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { RootProvider } from '@altinn/altinn-components/lib/components/RootProvider';
 
 import { ReloadAlert } from '@/components/ReloadAlert/ReloadAlert';
 import { RefreshToken } from '@/resources/Token/RefreshToken';
@@ -58,9 +60,11 @@ createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ReloadAlert />
-        <RefreshToken />
-        <RouterProvider router={Router}></RouterProvider>
+        <RootProvider>
+          <ReloadAlert />
+          <RefreshToken />
+          <RouterProvider router={Router}></RouterProvider>
+        </RootProvider>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,

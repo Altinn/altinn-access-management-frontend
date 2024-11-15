@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Paragraph, Tag } from '@digdir/designsystemet-react';
 import { useEffect, useId, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
-
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
+import { Avatar } from '@altinn/altinn-components';
 
 import type { FilteredRightHolder } from '../useFilteredRightHolders';
+import { ListItem } from '../../common/List';
 
 import classes from './UserItem.module.css';
-import { ListItem } from '../../common/List';
 
 interface UserProps {
   /** The user object containing user details. */
@@ -107,7 +106,7 @@ export const UserItem = ({
             {icon && (
               <Avatar
                 size={size}
-                profile='organization'
+                type='company'
                 name={user.name}
                 className={classes.icon}
               />
