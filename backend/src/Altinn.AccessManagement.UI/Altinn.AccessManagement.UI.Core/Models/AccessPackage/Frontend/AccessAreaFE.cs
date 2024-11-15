@@ -16,7 +16,7 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Descriotion
+        /// Description
         /// </summary>
         public string Description { get; set; }
 
