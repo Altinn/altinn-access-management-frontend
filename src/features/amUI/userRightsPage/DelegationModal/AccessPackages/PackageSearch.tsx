@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Paragraph, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
+import { Avatar } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
-import { Avatar } from '@/features/amUI/common/Avatar/Avatar';
 import { List, ListItem } from '@/components';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -72,8 +72,9 @@ export const PackageSearch = ({ toParty }: PackageSearchProps) => {
               <div className={classes.packageArea}>
                 <Avatar
                   size='sm'
-                  logoUrl={a.iconUrl}
-                  profile={'serviceOwner'}
+                  imageUrl={a.iconUrl}
+                  name={a.name}
+                  type={'company'}
                 />
                 <Heading size='2xs'>{a.name}</Heading>
               </div>

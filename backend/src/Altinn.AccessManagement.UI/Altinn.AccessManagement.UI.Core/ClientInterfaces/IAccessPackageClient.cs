@@ -1,10 +1,4 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {

@@ -1,13 +1,10 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
+    /// <summary>
+    /// Servoice for access package logic
+    /// </summary>
     public interface IAccessPackageService
     {
         /// <summary>
