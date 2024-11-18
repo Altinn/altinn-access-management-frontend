@@ -10,34 +10,58 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegateRights,
     deleteRights,
     logoutUser,
+    instantiateResources,
     coverebyRights,
+    delegateRoles,
     context,
   }) => {
-    test.setTimeout(60000 * 3);
+    test.setTimeout(300000);
 
-    await login.loginWithUser('03835898554');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    await login.loginWithUser('04885299593');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to ROMANTISK ESKE
-    await deleteRights.revokeRightsSSN('ROMANTISK ESKE');
+    await deleteRights.revokeRightsSSN('SKYFRI GATE');
 
     //To delegate rights
     // WHEN user delegates to ROMANTISK ESKE
-    await delegate.delegateToSSN('11868898854', 'ESKE');
+    await delegate.delegateToSSN('19856097121', 'GATE');
+    await delegateRoles.delegateRoles(
+      'Tilgangsstyring',
+      'Begrenset signeringsrettighet',
+      'SKYFRI GATE',
+    );
     await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('Automatiseringstest for Access Management');
+    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
     await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
-    await logoutUser.gotoLogoutPage('OPPKLARENDE OMKOMMEN TIGER AS');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     // await context1.close();
     await context.clearCookies();
 
     //Login with covereby User
 
-    await login.loginWithUser('11868898854');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    await login.loginWithUser('19856097121');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
+
+    //Instantiate app to which user had got rights
+    await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
     // await context.close();
+
+    //To delegate rights
+    // WHEN user delegates to KLIPPFISK
+    await delegate.delegateToSSN('04880748144', 'KLIPPFISK');
+    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
+    await context.clearCookies();
+
+    //Instantiate app to which user had got rights
+    await login.loginWithUser('04880748144');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await coverebyRights.checkCoverebyRights();
+    await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
   });
 
   test('User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to Org B', async ({
@@ -47,12 +71,14 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     deleteRights,
     logoutUser,
     coverebyRights,
+    instantiateResources,
+    delegateRoles,
     context,
   }) => {
     test.setTimeout(60000 * 3);
 
-    await login.loginWithUser('03835898554');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    await login.loginWithUser('04885299593');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to OPPKLARENDE OMKOMMEN TIGER AS
@@ -62,18 +88,43 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     //To delegate rights
     // WHEN user delegates to
     await delegate.delegateToOrg('310832170', 'GJESTFRI RESERVERT HUND DA');
+    await delegateRoles.delegateRoles(
+      'Tilgangsstyring',
+      'Begrenset signeringsrettighet',
+      'GJESTFRI RESERVERT HUND DA',
+    );
     await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('Automatiseringstest for Access Management');
+    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
     await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
-    await logoutUser.gotoLogoutPage('OPPKLARENDE OMKOMMEN TIGER AS');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     // await context1.close();
     await context.clearCookies();
 
     //Login with covereby User
 
     await login.loginWithUser('21908498426');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
+
+    //Instantiate app to which user had got rights
+    await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
+    // await context.close();
+
+    //Delete rights
+    await deleteRights.revokeRightsOrg('UNDERFUNDIG TROFAST TIGER AS', buttonIndex);
+
+    //Delegate to another org
+    await delegate.delegateToOrg('313948579', 'UNDERFUNDIG TROFAST TIGER AS');
+    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
+    await context.clearCookies();
+
+    //Instantiate app to which user had got rights
+    await login.loginWithUser('20860898609');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
+    await coverebyRights.checkCoverebyRights();
+    await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
   });
 
   test('DAGL/HADM do not have rights to delegate Altinn2 to org Y , but has the rights to delegate same service after delegating sens role to himself', async ({
@@ -88,8 +139,9 @@ test.describe('User with DAGL/HADM role without having resource access themselve
   }) => {
     test.setTimeout(60000 * 3);
 
-    await login.loginWithUser('03835898554');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    //Login with user who has tilgangstyrring rolle
+    await login.loginWithUser('04885299593');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
 
     //To delete rights - setup
     // GIVEN user without delegated rights to UINTERESSERT LØVEFLOKK
@@ -99,11 +151,12 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     // WHEN user delegates rolls to UINTERESSERT LØVEFLOKK
     await delegate.delegateToSSN('07922148605', 'LØVEFLOKK');
     await delegateRoles.delegateRole('Taushetsbelagt post', 'Hovedadministrator');
-    await logoutUser.gotoLogoutPage('OPPKLARENDE OMKOMMEN TIGER AS');
+    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     await context.clearCookies();
 
+    //Login with another user who has SENS role
     await login.loginWithUser('07922148605');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
     await deleteRights.revokeRightsSSN('STORARTET KORGSTOL');
     await new Promise((resolve) =>
       setTimeout(() => {
@@ -120,7 +173,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
 
     //Login with covereby User
     await login.loginWithUser('07885798378');
-    await login.chooseReportee('OPPKLARENDE OMKOMMEN TIGER AS');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
   });
 });
