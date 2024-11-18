@@ -1,4 +1,4 @@
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 import { useRevokeResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { getUrnForParty } from '../utils';

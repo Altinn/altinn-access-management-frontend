@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 export interface ResourceAlertProps {
   /*** The resource */

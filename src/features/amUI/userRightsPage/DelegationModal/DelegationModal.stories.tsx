@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 
-import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import store from '@/rtk/app/store';
 
 import { SnackbarProvider } from '../../common/Snackbar';

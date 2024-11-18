@@ -20,7 +20,7 @@ import {
   type ServiceWithStatus,
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { arraysEqual, debounce } from '@/resources/utils';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { AmPagination } from '@/components/Paginering';
 
 import { ResourceActionBar } from '../ResourceActionBar';

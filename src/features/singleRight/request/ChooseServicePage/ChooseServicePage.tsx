@@ -16,7 +16,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsSlice';
 import { GeneralPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetUserInfoQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { SearchSection } from '../../components/SearchSection';
 import { ResourceCollectionBar } from '../../components/ResourceCollectionBar';

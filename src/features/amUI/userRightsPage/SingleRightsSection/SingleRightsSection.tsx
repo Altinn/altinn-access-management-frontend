@@ -7,7 +7,7 @@ import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRigh
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { List } from '@/features/amUI/common/List/List';
 import usePagination from '@/resources/hooks/usePagination';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { AmPagination } from '@/components/Paginering';
 
 import { DelegationModal, DelegationType } from '../DelegationModal/DelegationModal';

@@ -1,4 +1,4 @@
-import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 export const getUrnForParty = (partyUuid: string, partyType: PartyType) => {
   if (partyUuid && partyType === PartyType.Person) {

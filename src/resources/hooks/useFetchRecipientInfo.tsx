@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  UserType,
-  useGetPartyByUUIDQuery,
-  useGetUserByUUIDQuery,
-} from '@/rtk/features/lookup/lookupApi';
+import { UserType, useGetPartyByUUIDQuery, useGetUserByUUIDQuery } from '@/rtk/features/lookupApi';
 
 // Used for fetching recipient name from userUUID or partyUUID
 export const useFetchRecipientInfo = (

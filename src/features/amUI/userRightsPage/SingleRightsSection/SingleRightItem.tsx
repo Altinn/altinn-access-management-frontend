@@ -6,7 +6,7 @@ import { Avatar } from '@altinn/altinn-components';
 
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ListItem } from '@/features/amUI/common/List';
-import { type Party } from '@/rtk/features/lookup/lookupApi';
+import { type Party } from '@/rtk/features/lookupApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
 

@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Button, Heading, Modal } from '@digdir/designsystemet-react';
+import { Button, Modal } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import { Trans } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 

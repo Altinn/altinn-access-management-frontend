@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Avatar } from '@altinn/altinn-components';
 
-import { useGetReporteePartyQuery, type Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useDelegationCheckMutation,
@@ -23,10 +22,11 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
 import { useDelegateRights } from '@/resources/hooks/useDelegateRights';
 import { useEditResource } from '@/resources/hooks/useEditResource';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
+import { useGetReporteePartyQuery, type Party } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../../../common/Snackbar';
 import {

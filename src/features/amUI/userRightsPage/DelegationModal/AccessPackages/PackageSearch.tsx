@@ -6,7 +6,7 @@ import { Avatar } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 import { List, ListItem } from '@/components';
 
 import { useDelegationModalContext } from '../DelegationModalContext';

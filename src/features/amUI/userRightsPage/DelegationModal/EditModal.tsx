@@ -3,7 +3,7 @@ import { Modal } from '@digdir/designsystemet-react';
 import { forwardRef } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
 import { SnackbarProvider } from '../../common/Snackbar';
