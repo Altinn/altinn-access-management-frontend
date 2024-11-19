@@ -31,7 +31,6 @@ export const PageLayoutWrapper = ({
             setMenuOpen(!menuOpen);
           },
           items: [],
-          variant: 'dropdown',
         },
       }}
       sidebar={{
@@ -39,38 +38,38 @@ export const PageLayoutWrapper = ({
           groups: {},
           items: [
             {
-              group: 1,
+              groupId: 1,
               icon: 'buildings2',
               id: '1',
               size: 'lg',
               title: 'Bedriftsprofil',
             },
             {
-              group: 2,
-              icon: 'person-group',
+              groupId: 2,
               id: '2',
+              icon: 'person-group',
               title: 'Brukere',
             },
             {
-              group: 2,
+              groupId: 2,
               icon: 'handshake',
               id: '3',
               title: 'Fullmakter',
             },
             {
-              group: 3,
+              groupId: 3,
               icon: 'inbox',
               id: '4',
               title: 'Våre tilganger hos andre',
             },
             {
-              group: 3,
+              groupId: 3,
               icon: 'database',
               id: '5',
               title: 'Klientdelegering',
             },
             {
-              group: 4,
+              groupId: 4,
               icon: 'clock-dashed',
               id: '6',
               title: 'Aktivitetslogg',

@@ -12,12 +12,7 @@
 }
 
 .singleRightItem {
-  display: grid;
-  grid-template-areas:
-    'icon title type action'
-    'icon owner type action';
-  grid-template-columns: 35px 1fr 10px 80px;
-  gap: 0 0.5rem;
+  display: flex;
   align-items: center;
 }
 

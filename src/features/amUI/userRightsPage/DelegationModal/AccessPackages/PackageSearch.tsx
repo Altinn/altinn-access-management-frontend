@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Heading, Paragraph, Search } from '@digdir/designsystemet-react';
+import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
-import { Avatar } from '@altinn/altinn-components';
 
 import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookup/lookupApi';
-import { List, ListItem } from '@/components';
+import { List } from '@/components';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './PackageSearch.module.css';
+import AccessAreaListItem from './AccessAreaListItem';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
   toParty: Party;
 }
 
-export const PackageSearch = ({ toParty }: PackageSearchProps) => {
+export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
@@ -68,30 +68,11 @@ export const PackageSearch = ({ toParty }: PackageSearchProps) => {
           className={classes.searchResults}
         >
           {data?.map((a) => (
-            <ListItem key={a.id}>
-              <div className={classes.packageArea}>
-                <Avatar
-                  size='sm'
-                  imageUrl={a.iconUrl}
-                  name={a.name}
-                  type={'company'}
-                />
-                <Heading size='2xs'>{a.name}</Heading>
-              </div>
-              <Paragraph size='xs'>{a.description}</Paragraph>
-              <List
-                spacing
-                className={classes.packages}
-              >
-                {a.accessPackages.map((p) => (
-                  <ListItem key={p.id}>
-                    <Paragraph size='xs'>
-                      <i>{p.name}</i>
-                    </Paragraph>
-                  </ListItem>
-                ))}
-              </List>
-            </ListItem>
+            <AccessAreaListItem
+              key={a.id}
+              accessPackageArea={a}
+              onSelection={onSelection}
+            />
           ))}
         </List>
       </search>

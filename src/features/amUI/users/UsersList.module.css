@@ -24,3 +24,14 @@
 .usersListHeading {
   margin-bottom: 10px;
 }
+
+.inheritingRightHoldersList {
+  margin: 0.5rem;
+  margin-right: 0;
+}
+
+.usersListItems {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
