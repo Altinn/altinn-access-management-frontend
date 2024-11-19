@@ -37,6 +37,11 @@ export interface RightHolder {
   inheritingRightHolders: RightHolder[];
 }
 
+export interface RightHolderAccesses {
+  accessPackages: string[];
+  services: string[];
+}
+
 export const userInfoApi = createApi({
   reducerPath: 'userInfoApi',
   baseQuery: fetchBaseQuery({
@@ -63,9 +68,19 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
       keepUnusedDataFor: 300,
     }),
+    getRightHolderAccesses: builder.query<RightHolderAccesses, string>({
+      query: (rightHolderUuid) =>
+        `reportee/${getCookie('AltinnPartyUuid')}/rightholders/${rightHolderUuid}/accesses`,
+      keepUnusedDataFor: 300,
+    }),
   }),
 });
 
-export const { useGetUserInfoQuery, useGetReporteeQuery, useGetRightHoldersQuery } = userInfoApi;
+export const {
+  useGetUserInfoQuery,
+  useGetReporteeQuery,
+  useGetRightHoldersQuery,
+  useGetRightHolderAccessesQuery,
+} = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

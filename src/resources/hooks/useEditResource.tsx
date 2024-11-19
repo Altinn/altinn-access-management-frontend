@@ -1,4 +1,4 @@
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 import { useEditResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import type { RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
 

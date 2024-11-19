@@ -58,5 +58,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return rightHolders.Select(rightHolder => new RightHolder(rightHolder)).ToList();
         }
+
+        /// <inheritdoc/>
+        public Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
+        {
+            return _accessManagementClient.GetRightHolderAccesses(reporteeUuid, rightHolderUuid);
+        }
     }
 }

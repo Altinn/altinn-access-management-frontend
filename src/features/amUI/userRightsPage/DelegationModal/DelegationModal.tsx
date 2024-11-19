@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type { Party } from '@/rtk/features/lookup/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { DelegationModalProvider } from './DelegationModalContext';
 import { DelegationModalContent } from './DelegationModalContent';

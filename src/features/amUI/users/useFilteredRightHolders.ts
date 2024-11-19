@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 
 import { getTotalNumOfPages, getArrayPage } from '@/resources/utils';
-import type { RightHolder } from '@/rtk/features/userInfo/userInfoApi';
-import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
+import type { RightHolder } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 export interface FilteredRightHolder extends RightHolder {
   matchInInheritingRightHolders?: boolean;

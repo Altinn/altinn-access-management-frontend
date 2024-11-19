@@ -4,7 +4,7 @@ import { Heading } from '@digdir/designsystemet-react';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 

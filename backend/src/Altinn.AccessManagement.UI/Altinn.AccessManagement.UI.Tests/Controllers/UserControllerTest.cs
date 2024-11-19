@@ -104,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// Assert that NotFound is returned upon user not found by Profile service
         /// </summary>
         [Fact]
-        public async Task GetUser_UserNotFoundByProfoileService_ReturnsNotFound()
+        public async Task GetUser_UserNotFoundByProfileService_ReturnsNotFound()
         {
             const int userId = 1234;
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
@@ -173,6 +173,45 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        /// Right holder's list of accesses is returned when valid input
+        /// </summary>
+        [Fact]
+        public async Task GetRightholderAccesses_Returns_Accesses()
+        {
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; // Valid user that has rights for the reportee
+
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "RightHolderAccess", $"{rightHolderUuid}.json");
+            RightHolderAccesses expectedResponse = Util.GetMockData<RightHolderAccesses>(path);
+
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteeUuid}/rightholders/{rightHolderUuid}/accesses");
+            RightHolderAccesses actualResponse = await response.Content.ReadFromJsonAsync<RightHolderAccesses>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        /// Invalid rightHolderUuid returns HTTP error when invalid input is provided
+        /// </summary>
+        [Fact]
+        public async Task GetRightholderAccesses_Invalid_Input()
+        {
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c800000"; // Invalid user uuid. User has no rights for reportee
+
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteeUuid}/rightholders/{rightHolderUuid}/accesses");
+
+            Assert.False(response.IsSuccessStatusCode);
         }
     }
 }

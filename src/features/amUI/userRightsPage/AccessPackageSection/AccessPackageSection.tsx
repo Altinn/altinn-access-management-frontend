@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { DelegationModal, DelegationType } from '../DelegationModal/DelegationModal';
 
