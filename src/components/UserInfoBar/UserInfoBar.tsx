@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Buildings3FillIcon } from '@navikt/aksel-icons';
 
 import AltinnTextLogo from '@/assets/AltinnTextLogo.svg?react';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import classes from './UserInfoBar.module.css';
 

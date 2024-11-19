@@ -26,6 +26,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId);
 
         /// <summary>
+        /// Gets all accesses of a given right holder for a reportee
+        /// </summary>
+        /// <param name = "reporteeUuid" > The uuid for the reportee which the right holder has access to</param>
+        /// <param name="rightHolderUuid">The uuid for the right holder whose accesses are to be returned</param>
+        /// <returns>All right holder's accesses</returns>
+        Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid);
+
+        /// <summary>
         ///     Clears cached accesses of the delegation recipient
         /// </summary>
         /// <param name="party">

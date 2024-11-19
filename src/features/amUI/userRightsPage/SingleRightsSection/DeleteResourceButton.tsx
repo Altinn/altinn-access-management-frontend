@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { Party } from '@/rtk/features/lookup/lookupApi';
-import { useGetReporteePartyQuery } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
+import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';

@@ -6,7 +6,7 @@ import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { ActionBar } from '@/components';
 import { addOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useAppDispatch } from '@/rtk/app/hooks';
-import type { Organization } from '@/rtk/features/lookup/lookupApi';
+import type { Organization } from '@/rtk/features/lookupApi';
 import common from '@/resources/css/Common.module.css';
 import { getButtonIconSize } from '@/resources/utils';
 

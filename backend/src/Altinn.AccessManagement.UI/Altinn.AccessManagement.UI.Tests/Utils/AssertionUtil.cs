@@ -325,6 +325,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Description, actual.Description);
         }
 
+        public static void AssertEqual(RightHolderAccesses expected, RightHolderAccesses actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            AssertCollections(expected.AccessPackages, actual.AccessPackages, Assert.Equal);
+            AssertCollections(expected.Services, actual.Services, Assert.Equal);
+
+        }
+
         public static void AssertEqual(List<OrganizationApiSet> expected, List<OrganizationApiSet> actual)
         {
             Assert.NotNull(actual);

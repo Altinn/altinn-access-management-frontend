@@ -10,8 +10,8 @@ import { apiDelegationApi } from '../features/apiDelegation/apiDelegationApi';
 import { overviewOrgApi } from '../features/apiDelegation/overviewOrg/overviewOrgApi';
 import { resourceApi } from '../features/resourceApi';
 import { accessPackageApi } from '../features/accessPackageApi';
-import { lookupApi } from '../features/lookup/lookupApi';
-import { userInfoApi } from '../features/userInfo/userInfoApi';
+import { lookupApi } from '../features/lookupApi';
+import { userInfoApi } from '../features/userInfoApi';
 
 const logger = createLogger();
 

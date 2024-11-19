@@ -7,11 +7,13 @@ import { Avatar } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookup/lookupApi';
-import { PartyType, useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import {
+  PartyType,
+  useGetReporteeQuery,
+  useGetRightHolderAccessesQuery,
+} from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
-import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -34,17 +36,14 @@ export const UserRightsPage = () => {
   useDocumentTitle(t('user_rights_page.page_title'));
   const name = id ? party?.name : '';
 
-  const { data: singleRights, isLoading } = useGetSingleRightsForRightholderQuery({
-    party: getCookie('AltinnPartyId'),
-    userId: id || '',
-  });
+  const { data: allAccesses, isLoading } = useGetRightHolderAccessesQuery(id || '');
 
   return (
     <SnackbarProvider>
       <PageWrapper>
         <PageLayoutWrapper reporteeName={reportee?.name || ''}>
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
-            {!isLoading && singleRights ? (
+            {!isLoading && allAccesses ? (
               <>
                 <div className={classes.headingRow}>
                   <Avatar
@@ -80,7 +79,7 @@ export const UserRightsPage = () => {
                       <Badge
                         size='sm'
                         color={chosenTab === 'packages' ? 'accent' : 'neutral'}
-                        count={0}
+                        count={allAccesses.accessPackages.length}
                         maxCount={99}
                       ></Badge>
                       {t('user_rights_page.access_packages_title')}
@@ -89,7 +88,7 @@ export const UserRightsPage = () => {
                       <Badge
                         size='sm'
                         color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-                        count={singleRights.length}
+                        count={allAccesses.services.length}
                         maxCount={99}
                       ></Badge>
                       {t('user_rights_page.single_rights_title')}

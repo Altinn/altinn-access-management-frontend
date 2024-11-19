@@ -86,6 +86,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public async Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
+        {
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "RightHolders", "RightHolderAccess", $"{rightHolderUuid}.json");
+                return await Task.FromResult(Util.GetMockData<RightHolderAccesses>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }         
+        }
+
+        /// <inheritdoc />
         public Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
             return Task.FromResult(new HttpResponseMessage

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Heading, Search, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
-import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
+import { type RightHolder } from '@/rtk/features/userInfoApi';
 import { ListItem } from '@/features/amUI/common/List/ListItem';
 import { List } from '@/features/amUI/common/List/List';
 import { debounce } from '@/resources/utils';

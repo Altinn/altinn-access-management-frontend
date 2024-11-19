@@ -12,7 +12,7 @@ import type {
   ApiDelegation,
 } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
 import { softRemoveApi } from '@/rtk/features/apiDelegation/delegableApi/delegableApiSlice';
-import type { Organization } from '@/rtk/features/lookup/lookupApi';
+import type { Organization } from '@/rtk/features/lookupApi';
 import { BorderedList, CompactDeletableListItem } from '@/components';
 
 import classes from './ConfirmationPage.module.css';

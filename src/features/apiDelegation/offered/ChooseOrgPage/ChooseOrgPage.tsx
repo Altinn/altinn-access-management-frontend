@@ -8,15 +8,15 @@ import cn from 'classnames';
 import { Page, PageHeader, PageContent, PageContainer, RestartPrompter } from '@/components';
 import { removeOrg } from '@/rtk/features/apiDelegation/apiDelegationSlice';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';
-import type { Organization } from '@/rtk/features/lookup/lookupApi';
 import ApiIcon from '@/assets/Api.svg?react';
 import { ApiDelegationPath } from '@/routes/paths';
 import common from '@/resources/css/Common.module.css';
 import { useMediaQuery } from '@/resources/hooks';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
 import { useFetchOverviewOrgsQuery } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import type { Organization } from '@/rtk/features/lookupApi';
 
 import { DelegationType } from '../../components/DelegationType';
 

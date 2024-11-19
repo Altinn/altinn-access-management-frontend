@@ -114,5 +114,30 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode(500);
             }
         }
+
+        /// <summary>
+        /// Endpoint for retrieving all accesses a specified right holder has on behalf of a party (the reportee)
+        /// </summary>
+        /// <param name="reporteeUuid">The uuid for the reportee which the right holder has access to</param>
+        /// <param name="rightHolderUuid">The uuid for the right holder whose accesses are to be returned</param>
+        /// <returns>All right holder's accesses</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("reportee/{reporteeUuid}/rightholders/{rightHolderUuid}/accesses")]
+        public async Task<ActionResult<RightHolderAccesses>> GetRightholderAccesses(string reporteeUuid, string rightHolderUuid)
+        {
+            try
+            {
+                string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
+
+                RightHolderAccesses accesses = await _userService.GetRightHolderAccesses(reporteeUuid, rightHolderUuid);
+
+                return accesses;
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
+            }
+        }
     }
 }

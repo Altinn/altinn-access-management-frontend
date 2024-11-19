@@ -2,7 +2,7 @@ import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetReporteeQuery } from '@/rtk/features/userInfo/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import classes from './ChooseOrgPage.module.css';
 
