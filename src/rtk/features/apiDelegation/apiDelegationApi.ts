@@ -8,7 +8,7 @@ import type {
 } from '@/dataObjects/dtos/resourceDelegation';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import type { Organization } from '../lookup/lookupApi';
+import type { Organization } from '../lookupApi';
 
 import type { DelegableApi } from './delegableApi/delegableApiSlice';
 

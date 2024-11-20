@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
-import { FilterIcon, ChevronRightIcon } from '@navikt/aksel-icons';
+import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router-dom';
-import { Avatar } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -12,7 +12,7 @@ import {
 } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { arraysEqual, debounce } from '@/resources/utils';
-import { Filter, List, ListItem } from '@/components';
+import { Filter, List } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -131,7 +131,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
             )}
             {filterChips()}
           </div>
-          <List className={classes.resourceList}> {listedResources}</List>
+          <List className={classes.resourceList}>{listedResources}</List>
           {totalNumberOfResults !== undefined &&
             totalNumberOfResults > searchResultsPerPage &&
             !displayPopularResources && (
@@ -151,43 +151,35 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
 
   const listedResources = resources?.map((resource: ServiceResource, index: number) => {
     return (
-      <ListItem
+      <li
         key={resource.identifier ?? index}
         className={classes.resourceItem}
-        onClick={() => onSelection(resource)}
       >
-        <span className={classes.resource}>
-          <Avatar
-            size='md'
-            type='company'
-            imageUrl={resource.resourceOwnerLogoUrl}
-            name={resource.resourceOwnerName}
-          />
-          <span className={classes.resourceHeading}>
-            <Paragraph>{resource.title}</Paragraph>
+        <ListItem
+          id={resource.identifier ?? index}
+          onClick={() => onSelection(resource)}
+          linkIcon='chevron-right'
+          size='md'
+          title={resource.title}
+          description={resource.resourceOwnerName}
+          avatar={{
+            type: 'company',
+            imageUrl: resource.resourceOwnerLogoUrl,
+            name: resource.resourceOwnerName,
+          }}
+        />
+        {!!delegatedResources &&
+          delegatedResources.some(
+            (delegation) => delegation.resource?.identifier === resource.identifier,
+          ) && (
             <Paragraph
               size='xs'
-              className={classes.resourceSubtitle}
+              className={classes.infoText}
             >
-              {resource.resourceOwnerName}
+              {t('common.has_poa')}
             </Paragraph>
-          </span>
-        </span>
-        <div className={classes.listItemRight}>
-          {!!delegatedResources &&
-            delegatedResources.some(
-              (delegation) => delegation.resource?.identifier === resource.identifier,
-            ) && (
-              <Paragraph
-                size='xs'
-                className={classes.infoText}
-              >
-                {t('common.has_poa')}
-              </Paragraph>
-            )}
-          <ChevronRightIcon fontSize='1.5em' />
-        </div>
-      </ListItem>
+          )}
+      </li>
     );
   });
 

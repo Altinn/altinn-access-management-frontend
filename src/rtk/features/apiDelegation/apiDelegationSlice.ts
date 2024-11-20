@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { type Organization } from '../lookup/lookupApi';
+import { type Organization } from '../lookupApi';
 
 export interface InitialState {
   chosenOrgs: Organization[];

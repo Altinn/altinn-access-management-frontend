@@ -2,16 +2,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React, { useRef } from 'react';
-import { Avatar } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { ListItem } from '@/features/amUI/common/List';
 import { type Party } from '@/rtk/features/lookupApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
 
-import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
+import classes from './SingleRightsSection.module.css';
 
 interface SingleRightItemProps {
   resource: ServiceResource;
@@ -23,19 +22,19 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) 
 
   return (
     <>
-      <ListItem
-        onClick={() => modalRef.current?.showModal()}
-        className={classes.singleRightItem}
-      >
-        <Avatar
-          size='md'
-          type='company'
-          className={classes.icon}
-          imageUrl={resource.resourceOwnerLogoUrl}
-          name={resource.resourceOwnerName}
+      <li className={classes.singleRightItem}>
+        <ListItem
+          id={resource.identifier}
+          title={resource.title}
+          description={resource.resourceOwnerName}
+          size='lg'
+          avatar={{
+            type: 'company',
+            imageUrl: resource.resourceOwnerLogoUrl,
+            name: resource.resourceOwnerName,
+          }}
+          onClick={() => modalRef.current?.showModal()}
         />
-        <div className={classes.title}>{resource.title}</div>
-        <div className={classes.resourceOwnerName}>{resource.resourceOwnerName}</div>
         <div
           className={classes.action}
           onClick={(event) => {
@@ -48,7 +47,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) 
             toParty={toParty}
           />
         </div>
-      </ListItem>
+      </li>
       <EditModal
         ref={modalRef}
         toParty={toParty}

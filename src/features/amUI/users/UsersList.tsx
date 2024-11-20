@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Heading, Search, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
+import type { AvatarType, ListItemSize } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
+import { Link } from 'react-router-dom';
 
 import { type RightHolder } from '@/rtk/features/userInfoApi';
-import { ListItem } from '@/features/amUI/common/List/ListItem';
-import { List } from '@/features/amUI/common/List/List';
 import { debounce } from '@/resources/utils';
 import { AmPagination } from '@/components/Paginering';
+import { List } from '@/components';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import classes from './UsersList.module.css';
-import { UserItem } from './UserItem';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -31,11 +32,26 @@ export const UsersList = () => {
   return (
     <div className={classes.usersList}>
       {currentUserAsRightHolder && (
-        <UserItem
-          user={currentUserAsRightHolder}
-          size='lg'
-          className={classes.currentUser}
-        />
+        <div className={classes.currentUser}>
+          <ListItem
+            id={currentUserAsRightHolder.partyUuid}
+            size='xl'
+            title={currentUserAsRightHolder.name}
+            description={currentUserAsRightHolder.registryRoles
+              .map((role) => t(`user_role.${role}`))
+              .join(', ')}
+            avatar={{
+              type: 'person',
+              name: currentUserAsRightHolder.name,
+            }}
+            as={(props) => (
+              <Link
+                {...props}
+                to={`${currentUserAsRightHolder.partyUuid}`}
+              />
+            )}
+          />
+        </div>
       )}
       <Heading
         level={2}
@@ -58,15 +74,16 @@ export const UsersList = () => {
       />
       <List
         spacing
-        aria-labelledby='user_list_heading_id'
+        className={classes.usersListItems}
       >
-        {pageEntries.map((user) => (
-          <UserListItem
-            key={user.partyUuid}
-            user={user}
+        {pageEntries.map((entry) => (
+          <RightholderListItem
+            rightholder={entry}
+            key={entry.partyUuid}
           />
         ))}
       </List>
+
       <Paragraph
         role='alert'
         size='lg'
@@ -87,30 +104,90 @@ export const UsersList = () => {
   );
 };
 
-const UserListItem = ({ user }: { user: RightHolder }) => {
-  const hasChildren = !!(user.inheritingRightHolders && user.inheritingRightHolders.length > 0);
+const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
+  const [expanded, setExpanded] = useState(false);
+  const collapsible =
+    rightholder.inheritingRightHolders && rightholder.inheritingRightHolders.length > 0;
+
+  const avatar = {
+    type:
+      rightholder.partyType.toString() === 'Organization'
+        ? ('company' as AvatarType)
+        : ('person' as AvatarType),
+    name: rightholder.name,
+  };
+  const baseListItemProps = {
+    id: rightholder.partyUuid,
+    title: rightholder.name,
+    description: rightholder.unitType,
+    size: 'lg' as ListItemSize,
+    linkIcon: 'chevron-right' as const,
+    avatar,
+  };
 
   return (
-    <>
-      <ListItem>
-        <UserItem user={user}>
-          {hasChildren && (
-            <List>
-              {user.inheritingRightHolders.map((user) => (
-                <ListItem key={user.partyUuid}>
-                  <UserItem
-                    user={user}
-                    size='sm'
-                    className={classes.inheritingUsers}
-                    icon={false}
-                    showRoles={false}
-                  />
-                </ListItem>
-              ))}
-            </List>
+    <li>
+      {collapsible ? (
+        <ListItem
+          {...baseListItemProps}
+          collapsible
+          as='button'
+          expanded={expanded}
+          onClick={() => setExpanded(!expanded)}
+        />
+      ) : (
+        <ListItem
+          {...baseListItemProps}
+          as={(props) => (
+            <Link
+              {...props}
+              to={`${rightholder.partyUuid}`}
+            />
           )}
-        </UserItem>
-      </ListItem>
-    </>
+        />
+      )}
+
+      {expanded && collapsible && (
+        <InheritingRightHoldersList inheritingRightHolders={rightholder.inheritingRightHolders} />
+      )}
+    </li>
+  );
+};
+
+const InheritingRightHoldersList = ({
+  inheritingRightHolders,
+}: {
+  inheritingRightHolders: RightHolder[];
+}) => {
+  const items =
+    inheritingRightHolders?.map((inheritingRightHolder) => ({
+      id: inheritingRightHolder.partyUuid,
+      title: inheritingRightHolder.name,
+      description: inheritingRightHolder.unitType,
+      as: Link,
+      to: `${inheritingRightHolder.partyUuid}`,
+      linkIcon: 'chevron-right' as const,
+      avatar: {
+        type:
+          inheritingRightHolder.partyType.toString() === 'Organization'
+            ? ('company' as AvatarType)
+            : ('person' as AvatarType),
+        name: inheritingRightHolder.name,
+      },
+    })) || [];
+
+  return (
+    <div className={classes.inheritingRightHoldersList}>
+      <ul className={classes.usersListItems}>
+        {items.map((item) => (
+          <li key={item.id}>
+            <ListItem
+              size='sm'
+              {...item}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
