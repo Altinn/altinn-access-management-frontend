@@ -161,8 +161,6 @@ const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: RightHol
       id: inheritingRightHolder.partyUuid,
       title: inheritingRightHolder.name,
       description: inheritingRightHolder.unitType,
-      as: Link,
-      to: `${inheritingRightHolder.partyUuid}`,
       linkIcon: 'chevron-right' as const,
       avatar: {
         type:
@@ -180,6 +178,12 @@ const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: RightHol
           <li key={item.id}>
             <ListItem
               size='sm'
+              as={(props) => (
+                <Link
+                  {...props}
+                  to={`${item.id}`}
+                />
+              )}
               {...item}
             />
           </li>
