@@ -1,5 +1,6 @@
 import React from 'react';
 import { ListItem } from '@altinn/altinn-components';
+import { Paragraph } from '@digdir/designsystemet-react';
 
 import type { AccessArea, AccessPackage } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
@@ -27,7 +28,6 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
           linkIcon='chevron-right'
           size='md'
           title={name}
-          description={description}
           avatar={{
             type: 'company',
             imageUrl: iconUrl,
@@ -37,7 +37,7 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
       </li>
       {expanded && (
         <>
-          {/* <Paragraph size='xs'>{description}</Paragraph> s */}
+          <Paragraph size='xs'>{description}</Paragraph>
           <List>
             {accessPackages?.map((item) => (
               <li key={item.id}>
@@ -46,7 +46,6 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
                   onClick={() => onSelection(item)}
                   size='xs'
                   title={item.name}
-                  // description={item.description}
                   color='accent'
                 />
               </li>
