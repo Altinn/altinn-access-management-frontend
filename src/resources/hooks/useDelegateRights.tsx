@@ -1,11 +1,11 @@
 import { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import type { DelegationInputDto, DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import { DelegationRequestDto, ServiceDto } from '@/dataObjects/dtos/resourceDelegation';
-import type { Party } from '@/rtk/features/lookup/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
-import { PartyType } from '@/rtk/features/userInfo/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 import type { ChipRight } from '@/features/amUI/userRightsPage/DelegationModal/SingleRights/ResourceInfo';
+import type { Party } from '@/rtk/features/lookupApi';
 
 export const useDelegateRights = () => {
   const [delegate] = useDelegateRightsMutation();

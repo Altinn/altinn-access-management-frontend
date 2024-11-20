@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookup/lookupApi';
 import { List } from '@/components';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
@@ -63,10 +63,7 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             />
           </div>
         </div>
-        <List
-          spacing
-          className={classes.searchResults}
-        >
+        <List className={classes.searchResults}>
           {data?.map((a) => (
             <AccessAreaListItem
               key={a.id}

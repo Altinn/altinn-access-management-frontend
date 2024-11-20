@@ -131,12 +131,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
             )}
             {filterChips()}
           </div>
-          <List
-            className={classes.resourceList}
-            spacing
-          >
-            {listedResources}
-          </List>
+          <List className={classes.resourceList}>{listedResources}</List>
           {totalNumberOfResults !== undefined &&
             totalNumberOfResults > searchResultsPerPage &&
             !displayPopularResources && (

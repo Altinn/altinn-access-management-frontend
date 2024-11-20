@@ -5,9 +5,10 @@ import type { AvatarType, ListItemSize } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
 import { Link } from 'react-router-dom';
 
-import { type RightHolder } from '@/rtk/features/userInfo/userInfoApi';
+import { type RightHolder } from '@/rtk/features/userInfoApi';
 import { debounce } from '@/resources/utils';
 import { AmPagination } from '@/components/Paginering';
+import { List } from '@/components';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import classes from './UsersList.module.css';
@@ -57,14 +58,17 @@ export const UsersList = () => {
         hideLabel
         label={t('users_page.user_search_placeholder')}
       />
-      <ul className={classes.usersListItems}>
+      <List
+        spacing
+        className={classes.usersListItems}
+      >
         {pageEntries.map((entry) => (
           <RightholderListItem
             rightholder={entry}
             key={entry.partyUuid}
           />
         ))}
-      </ul>
+      </List>
 
       <Paragraph
         role='alert'

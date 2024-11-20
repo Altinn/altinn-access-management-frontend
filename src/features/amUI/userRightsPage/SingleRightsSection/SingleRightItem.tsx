@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { ListItem } from '@altinn/altinn-components';
 
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { type Party } from '@/rtk/features/lookup/lookupApi';
+import { type Party } from '@/rtk/features/lookupApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
 
