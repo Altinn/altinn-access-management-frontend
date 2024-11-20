@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Heading, Search, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import type { AvatarType, ListItemSize } from '@altinn/altinn-components';
@@ -124,7 +124,10 @@ const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
     linkIcon: 'chevron-right' as const,
     avatar,
   };
-
+  const rightHoldersList = useMemo(
+    () => [rightholder, ...rightholder.inheritingRightHolders],
+    [rightholder],
+  );
   return (
     <li>
       {collapsible ? (
@@ -147,25 +150,17 @@ const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
         />
       )}
 
-      {expanded && collapsible && (
-        <InheritingRightHoldersList inheritingRightHolders={rightholder.inheritingRightHolders} />
-      )}
+      {expanded && collapsible && <ExpandedRightHoldersListItem rightHolders={rightHoldersList} />}
     </li>
   );
 };
 
-const InheritingRightHoldersList = ({
-  inheritingRightHolders,
-}: {
-  inheritingRightHolders: RightHolder[];
-}) => {
+const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: RightHolder[] }) => {
   const items =
-    inheritingRightHolders?.map((inheritingRightHolder) => ({
+    rightHolders?.map((inheritingRightHolder) => ({
       id: inheritingRightHolder.partyUuid,
       title: inheritingRightHolder.name,
       description: inheritingRightHolder.unitType,
-      as: Link,
-      to: `${inheritingRightHolder.partyUuid}`,
       linkIcon: 'chevron-right' as const,
       avatar: {
         type:
@@ -183,6 +178,12 @@ const InheritingRightHoldersList = ({
           <li key={item.id}>
             <ListItem
               size='sm'
+              as={(props) => (
+                <Link
+                  {...props}
+                  to={`${item.id}`}
+                />
+              )}
               {...item}
             />
           </li>
