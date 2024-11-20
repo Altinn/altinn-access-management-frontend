@@ -12,7 +12,6 @@ import { List } from '@/components';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import classes from './UsersList.module.css';
-import { UserItem } from './UserItem';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -33,11 +32,26 @@ export const UsersList = () => {
   return (
     <div className={classes.usersList}>
       {currentUserAsRightHolder && (
-        <UserItem
-          user={currentUserAsRightHolder}
-          size='lg'
-          className={classes.currentUser}
-        />
+        <div className={classes.currentUser}>
+          <ListItem
+            id={currentUserAsRightHolder.partyUuid}
+            size='xl'
+            title={currentUserAsRightHolder.name}
+            description={currentUserAsRightHolder.registryRoles
+              .map((role) => t(`user_role.${role}`))
+              .join(', ')}
+            avatar={{
+              type: 'person',
+              name: currentUserAsRightHolder.name,
+            }}
+            as={(props) => (
+              <Link
+                {...props}
+                to={`${currentUserAsRightHolder.partyUuid}`}
+              />
+            )}
+          />
+        </div>
       )}
       <Heading
         level={2}

@@ -17,6 +17,7 @@ interface UserInfo {
 interface ReporteeInfo {
   name: string;
   organizationNumber?: string;
+  type?: string;
 }
 
 export enum PartyType {
