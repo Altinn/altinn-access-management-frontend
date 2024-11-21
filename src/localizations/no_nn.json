@@ -64,7 +64,10 @@
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt."
   },
   "header" : {
-    "menu-label": "Meny"
+    "menu-label": "Meny",
+    "change-label": "Bytt",
+    "back-label": "Tilbake"
+    
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
