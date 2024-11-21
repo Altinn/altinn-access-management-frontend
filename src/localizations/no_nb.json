@@ -76,8 +76,10 @@
     "unknown_error_description": "Vennligst prøv å laste inn siden på nytt.",
     "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00"
   },
-  "header" : {
-    "menu-label": "Meny"
+  "header": {
+    "menu-label": "Meny",
+    "change-label": "Bytt",
+    "back-label": "Tilbake"
   },
   "profile": {
     "received": "Mottatte",
