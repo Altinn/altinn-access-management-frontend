@@ -1,4 +1,5 @@
 ﻿using System.CodeDom.Compiler;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -9,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -318,6 +320,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return mockResponse;
             }
             throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+        //// Access packages
+
+        /// <inheritdoc />
+        public async Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode)
+        {
+            ThrowExceptionIfTriggerParty(from);
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{to}.json");
+                return await Task.FromResult(Util.GetMockData<List<AccessPackageAccess>>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
         }
 
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)

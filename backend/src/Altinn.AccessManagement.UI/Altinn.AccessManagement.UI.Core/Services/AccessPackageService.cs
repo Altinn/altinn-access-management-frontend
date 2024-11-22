@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Generic;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
@@ -50,6 +51,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return sortedAreas;
+        }
+
+        /// <inheritdoc/>
+        public async Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegationsToRightHolder(Guid rightHolderUuid, Guid rightOwnerUuid, string languageCode)
+        {
+            List<AccessPackageAccess> accessesFromAM = await _accessManagementClient.GetAccessPackageAccesses(rightHolderUuid.ToString(), rightOwnerUuid.ToString(), languageCode);
+
+            Dictionary<string, List<AccessPackageDelegation>> sortedAccesses = new Dictionary<string, List<AccessPackageDelegation>>();
+
+            foreach (AccessPackageAccess access in accessesFromAM)
+            {
+                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage, access.AccessDetails);
+                if (!sortedAccesses.ContainsKey(access.AccessPackage.Area.Id))
+                {
+                    sortedAccesses.Add(access.AccessPackage.Area.Id, new List<AccessPackageDelegation> { delegation });
+                }
+                else
+                {
+                    sortedAccesses[access.AccessPackage.Area.Id].Add(delegation);
+                }
+            }
+
+            return sortedAccesses;
         }
     }
 }

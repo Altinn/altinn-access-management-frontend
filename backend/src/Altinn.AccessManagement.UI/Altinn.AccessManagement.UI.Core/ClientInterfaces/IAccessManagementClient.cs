@@ -1,8 +1,8 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -157,5 +157,16 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="rightKeys">List of identifiers for the rights to be delegated</param>
         /// <returns></returns>
         Task<HttpResponseMessage> DelegateResourceRights(string from, string to, string resourceId, List<string> rightKeys);
+
+        //// Access packages
+
+        /// <summary>
+        ///     Gets all access package delegations from someone to someone (or multiple someones)
+        /// </summary>
+        /// <param name="to">the one(s) who has received the delegated access. Can be either a guid or one of the following strigns: "all", "me"</param>
+        /// <param name="from">The the one(s) whose rights have been delegated to the one(s) specified in to. Can be either a guid or one of the following strigns: "all", "me"</param>
+        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
+        /// <returns>A list of all access package delegations</returns>
+        Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode);
     }
 }
