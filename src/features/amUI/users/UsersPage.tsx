@@ -18,7 +18,7 @@ export const UsersPage = () => {
 
   return (
     <PageWrapper>
-      <PageLayoutWrapper reporteeName={reportee?.name || ''}>
+      <PageLayoutWrapper>
         <Heading
           level={1}
           size='md'
