@@ -4,7 +4,7 @@ import '@digdir/designsystemet-theme/altinn.css';
 import '@digdir/designsystemet-css';
 import '@/resources/css/Common.module.css';
 
-import '@altinn/altinn-components/lib/css/global.css';
+import '@altinn/altinn-components/dist/global.css';
 
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
