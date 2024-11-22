@@ -381,3 +381,6 @@ playwright/playwright-report
 playwright/test-results
 playwright/jsonReports
 *storybook.log
+
+# Storybook build files
+storybook-static/
