@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Get all access packages delegated to a single right holder from a single party
         /// </summary>
-        /// <returns>A dictionary of lists (sorted by access area) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
+        /// <returns>A dictionary of lists (sorted by access area-id) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
         [HttpGet]
         [Authorize]
         [Route("delegations/{from}/{to}")]

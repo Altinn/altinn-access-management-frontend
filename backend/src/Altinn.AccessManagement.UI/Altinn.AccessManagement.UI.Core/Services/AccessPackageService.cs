@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             foreach (AccessPackageAccess access in accessesFromAM)
             {
-                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage, access.AccessDetails);
+                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id, access.AccessDetails);
                 if (!sortedAccesses.ContainsKey(access.AccessPackage.Area.Id))
                 {
                     sortedAccesses.Add(access.AccessPackage.Area.Id, new List<AccessPackageDelegation> { delegation });

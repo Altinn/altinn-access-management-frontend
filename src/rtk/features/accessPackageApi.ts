@@ -16,6 +16,17 @@ export interface AccessPackage {
   description: string;
 }
 
+export interface AccessPackageDelegation {
+  accessPackageId: string;
+  DelegationDetails: DelegationDetails;
+}
+
+export interface DelegationDetails {
+  delegatedFrom: string;
+  delegatedTo: string;
+  lastChangedOn: Date;
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'accesspackage';
 
 export const accessPackageApi = createApi({
@@ -35,9 +46,14 @@ export const accessPackageApi = createApi({
         return `search?&searchString=${searchString}`;
       },
     }),
+    getRightHolderDelegations: builder.query<{ [key: string]: AccessPackage[] }, string>({
+      query: (rightHolderUuid) => {
+        return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
+      },
+    }),
   }),
 });
 
-export const { useSearchQuery } = accessPackageApi;
+export const { useSearchQuery, useGetRightHolderDelegationsQuery } = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;
