@@ -63,11 +63,10 @@
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt."
   },
-  "header" : {
+  "header": {
     "menu-label": "Meny",
     "change-label": "Bytt",
     "back-label": "Tilbake"
-    
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -212,6 +211,7 @@
     "current_services_title": "Fullmakt til {{count}} tenester"
   },
   "access_packages": {
+    "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke"
   },
   "users_page": {

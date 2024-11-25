@@ -213,6 +213,7 @@
     "current_services_title": "Power of attorney to {{count}} services"
   },
   "access_packages": {
+    "current_access_packages_title": "Power of attorney to {{count}} access package(s)",
     "give_new_button": "Give power of attorney to new access package"
   },
   "users_page": {

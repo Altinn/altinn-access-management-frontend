@@ -212,6 +212,7 @@
     "current_services_title": "Fullmakt til {{count}} tjenester"
   },
   "access_packages": {
+    "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke"
   },
   "users_page": {
