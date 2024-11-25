@@ -41,7 +41,7 @@ export const UserRightsPage = () => {
   return (
     <SnackbarProvider>
       <PageWrapper>
-        <PageLayoutWrapper reporteeName={reportee?.name || ''}>
+        <PageLayoutWrapper>
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
             {!isLoading && allAccesses ? (
               <>
