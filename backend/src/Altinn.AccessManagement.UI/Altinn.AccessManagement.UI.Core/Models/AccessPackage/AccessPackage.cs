@@ -1,4 +1,6 @@
-﻿namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
+﻿using Altinn.AccessManagement.UI.Core.Models.Common;
+
+namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
 {
     /// <summary>
     /// Model for representing an access package
@@ -19,6 +21,11 @@
         /// Description
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        public List<IdNamePair> Resources { get; set; }
 
         /// <summary>
         /// The area that this access package belongs to

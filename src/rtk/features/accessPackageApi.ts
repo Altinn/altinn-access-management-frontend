@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 
 export interface AccessArea {
   id: string;
@@ -14,6 +15,7 @@ export interface AccessPackage {
   id: string;
   name: string;
   description: string;
+  resources: IdNamePair[];
 }
 
 export interface AccessPackageDelegation {
@@ -46,7 +48,7 @@ export const accessPackageApi = createApi({
         return `search?&searchString=${searchString}`;
       },
     }),
-    getRightHolderDelegations: builder.query<{ [key: string]: AccessPackage[] }, string>({
+    getRightHolderDelegations: builder.query<{ [key: string]: AccessPackageDelegation[] }, string>({
       query: (rightHolderUuid) => {
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
