@@ -41,22 +41,24 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
           ))}
         </List>
       )}
-      <Paragraph size='sm'>Andre tilganger under området:</Paragraph>
       {notDelegatedPackages.length > 0 && (
-        <List>
-          {notDelegatedPackages.map((item) => (
-            <li key={item.id}>
-              <ListItem
-                id={item.id}
-                onClick={() => onSelection(item)}
-                size='md'
-                title={item.name}
-                description={`${item.resources.length} tjenester`}
-                color='accent'
-              />
-            </li>
-          ))}
-        </List>
+        <>
+          <Paragraph size='sm'>Andre tilganger under området:</Paragraph>
+          <List>
+            {notDelegatedPackages.map((item) => (
+              <li key={item.id}>
+                <ListItem
+                  id={item.id}
+                  onClick={() => onSelection(item)}
+                  size='md'
+                  title={item.name}
+                  description={`${item.resources.length} tjenester`}
+                  color='accent'
+                />
+              </li>
+            ))}
+          </List>
+        </>
       )}
     </>
   );

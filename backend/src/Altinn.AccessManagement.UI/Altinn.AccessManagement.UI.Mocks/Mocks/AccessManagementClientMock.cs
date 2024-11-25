@@ -359,9 +359,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         // A helper for testing handling of exceptions in client
-        private static void ThrowExceptionIfTriggerParty(string partyId)
+        private static void ThrowExceptionIfTriggerParty(string id)
         {
-            if (partyId == "********")
+            if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();
             }
