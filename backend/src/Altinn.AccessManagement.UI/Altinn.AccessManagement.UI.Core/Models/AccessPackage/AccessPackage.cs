@@ -23,7 +23,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
         public string Description { get; set; }
 
         /// <summary>
-        /// Description
+        /// Resources
         /// </summary>
         public List<IdNamePair> Resources { get; set; }
 
