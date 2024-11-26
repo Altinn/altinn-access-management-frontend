@@ -23,9 +23,9 @@
   padding: 0 10px;
   margin-bottom: 10px;
 }
+
 .actions {
   display: flex;
-  justify-content: flex-end;
   gap: 15px;
   align-items: center;
   padding: 0 10px;

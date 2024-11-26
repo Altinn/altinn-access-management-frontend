@@ -19,7 +19,7 @@ interface DelegationModalContextProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setResourceToView: React.Dispatch<React.SetStateAction<ServiceResource | undefined>>;
   setPackageToView: React.Dispatch<React.SetStateAction<SelectedPackageProps | undefined>>;
-  onSelection: (resource: ServiceResource) => void;
+  onSelection: (resource?: ServiceResource, accessPackage?: SelectedPackageProps) => void;
 }
 
 const DelegationModalContext = createContext<DelegationModalContextProps | undefined>(undefined);
