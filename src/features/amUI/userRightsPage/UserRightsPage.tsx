@@ -95,7 +95,7 @@ export const UserRightsPage = () => {
                     </Tabs.Tab>
                   </Tabs.List>
                   <Tabs.Panel value='packages'>
-                    <AccessPackageSection />
+                    <AccessPackageSection numberOfAccesses={allAccesses.accessPackages.length} />
                   </Tabs.Panel>
                   <Tabs.Panel value='singleRights'>
                     <SingleRightsSection />

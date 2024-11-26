@@ -213,7 +213,9 @@
     "current_services_title": "Fullmakt til {{count}} tenester"
   },
   "access_packages": {
-    "give_new_button": "Gi fullmakt til ny tilgangspakke"
+    "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
+    "give_new_button": "Gi fullmakt til ny tilgangspakke",
+    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",

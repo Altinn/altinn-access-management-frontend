@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -289,6 +290,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Value, actual.Value);
         }
 
+        private static void AssertEqual(IdNamePair expected, IdNamePair actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+        }
+
         public static void AssertEqual(List<ApiDelegationOutput> expected, List<ApiDelegationOutput> actual)
         {
             Assert.NotNull(actual);
@@ -323,6 +333,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
 
         public static void AssertEqual(RightHolderAccesses expected, RightHolderAccesses actual)
@@ -346,6 +357,27 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 var a = actual.FindAll(c => c.OrgNumber == item.OrgNumber && c.Name == item.Name);
                 Assert.Single(a);
             }
+        }
+
+        public static void AssertEqual(AccessPackageDelegation expected, AccessPackageDelegation actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.AccessPackageId, actual.AccessPackageId);
+            AssertEqual(expected.DelegationDetails, actual.DelegationDetails);
+
+        }
+
+        public static void AssertEqual(AccessDetails expected, AccessDetails actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.DelegatedFrom, actual.DelegatedFrom);
+            Assert.Equal(expected.DelegatedTo, actual.DelegatedTo);
+            Assert.Equal(expected.LastChangedOn, actual.LastChangedOn);
+
         }
     }
 }

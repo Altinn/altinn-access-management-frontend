@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSearch_EmptySearch()
         {
             // Arrange
-            List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/emptySearch.json");
+            List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/Search/emptySearch.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/accesspackage/search");
@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string searchString = "a"; // Will return all packages in mocked data
-            List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/emptySearch.json");
+            List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/Search/emptySearch.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/search?&searchString={searchString}");
@@ -89,6 +89,92 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             List<AccessAreaFE> actualResources = JsonSerializer.Deserialize<List<AccessAreaFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: Get all access packages for a valid right holder on behalf of a valid party 
+        ///     Expected: Returns the right holders active access package delegations, sorted into the areas they belong to
+        /// </summary>
+        [Fact]
+        public async Task GetDelegationsToRightHolder_ReturnsAccessPackages()
+        {
+            // Arrange
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "167536b5-f8ed-4c5a-8f48-0279507e53ae"; // Valid user that has access package rights for the reportee
+            Dictionary<string, List<AccessPackageDelegation>> expectedResult = Util.GetMockData<Dictionary<string, List<AccessPackageDelegation>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{rightHolderUuid}.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations/{reporteeUuid}/{rightHolderUuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Dictionary<string, List<AccessPackageDelegation>> actualResult = JsonSerializer.Deserialize<Dictionary<string, List<AccessPackageDelegation>>>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertCollections(expectedResult.Keys, actualResult.Keys, Assert.Equal);
+            foreach (string key in actualResult.Keys)
+            {
+                AssertionUtil.AssertCollections(expectedResult[key], actualResult[key], AssertionUtil.AssertEqual);
+            }
+        }
+
+        /// <summary>
+        ///     Test case: The right owned is valid but has no access packages for the reportee party
+        ///     Expected: Returns an empty Dictionary
+        /// </summary>
+        [Fact]
+        public async Task GetDelegationsToRightHolder_RightHolderHasNoAccessPackages()
+        {
+            // Arrange
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "26ca8b02-c455-4dc0-96be-f92864837ff9"; // Valid right holder that has no access package rights for the reportee
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations/{reporteeUuid}/{rightHolderUuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Dictionary<string, List<AccessPackageDelegation>> actualResult = JsonSerializer.Deserialize<Dictionary<string, List<AccessPackageDelegation>>>(await response.Content.ReadAsStringAsync(), options);
+            Assert.Empty(actualResult.Keys);
+        }
+
+        /// <summary>
+        ///     Test case: Backend returns a non-successfull status code
+        ///     Expected: Returns a non-successfull status
+        /// </summary>
+        [Fact]
+        public async Task GetDelegationsToRightHolder_BackendHttpError()
+        {
+            // Arrange
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "26ca8b02-c455-4dc0-96be-f92864800000"; // This right holder has no relationship to the party
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations/{reporteeUuid}/{rightHolderUuid}");
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+
+        }
+
+        /// <summary>
+        ///     Test case: Unexpected exception thrown in the BFF
+        ///     Expected: Returns a 500 error
+        /// </summary>
+        [Fact]
+        public async Task GetDelegationsToRightHolder_UnexpectedException()
+        {
+            // Arrange
+            string reporteeUuid = "********"; // Input that will trigger that a mocked unexpected exception is thrown
+            string rightHolderUuid = "26ca8b02-c455-4dc0-96be-f92864837ff9"; // Valid right holder that has no access package rights for the reportee
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations/{reporteeUuid}/{rightHolderUuid}");
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
         }
     }
 }
