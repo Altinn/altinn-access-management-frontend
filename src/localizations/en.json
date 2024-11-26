@@ -62,7 +62,9 @@
     "give_poa": "Give power of attorney",
     "delete_poa": "Delete power of attorney",
     "has_poa": "Has power of attorney",
-    "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload."
+    "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload.",
+    "show_more": "Show more",
+    "show_less": "Show less"
   },
   "header": {
     "menu-label": "Menu",

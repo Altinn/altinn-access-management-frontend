@@ -61,13 +61,14 @@
     "give_poa": "Gi fullmakt",
     "delete_poa": "Slett fullmakt",
     "has_poa": "Har fullmakt",
-    "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt."
+    "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
+    "show_more": "Se meir",
+    "show_less": "Se mindre"
   },
-  "header" : {
+  "header": {
     "menu-label": "Meny",
     "change-label": "Bytt",
     "back-label": "Tilbake"
-    
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",

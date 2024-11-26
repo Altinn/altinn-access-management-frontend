@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { List, ListItem } from '@altinn/altinn-components';
+import type { ListItemProps } from '@altinn/altinn-components';
+import { Avatar, List } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
-import { AmPagination } from '@/components/Paginering';
 
 import type { SelectedPackageProps } from '../DelegationModalContext';
 
@@ -100,41 +100,56 @@ const services = [
   },
 ];
 
-export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, onDelegate }: PackageInfoProps) => {
   const { t } = useTranslation();
+  const [showAllServices, setShowAllServices] = React.useState(false);
 
   const page = useMemo(
-    () =>
-      services.map((service) => ({
+    () => [
+      ...services.slice(0, showAllServices ? services.length : 5).map((service) => ({
         key: `service-${service.name}`,
         id: `service-${service.name}`,
         title: service.name,
         description: service.owner,
-        avatar: { src: service.logo, alt: service.owner, type: 'company' },
+        avatar: {
+          imageUrl: service.logo,
+          imageAlt: service.owner,
+          type: 'company',
+          name: service.owner,
+        },
         as: 'div' as React.ElementType,
       })),
-    [],
+      {
+        key: 'pagination',
+        id: 'pagination',
+        title: t(showAllServices ? 'common.show_less' : 'common.show_more'),
+        description: '',
+        onClick: () => setShowAllServices(!showAllServices),
+        icon: 'menu-elipsis-horizontal',
+        as: 'button' as React.ElementType,
+      },
+    ],
+    [showAllServices],
   );
 
   return (
-    <>
-      <ListItem
-        id={accessPackage.name ?? ''}
-        size='xl'
-        title={accessPackage?.name}
-        avatar={{
-          src: accessPackage.area?.iconUrl,
-          alt: accessPackage.area?.name,
-          type: 'company',
-        }}
-      />
-      {/* <Heading
-        size='md'
-        level={1}
-      >
-        {accessPackage?.name}
-      </Heading> */}
-      <Paragraph>{accessPackage?.description}</Paragraph>
+    <div className={classes.container}>
+      <div className={classes.header}>
+        <Avatar
+          imageUrl={accessPackage?.area?.iconUrl ?? undefined}
+          name={accessPackage?.name}
+          type='company'
+          size='lg'
+        />
+        <Heading
+          size='md'
+          level={1}
+        >
+          {accessPackage?.name}
+        </Heading>
+      </div>
+      <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
+
       <Heading
         size='sm'
         level={2}
@@ -147,11 +162,14 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       <div className={classes.service_list}>
         <List
           size='xs'
-          items={page}
+          items={page as ListItemProps[]}
+          spacing='none'
         />
       </div>
-
-      <Button onClick={onDelegate}>{t('common.give_poa')}</Button>
-    </>
+      <div className={classes.actions}>
+        <Button onClick={onDelegate}>{t('common.give_poa')}</Button>
+        <Button onClick={onDelegate}>{t('common.give_poa')}</Button>
+      </div>
+    </div>
   );
 };

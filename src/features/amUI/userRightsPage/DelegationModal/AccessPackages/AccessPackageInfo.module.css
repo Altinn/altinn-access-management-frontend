@@ -1,10 +1,33 @@
 .service_list {
   display: flex;
   flex-direction: column;
-  padding: 0;
-  max-height: 260px;
+  padding: 2px;
+  height: 230px;
   justify-content: space-between;
-  overflow-y: scroll;
-  margin: 20px 0;
-  padding: 5px;
+  overflow-y: auto;
+  overflow-x: visible;
+  gap: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  align-items: center;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  align-items: center;
+  padding: 0 10px;
+  margin-bottom: 10px;
 }
