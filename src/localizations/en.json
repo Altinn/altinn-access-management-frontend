@@ -214,7 +214,8 @@
   },
   "access_packages": {
     "current_access_packages_title": "Power of attorney to {{count}} access package(s)",
-    "give_new_button": "Give power of attorney to new access package"
+    "give_new_button": "Give power of attorney to new access package",
+    "other_packages_in_area_title": "Other available packages in this area:"
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",

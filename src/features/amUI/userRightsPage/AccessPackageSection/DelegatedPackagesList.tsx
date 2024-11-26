@@ -1,6 +1,7 @@
 import React from 'react';
 import { ListItem } from '@altinn/altinn-components';
 import { Paragraph } from '@digdir/designsystemet-react';
+import { useTranslation } from 'react-i18next';
 
 import type { AccessPackage, AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
@@ -19,6 +20,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   packageDelegations,
   accessPackages,
 }) => {
+  const { t } = useTranslation();
   const delegatedPackageIds = packageDelegations.map((p) => p.accessPackageId);
   const delegatedPackages = accessPackages.filter((p) => delegatedPackageIds.includes(p.id));
   const notDelegatedPackages = accessPackages.filter((p) => !delegatedPackageIds.includes(p.id));
@@ -43,7 +45,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
       )}
       {notDelegatedPackages.length > 0 && (
         <>
-          <Paragraph size='sm'>Andre tilganger under området:</Paragraph>
+          <Paragraph size='sm'>{t('access_packages.other_packages_in_area_title')}</Paragraph>
           <List>
             {notDelegatedPackages.map((item) => (
               <li key={item.id}>

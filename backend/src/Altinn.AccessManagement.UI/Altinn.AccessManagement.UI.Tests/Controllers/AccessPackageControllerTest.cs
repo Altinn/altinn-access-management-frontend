@@ -100,8 +100,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; // Valid user that has access package rights for the reportee
-            Dictionary<string, List<AccessPackageDelegation>> expectedResult = Util.GetMockData<Dictionary<string, List<AccessPackageDelegation>>>(_expectedDataPath + "/AccessPackage/GetDelegations/5c0656db-cf51-43a4-bd64-6a91c8caacfb.json");
+            string rightHolderUuid = "167536b5-f8ed-4c5a-8f48-0279507e53ae"; // Valid user that has access package rights for the reportee
+            Dictionary<string, List<AccessPackageDelegation>> expectedResult = Util.GetMockData<Dictionary<string, List<AccessPackageDelegation>>>(_expectedDataPath + $"/AccessPackage/GetDelegations/{rightHolderUuid}.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/delegations/{reporteeUuid}/{rightHolderUuid}");
