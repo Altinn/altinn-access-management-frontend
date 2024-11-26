@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { AccessArea, AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { SnackbarProvider } from '../../common/Snackbar';
 
@@ -16,6 +16,7 @@ import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
+import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 
 export interface DelegationModalProps {
   toParty: Party;
@@ -40,9 +41,9 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     setResourceToView(resource);
   };
 
-  const onPackageSelection = (accessPackage?: AccessPackage) => {
+  const onPackageSelection = (accessPackage?: AccessPackage, accessArea?: AccessArea) => {
     setInfoView(true);
-    setPackageToView(accessPackage);
+    setPackageToView(accessPackage ? { ...accessPackage, area: accessArea } : undefined);
   };
 
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -72,7 +73,12 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
           toParty={toParty}
         />
       );
-      infoViewContent = <></>; // TODO: Add info view for chosen access package
+      infoViewContent = packageToView && (
+        <AccessPackageInfo
+          accessPackage={packageToView}
+          toParty={toParty}
+        />
+      );
       triggerButtonText = t('access_packages.give_new_button');
       break;
     default:

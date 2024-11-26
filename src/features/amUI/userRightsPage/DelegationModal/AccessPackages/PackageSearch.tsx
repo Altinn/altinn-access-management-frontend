@@ -4,6 +4,7 @@ import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
+import type { AccessArea } from '@/rtk/features/accessPackageApi';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -14,7 +15,7 @@ import classes from './PackageSearch.module.css';
 import AccessAreaListItem from './AccessAreaListItem';
 
 export interface PackageSearchProps {
-  onSelection: (pack: AccessPackage) => void;
+  onSelection: (pack: AccessPackage, area: AccessArea) => void;
   toParty: Party;
 }
 
@@ -68,7 +69,7 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             <AccessAreaListItem
               key={a.id}
               accessPackageArea={a}
-              onSelection={onSelection}
+              onSelection={(ap: AccessPackage) => onSelection(ap, a)}
             />
           ))}
         </List>

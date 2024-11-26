@@ -1,0 +1,10 @@
+.service_list {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  max-height: 260px;
+  justify-content: space-between;
+  overflow-y: scroll;
+  margin: 20px 0;
+  padding: 5px;
+}
