@@ -1,0 +1,53 @@
+[
+  {
+    "AccessPackage": {
+      "Id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CC",
+      "Name": "Annleggsadministrasjon",
+      "Description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "Tags": [
+        {
+          "Id": "F28F5F92-0F72-4595-A166-C723E978E690",
+          "Name": "Eiendom"
+        }
+      ],
+      "EntityType": {
+        "Id": "EEC6B868-3DA0-4721-87B2-63C5686014C6",
+        "Name": "Organisasjon"
+      },
+      "Area": {
+        "Id": "589217CF-6070-474F-9989-8C5359C740F4",
+        "Name": "Bygg og anlegg",
+        "Description": "For de som bygger med anlegg",
+        "IconUrl": "https://www.svgrepo.com/show/437004/hammer.svg",
+        "Group": {
+          "Id": "",
+          "Name": "Bransje",
+          "Description": "....."
+        }
+      },
+      "Provider": {
+        "Id": "181C5364-2988-4F48-925C-62844576B5B0",
+        "Name": "Digdir"
+      },
+      "Resources": [
+        {
+          "Id": "appid-512",
+          "Name": "Lønningsoversikt"
+        }
+      ]
+    },
+    "To": {
+      "Name": "Intelligent Albatross",
+      "Uuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+      "LastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
+    }
+  }
+]

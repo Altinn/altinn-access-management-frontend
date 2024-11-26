@@ -1,0 +1,89 @@
+﻿[
+  {
+    "id": "589217CF-6070-474F-9989-8C5359C740F4",
+    "name": "Bygg og anlegg",
+    "description": "For de som bygger med anlegg. Et nobelt og meget nyttig yrke som inkluderer ting som hammer, spiker, og masse andre greier som sikkert er vanskelig å uttale navnet på.",
+    "iconUrl": "https://www.svgrepo.com/show/437004/hammer.svg",
+    "accessPackages": [
+      {
+        "id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CD",
+        "name": "Kjøp og salg av eiendom",
+        "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "resources": [
+          {
+            "id": "appid-402",
+            "name": "Det magiske klesskapet"
+          },
+          {
+            "id": "se_3225_1596",
+            "name": "A2 skjema"
+          }
+        ],
+        "area": {
+          "id": "589217CF-6070-474F-9989-8C5359C740F4",
+          "name": "Bygg og anlegg",
+          "description": "For de som bygger med anlegg. Et nobelt og meget nyttig yrke som inkluderer ting som hammer, spiker, og masse andre greier som sikkert er vanskelig å uttale navnet på.",
+          "iconUrl": "https://www.svgrepo.com/show/437004/hammer.svg"
+        }
+      },
+      {
+        "id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CC",
+        "name": "Annleggsadministrasjon",
+        "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "resources": [
+          {
+            "id": "appid-512",
+            "name": "Lønningsoversikt"
+          }
+        ],
+        "area": {
+          "id": "589217CF-6070-474F-9989-8C5359C740F4",
+          "name": "Bygg og anlegg",
+          "description": "For de som bygger med anlegg",
+          "iconUrl": "https://www.svgrepo.com/show/437004/hammer.svg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "589217CF-6070-474F-9989-8C5359C740GG",
+    "name": "Overnaturligheter",
+    "description": "Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.",
+    "iconUrl": "https://www.svgrepo.com/show/509156/magic-wand.svg",
+    "accessPackages": [
+      {
+        "id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CFG",
+        "name": "Magibruk",
+        "description": "Cat ipsum dolor sit amet, i will ruin the couch with my claws and have secret plans so pretend not to be evil.",
+        "resources": [
+          {
+            "id": "appid-402",
+            "name": "Det magiske klesskapet"
+          },
+          {
+            "id": "appid-503",
+            "name": "Snarveien"
+          },
+          {
+            "id": "app_ttd_a3-app",
+            "name": "A3 app"
+          },
+          {
+            "id": "app_ttd_a3-app2",
+            "name": "A3 app 2"
+          },
+          {
+            "id": "appid-509",
+            "name": "Kaffemaskinen i 4. etasje"
+          }
+        ],
+        "area": {
+          "id": "589217CF-6070-474F-9989-8C5359C740GG",
+          "name": "Overnaturligheter",
+          "description": "Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.",
+          "iconUrl": "https://www.svgrepo.com/show/509156/magic-wand.svg"
+        }
+      }
+    ]
+  }
+]
