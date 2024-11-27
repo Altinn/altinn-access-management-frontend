@@ -19,7 +19,7 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, onDelegate }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { listItems } = useminimzableList(accessPackage.resources);
+  const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
   return (
     <div className={classes.container}>
@@ -71,7 +71,7 @@ const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
   as: 'div' as React.ElementType,
 });
 
-const useminimzableList = (list: IdNamePair[]) => {
+const useMinimizableResourceList = (list: IdNamePair[]) => {
   const { t } = useTranslation();
   const [showAll, setShowAll] = React.useState(false);
   if (list.length <= MINIMIZED_LIST_SIZE) {
