@@ -1,6 +1,5 @@
 ﻿using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Models
 {

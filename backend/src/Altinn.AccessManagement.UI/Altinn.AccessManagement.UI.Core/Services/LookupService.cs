@@ -3,7 +3,6 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
-using System.IO;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
