@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessArea, AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { SnackbarProvider } from '../../common/Snackbar';
 
@@ -41,9 +41,9 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     setResourceToView(resource);
   };
 
-  const onPackageSelection = (accessPackage?: AccessPackage, accessArea?: AccessArea) => {
+  const onPackageSelection = (accessPackage?: AccessPackage) => {
     setInfoView(true);
-    setPackageToView(accessPackage ? { ...accessPackage, area: accessArea } : undefined);
+    setPackageToView(accessPackage);
   };
 
   const modalRef = useRef<HTMLDialogElement>(null);

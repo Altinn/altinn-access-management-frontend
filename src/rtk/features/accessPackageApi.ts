@@ -16,6 +16,7 @@ export interface AccessPackage {
   name: string;
   description: string;
   resources: IdNamePair[];
+  area: AccessArea;
 }
 
 export interface AccessPackageDelegation {

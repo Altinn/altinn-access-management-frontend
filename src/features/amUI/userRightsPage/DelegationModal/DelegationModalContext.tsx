@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessArea, AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 export interface DelegationModalProps {
   children: React.ReactNode;
 }
@@ -18,25 +18,21 @@ interface DelegationModalContextProps {
   setSearchString: React.Dispatch<React.SetStateAction<string>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setResourceToView: React.Dispatch<React.SetStateAction<ServiceResource | undefined>>;
-  setPackageToView: React.Dispatch<React.SetStateAction<SelectedPackageProps | undefined>>;
-  onSelection: (resource?: ServiceResource, accessPackage?: SelectedPackageProps) => void;
+  setPackageToView: React.Dispatch<React.SetStateAction<AccessPackage | undefined>>;
+  onSelection: (resource?: ServiceResource, accessPackage?: AccessPackage) => void;
 }
 
 const DelegationModalContext = createContext<DelegationModalContextProps | undefined>(undefined);
-
-export interface SelectedPackageProps extends AccessPackage {
-  area?: AccessArea;
-}
 
 export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ children }) => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [resourceToView, setResourceToView] = useState<ServiceResource | undefined>(undefined);
-  const [packageToView, setPackageToView] = useState<SelectedPackageProps | undefined>(undefined);
+  const [packageToView, setPackageToView] = useState<AccessPackage | undefined>(undefined);
   const [infoView, setInfoView] = useState(false);
 
-  const onSelection = (resource?: ServiceResource, accessPackage?: SelectedPackageProps) => {
+  const onSelection = (resource?: ServiceResource, accessPackage?: AccessPackage) => {
     if (resource) {
       setInfoView(true);
       setResourceToView(resource);

@@ -6,13 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-
-import type { SelectedPackageProps } from '../DelegationModalContext';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
-  accessPackage: SelectedPackageProps;
+  accessPackage: AccessPackage;
   toParty: Party;
   onDelegate?: () => void;
 }
@@ -20,7 +19,6 @@ export interface PackageInfoProps {
 export const AccessPackageInfo = ({ accessPackage, onDelegate }: PackageInfoProps) => {
   const { t } = useTranslation();
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
-
   return (
     <div className={classes.container}>
       <div className={classes.header}>
