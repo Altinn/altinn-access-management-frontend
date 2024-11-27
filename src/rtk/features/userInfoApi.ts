@@ -32,7 +32,6 @@ export interface RightHolder {
   partyType: PartyType;
   name: string;
   registryRoles: string[];
-  personId?: string;
   organizationNumber?: string;
   unitType?: string;
   inheritingRightHolders: RightHolder[];

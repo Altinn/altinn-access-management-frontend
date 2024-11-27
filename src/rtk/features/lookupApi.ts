@@ -19,7 +19,6 @@ export type Party = {
   partyId: number;
   partyUuid: string;
   orgNumber?: string;
-  ssn?: string;
   unitType?: string;
   name: string;
   partyTypeName: PartyType;

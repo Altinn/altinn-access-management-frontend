@@ -10,9 +10,8 @@ export interface FilteredRightHolder extends RightHolder {
 
 const isSearchMatch = (searchString: string, rightHolder: RightHolder): boolean => {
   const isNameMatch = rightHolder.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
-  const isPersonIdMatch = rightHolder.personId === searchString;
   const isOrgNrMatch = rightHolder.organizationNumber === searchString;
-  return isNameMatch || isPersonIdMatch || isOrgNrMatch;
+  return isNameMatch || isOrgNrMatch;
 };
 
 const sortRightHolders = (rightHolders: RightHolder[]): RightHolder[] =>

@@ -1,7 +1,6 @@
-﻿using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,11 +38,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("org/{orgNummer}")]
-        public async Task<ActionResult<Party>> GetOrganisation(string orgNummer)
+        public async Task<ActionResult<PartyFE>> GetOrganisation(string orgNummer)
         {
             try
             {
-                Party party = await _lookupService.GetPartyForOrganization(orgNummer);
+                PartyFE party = await _lookupService.GetPartyForOrganization(orgNummer);
 
                 if (party == null)
                 {
@@ -65,15 +64,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving a party by uuid
         /// </summary>
         /// <param name="uuid">The uuid for the party to look up</param>
-        /// <returns>Party information</returns>
+        /// <returns>Party information for the GUI</returns>
         [HttpGet]
         [Authorize]
         [Route("party/{uuid}")]
-        public async Task<ActionResult<Party>> GetPartyByUUID(Guid uuid)
+        public async Task<ActionResult<PartyFE>> GetPartyByUUID(Guid uuid)
         {
             try
             {
-                Party party = await _lookupService.GetPartyByUUID(uuid);
+                PartyFE party = await _lookupService.GetPartyByUUID(uuid);
 
                 if (party != null)
                 {
@@ -86,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetPartyByUUID failed to fetch reportee information");
+                _logger.LogError(ex, "GetPartyByUUID failed to fetch party information");
                 return StatusCode(500);
             }
         }
@@ -95,15 +94,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Endpoint for retrieving a user by uuid
         /// </summary>
         /// <param name="uuid">The uuid for the user to look up</param>
-        /// <returns>Party information</returns>
+        /// <returns>Party information for the GUI</returns>
         [HttpGet]
         [Authorize]
         [Route("user/{uuid}")]
-        public async Task<ActionResult<UserProfile>> GetUserByUUID(Guid uuid)
+        public async Task<ActionResult<UserProfileFE>> GetUserByUUID(Guid uuid)
         {
             try
             {
-                UserProfile user = await _lookupService.GetUserByUUID(uuid);
+                UserProfileFE user = await _lookupService.GetUserByUUID(uuid);
 
                 if (user != null)
                 {
@@ -116,7 +115,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetUserByUUID failed to fetch reportee information");
+                _logger.LogError(ex, "GetUserByUUID failed to fetch party information");
                 return StatusCode(500);
             }
         }

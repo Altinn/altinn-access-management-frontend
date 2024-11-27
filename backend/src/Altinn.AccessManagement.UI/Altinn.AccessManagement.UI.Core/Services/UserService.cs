@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
@@ -38,10 +39,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<UserProfile> GetUserProfile(int userId)
+        public async Task<UserProfileFE> GetUserProfile(int userId)
         {
             UserProfile userProfile = await _profileClient.GetUserProfile(userId);
-            return userProfile;           
+            return userProfile == null ? null : new UserProfileFE(userProfile);         
         }
 
         /// <inheritdoc/>        

@@ -25,11 +25,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessManagement
         public string OrganizationNumber { get; set; }
 
         /// <summary>
-        /// Gets the national identity number if the party is a person
-        /// </summary>
-        public string PersonId { get; set; }
-
-        /// <summary>
         /// Gets or sets the party id
         /// </summary>
         public int PartyId { get; set; }

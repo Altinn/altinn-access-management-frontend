@@ -1,8 +1,10 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("profile")]
-        public async Task<ActionResult> GetUser()
+        public async Task<ActionResult<UserProfileFE>> GetUser()
         {
             int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
             if (userId == 0)
@@ -45,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var user = await _userService.GetUserProfile(userId);
+                UserProfileFE user = await _userService.GetUserProfile(userId);
 
                 if (user == null)
                 {

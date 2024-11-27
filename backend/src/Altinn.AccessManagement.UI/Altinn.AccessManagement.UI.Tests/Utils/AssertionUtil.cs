@@ -233,7 +233,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        public static void AssertEqual(Party expected, Party actual)
+        public static void AssertEqual(PartyFE expected, PartyFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -246,7 +246,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyId, actual.PartyId);
             Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
-            AssertCollections<Party>(expected.ChildParties, actual.ChildParties, AssertEqual);
+            AssertCollections<PartyFE>(expected.ChildParties, actual.ChildParties, AssertEqual);
 
         }
 
@@ -275,7 +275,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyType, actual.PartyType);
-            Assert.Equal(expected.PersonId, actual.PersonId);
             AssertCollections(expected.RegistryRoles, actual.RegistryRoles, Assert.Equal);
 
         }
