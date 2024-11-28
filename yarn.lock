@@ -13,8 +13,8 @@ __metadata:
   linkType: hard
 
 "@altinn/altinn-components@npm:^0.6.7":
-  version: 0.6.7
-  resolution: "@altinn/altinn-components@npm:0.6.7"
+  version: 0.6.12
+  resolution: "@altinn/altinn-components@npm:0.6.12"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.2.1"
     classnames: "npm:^2.5.1"
@@ -23,7 +23,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1"
     react-dom: ">=18.3.1"
-  checksum: 10/b5702edf3dfc15663cca2c7dcfb92fd01c8de0a545d47611b26f7df84f2d3f38347ae53563c3db5c3895ff3add7b58616a21b561049eafdf0070fa2d686a7b59
+  checksum: 10/51a69817c3849cdc2fa34852f431ce5dca918a192ae609caba522b5d51c0598c058d962d4dcb750fd9874f64fb2679e3c1063a16a5dbf714e0daa2906b90e786
   languageName: node
   linkType: hard
 
