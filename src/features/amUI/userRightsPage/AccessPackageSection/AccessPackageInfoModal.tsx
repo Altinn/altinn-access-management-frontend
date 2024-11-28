@@ -5,19 +5,19 @@ import type { Party } from '@/rtk/features/lookupApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
 
-interface AccessPackageDelegationModalProps {
+interface AccessPackageInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
   toParty: Party;
   modalItem: AccessPackage | undefined;
   onClose?: () => void;
 }
 
-export const AccessPackageDelegationModal = ({
+export const AccessPackageInfoModal = ({
   modalRef,
   toParty,
   modalItem,
   onClose,
-}: AccessPackageDelegationModalProps) => {
+}: AccessPackageInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
 

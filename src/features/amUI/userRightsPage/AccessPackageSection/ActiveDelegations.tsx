@@ -10,7 +10,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 
 import { DelegatedAreaListItem } from './DelegatedAreaListItem';
 import { DelegatedPackagesList } from './DelegatedPackagesList';
-import { AccessPackageDelegationModal } from './AccessPackageDelegationModal';
+import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const { t } = useTranslation();
@@ -65,7 +65,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
               );
             })}
         </List>
-        <AccessPackageDelegationModal
+        <AccessPackageInfoModal
           modalRef={modalRef}
           toParty={toParty}
           modalItem={modalItem}
