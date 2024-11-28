@@ -16,6 +16,7 @@ import { ResourceInfo } from './SingleRights/ResourceInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
+import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 
 export interface DelegationModalProps {
   toParty: Party;
@@ -72,7 +73,12 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
           toParty={toParty}
         />
       );
-      infoViewContent = <></>; // TODO: Add info view for chosen access package
+      infoViewContent = packageToView && (
+        <AccessPackageInfo
+          accessPackage={packageToView}
+          toParty={toParty}
+        />
+      );
       triggerButtonText = t('access_packages.give_new_button');
       break;
     default:

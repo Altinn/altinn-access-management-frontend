@@ -19,7 +19,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@altinn/altinn-components": "^0.6.7",
+    "@altinn/altinn-components": "^0.6.10",
     "@cypress/react18": "^2.0.0",
     "@digdir/designsystemet-css": "1.0.0-next.35",
     "@digdir/designsystemet-react": "1.0.0-next.35",

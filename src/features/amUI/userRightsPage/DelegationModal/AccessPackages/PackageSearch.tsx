@@ -68,7 +68,7 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             <AccessAreaListItem
               key={a.id}
               accessPackageArea={a}
-              onSelection={onSelection}
+              onSelection={(ap: AccessPackage) => onSelection(ap)}
             />
           ))}
         </List>

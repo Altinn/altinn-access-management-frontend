@@ -30,7 +30,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
           toParty={party}
           delegationType={DelegationType.AccessPackage}
         />
-        <ActiveDelegations />
+        <ActiveDelegations toParty={party} />
       </div>
     )
   );

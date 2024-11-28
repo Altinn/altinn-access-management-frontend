@@ -43,7 +43,7 @@ export const DeleteResourceButton = ({
   return (
     representingParty && (
       <ButtonWithConfirmPopup
-        message={t('user_rights_page.delete_ingleRight_confirm_message')}
+        message={t('user_rights_page.delete_singleRight_confirm_message')}
         triggerButtonProps={{
           disabled: false,
           variant: 'secondary',

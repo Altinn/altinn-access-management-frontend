@@ -75,6 +75,13 @@
           {
             "id": "appid-509",
             "name": "Kaffemaskinen i 4. etasje"
+          },      {
+            "Id": "appid-512",
+            "Name": "Lønningsoversikt"
+          },
+          {
+            "Id": "appid-513",
+            "Name": "Kaffemaskinen i 5. etasje"
           }
         ],
         "area": {

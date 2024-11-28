@@ -7,7 +7,7 @@ import { List } from '@/components';
 
 interface AccessAreaListItemProps {
   accessPackageArea: AccessArea;
-  onSelection: (item: AccessPackage) => void;
+  onSelection: (accessPackage: AccessPackage) => void;
 }
 
 const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
@@ -40,15 +40,18 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
           <Paragraph size='xs'>{description}</Paragraph>
           <List>
             {accessPackages?.map((item) => (
-              <li key={item.id}>
-                <ListItem
-                  id={item.id}
-                  onClick={() => onSelection(item)}
-                  size='xs'
-                  title={item.name}
-                  color='accent'
-                />
-              </li>
+              <>
+                <li key={item.id}>
+                  <ListItem
+                    id={item.id}
+                    onClick={() => onSelection(item)}
+                    size='xs'
+                    title={item.name}
+                    color='accent'
+                    as='button'
+                  />
+                </li>
+              </>
             ))}
           </List>
         </>

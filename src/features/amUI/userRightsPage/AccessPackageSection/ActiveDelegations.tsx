@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Alert, Paragraph, Spinner } from '@digdir/designsystemet-react';
 
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useGetRightHolderDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { DelegatedAreaListItem } from './DelegatedAreaListItem';
 import { DelegatedPackagesList } from './DelegatedPackagesList';
+import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 
-export const ActiveDelegations = () => {
+export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const { t } = useTranslation();
   const { id } = useParams();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [modalItem, setModalItem] = React.useState<AccessPackage | undefined>(undefined);
 
   const {
     data: activeDelegations,
@@ -38,24 +43,35 @@ export const ActiveDelegations = () => {
     </Alert>
   ) : (
     activeDelegations && (
-      <List spacing>
-        {allPackageAreas
-          ?.filter((area) => areasToShow.some((areaId) => areaId === area.id))
-          .map((area) => {
-            return (
-              <DelegatedAreaListItem
-                key={area.id}
-                accessPackageArea={area}
-              >
-                <DelegatedPackagesList
-                  packageDelegations={activeDelegations[area.id]}
-                  accessPackages={area.accessPackages}
-                  onSelection={(pack) => console.log('clicked on access package: ', pack.name)}
-                />
-              </DelegatedAreaListItem>
-            );
-          })}
-      </List>
+      <>
+        <List spacing>
+          {allPackageAreas
+            ?.filter((area) => areasToShow.some((areaId) => areaId === area.id))
+            .map((area) => {
+              return (
+                <DelegatedAreaListItem
+                  key={area.id}
+                  accessPackageArea={area}
+                >
+                  <DelegatedPackagesList
+                    packageDelegations={activeDelegations[area.id]}
+                    accessPackages={area.accessPackages}
+                    onSelection={(pack) => {
+                      setModalItem(pack);
+                      modalRef.current?.showModal();
+                    }}
+                  />
+                </DelegatedAreaListItem>
+              );
+            })}
+        </List>
+        <AccessPackageInfoModal
+          modalRef={modalRef}
+          toParty={toParty}
+          modalItem={modalItem}
+          onClose={() => setModalItem(undefined)}
+        />
+      </>
     )
   );
 };
