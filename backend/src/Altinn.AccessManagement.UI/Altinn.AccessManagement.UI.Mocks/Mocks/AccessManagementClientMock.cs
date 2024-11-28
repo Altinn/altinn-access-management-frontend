@@ -79,7 +79,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Name = "Livsglad Film",
                     Type = AuthorizedPartyType.Person,
                     PartyUuid = new Guid("eb0e874b-5f37-44cc-b648-f9a902a82c89"),
-                    PersonId = "21915399719",
                     AuthorizedRoles = []
                 };
                 reportees.Add(currentUser);
@@ -376,14 +375,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 .RuleFor(s => s.Name, f => f.Person.FullName)
                 .RuleFor(s => s.PartyId, f => f.Random.Number(10000000, 99999999))
                 .RuleFor(s => s.PartyUuid, f => f.Random.Guid())
-                .RuleFor(s => s.PersonId, f => f.Person.Fodselsnummer())
                 .RuleFor(s => s.AuthorizedRoles, f => f.Make(f.Random.Number(0, 5), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList());
 
             _faker = new Faker<AuthorizedParty>()
                 .RuleFor(p => p.PartyUuid, f => f.Random.Guid())
                 .RuleFor(p => p.Type, f => f.PickRandom(allowedPartyTypes))
                 .RuleFor(p => p.OrganizationNumber, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Random.Number(100000000, 999999999).ToString() : null)
-                .RuleFor(p => p.PersonId, (f, p) => p.Type != AuthorizedPartyType.Organization ? f.Person.Fodselsnummer() : null)
                 .RuleFor(p => p.PartyId, f => f.Random.Number(10000000, 99999999))
                 .RuleFor(p => p.Name, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanyName() : f.Person.FullName)
                 .RuleFor(p => p.UnitType, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanySuffix() : null)

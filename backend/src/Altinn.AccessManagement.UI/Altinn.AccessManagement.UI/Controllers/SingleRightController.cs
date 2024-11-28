@@ -154,7 +154,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("{party}/rightholder/{userId}")]
-        public async Task<IActionResult> GetSingleRightsForRightholder([FromRoute] string party, [FromRoute] string userId)
+        public async Task<ActionResult<List<ResourceDelegation>>> GetSingleRightsForRightholder([FromRoute] string party, [FromRoute] string userId)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try

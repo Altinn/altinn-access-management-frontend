@@ -13,7 +13,6 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       partyUuid: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
       partyTypeName: 2,
       orgNumber: '310202398',
-      ssn: '',
       unitType: 'AS',
       name: 'DISKRET NÆR TIGER AS',
       isDeleted: false,

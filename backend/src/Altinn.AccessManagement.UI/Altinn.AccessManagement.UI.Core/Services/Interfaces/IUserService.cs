@@ -1,6 +1,6 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
-using Altinn.Platform.Profile.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -14,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <returns>users preferred settings</returns>
-        Task<UserProfile> GetUserProfile(int userId);
+        Task<UserProfileFE> GetUserProfile(int userId);
 
         /// <summary>
         /// Gets a Party based on partyId if the party is in the users reporteelist
