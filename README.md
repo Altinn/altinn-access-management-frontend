@@ -64,9 +64,9 @@ OBS: These settings use https which requires a certificate to be uploaded or gen
 
 Now that the BFF is running, you can move on to the react app.
 
-#### Troubleshooting: "Unhandled exception. System.IO.IOException: Failed to bind to address https://localhost:443"
+#### Troubleshooting
 
-If you encounter the error "Unhandled exception. System.IO.IOException: Failed to bind to address https://localhost:443", it usually means the application doesn't have the necessary permissions to use that port. This is because port 443 is a privileged port, typically requiring root access. However, running your entire application with elevated privileges (e.g., using sudo) is not recommended due to security risks. Instead, you can use a reverse proxy like nginx to handle port 443 and forward requests to your application running on a non-privileged port. This allows you to avoid running your app as root while still serving it on the standard HTTPS port.
+If you encounter the error **"Unhandled exception. System.IO.IOException: Failed to bind to address https://localhost:443"**, it usually means the application doesn't have the necessary permissions to use that port. This is because port 443 is a privileged port, typically requiring root access. However, running your entire application with elevated privileges (e.g., using sudo) is not recommended due to security risks. Instead, you can use a reverse proxy like nginx to handle port 443 and forward requests to your application running on a non-privileged port. This allows you to avoid running your app as root while still serving it on the standard HTTPS port.
 
 1. Install nginx:
 
@@ -112,15 +112,15 @@ Go back to the main nginx directory:
 
 ```Bash
 cd /opt/homebrew/etc/nginx/
-````
+```
 
-4. Create an ssl directory:
+Create an ssl directory:
 
 ```Bash
 mkdir ssl
 ```
 
-5. Generate a self-signed certificate:
+Generate a self-signed certificate:
 
 ```Bash
 cd ssl
@@ -128,13 +128,15 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out l
 ```
 (You'll be prompted to enter information for the certificate. This information is not critical for local development, so feel free to fill in any values.)
 
-6. Start nginx:
+4. Start nginx:
+
+Try running your app again. It should now work correctly on port 443, with nginx handling SSL encryption and forwarding requests to your application.
 
 ```Bash
 sudo nginx
 ```
 
-Try running your app again. It should now work correctly on port 443, with nginx handling SSL encryption and forwarding requests to your application.
+
 
 ### Step 3: Run the React application
 
