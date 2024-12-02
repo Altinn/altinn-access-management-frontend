@@ -1,30 +1,30 @@
 {
   "589217CF-6070-474F-9989-8C5359C740F4": [
     {
-      "accessPackageId": "3490203E-876E-4EF9-B774-9A0CD9B7E9CC",
-      "delegationDetails": {
-        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "lastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
-      }
+        "accessPackageId": "annleggadmin",
+        "delegationDetails": {
+            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+            "lastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
+        }
     },
     {
-      "accessPackageId": "3490203E-876E-4EF9-B774-9A0CD9B7E9CD",
-      "delegationDetails": {
-        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "lastChangedOn": "2024-12-22T14:57:39.2568955+01:00"
-      }
+        "accessPackageId": "eiendom_kjop",
+        "delegationDetails": {
+            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+            "lastChangedOn": "2024-12-22T14:57:39.2568955+01:00"
+        }
     }
   ],
   "589217CF-6070-474F-9989-8C5359C740GG": [
     {
-      "accessPackageId": "3490203E-876E-4EF9-B774-9A0CD9B7E9CFG",
-      "delegationDetails": {
-        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
-      }
+        "accessPackageId": "magibruk",
+        "delegationDetails": {
+            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+            "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+            "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
+        }
     }
   ]
 }

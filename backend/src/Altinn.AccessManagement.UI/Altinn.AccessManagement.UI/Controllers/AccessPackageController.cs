@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -94,5 +95,35 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegations/{from}")]
         public async Task<ActionResult<List<AccessPackageRecipients>>> GetDelegationsFromParty([FromRoute] Guid from)
         */
+
+        /// <summary>
+        ///     Endpoint for revoking access to an access package that has been granted from one party to another.
+        /// </summary>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="packageId">The identifier of the access package that is to be revoked</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("{from}/{to}/{accessPackageId}/revoke")]
+        public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string packageId)
+        {
+            try
+            {
+                var response = await _accessPackageService.RevokeAccessPackage(from, to, packageId);
+                return Ok(response);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
     }
 }
