@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
+import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 export interface AccessArea {
   id: string;
@@ -30,6 +31,13 @@ export interface DelegationDetails {
   lastChangedOn: Date;
 }
 
+export interface DelegationInput {
+  to: IdValuePair[];
+  rights: {
+    resource: IdValuePair[];
+  }[];
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'accesspackage';
 
 export const accessPackageApi = createApi({
@@ -54,9 +62,19 @@ export const accessPackageApi = createApi({
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
     }),
+    delegatePackage: builder.mutation<AccessPackageDelegation, DelegationInput>({
+      query: (delegation) => {
+        return {
+          url: `delegate/${getCookie('AltinnPartyId')}`,
+          method: 'POST',
+          body: delegation,
+        };
+      },
+    }),
   }),
 });
 
-export const { useSearchQuery, useGetRightHolderDelegationsQuery } = accessPackageApi;
+export const { useSearchQuery, useGetRightHolderDelegationsQuery, useDelegatePackageMutation } =
+  accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
@@ -168,5 +169,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A list of all access package delegations</returns>
         Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode);
+
+        /// <summary>
+        ///    Creates a new delegation of an access package
+        /// </summary>
+        /// <param name="party">The party that is delegating the access</param>
+        /// <param name="input">The delegation to be created</param>
+        Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, DelegationInput input);
     }
 }

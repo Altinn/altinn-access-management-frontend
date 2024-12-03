@@ -1,0 +1,60 @@
+{
+    "Id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CFG",
+    "Name": "Magibruk",
+    "Description": "Cat ipsum dolor sit amet, i will ruin the couch with my claws and have secret plans so pretend not to be evil.",
+    "Tags": [
+      {
+        "Id": "F28F5F92-0F72-4595-A166-C723E978E6AA",
+        "Name": "Overnaturlige ting"
+      }
+    ],
+    "EntityType": {
+      "Id": "EEC6B868-3DA0-4721-87B2-63C5686014C6",
+      "Name": "Organisasjon"
+    },
+    "Area": {
+      "Id": "589217CF-6070-474F-9989-8C5359C740GG",
+      "Name": "Overnaturligheter",
+      "Description": "Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.",
+      "IconUrl": "https://www.svgrepo.com/show/509156/magic-wand.svg",
+      "Group": {
+        "Id": "",
+        "Name": "Bransje",
+        "Description": "....."
+      }
+    },
+    "Provider": {
+      "Id": "181C5364-2988-4F48-925C-62844576B5B0",
+      "Name": "Digdir"
+    },
+    "Resources": [
+      {
+        "Id": "appid-402",
+        "Name": "Det magiske klesskapet"
+      },
+      {
+        "Id": "appid-503",
+        "Name": "Snarveien"
+      },
+      {
+        "Id": "app_ttd_a3-app",
+        "Name": "A3 app"
+      },
+      {
+        "Id": "app_ttd_a3-app2",
+        "Name": "A3 app 2"
+      },
+      {
+        "Id": "appid-509",
+        "Name": "Kaffemaskinen i 4. etasje"
+      },
+      {
+        "Id": "appid-512",
+        "Name": "Lønningsoversikt"
+      },
+      {
+        "Id": "appid-513",
+        "Name": "Kaffemaskinen i 5. etasje"
+      }
+    ]
+  }

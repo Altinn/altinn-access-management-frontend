@@ -360,5 +360,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AccessPackageAccess>>(response);
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, DelegationInput input)
+        {
+            string endpointUrl = $"internal/{party}/rights/delegation/offered"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(input, _serializerOptions), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            return response;
+        }
     }
 }

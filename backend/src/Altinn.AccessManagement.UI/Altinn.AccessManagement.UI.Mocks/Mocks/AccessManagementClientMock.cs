@@ -11,6 +11,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -97,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             catch
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }         
+            }
         }
 
         /// <inheritdoc />
@@ -339,6 +340,25 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, DelegationInput input)
+        {
+            ThrowExceptionIfTriggerParty(party);
+
+            string packageId = input.Rights.First().Resource.First().Value;
+            IdValuePair toMatch = input.To.First();
+            string path = Path.Combine(dataFolder, "AccessPackage", "Delegation", $"{packageId}.json");
+
+            if (File.Exists(path))
+            {
+                string content = File.ReadAllText(path);
+                return Task.FromResult(new HttpResponseMessage
+                { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();
@@ -394,5 +414,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return new List<AuthorizedParty>();
                 });
         }
+
+
+
+
+
     }
 }
