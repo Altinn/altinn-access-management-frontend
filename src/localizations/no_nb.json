@@ -244,6 +244,7 @@
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "{{name}} gir tilgang til {{count}} tjenester",
+    "package_delegation_success": "{{name}} har fått tilgang til {{accessPackage}}", 
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",

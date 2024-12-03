@@ -6,8 +6,13 @@ import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import {
+  useGetRightHolderDelegationsQuery,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
+import { useSnackbar } from '@/features/amUI/common/Snackbar';
+import { SnackbarMessageVariant } from '@/features/amUI/common/Snackbar/SnackbarProvider';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -19,10 +24,32 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const delegatePackage = useDelegateAccessPackage();
 
-  const handleDelegate = () => {
-    delegatePackage(toParty, accessPackage, onDelegate);
+  const delegatePackage = useDelegateAccessPackage();
+  const { openSnackbar } = useSnackbar();
+
+  const { data: activeDelegations, isFetching } = useGetRightHolderDelegationsQuery(
+    toParty.partyUuid,
+  );
+  const userHasPackage = React.useMemo(() => {
+    if (activeDelegations && !isFetching) {
+      return Object.values(activeDelegations)
+        .flat()
+        .some((delegation) => delegation.accessPackageId === accessPackage.id);
+    }
+    return false;
+  }, [activeDelegations, isFetching, accessPackage.id]);
+
+  const handleDelegate = async () => {
+    await delegatePackage(toParty, accessPackage, onDelegate);
+    openSnackbar({
+      message: t('delegation_modal.package_delegation_success', {
+        name: toParty.name,
+        accessPackage: accessPackage.name,
+      }),
+      duration: 5000,
+      variant: SnackbarMessageVariant.Default,
+    });
     if (onDelegate) {
       onDelegate();
     }
@@ -64,7 +91,11 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
         />
       </div>
       <div className={classes.actions}>
-        <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
+        {userHasPackage ? (
+          <Button onClick={() => {}}>{t('common.delete')}</Button> // TODO: Implement remove POA
+        ) : (
+          <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
+        )}
       </div>
     </div>
   );
