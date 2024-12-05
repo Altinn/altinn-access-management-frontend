@@ -1,7 +1,4 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
@@ -12,24 +9,11 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:pickProcess}",
-      "justMyCode": true
-    },
-    {
-      "name": ".NET Core Launch",
-      "type": "coreclr",
+      "name": "C#: Altinn.AccessManagement.UI [LocalDev_5000] asd",
+      "type": "dotnet",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/bin/Debug/net8.0/Altinn.AccessManagement.UI.dll",
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "console": "internalConsole",
-      "internalConsoleOptions": "openOnSessionStart",
-      "args": ["--launch-profile", "LocalDev_5000"]
+      "projectPath": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
+      "launchConfigurationId": "TargetFramework=;LocalDev_5000"
     }
   ]
 }
