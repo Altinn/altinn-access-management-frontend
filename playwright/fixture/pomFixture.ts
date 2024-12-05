@@ -8,6 +8,7 @@ import {
   revokeRights,
   coverebyUserRights,
   delegateRoleToUser,
+  instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
 
 // Define the fixtures
@@ -20,6 +21,7 @@ const test = baseTest.extend<{
   coverebyRights: coverebyUserRights;
   delegateRoles: delegateRoleToUser;
   apiDelegations: apiDelegation;
+  instantiateResources: instantiateResource;
 }>({
   login: async ({ page }, use) => {
     await use(new loginWithUser(page));
@@ -32,6 +34,9 @@ const test = baseTest.extend<{
   },
   deleteRights: async ({ page }, use) => {
     await use(new revokeRights(page));
+  },
+  instantiateResources: async ({ page }, use) => {
+    await use(new instantiateResource(page));
   },
   logoutUser: async ({ page }, use) => {
     await use(new logoutWithUser(page));
