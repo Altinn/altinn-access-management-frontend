@@ -9,7 +9,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "C#: Altinn.AccessManagement.UI [LocalDev_5000] asd",
+      "name": "C#: Altinn.AccessManagement.UI [LocalDev_5000]",
       "type": "dotnet",
       "request": "launch",
       "projectPath": "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
