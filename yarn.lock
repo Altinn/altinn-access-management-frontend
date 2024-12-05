@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:^0.6.10":
-  version: 0.6.10
-  resolution: "@altinn/altinn-components@npm:0.6.10"
+"@altinn/altinn-components@npm:^0.7.0":
+  version: 0.7.4
+  resolution: "@altinn/altinn-components@npm:0.7.4"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.2.1"
     classnames: "npm:^2.5.1"
@@ -23,7 +23,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1"
     react-dom: ">=18.3.1"
-  checksum: 10/6550b809b29db468d5e78bdd93c69c04e4a46d15d4ae6c1bcaff23d3f216a57fc3e70c6a7eb70006d81a03d987a9c3e0b3fd2a0397dc182e65f0c19b7ec698c4
+  checksum: 10/05205424b740cb2277e22c504f223766820193212a6e0c5b143895dc3040fa6731d60bf1582b2da7d624d74ef6e43c373e669a79aab639ecb313f66c56fbf538
   languageName: node
   linkType: hard
 
@@ -2655,7 +2655,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:^0.6.10"
+    "@altinn/altinn-components": "npm:^0.7.0"
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/designsystemet-css": "npm:1.0.0-next.35"
     "@digdir/designsystemet-react": "npm:1.0.0-next.35"
