@@ -130,11 +130,13 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out l
 
 4. Start nginx:
 
-Try running your app again. It should now work correctly on port 443, with nginx handling SSL encryption and forwarding requests to your application.
-
+Start nginx
 ```Bash
 sudo nginx
 ```
+
+Try running your app again. It should now work correctly on port 443, with nginx handling SSL encryption and forwarding requests to your application.
+
 
 
 
