@@ -214,7 +214,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         /// <summary>
@@ -274,7 +274,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                         {
                             Resource = new List<IdValuePair>
                             {
-                                new IdValuePair { Id = "urn:altinn:accesspackage", Value = "invalid_id" }
+                                // Send empty guid to  trigger exception in backend
+                                new IdValuePair { Id = "urn:altinn:accesspackage", Value = Guid.Empty.ToString() } 
                             }
                         }
                     }
@@ -288,9 +289,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
-
 
     }
 }

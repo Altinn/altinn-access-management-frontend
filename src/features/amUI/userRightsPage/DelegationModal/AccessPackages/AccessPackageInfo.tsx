@@ -41,17 +41,21 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const handleDelegate = async () => {
-    await delegatePackage(toParty, accessPackage, onDelegate);
-    openSnackbar({
-      message: t('delegation_modal.package_delegation_success', {
-        name: toParty.name,
-        accessPackage: accessPackage.name,
-      }),
-      duration: 5000,
-      variant: SnackbarMessageVariant.Default,
-    });
-    if (onDelegate) {
-      onDelegate();
+    try {
+      await delegatePackage(toParty, accessPackage, onDelegate);
+      openSnackbar({
+        message: t('delegation_modal.package_delegation_success', {
+          name: toParty.name,
+          accessPackage: accessPackage.name,
+        }),
+        duration: 5000,
+        variant: SnackbarMessageVariant.Default,
+      });
+      if (onDelegate) {
+        onDelegate();
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

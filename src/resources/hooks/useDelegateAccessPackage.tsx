@@ -1,8 +1,4 @@
-import type {
-  AccessPackage,
-  AccessPackageDelegation,
-  DelegationInput,
-} from '@/rtk/features/accessPackageApi';
+import type { AccessPackage, DelegationInput } from '@/rtk/features/accessPackageApi';
 import { useDelegatePackageMutation } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -14,7 +10,7 @@ export const useDelegateAccessPackage = () => {
   const delegatePackage = (
     toParty: Party,
     resource: AccessPackage,
-    onSuccess?: (response: AccessPackageDelegation) => void,
+    onSuccess?: () => void,
     onError?: (status: string | number) => void,
   ) => {
     let recipient: IdValuePair[];
@@ -39,8 +35,8 @@ export const useDelegateAccessPackage = () => {
 
     delegate(delegationInput)
       .unwrap()
-      .then((response) => {
-        onSuccess?.(response);
+      .then(() => {
+        onSuccess?.();
       })
       .catch((status) => {
         onError?.(status);

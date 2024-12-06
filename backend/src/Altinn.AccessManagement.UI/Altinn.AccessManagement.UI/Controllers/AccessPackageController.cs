@@ -96,16 +96,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("delegate/{party}")]
-        public async Task<ActionResult<AccessPackageDelegation>> CreateAccessPackageDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
+        public async Task<ActionResult> CreateAccessPackageDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
         {
             try
             {
                 HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, delegation);
-
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<AccessPackageDelegation>(responseContent, _serializerOptions);
+                    return Ok(await response.Content.ReadAsStringAsync());
                 }
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)

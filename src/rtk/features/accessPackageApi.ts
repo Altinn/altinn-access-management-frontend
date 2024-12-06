@@ -62,7 +62,7 @@ export const accessPackageApi = createApi({
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
     }),
-    delegatePackage: builder.mutation<AccessPackageDelegation, DelegationInput>({
+    delegatePackage: builder.mutation<void, DelegationInput>({
       invalidatesTags: ['AccessPackages'],
       query: (delegation) => {
         return {

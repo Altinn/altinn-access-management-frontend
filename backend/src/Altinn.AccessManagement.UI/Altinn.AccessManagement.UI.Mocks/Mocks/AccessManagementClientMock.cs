@@ -346,17 +346,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party);
 
             string packageId = input.Rights.First().Resource.First().Value;
-            IdValuePair toMatch = input.To.First();
-            string path = Path.Combine(dataFolder, "AccessPackage", "Delegation", $"{packageId}.json");
-
-            if (File.Exists(path))
+            
+            if (packageId == Guid.Empty.ToString())
             {
-                string content = File.ReadAllText(path);
-                return Task.FromResult(new HttpResponseMessage
-                { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            else
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
+            }
         }
 
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
