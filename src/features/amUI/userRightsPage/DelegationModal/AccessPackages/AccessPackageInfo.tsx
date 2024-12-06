@@ -6,7 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import {
+  useGetRightHolderDelegationsQuery,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
+
+import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -16,8 +21,21 @@ export interface PackageInfoProps {
   onDelegate?: () => void;
 }
 
-export const AccessPackageInfo = ({ accessPackage, onDelegate }: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, onDelegate, toParty }: PackageInfoProps) => {
   const { t } = useTranslation();
+
+  const { data: activeDelegations, isFetching } = useGetRightHolderDelegationsQuery(
+    toParty.partyUuid,
+  );
+  const userHasPackage = React.useMemo(() => {
+    if (activeDelegations && !isFetching) {
+      return Object.values(activeDelegations)
+        .flat()
+        .some((delegation) => delegation.accessPackageId === accessPackage.id);
+    }
+    return false;
+  }, [activeDelegations, isFetching, accessPackage.id]);
+
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
   return (
     <div className={classes.container}>
@@ -54,7 +72,15 @@ export const AccessPackageInfo = ({ accessPackage, onDelegate }: PackageInfoProp
         />
       </div>
       <div className={classes.actions}>
-        <Button onClick={onDelegate}>{t('common.give_poa')}</Button>
+        {userHasPackage ? (
+          <DeletePackageButton
+            accessPackage={accessPackage}
+            toPartyUuid={toParty.partyUuid}
+            fullText
+          />
+        ) : (
+          <Button onClick={onDelegate}>{t('common.give_poa')}</Button> // TODO: Implement delegation
+        )}
       </div>
     </div>
   );

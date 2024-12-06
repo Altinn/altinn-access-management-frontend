@@ -1,7 +1,7 @@
 .service_list {
   display: flex;
   flex-direction: column;
-  padding: 2px;
+  padding: 4px 2px;
   height: 230px;
   justify-content: space-between;
   overflow-y: auto;
@@ -12,7 +12,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
+  padding: 0.5rem;
 }
 
 .header {
@@ -20,7 +21,6 @@
   justify-content: flex-start;
   gap: 15px;
   align-items: center;
-  padding: 0 10px;
   margin-bottom: 10px;
 }
 
@@ -28,6 +28,6 @@
   display: flex;
   gap: 15px;
   align-items: center;
-  padding: 0 10px;
-  margin-bottom: 10px;
+  padding-top: 10px;
+  margin-bottom: 5px;
 }

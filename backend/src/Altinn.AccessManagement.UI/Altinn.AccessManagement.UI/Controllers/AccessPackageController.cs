@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
-        [Route("{from}/{to}/{accessPackageId}/revoke")]
+        [Route("{from}/{to}/{packageId}/revoke")]
         public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string packageId)
         {
             try

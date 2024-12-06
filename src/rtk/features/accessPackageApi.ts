@@ -42,7 +42,7 @@ export const accessPackageApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['AccessPackages'],
+  tagTypes: ['AccessPackages', 'currentPackages'],
   endpoints: (builder) => ({
     search: builder.query<AccessArea[], string>({
       query: (searchString) => {
@@ -53,10 +53,24 @@ export const accessPackageApi = createApi({
       query: (rightHolderUuid) => {
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
+      providesTags: ['currentPackages'],
+    }),
+    revokeDelegation: builder.mutation<
+      { packageId: boolean; success: boolean },
+      { from: string; to: string; packageId: string }
+    >({
+      query({ from, to, packageId }) {
+        return {
+          url: `${from}/${to}/${packageId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['currentPackages'],
     }),
   }),
 });
 
-export const { useSearchQuery, useGetRightHolderDelegationsQuery } = accessPackageApi;
+export const { useSearchQuery, useGetRightHolderDelegationsQuery, useRevokeDelegationMutation } =
+  accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

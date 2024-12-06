@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Alert, Paragraph, Spinner } from '@digdir/designsystemet-react';
@@ -16,7 +16,8 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const [modalItem, setModalItem] = React.useState<AccessPackage | undefined>(undefined);
+  const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
+  const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
 
   const {
     data: activeDelegations,
@@ -35,6 +36,18 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
 
   const areasToShow = Object.keys(activeDelegations ?? {});
 
+  const toggleExpandedArea = (areaId: string) => {
+    if (expandedAreas.some((id) => id === areaId)) {
+      const newExpandedState = expandedAreas.filter((id) => id !== areaId);
+      setExpandedAreas(newExpandedState);
+    } else {
+      const newExpandedState = [...expandedAreas, areaId];
+      setExpandedAreas(newExpandedState);
+    }
+  };
+
+  console.log('modalItem: ', modalItem?.id);
+
   return isFetching ? (
     <Spinner title={t('common.loading')} />
   ) : isError ? (
@@ -52,6 +65,8 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
                 <DelegatedAreaListItem
                   key={area.id}
                   accessPackageArea={area}
+                  expanded={expandedAreas.some((id) => id === area.id)}
+                  toggleExpanded={() => toggleExpandedArea(area.id)}
                 >
                   <DelegatedPackagesList
                     packageDelegations={activeDelegations[area.id]}
