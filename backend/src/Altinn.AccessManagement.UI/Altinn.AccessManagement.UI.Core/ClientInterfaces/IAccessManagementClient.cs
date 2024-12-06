@@ -174,7 +174,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///    Creates a new delegation of an access package
         /// </summary>
         /// <param name="party">The party that is delegating the access</param>
-        /// <param name="input">The delegation to be created</param>
-        Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, DelegationInput input);
+        /// <param name="to">The id of the right holder that will recieve the delegation</param>
+        /// <param name="packageId">The id of the package to be delegated</param>
+        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
+        Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode);
     }
 }

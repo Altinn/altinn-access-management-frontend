@@ -362,12 +362,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, DelegationInput input)
+        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
         {
-            string endpointUrl = $"internal/{party}/rights/delegation/offered"; // TODO: Switch with actual backend endpoint when available
+            string endpointUrl = $"http://localhost:5117/accessmanagement/api/v1/accessmanagement/api/v1/enduser/access/accesspackages/{packageId}?to={to}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(input, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            request.Headers.Add("party", "{party}");
+
+            HttpResponseMessage response = await _client.SendAsync(request);
+
             return response;
         }
     }

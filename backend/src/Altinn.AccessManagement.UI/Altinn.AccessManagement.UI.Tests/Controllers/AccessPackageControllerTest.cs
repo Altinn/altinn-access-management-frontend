@@ -19,6 +19,7 @@ using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Common.PEP.Interfaces;
 using AltinnCore.Authentication.JwtCookie;
+using Bogus.DataSets;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -188,29 +189,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task CreateAccessPackageDelegation_ValidRequest_ReturnsCreated()
         {
             // Arrange
-            var delegationInput = new DelegationInput
-            {
-                To = new List<IdValuePair>
-                    {
-                        new IdValuePair { Id = "urn:altinn:person:uuid", Value = "167536b5-f8ed-4c5a-8f48-0279507e53ae" }
-                    },
-                Rights = new List<Right>
-                    {
-                        new Right
-                        {
-                            Resource = new List<IdValuePair>
-                            {
-                                new IdValuePair { Id = "urn:altinn:accesspackage", Value = "3490203E-876E-4EF9-B774-9A0CD9B7E9CD" }
-                            }
-                        }
-                    }
-            };
             var party = "51329012";
-            var jsonContent = JsonSerializer.Serialize(delegationInput);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var packageId = "test_package_id";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}", content);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -225,29 +209,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task CreateAccessPackageDelegation_UnexpectedException()
         {
             // Arrange
-            var delegationInput = new DelegationInput
-            {
-                To = new List<IdValuePair>
-                    {
-                        new IdValuePair { Id = "urn:altinn:person:uuid", Value = "167536b5-f8ed-4c5a-8f48-0279507e53ae" }
-                    },
-                Rights = new List<Right>
-                    {
-                        new Right
-                        {
-                            Resource = new List<IdValuePair>
-                            {
-                                new IdValuePair { Id = "urn:altinn:accesspackage", Value = "3490203E-876E-4EF9-B774-9A0CD9B7E9CD" }
-                            }
-                        }
-                    }
-            };
             var party = "********";
-            var jsonContent = JsonSerializer.Serialize(delegationInput);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var packageId = "test_package_id";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}", content);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);
@@ -255,37 +222,20 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///    Test case: Create a new access package delegation with invalid input
-        ///    Expected: Returns a 400 bad request
+        ///    Test case: Create a new access package delegation that throws exception in backend
+        ///    Expected: Returns a not successfull status code
         /// </summary>
         [Fact]
         public async Task CreateAccessPackageDelegation_BadRequest()
         {
             // Arrange
-            var delegationInput = new DelegationInput
-            {
-                To = new List<IdValuePair>
-                    {
-                        new IdValuePair { Id = "urn:altinn:person:uuid", Value = "167536b5-f8ed-4c5a-8f48-0279507e53ae" }
-                    },
-                Rights = new List<Right>
-                    {
-                        new Right
-                        {
-                            Resource = new List<IdValuePair>
-                            {
-                                // Send empty guid to  trigger exception in backend
-                                new IdValuePair { Id = "urn:altinn:accesspackage", Value = Guid.Empty.ToString() } 
-                            }
-                        }
-                    }
-            };
+            
             var party = "51329012";
-            var jsonContent = JsonSerializer.Serialize(delegationInput);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var packageId = "";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}", content);
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
 
             // Assert
             Assert.False(response.IsSuccessStatusCode);

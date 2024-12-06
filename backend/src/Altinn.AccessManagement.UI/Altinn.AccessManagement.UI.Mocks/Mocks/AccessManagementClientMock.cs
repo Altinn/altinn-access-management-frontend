@@ -341,13 +341,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, DelegationInput input)
+        public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
         {
             ThrowExceptionIfTriggerParty(party);
-
-            string packageId = input.Rights.First().Resource.First().Value;
             
-            if (packageId == Guid.Empty.ToString())
+            if (packageId == string.Empty)
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }

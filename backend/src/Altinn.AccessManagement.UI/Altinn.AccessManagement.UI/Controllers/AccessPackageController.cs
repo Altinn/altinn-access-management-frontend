@@ -95,12 +95,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("delegate/{party}")]
-        public async Task<ActionResult> CreateAccessPackageDelegation([FromRoute] string party, [FromBody] DelegationInput delegation)
+        [Route("delegate/{party}/{packageId}/{to}")]
+        public async Task<ActionResult> CreateAccessPackageDelegation([FromRoute] string party, [FromRoute] string packageId, [FromRoute] Guid to)
         {
             try
             {
-                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, delegation);
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+
+                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, packageId, languageCode);
                 if (response.IsSuccessStatusCode)
                 {
                     return Ok(await response.Content.ReadAsStringAsync());

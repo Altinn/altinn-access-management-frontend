@@ -78,9 +78,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
+        public async Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode)
         {
-            return await _accessManagementClient.CreateAccessPackageDelegation(party, delegation);
+            return await _accessManagementClient.CreateAccessPackageDelegation(party, to, packageId, languageCode);
         }
     }
 }
