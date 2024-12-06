@@ -64,6 +64,82 @@ OBS: These settings use https which requires a certificate to be uploaded or gen
 
 Now that the BFF is running, you can move on to the react app.
 
+#### Troubleshooting
+
+If you encounter the error **"Unhandled exception. System.IO.IOException: Failed to bind to address https://localhost:443"**, it usually means the application doesn't have the necessary permissions to use that port. This is because port 443 is a privileged port, typically requiring root access. However, running your entire application with elevated privileges (e.g., using sudo) is not recommended due to security risks. Instead, you can use a reverse proxy like nginx to handle port 443 and forward requests to your application running on a non-privileged port. This allows you to avoid running your app as root while still serving it on the standard HTTPS port.
+
+1. Install nginx:
+
+```Bash
+brew install nginx
+```
+
+2. Configure nginx:
+
+Navigate to the nginx servers directory:
+
+```Bash
+cd /opt/homebrew/etc/nginx/servers
+```
+
+Create a new configuration file (e.g., am_ui.conf) and add the following content:
+
+```Nginx
+server {
+    listen 443 ssl;
+    server_name localhost;
+
+    ssl_certificate ssl/localhost.crt;
+    ssl_certificate_key ssl/localhost.key;
+
+    location / {
+        proxy_pass https://localhost:5000;  
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+
+3. Create an SSL certificate:
+
+Go back to the main nginx directory:
+
+```Bash
+cd /opt/homebrew/etc/nginx/
+```
+
+Create an ssl directory:
+
+```Bash
+mkdir ssl
+```
+
+Generate a self-signed certificate:
+
+```Bash
+cd ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt
+```
+(You'll be prompted to enter information for the certificate. This information is not critical for local development, so feel free to fill in any values.)
+
+4. Start nginx:
+
+Start nginx
+```Bash
+sudo nginx
+```
+
+Try running your app again. It should now work correctly on port 443, with nginx handling SSL encryption and forwarding requests to your application.
+
+
+
+
 ### Step 3: Run the React application
 
 Pull the newest version of this repo and navigate to its root
@@ -234,3 +310,5 @@ This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API req
 ### Documentation: 
 *  For more information on writing stories, see the [Storybook Docs](https://storybook.js.org/docs/react/get-started/introduction).
 *  To learn about using MSW with Storybook, check out the [MSW documentation](https://mswjs.io/docs/getting-started/integrate/storybook).
+
+
