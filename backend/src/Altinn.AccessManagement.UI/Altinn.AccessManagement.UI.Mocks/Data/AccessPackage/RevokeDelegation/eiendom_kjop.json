@@ -1,5 +1,4 @@
 {
   "packageId": "annleggadmin",
-  "success": false,
-  "ErrorCode": "SomeCode"
+  "success": true
 }

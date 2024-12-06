@@ -55,10 +55,7 @@ export const accessPackageApi = createApi({
       },
       providesTags: ['currentPackages'],
     }),
-    revokeDelegation: builder.mutation<
-      { packageId: boolean; success: boolean },
-      { from: string; to: string; packageId: string }
-    >({
+    revokeDelegation: builder.mutation<void, { from: string; to: string; packageId: string }>({
       query({ from, to, packageId }) {
         return {
           url: `${from}/${to}/${packageId}/revoke`,
