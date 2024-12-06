@@ -168,5 +168,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A list of all access package delegations</returns>
         Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode);
+
+        /// <summary>
+        ///     Revokes access to a given package for a right holder (to) on behalf of a party (from)
+        /// </summary>
+        /// <param name="from">The party which has granted access to the package to the right holder</param>
+        /// <param name="to">The right holder which currently has access to the access package</param>
+        /// <param name="packageId">The access package which the right holder is to lose access to on behalf of the given party (from)</param>
+        /// <returns>A HttpResponseMessage denoting whether or not the action was successfull.</returns>
+        Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId);
     }
 }

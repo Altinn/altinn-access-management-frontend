@@ -1,4 +1,4 @@
 {
-  "accessPackages": [ "3490203E-876E-4EF9-B774-9A0CD9B7E9CC", "3490203E-876E-4EF9-B774-9A0CD9B7E9CD", "3490203E-876E-4EF9-B774-9A0CD9B7E9CFG" ],
+    "accessPackages": [ "annleggadmin", "eiendom_kjop", "magibruk" ],
   "services": [ "appid-502", "a3-app2" ]
 }

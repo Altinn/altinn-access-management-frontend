@@ -9,16 +9,21 @@ import classes from './AccessPackageSection.module.css';
 interface AccessAreaListItemProps {
   /** The area to be presented */
   accessPackageArea: AccessArea;
+  /** External control of the Areas expanded state */
+  expanded: boolean;
+  /** Toggle the external expanded state */
+  toggleExpanded: () => void;
   /** The content to be displayed as expandable content inside the ActionBar. */
   children?: React.ReactNode;
 }
 
 export const DelegatedAreaListItem: React.FC<AccessAreaListItemProps> = ({
   accessPackageArea,
+  expanded,
+  toggleExpanded,
   children,
 }) => {
   const { id, name, description, iconUrl } = accessPackageArea;
-  const [expanded, setExpanded] = React.useState(false);
   return (
     <>
       <li key={id}>
@@ -27,7 +32,7 @@ export const DelegatedAreaListItem: React.FC<AccessAreaListItemProps> = ({
           collapsible
           expanded={expanded}
           as='button'
-          onClick={() => setExpanded(!expanded)}
+          onClick={toggleExpanded}
           linkIcon='chevron-right'
           size='lg'
           title={name}

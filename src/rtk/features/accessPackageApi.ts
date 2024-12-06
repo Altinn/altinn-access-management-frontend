@@ -53,10 +53,21 @@ export const accessPackageApi = createApi({
       query: (rightHolderUuid) => {
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
+      providesTags: ['AccessPackages'],
+    }),
+    revokeDelegation: builder.mutation<void, { from: string; to: string; packageId: string }>({
+      query({ from, to, packageId }) {
+        return {
+          url: `${from}/${to}/${packageId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['AccessPackages'],
     }),
   }),
 });
 
-export const { useSearchQuery, useGetRightHolderDelegationsQuery } = accessPackageApi;
+export const { useSearchQuery, useGetRightHolderDelegationsQuery, useRevokeDelegationMutation } =
+  accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

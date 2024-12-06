@@ -339,6 +339,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string resourceId)
+        {
+            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
+
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return mockResponse;
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();

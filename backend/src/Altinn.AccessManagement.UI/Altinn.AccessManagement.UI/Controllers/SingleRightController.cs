@@ -189,7 +189,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected exception occurred during revoke of single right");
+                _logger.LogError(ex, "Unexpected exception occurred during revoke of a resource");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }

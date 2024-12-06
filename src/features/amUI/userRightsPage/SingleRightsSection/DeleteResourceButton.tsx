@@ -30,8 +30,8 @@ export const DeleteResourceButton = ({
     const snackbarData = {
       message: t(
         isSuccessful
-          ? 'user_rights_page.delete_singleRight_success_message'
-          : 'user_rights_page.delete_singleRight_error_message',
+          ? 'single_rights.delete_singleRight_success_message'
+          : 'single_rights.delete_singleRight_error_message',
         { servicename: resource.title },
       ),
       variant: SnackbarMessageVariant.Default,
@@ -43,7 +43,7 @@ export const DeleteResourceButton = ({
   return (
     representingParty && (
       <ButtonWithConfirmPopup
-        message={t('user_rights_page.delete_singleRight_confirm_message')}
+        message={t('user_rights_page.delete_confirm_message')}
         triggerButtonProps={{
           disabled: false,
           variant: 'secondary',
