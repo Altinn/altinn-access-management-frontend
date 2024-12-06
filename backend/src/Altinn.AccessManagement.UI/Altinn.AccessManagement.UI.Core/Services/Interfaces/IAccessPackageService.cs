@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -23,5 +24,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A dictionary of lists (sorted by access area) containing all access package delegations that the right holder has on behalf of the specified right owner</returns>
         Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegationsToRightHolder(Guid rightHolderUuid, Guid rightOwnerUuid, string languageCode);
+
+        /// <summary>
+        ///    Creates a new delegation of an access package
+        /// </summary>
+        /// <param name="party">Identifies the selected party the authenticated user is acting on behalf of.</param>
+        /// <param name="to">The id of the right holder that will recieve the delegation</param>
+        /// <param name="packageId">The id of the package to be delegated</param>
+        /// <param name="languageCode">The code of the language on which texts are to be returned</param>
+        /// <returns></returns> 
+        Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode);
     }
 }

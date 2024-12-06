@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -74,6 +75,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return sortedAccesses;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode)
+        {
+            return await _accessManagementClient.CreateAccessPackageDelegation(party, to, packageId, languageCode);
         }
     }
 }
