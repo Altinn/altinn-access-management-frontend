@@ -210,12 +210,16 @@
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
     "popular_services": "Populære tenester:",
     "give_new_single_right": "Gi fullmakt til ny teneste",
-    "current_services_title": "Fullmakt til {{count}} tenester"
+    "current_services_title": "Fullmakt til {{count}} tenester",
+    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
+    "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tenesta {{servicename}}"
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
-    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:"
+    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
+    "delete_success_message": "Fullmakt til {{packageName}} er slettet",
+    "delete_error_message": "Kunne ikkje slette fullmakt til {{packageName}}"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -229,9 +233,7 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "resource_type_text": "Enkelttjeneste",
-    "delete_singleRight_confirm_message": "Er du sikker på at du vil slette denne?",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tenesta {{servicename}}"
+    "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "delegation_modal": {
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",

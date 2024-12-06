@@ -46,47 +46,49 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
     }
   };
 
-  console.log('modalItem: ', modalItem?.id);
-
-  return isFetching ? (
-    <Spinner title={t('common.loading')} />
-  ) : isError ? (
-    <Alert color='danger'>
-      <Paragraph>{t(`common.general_error_paragraph`)}</Paragraph>
-    </Alert>
-  ) : (
-    activeDelegations && (
-      <>
-        <List spacing>
-          {allPackageAreas
-            ?.filter((area) => areasToShow.some((areaId) => areaId === area.id))
-            .map((area) => {
-              return (
-                <DelegatedAreaListItem
-                  key={area.id}
-                  accessPackageArea={area}
-                  expanded={expandedAreas.some((id) => id === area.id)}
-                  toggleExpanded={() => toggleExpandedArea(area.id)}
-                >
-                  <DelegatedPackagesList
-                    packageDelegations={activeDelegations[area.id]}
-                    accessPackages={area.accessPackages}
-                    onSelection={(pack) => {
-                      setModalItem(pack);
-                      modalRef.current?.showModal();
-                    }}
-                  />
-                </DelegatedAreaListItem>
-              );
-            })}
-        </List>
-        <AccessPackageInfoModal
-          modalRef={modalRef}
-          toParty={toParty}
-          modalItem={modalItem}
-          onClose={() => setModalItem(undefined)}
-        />
-      </>
-    )
+  return (
+    <>
+      {isFetching ? (
+        <Spinner title={t('common.loading')} />
+      ) : isError ? (
+        <Alert color='danger'>
+          <Paragraph>{t(`common.general_error_paragraph`)}</Paragraph>
+        </Alert>
+      ) : (
+        activeDelegations && (
+          <List spacing>
+            {allPackageAreas
+              ?.filter((area) => areasToShow.some((areaId) => areaId === area.id))
+              .map((area) => {
+                return (
+                  <DelegatedAreaListItem
+                    key={area.id}
+                    accessPackageArea={area}
+                    expanded={expandedAreas.some((id) => id === area.id)}
+                    toggleExpanded={() => toggleExpandedArea(area.id)}
+                  >
+                    <DelegatedPackagesList
+                      packageDelegations={activeDelegations[area.id]}
+                      accessPackages={area.accessPackages}
+                      onSelection={(pack) => {
+                        setModalItem(pack);
+                        modalRef.current?.showModal();
+                      }}
+                    />
+                  </DelegatedAreaListItem>
+                );
+              })}
+          </List>
+        )
+      )}
+      <AccessPackageInfoModal
+        modalRef={modalRef}
+        toParty={toParty}
+        modalItem={modalItem}
+        onClose={() => {
+          setModalItem(undefined);
+        }}
+      />
+    </>
   );
 };

@@ -29,9 +29,9 @@ export const DeletePackageButton = ({
       const snackbarData = {
         message: t(
           isSuccessful
-            ? 'user_rights_page.delete_singleRight_success_message'
-            : 'user_rights_page.delete_singleRight_error_message',
-          { servicename: accessPackage.name },
+            ? 'access_packages.delete_success_message'
+            : 'access_packages.delete_error_message',
+          { packageName: accessPackage.name },
         ),
         variant: SnackbarMessageVariant.Default,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
@@ -65,7 +65,7 @@ export const DeletePackageButton = ({
         size='sm'
         onClick={onClick}
       >
-        {fullText ? 'Slett fullmakt' : t('common.delete')}
+        {fullText ? t('common.delete_poa') : t('common.delete')}
       </Button>
     )
   );
