@@ -11,6 +11,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -97,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             catch
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }         
+            }
         }
 
         /// <inheritdoc />
@@ -339,6 +340,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
+        {
+            ThrowExceptionIfTriggerParty(party);
+            
+            if (packageId == string.Empty)
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+            else
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();
@@ -394,5 +410,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return new List<AuthorizedParty>();
                 });
         }
+
+
+
+
+
     }
 }
