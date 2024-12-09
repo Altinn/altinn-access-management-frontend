@@ -6,6 +6,7 @@ export enum ErrorCode {
   HTTPError = 'HTTPError',
   Unauthorized = 'Unauthorized',
   InsufficientAuthenticationLevel = 'InsufficientAuthenticationLevel',
+  AccessListValidationFail = 'AccessListValidationFail',
   Unknown = 'Unknown',
 }
 
@@ -16,6 +17,7 @@ export const getErrorCodeTextKey = (errorCode: string | undefined): string | und
     case ErrorCode.MissingDelegationAccess:
       return 'single_rights.missing_delegation_access';
     case ErrorCode.MissingSrrRightAccess:
+    case ErrorCode.AccessListValidationFail:
       return 'single_rights.missing_srr_right_access';
     case ErrorCode.Unknown:
       return 'single_rights.unknown';
@@ -39,6 +41,7 @@ export const prioritizeErrors = (errors: string[]): string[] => {
     ErrorCode.MissingRoleAccess,
     ErrorCode.MissingDelegationAccess,
     ErrorCode.MissingSrrRightAccess,
+    ErrorCode.AccessListValidationFail,
     ErrorCode.Unknown,
   ];
 

@@ -11,7 +11,7 @@
     "status": "NotDelegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
+        "code": "AccessListValidationFail",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
@@ -36,7 +36,7 @@
     "status": "NotDelegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
+        "code": "AccessListValidationFail",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
@@ -61,7 +61,7 @@
     "status": "NotDelegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
+        "code": "AccessListValidationFail",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
