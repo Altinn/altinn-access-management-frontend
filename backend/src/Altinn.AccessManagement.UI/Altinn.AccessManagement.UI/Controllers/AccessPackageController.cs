@@ -1,5 +1,8 @@
 ﻿using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -17,6 +20,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IAccessPackageService _accessPackageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageController"/> class
@@ -26,6 +30,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _accessPackageService = accessPackageService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _serializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
         /// <summary>
@@ -39,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
-           {
+            {
                 return await _accessPackageService.GetSearch(languageCode, searchString);
             }
             catch (HttpStatusException ex)
@@ -81,6 +86,44 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, 500, "Unexpected exception occurred during fetching of access package delegations"));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for delegating a accesspackage from the reportee party to a third party
+        /// </summary>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("delegate/{party}/{packageId}/{to}")]
+        public async Task<ActionResult> CreateAccessPackageDelegation([FromRoute] string party, [FromRoute] string packageId, [FromRoute] Guid to)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+
+                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, packageId, languageCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Bad request", detail: responseContent));
+                }
+                else
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
 

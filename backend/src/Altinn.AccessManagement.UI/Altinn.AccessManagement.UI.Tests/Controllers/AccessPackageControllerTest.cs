@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
@@ -197,5 +196,66 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.False(httpResponse.IsSuccessStatusCode);
         }
+
+        /// <summary>
+        ///    Test case: Create a new access package delegation
+        ///    Expected: Returns a 201 Created
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_ValidRequest_ReturnsCreated()
+        {
+            // Arrange
+            var party = "51329012";
+            var packageId = "test_package_id";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Create a new access package delegation with invalid input
+        ///    Expected: Returns a 500 internal server error
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_UnexpectedException()
+        {
+            // Arrange
+            var party = "********";
+            var packageId = "test_package_id";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Create a new access package delegation that throws exception in backend
+        ///    Expected: Returns a not successfull status code
+        /// </summary>
+        [Fact]
+        public async Task CreateAccessPackageDelegation_BadRequest()
+        {
+            // Arrange
+
+            var party = "51329012";
+            var packageId = "";
+            var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/accesspackage/delegate/{party}/{packageId}/{to}", null);
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+        }
+
     }
 }

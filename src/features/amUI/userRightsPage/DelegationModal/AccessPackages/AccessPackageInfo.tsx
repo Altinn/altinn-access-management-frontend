@@ -10,6 +10,9 @@ import {
   useGetRightHolderDelegationsQuery,
   type AccessPackage,
 } from '@/rtk/features/accessPackageApi';
+import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
+import { useSnackbar } from '@/features/amUI/common/Snackbar';
+import { SnackbarMessageVariant } from '@/features/amUI/common/Snackbar/SnackbarProvider';
 
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
@@ -21,8 +24,11 @@ export interface PackageInfoProps {
   onDelegate?: () => void;
 }
 
-export const AccessPackageInfo = ({ accessPackage, onDelegate, toParty }: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: PackageInfoProps) => {
   const { t } = useTranslation();
+
+  const delegatePackage = useDelegateAccessPackage();
+  const { openSnackbar } = useSnackbar();
 
   const { data: activeDelegations, isFetching } = useGetRightHolderDelegationsQuery(
     toParty.partyUuid,
@@ -35,6 +41,25 @@ export const AccessPackageInfo = ({ accessPackage, onDelegate, toParty }: Packag
     }
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
+
+  const handleDelegate = async () => {
+    try {
+      await delegatePackage(toParty, accessPackage, onDelegate);
+      openSnackbar({
+        message: t('delegation_modal.package_delegation_success', {
+          name: toParty.name,
+          accessPackage: accessPackage.name,
+        }),
+        duration: 5000,
+        variant: SnackbarMessageVariant.Default,
+      });
+      if (onDelegate) {
+        onDelegate();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
   return (
@@ -79,7 +104,7 @@ export const AccessPackageInfo = ({ accessPackage, onDelegate, toParty }: Packag
             fullText
           />
         ) : (
-          <Button onClick={onDelegate}>{t('common.give_poa')}</Button> // TODO: Implement delegation
+          <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
         )}
       </div>
     </div>

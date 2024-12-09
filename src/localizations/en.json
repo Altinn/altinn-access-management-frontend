@@ -247,6 +247,7 @@
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
     "package_services": "{{name}} provides access to {{count}} services",
+    "package_delegation_success": "{{name}} has been given power of attorney for {{accessPackage}}", 
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."

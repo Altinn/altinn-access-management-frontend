@@ -64,10 +64,23 @@ export const accessPackageApi = createApi({
       },
       invalidatesTags: ['AccessPackages'],
     }),
+    delegatePackage: builder.mutation<void, { packageId: string; to: string }>({
+      invalidatesTags: ['AccessPackages'],
+      query: (args) => {
+        return {
+          url: `delegate/${getCookie('AltinnPartyId')}/${args.packageId}/${args.to}`,
+          method: 'POST',
+        };
+      },
+    }),
   }),
 });
 
-export const { useSearchQuery, useGetRightHolderDelegationsQuery, useRevokeDelegationMutation } =
-  accessPackageApi;
+export const {
+  useSearchQuery,
+  useGetRightHolderDelegationsQuery,
+  useRevokeDelegationMutation,
+  useDelegatePackageMutation,
+} = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;
