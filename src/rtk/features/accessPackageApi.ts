@@ -31,13 +31,6 @@ export interface DelegationDetails {
   lastChangedOn: Date;
 }
 
-export interface DelegationInput {
-  to: IdValuePair[];
-  rights: {
-    resource: IdValuePair[];
-  }[];
-}
-
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'accesspackage';
 
 export const accessPackageApi = createApi({
