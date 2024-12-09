@@ -123,7 +123,11 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     const hasMissingSrrRightAccess = response.some(
       (result) =>
         !hasMissingRoleAccess &&
-        result.details?.some((detail) => detail.code === ErrorCode.MissingSrrRightAccess),
+        result.details?.some(
+          (detail) =>
+            detail.code === ErrorCode.MissingSrrRightAccess ||
+            detail.code === ErrorCode.AccessListValidationFail,
+        ),
     );
 
     if (hasMissingRoleAccess) {

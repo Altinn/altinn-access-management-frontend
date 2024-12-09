@@ -52,7 +52,13 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
       </>
     );
   } else if (rightReasons) {
-    if (rightReasons.every((reason) => reason === ErrorCode.MissingSrrRightAccess)) {
+    if (
+      rightReasons.every(
+        (reason) =>
+          reason === ErrorCode.MissingSrrRightAccess ||
+          reason === ErrorCode.AccessListValidationFail,
+      )
+    ) {
       headingText = t('delegation_modal.service_error.general_heading');
       content = (
         <Paragraph>
