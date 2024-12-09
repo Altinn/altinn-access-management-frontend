@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId)
         {
-            return _accessManagementClient.RevokeAccessPackage(to, from, packageId);
+            return _accessManagementClient.RevokeAccessPackage(from, to, packageId);
         }
     }
 }

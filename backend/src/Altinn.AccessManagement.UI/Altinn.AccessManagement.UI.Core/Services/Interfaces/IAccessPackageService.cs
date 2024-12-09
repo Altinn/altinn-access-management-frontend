@@ -28,10 +28,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         ///     Performs a search for access packages based on the provided parameters and sorts them into a list of areas for frontend to display
         /// </summary>
-        /// <param name="to">The right holder which currently has access to the access package</param>
         /// <param name="from">The party which has granted access to the package to the right holder</param>
+        /// <param name="to">The right holder which currently has access to the access package</param>
         /// <param name="packageId">The access package which the right holder is to lose access to on behalf of the given party (from)</param>
         /// <returns>A HttpResponseMessage denoting whether or not the action was successfull.</returns>
-        Task<HttpResponseMessage> RevokeAccessPackage(Guid to, Guid from, string packageId);
+        Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId);
     }
 }
