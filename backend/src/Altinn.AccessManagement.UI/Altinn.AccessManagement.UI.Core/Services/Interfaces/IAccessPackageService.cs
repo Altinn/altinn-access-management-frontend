@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<Dictionary<string, List<AccessPackageDelegation>>> GetDelegationsToRightHolder(Guid rightHolderUuid, Guid rightOwnerUuid, string languageCode);
 
         /// <summary>
-        ///     Performs a search for access packages based on the provided parameters and sorts them into a list of areas for frontend to display
+        ///     Revokes access to a given package for a right holder (to) on behalf of a party (from)
         /// </summary>
         /// <param name="to">The right holder which currently has access to the access package</param>
         /// <param name="from">The party which has granted access to the package to the right holder</param>
