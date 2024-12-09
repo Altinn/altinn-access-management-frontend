@@ -14,6 +14,8 @@ import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPac
 import { useSnackbar } from '@/features/amUI/common/Snackbar';
 import { SnackbarMessageVariant } from '@/features/amUI/common/Snackbar/SnackbarProvider';
 
+import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
+
 import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
@@ -96,7 +98,11 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       </div>
       <div className={classes.actions}>
         {userHasPackage ? (
-          <Button onClick={() => {}}>{t('common.delete')}</Button> // TODO: Implement remove POA
+          <DeletePackageButton
+            accessPackage={accessPackage}
+            toPartyUuid={toParty.partyUuid}
+            fullText
+          />
         ) : (
           <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
         )}

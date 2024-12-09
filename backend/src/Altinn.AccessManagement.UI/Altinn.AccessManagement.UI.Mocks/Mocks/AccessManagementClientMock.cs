@@ -341,10 +341,23 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string resourceId)
+        {
+            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
+
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
+            if (mockResponse.IsSuccessStatusCode)
+            {
+                return mockResponse;
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+        /// <inheritdoc />
         public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
         {
             ThrowExceptionIfTriggerParty(party);
-            
+
             if (packageId == string.Empty)
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
@@ -410,10 +423,5 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return new List<AuthorizedParty>();
                 });
         }
-
-
-
-
-
     }
 }

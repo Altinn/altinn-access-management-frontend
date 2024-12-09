@@ -1,31 +1,10 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.SingleRight;
-using Altinn.AccessManagement.UI.Core.Services;
-using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Common.PEP.Interfaces;
-using AltinnCore.Authentication.JwtCookie;
-using Bogus.DataSets;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Moq;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -180,6 +159,43 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         }
 
+        /// <summary>
+        ///    Test case: RevokeAccessPackageAccess revokes the access package of a user
+        ///    Expected: RevokeAccessPackageAccess returns ok on valid input
+        /// </summary>
+        [Fact]
+        public async Task RevokeAccessPackageAccess_returns_ok_on_valid_input()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string packageId = "annleggadmin";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/{from}/{to}/{packageId}/revoke");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///  Test case: Call RevokeAccessPackageAccess with non-existent package
+        ///  Expected: RevokeAccessPackageAccess returns unsuccessfull status code when revoke request fails
+        /// </summary>
+        [Fact]
+        public async Task RevokeAccessPackageAccess_handles_error()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string packageId = "invalid_package_id";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/accesspackage/{from}/{to}/{packageId}/revoke");
+
+            // Assert
+            Assert.False(httpResponse.IsSuccessStatusCode);
+        }
 
         /// <summary>
         ///    Test case: Create a new access package delegation
@@ -229,7 +245,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task CreateAccessPackageDelegation_BadRequest()
         {
             // Arrange
-            
+
             var party = "51329012";
             var packageId = "";
             var to = "167536b5-f8ed-4c5a-8f48-0279507e53ae";

@@ -362,6 +362,22 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId)
+        {
+            string endpointUrl = $"todo/enduser/access/accesspackages/{packageId}?to={to}&from={from}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response;
+            }
+
+            _logger.LogError("Revoke resource delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+        }
+
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
         {
             string endpointUrl = $"http://localhost:5117/accessmanagement/api/v1/accessmanagement/api/v1/enduser/access/accesspackages/{packageId}?to={to}"; // TODO: Switch with actual backend endpoint when available

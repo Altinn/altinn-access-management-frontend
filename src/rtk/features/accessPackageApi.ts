@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 
 export interface AccessArea {
   id: string;
@@ -54,6 +53,16 @@ export const accessPackageApi = createApi({
       query: (rightHolderUuid) => {
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
+      providesTags: ['AccessPackages'],
+    }),
+    revokeDelegation: builder.mutation<void, { from: string; to: string; packageId: string }>({
+      query({ from, to, packageId }) {
+        return {
+          url: `${from}/${to}/${packageId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['AccessPackages'],
     }),
     delegatePackage: builder.mutation<void, { packageId: string; to: string }>({
       invalidatesTags: ['AccessPackages'],
@@ -67,7 +76,11 @@ export const accessPackageApi = createApi({
   }),
 });
 
-export const { useSearchQuery, useGetRightHolderDelegationsQuery, useDelegatePackageMutation } =
-  accessPackageApi;
+export const {
+  useSearchQuery,
+  useGetRightHolderDelegationsQuery,
+  useRevokeDelegationMutation,
+  useDelegatePackageMutation,
+} = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

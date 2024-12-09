@@ -1,7 +1,7 @@
 [
   {
     "AccessPackage": {
-      "Id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CC",
+      "Id": "annleggadmin",
       "Name": "Annleggsadministrasjon",
       "Description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "Tags": [
@@ -52,7 +52,7 @@
   },
   {
     "AccessPackage": {
-      "Id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CD",
+      "Id": "eiendom_kjop",
       "Name": "Kjøp og salg av eiendom",
       "Description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "Tags": [
@@ -107,7 +107,7 @@
   },
   {
     "AccessPackage": {
-      "Id": "3490203E-876E-4EF9-B774-9A0CD9B7E9CFG",
+      "Id": "magibruk",
       "Name": "Magibruk",
       "Description": "Cat ipsum dolor sit amet, i will ruin the couch with my claws and have secret plans so pretend not to be evil.",
       "Tags": [
