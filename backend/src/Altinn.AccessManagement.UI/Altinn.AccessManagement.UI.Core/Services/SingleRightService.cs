@@ -13,6 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SingleRightService : ISingleRightService
     {
         private readonly IAccessManagementClient _accessManagementClient;
+        private readonly IAccessManagementClientV0 _accessManagementClientV0;
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
 
@@ -25,11 +26,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
         /// </summary>
         /// <param name="accessManagementClient">The access management client.</param>
+        /// <param name="accessManagementClientV0">The old access management client, used to access the old am endpoints.</param>
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
-        public SingleRightService(IAccessManagementClient accessManagementClient, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
+        public SingleRightService(IAccessManagementClient accessManagementClient, IAccessManagementClientV0 accessManagementClientV0, IResourceService resourceService, IResourceRegistryClient resourceRegistryClient)
         {
             _accessManagementClient = accessManagementClient;
+            _accessManagementClientV0 = accessManagementClientV0;
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
         }
@@ -37,19 +40,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<HttpResponseMessage> CheckDelegationAccess(string partyId, Right request)
         {
-            return await _accessManagementClient.CheckSingleRightsDelegationAccess(partyId, request);
+            return await _accessManagementClientV0.CheckSingleRightsDelegationAccess(partyId, request);
         }
 
         /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateDelegation(string party, DelegationInput delegation)
         {
-            return await _accessManagementClient.CreateSingleRightsDelegation(party, delegation);
+            return await _accessManagementClientV0.CreateSingleRightsDelegation(party, delegation);
         }
 
         /// <inheritdoc />
         public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
-            return await _accessManagementClient.ClearAccessCacheOnRecipient(party, recipient);
+            return await _accessManagementClientV0.ClearAccessCacheOnRecipient(party, recipient);
         }
 
         /// <inheritdoc />
@@ -77,27 +80,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
                 var resource = await _resourceService.GetResource(resourceId);
 
-                // Find the logo based on the orgnr in the orgnrToOrgLookup
-                orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
+                if (resource != null)
+                {
+                    // Find the logo based on the orgnr in the orgnrToOrgLookup
+                    orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
 
-                ServiceResourceFE resourceFE = new ServiceResourceFE(
-                resource.Identifier,
-                resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                resourceType: resource.ResourceType,
-                status: resource.Status,
-                resourceReferences: resource.ResourceReferences,
-                resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                visible: resource.Visible,
-                delegable: resource.Delegable,
-                contactPoints: resource.ContactPoints,
-                spatial: resource.Spatial,
-                authorizationReference: resource.AuthorizationReference,
-                resourceOwnerLogoUrl: org?.Logo);
+                    ServiceResourceFE resourceFE = new ServiceResourceFE(
+                    resource.Identifier,
+                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
+                    resourceType: resource.ResourceType,
+                    status: resource.Status,
+                    resourceReferences: resource.ResourceReferences,
+                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
+                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
+                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
+                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
+                    visible: resource.Visible,
+                    delegable: resource.Delegable,
+                    contactPoints: resource.ContactPoints,
+                    spatial: resource.Spatial,
+                    authorizationReference: resource.AuthorizationReference,
+                    resourceOwnerLogoUrl: org?.Logo);
 
-                delegationsFE.Add(new ResourceDelegation(resourceFE, delegation));
+                    delegationsFE.Add(new ResourceDelegation(resourceFE, delegation));
+                }
             }
 
             return delegationsFE;

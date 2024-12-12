@@ -1,0 +1,27 @@
+[
+  {
+    "rightKey": "ske-innrapportering-boligsameie/write",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "ske-innrapportering-boligsameie"
+      }
+    ],
+    "action": "write",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

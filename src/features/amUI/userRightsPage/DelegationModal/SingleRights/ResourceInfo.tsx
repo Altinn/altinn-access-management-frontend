@@ -320,7 +320,8 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               <Paragraph>{resource.resourceOwnerName}</Paragraph>
             </div>
           </div>
-          <Paragraph>{resource.rightDescription}</Paragraph>
+          {resource.description && <Paragraph>{resource.description}</Paragraph>}
+          {resource.rightDescription && <Paragraph>{resource.rightDescription}</Paragraph>}
           {displayResourceAlert ? (
             <ResourceAlert
               error={
