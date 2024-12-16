@@ -530,10 +530,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-css@npm:1.0.0-next.35":
-  version: 1.0.0-next.35
-  resolution: "@digdir/designsystemet-css@npm:1.0.0-next.35"
-  checksum: 10/783800a6e0b775efd7874f792f99ea138eafbe7fdb090de4407138476a2de244ad7706e666a966a2d301c1784f756c6aa690c1d6fb3f0216ee21b81f6f96e327
+"@digdir/designsystemet-css@npm:1.0.0-next.42":
+  version: 1.0.0-next.42
+  resolution: "@digdir/designsystemet-css@npm:1.0.0-next.42"
+  checksum: 10/4963bc8bedfdabb9c2af39f765d6adf44341a3072803521ce330dfa2e661243cd59344dbca2734754d3f2f61d5e18b1f66c09cda529be78dfdd0f5d97ed67755
   languageName: node
   linkType: hard
 
@@ -2648,7 +2648,7 @@ __metadata:
   dependencies:
     "@altinn/altinn-components": "npm:^0.6.10"
     "@cypress/react18": "npm:^2.0.0"
-    "@digdir/designsystemet-css": "npm:1.0.0-next.35"
+    "@digdir/designsystemet-css": "npm:1.0.0-next.42"
     "@digdir/designsystemet-react": "npm:1.0.0-next.35"
     "@digdir/designsystemet-theme": "npm:1.0.0-next.35"
     "@navikt/aksel-icons": "npm:^7.0.0"
