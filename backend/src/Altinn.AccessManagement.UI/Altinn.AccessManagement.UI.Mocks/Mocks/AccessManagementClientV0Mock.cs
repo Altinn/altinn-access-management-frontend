@@ -1,13 +1,6 @@
-﻿using System.CodeDom.Compiler;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Enums;
-using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
@@ -206,7 +199,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(partyId);
 
             string resourceFileName = GetMockDataFilenameFromUrn(request.Resource);
-            string path = Path.Combine(dataFolder, "SingleRight", "DelegationAccessCheckResponse");
+            string path = Path.Combine(dataFolder, "SingleRight", "DelegationAccessCheckResponseV0");
 
             return await Util.GetMockedHttpResponse(path, resourceFileName);
         }

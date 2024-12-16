@@ -1,0 +1,67 @@
+[
+  {
+    "rightKey": "322a/read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "322a/write",
+    "action": "write",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            },
+            {
+              "id": "urn:altinn:role",
+              "value": "REGN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "322a/sign",
+    "action": "sign",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            },
+            {
+              "id": "urn:altinn:role",
+              "value": "REGN"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

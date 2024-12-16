@@ -1,12 +1,6 @@
 [
   {
     "rightKey": "ske-innrapportering-boligsameie/write",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "ske-innrapportering-boligsameie"
-      }
-    ],
     "action": "write",
     "status": "Delegable",
     "details": [

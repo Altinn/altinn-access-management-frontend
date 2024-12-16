@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -51,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse", "appid-503.json");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponseV0", "appid-503.json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -89,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse", "a3-app.json");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponseV0", "a3-app.json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -134,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse", "3225.json");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponseV0", "3225.json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -308,6 +309,231 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: CreateDelegation delegates the actions of an altinn 2 form
+        ///     Expected: CreateDelegation returns the delegated actions of the altinn 2 form
+        /// </summary>
+        [Fact]
+        public async Task CreateDelegation_Altinn2Service_valid()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string toSsn = "50019992";
+
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation", "3225.json");
+            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path);
+
+            List<IdValuePair> resource = new List<IdValuePair>
+            {
+                new IdValuePair
+                {
+                    Id = "urn:altinn:servicecode",
+                    Value = "3225",
+
+                },
+                new IdValuePair
+                {
+                    Id = "urn:altinn:serviceeditioncode",
+                    Value = "1596",
+
+                },
+            };
+
+            List<IdValuePair> to = new List<IdValuePair>
+            {
+                new IdValuePair
+                {
+                    Id = "urn:altinn:ssn",
+                    Value = toSsn,
+                },
+            };
+
+            List<Right> rights = new List<Right>
+            {
+                new Right
+                {
+                    Resource = resource,
+                    Action = "read",
+                },
+                new Right
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+            };
+
+            DelegationInput delegation = new DelegationInput
+            {
+                To = to,
+                Rights = rights,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(delegation);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
+            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: CreateDelegation does not delegate the actions of a standard resource if the resource does not exist
+        ///     Expected: CreateDelegation returns bad request
+        /// </summary>
+        [Fact]
+        public async Task CreateDelegation_StandardResource_invalid()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string toSsn = "50019992";
+
+            List<IdValuePair> resource = new List<IdValuePair>
+            {
+                new IdValuePair
+                {
+                    Id = "urn:altinn:resource",
+                    Value = "Nonexistent",
+
+                },
+            };
+
+            List<IdValuePair> to = new List<IdValuePair>
+            {
+                new IdValuePair
+                {
+                    Id = "urn:altinn:ssn",
+                    Value = toSsn,
+                },
+            };
+
+            List<Right> rights = new List<Right>
+            {
+                new Right
+                {
+                    Resource = resource,
+                    Action = "read",
+                },
+                new Right
+                {
+                    Resource = resource,
+                    Action = "write",
+                },
+                new Right
+                {
+                    Resource = resource,
+                    Action = "sign",
+                },
+            };
+
+            DelegationInput delegation = new DelegationInput
+            {
+                To = to,
+                Rights = rights,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(delegation);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: ClearAccessCache accepts correct input and returns ok
+        ///     Expected: ClearAccessCache returns OK
+        /// </summary>
+        [Fact]
+        public async Task ClearAccessCache_returnsOk()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            BaseAttribute recipient = new BaseAttribute
+            {
+                Type = "urn:altinn:person:uuid",
+                Value = userUUID,
+            };
+
+            string jsonDto = JsonSerializer.Serialize(recipient);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/{partyId}/accesscache/clear", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+
+        //// New GUI
+        ///
+
+        /// <summary>
+        ///     Test case: Successfully perform delegationcheck on a resource
+        ///     Expected: Returns OK and the checked accesses of the given resource
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_ReturnsValid()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "appid-503";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
+            List<DelegationCheckedRightFE> expectedResponse = Util.GetMockData<List<DelegationCheckedRightFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+            List<DelegationCheckedRightFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<DelegationCheckedRightFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: Try to perform delegation check on a resource that does not exist
+        ///     Expected: Returns a non-successfull status
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InvalidResource()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InternalServerError()
+        {
+            // Arrange
+            string from = "00000000-0000-0000-0000-000000000000";
+            string resource = "appid-503";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
 
@@ -485,172 +711,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
-        /// <summary>
-        ///     Test case: CreateDelegation delegates the actions of an altinn 2 form
-        ///     Expected: CreateDelegation returns the delegated actions of the altinn 2 form
-        /// </summary>
-        [Fact]
-        public async Task CreateDelegation_Altinn2Service_valid()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string toSsn = "50019992";
-
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation", "3225.json");
-            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path);
-
-            List<IdValuePair> resource = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:servicecode",
-                    Value = "3225",
-
-                },
-                new IdValuePair
-                {
-                    Id = "urn:altinn:serviceeditioncode",
-                    Value = "1596",
-
-                },
-            };
-
-            List<IdValuePair> to = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:ssn",
-                    Value = toSsn,
-                },
-            };
-
-            List<Right> rights = new List<Right>
-            {
-                new Right
-                {
-                    Resource = resource,
-                    Action = "read",
-                },
-                new Right
-                {
-                    Resource = resource,
-                    Action = "write",
-                },
-            };
-
-            DelegationInput delegation = new DelegationInput
-            {
-                To = to,
-                Rights = rights,
-            };
-
-            string jsonDto = JsonSerializer.Serialize(delegation);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
-            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
-        }
-
-        /// <summary>
-        ///     Test case: CreateDelegation does not delegate the actions of a standard resource if the resource does not exist
-        ///     Expected: CreateDelegation returns bad request
-        /// </summary>
-        [Fact]
-        public async Task CreateDelegation_StandardResource_invalid()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string toSsn = "50019992";
-
-            List<IdValuePair> resource = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:resource",
-                    Value = "Nonexistent",
-
-                },
-            };
-
-            List<IdValuePair> to = new List<IdValuePair>
-            {
-                new IdValuePair
-                {
-                    Id = "urn:altinn:ssn",
-                    Value = toSsn,
-                },
-            };
-
-            List<Right> rights = new List<Right>
-            {
-                new Right
-                {
-                    Resource = resource,
-                    Action = "read",
-                },
-                new Right
-                {
-                    Resource = resource,
-                    Action = "write",
-                },
-                new Right
-                {
-                    Resource = resource,
-                    Action = "sign",
-                },
-            };
-
-            DelegationInput delegation = new DelegationInput
-            {
-                To = to,
-                Rights = rights,
-            };
-
-            string jsonDto = JsonSerializer.Serialize(delegation);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate/{partyId}", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///     Test case: ClearAccessCache accepts correct input and returns ok
-        ///     Expected: ClearAccessCache returns OK
-        /// </summary>
-        [Fact]
-        public async Task ClearAccessCache_returnsOk()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-
-            BaseAttribute recipient = new BaseAttribute
-            {
-                Type = "urn:altinn:person:uuid",
-                Value = userUUID,
-            };
-
-            string jsonDto = JsonSerializer.Serialize(recipient);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/{partyId}/accesscache/clear", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-        }
-
         private int CountMatches(List<DelegationResponseData> actualResponses, string expectedResponseFileName)
         {
-            string path = Path.Combine(mockFolder, "Data", "SingleRight", "DelegationAccessCheckResponse", expectedResponseFileName);
+            string path = Path.Combine(mockFolder, "Data", "SingleRight", "DelegationAccessCheckResponseV0", expectedResponseFileName);
 
             List<DelegationResponseData> expectedResponses = Util.GetMockData<List<DelegationResponseData>>(path);
             int countMatches = 0;

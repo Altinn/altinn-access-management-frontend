@@ -1,12 +1,6 @@
 [
   {
     "rightKey": "jks-test-resource/read",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "jks-test-resource"
-      }
-    ],
     "action": "read",
     "status": "Delegable",
     "details": [
@@ -26,12 +20,6 @@
   },
   {
     "rightKey": "jks-test-resource/write",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "jks-test-resource"
-      }
-    ],
     "action": "write",
     "status": "Delegable",
     "details": [

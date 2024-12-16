@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -55,6 +56,17 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         ///     The user id of the rightholder
         /// </param>
         /// <returns></returns>
+        /// 
+
+        //// New GUI
+
+        /// <summary>
+        ///    Fetches all rights on a given resource with details on whether they can be delegated on behalf of the party
+        /// </summary>
+        /// <param name="party">The party on which the delegation would be on behalf of</param>
+        /// <param name="resource">The id of the resource to be checked for delegation</param>
+        Task<List<DelegationCheckedRightFE>> DelegationCheck(Guid party, string resource);
+
         Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
 
         /// <summary>

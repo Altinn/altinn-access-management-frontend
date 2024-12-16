@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Azure;
 
@@ -53,6 +54,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
             return await _accessManagementClientV0.ClearAccessCacheOnRecipient(party, recipient);
+        }
+
+        //// New GUI
+
+        /// <inheritdoc />
+        public async Task<List<DelegationCheckedRightFE>> DelegationCheck(Guid party, string resource)
+        {
+            List<DelegationCheckedRight> delegationCheckResult = await _accessManagementClient.GetDelegationCheck(party, resource);
+            List<DelegationCheckedRightFE> simplifiedResult = new List<DelegationCheckedRightFE>();
+            
+            foreach (DelegationCheckedRight right in delegationCheckResult)
+            {
+                simplifiedResult.Add(new DelegationCheckedRightFE
+                {
+                    Action = right.Action,
+                    RightKey = right.RightKey,
+                    Status = right.Status,
+                    ReasonCodes = right.Details.Select(d => d.Code).ToList()
+                });
+            }
+
+            return simplifiedResult;
         }
 
         /// <inheritdoc />

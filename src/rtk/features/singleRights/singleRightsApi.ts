@@ -3,13 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
-import type {
-  DelegationAccessResult,
-  DelegationInputDto,
-  DelegationResult,
-  ResourceReference,
-  RightChangesDto,
-} from '@/dataObjects/dtos/resourceDelegation';
+import type { DelegationResult, RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
   page: number;
@@ -49,6 +43,13 @@ interface searchParams {
   resultsPerPage: number;
 }
 
+export interface DelegationCheckedRight {
+  rightKey: string;
+  action: string;
+  status: string;
+  reasonCodes: string[];
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -81,14 +82,15 @@ export const singleRightsApi = createApi({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
       providesTags: ['overview'],
     }),
-    delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
-      query: (resourceRef) => ({
-        url: `singleright/checkdelegationaccesses/${getCookie('AltinnPartyId')}`,
-        method: 'POST',
-        body: JSON.stringify(resourceRef),
+    delegationCheck: builder.query<DelegationCheckedRight[], string>({
+      query: (resourceId) => ({
+        url: `singleright/${getCookie('AltinnPartyUuid')}/delegationcheck/${resourceId}`,
+        method: 'GET',
       }),
-      transformErrorResponse: (response: { status: string | number }) => {
-        return response.status;
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
       },
     }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
@@ -100,17 +102,18 @@ export const singleRightsApi = createApi({
         };
       },
     }),
-    delegateRights: builder.mutation<DelegationResult, DelegationInputDto>({
-      query: (delegation) => ({
-        url: `singleright/delegate/${getCookie('AltinnPartyId')}`,
-        method: 'POST',
-        body: JSON.stringify(delegation),
-      }),
-      invalidatesTags: ['overview'],
-      transformErrorResponse: (response: { status: string | number }) => {
-        return response.status;
+    delegateRights: builder.mutation<DelegationResult, { resourceId: string; rightKeys: string[] }>(
+      {
+        query: ({ resourceId, rightKeys }) => ({
+          url: `singleright/delegate/${getCookie('AltinnPartyId')}/${resourceId}?rightKey=${rightKeys}`,
+          method: 'POST',
+        }),
+        invalidatesTags: ['overview'],
+        transformErrorResponse: (response: { status: string | number }) => {
+          return response.status;
+        },
       },
-    }),
+    ),
     revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
       { from: string; to: string; resourceId: string }
@@ -143,7 +146,7 @@ export const {
   useGetPaginatedSearchQuery,
   useGetSingleRightsForRightholderQuery,
   useClearAccessCacheMutation,
-  useDelegationCheckMutation,
+  useDelegationCheckQuery,
   useDelegateRightsMutation,
   useRevokeResourceMutation,
   useEditResourceMutation,

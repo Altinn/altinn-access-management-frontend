@@ -101,6 +101,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        //// Single Rights
+
+        /// <inheritdoc />
+        public async Task<List<DelegationCheckedRight>> GetDelegationCheck(Guid party, string resource)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "DelegationCheck", $"{resource}.json");
+                return await Task.FromResult(Util.GetMockData<List<DelegationCheckedRight>>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+        }
+
         /// <inheritdoc />
         public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
         {
