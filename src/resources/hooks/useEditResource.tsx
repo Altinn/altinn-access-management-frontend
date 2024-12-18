@@ -2,8 +2,6 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useEditResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import type { RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
 
-import { getUrnForParty } from '../utils';
-
 export const useEditResource = () => {
   const [edit] = useEditResourceMutation();
 
@@ -16,8 +14,8 @@ export const useEditResource = () => {
     onSuccess?: () => void,
     onError?: () => void,
   ) => {
-    const from = getUrnForParty(fromParty.partyUuid, fromParty.partyTypeName);
-    const to = getUrnForParty(toParty.partyUuid, toParty.partyTypeName);
+    const from = fromParty.partyUuid;
+    const to = toParty.partyUuid;
 
     const rightsToAdd = newRightKeys.filter((rk) => !prevRightKeys.includes(rk));
     const rightsToDelete = prevRightKeys.filter((rk) => !newRightKeys.includes(rk));
@@ -33,11 +31,12 @@ export const useEditResource = () => {
       edits,
     })
       .unwrap()
-      .then((fulfilled) => {
-        if (fulfilled.failedEdits.length > 0) {
+      .then((failedEdits) => {
+        if (failedEdits.length > 0) {
           onError?.();
+        } else {
+          onSuccess?.();
         }
-        onSuccess?.();
       })
       .catch((error) => {
         console.log(error);

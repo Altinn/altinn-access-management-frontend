@@ -62,7 +62,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['SingleRights', 'overview'],
+  tagTypes: ['SingleRights', 'overview', 'delegationCheck'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -92,6 +92,7 @@ export const singleRightsApi = createApi({
       }): { status: string | number; data: string } => {
         return { status: response.status, data: new Date().toISOString() };
       },
+      providesTags: ['delegationCheck'],
     }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
@@ -102,18 +103,20 @@ export const singleRightsApi = createApi({
         };
       },
     }),
-    delegateRights: builder.mutation<DelegationResult, { resourceId: string; rightKeys: string[] }>(
-      {
-        query: ({ resourceId, rightKeys }) => ({
-          url: `singleright/delegate/${getCookie('AltinnPartyId')}/${resourceId}?rightKey=${rightKeys}`,
-          method: 'POST',
-        }),
-        invalidatesTags: ['overview'],
-        transformErrorResponse: (response: { status: string | number }) => {
-          return response.status;
-        },
+    delegateRights: builder.mutation<
+      DelegationResult,
+      { toUuid: string; resourceId: string; rightKeys: string[] }
+    >({
+      query: ({ toUuid, resourceId, rightKeys }) => ({
+        url: `singleright/${getCookie('AltinnPartyUuid')}/${toUuid}/delegate/${resourceId}`,
+        method: 'POST',
+        body: JSON.stringify(rightKeys),
+      }),
+      transformErrorResponse: (response: { status: string | number }) => {
+        return response.status;
       },
-    ),
+      invalidatesTags: ['overview', 'delegationCheck'],
+    }),
     revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
       { from: string; to: string; resourceId: string }
@@ -124,10 +127,10 @@ export const singleRightsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['overview'],
+      invalidatesTags: ['overview', 'delegationCheck'],
     }),
     editResource: builder.mutation<
-      { failedEdits: string[] },
+      string[],
       { from: string; to: string; resourceId: string; edits: RightChangesDto }
     >({
       query({ from, to, resourceId, edits }) {
@@ -137,7 +140,7 @@ export const singleRightsApi = createApi({
           body: JSON.stringify(edits),
         };
       },
-      invalidatesTags: ['overview'],
+      invalidatesTags: ['overview', 'delegationCheck'],
     }),
   }),
 });

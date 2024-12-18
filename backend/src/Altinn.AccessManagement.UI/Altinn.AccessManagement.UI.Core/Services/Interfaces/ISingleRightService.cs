@@ -43,6 +43,27 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns></returns>
         Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient);
 
+        // ----------------------------
+        //// New GUI
+        // ----------------------------
+
+        /// <summary>
+        ///    Fetches all rights on a given resource with details on whether they can be delegated on behalf of the party
+        /// </summary>
+        /// <param name="party">The party on which the delegation would be on behalf of</param>
+        /// <param name="resource">The id of the resource to be checked for delegation</param>
+        Task<List<DelegationCheckedRightFE>> DelegationCheck(Guid party, string resource);
+
+        /// <summary>
+        ///    Delegates the specified rights on a specified resource to someone on behalf of a specified party
+        /// </summary>
+        /// <param name="from">The party on which the delegation would be on behalf of</param>
+        /// <param name="to">The one that will receive access to the resource</param>
+        /// <param name="resource">The id of the resource to be delegated</param>
+        /// <param name="rights">List of keys for the specific rights that are to be delegated on the resource</param>
+        /// <returns> List of rightkeys, representing failed delegations </returns>
+        Task<DelegationOutput> Delegate(Guid from, Guid to, string resource, List<string> rights);
+
         /// <summary>
         ///     Gets the single-rights for a given rightholder
         /// </summary>
@@ -56,36 +77,25 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         ///     The user id of the rightholder
         /// </param>
         /// <returns></returns>
-        /// 
-
-        //// New GUI
-
-        /// <summary>
-        ///    Fetches all rights on a given resource with details on whether they can be delegated on behalf of the party
-        /// </summary>
-        /// <param name="party">The party on which the delegation would be on behalf of</param>
-        /// <param name="resource">The id of the resource to be checked for delegation</param>
-        Task<List<DelegationCheckedRightFE>> DelegationCheck(Guid party, string resource);
-
         Task<List<ResourceDelegation>> GetSingleRightsForRightholder(string languageCode, string party, string userId);
 
         /// <summary>
         /// Revokes all rights on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
-        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the HTTP response message.</returns>
-        Task<HttpResponseMessage> RevokeResourceAccess(string from, string to, string resourceId);
+        Task<HttpResponseMessage> RevokeResourceAccess(Guid from, Guid to, string resourceId);
 
         /// <summary>
         /// Makes requested changes to the rights on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
-        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <param name="rightsUpdate">The changes in right accesses that is to be made</param>
         /// <returns>A list of right keys whose edits failed, if any</returns>
-        Task<List<string>> EditResourceAccess(string from, string to, string resourceId, RightChanges rightsUpdate);
+        Task<List<string>> EditResourceAccess(Guid from, Guid to, string resourceId, RightChanges rightsUpdate);
     }
 }

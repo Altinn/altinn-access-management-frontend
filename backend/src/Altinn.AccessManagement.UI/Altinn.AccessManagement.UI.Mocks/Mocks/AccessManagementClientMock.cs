@@ -119,6 +119,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        public async Task<DelegationOutput> DelegateResource(Guid from, Guid to, string resource, List<string> rights)
+        {
+            ThrowExceptionIfTriggerParty(from.ToString());
+
+            try
+            {
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation", $"{resource}.json");
+                return await Task.FromResult(Util.GetMockData<DelegationOutput>(dataPath));
+            }
+            catch
+            {
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
+            }
+        }
+
         /// <inheritdoc />
         public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
         {
@@ -131,9 +146,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId)
+        public async Task<HttpResponseMessage> RevokeResourceDelegation(Guid from, Guid to, string resourceId)
         {
-            ThrowExceptionIfTriggerParty(from);
+            ThrowExceptionIfTriggerParty(from.ToString());
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
@@ -146,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
+        public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
         {
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 

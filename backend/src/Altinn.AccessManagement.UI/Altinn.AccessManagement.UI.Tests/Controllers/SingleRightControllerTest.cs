@@ -475,8 +475,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
 
+        // ----------------------------
         //// New GUI
-        ///
+        // ----------------------------
 
         /// <summary>
         ///     Test case: Successfully perform delegationcheck on a resource
@@ -591,8 +592,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RevokeResourceAccess_handles_error()
         {
             // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "invalid_appid";
 
             // Act
@@ -610,8 +611,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RevokeResourceAccess_returns_ok_on_valid_input()
         {
             // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "appid-502";
 
             // Act
@@ -629,8 +630,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task EditResourceAccess_returns_ok_on_valid_input()
         {
             // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "appid-503";
 
             RightChanges edits = new RightChanges()
@@ -659,8 +660,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task EditResourceAccess_returns_unsuccessfull_edits()
         {
             // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "appid-502";
 
             List<string> expectedResult = new List<string> { "appid-502/read", "appid-502/write" };
@@ -691,8 +692,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task EditResourceAccess_returns_handles_internal_errors()
         {
             // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             string resourceId = "invalid-resource";
 
             RightChanges edits = new RightChanges()

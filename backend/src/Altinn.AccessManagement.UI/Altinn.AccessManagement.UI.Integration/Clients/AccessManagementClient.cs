@@ -14,6 +14,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -129,6 +130,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<DelegationOutput> DelegateResource(Guid from, Guid to, string resource, List<string> rights)
+        {
+            string endpointUrl = $"todo/resources/{resource}/rights?from={from}&to={to}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(rights, _serializerOptions), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<DelegationOutput>(response);
+        }
+
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> GetSingleRightsForRightholder(string party, string userId)
         {
             string endpointUrl = $"todo/{party}/{userId}"; // TODO: Switch with actual backend endpoint when available
@@ -146,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId)
+        public async Task<HttpResponseMessage> RevokeResourceDelegation(Guid from, Guid to, string resourceId)
         {
             string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -162,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
+        public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
         {
             string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights/{rightKey}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

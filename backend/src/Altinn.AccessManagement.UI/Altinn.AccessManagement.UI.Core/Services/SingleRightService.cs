@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Register.Models;
 using Azure;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -56,7 +57,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _accessManagementClientV0.ClearAccessCacheOnRecipient(party, recipient);
         }
 
+        // ----------------------------
         //// New GUI
+        // ----------------------------
 
         /// <inheritdoc />
         public async Task<List<DelegationCheckedRightFE>> DelegationCheck(Guid party, string resource)
@@ -76,6 +79,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return simplifiedResult;
+        }
+
+        /// <inheritdoc />
+        public async Task<DelegationOutput> Delegate(Guid from, Guid to, string resource, List<string> rights)
+        {
+            return await _accessManagementClient.DelegateResource(from, to, resource, rights);
         }
 
         /// <inheritdoc />
@@ -133,20 +142,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> RevokeResourceAccess(string from, string to, string resourceId)
+        public Task<HttpResponseMessage> RevokeResourceAccess(Guid from, Guid to, string resourceId)
         {
             return _accessManagementClient.RevokeResourceDelegation(from, to, resourceId);
         }
 
         /// <inheritdoc />
-        public async Task<List<string>> EditResourceAccess(string from, string to, string resourceId, RightChanges update)
+        public async Task<List<string>> EditResourceAccess(Guid from, Guid to, string resourceId, RightChanges update)
         {
             List<string> failedEdits = new List<string>();
 
-            var delResponse = await _accessManagementClient.DelegateResourceRights(from, to, resourceId, update.RightsToDelegate);
-            var delegationResult = await delResponse.Content.ReadAsStringAsync();
-
-            DelegationOutput delegationOutput = JsonSerializer.Deserialize<DelegationOutput>(delegationResult, options);
+            DelegationOutput delegationOutput = await _accessManagementClient.DelegateResource(from, to, resourceId, update.RightsToDelegate);
 
             var failingDelegations = delegationOutput.RightDelegationResults.Where(right => right.Status != "Delegated").Select(right => right.RightKey).ToList();
 
