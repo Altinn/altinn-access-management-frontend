@@ -156,7 +156,6 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         className={classes.resourceItem}
       >
         <ListItem
-          id={resource.identifier ?? index}
           onClick={() => onSelection(resource)}
           linkIcon='chevron-right'
           size='md'

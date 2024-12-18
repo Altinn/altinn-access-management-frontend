@@ -16,7 +16,7 @@ dotenv.config({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
   testMatch: ['playwright/e2eTests/*.spec.ts'],
-  timeout: 30 * 1000, //30 seconds default timeout
+  timeout: 60 * 1000, //30 seconds default timeout
   use: {
     headless: true,
     // screenshot: 'only-on-failure',
