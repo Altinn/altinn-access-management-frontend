@@ -34,7 +34,6 @@ export const UsersList = () => {
       {currentUserAsRightHolder && (
         <div className={classes.currentUser}>
           <ListItem
-            id={currentUserAsRightHolder.partyUuid}
             size='xl'
             title={currentUserAsRightHolder.name}
             description={currentUserAsRightHolder.registryRoles
