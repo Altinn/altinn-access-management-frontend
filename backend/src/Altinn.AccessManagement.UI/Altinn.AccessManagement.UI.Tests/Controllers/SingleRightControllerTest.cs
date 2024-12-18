@@ -537,6 +537,80 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
         }
 
+        /// <summary>
+        ///     Test case: Successfully perform delegation of the rights on a specified resource
+        ///     Expected: Returns OK, with the output of the delegation
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_Success()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resource = "appid-503";
+            List<string> rightKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation", "appid-503.json");
+            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path);
+
+            string jsonRights = JsonSerializer.Serialize(rightKeys);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/delegate/{resource}", content);
+            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: Try to perform delegation of the rights on a non-existent resource
+        ///     Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_InvalidResource()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resource = "non-existing-resource";
+            List<string> rightKeys = new List<string> { "non-existing-resource/read", "non-existing-resource/write" };
+
+            string jsonRights = JsonSerializer.Serialize(rightKeys);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/delegate/{resource}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_InternalServerError()
+        {
+            // Arrange
+            string from = "00000000-0000-0000-0000-000000000000";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resource = "appid-503";
+            List<string> rightKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string jsonRights = JsonSerializer.Serialize(rightKeys);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/delegate/{resource}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
 
         /// <summary>
         /// Test case: GetSingleRightsForUser returns the single-rights for a user
