@@ -1,10 +1,9 @@
 import { Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@altinn/altinn-components';
+import { AccessPackageList } from '@altinn/altinn-components';
 
 import type { AccessPackage, AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
-
-import { AccessPackageList } from '../../../../../../altinn-components/lib/components';
 
 import classes from './AccessPackageSection.module.css';
 

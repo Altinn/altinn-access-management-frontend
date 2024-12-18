@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import React, { useRef } from 'react';
+import { ResourceListItem } from '@altinn/altinn-components';
+import type { FC } from 'react';
+import { useRef } from 'react';
 
-//import { ResourceListItem } from '@altinn/altinn-components';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { type Party } from '@/rtk/features/lookupApi';
 
-import { ResourceListItem } from '../../../../../../altinn-components/lib/components';
 import { EditModal } from '../DelegationModal/EditModal';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
@@ -18,7 +18,7 @@ interface SingleRightItemProps {
   toParty: Party;
 }
 
-const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) => {
+const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
