@@ -114,7 +114,6 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
 const MINIMIZED_LIST_SIZE = 5;
 
 const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
-  id: resource.id,
   title: resource.name,
   avatar: { type: 'company', name: resource.name },
   as: 'div' as React.ElementType,
@@ -127,7 +126,6 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     return { listItems: list.map(mapResourceToListItem) };
   }
   const toggleListItem: ListItemProps = {
-    id: 'pagination',
     title: t(showAll ? 'common.show_less' : 'common.show_more'),
     description: '',
     onClick: () => setShowAll(!showAll),

@@ -1,5 +1,4 @@
-import React from 'react';
-import { ListItem } from '@altinn/altinn-components';
+import { AccessAreaListItem } from '@altinn/altinn-components';
 import { Paragraph } from '@digdir/designsystemet-react';
 
 import type { AccessArea } from '@/rtk/features/accessPackageApi';
@@ -22,33 +21,25 @@ export const DelegatedAreaListItem: React.FC<AccessAreaListItemProps> = ({
   expanded,
   toggleExpanded,
   children,
-}) => {
+}: AccessAreaListItemProps) => {
   const { id, name, description, iconUrl } = accessPackageArea;
   return (
     <>
       <li key={id}>
-        <ListItem
+        <AccessAreaListItem
           id={id}
-          collapsible
-          expanded={expanded}
-          as='button'
-          onClick={toggleExpanded}
-          linkIcon='chevron-right'
           size='lg'
-          title={name}
-          avatar={{
-            type: 'company',
-            imageUrl: iconUrl,
-            name: name,
-          }}
-        />
+          name={name}
+          icon={iconUrl}
+          onClick={toggleExpanded}
+          expanded={expanded}
+        >
+          <div className={classes.accessAreaContent}>
+            <Paragraph size='sm'>{description}</Paragraph>
+            {children}
+          </div>
+        </AccessAreaListItem>
       </li>
-      {expanded && (
-        <div className={classes.accessAreaContent}>
-          <Paragraph size='sm'>{description}</Paragraph>
-          {children}
-        </div>
-      )}
     </>
   );
 };
