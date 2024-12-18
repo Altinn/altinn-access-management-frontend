@@ -2,11 +2,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React, { useRef } from 'react';
-import { ListItem } from '@altinn/altinn-components';
 
+//import { ResourceListItem } from '@altinn/altinn-components';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { type Party } from '@/rtk/features/lookupApi';
 
+import { ResourceListItem } from '../../../../../../altinn-components/lib/components';
 import { EditModal } from '../DelegationModal/EditModal';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
@@ -23,17 +24,22 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) 
   return (
     <>
       <li className={classes.singleRightItem}>
-        <ListItem
+        <ResourceListItem
+          resourceName={resource.title}
+          ownerName={resource.resourceOwnerName}
+          ownerLogoUrl={resource.resourceOwnerLogoUrl}
           id={resource.identifier}
-          title={resource.title}
-          description={resource.resourceOwnerName}
           size='lg'
-          avatar={{
-            type: 'company',
-            imageUrl: resource.resourceOwnerLogoUrl,
-            name: resource.resourceOwnerName,
-          }}
+          as='button'
           onClick={() => modalRef.current?.showModal()}
+          controls={
+            <div className={classes.actions}>
+              <DeleteResourceButton
+                resource={resource}
+                toParty={toParty}
+              />
+            </div>
+          }
         />
         <div
           className={classes.action}
@@ -41,12 +47,7 @@ const SingleRightItem: React.FC<SingleRightItemProps> = ({ resource, toParty }) 
             event.stopPropagation();
             event.preventDefault();
           }}
-        >
-          <DeleteResourceButton
-            resource={resource}
-            toParty={toParty}
-          />
-        </div>
+        ></div>
       </li>
       <EditModal
         ref={modalRef}

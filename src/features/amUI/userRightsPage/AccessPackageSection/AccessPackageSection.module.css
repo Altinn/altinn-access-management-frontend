@@ -6,8 +6,17 @@
 }
 
 .accessAreaContent {
-  padding-top: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-right: 0.625rem;
+}
+
+.controls > button {
+  white-space: nowrap;
 }

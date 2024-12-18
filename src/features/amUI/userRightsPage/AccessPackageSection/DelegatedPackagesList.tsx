@@ -1,10 +1,12 @@
-import React from 'react';
-import { ListItem } from '@altinn/altinn-components';
 import { Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@altinn/altinn-components';
 
 import type { AccessPackage, AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
-import { List } from '@/components';
+
+import { AccessPackageList } from '../../../../../../altinn-components/lib/components';
+
+import classes from './AccessPackageSection.module.css';
 
 interface DelegatedPackagesListProps {
   /** The method to be called when clicking a package */
@@ -19,7 +21,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   onSelection,
   packageDelegations,
   accessPackages,
-}) => {
+}: DelegatedPackagesListProps) => {
   const { t } = useTranslation();
   const delegatedPackageIds = packageDelegations.map((p) => p.accessPackageId);
   const delegatedPackages = accessPackages.filter((p) => delegatedPackageIds.includes(p.id));
@@ -28,38 +30,52 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   return (
     <>
       {delegatedPackages.length > 0 && (
-        <List>
-          {delegatedPackages.map((item) => (
-            <li key={item.id}>
-              <ListItem
-                id={item.id}
-                onClick={() => onSelection(item)}
-                size='md'
-                title={item.name}
-                description={`${item.resources.length} tjenester`}
-                color='accent'
-              />
-            </li>
-          ))}
-        </List>
+        <AccessPackageList
+          items={delegatedPackages.map((item) => ({
+            id: item.id,
+            title: item.name,
+            description: `${item.resources.length} tjenester`,
+            onClick: () => onSelection(item),
+            controls: (
+              <div className={classes.controls}>
+                <Button
+                  // className={classes.controlButton}
+                  icon='minus-circle'
+                  variant='text'
+                  size='sm'
+                  onClick={() => console.log('Delete POA for ' + item.name)}
+                >
+                  {t('common.delete_poa')}
+                </Button>
+              </div>
+            ),
+          }))}
+        />
       )}
       {notDelegatedPackages.length > 0 && (
         <>
           <Paragraph size='sm'>{t('access_packages.other_packages_in_area_title')}</Paragraph>
-          <List>
-            {notDelegatedPackages.map((item) => (
-              <li key={item.id}>
-                <ListItem
-                  id={item.id}
-                  onClick={() => onSelection(item)}
-                  size='md'
-                  title={item.name}
-                  description={`${item.resources.length} tjenester`}
-                  color='accent'
-                />
-              </li>
-            ))}
-          </List>
+          <AccessPackageList
+            items={notDelegatedPackages.map((item) => ({
+              id: item.id,
+              title: item.name,
+              description: `${item.resources.length} tjenester`,
+              onClick: () => onSelection(item),
+              controls: (
+                <div className={classes.controls}>
+                  <Button
+                    // className={classes.controlButton}
+                    icon='plus-circle'
+                    variant='text'
+                    size='sm'
+                    onClick={() => console.log('Give POA to ' + item.name)}
+                  >
+                    {t('common.give_poa')}
+                  </Button>
+                </div>
+              ),
+            }))}
+          />
         </>
       )}
     </>
