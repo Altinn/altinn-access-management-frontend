@@ -218,10 +218,10 @@
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
-    "delete_success_message": "Fullmakt til {{packageName}} er slettet",
-    "delete_error_message": "Kunne ikkje slette fullmakt til {{packageName}}",
-    "delegate_success_message": "Fullmakt til {{packageName}} vart gjeven.",
-    "delegete_error_message": "Fullmakt til {{packageName}} kunne ikkje gjevast."
+    "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
+    "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
+    "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
+    "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -247,7 +247,6 @@
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "{{name}} gir tilgang til {{count}} tenester",
-    "package_delegation_success": "{{name}} har fått tilgang til {{accessPackage}}", 
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."

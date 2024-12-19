@@ -36,14 +36,16 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
       accessPackage,
       () => {
         openSnackbar({
-          message: t('access_packages.delegate_success_message', {
+          message: t('access_packages.package_delegation_success', {
+            name: toParty.name,
             packageName: accessPackage.name,
           }),
         });
       },
       () => {
         openSnackbar({
-          message: t('access_packages.delegate_error_message', {
+          message: t('access_packages.package_delegation_error', {
+            name: toParty.name,
             packageName: accessPackage.name,
           }),
         });
@@ -57,14 +59,16 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
       accessPackage,
       () => {
         openSnackbar({
-          message: t('access_packages.delete_success_message', {
+          message: t('access_packages.package_deletion_success', {
+            name: toParty.name,
             packageName: accessPackage.name,
           }),
         });
       },
       () => {
         openSnackbar({
-          message: t('access_packages.delete_error_message', {
+          message: t('access_packages.package_deletion_error', {
+            name: toParty.name,
             packageName: accessPackage.name,
           }),
         });

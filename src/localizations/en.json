@@ -220,10 +220,10 @@
     "current_access_packages_title": "Power of attorney to {{count}} access package(s)",
     "give_new_button": "Give power of attorney to new access package",
     "other_packages_in_area_title": "Other available packages in this area:",
-    "delete_success_message": "Power of attorney to {{packageName}} has been revoked",
-    "delete_error_message": "Failed to revoke power of attorney to {{packageName}}",
-    "delegate_success_message": "Power of attorney successfully granted to {{packageName}}.",
-    "delegete_error_message": "Power of attorney could not be granted to {{packageName}}."
+    "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
+    "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
+    "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
+    "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -249,7 +249,6 @@
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
     "package_services": "{{name}} provides access to {{count}} services",
-    "package_delegation_success": "{{name}} has been given power of attorney for {{accessPackage}}", 
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
