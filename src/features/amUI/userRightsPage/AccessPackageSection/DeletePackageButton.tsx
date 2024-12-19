@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@digdir/designsystemet-react';
 
+import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useRevokeDelegationMutation, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -10,13 +11,13 @@ import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/
 
 interface DeletePackageButtonProps {
   accessPackage: AccessPackage;
-  toPartyUuid: string;
+  toParty: Party;
   fullText?: boolean;
 }
 
 export const DeletePackageButton = ({
   accessPackage,
-  toPartyUuid,
+  toParty,
   fullText = false,
 }: DeletePackageButtonProps) => {
   const { t } = useTranslation();
@@ -29,9 +30,9 @@ export const DeletePackageButton = ({
       const snackbarData = {
         message: t(
           isSuccessful
-            ? 'access_packages.delete_success_message'
-            : 'access_packages.delete_error_message',
-          { packageName: accessPackage.name },
+            ? 'access_packages.package_deletion_success'
+            : 'access_packages.package_deletion_error',
+          { accessPackage: accessPackage.name, name: toParty.name },
         ),
         variant: SnackbarMessageVariant.Default,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
@@ -41,8 +42,7 @@ export const DeletePackageButton = ({
 
     if (representingParty) {
       revoke({
-        from: representingParty?.partyUuid,
-        to: toPartyUuid,
+        to: toParty.partyUuid,
         packageId: accessPackage.id,
       })
         .unwrap()

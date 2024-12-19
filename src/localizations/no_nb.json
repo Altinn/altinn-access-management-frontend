@@ -219,8 +219,10 @@
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
-    "delete_success_message": "Fullmakt til {{packageName}} er slettet",
-    "delete_error_message": "Kunne ikke slette fullmakt til {{packageName}}"
+    "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
+    "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
+    "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
+    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -246,7 +248,6 @@
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "{{name}} gir tilgang til {{count}} tjenester",
-    "package_delegation_success": "{{name}} har fått tilgang til {{accessPackage}}", 
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
