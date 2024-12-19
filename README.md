@@ -162,17 +162,23 @@ Happy coding!
 
 The BFF provides us with the option of mocking away all external connections, instead fetching data from static files or generating it dynamically on-call. This can be usefull when testing out code only pertaining to the frontend or when developing functionality that lacks backend support.
 
-The mock can be activated locally or in a specific environment by going to the relevant appsettings file and setting `UseMockData` to true. Be aware that this should NEVER be done for TT02 or PROD!
+The mock can be activated locally or in a specific environment by using the appsettings file for that environment and setting the relevant flags in the 'MockSettings' section. Each flag here relates to a client in the BFF and thus, to the integration to external backends. Setting one of these to true means that instead of the regulat client being used at runtime, a mocked version will be used instead. The mocked client will use data from static files instead of making calls to external sources. Since each client can be mocked individually, there is a number of possible combinations that can be enabled, depending on the needed case. In development, you are free to use whatever combination you want, and in certain situations, we enable mocking in one or more of the AT environemts. That being said...
+
+**Be aware that the mock should NEVER be enabled for TT02 or PROD!**
 
 ```bash
-"GeneralSettings": {
-  "FrontendBaseUrl": "https://am.ui.at22.altinn.cloud",
-  "Hostname": "at22.altinn.cloud",
-  "UseMockData": true
+"MockSettings": {
+  "AccessManagement_V0": false,
+  "AccessManagement": true,
+  "AccessPackage": true,
+  "ResourceRegistry": false,
+  "Profile": false,
+  "Register": false,
+  "KeyVault": false
 },
 ```
 
-Fun fact: The static files used to run the mock is the same that is used for integration tests - meaning we get twice the usage out of the same data! ♻️
+Fun fact: The static files used to run the mock are also used for integration tests - meaning we get twice the usage out of the same data! ♻️
 
 ### Login when in mock-mode
 
