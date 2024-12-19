@@ -32,8 +32,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     setPackageToView,
     packageToView,
     infoView,
-    setSearchString,
-    setFilters,
+    reset,
   } = useDelegationModalContext();
 
   const onResourceSelection = (resource?: ServiceResource) => {
@@ -49,9 +48,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const onClose = () => {
-    setInfoView(false);
-    setSearchString('');
-    setFilters([]);
+    reset();
   };
 
   /* handle closing */

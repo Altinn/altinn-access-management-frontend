@@ -1,39 +1,61 @@
 import React from 'react';
 import { Paragraph } from '@digdir/designsystemet-react';
-import { AccessPackageList, AccessAreaListItem as AreaListItem } from '@altinn/altinn-components';
+import { AccessAreaListItem as AreaListItem } from '@altinn/altinn-components';
 
-import type { AccessArea, AccessPackage } from '@/rtk/features/accessPackageApi';
+import {
+  useGetRightHolderDelegationsQuery,
+  type AccessArea,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
+import type { Party } from '@/rtk/features/lookupApi';
+
+import { DelegatedPackagesList } from '../../AccessPackageSection/DelegatedPackagesList';
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './AccessPackageSection.module.css';
 
 interface AccessAreaListItemProps {
   accessPackageArea: AccessArea;
+  toParty: Party;
   onSelection: (accessPackage: AccessPackage) => void;
+  onDelegate: (accessPackage: AccessPackage) => void;
+  onRevoke: (accessPackage: AccessPackage) => void;
 }
 
 const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
   accessPackageArea,
+  toParty,
   onSelection,
+  onDelegate,
+  onRevoke,
 }: AccessAreaListItemProps) => {
   const { id, name, description, iconUrl, accessPackages } = accessPackageArea;
-  const [expanded, setExpanded] = React.useState(false);
+  const { data, isFetching } = useGetRightHolderDelegationsQuery(toParty.partyUuid);
+  const { expandedAreas, toggleExpanded } = useDelegationModalContext();
+  const expanded = expandedAreas.includes(id);
+
   return (
     <AreaListItem
       name={name}
       expanded={expanded}
-      onClick={() => setExpanded(!expanded)}
+      onClick={() => toggleExpanded(!expanded, id)}
       icon={iconUrl}
       id={id}
     >
-      <>
-        <Paragraph size='xs'>{description}</Paragraph>
-        <AccessPackageList
-          items={accessPackages.map((item) => ({
-            id: item.id,
-            title: item.name,
-            description: `${item.resources.length} tjenester`,
-            onClick: () => onSelection(item),
-          }))}
-        />
-      </>
+      <div className={classes.accessAreaContent}>
+        <Paragraph size='sm'>{description}</Paragraph>
+        {!isFetching && data ? (
+          <DelegatedPackagesList
+            packageDelegations={data[id] ?? []}
+            accessPackages={accessPackages}
+            onSelection={(ap: AccessPackage) => onSelection(ap)}
+            onDelegate={onDelegate}
+            onRevoke={onRevoke}
+          />
+        ) : (
+          '...laster'
+        )}
+      </div>
     </AreaListItem>
   );
 };

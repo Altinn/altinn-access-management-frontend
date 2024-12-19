@@ -7,6 +7,9 @@ import { debounce } from '@/resources/utils';
 import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
 import type { Party } from '@/rtk/features/lookupApi';
+import { useSnackbar } from '@/features/amUI/common/Snackbar';
+import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
+import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
@@ -28,6 +31,52 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
     setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
+
+  const { openSnackbar } = useSnackbar();
+  const delegate = useDelegateAccessPackage();
+  const revoke = useRevokeAccessPackage();
+
+  const onDelegate = async (accessPackage: AccessPackage) => {
+    delegate(
+      toParty,
+      accessPackage,
+      () => {
+        openSnackbar({
+          message: t('access_packages.delegate_success_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+      () => {
+        openSnackbar({
+          message: t('access_packages.delegate_error_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+    );
+  };
+
+  const onRevoke = async (accessPackage: AccessPackage) => {
+    revoke(
+      toParty,
+      accessPackage,
+      () => {
+        openSnackbar({
+          message: t('access_packages.delete_success_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+      () => {
+        openSnackbar({
+          message: t('access_packages.delete_error_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+    );
+  };
 
   const { data } = useSearchQuery(debouncedSearchString);
 
@@ -63,12 +112,16 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             />
           </div>
         </div>
+
         <List className={classes.searchResults}>
           {data?.map((a) => (
             <AccessAreaListItem
+              toParty={toParty}
               key={a.id}
               accessPackageArea={a}
               onSelection={(ap: AccessPackage) => onSelection(ap)}
+              onDelegate={onDelegate}
+              onRevoke={onRevoke}
             />
           ))}
         </List>

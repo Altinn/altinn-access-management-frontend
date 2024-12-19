@@ -41,7 +41,6 @@ export const DeletePackageButton = ({
 
     if (representingParty) {
       revoke({
-        from: representingParty?.partyUuid,
         to: toPartyUuid,
         packageId: accessPackage.id,
       })

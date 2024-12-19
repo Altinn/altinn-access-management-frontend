@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@altinn/altinn-components';
 import { AccessPackageList } from '@altinn/altinn-components';
 
-import type { AccessPackage, AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
+import { type AccessPackage, type AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
 
 import classes from './AccessPackageSection.module.css';
 
@@ -14,12 +14,18 @@ interface DelegatedPackagesListProps {
   packageDelegations: AccessPackageDelegation[];
   /** The complete list of packages that belong to the same area */
   accessPackages: AccessPackage[];
+  /** The method to be called when delegating a package */
+  onDelegate: (accessPackage: AccessPackage) => void;
+  /** The method to be called when revoking a package */
+  onRevoke: (accessPackage: AccessPackage) => void;
 }
 
 export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   onSelection,
   packageDelegations,
   accessPackages,
+  onDelegate,
+  onRevoke,
 }: DelegatedPackagesListProps) => {
   const { t } = useTranslation();
   const delegatedPackageIds = packageDelegations.map((p) => p.accessPackageId);
@@ -38,11 +44,10 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
             controls: (
               <div className={classes.controls}>
                 <Button
-                  // className={classes.controlButton}
                   icon='minus-circle'
                   variant='text'
                   size='sm'
-                  onClick={() => console.log('Delete POA for ' + item.name)}
+                  onClick={() => onRevoke(item)}
                 >
                   {t('common.delete_poa')}
                 </Button>
@@ -53,7 +58,9 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
       )}
       {notDelegatedPackages.length > 0 && (
         <>
-          <Paragraph size='sm'>{t('access_packages.other_packages_in_area_title')}</Paragraph>
+          {delegatedPackages.length > 0 && (
+            <Paragraph size='sm'>{t('access_packages.other_packages_in_area_title')}</Paragraph>
+          )}
           <AccessPackageList
             items={notDelegatedPackages.map((item) => ({
               id: item.id,
@@ -63,11 +70,10 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
               controls: (
                 <div className={classes.controls}>
                   <Button
-                    // className={classes.controlButton}
                     icon='plus-circle'
                     variant='text'
                     size='sm'
-                    onClick={() => console.log('Give POA to ' + item.name)}
+                    onClick={() => onDelegate(item)}
                   >
                     {t('common.give_poa')}
                   </Button>
