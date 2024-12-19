@@ -221,7 +221,9 @@
     "give_new_button": "Give power of attorney to new access package",
     "other_packages_in_area_title": "Other available packages in this area:",
     "delete_success_message": "Power of attorney to {{packageName}} has been revoked",
-    "delete_error_message": "Failed to revoke power of attorney to {{packageName}}"
+    "delete_error_message": "Failed to revoke power of attorney to {{packageName}}",
+    "delegate_success_message": "Power of attorney successfully granted to {{packageName}}.",
+    "delegete_error_message": "Power of attorney could not be granted to {{packageName}}."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",

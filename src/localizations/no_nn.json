@@ -219,7 +219,9 @@
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "delete_success_message": "Fullmakt til {{packageName}} er slettet",
-    "delete_error_message": "Kunne ikkje slette fullmakt til {{packageName}}"
+    "delete_error_message": "Kunne ikkje slette fullmakt til {{packageName}}",
+    "delegate_success_message": "Fullmakt til {{packageName}} vart gjeven.",
+    "delegete_error_message": "Fullmakt til {{packageName}} kunne ikkje gjevast."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",

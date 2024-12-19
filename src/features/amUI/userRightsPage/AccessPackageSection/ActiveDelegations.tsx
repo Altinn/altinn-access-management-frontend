@@ -1,12 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Alert, Paragraph, Spinner } from '@digdir/designsystemet-react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useGetRightHolderDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
-import type { Party } from '@/rtk/features/lookupApi';
+import { type Party } from '@/rtk/features/lookupApi';
+import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
+import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
+
+import { useSnackbar } from '../../common/Snackbar';
 
 import { DelegatedAreaListItem } from './DelegatedAreaListItem';
 import { DelegatedPackagesList } from './DelegatedPackagesList';
@@ -14,16 +17,60 @@ import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const { t } = useTranslation();
-  const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
-
+  const { openSnackbar } = useSnackbar();
   const {
     data: activeDelegations,
     isFetching: isGetDelegationFetching,
     isError: isGetDelegationError,
-  } = useGetRightHolderDelegationsQuery(id ?? '');
+  } = useGetRightHolderDelegationsQuery(toParty.partyUuid);
+
+  const delegate = useDelegateAccessPackage();
+  const revoke = useRevokeAccessPackage();
+
+  const onDelegate = async (accessPackage: AccessPackage) => {
+    delegate(
+      toParty,
+      accessPackage,
+      () => {
+        openSnackbar({
+          message: t('access_packages.delegate_success_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+      () => {
+        openSnackbar({
+          message: t('access_packages.delegate_error_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+    );
+  };
+
+  const onRevoke = async (accessPackage: AccessPackage) => {
+    revoke(
+      toParty,
+      accessPackage,
+      () => {
+        openSnackbar({
+          message: t('access_packages.delete_success_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+      () => {
+        openSnackbar({
+          message: t('access_packages.delete_error_message', {
+            packageName: accessPackage.name,
+          }),
+        });
+      },
+    );
+  };
 
   const {
     data: allPackageAreas,
@@ -74,6 +121,8 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
                         setModalItem(pack);
                         modalRef.current?.showModal();
                       }}
+                      onDelegate={onDelegate}
+                      onRevoke={onRevoke}
                     />
                   </DelegatedAreaListItem>
                 );

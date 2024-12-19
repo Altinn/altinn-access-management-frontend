@@ -55,16 +55,16 @@ export const accessPackageApi = createApi({
       },
       providesTags: ['AccessPackages'],
     }),
-    revokeDelegation: builder.mutation<void, { from: string; to: string; packageId: string }>({
-      query({ from, to, packageId }) {
+    revokeDelegation: builder.mutation<void, { to: string; packageId: string }>({
+      query({ to, packageId }) {
         return {
-          url: `${from}/${to}/${packageId}/revoke`,
+          url: `${getCookie('AltinnPartyUuid')}/${to}/${packageId}/revoke`,
           method: 'DELETE',
         };
       },
       invalidatesTags: ['AccessPackages'],
     }),
-    delegatePackage: builder.mutation<void, { packageId: string; to: string }>({
+    delegatePackage: builder.mutation<void, { to: string; packageId: string }>({
       invalidatesTags: ['AccessPackages'],
       query: (args) => {
         return {
