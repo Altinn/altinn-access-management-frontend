@@ -43,7 +43,9 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MockSettings() { }
+        public MockSettings()
+        {
+        }
 
         /// <summary>
         /// Constructor for setting all members to the same value
