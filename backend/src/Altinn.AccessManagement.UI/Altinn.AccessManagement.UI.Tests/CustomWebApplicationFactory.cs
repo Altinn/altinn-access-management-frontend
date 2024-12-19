@@ -25,6 +25,8 @@ namespace Altinn.AccessManagement.UI.Tests
                     .AddJsonFile("appsettings.test.json")
                     .Build());
             });
+
+            builder.UseEnvironment("Test");
         }
     }
 }

@@ -201,7 +201,7 @@
     "add_more_services": "Legg til fleire tenester",
     "cannot_delegate_alert_heading": "Du kan ikkje gi fullmakt til denne tenesta",
     "ceo_or_main_admin_can_help": "Dagleg leiar eller hovudadministrator kan hjelpe deg med dette.",
-    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi {{reason}}",
+    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi: {{reason}}",
     "missing_recipient_error_title": "Mottakar manglar",
     "missing_recipient_error_message": "Mottakar for delegeringa manglar. Ver venleg og gå tilbake til profilsida og vel kven du ønsker å delegere til.",
     "faulty_recipient_error_title": "Kan ikkje delegere til mottakar",

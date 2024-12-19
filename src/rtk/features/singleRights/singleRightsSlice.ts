@@ -131,7 +131,6 @@ const createDelegationResponseData = (
   };
 };
 
-// TODO: Move to SingleRightsApi
 export const delegationAccessCheck = createAsyncThunk(
   'singleRightSlice/delegationAccessCheck',
   async (dto: DelegationAccessCheckDto, { rejectWithValue }) => {

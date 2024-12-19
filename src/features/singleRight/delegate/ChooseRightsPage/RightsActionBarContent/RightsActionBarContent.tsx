@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import * as React from 'react';
-import { Paragraph, Heading, Chip, Alert, Tag } from '@digdir/designsystemet-react';
+import { Paragraph, Heading, Chip, Alert } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
@@ -38,6 +38,12 @@ export interface RightsActionBarContentProps {
 
   /** The type of service */
   serviceType: string;
+
+  /** Owner of the service */
+  serviceOwner: string;
+
+  /** The reportee on which to delegate on behalf od */
+  reportee: string;
 }
 
 export const RightsActionBarContent = ({
@@ -47,6 +53,8 @@ export const RightsActionBarContent = ({
   rightDescription,
   serviceIdentifier,
   serviceType,
+  serviceOwner,
+  reportee,
 }: RightsActionBarContentProps) => {
   const { t } = useTranslation();
   const hasUndelegableRights =
@@ -142,14 +150,18 @@ export const RightsActionBarContent = ({
           {t('single_rights.one_or_more_rights_is_undelegable', {
             reason: t(`${getErrorCodeTextKey(errorList[0])}`, {
               you: t('common.you_lowercase'),
+              resourceowner: serviceOwner,
+              reporteeorg: reportee,
             }),
           })}
         </Paragraph>
-        <Paragraph className={classes.alertParagraph}>
-          {t('single_rights.ceo_or_main_admin_can_help')}
-        </Paragraph>
+        {errorList[0] === ErrorCode.MissingRoleAccess ||
+          (errorList[0] === ErrorCode.MissingDelegationAccess && (
+            <Paragraph>{t('single_rights.ceo_or_main_admin_can_help')}</Paragraph>
+          ))}
 
         <Heading
+          className={classes.undelegableRightsHeader}
           size='2xs'
           level={5}
         >

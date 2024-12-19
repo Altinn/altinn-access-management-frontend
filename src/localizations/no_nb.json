@@ -202,7 +202,7 @@
     "add_more_services": "Legg til flere tjenester",
     "cannot_delegate_alert_heading": "Du kan ikke gi fullmakt til denne tjenesten",
     "ceo_or_main_admin_can_help": "Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
-    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi {{reason}}",
+    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi: {{reason}}",
     "missing_recipient_error_title": "Mottaker mangler",
     "missing_recipient_error_message": "Mottaker for delegeringen mangler. Vennligst gå tilbake til profilsiden og velg hvem du ønsker å delegere til.",
     "faulty_recipient_error_title": "Kan ikke delegere til mottaker",

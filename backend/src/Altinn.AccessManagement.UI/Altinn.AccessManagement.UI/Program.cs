@@ -195,25 +195,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton(config);
     services.AddHttpClient<IAuthenticationClient, AuthenticationClient>();
 
-    bool useMockData = config.GetValue("GeneralSettings:UseMockData", false);
-    if (useMockData)
-    {
-        services.AddHttpClient<IProfileClient, ProfileClientMock>();
-        services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();
-        services.AddHttpClient<IAccessPackageClient, AccessPackageClientMock>();
-        services.AddHttpClient<IRegisterClient, RegisterClientMock>();
-        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
-        services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
-    }
-    else
-    {
-        services.AddHttpClient<IProfileClient, ProfileClient>();
-        services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
-        services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
-        services.AddHttpClient<IRegisterClient, RegisterClient>();
-        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
-        services.AddSingleton<IKeyVaultService, KeyVaultService>();
-    }
+    ConfigureMockableClients(services, config);
 
     services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IAPIDelegationService, APIDelegationService>();
@@ -289,5 +271,73 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
 
         logger.LogInformation("Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}", applicationInsightsConnectionString);
+    }
+}
+
+void ConfigureMockableClients(IServiceCollection services, IConfiguration config)
+{
+    MockSettings mockSettings = config.GetSection("MockSettings").Get<MockSettings>() ?? new MockSettings(false);
+
+    if (mockSettings.AccessManagement)
+    {
+        services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
+    }
+
+    if (mockSettings.AccessManagement_V0)
+    {
+        services.AddHttpClient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
+    }
+    else
+    {
+        services.AddHttpClient<IAccessManagementClientV0, AccessManagementClientV0>();
+    }
+
+    if (mockSettings.Profile)
+    {
+        services.AddHttpClient<IProfileClient, ProfileClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IProfileClient, ProfileClient>();
+    }
+
+    if (mockSettings.AccessPackage)
+    {
+        services.AddHttpClient<IAccessPackageClient, AccessPackageClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
+    }
+
+    if (mockSettings.Register)
+    {
+        services.AddHttpClient<IRegisterClient, RegisterClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IRegisterClient, RegisterClient>();
+    }
+
+    if (mockSettings.ResourceRegistry)
+    {
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClientMock>();
+    }
+    else
+    {
+        services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
+    }
+
+    if (mockSettings.KeyVault)
+    {
+        services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
+    }
+    else
+    {
+        services.AddSingleton<IKeyVaultService, KeyVaultService>();
     }
 }

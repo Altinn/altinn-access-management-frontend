@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Integration.Util
                 PropertyNameCaseInsensitive = true,
             };
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<T>(responseContent, serializerOptions);

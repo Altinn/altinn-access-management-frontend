@@ -1,0 +1,59 @@
+[
+  {
+    "rightKey": "appid-503/read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "appid-503/write",
+    "action": "write",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "appid-503/sign",
+    "action": "sign",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "DelegationAccess",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "rightKey": "3225/read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "3225/all-accesses-3325",
+    "action": "all-accesses-3325",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:INNH, urn:altinn:rolecode:HADM. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "3225/write",
+    "action": "write",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingSrrRightAccess",
+        "description": "",
+        "parameters": {
+        }
+      },
+      {
+        "code": "MissingRoleAccess",
+        "description": "",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            },
+            {
+              "id": "urn:altinn:role",
+              "value": "REGN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "3225/sign",
+    "action": "sign",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingSrrRightAccess",
+        "description": "MissingSrrRightAccess",
+        "parameters": {
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "3225/confirm",
+    "action": "confirm",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingSrrRightAccess",
+        "description": "MissingSrrRightAccess",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

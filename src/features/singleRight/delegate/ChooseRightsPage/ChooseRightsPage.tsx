@@ -33,6 +33,7 @@ import { useClearAccessCacheMutation } from '@/rtk/features/singleRights/singleR
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { RecipientErrorAlert } from '../../components/RecipientErrorAlert/RecipientErrorAlert';
 
@@ -76,6 +77,8 @@ export const ChooseRightsPage = () => {
     error: recipientError,
     isLoading,
   } = useFetchRecipientInfo(urlParams.get('userUUID'), urlParams.get('partyUUID'));
+
+  const { data: representingParty } = useGetReporteeQuery();
 
   const initializeDelegableServices = () => {
     const delegable = servicesWithStatus.filter(
@@ -190,6 +193,8 @@ export const ChooseRightsPage = () => {
         serviceDescription={service.description}
         rightDescription={service.rightDescription}
         serviceType={service.type}
+        serviceOwner={service.serviceOwner}
+        reportee={representingParty?.name ?? ''}
       />
     </RightsActionBar>
   ));

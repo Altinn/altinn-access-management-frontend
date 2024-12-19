@@ -1,9 +1,7 @@
-﻿using System.Text.Json;
-using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -15,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class APIDelegationService : IAPIDelegationService
     {
-        private readonly IAccessManagementClient _maskinportenSchemaClient;
+        private readonly IAccessManagementClientV0 _maskinportenSchemaClient;
         private readonly IResourceService _resourceService;
 
         /// <summary>
@@ -24,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="maskinportenSchemaClient">handler for delegations client</param>
         /// <param name="resourceService">handler for resource registry</param>
         public APIDelegationService(
-            IAccessManagementClient maskinportenSchemaClient,
+            IAccessManagementClientV0 maskinportenSchemaClient,
             IResourceService resourceService)
         {
             _maskinportenSchemaClient = maskinportenSchemaClient;

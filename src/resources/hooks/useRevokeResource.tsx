@@ -1,8 +1,6 @@
 import type { Party } from '@/rtk/features/lookupApi';
 import { useRevokeResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 
-import { getUrnForParty } from '../utils';
-
 export const useRevokeResource = () => {
   const [revoke] = useRevokeResourceMutation();
 
@@ -13,8 +11,8 @@ export const useRevokeResource = () => {
     onSuccess?: () => void,
     onError?: () => void,
   ) => {
-    const from = getUrnForParty(fromParty.partyUuid, fromParty.partyTypeName);
-    const to = getUrnForParty(toParty.partyUuid, toParty.partyTypeName);
+    const from = fromParty.partyUuid;
+    const to = toParty.partyUuid;
 
     revoke({
       from,

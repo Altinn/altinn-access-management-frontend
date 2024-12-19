@@ -1,0 +1,45 @@
+{
+  "identifier": "jks-test-resource",
+  "title": {
+    "en": "JK's Test Resource",
+    "nb": "JK's Test Ressurs",
+    "nn": "JK's Test Ressurs"
+  },
+  "description": {
+    "en": "Very nice test resource",
+    "nb": "Veldig fin test ressurs",
+    "nn": "Steikje fine test ressurs"
+  },
+  "rightDescription": {
+    "en": "You'll give access to this nice test resource",
+    "nb": "Du gir tilgang til denne fine test ressursen",
+    "nn": "Du gir tilgong til dinne steikje fine test ressursen"
+  },
+  "homepage": "https://www.altinn.no",
+  "status": "Active",
+  "contactPoints": [],
+  "isPartOf": "",
+  "resourceReferences": [],
+  "delegable": true,
+  "visible": true,
+  "hasCompetentAuthority": {
+    "name": {
+      "en": "JK's Testing department",
+      "nb": "JK's Test departement",
+      "nn": "JK's Test departement"
+    },
+    "organization": "991825827",
+    "orgcode": "ttd"
+  },
+  "keywords": [],
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "GenericAccessResource",
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:resource",
+      "value": "jks-test-resource"
+    }
+  ]
+}

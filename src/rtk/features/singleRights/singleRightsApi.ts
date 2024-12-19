@@ -3,13 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { BaseAttribute } from '@/dataObjects/dtos/BaseAttribute';
-import type {
-  DelegationAccessResult,
-  DelegationInputDto,
-  DelegationResult,
-  ResourceReference,
-  RightChangesDto,
-} from '@/dataObjects/dtos/resourceDelegation';
+import type { DelegationResult, RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
 
 interface PaginatedListDTO {
   page: number;
@@ -49,6 +43,13 @@ interface searchParams {
   resultsPerPage: number;
 }
 
+export interface DelegationCheckedRight {
+  rightKey: string;
+  action: string;
+  status: string;
+  reasonCodes: string[];
+}
+
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1';
 
 export const singleRightsApi = createApi({
@@ -61,7 +62,7 @@ export const singleRightsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['SingleRights', 'overview'],
+  tagTypes: ['SingleRights', 'overview', 'delegationCheck'],
   endpoints: (builder) => ({
     // TODO: Move to resourceApi
     getPaginatedSearch: builder.query<PaginatedListDTO, searchParams>({
@@ -81,15 +82,17 @@ export const singleRightsApi = createApi({
       query: ({ party, userId }) => `singleright/${party}/rightholder/${userId}`,
       providesTags: ['overview'],
     }),
-    delegationCheck: builder.mutation<DelegationAccessResult[], ResourceReference>({
-      query: (resourceRef) => ({
-        url: `singleright/checkdelegationaccesses/${getCookie('AltinnPartyId')}`,
-        method: 'POST',
-        body: JSON.stringify(resourceRef),
+    delegationCheck: builder.query<DelegationCheckedRight[], string>({
+      query: (resourceId) => ({
+        url: `singleright/${getCookie('AltinnPartyUuid')}/delegationcheck/${resourceId}`,
+        method: 'GET',
       }),
-      transformErrorResponse: (response: { status: string | number }) => {
-        return response.status;
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
       },
+      providesTags: ['delegationCheck'],
     }),
     clearAccessCache: builder.mutation<void, { party: string; user: BaseAttribute }>({
       query({ party, user }) {
@@ -100,16 +103,19 @@ export const singleRightsApi = createApi({
         };
       },
     }),
-    delegateRights: builder.mutation<DelegationResult, DelegationInputDto>({
-      query: (delegation) => ({
-        url: `singleright/delegate/${getCookie('AltinnPartyId')}`,
+    delegateRights: builder.mutation<
+      DelegationResult,
+      { toUuid: string; resourceId: string; rightKeys: string[] }
+    >({
+      query: ({ toUuid, resourceId, rightKeys }) => ({
+        url: `singleright/${getCookie('AltinnPartyUuid')}/${toUuid}/delegate/${resourceId}`,
         method: 'POST',
-        body: JSON.stringify(delegation),
+        body: JSON.stringify(rightKeys),
       }),
-      invalidatesTags: ['overview'],
       transformErrorResponse: (response: { status: string | number }) => {
         return response.status;
       },
+      invalidatesTags: ['overview', 'delegationCheck'],
     }),
     revokeResource: builder.mutation<
       { isSuccessStatusCode: boolean },
@@ -121,10 +127,10 @@ export const singleRightsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['overview'],
+      invalidatesTags: ['overview', 'delegationCheck'],
     }),
     editResource: builder.mutation<
-      { failedEdits: string[] },
+      string[],
       { from: string; to: string; resourceId: string; edits: RightChangesDto }
     >({
       query({ from, to, resourceId, edits }) {
@@ -134,7 +140,7 @@ export const singleRightsApi = createApi({
           body: JSON.stringify(edits),
         };
       },
-      invalidatesTags: ['overview'],
+      invalidatesTags: ['overview', 'delegationCheck'],
     }),
   }),
 });
@@ -143,7 +149,7 @@ export const {
   useGetPaginatedSearchQuery,
   useGetSingleRightsForRightholderQuery,
   useClearAccessCacheMutation,
-  useDelegationCheckMutation,
+  useDelegationCheckQuery,
   useDelegateRightsMutation,
   useRevokeResourceMutation,
   useEditResourceMutation,

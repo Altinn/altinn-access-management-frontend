@@ -394,8 +394,14 @@
     "homepage": null,
     "isPartOf": null,
     "keywords": [
-      { "language": "nb", "word": "klesskapet_kw" },
-      { "language": "en", "word": "closet_kw" }
+      {
+        "language": "nb",
+        "word": "klesskapet_kw"
+      },
+      {
+        "language": "en",
+        "word": "closet_kw"
+      }
     ],
     "identifier": "appid-502",
     "contactPoints": [
@@ -1092,5 +1098,112 @@
         "nn": "Digitaliseringsdirektoratet"
       }
     }
+  },
+  {
+    "identifier": "jks-test-resource",
+    "title": {
+      "en": "JK's Test Resource",
+      "nb": "JK's Test Ressurs",
+      "nn": "JK's Test Ressurs"
+    },
+    "description": {
+      "en": "Very nice test resource",
+      "nb": "Veldig fin test ressurs",
+      "nn": "Steikje fine test ressurs"
+    },
+    "rightDescription": {
+      "en": "You'll give access to this nice test resource",
+      "nb": "Du gir tilgang til denne fine test ressursen",
+      "nn": "Du gir tilgong til dinne steikje fine test ressursen"
+    },
+    "homepage": "https://www.altinn.no",
+    "status": "Active",
+    "contactPoints": [],
+    "isPartOf": "",
+    "resourceReferences": [],
+    "delegable": true,
+    "visible": true,
+    "hasCompetentAuthority": {
+      "name": {
+        "en": "JK's Testing department",
+        "nb": "JK's Test departement",
+        "nn": "JK's Test departement"
+      },
+      "organization": "991825827",
+      "orgcode": "ttd"
+    },
+    "keywords": [],
+    "accessListMode": "Disabled",
+    "selfIdentifiedUserEnabled": false,
+    "enterpriseUserEnabled": false,
+    "resourceType": "GenericAccessResource",
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "jks-test-resource"
+      }
+    ]
+  },
+  {
+    "identifier": "ske-innrapportering-boligsameie",
+    "version": "1",
+    "title": {
+      "en": "Submission Jointly owned housing property",
+      "nb": "Innrapportering Boligsameie",
+      "nn": "Innrapportering Bustadsameige"
+    },
+    "description": {
+      "en": "Jointly owned housing property must submit information to the Directorate of Taxes about the unit owner/shareholder's share of any income, expenses, assets and liabilities.",
+      "nb": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
+      "nn": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene."
+    },
+    "rightDescription": {
+      "en": "Provide access to using the form for submitting information on Jointly owned housing property",
+      "nb": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
+      "nn": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om bustadsameige på vegne av deg."
+    },
+    "status": "Completed",
+    "contactPoints": [
+      {
+        "category": "Innrapportering",
+        "email": "",
+        "telephone": "",
+        "contactPage": "www.skatteetaten.no"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "hasCompetentAuthority": {
+      "name": {
+        "en": "Norwegian Tax Administration",
+        "nb": "Skatteetaten",
+        "nn": "Skatteetaten"
+      },
+      "organization": "974761076",
+      "orgcode": "skd"
+    },
+    "keywords": [
+      {
+        "word": "Boligsameie",
+        "language": "nb"
+      },
+      {
+        "word": "innrapportering",
+        "language": "nb"
+      }
+    ],
+    "accessListMode": "Disabled",
+    "selfIdentifiedUserEnabled": false,
+    "enterpriseUserEnabled": true,
+    "resourceType": "GenericAccessResource",
+    "availableForType": [
+      "LegalEntityEnterprise"
+    ],
+    "authorizationReference": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "ske-innrapportering-boligsameie"
+      }
+    ]
   }
 ]
