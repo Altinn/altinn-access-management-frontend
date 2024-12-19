@@ -10,6 +10,7 @@ import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPac
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 
 import { useSnackbar } from '../../common/Snackbar';
+import { SnackbarDuration } from '../../common/Snackbar/SnackbarProvider';
 
 import { DelegatedAreaListItem } from './DelegatedAreaListItem';
 import { DelegatedPackagesList } from './DelegatedPackagesList';
@@ -38,7 +39,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         openSnackbar({
           message: t('access_packages.package_delegation_success', {
             name: toParty.name,
-            packageName: accessPackage.name,
+            accessPackage: accessPackage.name,
           }),
         });
       },
@@ -46,8 +47,9 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         openSnackbar({
           message: t('access_packages.package_delegation_error', {
             name: toParty.name,
-            packageName: accessPackage.name,
+            accessPackage: accessPackage.name,
           }),
+          duration: SnackbarDuration.infinite,
         });
       },
     );
@@ -61,7 +63,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         openSnackbar({
           message: t('access_packages.package_deletion_success', {
             name: toParty.name,
-            packageName: accessPackage.name,
+            accessPackage: accessPackage.name,
           }),
         });
       },
@@ -69,8 +71,9 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         openSnackbar({
           message: t('access_packages.package_deletion_error', {
             name: toParty.name,
-            packageName: accessPackage.name,
+            accessPackage: accessPackage.name,
           }),
+          duration: SnackbarDuration.infinite,
         });
       },
     );

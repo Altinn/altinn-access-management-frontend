@@ -42,15 +42,17 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
       accessPackage,
       () => {
         openSnackbar({
-          message: t('access_packages.delegate_success_message', {
-            packageName: accessPackage.name,
+          message: t('access_packages.package_delegation_success', {
+            accessPackage: accessPackage.name,
+            name: toParty.name,
           }),
         });
       },
       () => {
         openSnackbar({
-          message: t('access_packages.delegate_error_message', {
-            packageName: accessPackage.name,
+          message: t('access_packages.package_delegation_error', {
+            accessPackage: accessPackage.name,
+            name: toParty.name,
           }),
         });
       },
@@ -63,15 +65,17 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
       accessPackage,
       () => {
         openSnackbar({
-          message: t('access_packages.delete_success_message', {
-            packageName: accessPackage.name,
+          message: t('access_packages.package_deletion_success', {
+            accessPackage: accessPackage.name,
+            name: toParty.name,
           }),
         });
       },
       () => {
         openSnackbar({
-          message: t('access_packages.delete_error_message', {
-            packageName: accessPackage.name,
+          message: t('access_packages.package_deletion_error', {
+            accessPackage: accessPackage.name,
+            name: toParty.name,
           }),
         });
       },

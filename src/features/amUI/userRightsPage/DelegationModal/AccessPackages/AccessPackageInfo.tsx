@@ -12,6 +12,7 @@ import {
 } from '@/rtk/features/accessPackageApi';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useSnackbar } from '@/features/amUI/common/Snackbar';
+import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvider';
 
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
@@ -42,7 +43,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const handleDelegate = async () => {
-    await delegatePackage(
+    delegatePackage(
       toParty,
       accessPackage,
       () => {
@@ -62,6 +63,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
             name: toParty.name,
             accessPackage: accessPackage.name,
           }),
+          duration: SnackbarDuration.infinite,
         });
       },
     );
@@ -106,7 +108,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
         {userHasPackage ? (
           <DeletePackageButton
             accessPackage={accessPackage}
-            toPartyUuid={toParty.partyUuid}
+            toParty={toParty}
             fullText
           />
         ) : (
