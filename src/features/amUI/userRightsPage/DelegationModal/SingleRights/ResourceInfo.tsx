@@ -5,18 +5,16 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Avatar } from '@altinn/altinn-components';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type {
+  DelegationCheckedRight,
+  ServiceResource,
+} from '@/rtk/features/singleRights/singleRightsApi';
 import {
-  useDelegationCheckMutation,
+  useDelegationCheckQuery,
   useGetSingleRightsForRightholderQuery,
 } from '@/rtk/features/singleRights/singleRightsApi';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
-import {
-  RightStatus,
-  type DelegationAccessResult,
-  type ResourceReference,
-} from '@/dataObjects/dtos/resourceDelegation';
-import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
+import { RightStatus } from '@/dataObjects/dtos/resourceDelegation';
 import { LocalizedAction } from '@/resources/utils/localizedActions';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { arraysEqualUnordered } from '@/resources/utils/arrayUtils';
@@ -43,7 +41,6 @@ export type ChipRight = {
   rightKey: string;
   delegable: boolean;
   checked: boolean;
-  resourceReference: IdValuePair[];
   delegationReason: string;
 };
 
@@ -55,7 +52,6 @@ export interface ResourceInfoProps {
 
 export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProps) => {
   const { t } = useTranslation();
-  const [delegationCheck, error] = useDelegationCheckMutation();
   const [hasAccess, setHasAccess] = useState(false);
   const delegateRights = useDelegateRights();
   const editResource = useEditResource();
@@ -72,17 +68,25 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   const [delegationErrorMessage, setDelegationErrorMessage] = useState<string | null>(null);
   const [missingAccessMessage, setMissingAccessMessage] = useState<string | null>(null);
-  const displayResourceAlert =
-    error.isError ||
-    resource?.delegable === false ||
-    (rights.length > 0 && !rights.some((r) => r.delegable === true));
 
-  const resourceRef: ResourceReference | null =
-    resource !== undefined
+  const {
+    data: delegationCheckedRights,
+    isError: isDelegationCheckError,
+    error: delegationCheckError,
+  } = useDelegationCheckQuery(resource.identifier);
+
+  const delegationCheckErrorDetails =
+    isDelegationCheckError && delegationCheckError && 'status' in delegationCheckError
       ? {
-          resource: resource.authorizationReference,
+          status: delegationCheckError.status.toString(),
+          time: delegationCheckError.data as number,
         }
       : null;
+
+  const displayResourceAlert =
+    isDelegationCheckError ||
+    resource?.delegable === false ||
+    (rights.length > 0 && !rights.some((r) => r.delegable === true));
 
   const { data: delegatedResources, isFetching } = useGetSingleRightsForRightholderQuery({
     party: getCookie('AltinnPartyId'),
@@ -112,21 +116,18 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     }
   }, [delegatedResources, userHasResource, isFetching]);
 
-  const getMissingAccessMessage = (response: DelegationAccessResult[]) => {
-    const hasMissingRoleAccess = response.some((result) =>
-      result.details?.some(
-        (detail) =>
-          detail.code === ErrorCode.MissingRoleAccess ||
-          detail.code === ErrorCode.MissingRightAccess,
+  const getMissingAccessMessage = (response: DelegationCheckedRight[]) => {
+    const hasMissingRoleAccess = response.some((right) =>
+      right.reasonCodes.some(
+        (code) => code === ErrorCode.MissingRoleAccess || code === ErrorCode.MissingRightAccess,
       ),
     );
     const hasMissingSrrRightAccess = response.some(
-      (result) =>
+      (right) =>
         !hasMissingRoleAccess &&
-        result.details?.some(
-          (detail) =>
-            detail.code === ErrorCode.MissingSrrRightAccess ||
-            detail.code === ErrorCode.AccessListValidationFail,
+        right.reasonCodes.some(
+          (code) =>
+            code === ErrorCode.MissingSrrRightAccess || code === ErrorCode.AccessListValidationFail,
         ),
     );
 
@@ -142,42 +143,37 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
   };
 
   const mapRightsToChipRights = (
-    rights: DelegationAccessResult[],
-    checked: (right: DelegationAccessResult) => boolean,
+    rights: DelegationCheckedRight[],
+    checked: (right: DelegationCheckedRight) => boolean,
   ): ChipRight[] => {
-    return rights.map((right: DelegationAccessResult) => ({
+    return rights.map((right: DelegationCheckedRight) => ({
       action: right.action,
       rightKey: right.rightKey,
       delegable:
         right.status === RightStatus.Delegable || right.status === BFFDelegatedStatus.Delegated,
       checked: checked(right) || false,
-      resourceReference: right.resource,
-      delegationReason: right.details[0].code,
+      delegationReason: right.reasonCodes[0],
     }));
   };
 
   useEffect(() => {
-    if (resourceRef) {
-      delegationCheck(resourceRef)
-        .unwrap()
-        .then((response: DelegationAccessResult[]) => {
-          setMissingAccessMessage(getMissingAccessMessage(response));
+    if (delegationCheckedRights) {
+      setMissingAccessMessage(getMissingAccessMessage(delegationCheckedRights));
 
-          if (hasAccess) {
-            const chipRights: ChipRight[] = mapRightsToChipRights(response, (right) =>
-              currentRights.some((key) => key === right.rightKey) ? true : false,
-            );
-            setRights(chipRights);
-          } else {
-            const chipRights: ChipRight[] = mapRightsToChipRights(
-              response,
-              (right) => right.status === RightStatus.Delegable,
-            );
-            setRights(chipRights);
-          }
-        });
+      if (hasAccess) {
+        const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedRights, (right) =>
+          currentRights.some((key) => key === right.rightKey) ? true : false,
+        );
+        setRights(chipRights);
+      } else {
+        const chipRights: ChipRight[] = mapRightsToChipRights(
+          delegationCheckedRights,
+          (right) => right.status === RightStatus.Delegable,
+        );
+        setRights(chipRights);
+      }
     }
-  }, [delegatedResources, currentRights]);
+  }, [delegationCheckedRights]);
 
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
@@ -230,13 +226,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         );
 
         if (notDelegatedActions.length > 0) {
-          setRights(
-            mapRightsToChipRights(
-              response.rightDelegationResults,
-              (right) => right.status === BFFDelegatedStatus.Delegated,
-            ),
-          );
-
           setDelegationErrorMessage(
             t('delegation_modal.technical_error_message.some_failed', {
               actions: notDelegatedActions.map((action) => action.action).join(', '),
@@ -320,17 +309,11 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               <Paragraph>{resource.resourceOwnerName}</Paragraph>
             </div>
           </div>
-          <Paragraph>{resource.rightDescription}</Paragraph>
+          {resource.description && <Paragraph>{resource.description}</Paragraph>}
+          {resource.rightDescription && <Paragraph>{resource.rightDescription}</Paragraph>}
           {displayResourceAlert ? (
             <ResourceAlert
-              error={
-                error.isError
-                  ? {
-                      status: String(error?.error),
-                      time: error.startedTimeStamp,
-                    }
-                  : null
-              }
+              error={delegationCheckErrorDetails}
               rightReasons={rights.map((r) => r.delegationReason)}
               resource={resource}
             />

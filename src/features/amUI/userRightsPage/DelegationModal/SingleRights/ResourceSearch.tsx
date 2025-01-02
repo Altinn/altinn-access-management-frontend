@@ -164,7 +164,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           avatar={{
             type: 'company',
             imageUrl: resource.resourceOwnerLogoUrl,
-            name: resource.resourceOwnerName,
+            name: resource.resourceOwnerName ?? '',
           }}
         />
         {!!delegatedResources &&

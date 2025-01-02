@@ -6,10 +6,12 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -41,7 +43,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for checking delegation accesses on behalf of the party having offered the delegation
+        ///     Old endpoint for checking delegation accesses on behalf of the party having offered the delegation. Used in A2-A3-hybrid
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -78,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for delegating a single right from the reportee party to a third party
+        ///     Old endpoint for delegating a single right from the reportee party to a third party. Used in A2-A3-hybrid
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -116,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Endpoint for clearing cash on accesses of the given recipient on behalf of the provided party
+        ///     Endpoint for clearing cash on accesses of the given recipient on behalf of the provided party. Used in A2-A3-hybrid
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -139,6 +141,72 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        // ----------------------------
+        //// New GUI
+        // ----------------------------
+
+        /// <summary>
+        ///     Endpoint for checking what rights a user can delegate on a particular resource
+        /// </summary>
+        /// <param name="from">The party from which the resource would be delegated</param>
+        /// <param name="resource">The id of the resource on which to check right delegability</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("{from}/delegationcheck/{resource}")]
+        public async Task<ActionResult<List<DelegationCheckedRightFE>>> GetDelegationCheck([FromRoute] Guid from, [FromRoute] string resource)
+        {
+            try
+            {
+                List<DelegationCheckedRightFE> result = await _singleRightService.DelegationCheck(from, resource);
+                return Ok(result);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for delegating a given set of rights on a resource
+        /// </summary>
+        /// <param name="from">The party from which the resource would be delegated</param>
+        /// <param name="to">To whom the resource will be delegted</param>
+        /// <param name="resource">The id of the resource which will be delegated</param>
+        /// <param name="rightKeys">The identifiers of the rights that are to be delegated</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("{from}/{to}/delegate/{resource}")]
+        public async Task<ActionResult<DelegationOutput>> DelegateResource([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string resource, [FromBody] List<string> rightKeys)
+        {
+            try
+            {
+                DelegationOutput result = await _singleRightService.Delegate(from, to, resource, rightKeys);
+                return Ok(result);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
             }
         }
@@ -172,15 +240,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for revoking all rights on a resource that has been granted from one party to another.
         /// </summary>
-        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
-        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
         [Route("{from}/{to}/{resourceId}/revoke")]
-        public async Task<ActionResult> RevokeResourceAccess([FromRoute] string from, [FromRoute] string to, [FromRoute] string resourceId)
+        public async Task<ActionResult> RevokeResourceAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string resourceId)
         {
             try
             {
@@ -197,8 +265,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         ///     Endpoint for editing what rights are granted from one party to another on a specific resource.
         /// </summary>
-        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
-        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
         /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
         /// <param name="update">The rights to be edited (delegated and deleted)</param>
         /// <response code="400">Bad Request</response>
@@ -206,7 +274,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("{from}/{to}/{resourceId}/edit")]
-        public async Task<ActionResult> EditResourceAccess([FromRoute] string from, [FromRoute] string to, [FromRoute] string resourceId, [FromBody] RightChanges update)
+        public async Task<ActionResult> EditResourceAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string resourceId, [FromBody] RightChanges update)
         {
             try
             {

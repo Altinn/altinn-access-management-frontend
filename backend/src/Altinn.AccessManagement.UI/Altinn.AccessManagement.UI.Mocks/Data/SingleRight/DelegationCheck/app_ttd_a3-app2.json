@@ -1,0 +1,489 @@
+[
+  {
+    "rightKey": "a3-app2,ttd:instantiate",
+    "action": "instantiate",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            },
+            {
+              "id": "urn:altinn:org",
+              "value": "ttd"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,ttd:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            },
+            {
+              "id": "urn:altinn:org",
+              "value": "ttd"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,ttd,Task_1:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,ttd,Task_1:write",
+    "action": "write",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,EndEvent_1,ttd:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,EndEvent_1,ttd:write",
+    "action": "write",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,ttd:delete",
+    "action": "delete",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,ttd:write",
+    "action": "write",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:ttd), which would give access to delegate the right.",
+        "parameters": {
+          "RequiredRoles": [
+            {
+              "id": "urn:altinn:org",
+              "value": "ttd"
+            }
+          ]
+        }
+      },
+      {
+        "code": "MissingDelegationAccess",
+        "description": "The user does not have access through delegation(s) of the right",
+        "parameters": {}
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,EndEvent_1,ttd:complete",
+    "action": "complete",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "MissingRoleAccess",
+        "description": "Delegator does not have any required role(s) for the reportee party: (urn:altinn:org:ttd), which would give access to delegate the right.",
+        "parameters": {
+          "RequiredRoles": [
+            {
+              "id": "urn:altinn:org",
+              "value": "ttd"
+            }
+          ]
+        }
+      },
+      {
+        "code": "MissingDelegationAccess",
+        "description": "The user does not have access through delegation(s) of the right",
+        "parameters": {}
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,events,ttd:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:ttd. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            },
+            {
+              "id": "urn:altinn:org",
+              "value": "ttd"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "a3-app2,ttd,Task_3:read",
+    "action": "read",
+    "status": "Delegable",
+    "details": [
+      {
+        "code": "RoleAccess",
+        "description": "Delegator have access through having one of the following role(s) for the reportee party: urn:altinn:rolecode:A0237, urn:altinn:rolecode:SIttd, urn:altinn:rolecode:A0241, urn:altinn:rolecode:A0239, urn:altinn:rolecode:A0240, urn:altinn:rolecode:REGNA, urn:altinn:rolecode:a0238, urn:altinn:rolecode:UTINN, urn:altinn:org:KNUF. Note: if the user is a Main Administrator (HADM) the user might not have direct access to the role other than for delegation purposes.",
+        "parameters": {
+          "RoleRequirementsMatches": [
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0237"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "SIttd"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0241"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0239"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "A0240"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "REGNA"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "a0238"
+            },
+            {
+              "id": "urn:altinn:rolecode",
+              "value": "UTINN"
+            },
+            {
+              "id": "urn:altinn:org",
+              "value": "KNUF"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
