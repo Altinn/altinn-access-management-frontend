@@ -4,6 +4,7 @@ import { Button } from '@altinn/altinn-components';
 import { AccessPackageList } from '@altinn/altinn-components';
 
 import { type AccessPackage, type AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import classes from './AccessPackageSection.module.css';
 
@@ -18,7 +19,40 @@ interface DelegatedPackagesListProps {
   onDelegate: (accessPackage: AccessPackage) => void;
   /** The method to be called when revoking a package */
   onRevoke: (accessPackage: AccessPackage) => void;
+  /** The selected user */
+  toParty: Party;
 }
+
+interface DelegatedPackage extends AccessPackage {
+  inherited: boolean;
+}
+
+interface PackageGroups {
+  delegatedPackages: DelegatedPackage[];
+  notDelegatedPackages: AccessPackage[];
+}
+
+const groupPackages = (
+  accessPackages: AccessPackage[],
+  packageDelegations: AccessPackageDelegation[],
+): PackageGroups => {
+  return accessPackages.reduce<PackageGroups>(
+    (acc, pkg) => {
+      const delegation = packageDelegations.find((d) => d.accessPackageId === pkg.id);
+      if (delegation) {
+        acc.delegatedPackages.push({
+          ...pkg,
+          inherited: delegation.inherited,
+          inheritedFrom: delegation.inheritedFrom,
+        });
+      } else {
+        acc.notDelegatedPackages.push(pkg);
+      }
+      return acc;
+    },
+    { delegatedPackages: [], notDelegatedPackages: [] },
+  );
+};
 
 export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   onSelection,
@@ -28,9 +62,11 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   onRevoke,
 }: DelegatedPackagesListProps) => {
   const { t } = useTranslation();
-  const delegatedPackageIds = packageDelegations.map((p) => p.accessPackageId);
-  const delegatedPackages = accessPackages.filter((p) => delegatedPackageIds.includes(p.id));
-  const notDelegatedPackages = accessPackages.filter((p) => !delegatedPackageIds.includes(p.id));
+
+  const { delegatedPackages, notDelegatedPackages } = groupPackages(
+    accessPackages,
+    packageDelegations,
+  );
 
   return (
     <>
@@ -48,6 +84,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
                   variant='text'
                   size='sm'
                   onClick={() => onRevoke(item)}
+                  disabled={item.inherited}
                 >
                   {t('common.delete_poa')}
                 </Button>

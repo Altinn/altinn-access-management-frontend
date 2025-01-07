@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { Avatar, List } from '@altinn/altinn-components';
+import { Avatar, List, Button } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -17,6 +17,7 @@ import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvid
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
+import { InformationSquareIcon } from '@navikt/aksel-icons';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -87,7 +88,18 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
         </Heading>
       </div>
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
-
+      {accessPackage?.inherited && (
+        <Paragraph
+          className={classes.inherited}
+          size='xs'
+        >
+          <InformationSquareIcon fontSize='1.5rem' />
+          {t('delegation_modal.inherited_role_message', {
+            user_name: toParty.name,
+            org_name: accessPackage.inheritedFrom?.name,
+          })}
+        </Paragraph>
+      )}
       <Heading
         size='sm'
         level={2}
@@ -99,7 +111,6 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       </Heading>
       <div className={classes.service_list}>
         <List
-          size='xs'
           items={listItems}
           spacing='none'
         />
@@ -110,6 +121,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
             accessPackage={accessPackage}
             toParty={toParty}
             fullText
+            disabled={isFetching || accessPackage.inherited}
           />
         ) : (
           <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>

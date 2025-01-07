@@ -128,6 +128,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
                         setModalItem(pack);
                         modalRef.current?.showModal();
                       }}
+                      toParty={toParty}
                       onDelegate={onDelegate}
                       onRevoke={onRevoke}
                     />
