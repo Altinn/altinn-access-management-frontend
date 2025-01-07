@@ -24,7 +24,7 @@ interface SnackbarConfig {
 
 export interface SnackbarInput {
   message: string;
-  variant: SnackbarMessageVariant;
+  variant?: SnackbarMessageVariant;
   dismissable?: boolean;
   duration?: number;
 }

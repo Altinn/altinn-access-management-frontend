@@ -12,7 +12,7 @@ import {
 } from '@/rtk/features/accessPackageApi';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useSnackbar } from '@/features/amUI/common/Snackbar';
-import { SnackbarMessageVariant } from '@/features/amUI/common/Snackbar/SnackbarProvider';
+import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvider';
 
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
@@ -43,22 +43,30 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const handleDelegate = async () => {
-    try {
-      await delegatePackage(toParty, accessPackage, onDelegate);
-      openSnackbar({
-        message: t('delegation_modal.package_delegation_success', {
-          name: toParty.name,
-          accessPackage: accessPackage.name,
-        }),
-        duration: 5000,
-        variant: SnackbarMessageVariant.Default,
-      });
-      if (onDelegate) {
-        onDelegate();
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    delegatePackage(
+      toParty,
+      accessPackage,
+      () => {
+        openSnackbar({
+          message: t('access_packages.package_delegation_success', {
+            name: toParty.name,
+            accessPackage: accessPackage.name,
+          }),
+        });
+        if (onDelegate) {
+          onDelegate();
+        }
+      },
+      () => {
+        openSnackbar({
+          message: t('access_packages.package_delegation_error', {
+            name: toParty.name,
+            accessPackage: accessPackage.name,
+          }),
+          duration: SnackbarDuration.infinite,
+        });
+      },
+    );
   };
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
@@ -100,7 +108,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
         {userHasPackage ? (
           <DeletePackageButton
             accessPackage={accessPackage}
-            toPartyUuid={toParty.partyUuid}
+            toParty={toParty}
             fullText
           />
         ) : (
@@ -114,7 +122,6 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
 const MINIMIZED_LIST_SIZE = 5;
 
 const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
-  id: resource.id,
   title: resource.name,
   avatar: { type: 'company', name: resource.name },
   as: 'div' as React.ElementType,
@@ -127,7 +134,6 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     return { listItems: list.map(mapResourceToListItem) };
   }
   const toggleListItem: ListItemProps = {
-    id: 'pagination',
     title: t(showAll ? 'common.show_less' : 'common.show_more'),
     description: '',
     onClick: () => setShowAll(!showAll),

@@ -203,7 +203,7 @@
     "add_more_services": "Add more services",
     "cannot_delegate_alert_heading": "You cannot give power of attorney to this service",
     "ceo_or_main_admin_can_help": "CEO or main administrator can help you with this.",
-    "one_or_more_rights_is_undelegable": "One or more rights on this service cant be delegated because of {{reason}}",
+    "one_or_more_rights_is_undelegable": "One or more rights on this service cant be delegated because: {{reason}}",
     "missing_recipient_error_title": "Recipient missing",
     "missing_recipient_error_message": "The recipient for the delegation is missing. Please go back to the profile page and select who you wish to delegate to.",
     "faulty_recipient_error_title": "Cannot delegate to recipient",
@@ -220,8 +220,10 @@
     "current_access_packages_title": "Power of attorney to {{count}} access package(s)",
     "give_new_button": "Give power of attorney to new access package",
     "other_packages_in_area_title": "Other available packages in this area:",
-    "delete_success_message": "Power of attorney to {{packageName}} has been revoked",
-    "delete_error_message": "Failed to revoke power of attorney to {{packageName}}"
+    "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
+    "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
+    "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
+    "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}."
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
@@ -247,7 +249,6 @@
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
     "package_services": "{{name}} provides access to {{count}} services",
-    "package_delegation_success": "{{name}} has been given power of attorney for {{accessPackage}}", 
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
