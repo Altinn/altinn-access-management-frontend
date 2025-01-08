@@ -19,16 +19,10 @@ interface DelegatedPackagesListProps {
   onDelegate: (accessPackage: AccessPackage) => void;
   /** The method to be called when revoking a package */
   onRevoke: (accessPackage: AccessPackage) => void;
-  /** The selected user */
-  toParty: Party;
-}
-
-interface DelegatedPackage extends AccessPackage {
-  inherited: boolean;
 }
 
 interface PackageGroups {
-  delegatedPackages: DelegatedPackage[];
+  delegatedPackages: AccessPackage[];
   notDelegatedPackages: AccessPackage[];
 }
 
@@ -65,6 +59,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
 
   const { delegatedPackages, notDelegatedPackages } = groupPackages(
     accessPackages,
+
     packageDelegations,
   );
 

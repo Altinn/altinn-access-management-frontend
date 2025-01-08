@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
 import { Avatar, List, Button } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
@@ -17,7 +17,7 @@ import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvid
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
-import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -89,22 +89,19 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       </div>
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
       {accessPackage?.inherited && (
-        <Paragraph
-          className={classes.inherited}
-          size='xs'
-        >
+        <div className={classes.inherited}>
           <InformationSquareFillIcon
             fontSize='1.5rem'
-            style={{ color: '#0b66ac', marginRight: '0.5rem' }}
+            className={classes.inheritedInfoIcon}
           />
-          <span>
+          <Paragraph size='xs'>
             <Trans
               i18nKey='delegation_modal.inherited_role_message'
               values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
-              components={{ strong: <strong /> }}
+              components={{ b: <strong /> }}
             />
-          </span>
-        </Paragraph>
+          </Paragraph>
+        </div>
       )}
       <Heading
         size='sm'
@@ -118,7 +115,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       <div className={classes.service_list}>
         <List
           items={listItems}
-          spacing='none'
+          spacing='xs'
         />
       </div>
       <div className={classes.actions}>
@@ -143,6 +140,7 @@ const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
   title: resource.name,
   avatar: { type: 'company', name: resource.name },
   as: 'div' as React.ElementType,
+  size: 'xs',
 });
 
 const useMinimizableResourceList = (list: IdNamePair[]) => {
@@ -157,6 +155,7 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     onClick: () => setShowAll(!showAll),
     icon: 'menu-elipsis-horizontal',
     as: 'button' as React.ElementType,
+    size: 'xs',
   };
   const minimizedList = list.slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE);
   return {

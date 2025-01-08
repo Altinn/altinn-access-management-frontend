@@ -51,7 +51,6 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
             onSelection={(ap: AccessPackage) => onSelection(ap)}
             onDelegate={onDelegate}
             onRevoke={onRevoke}
-            toParty={toParty}
           />
         ) : (
           '...laster'

@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   padding: 4px 2px;
-  height: 230px;
+  max-height: 282px;
   justify-content: space-between;
   overflow-y: auto;
   overflow-x: visible;
@@ -34,4 +34,9 @@
 
 .inherited {
   display: flex;
+}
+
+.inheritedInfoIcon {
+  color: var(--ds-color-accent-text-subtle);
+  margin-right: 0.3rem;
 }
