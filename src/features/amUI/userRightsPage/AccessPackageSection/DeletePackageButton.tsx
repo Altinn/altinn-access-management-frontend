@@ -64,7 +64,7 @@ export const DeletePackageButton = ({
         {...props}
         variant={'outline'}
         color={'secondary'}
-        size='sm'
+        size='md'
         onClick={onClick}
       >
         {fullText ? t('common.delete_poa') : t('common.delete')}
