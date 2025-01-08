@@ -93,11 +93,17 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
           className={classes.inherited}
           size='xs'
         >
-          <InformationSquareIcon fontSize='1.5rem' />
-          {t('delegation_modal.inherited_role_message', {
-            user_name: toParty.name,
-            org_name: accessPackage.inheritedFrom?.name,
-          })}
+          <InformationSquareFillIcon
+            fontSize='1.5rem'
+            style={{ color: '#0b66ac', marginRight: '0.5rem' }}
+          />
+          <span>
+            <Trans
+              i18nKey='delegation_modal.inherited_role_message'
+              values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
+              components={{ strong: <strong /> }}
+            />
+          </span>
         </Paragraph>
       )}
       <Heading
