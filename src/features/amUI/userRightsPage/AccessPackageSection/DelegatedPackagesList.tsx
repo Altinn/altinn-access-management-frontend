@@ -4,7 +4,6 @@ import { Button } from '@altinn/altinn-components';
 import { AccessPackageList } from '@altinn/altinn-components';
 
 import { type AccessPackage, type AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
 
 import classes from './AccessPackageSection.module.css';
 
