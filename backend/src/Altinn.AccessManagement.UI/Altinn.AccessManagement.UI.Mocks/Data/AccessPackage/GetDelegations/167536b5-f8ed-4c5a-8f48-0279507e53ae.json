@@ -171,5 +171,60 @@
       "DelegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
       "LastChangedOn": "2024-10-22T14:57:39.2568955+01:00"
     }
+  },
+  {
+    "AccessPackage": {
+      "Id": "urn:altinn:accesspackage:ordinaerposttilvirksomheten",
+      "Name": "Ordinær post til virksomheten",
+      "Description": "Denne fullmakten gir tilgang til all mottatt post som ikke innholder sensitiv/taushetsbelagt informasjon som sendes virksomheten. Fullmakten gis normalt til de i virksomheten som håndterer mottak av post. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "Tags": [
+        {
+          "Id": "c022ae24-f729-48d0-b859-f08d1faa6c83",
+          "Name": "Post"
+        }
+      ],
+      "EntityType": {
+        "Id": "EEC6B868-3DA0-4721-87B2-63C5686014C6",
+        "Name": "Organisasjon"
+      },
+      "Area": {
+        "Id": "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B",
+        "Name": "Post og arkiv",
+        "Description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
+        "IconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzIzMjYyQSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMyA1LjI1YS43NS43NSAwIDAgMC0uNzUuNzV2MTNjMCAuNDE0LjMzNi43NS43NS43NWgxOGEuNzUuNzUgMCAwIDAgLjc1LS43NVY2YS43NS43NSAwIDAgMC0uNzUtLjc1SDNabS43NSAxMS45NCA1LjI3My01LjI3M0wzLjc1IDguNHY4Ljc4OFptNi41NDYtNC40MjVMNC44MSAxOC4yNWgxNC4zNzhsLTUuNDg1LTUuNDg1LTEuMjg4Ljg1OWEuNzUuNzUgMCAwIDEtLjgzMiAwbC0xLjI4OC0uODU5Wm00LjY4MS0uODQ4TDIwLjI1IDguNHY4Ljc4OGwtNS4yNzMtNS4yNzJabS0xMS01LjE2N0wxMiAxMi4wOTlsOC4wMjMtNS4zNDlIMy45NzdaIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=",
+        "Group": {
+          "Id": "",
+          "Name": "Bransje",
+          "Description": "....."
+        }
+      },
+      "Provider": {
+        "Id": "181C5364-2988-4F48-925C-62844576B5B0",
+        "Name": "Digdir"
+      },
+      "Resources": [
+        {
+          "Id": "appid-513",
+          "Name": "ordinær_post"
+        },
+        {
+          "Id": "appid-514",
+          "Name": "ikke_sensitiv_post"
+        }
+      ]
+    },
+    "To": {
+      "Name": "RIKTIG MINIMALISTISK PIGGSVIN",
+      "Uuid": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+      "LastChangedOn": "2024-10-22T14:57:39.2568955+01:00"
+    }
   }
 ]

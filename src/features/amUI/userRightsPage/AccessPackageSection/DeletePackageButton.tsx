@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@digdir/designsystemet-react';
+import { Button } from '@altinn/altinn-components';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
@@ -13,12 +13,14 @@ interface DeletePackageButtonProps {
   accessPackage: AccessPackage;
   toParty: Party;
   fullText?: boolean;
+  disabled?: boolean;
 }
 
 export const DeletePackageButton = ({
   accessPackage,
   toParty,
   fullText = false,
+  ...props
 }: DeletePackageButtonProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
@@ -59,10 +61,10 @@ export const DeletePackageButton = ({
   return (
     representingParty && (
       <Button
-        disabled={false}
-        variant='secondary'
-        color='danger'
-        size='sm'
+        {...props}
+        variant={'outline'}
+        color={'secondary'}
+        size='md'
         onClick={onClick}
       >
         {fullText ? t('common.delete_poa') : t('common.delete')}

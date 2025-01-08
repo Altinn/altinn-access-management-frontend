@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { Avatar, List } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { Avatar, List, Button } from '@altinn/altinn-components';
+import { Trans, useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
@@ -17,6 +17,7 @@ import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvid
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -87,7 +88,21 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
         </Heading>
       </div>
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
-
+      {accessPackage?.inherited && (
+        <div className={classes.inherited}>
+          <InformationSquareFillIcon
+            fontSize='1.5rem'
+            className={classes.inheritedInfoIcon}
+          />
+          <Paragraph size='xs'>
+            <Trans
+              i18nKey='delegation_modal.inherited_role_message'
+              values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
+              components={{ b: <strong /> }}
+            />
+          </Paragraph>
+        </div>
+      )}
       <Heading
         size='sm'
         level={2}
@@ -99,9 +114,8 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       </Heading>
       <div className={classes.service_list}>
         <List
-          size='xs'
           items={listItems}
-          spacing='none'
+          spacing='xs'
         />
       </div>
       <div className={classes.actions}>
@@ -110,6 +124,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
             accessPackage={accessPackage}
             toParty={toParty}
             fullText
+            disabled={isFetching || accessPackage.inherited}
           />
         ) : (
           <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
@@ -125,6 +140,7 @@ const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
   title: resource.name,
   avatar: { type: 'company', name: resource.name },
   as: 'div' as React.ElementType,
+  size: 'xs',
 });
 
 const useMinimizableResourceList = (list: IdNamePair[]) => {
@@ -139,6 +155,7 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     onClick: () => setShowAll(!showAll),
     icon: 'menu-elipsis-horizontal',
     as: 'button' as React.ElementType,
+    size: 'xs',
   };
   const minimizedList = list.slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE);
   return {
