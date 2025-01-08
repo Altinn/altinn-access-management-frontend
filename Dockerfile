@@ -24,7 +24,6 @@ WORKDIR /app
 #     DOTNET_RUNNING_IN_CONTAINER=true
 ENV ASPNETCORE_ENVIRONMENT = Development
 ENV ASPNETCORE_HTTP_PORTS = 80
-RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib
 
 COPY --from=generate-accessmanagement-backend /app_output .
 COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/accessmanagement/assets
