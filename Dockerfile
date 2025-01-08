@@ -22,10 +22,6 @@ EXPOSE 80
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_HTTP_PORTS=80
-# ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
-#     DOTNET_RUNNING_IN_CONTAINER=true
-ENV ASPNETCORE_ENVIRONMENT = Development
-ENV ASPNETCORE_HTTP_PORTS = 80
 
 COPY --from=generate-accessmanagement-backend /app_output .
 COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/accessmanagement/assets
