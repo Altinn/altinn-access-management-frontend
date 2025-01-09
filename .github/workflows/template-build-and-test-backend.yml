@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 env:
-  dotnet_version: 8.0.x
+  dotnet_version: 9.0.x
 
 jobs:
   build:
@@ -42,8 +42,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
+          dotnet-version: ${{ env.dotnet_version }}
       - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:

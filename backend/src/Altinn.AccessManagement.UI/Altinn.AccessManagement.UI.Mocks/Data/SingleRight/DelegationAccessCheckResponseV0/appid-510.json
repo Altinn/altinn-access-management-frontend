@@ -1,0 +1,77 @@
+[
+  {
+    "rightKey": "appid-510/read",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ],
+    "action": "read",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "AccessListValidationFail",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "appid-510/write",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ],
+    "action": "write",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "AccessListValidationFail",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "rightKey": "appid-510/sign",
+    "resource": [
+      {
+        "id": "urn:altinn:resource",
+        "value": "appid-510"
+      }
+    ],
+    "action": "sign",
+    "status": "NotDelegable",
+    "details": [
+      {
+        "code": "AccessListValidationFail",
+        "description": "The user have access through delegation(s) of the right to the recipient(s)",
+        "parameters": {
+          "roleRequirementsMatches": [
+            {
+              "id": "urn:altinn:role",
+              "value": "DAGL"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

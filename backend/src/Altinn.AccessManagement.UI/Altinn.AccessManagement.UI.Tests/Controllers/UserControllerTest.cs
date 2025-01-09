@@ -3,21 +3,14 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
-using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Common.PEP.Interfaces;
 using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
-using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
@@ -46,9 +39,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         }
 
-        private static UserProfile GetUserProfile(int id)
+        private static UserProfileFE GetUserProfile(int id)
         {
-            return new UserProfile
+            return new UserProfileFE
             {
                 UserId = id,
                 Email = "email@domain.com",
@@ -57,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 PhoneNumber = "12345678",
                 UserName = "UserName",
                 UserType = UserType.None,
-                Party = new Party(),
+                Party = new PartyFE(),
                 ProfileSettingPreference = new ProfileSettingPreference
                 {
                     DoNotPromptForParty = false,
@@ -81,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var response = await _client.GetAsync("accessmanagement/api/v1/user/profile");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var userProfile = await response.Content.ReadFromJsonAsync<UserProfile>();
+            var userProfile = await response.Content.ReadFromJsonAsync<UserProfileFE>();
             Assert.Equal(userId, userProfile.UserId);
         }
 

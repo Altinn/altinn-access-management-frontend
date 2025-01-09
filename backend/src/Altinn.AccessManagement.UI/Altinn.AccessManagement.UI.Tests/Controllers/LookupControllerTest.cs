@@ -3,11 +3,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
-using Altinn.Platform.Profile.Models;
 using Altinn.Platform.Register.Enums;
-using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -72,7 +71,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Party actualParty = await response.Content.ReadFromJsonAsync<Party>();
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
             Assert.Equal(lookupOrgNo, actualParty.OrgNumber);
             Assert.Equal(50004222, actualParty.PartyId);
             Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
@@ -105,7 +104,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            Party actualParty = await response.Content.ReadFromJsonAsync<Party>();
+            PartyFE actualParty = await response.Content.ReadFromJsonAsync<PartyFE>();
             Assert.Equal(lookupUUID, actualParty.PartyUuid);
             Assert.Equal(51317934, actualParty.PartyId);
             Assert.Equal(PartyType.Organisation, actualParty.PartyTypeName);
@@ -152,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            UserProfile actualUser = await response.Content.ReadFromJsonAsync<UserProfile>();
+            UserProfileFE actualUser = await response.Content.ReadFromJsonAsync<UserProfileFE>();
             Assert.Equal(lookupUUID, actualUser.UserUuid);
             Assert.Equal(20004938, actualUser.UserId);
             Assert.Equal(50019992, actualUser.PartyId);

@@ -41,6 +41,9 @@
 
 .resourceList {
   padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .resourceItem {

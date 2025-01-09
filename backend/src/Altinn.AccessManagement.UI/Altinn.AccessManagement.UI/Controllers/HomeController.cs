@@ -2,6 +2,7 @@
 using Altinn.AccessManagement.Models;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Platform.Profile.Models;
@@ -109,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             if (string.IsNullOrEmpty(languageCode))
             {
                 int userId = AuthenticationHelper.GetUserId(_httpContextAccessor.HttpContext);
-                UserProfile user = await _userService.GetUserProfile(userId);
+                UserProfileFE user = await _userService.GetUserProfile(userId);
                 languageCode = LanguageHelper.GetFrontendStandardLanguage(user?.ProfileSettingPreference?.Language);
             }
 

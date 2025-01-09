@@ -11,6 +11,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -79,7 +80,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     Name = "Livsglad Film",
                     Type = AuthorizedPartyType.Person,
                     PartyUuid = new Guid("eb0e874b-5f37-44cc-b648-f9a902a82c89"),
-                    PersonId = "21915399719",
                     AuthorizedRoles = []
                 };
                 reportees.Add(currentUser);
@@ -98,174 +98,40 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             catch
             {
                 throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
-            }         
+            }
         }
+
+        //// Single Rights
 
         /// <inheritdoc />
-        public Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
+        public async Task<List<DelegationCheckedRight>> GetDelegationCheck(Guid party, string resource)
         {
-            return Task.FromResult(new HttpResponseMessage
-            { StatusCode = HttpStatusCode.OK });
-        }
+            ThrowExceptionIfTriggerParty(party.ToString());
 
-        //// MaskinportenSchema
-
-        public Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
-        {
-            ThrowExceptionIfTriggerParty(party);
-
-            List<MaskinportenSchemaDelegation> delegations = new List<MaskinportenSchemaDelegation>();
-            List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
-
-            string path = Path.Combine(dataFolder, "MaskinportenSchema");
-            if (Directory.Exists(path))
+            try
             {
-                string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
-                delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
-
-                if (!string.IsNullOrEmpty(party))
-                {
-                    filteredDelegations.AddRange(delegations.FindAll(od => od.CoveredByPartyId == Convert.ToInt32(party)));
-                }
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "DelegationCheck", $"{resource}.json");
+                return await Task.FromResult(Util.GetMockData<List<DelegationCheckedRight>>(dataPath));
             }
-
-            return Task.FromResult(filteredDelegations);
-        }
-
-        public Task<List<MaskinportenSchemaDelegation>> GetOfferedMaskinportenSchemaDelegations(string party)
-        {
-            ThrowExceptionIfTriggerParty(party);
-
-            List<MaskinportenSchemaDelegation> delegations = new List<MaskinportenSchemaDelegation>();
-            List<MaskinportenSchemaDelegation> filteredDelegations = new List<MaskinportenSchemaDelegation>();
-
-            string path = Path.Combine(dataFolder, "MaskinportenSchema");
-            if (Directory.Exists(path))
+            catch
             {
-                string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
-                delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
-
-                if (!string.IsNullOrEmpty(party))
-                {
-                    filteredDelegations.AddRange(delegations.FindAll(od => od.OfferedByPartyId == Convert.ToInt32(party)));
-                }
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
-
-            return Task.FromResult(filteredDelegations);
         }
 
-        public Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
+        public async Task<DelegationOutput> DelegateResource(Guid from, Guid to, string resource, List<string> rights)
         {
-            ThrowExceptionIfTriggerParty(party);
+            ThrowExceptionIfTriggerParty(from.ToString());
 
-            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
-            IdValuePair fromMatch = delegation.From.First();
-
-            string path = Path.Combine(dataFolder, "MaskinportenSchema");
-            if (Directory.Exists(path))
+            try
             {
-                string content = File.ReadAllText(Path.Combine(path, "backendReceived.json"));
-                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
-                foreach (MaskinportenSchemaDelegation d in delegations)
-                {
-                    if (d.CoveredByPartyId.ToString() == party &&
-                        d.OfferedByOrganizationNumber == fromMatch.Value &&
-                        d.ResourceId == resourceMatch.Value)
-                    {
-                        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NoContent));
-                    }
-                }
+                string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation", $"{resource}.json");
+                return await Task.FromResult(Util.GetMockData<DelegationOutput>(dataPath));
             }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
-        }
-
-        public Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
-        {
-            ThrowExceptionIfTriggerParty(party);
-
-            IdValuePair resourceMatch = delegation.Rights.First().Resource.First();
-            IdValuePair toMatch = delegation.To.First();
-
-            string path = Path.Combine(dataFolder, "MaskinportenSchema");
-            if (Directory.Exists(path))
+            catch
             {
-                string content = File.ReadAllText(Path.Combine(path, "backendOffered.json"));
-
-                List<MaskinportenSchemaDelegation> delegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(content, options) ?? [];
-                foreach (MaskinportenSchemaDelegation d in delegations)
-                {
-                    if (d.OfferedByPartyId.ToString() == party &&
-                        d.CoveredByOrganizationNumber == toMatch.Value &&
-                        d.ResourceId == resourceMatch.Value)
-                    {
-                        return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NoContent));
-                    }
-                }
+                throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", HttpStatusCode.BadRequest, "");
             }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
-        }
-
-        public Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
-        {
-            ThrowExceptionIfTriggerParty(party);
-
-            string resourceId = delegation.Rights.First().Resource.First().Value;
-            IdValuePair toMatch = delegation.To.First();
-            string path = Path.Combine(dataFolder, "MaskinportenSchema", "Delegation", $"{resourceId}.json");
-            if (File.Exists(path))
-            {
-                string content = File.ReadAllText(path);
-                return Task.FromResult(new HttpResponseMessage
-                { StatusCode = HttpStatusCode.Created, Content = new StringContent(content) });
-            }
-
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
-        }
-
-        /// <inheritdoc />
-        public Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request)
-        {
-            string resourceId = request.Resource[0].Value;
-            string filename;
-            switch (resourceId)
-            {
-                case "appid-400":
-                case "appid-136":
-                    filename = resourceId;
-                    break;
-                default:
-                    filename = "default";
-                    break;
-            }
-
-            string fullPath = Path.Combine(dataFolder, "MaskinportenSchema", "DelegationCheck", filename + ".json");
-
-            List<DelegationResponseData> mockedResponse = Util.GetMockData<List<DelegationResponseData>>(fullPath);
-
-            return Task.FromResult(mockedResponse);
-        }
-
-        //// SingleRight
-
-        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
-        {
-            ThrowExceptionIfTriggerParty(partyId);
-
-            string resourceFileName = GetMockDataFilenameFromUrn(request.Resource);
-            string path = Path.Combine(dataFolder, "SingleRight", "DelegationAccessCheckResponse");
-
-            return await Util.GetMockedHttpResponse(path, resourceFileName);
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateSingleRightsDelegation(string party, DelegationInput delegation)
-        {
-            string resourceFileName = GetMockDataFilenameFromUrn(delegation.Rights.First().Resource);
-            string dataPath = Path.Combine(dataFolder, "SingleRight", "CreateDelegation");
-
-            return await Util.GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
         /// <inheritdoc />
@@ -280,9 +146,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId)
+        public async Task<HttpResponseMessage> RevokeResourceDelegation(Guid from, Guid to, string resourceId)
         {
-            ThrowExceptionIfTriggerParty(from);
+            ThrowExceptionIfTriggerParty(from.ToString());
 
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
@@ -295,7 +161,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
+        public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
         {
             string dataPath = Path.Combine(dataFolder, "SingleRight", "RevokeDelegation");
 
@@ -340,21 +206,31 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string resourceId)
         {
-            IdValuePair referencePart = resourceReference.First();
+            string dataPath = Path.Combine(dataFolder, "AccessPackage", "RevokeDelegation");
 
-            switch (referencePart.Id)
+            var mockResponse = await Util.GetMockedHttpResponse(dataPath, resourceId);
+            if (mockResponse.IsSuccessStatusCode)
             {
-                case "urn:altinn:resource":
-                case "urn:altinn:servicecode":
-                case "urn:altinn:app":
-                    return referencePart.Value;
-                case "urn:altinn:org":
-                case "urn:altinn:serviceeditioncode":
-                    return resourceReference[1].Value;
-                default:
-                    return "Unknown";
+                return mockResponse;
+            }
+            throw new HttpStatusException("StatusError", "Unexpected mockResponse status from Access Management", mockResponse.StatusCode, "");
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
+        {
+            ThrowExceptionIfTriggerParty(party);
+
+            if (packageId == string.Empty)
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+            else
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
             }
         }
 
@@ -376,14 +252,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 .RuleFor(s => s.Name, f => f.Person.FullName)
                 .RuleFor(s => s.PartyId, f => f.Random.Number(10000000, 99999999))
                 .RuleFor(s => s.PartyUuid, f => f.Random.Guid())
-                .RuleFor(s => s.PersonId, f => f.Person.Fodselsnummer())
                 .RuleFor(s => s.AuthorizedRoles, f => f.Make(f.Random.Number(0, 5), () => f.PickRandom<RegistryRoleType>().ToString()).Distinct().ToList());
 
             _faker = new Faker<AuthorizedParty>()
                 .RuleFor(p => p.PartyUuid, f => f.Random.Guid())
                 .RuleFor(p => p.Type, f => f.PickRandom(allowedPartyTypes))
                 .RuleFor(p => p.OrganizationNumber, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Random.Number(100000000, 999999999).ToString() : null)
-                .RuleFor(p => p.PersonId, (f, p) => p.Type != AuthorizedPartyType.Organization ? f.Person.Fodselsnummer() : null)
                 .RuleFor(p => p.PartyId, f => f.Random.Number(10000000, 99999999))
                 .RuleFor(p => p.Name, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanyName() : f.Person.FullName)
                 .RuleFor(p => p.UnitType, (f, p) => p.Type == AuthorizedPartyType.Organization ? f.Company.CompanySuffix() : null)

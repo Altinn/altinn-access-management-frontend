@@ -16,6 +16,8 @@ export const Default: StoryObj = {
     rightDescription: 'Right description',
     serviceIdentifier: 'serviceIdentifier',
     serviceType: 'serviceType',
+    serviceOwner: 'serviceOwner',
+    reportee: 'Superbuisness AS',
     rights: [
       {
         action: 'action A',

@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
@@ -20,6 +21,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger _logger;
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
+        private readonly IAccessManagementClientV0 _accessManagementClientV0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="APIDelegationService"/> class.
@@ -27,27 +29,30 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="logger">handler for logger</param>
         /// <param name="profileClient">handler for profile client</param>
         /// <param name="accessManagementClient">handler for AM client</param>
+        /// <param name="accessManagementClientV0">handler for old AM client</param>
         public UserService(
             ILogger<IAPIDelegationService> logger,
             IProfileClient profileClient,
-            IAccessManagementClient accessManagementClient)
+            IAccessManagementClient accessManagementClient,
+            IAccessManagementClientV0 accessManagementClientV0)
         {
             _logger = logger;
             _profileClient = profileClient;
             _accessManagementClient = accessManagementClient;
+            _accessManagementClientV0 = accessManagementClientV0;
         }
 
         /// <inheritdoc/>
-        public async Task<UserProfile> GetUserProfile(int userId)
+        public async Task<UserProfileFE> GetUserProfile(int userId)
         {
             UserProfile userProfile = await _profileClient.GetUserProfile(userId);
-            return userProfile;           
+            return userProfile == null ? null : new UserProfileFE(userProfile);         
         }
 
         /// <inheritdoc/>        
         public async Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId)
         {
-            AuthorizedParty partyInfo = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
+            AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
             return partyInfo;
         }
 

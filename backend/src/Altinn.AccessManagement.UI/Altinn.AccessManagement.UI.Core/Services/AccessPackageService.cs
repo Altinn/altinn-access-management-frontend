@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -12,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessPackageClient _accessPackageClient;
-
+        private readonly ILookupService _lookupService;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -23,10 +24,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="accessManagementClient">The access management client.</param>
         /// <param name="accessPackageClient">The access package client.</param>
-        public AccessPackageService(IAccessManagementClient accessManagementClient, IAccessPackageClient accessPackageClient)
+        /// <param name="lookupService">The lookup service.</param>
+        public AccessPackageService(IAccessManagementClient accessManagementClient, IAccessPackageClient accessPackageClient, ILookupService lookupService)
         {
             _accessManagementClient = accessManagementClient;
             _accessPackageClient = accessPackageClient;
+            _lookupService = lookupService;
         }
 
         /// <inheritdoc />
@@ -59,10 +62,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<AccessPackageAccess> accessesFromAM = await _accessManagementClient.GetAccessPackageAccesses(rightHolderUuid.ToString(), rightOwnerUuid.ToString(), languageCode);
 
             Dictionary<string, List<AccessPackageDelegation>> sortedAccesses = new Dictionary<string, List<AccessPackageDelegation>>();
-
+            
             foreach (AccessPackageAccess access in accessesFromAM)
             {
-                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id, access.AccessDetails);
+                var isInherited = access.AccessDetails.DelegatedTo != rightHolderUuid; 
+                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id, access.AccessDetails, isInherited, null);
+                if (isInherited)
+                {
+                    var inheritedFrom = await _lookupService.GetPartyByUUID(access.AccessDetails.DelegatedTo);
+                    delegation.InheritedFrom = inheritedFrom;
+                }
+                
                 if (!sortedAccesses.ContainsKey(access.AccessPackage.Area.Id))
                 {
                     sortedAccesses.Add(access.AccessPackage.Area.Id, new List<AccessPackageDelegation> { delegation });
@@ -74,6 +84,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             return sortedAccesses;
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId)
+        {
+            return _accessManagementClient.RevokeAccessPackage(from, to, packageId);
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode)
+        {
+            return await _accessManagementClient.CreateAccessPackageDelegation(party, to, packageId, languageCode);
         }
     }
 }

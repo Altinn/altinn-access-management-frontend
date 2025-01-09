@@ -1,0 +1,20 @@
+[
+  {
+    "rightKey": "appid-503/read",
+    "action": "read",
+    "status": "Delegable",
+    "reasonCodes": ["DelegationAccess"]
+  },
+  {
+    "rightKey": "appid-503/write",
+    "action": "write",
+    "status": "Delegable",
+    "reasonCodes": [ "DelegationAccess" ]
+  },
+  {
+    "rightKey": "appid-503/sign",
+    "action": "sign",
+    "status": "Delegable",
+    "reasonCodes": [ "DelegationAccess" ]
+  }
+]

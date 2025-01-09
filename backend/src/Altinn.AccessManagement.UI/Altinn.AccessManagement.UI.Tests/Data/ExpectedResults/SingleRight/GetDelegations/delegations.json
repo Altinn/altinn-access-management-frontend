@@ -222,5 +222,150 @@
         }
       ]
     }
+  },
+  {
+    "resource": {
+      "identifier": "jks-test-resource",
+      "title": "JK's Test Ressurs",
+      "description": "Veldig fin test ressurs",
+      "rightDescription": "Du gir tilgang til denne fine test ressursen",
+      "homepage": null,
+      "status": "Active",
+      "spatial": null,
+      "contactPoints": [],
+      "delegable": true,
+      "visible": true,
+      "resourceOwnerName": "JK's Test departement",
+      "resourceOwnerOrgNumber": "991825827",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+      "resourceOwnerOrgcode": null,
+      "resourceReferences": [],
+      "priorityCounter": null,
+      "resourceType": "GenericAccessResource",
+      "authorizationReference": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "jks-test-resource"
+        }
+      ],
+      "keywords": []
+    },
+    "delegation": {
+      "from": [
+        {
+          "id": "urn:altinn:organizationnumber",
+          "value": "777777777"
+        }
+      ],
+      "to": [
+        {
+          "id": "urn:altinn:ssn",
+          "value": "50019992"
+        }
+      ],
+      "rightDelegationResults": [
+        {
+          "rightKey": "jks-test-resource/read",
+          "resource": [
+            {
+              "id": "urn:altinn:resource",
+              "value": "jks-test-resource"
+            }
+          ],
+          "action": "read",
+          "status": "Delegated",
+          "details": [
+            {
+              "code": "",
+              "description": "",
+              "parameters": {
+                "roleRequirementsMatches": [
+                  {
+                    "id": "",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "resource": {
+      "identifier": "ske-innrapportering-boligsameie",
+      "title": "Innrapportering Boligsameie",
+      "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
+      "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
+      "homepage": null,
+      "status": "Completed",
+      "spatial": null,
+      "contactPoints": [
+        {
+          "category": "Innrapportering",
+          "email": "",
+          "telephone": "",
+          "contactPage": "www.skatteetaten.no"
+        }
+      ],
+      "delegable": true,
+      "visible": true,
+      "resourceOwnerName": "Skatteetaten",
+      "resourceOwnerOrgNumber": "974761076",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+      "resourceOwnerOrgcode": null,
+      "resourceReferences": null,
+      "priorityCounter": null,
+      "resourceType": "GenericAccessResource",
+      "authorizationReference": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "ske-innrapportering-boligsameie"
+        }
+      ],
+      "keywords": []
+    },
+    "delegation": {
+      "from": [
+        {
+          "id": "urn:altinn:organizationnumber",
+          "value": "777777777"
+        }
+      ],
+      "to": [
+        {
+          "id": "urn:altinn:ssn",
+          "value": "50019992"
+        }
+      ],
+      "rightDelegationResults": [
+        {
+          "rightKey": "ske-innrapportering-boligsameie/write",
+          "resource": [
+            {
+              "id": "urn:altinn:resource",
+              "value": "ske-innrapportering-boligsameie"
+            }
+          ],
+          "action": "write",
+          "status": "Delegated",
+          "details": [
+            {
+              "code": "",
+              "description": "",
+              "parameters": {
+                "roleRequirementsMatches": [
+                  {
+                    "id": "",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

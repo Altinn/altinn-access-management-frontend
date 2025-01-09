@@ -1,0 +1,103 @@
+{
+  "from": [
+    {
+      "id": "urn:altinn:organizationnumber",
+      "value": "991825827"
+    }
+  ],
+  "to": [
+    {
+      "id": "urn:altinn:ssn",
+      "value": "50019992"
+    }
+  ],
+  "rightDelegationResults": [
+    {
+      "rightKey": "app_ttd_potato-app,ttd:read",
+      "resource": [
+        {
+          "id": "urn:altinn:app",
+          "value": "app_ttd_potato-app"
+        },
+        {
+          "id": "urn:altinn:org",
+          "value": "ttd"
+        }
+      ],
+      "action": "read",
+      "status": "NotDelegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "rightKey": "app_ttd_potato-app,ttd,Task_1:write",
+      "resource": [
+        {
+          "id": "urn:altinn:app",
+          "value": "app_ttd_potato-app"
+        },
+        {
+          "id": "urn:altinn:org",
+          "value": "ttd"
+        }
+      ],
+      "action": "write",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "rightKey": "app_ttd_potato-app,ttd:delete",
+      "resource": [
+        {
+          "id": "urn:altinn:applicationid",
+          "value": "app_ttd_potato-app"
+        },
+        {
+          "id": "urn:altinn:org",
+          "value": "ttd"
+        }
+      ],
+      "action": "delete",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

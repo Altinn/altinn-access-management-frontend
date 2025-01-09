@@ -1,6 +1,10 @@
 ﻿using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +20,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         private readonly IAccessPackageService _accessPackageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageController"/> class
@@ -25,6 +30,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _accessPackageService = accessPackageService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _serializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
         /// <summary>
@@ -38,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
-           {
+            {
                 return await _accessPackageService.GetSearch(languageCode, searchString);
             }
             catch (HttpStatusException ex)
@@ -83,6 +89,44 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
         }
 
+        /// <summary>
+        ///     Endpoint for delegating a accesspackage from the reportee party to a third party
+        /// </summary>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("delegate/{party}/{packageId}/{to}")]
+        public async Task<ActionResult> CreateAccessPackageDelegation([FromRoute] string party, [FromRoute] string packageId, [FromRoute] Guid to)
+        {
+            try
+            {
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+
+                HttpResponseMessage response = await _accessPackageService.CreateDelegation(party, to, packageId, languageCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Bad request", detail: responseContent));
+                }
+                else
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during delegation of resource:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
         // For later use in display of all packages delegated on behalf of party
         /*
         /// <summary>
@@ -94,5 +138,35 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegations/{from}")]
         public async Task<ActionResult<List<AccessPackageRecipients>>> GetDelegationsFromParty([FromRoute] Guid from)
         */
+
+        /// <summary>
+        ///     Endpoint for revoking access to an access package that has been granted from one party to another.
+        /// </summary>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted. Provided on urn format</param>
+        /// <param name="to">The right holder that has been granted access to the resource. Provided on urn format</param>
+        /// <param name="packageId">The identifier of the access package that is to be revoked</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("{from}/{to}/{packageId}/revoke")]
+        public async Task<ActionResult> RevokeAccessPackageAccess([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] string packageId)
+        {
+            try
+            {
+                var response = await _accessPackageService.RevokeAccessPackage(from, to, packageId);
+                return Ok(response);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
     }
 }

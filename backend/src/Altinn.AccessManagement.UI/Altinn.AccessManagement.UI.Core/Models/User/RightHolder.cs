@@ -29,11 +29,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public List<RegistryRoleType> RegistryRoles { get; set; }
 
         /// <summary>
-        /// The national identity number if the party is a person
-        /// </summary>
-        public string PersonId { get; set; }
-
-        /// <summary>
         /// The organization number if the party is an organization
         /// </summary>
         public string OrganizationNumber { get; set; }
@@ -63,7 +58,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
             PartyUuid = party.PartyUuid;
             PartyType = party.Type;
             Name = party.Name;
-            PersonId = party.PersonId;
             OrganizationNumber = party.OrganizationNumber;
             UnitType = party.UnitType;
             RegistryRoles = party.AuthorizedRoles.Where(role => Enum.IsDefined(typeof(RegistryRoleType), role.ToUpper()))

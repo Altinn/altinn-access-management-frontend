@@ -61,7 +61,9 @@
     "give_poa": "Gi fullmakt",
     "delete_poa": "Slett fullmakt",
     "has_poa": "Har fullmakt",
-    "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt."
+    "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
+    "show_more": "Se meir",
+    "show_less": "Se mindre"
   },
   "header": {
     "menu-label": "Meny",
@@ -199,7 +201,7 @@
     "add_more_services": "Legg til fleire tenester",
     "cannot_delegate_alert_heading": "Du kan ikkje gi fullmakt til denne tenesta",
     "ceo_or_main_admin_can_help": "Dagleg leiar eller hovudadministrator kan hjelpe deg med dette.",
-    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi {{reason}}",
+    "one_or_more_rights_is_undelegable": "Ein eller fleire av rettane på denne tenesta blir ikkje delegert fordi: {{reason}}",
     "missing_recipient_error_title": "Mottakar manglar",
     "missing_recipient_error_message": "Mottakar for delegeringa manglar. Ver venleg og gå tilbake til profilsida og vel kven du ønsker å delegere til.",
     "faulty_recipient_error_title": "Kan ikkje delegere til mottakar",
@@ -208,12 +210,18 @@
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikkje sjå at nokon tenester er valde.",
     "popular_services": "Populære tenester:",
     "give_new_single_right": "Gi fullmakt til ny teneste",
-    "current_services_title": "Fullmakt til {{count}} tenester"
+    "current_services_title": "Fullmakt til {{count}} tenester",
+    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
+    "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tenesta {{servicename}}"
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
-    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:"
+    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
+    "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
+    "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
+    "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
+    "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}."
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -227,9 +235,7 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "resource_type_text": "Enkelttjeneste",
-    "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tenesta {{servicename}}"
+    "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "delegation_modal": {
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny teneste",
@@ -240,6 +246,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
+    "package_services": "{{name}} gir tilgang til {{count}} tenester",
+    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom si rolle i <b>{{org_name}}</b>. Den kan derfor ikkje slettast eller endrast.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."

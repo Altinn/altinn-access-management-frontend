@@ -14,6 +14,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -115,171 +116,29 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
         }
 
+        //// Single Rights
+
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
+        public async Task<List<DelegationCheckedRight>> GetDelegationCheck(Guid party, string resource)
         {
-            string endpointUrl = $"internal/{party}/accesscache/clear";
+            string endpointUrl = $"todo/resources/{resource}/rights/delegationcheck/?from={party}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(recipient, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PutAsync(token, endpointUrl, requestBody);
-            return response;
-        }
 
-        //// MaskinportenSchema
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
-        /// <inheritdoc />
-        public async Task<List<MaskinportenSchemaDelegation>> GetReceivedMaskinportenSchemaDelegations(string party)
-        {
-            try
-            {
-                string endpointUrl = $"{party}/maskinportenschema/received";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    List<MaskinportenSchemaDelegation> inboundDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(responseContent, _serializerOptions);
-                    return inboundDelegations;
-                }
-
-                _logger.LogError("Getting received delegations from accessmanagement failed with {StatusCode}", response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // MaskinportenSchemaClient // GetInboundDelegations // Exception");
-                throw;
-            }
-
-            return null;
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<DelegationCheckedRight>>(response);
         }
 
         /// <inheritdoc />
-        public async Task<List<MaskinportenSchemaDelegation>> GetOfferedMaskinportenSchemaDelegations(string party)
+        public async Task<DelegationOutput> DelegateResource(Guid from, Guid to, string resource, List<string> rights)
         {
-            try
-            {
-                string endpointUrl = $"{party}/maskinportenschema/offered";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    List<MaskinportenSchemaDelegation> outboundDelegations = JsonSerializer.Deserialize<List<MaskinportenSchemaDelegation>>(responseContent, _serializerOptions);
-                    return outboundDelegations;
-                }
-
-                _logger.LogError("Getting offered delegations from accessmanagement failed with {StatusCode}", response.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // GetOutboundDelegations // Exception");
-                throw;
-            }
-
-            return null;
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeReceivedMaskinportenScopeDelegation(string party, RevokeReceivedDelegation delegation)
-        {
-            try
-            {
-                string endpointUrl = $"{party}/maskinportenschema/received/revoke";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // DelegationsClient // RevokeReceivedMaskinportenScopeDelegation // Exception");
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeOfferedMaskinportenScopeDelegation(string party, RevokeOfferedDelegation delegation)
-        {
-            string endpointUrl = $"{party}/maskinportenschema/offered/revoke";
+            string endpointUrl = $"todo/resources/{resource}/rights?from={from}&to={to}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(rights, _serializerOptions), Encoding.UTF8, "application/json");
+
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-            return response;
-        }
 
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateMaskinportenScopeDelegation(string party, DelegationInput delegation)
-        {
-            string endpointUrl = $"{party}/maskinportenschema/offered";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-            return response;
-        }
-
-        /// <inheritdoc />
-        public async Task<List<DelegationResponseData>> MaskinportenSchemaDelegationCheck(string partyId, Right request)
-        {
-            try
-            {
-                string endpointUrl = $"{partyId}/maskinportenschema/delegationcheck";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<DelegationResponseData>>(responseContent, _serializerOptions);
-                }
-                else
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-
-                    throw error;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // MaskinportenSchemaClient // DelegationCheck // Exception");
-                throw;
-            }
-        }
-
-        //// SingleRights
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CheckSingleRightsDelegationAccess(string partyId, Right request)
-        {
-            try
-            {
-                string endpointUrl = $"internal/{partyId}/rights/delegation/delegationcheck";
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                StringContent requestBody = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SingleRightClient // CheckDelegationAccess // Exception");
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<HttpResponseMessage> CreateSingleRightsDelegation(string party, DelegationInput delegation)
-        {
-            string endpointUrl = $"internal/{party}/rights/delegation/offered";
-            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-            StringContent requestBody = new StringContent(JsonSerializer.Serialize(delegation, _serializerOptions), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
-            return response;
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<DelegationOutput>(response);
         }
 
         /// <inheritdoc />
@@ -300,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeResourceDelegation(string from, string to, string resourceId)
+        public async Task<HttpResponseMessage> RevokeResourceDelegation(Guid from, Guid to, string resourceId)
         {
             string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -316,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<HttpResponseMessage> RevokeRightDelegation(string from, string to, string resourceId, string rightKey)
+        public async Task<HttpResponseMessage> RevokeRightDelegation(Guid from, Guid to, string resourceId, string rightKey)
         {
             string endpointUrl = $"todo/enduser/delegations/from/{from}/to/{to}/resources/{resourceId}/rights/{rightKey}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -359,6 +218,36 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AccessPackageAccess>>(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId)
+        {
+            string endpointUrl = $"todo/enduser/access/accesspackages/{packageId}?to={to}&from={from}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response;
+            }
+
+            _logger.LogError("Revoke resource delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode)
+        {
+            string endpointUrl = $"http://localhost:5117/accessmanagement/api/v1/accessmanagement/api/v1/enduser/access/accesspackages/{packageId}?to={to}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, endpointUrl);
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            request.Headers.Add("party", "{party}");
+
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            return response;
         }
     }
 }

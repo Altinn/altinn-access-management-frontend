@@ -61,7 +61,9 @@
     "give_poa": "Gi fullmakt",
     "delete_poa": "Slett fullmakt",
     "has_poa": "Har fullmakt",
-    "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt."
+    "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt.",
+    "show_more": "Se mer",
+    "show_less": "Se mindre"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -200,7 +202,7 @@
     "add_more_services": "Legg til flere tjenester",
     "cannot_delegate_alert_heading": "Du kan ikke gi fullmakt til denne tjenesten",
     "ceo_or_main_admin_can_help": "Daglig leder eller hovedadministrator kan hjelpe deg med dette.",
-    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi {{reason}}",
+    "one_or_more_rights_is_undelegable": "En eller flere av rettighetene på denne tjenesten blir ikke delegert fordi: {{reason}}",
     "missing_recipient_error_title": "Mottaker mangler",
     "missing_recipient_error_message": "Mottaker for delegeringen mangler. Vennligst gå tilbake til profilsiden og velg hvem du ønsker å delegere til.",
     "faulty_recipient_error_title": "Kan ikke delegere til mottaker",
@@ -209,12 +211,18 @@
     "restart_prompter_no_resources_chosen_ingress": "Vi kan ikke se at noen tjenester er blitt valgt.",
     "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt til ny tjeneste",
-    "current_services_title": "Fullmakt til {{count}} tjenester"
+    "current_services_title": "Fullmakt til {{count}} tjenester",
+    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
-    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:"
+    "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
+    "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
+    "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
+    "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
+    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}."
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -228,9 +236,7 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "resource_type_text": "Enkelttjeneste",
-    "delete_ingleRight_confirm_message": "Er du sikker på at du vil slette denne?",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
+    "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
   "delegation_modal": {
     "give_service_to_name": "Gi <strong>{{name}}</strong> fullmakt til ny tjeneste",
@@ -241,6 +247,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
+    "package_services": "{{name}} gir tilgang til {{count}} tjenester",
+    "inherited_role_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes eller endres.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",

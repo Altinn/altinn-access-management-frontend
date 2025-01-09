@@ -1,0 +1,126 @@
+﻿[
+  {
+    "id": "589217CF-6070-474F-9989-8C5359C740F4",
+    "name": "Bygg og anlegg",
+    "description": "For de som bygger med anlegg. Et nobelt og meget nyttig yrke som inkluderer ting som hammer, spiker, og masse andre greier som sikkert er vanskelig å uttale navnet på.",
+    "iconUrl": "https://www.svgrepo.com/show/437004/hammer.svg",
+    "accessPackages": [
+      {
+        "id": "eiendom_kjop",
+        "name": "Kjøp og salg av eiendom",
+        "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "resources": [
+          {
+            "id": "appid-402",
+            "name": "Det magiske klesskapet"
+          },
+          {
+            "id": "se_3225_1596",
+            "name": "A2 skjema"
+          }
+        ],
+        "area": {
+          "id": "589217CF-6070-474F-9989-8C5359C740F4",
+          "name": "Bygg og anlegg",
+          "description": "For de som bygger med anlegg. Et nobelt og meget nyttig yrke som inkluderer ting som hammer, spiker, og masse andre greier som sikkert er vanskelig å uttale navnet på.",
+          "iconUrl": "https://www.svgrepo.com/show/437004/hammer.svg"
+        }
+      },
+      {
+        "id": "annleggadmin",
+        "name": "Annleggsadministrasjon",
+        "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "resources": [
+          {
+            "id": "appid-512",
+            "name": "Lønningsoversikt"
+          }
+        ],
+        "area": {
+          "id": "589217CF-6070-474F-9989-8C5359C740F4",
+          "name": "Bygg og anlegg",
+          "description": "For de som bygger med anlegg",
+          "iconUrl": "https://www.svgrepo.com/show/437004/hammer.svg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "589217CF-6070-474F-9989-8C5359C740GG",
+    "name": "Overnaturligheter",
+    "description": "Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.",
+    "iconUrl": "https://www.svgrepo.com/show/509156/magic-wand.svg",
+    "accessPackages": [
+      {
+        "id": "magibruk",
+        "name": "Magibruk",
+        "description": "Cat ipsum dolor sit amet, i will ruin the couch with my claws and have secret plans so pretend not to be evil.",
+        "resources": [
+          {
+            "id": "appid-402",
+            "name": "Det magiske klesskapet"
+          },
+          {
+            "id": "appid-503",
+            "name": "Snarveien"
+          },
+          {
+            "id": "app_ttd_a3-app",
+            "name": "A3 app"
+          },
+          {
+            "id": "app_ttd_a3-app2",
+            "name": "A3 app 2"
+          },
+          {
+            "id": "appid-509",
+            "name": "Kaffemaskinen i 4. etasje"
+          },
+          {
+            "Id": "appid-512",
+            "Name": "Lønningsoversikt"
+          },
+          {
+            "Id": "appid-513",
+            "Name": "Kaffemaskinen i 5. etasje"
+          }
+        ],
+        "area": {
+          "id": "589217CF-6070-474F-9989-8C5359C740GG",
+          "name": "Overnaturligheter",
+          "description": "Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.",
+          "iconUrl": "https://www.svgrepo.com/show/509156/magic-wand.svg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B",
+    "name": "Post og arkiv",
+    "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
+    "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzIzMjYyQSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMyA1LjI1YS43NS43NSAwIDAgMC0uNzUuNzV2MTNjMCAuNDE0LjMzNi43NS43NS43NWgxOGEuNzUuNzUgMCAwIDAgLjc1LS43NVY2YS43NS43NSAwIDAgMC0uNzUtLjc1SDNabS43NSAxMS45NCA1LjI3My01LjI3M0wzLjc1IDguNHY4Ljc4OFptNi41NDYtNC40MjVMNC44MSAxOC4yNWgxNC4zNzhsLTUuNDg1LTUuNDg1LTEuMjg4Ljg1OWEuNzUuNzUgMCAwIDEtLjgzMiAwbC0xLjI4OC0uODU5Wm00LjY4MS0uODQ4TDIwLjI1IDguNHY4Ljc4OGwtNS4yNzMtNS4yNzJabS0xMS01LjE2N0wxMiAxMi4wOTlsOC4wMjMtNS4zNDlIMy45NzdaIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=",
+    "accessPackages": [
+      {
+        "id": "urn:altinn:accesspackage:posttilvirksomhetenmedtaushetsbelagtinnhold",
+        "name": "Post til virksomheten med taushetsbelagt innhold",
+        "description": "Denne fullmakten gir tilgang til all mottatt post som innholder sensitiv/taushetsbelagt informasjon som sendes virksomheten. Fullmakten gis normalt til de i virksomheten som håndterer mottak av post som har taushetsbelagt innhold. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "resources": [
+          {
+            "id": "appid-513",
+            "name": "ikke_ordinær_post"
+          },
+          {
+            "id": "appid-514",
+            "name": "sensitiv_post"
+          }
+        ],
+        "area": {
+          "id": "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B",
+          "name": "Post og arkiv",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
+          "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzIzMjYyQSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMyA1LjI1YS43NS43NSAwIDAgMC0uNzUuNzV2MTNjMCAuNDE0LjMzNi43NS43NS43NWgxOGEuNzUuNzUgMCAwIDAgLjc1LS43NVY2YS43NS43NSAwIDAgMC0uNzUtLjc1SDNabS43NSAxMS45NCA1LjI3My01LjI3M0wzLjc1IDguNHY4Ljc4OFptNi41NDYtNC40MjVMNC44MSAxOC4yNWgxNC4zNzhsLTUuNDg1LTUuNDg1LTEuMjg4Ljg1OWEuNzUuNzUgMCAwIDEtLjgzMiAwbC0xLjI4OC0uODU5Wm00LjY4MS0uODQ4TDIwLjI1IDguNHY4Ljc4OGwtNS4yNzMtNS4yNzJabS0xMS01LjE2N0wxMiAxMi4wOTlsOC4wMjMtNS4zNDlIMy45NzdaIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4="
+        }
+      }
+    ]
+  }
+]

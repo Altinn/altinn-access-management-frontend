@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.Platform.Register.Models;
@@ -60,7 +61,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="BaseRightExternal" /> have the same property in the same positions.
+        ///     Assert that two <see cref="DelegationResponseData" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -74,7 +75,24 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="CompetentAuthorityExternal" /> have the same property in the same positions.
+        ///     Assert that two <see cref="DelegationCheckedRightFE" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(DelegationCheckedRightFE expected, DelegationCheckedRightFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Action, actual.Action);
+            Assert.Equal(expected.RightKey, actual.RightKey);
+            Assert.Equal(expected.Status, actual.Status);
+            AssertCollections(expected.ReasonCodes, actual.ReasonCodes, Assert.Equal);
+
+        }
+
+        /// <summary>
+        ///     Assert that two <see cref="CompetentAuthority" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
         /// <param name="actual">The instance to verify.</param>
@@ -154,7 +172,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.AuthorizationReference, actual.AuthorizationReference, AssertEqual);
             AssertEqual(expected.ContactPoints, actual.ContactPoints);
             Assert.Equal(expected.Spatial, actual.Spatial);
-            Assert.Equal(expected.ResourceReferences.Count, actual.ResourceReferences.Count);
+            Assert.Equal(expected.ResourceReferences?.Count, actual.ResourceReferences?.Count);
             AssertEqual(expected.ResourceReferences, actual.ResourceReferences);
         }
 
@@ -165,8 +183,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <param name="actual">The instance to verify.</param>
         public static void AssertEqual(List<ResourceReference> expected, List<ResourceReference> actual)
         {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
+            if (actual == null) {
+                Assert.Null(expected);
+                return;
+            }
 
             for (int i = 0; i < actual.Count; i++)
             {
@@ -234,7 +254,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             }
         }
 
-        public static void AssertEqual(Party expected, Party actual)
+        public static void AssertEqual(PartyFE expected, PartyFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -247,7 +267,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyId, actual.PartyId);
             Assert.Equal(expected.OnlyHierarchyElementWithNoAccess, actual.OnlyHierarchyElementWithNoAccess);
-            AssertCollections<Party>(expected.ChildParties, actual.ChildParties, AssertEqual);
+            AssertCollections<PartyFE>(expected.ChildParties, actual.ChildParties, AssertEqual);
 
         }
 
@@ -276,7 +296,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
             Assert.Equal(expected.PartyUuid, actual.PartyUuid);
             Assert.Equal(expected.PartyType, actual.PartyType);
-            Assert.Equal(expected.PersonId, actual.PersonId);
             AssertCollections(expected.RegistryRoles, actual.RegistryRoles, Assert.Equal);
 
         }

@@ -19,7 +19,10 @@ interface DelegationModalContextProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   setResourceToView: React.Dispatch<React.SetStateAction<ServiceResource | undefined>>;
   setPackageToView: React.Dispatch<React.SetStateAction<AccessPackage | undefined>>;
-  onSelection: (resource: ServiceResource) => void;
+  onSelection: (resource?: ServiceResource, accessPackage?: AccessPackage) => void;
+  expandedAreas: string[];
+  toggleExpanded: (value: boolean, id: string) => void;
+  reset: () => void;
 }
 
 const DelegationModalContext = createContext<DelegationModalContextProps | undefined>(undefined);
@@ -31,15 +34,34 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
   const [resourceToView, setResourceToView] = useState<ServiceResource | undefined>(undefined);
   const [packageToView, setPackageToView] = useState<AccessPackage | undefined>(undefined);
   const [infoView, setInfoView] = useState(false);
+  const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
 
-  const onSelection = (resource?: ServiceResource, pack?: AccessPackage) => {
+  const toggleExpanded = (value: boolean, id: string) => {
+    if (value) {
+      setExpandedAreas([...expandedAreas, id]);
+    } else {
+      setExpandedAreas(expandedAreas.filter((areaId) => areaId !== id));
+    }
+  };
+
+  const onSelection = (resource?: ServiceResource, accessPackage?: AccessPackage) => {
     if (resource) {
       setInfoView(true);
       setResourceToView(resource);
-    } else if (pack) {
+    } else if (accessPackage) {
       setInfoView(true);
-      setPackageToView(pack);
+      setPackageToView(accessPackage);
     }
+  };
+
+  const reset = () => {
+    setCurrentPage(1);
+    setResourceToView(undefined);
+    setPackageToView(undefined);
+    setExpandedAreas([]);
+    setInfoView(false);
+    setSearchString('');
+    setFilters([]);
   };
 
   return (
@@ -58,6 +80,9 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
         setCurrentPage,
         setResourceToView,
         setPackageToView,
+        expandedAreas,
+        toggleExpanded,
+        reset,
       }}
     >
       {children}

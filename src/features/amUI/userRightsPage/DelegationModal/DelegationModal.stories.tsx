@@ -35,7 +35,6 @@ export const Default: StoryObj<DelegationModalProps> = {
       partyId: 123,
       partyUuid: '123',
       orgNumber: '123123123',
-      ssn: '123123123',
       unitType: 'unitType',
       name: 'Ola Nordmann',
       partyTypeName: PartyType.Person,

@@ -3,7 +3,7 @@ import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/design
 import { Trans, useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router-dom';
-import { ListItem } from '@altinn/altinn-components';
+import { ResourceListItem } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
@@ -155,19 +155,15 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         key={resource.identifier ?? index}
         className={classes.resourceItem}
       >
-        <ListItem
-          id={resource.identifier ?? index}
+        <ResourceListItem
+          id={resource.identifier}
+          ownerName={resource.resourceOwnerName ?? ''}
+          resourceName={resource.title}
+          ownerLogoUrl={resource.resourceOwnerLogoUrl}
+          ownerLogoUrlAlt={resource.resourceOwnerName}
           onClick={() => onSelection(resource)}
-          linkIcon='chevron-right'
-          size='md'
-          title={resource.title}
-          description={resource.resourceOwnerName}
-          avatar={{
-            type: 'company',
-            imageUrl: resource.resourceOwnerLogoUrl,
-            name: resource.resourceOwnerName,
-          }}
         />
+
         {!!delegatedResources &&
           delegatedResources.some(
             (delegation) => delegation.resource?.identifier === resource.identifier,

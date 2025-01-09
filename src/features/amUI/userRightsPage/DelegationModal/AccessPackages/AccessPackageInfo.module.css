@@ -1,0 +1,42 @@
+.service_list {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 2px;
+  max-height: 282px;
+  justify-content: space-between;
+  overflow-y: auto;
+  overflow-x: visible;
+  gap: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  padding-top: 10px;
+  margin-bottom: 5px;
+}
+
+.inherited {
+  display: flex;
+}
+
+.inheritedInfoIcon {
+  color: var(--ds-color-accent-text-subtle);
+  margin-right: 0.3rem;
+}

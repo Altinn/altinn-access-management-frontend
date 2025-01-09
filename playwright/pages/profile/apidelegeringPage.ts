@@ -256,7 +256,7 @@ export class apiDelegation {
     for (const apiName of apiNames) {
       await this.page
         .getByRole('button', { name: `Legg til ${apiName}` })
-        .last()
+        .first()
         .click();
     }
 

@@ -1,17 +1,11 @@
 [
   {
-    "rightKey": "appid-510/read",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-510"
-      }
-    ],
+    "rightKey": "appid-508/read",
     "action": "read",
-    "status": "NotDelegable",
+    "status": "Delegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
+        "code": "DelegationAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
@@ -25,18 +19,12 @@
     ]
   },
   {
-    "rightKey": "appid-510/write",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-510"
-      }
-    ],
+    "rightKey": "appid-508/write",
     "action": "write",
-    "status": "NotDelegable",
+    "status": "Delegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
+        "code": "DelegationAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [
@@ -50,18 +38,12 @@
     ]
   },
   {
-    "rightKey": "appid-510/sign",
-    "resource": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-510"
-      }
-    ],
+    "rightKey": "appid-508/sign",
     "action": "sign",
-    "status": "NotDelegable",
+    "status": "Delegable",
     "details": [
       {
-        "code": "MissingSrrRightAccess",
+        "code": "DelegationAccess",
         "description": "The user have access through delegation(s) of the right to the recipient(s)",
         "parameters": {
           "roleRequirementsMatches": [

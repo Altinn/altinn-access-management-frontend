@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
+import { Party } from './lookupApi';
 
 export interface AccessArea {
   id: string;
@@ -16,11 +17,16 @@ export interface AccessPackage {
   name: string;
   description: string;
   resources: IdNamePair[];
+  area: AccessArea;
+  inherited?: boolean;
+  inheritedFrom?: Party;
 }
 
 export interface AccessPackageDelegation {
   accessPackageId: string;
-  DelegationDetails: DelegationDetails;
+  delegationDetails: DelegationDetails;
+  inherited: boolean;
+  inheritedFrom?: Party;
 }
 
 export interface DelegationDetails {
@@ -52,10 +58,34 @@ export const accessPackageApi = createApi({
       query: (rightHolderUuid) => {
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
       },
+      providesTags: ['AccessPackages'],
+    }),
+    revokeDelegation: builder.mutation<void, { to: string; packageId: string }>({
+      query({ to, packageId }) {
+        return {
+          url: `${getCookie('AltinnPartyUuid')}/${to}/${packageId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['AccessPackages'],
+    }),
+    delegatePackage: builder.mutation<void, { to: string; packageId: string }>({
+      invalidatesTags: ['AccessPackages'],
+      query: (args) => {
+        return {
+          url: `delegate/${getCookie('AltinnPartyId')}/${args.packageId}/${args.to}`,
+          method: 'POST',
+        };
+      },
     }),
   }),
 });
 
-export const { useSearchQuery, useGetRightHolderDelegationsQuery } = accessPackageApi;
+export const {
+  useSearchQuery,
+  useGetRightHolderDelegationsQuery,
+  useRevokeDelegationMutation,
+  useDelegatePackageMutation,
+} = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

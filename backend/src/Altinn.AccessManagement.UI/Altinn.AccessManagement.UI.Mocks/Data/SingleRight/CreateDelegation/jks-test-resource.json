@@ -1,0 +1,66 @@
+{
+  "from": [
+    {
+      "id": "urn:altinn:organizationnumber",
+      "value": "991825827"
+    }
+  ],
+  "to": [
+    {
+      "id": "urn:altinn:ssn",
+      "value": "50019992"
+    }
+  ],
+  "rightDelegationResults": [
+    {
+      "rightKey": "jks-test-resource/read",
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-503"
+        }
+      ],
+      "action": "read",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "rightKey": "jks-test-resource/write",
+      "resource": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "appid-503"
+        }
+      ],
+      "action": "write",
+      "status": "Delegated",
+      "details": [
+        {
+          "code": "",
+          "description": "",
+          "parameters": {
+            "roleRequirementsMatches": [
+              {
+                "id": "",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

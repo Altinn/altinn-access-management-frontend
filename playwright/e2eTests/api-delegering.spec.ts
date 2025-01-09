@@ -190,9 +190,9 @@ test.describe('API-Delegations to organization user', () => {
     await apiDelegations.applyButton.click();
 
     const apiNames = [
-      'AuthorizedParties: Mainunit to Organization Maskinporten Schema for utviklingstester',
+      'Maskinporten Schema - AM - K6',
+      'Automation Test Delegation Scheme',
       'Automation Regression',
-      'AuthorizedParties: Subunit to Organization Maskinporten Schema for utviklingstester',
     ];
 
     await apiDelegations.selectApiAccess(apiNames);

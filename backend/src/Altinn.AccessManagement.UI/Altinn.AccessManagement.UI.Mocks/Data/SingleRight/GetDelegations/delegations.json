@@ -142,5 +142,87 @@
         ]
       }
     ]
+  },
+  {
+    "from": [
+      {
+        "id": "urn:altinn:organizationnumber",
+        "value": "777777777"
+      }
+    ],
+    "to": [
+      {
+        "id": "urn:altinn:ssn",
+        "value": "50019992"
+      }
+    ],
+    "rightDelegationResults": [
+      {
+        "rightKey": "jks-test-resource/read",
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "jks-test-resource"
+          }
+        ],
+        "action": "read",
+        "status": "Delegated",
+        "details": [
+          {
+            "code": "",
+            "description": "",
+            "parameters": {
+              "roleRequirementsMatches": [
+                {
+                  "id": "",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "from": [
+      {
+        "id": "urn:altinn:organizationnumber",
+        "value": "777777777"
+      }
+    ],
+    "to": [
+      {
+        "id": "urn:altinn:ssn",
+        "value": "50019992"
+      }
+    ],
+    "rightDelegationResults": [
+      {
+        "rightKey": "ske-innrapportering-boligsameie/write",
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ],
+        "action": "write",
+        "status": "Delegated",
+        "details": [
+          {
+            "code": "",
+            "description": "",
+            "parameters": {
+              "roleRequirementsMatches": [
+                {
+                  "id": "",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

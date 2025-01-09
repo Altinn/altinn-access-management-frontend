@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -51,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse", "appid-503.json");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponseV0", "appid-503.json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -89,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse", "a3-app.json");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponseV0", "a3-app.json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -134,7 +135,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "999 999 999";
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponse", "3225.json");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationAccessCheckResponseV0", "3225.json");
             List<DelegationResponseData> expectedResponse = Util.GetMockData<List<DelegationResponseData>>(path);
 
             List<IdValuePair> resource = new List<IdValuePair>
@@ -310,181 +311,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
-
-        /// <summary>
-        /// Test case: GetSingleRightsForUser returns the single-rights for a user
-        /// Expected: GetSingleRightsForUser returns the single-rights for a user
-        /// </summary>
-        [Fact]
-        public async Task GetSingleRightsForUser_returnsExpectedRights()
-        {
-            // Arrange
-            string partyId = "999 999 999";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-
-            // Expected response data
-            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
-            string content = File.ReadAllText(Path.Combine(path));
-            List<ResourceDelegation> expectedResponse = JsonSerializer.Deserialize<List<ResourceDelegation>>(content, options);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
-            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
-
-            // Assert
-            Assert.Equal(expectedResponse.Count, actualResponse.Count);
-            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Resource).ToList(), actualResponse.Select(r => r.Resource).ToList(), AssertionUtil.AssertEqual);
-            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Delegation).ToList().ToList(), actualResponse.Select(r => r.Delegation).ToList(), AssertionUtil.AssertEqual);
-
-        }
-
-
-        /// <summary>
-        ///    Test case: GetSingleRightsForUser handles error
-        ///    Expected: GetSingleRightsForUser returns internal server error
-        /// </summary>
-        [Fact]
-        public async Task GetSingleRightsForUser_handles_error()
-        {
-            // Arrange
-            string partyId = "********";
-            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///  Test case: Call RevokeResourceAccess with non-existent resource
-        ///  Expected: RevokeResourceAccess returns internal server error when revoke request fails
-        /// </summary>
-        [Fact]
-        public async Task RevokeResourceAccess_handles_error()
-        {
-            // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "invalid_appid";
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: RevokeResourceAccess revokes the resource of a user
-        ///    Expected: RevokeResourceAccess returns ok on valid input
-        /// </summary>
-        [Fact]
-        public async Task RevokeResourceAccess_returns_ok_on_valid_input()
-        {
-            // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "appid-502";
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-        }
-
-        /// <summary>
-        ///    Test case: EditResourceAccess successfully makes the requested edits
-        ///    Expected: EditResourceAccess returns ok with no failed edits
-        /// </summary>
-        [Fact]
-        public async Task EditResourceAccess_returns_ok_on_valid_input()
-        {
-            // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "appid-503";
-
-            RightChanges edits = new RightChanges()
-            {
-                RightsToDelegate = new List<string> { "appid-503/read", "appid-503/write" },
-                RightsToRevoke = new List<string> { "appid-503/sign" }
-            };
-
-            string jsonDto = JsonSerializer.Serialize(edits);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
-            List<string> failingEdits = await httpResponse.Content.ReadFromJsonAsync<List<string>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Empty(failingEdits);
-        }
-
-        /// <summary>
-        ///    Test case: Backend returns unsuccessfull edits
-        ///    Expected: EditResourceAccess returns ok but with failed edits
-        /// </summary>
-        [Fact]
-        public async Task EditResourceAccess_returns_unsuccessfull_edits()
-        {
-            // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "appid-502";
-
-            List<string> expectedResult = new List<string> { "appid-502/read", "appid-502/write" };
-
-            RightChanges edits = new RightChanges()
-            {
-                RightsToDelegate = new List<string> { "appid-502/read" },
-                RightsToRevoke = new List<string> { "appid-502/write" }
-            };
-
-            string jsonDto = JsonSerializer.Serialize(edits);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
-            List<string> failingEdits = await httpResponse.Content.ReadFromJsonAsync<List<string>>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(failingEdits, expectedResult);
-        }
-
-        /// <summary>
-        ///    Test case: An internal error happens
-        ///    Expected: EditResourceAccess returns 500 Internal Server Error
-        /// </summary>
-        [Fact]
-        public async Task EditResourceAccess_returns_handles_internal_errors()
-        {
-            // Arrange
-            string from = "urn:altinn:organization:uuid:cd35779b-b174-4ecc-bbef-ece13611be7f";
-            string to = "urn:altinn:person:uuid:5c0656db-cf51-43a4-bd64-6a91c8caacfb";
-            string resourceId = "invalid-resource";
-
-            RightChanges edits = new RightChanges()
-            {
-                RightsToDelegate = new List<string> { "appid-502/write" },
-                RightsToRevoke = new List<string> { "appid-502/read" }
-            };
-
-            string jsonDto = JsonSerializer.Serialize(edits);
-            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
-        }
-
         /// <summary>
         ///     Test case: CreateDelegation delegates the actions of an altinn 2 form
         ///     Expected: CreateDelegation returns the delegated actions of the altinn 2 form
@@ -648,9 +474,321 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
 
+
+        // ----------------------------
+        //// New GUI
+        // ----------------------------
+
+        /// <summary>
+        ///     Test case: Successfully perform delegationcheck on a resource
+        ///     Expected: Returns OK and the checked accesses of the given resource
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_ReturnsValid()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "appid-503";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
+            List<DelegationCheckedRightFE> expectedResponse = Util.GetMockData<List<DelegationCheckedRightFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+            List<DelegationCheckedRightFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<DelegationCheckedRightFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: Try to perform delegation check on a resource that does not exist
+        ///     Expected: Returns a non-successfull status
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InvalidResource()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InternalServerError()
+        {
+            // Arrange
+            string from = "00000000-0000-0000-0000-000000000000";
+            string resource = "appid-503";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{from}/delegationcheck/{resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully perform delegation of the rights on a specified resource
+        ///     Expected: Returns OK, with the output of the delegation
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_Success()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resource = "appid-503";
+            List<string> rightKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "CreateDelegation", "appid-503.json");
+            DelegationOutput expectedResponse = Util.GetMockData<DelegationOutput>(path);
+
+            string jsonRights = JsonSerializer.Serialize(rightKeys);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/delegate/{resource}", content);
+            DelegationOutput actualResponse = await httpResponse.Content.ReadFromJsonAsync<DelegationOutput>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: Try to perform delegation of the rights on a non-existent resource
+        ///     Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_InvalidResource()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resource = "non-existing-resource";
+            List<string> rightKeys = new List<string> { "non-existing-resource/read", "non-existing-resource/write" };
+
+            string jsonRights = JsonSerializer.Serialize(rightKeys);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/delegate/{resource}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_InternalServerError()
+        {
+            // Arrange
+            string from = "00000000-0000-0000-0000-000000000000";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resource = "appid-503";
+            List<string> rightKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string jsonRights = JsonSerializer.Serialize(rightKeys);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/delegate/{resource}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+
+        /// <summary>
+        /// Test case: GetSingleRightsForUser returns the single-rights for a user
+        /// Expected: GetSingleRightsForUser returns the single-rights for a user
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsForUser_returnsExpectedRights()
+        {
+            // Arrange
+            string partyId = "999 999 999";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            // Expected response data
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
+            string content = File.ReadAllText(Path.Combine(path));
+            List<ResourceDelegation> expectedResponse = JsonSerializer.Deserialize<List<ResourceDelegation>>(content, options);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Resource).ToList(), actualResponse.Select(r => r.Resource).ToList(), AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedResponse.Select(r => r.Delegation).ToList().ToList(), actualResponse.Select(r => r.Delegation).ToList(), AssertionUtil.AssertEqual);
+
+        }
+
+
+        /// <summary>
+        ///    Test case: GetSingleRightsForUser handles error
+        ///    Expected: GetSingleRightsForUser returns internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsForUser_handles_error()
+        {
+            // Arrange
+            string partyId = "********";
+            string userUUID = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/{partyId}/rightholder/{userUUID}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///  Test case: Call RevokeResourceAccess with non-existent resource
+        ///  Expected: RevokeResourceAccess returns internal server error when revoke request fails
+        /// </summary>
+        [Fact]
+        public async Task RevokeResourceAccess_handles_error()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "invalid_appid";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: RevokeResourceAccess revokes the resource of a user
+        ///    Expected: RevokeResourceAccess returns ok on valid input
+        /// </summary>
+        [Fact]
+        public async Task RevokeResourceAccess_returns_ok_on_valid_input()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/revoke");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: EditResourceAccess successfully makes the requested edits
+        ///    Expected: EditResourceAccess returns ok with no failed edits
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_ok_on_valid_input()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-503";
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-503/read", "appid-503/write" },
+                RightsToRevoke = new List<string> { "appid-503/sign" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
+            List<string> failingEdits = await httpResponse.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Empty(failingEdits);
+        }
+
+        /// <summary>
+        ///    Test case: Backend returns unsuccessfull edits
+        ///    Expected: EditResourceAccess returns ok but with failed edits
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_unsuccessfull_edits()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "appid-502";
+
+            List<string> expectedResult = new List<string> { "appid-502/read", "appid-502/write" };
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-502/read" },
+                RightsToRevoke = new List<string> { "appid-502/write" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
+            List<string> failingEdits = await httpResponse.Content.ReadFromJsonAsync<List<string>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(failingEdits, expectedResult);
+        }
+
+        /// <summary>
+        ///    Test case: An internal error happens
+        ///    Expected: EditResourceAccess returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_handles_internal_errors()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string to = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            string resourceId = "invalid-resource";
+
+            RightChanges edits = new RightChanges()
+            {
+                RightsToDelegate = new List<string> { "appid-502/write" },
+                RightsToRevoke = new List<string> { "appid-502/read" }
+            };
+
+            string jsonDto = JsonSerializer.Serialize(edits);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/{from}/{to}/{resourceId}/edit", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
         private int CountMatches(List<DelegationResponseData> actualResponses, string expectedResponseFileName)
         {
-            string path = Path.Combine(mockFolder, "Data", "SingleRight", "DelegationAccessCheckResponse", expectedResponseFileName);
+            string path = Path.Combine(mockFolder, "Data", "SingleRight", "DelegationAccessCheckResponseV0", expectedResponseFileName);
 
             List<DelegationResponseData> expectedResponses = Util.GetMockData<List<DelegationResponseData>>(path);
             int countMatches = 0;
