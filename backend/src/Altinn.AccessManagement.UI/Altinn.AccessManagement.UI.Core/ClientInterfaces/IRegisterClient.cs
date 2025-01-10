@@ -24,5 +24,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// A list of party information corresponding to the provided uuids
         /// </returns>
         Task<List<Party>> GetPartyList(List<Guid> uuidList);
+
+        /// <summary>
+        /// Looks up party name for a list of orgNumbers
+        /// </summary>
+        /// <param name="orgNumbers">The list of organisation numbers to be looked up</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        /// A list of party organisation numbers with corresponding names
+        /// </returns>
+        Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken = default);
     }
 }

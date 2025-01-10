@@ -110,5 +110,38 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string endpointUrl = $"parties/nameslookup";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext!, _platformSettings.JwtCookieName!);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                PartyNamesLookup lookupNames = new ()
+                {
+                    Parties = orgNumbers.Where(x => x.Length == 9).Select(x => new PartyLookup() { OrgNo = x }).ToList()
+                };
+                StringContent requestContent = new (JsonSerializer.Serialize(lookupNames, _serializerOptions), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestContent, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<PartyNamesLookupResult>(responseContent, _serializerOptions)?.PartyNames;
+                }
+
+                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyNames // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyNames // Exception");
+                throw;
+            }
+        }
     }
 }
