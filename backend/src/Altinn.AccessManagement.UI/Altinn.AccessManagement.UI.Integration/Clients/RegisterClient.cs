@@ -1,12 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Altinn.Platform.Register.Models;
 using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
@@ -83,6 +86,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
+        public async Task<Party> GetPartyForPerson(string ssn)
+        {
+            string endpointUrl = $"parties/lookup";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var accessToken = await _accessTokenProvider.GetAccessToken();
+
+            StringContent requestBody = new StringContent(JsonSerializer.Serialize(new PartyLookup { Ssn = ssn }, _serializerOptions), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Party>(response, _logger, "RegisterClient // GetPartyForPerson");
+        }
+
+        /// <inheritdoc/>
         public async Task<List<Party>> GetPartyList(List<Guid> uuidList)
         {
             try
@@ -109,6 +127,24 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyForOrganization // Exception");
                 throw;
             }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Person> GetPerson(string ssn, string lastname)
+        {
+            string endpointUrl = $"persons";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            var platformAccessToken = await _accessTokenProvider.GetAccessToken();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, endpointUrl);
+            request.Headers.Add("X-Ai-NationalIdentityNumber", ssn);
+            request.Headers.Add("X-Ai-LastName", lastname);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Headers.Add("PlatformAccessToken", platformAccessToken);
+
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<Person>(response);
         }
     }
 }

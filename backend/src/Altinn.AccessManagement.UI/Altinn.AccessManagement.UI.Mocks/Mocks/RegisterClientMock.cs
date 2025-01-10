@@ -46,5 +46,34 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             return Task.FromResult(new List<Party> { });
         }
+
+        /// <inheritdoc/>
+        public async Task<Person> GetPerson(string ssn, string lastname)
+        {
+            Person person = null;
+            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Persons", "persons.json");
+            if (File.Exists(testDataPath))
+            {
+                string content = File.ReadAllText(testDataPath);
+                List<Person> personList = JsonSerializer.Deserialize<List<Person>>(content);
+                person = personList?.FirstOrDefault(p => p.SSN == ssn && p.LastName == lastname);
+            }
+            return await Task.FromResult(person);
+        }
+
+        /// <inheritdoc/>
+        public async Task<Party> GetPartyForPerson(string ssn)
+        {
+            Party party = null;
+            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
+            if (File.Exists(testDataPath))
+            {
+                string content = File.ReadAllText(testDataPath);
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content);
+                party = partyList?.FirstOrDefault(p => p.SSN == ssn);
+            }
+
+            return await Task.FromResult(party);
+        }
     }
 }

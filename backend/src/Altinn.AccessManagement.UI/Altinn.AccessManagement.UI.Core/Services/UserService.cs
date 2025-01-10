@@ -1,10 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
-using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Platform.Profile.Models;
@@ -22,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
+        private readonly IRegisterClient _registerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="APIDelegationService"/> class.
@@ -30,16 +27,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="profileClient">handler for profile client</param>
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
+        /// <param name="registerClient">handler for register client</param>
         public UserService(
             ILogger<IAPIDelegationService> logger,
             IProfileClient profileClient,
             IAccessManagementClient accessManagementClient,
-            IAccessManagementClientV0 accessManagementClientV0)
+            IAccessManagementClientV0 accessManagementClientV0,
+            IRegisterClient registerClient)
         {
             _logger = logger;
             _profileClient = profileClient;
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
+            _registerClient = registerClient;
         }
 
         /// <inheritdoc/>
@@ -68,6 +68,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
         {
             return _accessManagementClient.GetRightHolderAccesses(reporteeUuid, rightHolderUuid);
+        }
+
+        /// <inheritdoc/>
+        public async Task<Guid?> ValidatePerson(string ssn, string lastname)
+        {
+            // Check that a person with the provided ssn and last name exists 
+            Person person = await _registerClient.GetPerson(ssn, lastname);
+
+            if (person == null)
+            {
+                return null;
+            }
+
+            Party personParty = await _registerClient.GetPartyForPerson(ssn);
+
+            return personParty?.PartyUuid;
         }
     }
 }
