@@ -1,0 +1,52 @@
+[
+  {
+    "systemId": "fiken_demo_product",
+    "systemVendorOrgNumber": "913312465",
+    "systemVendorOrgName": "FIKEN",
+    "name": {
+      "en": "Fiken",
+      "nb": "Fiken",
+      "nn": "Fiken"
+    },
+    "description": {
+      "en": "Fiken",
+      "nb": "Fiken",
+      "nn": "Fiken"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "systemId": "991825827_smartcloud",
+    "systemVendorOrgNumber": "991825827",
+    "systemVendorOrgName": "SMARTCLOUD",
+    "name": {
+      "en": "SmartCloud",
+      "nb": "SmartCloud",
+      "nn": "Smart SKY"
+    },
+    "description": {
+      "en": "SmartCloud Rocks",
+      "nb": "SmartCloud er verdens beste system.",
+      "nn": "SmartSky er vestlandets beste system"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ]
+      }
+    ]
+  }
+]
