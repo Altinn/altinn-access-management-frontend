@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -38,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetSystems checks the all systems in the system register are returned
+        ///     Test case: GetSystems checks that all systems in the system register are returned
         ///     Expected: GetSystems returns the systems in the system register
         /// </summary>
         [Fact]
@@ -51,6 +52,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister");
             List<RegisteredSystem> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RegisteredSystem>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetSystemRights checks that all system rights for requested system are returned
+        ///     Expected: GetSystemRights returns the system rights for the requested system
+        /// </summary>
+        [Fact]
+        public async Task GetSystemRights_ReturnsRights()
+        {
+            // Arrange
+            string path = Path.Combine(_expectedDataPath, "SystemRegister", "systemRights.json");
+            List<ServiceResourceFE> expectedResponse = Util.GetMockData<List<ServiceResourceFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister/rights/1");
+            List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
