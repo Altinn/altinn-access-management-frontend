@@ -9,6 +9,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class RegisterClientMock : IRegisterClient
     {
+        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
         /// </summary>
@@ -40,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, options);
                 return Task.FromResult(new List<Party>() { partyList?.FirstOrDefault(p => p.PartyUuid == uuidList[0]) });
             }
 
@@ -53,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, options);
                 List<PartyName> partyNames = partyList?.Select(p => 
                 {
                     return new PartyName { 
