@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="accessTokenProvider">the handler for access token generator</param>
         public SystemRegisterClient(
             HttpClient httpClient, 
-            ILogger<RegisterClient> logger,
+            ILogger<SystemRegisterClient> logger,
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings, 
             IAccessTokenProvider accessTokenProvider)
