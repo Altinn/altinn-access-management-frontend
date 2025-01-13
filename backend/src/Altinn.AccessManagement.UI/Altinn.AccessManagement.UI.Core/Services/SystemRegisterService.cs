@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         
         private static List<string> GetResourceIdsFromRights(IEnumerable<Right> rights)
         {
-            List<string> resourceIds = [];
+            List<string> resourceIds = new List<string>();
             foreach (Right right in rights)
             {
                 string resourceId = right.Resource.Find(x => x.Id == "urn:altinn:resource")?.Value;

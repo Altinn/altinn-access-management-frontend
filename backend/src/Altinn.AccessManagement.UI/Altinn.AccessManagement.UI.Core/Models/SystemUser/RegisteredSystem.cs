@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// <summary>
         /// The array of Rights versus System Provider's Resources needed to use this Registered System
         /// </summary>
-        public List<Right> Rights { get; set; } = [];
+        public List<Right> Rights { get; set; } = new List<Right>();
 
         /// <summary>
         /// True if the registered system is visible to the user in the UI
