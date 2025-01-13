@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
-        public async Task<ActionResult> GetListOfRegisteredSystems(CancellationToken cancellationToken = default)
+        public async Task<ActionResult> GetListOfRegisteredSystems(CancellationToken cancellationToken)
         {
             List<RegisteredSystem> lista = await _systemRegisterService.GetSystems(cancellationToken);
 

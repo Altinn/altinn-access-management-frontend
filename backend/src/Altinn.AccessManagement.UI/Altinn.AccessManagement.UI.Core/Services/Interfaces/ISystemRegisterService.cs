@@ -26,6 +26,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// A list of frontend resource objects (with logo)
         /// </returns>
-        Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken);
+        Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken = default);
     }
 }
