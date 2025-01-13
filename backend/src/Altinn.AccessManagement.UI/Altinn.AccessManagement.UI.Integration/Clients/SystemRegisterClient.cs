@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
@@ -15,6 +16,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// <summary>
     ///     Client implementation for integration with the System Register
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class SystemRegisterClient : ISystemRegisterClient
     {
         private readonly ILogger _logger;
