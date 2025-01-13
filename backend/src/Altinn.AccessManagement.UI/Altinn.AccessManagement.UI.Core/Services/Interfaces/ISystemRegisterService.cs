@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// A list of all visible, non-deleted registered systems
         /// </returns>
-        Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken = default);
+        Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken);
 
         /// <summary>
         /// Get rights of a specific system in the system register
@@ -26,6 +26,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// A list of frontend resource objects (with logo)
         /// </returns>
-        Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken = default);
+        Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken);
     }
 }

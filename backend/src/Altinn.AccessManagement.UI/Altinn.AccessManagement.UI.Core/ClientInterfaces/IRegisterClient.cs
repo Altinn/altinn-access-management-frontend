@@ -33,6 +33,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <returns>
         /// A list of party organisation numbers with corresponding names
         /// </returns>
-        Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken = default);
+        Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken);
     }
 }

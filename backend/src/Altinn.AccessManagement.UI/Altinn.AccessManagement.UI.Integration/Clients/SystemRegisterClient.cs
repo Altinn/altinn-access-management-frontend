@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken = default)
+        public async Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken = default)
+        public async Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken = default)
+        public async Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken)
         {
             try
             {

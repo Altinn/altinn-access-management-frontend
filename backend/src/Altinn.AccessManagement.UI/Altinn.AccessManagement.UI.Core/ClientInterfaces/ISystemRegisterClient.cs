@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <returns>
         /// A list of registered systems
         /// </returns>
-        Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken = default);
+        Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken);
 
         /// <summary>
         /// Get a specific system in the system register
@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <returns>
         /// The requested system
         /// </returns>
-        Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken = default);
+        Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get rights of a specific system in the system register
@@ -35,6 +35,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <returns>
         /// The rights of the requested system
         /// </returns>
-        Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken = default);
+        Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken);
     }
 }

@@ -21,21 +21,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken = default)
+        public Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken)
         {
             List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
             return Task.FromResult(systems[0].Rights);
         }
 
         /// <inheritdoc />
-        public Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken = default)
+        public Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken)
         {
             List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
             return Task.FromResult(systems[0]);
         }
 
         /// <inheritdoc />
-        public Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken = default)
+        public Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken)
         {
             List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
             return Task.FromResult(systems);

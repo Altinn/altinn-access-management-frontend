@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new List<Party> { });
         }
 
-        public Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken = default)
+        public Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken)
         {
             string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
             if (File.Exists(testDataPath))
