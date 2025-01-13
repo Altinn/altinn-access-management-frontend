@@ -17,6 +17,7 @@
     "nn": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om bustadsameige på vegne av deg."
   },
   "status": "Completed",
+  "resourceReferences": [],
   "contactPoints": [
     {
       "category": "Innrapportering",
@@ -50,9 +51,7 @@
   "selfIdentifiedUserEnabled": false,
   "enterpriseUserEnabled": true,
   "resourceType": "GenericAccessResource",
-  "availableForType": [
-    "LegalEntityEnterprise"
-  ],
+  "availableForType": ["LegalEntityEnterprise"],
   "authorizationReference": [
     {
       "id": "urn:altinn:resource",
