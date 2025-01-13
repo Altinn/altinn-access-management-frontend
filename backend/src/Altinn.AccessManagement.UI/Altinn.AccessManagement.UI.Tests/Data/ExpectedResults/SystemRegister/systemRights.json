@@ -21,7 +21,7 @@
     "resourceOwnerOrgNumber": "974761076",
     "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
     "resourceOwnerOrgcode": "skd",
-    "resourceReferences": [],
+    "resourceReferences": null,
     "priorityCounter": null,
     "resourceType": "GenericAccessResource",
     "authorizationReference": [
