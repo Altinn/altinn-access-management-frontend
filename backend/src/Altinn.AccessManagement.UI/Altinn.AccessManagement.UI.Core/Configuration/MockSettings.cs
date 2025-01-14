@@ -41,6 +41,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool KeyVault { get; set; }
 
         /// <summary>
+        /// Set to run SystemRegisterClient locally during runtime
+        /// </summary>
+        public bool SystemRegister { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()

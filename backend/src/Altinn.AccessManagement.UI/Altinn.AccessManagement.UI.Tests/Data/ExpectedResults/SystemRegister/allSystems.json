@@ -1,0 +1,52 @@
+[
+  {
+    "systemId": "910493353_fiken_demo_product",
+    "systemVendorOrgNumber": "910493353",
+    "systemVendorOrgName": "LEPSØY OG TONSTAD",
+    "name": {
+      "en": "Fiken",
+      "nb": "Fiken",
+      "nn": "Fiken"
+    },
+    "description": {
+      "en": "Fiken",
+      "nb": "Fiken",
+      "nn": "Fiken"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "systemId": "310144827_smartcloud",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "N/A",
+    "name": {
+      "en": "SmartCloud",
+      "nb": "SmartCloud",
+      "nn": "Smart SKY"
+    },
+    "description": {
+      "en": "SmartCloud Rocks",
+      "nb": "SmartCloud er verdens beste system.",
+      "nn": "SmartSky er vestlandets beste system"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ]
+      }
+    ]
+  }
+]

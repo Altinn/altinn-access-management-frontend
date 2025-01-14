@@ -9,6 +9,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class RegisterClientMock : IRegisterClient
     {
+        private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
         /// </summary>
@@ -40,11 +41,32 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, options);
                 return Task.FromResult(new List<Party>() { partyList?.FirstOrDefault(p => p.PartyUuid == uuidList[0]) });
             }
 
             return Task.FromResult(new List<Party> { });
+        }
+
+        public Task<List<PartyName>> GetPartyNames(IEnumerable<string> orgNumbers, CancellationToken cancellationToken)
+        {
+            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Parties", "parties.json");
+            if (File.Exists(testDataPath))
+            {
+                string content = File.ReadAllText(testDataPath);
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, options);
+                List<PartyName> partyNames = partyList?.Where(party => orgNumbers.Contains(party.OrgNumber)).Select(p => 
+                {
+                    return new PartyName { 
+                        OrgNo = p.Organization?.OrgNumber, 
+                        Name = p.Organization?.Name, 
+                        Ssn = p.SSN 
+                    };
+                }).ToList();
+                return Task.FromResult(partyNames);
+            }
+
+            return Task.FromResult(new List<PartyName> { });
         }
     }
 }
