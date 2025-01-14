@@ -120,11 +120,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext!, _platformSettings.JwtCookieName!);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
-                PartyNamesLookup lookupNames = new ()
+                PartyNamesLookup lookupNames = new()
                 {
                     Parties = orgNumbers.Where(x => x.Length == 9).Select(x => new PartyLookup() { OrgNo = x }).ToList()
                 };
-                StringContent requestContent = new (JsonSerializer.Serialize(lookupNames, _serializerOptions), Encoding.UTF8, "application/json");
+                StringContent requestContent = new(JsonSerializer.Serialize(lookupNames, _serializerOptions), Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestContent, accessToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
