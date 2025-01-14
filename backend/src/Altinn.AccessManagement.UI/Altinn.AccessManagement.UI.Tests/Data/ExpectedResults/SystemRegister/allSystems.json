@@ -1,8 +1,8 @@
 [
   {
-    "systemId": "fiken_demo_product",
-    "systemVendorOrgNumber": "913312465",
-    "systemVendorOrgName": "FIKEN",
+    "systemId": "910493353_fiken_demo_product",
+    "systemVendorOrgNumber": "910493353",
+    "systemVendorOrgName": "LEPSØY OG TONSTAD",
     "name": {
       "en": "Fiken",
       "nb": "Fiken",
@@ -25,9 +25,9 @@
     ]
   },
   {
-    "systemId": "991825827_smartcloud",
-    "systemVendorOrgNumber": "991825827",
-    "systemVendorOrgName": "SMARTCLOUD",
+    "systemId": "310202398_smartcloud",
+    "systemVendorOrgNumber": "310202398",
+    "systemVendorOrgName": "DISKRET NÆR TIGER AS",
     "name": {
       "en": "SmartCloud",
       "nb": "SmartCloud",

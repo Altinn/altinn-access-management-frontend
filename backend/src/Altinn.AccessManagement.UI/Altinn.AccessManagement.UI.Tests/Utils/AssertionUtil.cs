@@ -407,6 +407,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
             Assert.Equal(expected.SystemId, actual.SystemId);
             Assert.Equal(expected.SystemVendorOrgNumber, actual.SystemVendorOrgNumber);
+            Assert.Equal(expected.SystemVendorOrgName, actual.SystemVendorOrgName);
         }
     }
 }

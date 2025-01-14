@@ -55,7 +55,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 string content = File.ReadAllText(testDataPath);
                 List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, options);
-                List<PartyName> partyNames = partyList?.Select(p => 
+                List<PartyName> partyNames = partyList?.Where(party => orgNumbers.Contains(party.OrgNumber)).Select(p => 
                 {
                     return new PartyName { 
                         OrgNo = p.Organization?.OrgNumber, 

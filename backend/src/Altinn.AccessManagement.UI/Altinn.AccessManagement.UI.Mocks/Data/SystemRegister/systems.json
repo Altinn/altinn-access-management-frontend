@@ -1,7 +1,7 @@
 [
   {
-    "systemId": "fiken_demo_product",
-    "systemVendorOrgNumber": "913312465",
+    "systemId": "910493353_fiken_demo_product",
+    "systemVendorOrgNumber": "910493353",
     "systemVendorOrgName": "",
     "name": {
       "en": "Fiken",
@@ -26,8 +26,8 @@
     "isVisible": true
   },
   {
-    "systemId": "991825827_smartcloud",
-    "systemVendorOrgNumber": "991825827",
+    "systemId": "310202398_smartcloud",
+    "systemVendorOrgNumber": "310202398",
     "systemVendorOrgName": "",
     "name": {
       "en": "SmartCloud",
