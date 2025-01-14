@@ -128,11 +128,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="validationInput">The ssn and last name of the person to be looked up</param>
         /// <returns>The partyUuid of the person</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
         [Route("reportee/{partyId}/rightholder/person")]
         public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 Guid? partyUuid = await _userService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
