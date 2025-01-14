@@ -93,10 +93,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, _options);
                 party = partyList?.FirstOrDefault(p => p.SSN == ssn);
             }
-            else
-            {
-                throw new HttpStatusException("Status Error", "Party not found", HttpStatusCode.NotFound, null);
-            }
 
             return await Task.FromResult(party);
         }
