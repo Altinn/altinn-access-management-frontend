@@ -32,11 +32,19 @@ namespace Altinn.AccessManagement.UI.Integration.Util
             }
             else
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, serializerOptions);
-                if (error.StatusCode != response.StatusCode)
+                string responseContent = string.Empty;
+                HttpStatusException error;
+                if (response.Content.Headers.ContentLength > 0)
                 {
-                    error.StatusCode = response.StatusCode;
+                    responseContent = await response.Content.ReadAsStringAsync();
+                    error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, serializerOptions);
+                    if (error.StatusCode != response.StatusCode)
+                    {
+                        error.StatusCode = response.StatusCode;
+                    }
+                } else
+                {
+                    error = new HttpStatusException("General", response.ReasonPhrase, response.StatusCode, string.Empty);
                 }
 
                 logger?.LogError($"AccessManagement.UI // {clientMethodName} // Unexpected HttpStatusCode: {response.StatusCode}\n {responseContent}");

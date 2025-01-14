@@ -78,6 +78,11 @@ export const userInfoApi = createApi({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/person`,
         method: 'POST',
         body: JSON.stringify({ ssn, lastName }),
+        transformErrorResponse: (response: {
+          status: string | number;
+        }): { status: string | number } => {
+          return { status: response.status };
+        },
       }),
     }),
   }),

@@ -73,15 +73,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc/>
         public async Task<Guid?> ValidatePerson(string ssn, string lastname)
         {
+            // Check for bad input
+            string ssn_cleaned = ssn.Trim().Replace("\"", string.Empty);
+            string lastname_cleaned = lastname.Trim().Replace("\"", string.Empty);
+            if (ssn_cleaned.Length != 11 || !ssn_cleaned.All(char.IsDigit))
+            {
+                return null;
+            }
+
             // Check that a person with the provided ssn and last name exists 
-            Person person = await _registerClient.GetPerson(ssn, lastname);
+            Person person = await _registerClient.GetPerson(ssn_cleaned, lastname_cleaned);
 
             if (person == null)
             {
                 return null;
             }
 
-            Party personParty = await _registerClient.GetPartyForPerson(ssn);
+            Party personParty = await _registerClient.GetPartyForPerson(ssn_cleaned);
 
             return personParty?.PartyUuid;
         }

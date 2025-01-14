@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -9,6 +11,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// </summary>
     public class RegisterClientMock : IRegisterClient
     {
+        static int _numberOfFaliedPersonLookups = 0;
+        JsonSerializerOptions _options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
         /// </summary>
@@ -51,12 +59,27 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public async Task<Person> GetPerson(string ssn, string lastname)
         {
             Person person = null;
-            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Persons", "persons.json");
+            string testDataPath = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RegisterClientMock).Assembly.Location).LocalPath), "Data", "Register", "Persons", $"{ssn}.json");
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Person> personList = JsonSerializer.Deserialize<List<Person>>(content);
-                person = personList?.FirstOrDefault(p => p.SSN == ssn && p.LastName == lastname);
+                Person personContent = JsonSerializer.Deserialize<Person>(content, _options);
+                if (personContent.LastName.ToLower() == lastname.ToLower())
+                {
+                    person = personContent;
+                }
+            }
+
+            if (person == null)
+            {
+                _numberOfFaliedPersonLookups++;
+                if (_numberOfFaliedPersonLookups > 3)
+                {
+                    throw new HttpStatusException( "Status Error", "Too many failed person lookups", HttpStatusCode.TooManyRequests, null);
+                } else
+                {
+                    throw new HttpStatusException("Status Error", "Person not found", HttpStatusCode.NotFound, null);
+                }
             }
             return await Task.FromResult(person);
         }
@@ -69,8 +92,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (File.Exists(testDataPath))
             {
                 string content = File.ReadAllText(testDataPath);
-                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content);
+                List<Party> partyList = JsonSerializer.Deserialize<List<Party>>(content, _options);
                 party = partyList?.FirstOrDefault(p => p.SSN == ssn);
+            } else
+            {
+                throw new HttpStatusException("Status Error", "Party not found", HttpStatusCode.NotFound, null);
             }
 
             return await Task.FromResult(party);

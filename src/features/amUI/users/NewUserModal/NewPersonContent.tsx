@@ -1,49 +1,62 @@
 import { Button, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
-import { Alert } from '@digdir/designsystemet-react';
+import { t } from 'i18next';
 
 import { useValidateNewUserPersonMutation } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
+import { NewUserAlert } from './NewUserAlert';
 
 export const NewPersonContent = () => {
   const [ssn, setSsn] = useState('');
   const [lastName, setLastName] = useState('');
+  const [errorTime, setErrorTime] = useState<string>('');
 
-  const [validateNewPerson, { error }] = useValidateNewUserPersonMutation();
+  const [validateNewPerson, { error, isError, isLoading }] = useValidateNewUserPersonMutation();
+
+  const errorDetails =
+    isError && error && 'status' in error
+      ? {
+          status: error.status.toString(),
+          time: errorTime,
+        }
+      : null;
 
   const navigateIfValidPerson = () => {
     validateNewPerson({ ssn, lastName })
       .unwrap()
       .then((userUuid) => {
         window.location.href = `${window.location.href}/${userUuid}`;
+      })
+      .catch(() => {
+        setErrorTime(new Date().toISOString());
       });
   };
 
   return (
-    <>
-      {error && (
-        <Alert
-          color='danger'
-          className={classes.error}
-        >
-          Something failed oh no!
-          {status in error && error.status}
-        </Alert>
-      )}
+    <div className={classes.newPersonContent}>
+      {isError && <NewUserAlert error={errorDetails} />}
       <TextField
         className={classes.textField}
-        label='Fødselsnummer'
+        label={t('common.ssn')}
         size='sm'
         onChange={(e) => setSsn((e.target as HTMLInputElement).value)}
       />
       <TextField
         className={classes.textField}
-        label='Etternavn'
+        label={t('common.last_name')}
         size='sm'
         onChange={(e) => setLastName((e.target as HTMLInputElement).value)}
       />
-      <Button onClick={navigateIfValidPerson}>Valider</Button>
-    </>
+      <div className={classes.validationButton}>
+        <Button
+          disabled={ssn.length !== 11 || lastName.length < 1}
+          loading={isLoading}
+          onClick={navigateIfValidPerson}
+        >
+          {t('new_user_modal.add_button')}
+        </Button>
+      </div>
+    </div>
   );
 };

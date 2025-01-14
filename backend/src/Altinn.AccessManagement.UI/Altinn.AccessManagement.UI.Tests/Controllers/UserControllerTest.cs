@@ -1,17 +1,21 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -205,6 +209,119 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteeUuid}/rightholders/{rightHolderUuid}/accesses");
 
             Assert.False(response.IsSuccessStatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Validate a valid person
+        ///    Expected: Returns a 200 and the party uuid of the person
+        /// </summary>
+        [Fact]
+        public async Task ValidatePerson_ValidInput()
+        {
+            // Arrange
+            var partyId = 51329012;
+            var ssn = "20838198385";
+            var lastname = "Medaljong";
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            string jsonRights = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            var expectedResponse = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+
+            var response = await httpResponse.Content.ReadFromJsonAsync<Guid>();
+            Assert.Equal(expectedResponse, response);
+
+        }
+
+        /// <summary>
+        ///    Test case: Enter invalid input
+        ///    Expected: Returns a 404 not found
+        /// </summary>
+        [Fact]
+        public async Task ValidatePerson_InvalidInput()
+        {
+            // Arrange
+            var partyId = 51329012;
+            var ssn = "2083819838a"; // Invalid ssn
+            var lastname = "Medaljong";
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            string jsonRights = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Enter an ivalid ssn and last name combination
+        ///    Expected: Returns a 404 not found
+        /// </summary>
+        [Fact]
+        public async Task ValidatePerson_InvalidInputCombination()
+        {
+            // Arrange
+            var partyId = 51329012;
+            var ssn = "20838198385"; // Valid ssn
+            var lastname = "Albatross"; // Valid last name, but does not belong to person with given ssn
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            string jsonRights = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Enter invalid data too many times
+        ///    Expected: Returns a 429 - too many requests
+        /// </summary>
+        [Fact]
+        public async Task ValidatePerson_TooManyRequests()
+        {
+            // Arrange
+            var partyId = 51329012;
+            var ssn = "20838198311"; // Invalid ssn
+            var lastname = "Hansen"; // Invalid name combination
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            string jsonRights = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act - reapeat the request 4 times to lock the user
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.TooManyRequests, httpResponse.StatusCode);
         }
     }
 }
