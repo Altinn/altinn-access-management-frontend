@@ -96,14 +96,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost("{partyId}")]
         public async Task<ActionResult> Post([FromRoute] int partyId, [FromBody] NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
-            Result<string> systemUserResult = await _systemUserService.CreateSystemUser(partyId, newSystemUser, cancellationToken);
+            Result<SystemUser> systemUserResult = await _systemUserService.CreateSystemUser(partyId, newSystemUser, cancellationToken);
 
             if (systemUserResult.IsProblem)
             {
                 return systemUserResult.Problem.ToActionResult(); 
             }
 
-            return Ok(systemUserResult.Value);
+            return Ok(systemUserResult.Value.Id);
         }
 
         /// <summary>

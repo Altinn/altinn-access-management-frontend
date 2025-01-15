@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<string>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
+        public async Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             AuthorizedParty party = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
             if (party is null)
@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             Result<SystemUser> createdSystemUser = await _systemUserClient.CreateNewSystemUser(partyId, newSystemUser, cancellationToken);
 
-            return createdSystemUser.Value.Id;
+            return createdSystemUser;
         }
 
         private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, CancellationToken cancellationToken)

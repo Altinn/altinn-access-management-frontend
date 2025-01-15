@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUser>> CreateNewSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellation)
+        public Task<Result<SystemUser>> CreateNewSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationtoken)
         {
             List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
             RegisteredSystem system = systems.Find(s => s.SystemId == newSystemUser.SystemId);
@@ -71,10 +71,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory
-                = ProblemDescriptorFactory.New("AUTH");
+                = ProblemDescriptorFactory.New("AMUI");
 
             public static ProblemDescriptor SystemNotFound { get; }
-                = _factory.Create(11, HttpStatusCode.BadRequest, "System not found");
+                = _factory.Create(11, HttpStatusCode.NotFound, "System not found");
         }
     }
 }

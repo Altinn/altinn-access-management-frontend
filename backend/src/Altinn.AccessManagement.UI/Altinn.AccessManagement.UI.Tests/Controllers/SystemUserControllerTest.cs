@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -124,8 +125,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: DeleteSystemUser checks that systems user with given id for given party is deleted
-        ///     Expected: DeleteSystemUser deletes the system user with given id for given party
+        ///     Test case: PostSystemUser creates new system user for given party
+        ///     Expected: PostSystemUser new guid for created system user
         /// </summary>
         [Fact]
         public async Task PostSystemUser_ReturnsNewSystemUserId()
@@ -148,6 +149,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: PostSystemUser creates new system user for given party, for a system that does not exist
+        ///     Expected: PostSystemUser returns specific error code
+        /// </summary>
+        [Fact]
+        public async Task PostSystemUser_ReturnsSystemNotFound()
+        {
+            // Arrange
+            string expectedResponse = "AMUI-00011";
+            NewSystemUserRequest dto = new NewSystemUserRequest
+            {
+                IntegrationTitle = "NotFound",
+                SystemId = "not_found",
+            };
+
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/51329012", content);
+            AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse.ErrorCode.ToString());
         }
     }
 }
