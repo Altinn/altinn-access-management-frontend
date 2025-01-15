@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
         {
             List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemId, cancellationToken);
-            List<string> resourceIds = GetResourceIdsFromRights(rights);
+            List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
 
             IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
             IEnumerable<ServiceResource> resources = await Task.WhenAll(resourceTasks);
@@ -68,21 +68,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
         
             return ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
-        }
-        
-        private static List<string> GetResourceIdsFromRights(IEnumerable<Right> rights)
-        {
-            List<string> resourceIds = new List<string>();
-            foreach (Right right in rights)
-            {
-                string resourceId = right.Resource.Find(x => x.Id == "urn:altinn:resource")?.Value;
-                if (resourceId != null)
-                {
-                    resourceIds.Add(resourceId);
-                }
-            }
-
-            return resourceIds;
         }
     }
 }

@@ -207,6 +207,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISingleRightService, SingleRightService>();
     services.AddSingleton<IAccessPackageService, AccessPackageService>();
     services.AddSingleton<ISystemRegisterService, SystemRegisterService>();
+    services.AddSingleton<ISystemUserService, SystemUserService>();
 
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 
@@ -349,5 +350,14 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<ISystemRegisterClient, SystemRegisterClient>();
+    }
+
+    if (mockSettings.SystemUser)
+    {
+        services.AddSingleton<ISystemUserClient, SystemUserClientMock>();
+    }
+    else
+    {
+        services.AddSingleton<ISystemUserClient, SystemUserClient>();
     }
 }

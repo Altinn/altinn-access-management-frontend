@@ -46,6 +46,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool SystemRegister { get; set; }
 
         /// <summary>
+        /// Set to run SystemUserClient locally during runtime
+        /// </summary>
+        public bool SystemUser { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()
