@@ -159,7 +159,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostSystemUser_ReturnsSystemNotFound()
         {
             // Arrange
-            string expectedResponse = "AMUI-00011";
+            string expectedResponse = "AUTH-00011";
             NewSystemUserRequest dto = new NewSystemUserRequest
             {
                 IntegrationTitle = "NotFound",
