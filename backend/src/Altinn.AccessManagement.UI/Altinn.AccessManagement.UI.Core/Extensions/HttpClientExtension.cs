@@ -56,11 +56,17 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         /// <param name="authorizationToken">the authorization token (jwt).</param>
         /// <param name="requestUri">The request Uri.</param>
         /// <param name="platformAccessToken">The platformAccess tokens.</param>
+        /// <param name="languageCode">The language code.</param>
         /// <returns>A HttpResponseMessage.</returns>
-        public static Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, string authorizationToken, string requestUri, string platformAccessToken = null)
+        public static Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, string authorizationToken, string requestUri, string platformAccessToken = null, string languageCode = null)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
             request.Headers.Add("Authorization", "Bearer " + authorizationToken);
+            if (!string.IsNullOrEmpty(languageCode))
+            {
+                request.Headers.Add("Accept-Language", languageCode);
+            }
+
             if (!string.IsNullOrEmpty(platformAccessToken))
             {
                 request.Headers.Add("PlatformAccessToken", platformAccessToken);

@@ -41,6 +41,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool KeyVault { get; set; }
 
         /// <summary>
+        /// Set to mock RoleClient during runtime
+        /// </summary>
+        public bool RoleClient { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()

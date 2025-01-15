@@ -41,7 +41,7 @@
         public string OpenIdWellKnownEndpoint { get; set; }
 
         /// <summary>
-        /// Gets or sets the subscriptionkey.
+        /// Gets or sets the subscription key.
         /// </summary>
         public string SubscriptionKey { get; set; }
 
@@ -49,5 +49,10 @@
         /// Gets or sets the SubscriptionKeyHeaderName
         /// </summary>
         public string SubscriptionKeyHeaderName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the api role endpoint
+        /// </summary>
+        public string ApiRoleEndpoint { get; set; }
     }
 }

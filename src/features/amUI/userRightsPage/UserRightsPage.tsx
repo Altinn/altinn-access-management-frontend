@@ -14,6 +14,7 @@ import {
   useGetRightHolderAccessesQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -37,6 +38,9 @@ export const UserRightsPage = () => {
   const name = id ? party?.name : '';
 
   const { data: allAccesses, isLoading } = useGetRightHolderAccessesQuery(id || '');
+
+  const { data } = useGetRolesForUserQuery(id || '');
+  console.log(data);
 
   return (
     <SnackbarProvider>
