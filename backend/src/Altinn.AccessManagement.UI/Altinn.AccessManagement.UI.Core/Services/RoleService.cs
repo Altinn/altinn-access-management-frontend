@@ -40,9 +40,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<Assignment>> GetRolesForUser(string languageCode, Guid userId)
+        public async Task<List<Assignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
-            return await _roleClient.GetRolesForUser(languageCode, userId);
+            return await _roleClient.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
         }
     }
 }

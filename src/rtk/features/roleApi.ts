@@ -35,6 +35,11 @@ export interface Assignment {
   role: Role;
 }
 
+interface RoleApiRequest {
+  rightOwnerUuid: string;
+  rightHolderUuid: string;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
 
 export const roleApi = createApi({
@@ -54,8 +59,9 @@ export const roleApi = createApi({
     getRoles: builder.query<Role[], void>({
       query: () => 'roles',
     }),
-    getRolesForUser: builder.query<Assignment[], string>({
-      query: (userUuid) => `roles/user/${userUuid}`,
+    getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
+      query: ({ rightOwnerUuid, rightHolderUuid }) =>
+        `roles/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
     }),
   }),
 });

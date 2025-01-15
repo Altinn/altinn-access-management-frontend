@@ -14,11 +14,11 @@ import {
   useGetRightHolderAccessesQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
-import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
+import { UserRoles } from '../common/UserRoles/userRoles';
 
 import classes from './UserRightsPage.module.css';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
@@ -38,9 +38,6 @@ export const UserRightsPage = () => {
   const name = id ? party?.name : '';
 
   const { data: allAccesses, isLoading } = useGetRightHolderAccessesQuery(id || '');
-
-  const { data } = useGetRolesForUserQuery(id || '');
-  console.log(data);
 
   return (
     <SnackbarProvider>
@@ -71,6 +68,12 @@ export const UserRightsPage = () => {
                     </Paragraph>
                   </div>
                 </div>
+                {!!reportee?.partyUuid && !!party?.partyUuid && (
+                  <UserRoles
+                    rightOwnerUuid={reportee.partyUuid}
+                    rightHolderUuid={party.partyUuid}
+                  />
+                )}
                 <Tabs
                   defaultValue='packages'
                   size='sm'
@@ -85,7 +88,7 @@ export const UserRightsPage = () => {
                         color={chosenTab === 'packages' ? 'accent' : 'neutral'}
                         count={allAccesses.accessPackages.length}
                         maxCount={99}
-                      ></Badge>
+                      />
                       {t('user_rights_page.access_packages_title')}
                     </Tabs.Tab>
                     <Tabs.Tab value='singleRights'>
@@ -94,7 +97,7 @@ export const UserRightsPage = () => {
                         color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
                         count={allAccesses.services.length}
                         maxCount={99}
-                      ></Badge>
+                      />
                       {t('user_rights_page.single_rights_title')}
                     </Tabs.Tab>
                   </Tabs.List>

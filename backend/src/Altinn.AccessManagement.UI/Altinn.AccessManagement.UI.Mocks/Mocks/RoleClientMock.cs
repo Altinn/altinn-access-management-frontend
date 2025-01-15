@@ -35,12 +35,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<List<Assignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
-            List<Assignment> allAssignments = Util.GetMockData<List<Assignment>>($"{dataFolder}/Roles/GetRoles/{rightHolderUuid}.json");
-            if (allAssignments == null)
-            {
+            try {
+                List<Assignment> allAssignments = Util.GetMockData<List<Assignment>>($"{dataFolder}/Roles/GetRoles/{rightHolderUuid}.json");
+                if (allAssignments == null)
+                {
+                    return Task.FromResult(new List<Assignment>());
+                }
+                return Task.FromResult(allAssignments);
+            } catch {
                 return Task.FromResult(new List<Assignment>());
             }
-            return Task.FromResult(allAssignments);
         }
     }
 }

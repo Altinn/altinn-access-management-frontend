@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>All search results</returns>
         [HttpGet]
         [Authorize]
-        [Route("roles/{rightOwnerUuid}/{rightHolderUuid}")]
+        [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
         public async Task<ActionResult<List<Assignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
         {
             var httpContext = _httpContextAccessor.HttpContext;
