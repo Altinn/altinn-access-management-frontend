@@ -41,7 +41,8 @@ namespace Altinn.AccessManagement.UI.Integration.Util
                     {
                         error.StatusCode = response.StatusCode;
                     }
-                } else
+                }
+                else
                 {
                     error = new HttpStatusException("General", response.ReasonPhrase, response.StatusCode, string.Empty);
                 }
