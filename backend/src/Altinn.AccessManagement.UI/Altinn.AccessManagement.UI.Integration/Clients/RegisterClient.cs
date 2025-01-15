@@ -95,7 +95,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(new PartyLookup { Ssn = ssn }, _serializerOptions), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
-            string responseContent = await response.Content.ReadAsStringAsync();
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Party>(response, _logger, "RegisterClient // GetPartyForPerson");
         }
