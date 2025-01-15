@@ -121,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> Delete([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             bool result = await _systemUserService.DeleteSystemUser(partyId, systemUserGuid, cancellationToken);
-            if (result is true)
+            if (result)
             {
                 return Accepted();
             }

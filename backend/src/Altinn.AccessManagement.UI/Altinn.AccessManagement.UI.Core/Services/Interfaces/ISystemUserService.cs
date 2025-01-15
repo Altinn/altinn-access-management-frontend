@@ -32,10 +32,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// Create a new system user
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
-        /// <param name="newSystemUserDescriptor">Object with IntegrationTitle and SystemId for new system user</param>
+        /// <param name="newSystemUser">Object with IntegrationTitle and SystemId for new system user</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Created system user, or specific error if creation fails</returns>
-        Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUserDescriptor, CancellationToken cancellationToken);
+        Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken);
 
         /// <summary>
         /// Deletes system user
