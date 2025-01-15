@@ -108,6 +108,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 lista.Add(new SystemUserFE
                 {
                     Id = systemUser.Id,
+                    IntegrationTitle = systemUser.IntegrationTitle,
                     PartyId = systemUser.PartyId,
                     SupplierOrgNo = systemUser.SupplierOrgNo,
                     SystemId = systemUser.SystemId,

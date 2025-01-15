@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The System User could also denote Single Rights or Rights Packages delegated to it
     /// from the Party; for the purpose of integrating the Product with the Service.
     /// </summary>
-    [Route("authfront/api/v1/systemuser")]
+    [Route("accessmanagement/api/v1/systemuser")]
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class SystemUserController : ControllerBase
@@ -126,7 +126,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return Accepted();
             }
 
-            return NoContent();
+            return NotFound();
         }
     }
 }

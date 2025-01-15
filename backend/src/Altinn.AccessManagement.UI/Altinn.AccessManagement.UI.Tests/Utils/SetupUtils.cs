@@ -134,6 +134,30 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return factory.CreateClient();
         }
 
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for AccessPackageController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserController> customFactory)
+        {
+            WebApplicationFactory<SystemUserController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<ISystemUserClient, SystemUserClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
+                    services.AddTransient<IRegisterClient, RegisterClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient();
+        }
+
 
         /// <summary>
         ///     Adds an auth cookie to the request message

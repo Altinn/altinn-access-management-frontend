@@ -32,7 +32,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             SystemUser createdSystemUser = new SystemUser
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = "eb9c9edf-a32f-424c-b475-6d47a0e7621f",
                 PartyId = partyId.ToString(),
                 IntegrationTitle = newSystemUser.IntegrationTitle,
                 SystemId = newSystemUser.SystemId,

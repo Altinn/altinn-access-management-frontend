@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.Platform.Register.Models;
@@ -408,6 +409,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.SystemId, actual.SystemId);
             Assert.Equal(expected.SystemVendorOrgNumber, actual.SystemVendorOrgNumber);
             Assert.Equal(expected.SystemVendorOrgName, actual.SystemVendorOrgName);
+        }
+
+        public static void AssertEqual(SystemUserFE expected, SystemUserFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.SystemId, actual.SystemId);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.IntegrationTitle, actual.IntegrationTitle);
+            Assert.Equal(expected.SupplierName, actual.SupplierName);
+            Assert.Equal(expected.SupplierOrgNo, actual.SupplierOrgNo);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
     }
 }
