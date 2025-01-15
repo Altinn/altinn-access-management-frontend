@@ -323,5 +323,29 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.TooManyRequests, httpResponse.StatusCode);
         }
+
+        /// <summary>
+        ///    Test case: Sending the wrong input in body triggers a babd request
+        ///    Expected: Returns a 400 - bad request
+        /// </summary>
+        [Fact]
+        public async Task ValidatePerson_BadRequest()
+        {
+            // Arrange
+            var partyId = 51329012;
+            string input = "The wrong input";
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string jsonRights = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act 
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
     }
 }
