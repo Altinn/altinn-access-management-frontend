@@ -64,7 +64,12 @@
     "has_poa": "Has power of attorney",
     "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload.",
     "show_more": "Show more",
-    "show_less": "Show less"
+    "show_less": "Show less",
+    "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
+    "time_of_error": "Error occurred at time: {{time}}",
+    "error_status": "Status: {{status}}",
+    "ssn": "National identity number",
+    "last_name": "Last name"
   },
   "header": {
     "menu-label": "Menu",
@@ -270,6 +275,15 @@
       "access_list_service": "Who can use this service is determined by {{resourceOwner}}, and {{reportee}} has not been given that opportunity. We recommend contacting {{resourceOwner}}.",
       "missing_rights": "You cannot delegate this authorization to others because you do not have it yourself. The general manager or main administrator can help you with this."
     }
+  },
+  "new_user_modal": {
+    "not_found_error": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
+    "too_many_requests_error": "You have been blocked due to too many failing attempts. Try again in an hour.",
+    "person": "Person",
+    "organization": "Organization",
+    "modal_title": "Add new person or organization",
+    "trigger_button": "Add user",
+    "add_button": "Add user"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
