@@ -93,5 +93,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return personParty?.PartyUuid;
         }
+
+        /// <inheritdoc/>
+        public async Task<Guid?> ValidateOrg(string orgNumber, string orgName)
+        {
+            // Check for bad input
+            string orgNumber_cleaned = orgNumber.Trim().Replace("\"", string.Empty);
+            string orgName_cleaned = orgName.Trim().Replace("\"", string.Empty);
+            if (orgNumber_cleaned.Length != 9 || !orgNumber_cleaned.All(char.IsDigit))
+            {
+                return null;
+            }
+
+            // Check that an org with the provided name and number exists
+            Party orgParty = await _registerClient.GetPartyForOrganization(orgNumber_cleaned);
+
+            if (orgParty?.OrgNumber != orgNumber_cleaned)
+            {
+                return null;
+            }
+
+            return orgParty.PartyUuid;
+        }
     }
 }

@@ -5,14 +5,21 @@ import { useTranslation } from 'react-i18next';
 export interface NewUserAlertProps {
   /*** The technical error if one has occured */
   error?: { status: string; time: string } | null;
+  /*** The type of user to be added */
+  userType: 'person' | 'org';
 }
 
-export const NewUserAlert = ({ error }: NewUserAlertProps) => {
+export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   const { t } = useTranslation();
   let errorText;
 
   if (error && error.status === '404') {
-    errorText = <Paragraph size='sm'>{t('new_user_modal.not_found_error')}</Paragraph>;
+    errorText =
+      userType == 'person' ? (
+        <Paragraph size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>
+      ) : (
+        <Paragraph size='sm'>{t('new_user_modal.not_found_error_org')}</Paragraph>
+      );
   } else if (error && error.status === '429') {
     errorText = <Paragraph size='sm'>{t('new_user_modal.too_many_requests_error')}</Paragraph>;
   } else if (error) {

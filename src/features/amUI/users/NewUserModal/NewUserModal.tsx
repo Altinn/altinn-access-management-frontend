@@ -5,6 +5,7 @@ import { t } from 'i18next';
 
 import { NewPersonContent } from './NewPersonContent';
 import classes from './NewUserModal.module.css';
+import { NewOrgContent } from './NewOrgContent';
 
 /**
  * NewUserButton component renders a button that, when clicked, opens a modal to add a new user.
@@ -56,7 +57,9 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
         <Tabs.Panel value='person'>
           <NewPersonContent />
         </Tabs.Panel>
-        <Tabs.Panel value='org'>Kommer senere...</Tabs.Panel>
+        <Tabs.Panel value='org'>
+          <NewOrgContent />
+        </Tabs.Panel>
       </Tabs>
     </Modal>
   );

@@ -45,5 +45,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="lastname">The last name of the user</param>
         /// <returns>The person's partyUuid if ssn and lastname correspond to the same person. Returns null if matching person is not found</returns>
         Task<Guid?> ValidatePerson(string ssn, string lastname);
+
+        /// <summary>
+        /// Checks that an org with the provided name and org number exists. If they do, the org's partyUuid is returned.
+        /// </summary>
+        /// <param name="orgNumber">The org number of the organization</param>
+        /// <param name="orgName">The name of the organization</param>
+        /// <returns>The org's partyUuid if org number and name correspond to the same organization.</returns>
+        Task<Guid?> ValidateOrg(string orgNumber, string orgName);
     }
 }

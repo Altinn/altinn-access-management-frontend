@@ -162,7 +162,50 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetUserByUUID failed to fetch party information");
+                _logger.LogError(ex, "ValidatePerson failed unexpectedly");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for validating a new rightholder org through an org number and org name combination.
+        /// If the org number and name does not match, the endpoint will return 404.
+        /// If the combination is valid, the endpoint will return the partyUuid of the org.
+        /// </summary>
+        /// <param name="validationInput">The name and org number of the organization to be looked up and validated</param>
+        /// <returns>The partyUuid of the org</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("reportee/{partyId}/rightholder/organization")]
+        public async Task<ActionResult<Guid>> ValidateOrg([FromBody] ValidateOrgInput validationInput)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                Guid? partyUuid = await _userService.ValidateOrg(validationInput.OrgNumber, validationInput.OrgName);
+
+                if (partyUuid != null)
+                {
+                    return partyUuid;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ValidateOrg failed unexpectedly");
                 return StatusCode(500);
             }
         }

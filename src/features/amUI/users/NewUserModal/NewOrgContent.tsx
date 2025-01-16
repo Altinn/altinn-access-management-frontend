@@ -2,17 +2,17 @@ import { Button, TextField } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
 
-import { useValidateNewUserPersonMutation } from '@/rtk/features/userInfoApi';
+import { useValidateNewUserOrgMutation } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
 import { NewUserAlert } from './NewUserAlert';
 
-export const NewPersonContent = () => {
-  const [ssn, setSsn] = useState('');
-  const [lastName, setLastName] = useState('');
+export const NewOrgContent = () => {
+  const [orgNumber, setOrgNumber] = useState('');
+  const [orgName, setOrgName] = useState('');
   const [errorTime, setErrorTime] = useState<string>('');
 
-  const [validateNewPerson, { error, isError, isLoading }] = useValidateNewUserPersonMutation();
+  const [validateNewOrg, { error, isError, isLoading }] = useValidateNewUserOrgMutation();
 
   const errorDetails =
     isError && error && 'status' in error
@@ -22,8 +22,8 @@ export const NewPersonContent = () => {
         }
       : null;
 
-  const navigateIfValidPerson = () => {
-    validateNewPerson({ ssn, lastName })
+  const navigateIfValidOrg = () => {
+    validateNewOrg({ orgNumber, orgName })
       .unwrap()
       .then((userUuid) => {
         window.location.href = `${window.location.href}/${userUuid}`;
@@ -37,27 +37,27 @@ export const NewPersonContent = () => {
     <div className={classes.newUserContent}>
       {isError && (
         <NewUserAlert
-          userType='person'
+          userType='org'
           error={errorDetails}
         />
       )}
       <TextField
         className={classes.textField}
-        label={t('common.ssn')}
+        label={t('common.org_number')}
         size='sm'
-        onChange={(e) => setSsn((e.target as HTMLInputElement).value)}
+        onChange={(e) => setOrgNumber((e.target as HTMLInputElement).value)}
       />
       <TextField
         className={classes.textField}
-        label={t('common.last_name')}
+        label={t('common.org_name')}
         size='sm'
-        onChange={(e) => setLastName((e.target as HTMLInputElement).value)}
+        onChange={(e) => setOrgName((e.target as HTMLInputElement).value)}
       />
       <div className={classes.validationButton}>
         <Button
-          disabled={ssn.length !== 11 || lastName.length < 1}
+          disabled={orgNumber.length !== 9 || orgName.length < 1}
           loading={isLoading}
-          onClick={navigateIfValidPerson}
+          onClick={navigateIfValidOrg}
         >
           {t('new_user_modal.add_button')}
         </Button>
