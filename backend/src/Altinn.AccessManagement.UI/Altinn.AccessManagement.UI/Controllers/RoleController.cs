@@ -14,9 +14,8 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The <see cref="RoleController"/> provides the API endpoints related to roles.
     /// </summary>
     [Route("accessmanagement/api/v1/role")]
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
-        private readonly IAccessPackageService _accessPackageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -25,9 +24,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleController"/> class
         /// </summary>
-        public RoleController(IAccessPackageService accessPackageService, IHttpContextAccessor httpContextAccessor, ILogger<RoleController> logger, IRoleService roleService)
+        public RoleController(IHttpContextAccessor httpContextAccessor, ILogger<RoleController> logger, IRoleService roleService)
         {
-            _accessPackageService = accessPackageService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _roleService = roleService;
@@ -43,16 +41,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
         public async Task<ActionResult<List<RoleAssignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
         {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                _logger.LogError("HttpContext is null");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-            }
-
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContext);
             try
             {
+                var httpContext = _httpContextAccessor.HttpContext;
+                var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContext);
                 return await _roleService.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
             }
             catch (HttpStatusException ex)

@@ -40,6 +40,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />    
         public Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
+            if (rightHolderUuid == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
             try {
                 List<RoleAssignment> allAssignments = Util.GetMockData<List<RoleAssignment>>($"{dataFolder}/Roles/GetRolesForUser/{rightHolderUuid}.json");
                 if (allAssignments == null)
