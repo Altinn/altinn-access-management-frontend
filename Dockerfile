@@ -26,7 +26,7 @@ ENV ASPNETCORE_HTTP_PORTS=80
 COPY --from=generate-accessmanagement-backend /app_output .
 COPY --from=generate-accessmanagement-frontend /build/dist/assets ./wwwroot/accessmanagement/assets
 COPY --from=generate-accessmanagement-frontend /build/src/localizations ./wwwroot/accessmanagement/localizations
-COPY --from=generate-accessmanagement-frontend /build/dist/manifest.json ./wwwroot/accessmanagement
+COPY --from=generate-accessmanagement-frontend /build/dist/.vite/manifest.json ./wwwroot/accessmanagement
 
 RUN mkdir /tmp/logtelemetry
 
