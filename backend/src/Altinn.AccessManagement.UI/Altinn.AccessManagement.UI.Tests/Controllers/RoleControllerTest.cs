@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
 
         /// <summary>
-        ///     Test case: Get roles for user that doesn't has roles
+        ///     Test case: Get roles for user that doesn't have roles
         ///     Expected: Returns users roles for the given and right holder and right owner
         /// </summary>
         [Fact]
@@ -81,8 +81,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Get roles for user that doesn't has roles
-        ///     Expected: Returns users roles for the given and right holder and right owner
+        ///     Test case: get roles returns error if error is thrown
+        ///     Expected: Returns the error  
         /// </summary>
         [Fact]
         public async Task GetRolesForUser_InternalError()
