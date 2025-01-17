@@ -76,7 +76,7 @@ export const UserRightsPage = () => {
                     >
                       for {reportee?.name}
                     </Paragraph>
-                  </div>{' '}
+                  </div>
                 </div>
 
                 <Tabs
