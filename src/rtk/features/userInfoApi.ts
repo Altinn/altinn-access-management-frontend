@@ -74,6 +74,18 @@ export const userInfoApi = createApi({
         `reportee/${getCookie('AltinnPartyUuid')}/rightholders/${rightHolderUuid}/accesses`,
       keepUnusedDataFor: 300,
     }),
+    validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
+      query: ({ ssn, lastName }) => ({
+        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/person`,
+        method: 'POST',
+        body: JSON.stringify({ ssn, lastName }),
+        transformErrorResponse: (response: {
+          status: string | number;
+        }): { status: string | number } => {
+          return { status: response.status };
+        },
+      }),
+    }),
   }),
 });
 
@@ -82,6 +94,7 @@ export const {
   useGetReporteeQuery,
   useGetRightHoldersQuery,
   useGetRightHolderAccessesQuery,
+  useValidateNewUserPersonMutation,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

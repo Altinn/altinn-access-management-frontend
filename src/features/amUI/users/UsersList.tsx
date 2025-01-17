@@ -12,6 +12,7 @@ import { List } from '@/components';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import classes from './UsersList.module.css';
+import { NewUserButton } from './NewUserModal/NewUserModal';
 
 export const UsersList = () => {
   const { t } = useTranslation();
@@ -60,17 +61,20 @@ export const UsersList = () => {
       >
         {t('users_page.user_list_heading')}
       </Heading>
-      <Search
-        className={classes.searchBar}
-        placeholder={t('users_page.user_search_placeholder')}
-        onChange={(event) => onSearch(event.target.value)}
-        onClear={() => {
-          setSearchString('');
-          setCurrentPage(1);
-        }}
-        hideLabel
-        label={t('users_page.user_search_placeholder')}
-      />
+      <div className={classes.searchAndAddUser}>
+        <Search
+          className={classes.searchBar}
+          placeholder={t('users_page.user_search_placeholder')}
+          onChange={(event) => onSearch(event.target.value)}
+          onClear={() => {
+            setSearchString('');
+            setCurrentPage(1);
+          }}
+          hideLabel
+          label={t('users_page.user_search_placeholder')}
+        />
+        <NewUserButton />
+      </div>
       <List
         spacing
         className={classes.usersListItems}

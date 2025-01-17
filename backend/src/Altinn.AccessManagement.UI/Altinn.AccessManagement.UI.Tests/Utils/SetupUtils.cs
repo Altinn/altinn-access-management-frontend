@@ -117,14 +117,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for AccessPackageController tests</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemRegisterController> customFactory)
         {
-            WebApplicationFactory<RoleController> factory = customFactory.WithWebHostBuilder(builder =>
+            WebApplicationFactory<SystemRegisterController> factory = customFactory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
-                    services.AddTransient<IProfileClient, ProfileClientMock>();
+                    services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });

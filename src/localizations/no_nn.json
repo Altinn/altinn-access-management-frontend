@@ -63,7 +63,12 @@
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
     "show_more": "Se meir",
-    "show_less": "Se mindre"
+    "show_less": "Se mindre",
+    "technical_error": "Beklagar, det har skjedd ein teknisk feil. Ver venleg å ta kontakt med Altinn brukerservice om problemet held fram.",
+    "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
+    "error_status": "Status: {{status}}",
+    "ssn": "Fødselsnummer",
+    "last_name": "Etternavn"
   },
   "header": {
     "menu-label": "Meny",
@@ -268,6 +273,15 @@
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette."
     }
+  },
+  "new_user_modal": {
+    "not_found_error": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "too_many_requests_error": "Du er blitt sperra pga for mange feilande forsøk. Du kan prøve igjen om ei time.",
+    "person": "Person",
+    "organization": "Virksemnd",
+    "modal_title": "Legg til ny person eller virksemnd",
+    "trigger_button": "Legg til brukar",
+    "add_button": "Legg til brukar"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

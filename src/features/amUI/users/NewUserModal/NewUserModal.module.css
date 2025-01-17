@@ -1,0 +1,18 @@
+.textField {
+  max-width: 22rem;
+}
+
+.modalHeading {
+  margin-bottom: 10px;
+}
+
+.validationButton {
+  margin-top: 10px;
+}
+
+.newPersonContent {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
