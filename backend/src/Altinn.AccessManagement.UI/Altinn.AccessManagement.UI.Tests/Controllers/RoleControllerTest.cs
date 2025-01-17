@@ -33,14 +33,38 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: Search with empty input
-        ///     Expected: Search returns all access packages
+        ///     Test case: Get roles for user that has roles
+        ///     Expected: Returns users roles for the given and right holder and right owner
         /// </summary>
         [Fact]
         public async Task GetRolesForUser_HasRoles()
         {
             string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
             string rightHolderUuid = "167536b5-f8ed-4c5a-8f48-0279507e53ae"; // Valid user that has role-assignments for the reportee
+            List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>> (_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/assignments/{rightOwnerUuid}/{rightHolderUuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
+            
+            AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
+           
+        }
+
+
+        /// <summary>
+        ///     Test case: Get roles for user that doesn't has roles
+        ///     Expected: Returns users roles for the given and right holder and right owner
+        /// </summary>
+        [Fact]
+        public async Task GetRolesForUser_HasNoRoles()
+        {
+            string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; // Valid user that doesn't has role-assignments for the reportee
             List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>> (_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
 
             // Act
