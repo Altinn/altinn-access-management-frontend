@@ -40,7 +40,7 @@ interface RoleApiRequest {
   rightHolderUuid: string;
 }
 
-const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
+const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
 
 export const roleApi = createApi({
   reducerPath: 'roleApi',
@@ -56,16 +56,13 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getRoles: builder.query<Role[], void>({
-      query: () => 'roles',
-    }),
     getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
       query: ({ rightOwnerUuid, rightHolderUuid }) =>
-        `role/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
+        `/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
     }),
   }),
 });
 
-export const { useGetRolesQuery, useGetRolesForUserQuery } = roleApi;
+export const { useGetRolesForUserQuery } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;
