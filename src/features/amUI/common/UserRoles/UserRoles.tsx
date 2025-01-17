@@ -19,7 +19,7 @@ export const UserRoles = ({ rightOwnerUuid, rightHolderUuid }: UserRulesProps) =
     <div className={classes.userRoles}>
       {data?.map((role) => (
         <Badge
-          color={'subtle' as BadgeColor}
+          color={'info' as BadgeColor}
           label={role.role.name}
           key={role.id}
         />

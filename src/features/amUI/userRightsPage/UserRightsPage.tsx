@@ -18,7 +18,7 @@ import { amUIPath } from '@/routes/paths';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
-import { UserRoles } from '../common/UserRoles/userRoles';
+import { UserRoles } from '../common/UserRoles/UserRoles';
 
 import classes from './UserRightsPage.module.css';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
@@ -53,27 +53,32 @@ export const UserRightsPage = () => {
                     type={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
                   <div>
-                    <Heading
-                      level={1}
-                      size='sm'
-                      className={classes.heading}
-                    >
-                      {party?.name}
-                    </Heading>
+                    <div className={classes.headingContainer}>
+                      <Heading
+                        level={1}
+                        size='sm'
+                        className={classes.heading}
+                      >
+                        {party?.name}
+                      </Heading>
+
+                      {!!reportee?.partyUuid && !!party?.partyUuid && (
+                        <UserRoles
+                          rightOwnerUuid={reportee.partyUuid}
+                          rightHolderUuid={party.partyUuid}
+                        />
+                      )}
+                    </div>
+
                     <Paragraph
                       className={classes.subheading}
                       size='xs'
                     >
                       for {reportee?.name}
                     </Paragraph>
-                  </div>
+                  </div>{' '}
                 </div>
-                {!!reportee?.partyUuid && !!party?.partyUuid && (
-                  <UserRoles
-                    rightOwnerUuid={reportee.partyUuid}
-                    rightHolderUuid={party.partyUuid}
-                  />
-                )}
+
                 <Tabs
                   defaultValue='packages'
                   size='sm'

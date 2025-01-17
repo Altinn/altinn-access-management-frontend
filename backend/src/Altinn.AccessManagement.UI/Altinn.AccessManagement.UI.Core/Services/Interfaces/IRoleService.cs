@@ -20,6 +20,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
                 /// <param name="languageCode">languageCode.</param>
                 /// <param name="userId">user id.</param>
                 /// <returns></returns>
-                Task<List<Assignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
+                Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
     }
 }

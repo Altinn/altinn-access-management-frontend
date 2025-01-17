@@ -24,6 +24,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="rightOwnerUuid">the user to retrieve roles for</param>
         /// <param name="rightHolderUuid">the user to retrieve roles for</param>
         /// <returns>List of access packages matching the search parameters</returns>
-        public Task<List<Assignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
+        public Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
     }
 }

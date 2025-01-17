@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiRoleEndpoint); // TODO: Change to final ApiRoleEndpoint
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint); // TODO: Change to final ApiRoleEndpoint
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<Assignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
+        public async Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    return JsonSerializer.Deserialize<List<Assignment>>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<List<RoleAssignment>>(responseContent, _serializerOptions);
                 }
                 else
                 {

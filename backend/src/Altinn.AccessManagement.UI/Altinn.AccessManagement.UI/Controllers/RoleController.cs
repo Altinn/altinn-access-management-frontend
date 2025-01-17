@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// <summary>
     /// The <see cref="RoleController"/> provides the API endpoints related to roles.
     /// </summary>
-    [Route("accessmanagement/api/v1/roles")]
+    [Route("accessmanagement/api/v1/role")]
     public class RoleController : Controller
     {
         private readonly IAccessPackageService _accessPackageService;
@@ -34,32 +34,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
-        /// <summary>
-        ///     Get all roles
-        /// </summary>
-        /// <returns>All search results</returns>
-        [HttpGet]
-        [Authorize]
-        public async Task<ActionResult<List<Role>>> GetAllRoles()
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null)
-            {
-                _logger.LogError("HttpContext is null");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-            }
-
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(httpContext);
-            try
-            {
-                return await _roleService.GetAllRoles(languageCode);
-            }
-            catch (HttpStatusException ex)
-            {
-                _logger.LogError(ex, "Error getting roles");
-                return StatusCode((int)ex.StatusCode, ex.Message);
-            }
-        }
 
         /// <summary>
         ///     Get roles for user
@@ -68,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
-        public async Task<ActionResult<List<Assignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
+        public async Task<ActionResult<List<RoleAssignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
         {
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext == null)

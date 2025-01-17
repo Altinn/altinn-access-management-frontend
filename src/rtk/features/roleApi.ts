@@ -61,7 +61,7 @@ export const roleApi = createApi({
     }),
     getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
       query: ({ rightOwnerUuid, rightHolderUuid }) =>
-        `roles/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
+        `role/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
     }),
   }),
 });

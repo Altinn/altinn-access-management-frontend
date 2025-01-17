@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
@@ -398,5 +399,27 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.LastChangedOn, actual.LastChangedOn);
 
         }
+
+        public static void AssertEqual(RoleAssignment expected, RoleAssignment actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.FromId, actual.FromId);
+            Assert.Equal(expected.ToId, actual.ToId);
+            Assert.Equal(expected.RoleId, actual.RoleId);
+
+        }
+        public static void AssertEqual(Role expected, Role actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Code, actual.Code);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+
+        }
+
     }
 }

@@ -50,9 +50,5 @@
         /// </summary>
         public string SubscriptionKeyHeaderName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the api role endpoint
-        /// </summary>
-        public string ApiRoleEndpoint { get; set; }
     }
 }

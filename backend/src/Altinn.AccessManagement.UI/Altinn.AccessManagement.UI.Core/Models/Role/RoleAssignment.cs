@@ -3,7 +3,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Role;
 /// <summary>
 /// Assignment
 /// </summary>
-public class Assignment
+public class RoleAssignment
 {
     /// <summary>
     /// Id
@@ -24,11 +24,6 @@ public class Assignment
     /// ToId
     /// </summary>
     public Guid ToId { get; set; }
-
-    /// <summary>
-    /// IsDelegable
-    /// </summary>
-    public bool IsDelegable { get; set; } //// TODO: REMOVE
 
     /// <summary>
     /// Role

@@ -33,17 +33,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(JsonSerializer.Deserialize<List<Role>>(json, options));
         }
 
-        public Task<List<Assignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
+        public Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
             try {
-                List<Assignment> allAssignments = Util.GetMockData<List<Assignment>>($"{dataFolder}/Roles/GetRoles/{rightHolderUuid}.json");
+                List<RoleAssignment> allAssignments = Util.GetMockData<List<RoleAssignment>>($"{dataFolder}/Roles/GetRolesForUser/{rightHolderUuid}.json");
                 if (allAssignments == null)
                 {
-                    return Task.FromResult(new List<Assignment>());
+                    return Task.FromResult(new List<RoleAssignment>());
                 }
                 return Task.FromResult(allAssignments);
             } catch {
-                return Task.FromResult(new List<Assignment>());
+                return Task.FromResult(new List<RoleAssignment>());
             }
         }
     }
