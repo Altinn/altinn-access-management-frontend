@@ -34,7 +34,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             _serializerOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
-
         /// <summary>
         ///     Get roles for user
         /// </summary>

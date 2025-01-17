@@ -3,7 +3,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
-
 namespace Altinn.AccessManagement.UI.Core.Services
 {
     /// <inheritdoc />
