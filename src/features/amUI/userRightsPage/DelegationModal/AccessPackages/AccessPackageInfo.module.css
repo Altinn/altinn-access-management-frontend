@@ -9,10 +9,17 @@
   gap: 10px;
 }
 
+.services {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   padding: 0.5rem;
 }
 
@@ -21,7 +28,7 @@
   justify-content: flex-start;
   gap: 15px;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .actions {

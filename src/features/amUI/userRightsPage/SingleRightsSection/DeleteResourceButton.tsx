@@ -52,11 +52,10 @@ export const DeleteResourceButton = ({
         }}
         triggerButtonContent={<>{fullText ? t('common.delete_poa') : t('common.delete')}</>}
         confirmButtonProps={{
-          variant: 'primary',
           color: 'danger',
         }}
         confirmButtonContent={t('common.delete')}
-        cancelButtonProps={{ variant: 'tertiary' }}
+        cancelButtonProps={{ variant: 'text' }}
         cancelButtonContent={t('common.cancel')}
         onConfirm={() =>
           revoke(

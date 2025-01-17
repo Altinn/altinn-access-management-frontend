@@ -52,7 +52,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 icon: 'buildings2',
                 id: '1',
                 size: 'lg',
-                title: 'Bedriftsprofil',
+                title: 'Tilgangsstyring',
               },
               {
                 groupId: 2,
@@ -61,28 +61,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 title: 'Brukere',
               },
               {
-                groupId: 2,
-                icon: 'handshake',
-                id: '3',
-                title: 'Fullmakter',
-              },
-              {
                 groupId: 3,
                 icon: 'inbox',
-                id: '4',
+                id: '3',
                 title: 'Våre tilganger hos andre',
-              },
-              {
-                groupId: 3,
-                icon: 'database',
-                id: '5',
-                title: 'Klientdelegering',
-              },
-              {
-                groupId: 4,
-                icon: 'clock-dashed',
-                id: '6',
-                title: 'Aktivitetslogg',
               },
             ],
           },

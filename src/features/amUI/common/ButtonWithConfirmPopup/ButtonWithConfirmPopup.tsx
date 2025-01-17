@@ -1,7 +1,9 @@
-import type { ButtonProps, PopoverProps, PopoverTriggerProps } from '@digdir/designsystemet-react';
-import { Popover, Button } from '@digdir/designsystemet-react';
+import type { PopoverProps, PopoverTriggerProps } from '@digdir/designsystemet-react';
+import { Paragraph, Popover } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import type { ButtonProps } from '@altinn/altinn-components';
+import { Button } from '@altinn/altinn-components';
 
 import classes from './ButtonWithConfirmPopup.module.css';
 
@@ -45,10 +47,10 @@ export const ButtonWithConfirmPopup = ({
           onClose={() => setOpen(false)}
           {...popoverProps}
         >
-          <div className={classes.confirmPopupMessage}>{message}</div>
+          <Paragraph className={classes.confirmPopupMessage}>{message}</Paragraph>
           <div className={classes.confirmPopupButtons}>
             <Button
-              variant='secondary'
+              variant='outline'
               {...cancelButtonProps}
               onClick={() => setOpen(false)}
             >

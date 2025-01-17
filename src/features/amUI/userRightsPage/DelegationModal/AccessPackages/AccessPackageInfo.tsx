@@ -3,6 +3,7 @@ import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
 import { Avatar, List, Button } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
@@ -17,7 +18,6 @@ import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvid
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -103,20 +103,22 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
           </Paragraph>
         </div>
       )}
-      <Heading
-        size='sm'
-        level={2}
-      >
-        {t('delegation_modal.package_services', {
-          count: accessPackage.resources.length,
-          name: accessPackage?.name,
-        })}
-      </Heading>
-      <div className={classes.service_list}>
-        <List
-          items={listItems}
-          spacing='xs'
-        />
+      <div className={classes.services}>
+        <Heading
+          size='xs'
+          level={2}
+        >
+          {t('delegation_modal.package_services', {
+            count: accessPackage.resources.length,
+            name: accessPackage?.name,
+          })}
+        </Heading>
+        <div className={classes.service_list}>
+          <List
+            items={listItems}
+            spacing='xs'
+          />
+        </div>
       </div>
       <div className={classes.actions}>
         {userHasPackage ? (
