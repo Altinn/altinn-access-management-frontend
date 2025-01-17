@@ -14,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The <see cref="RoleController"/> provides the API endpoints related to roles.
     /// </summary>
     [Route("accessmanagement/api/v1/role")]
-    public class RoleController : BaseController
+    public class RoleController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
@@ -41,6 +41,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
         public async Task<ActionResult<List<RoleAssignment>>> GetRolesForUser(Guid rightOwnerUuid, Guid rightHolderUuid)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var httpContext = _httpContextAccessor.HttpContext;
