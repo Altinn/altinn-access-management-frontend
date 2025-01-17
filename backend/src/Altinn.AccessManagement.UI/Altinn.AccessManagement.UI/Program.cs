@@ -332,15 +332,6 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddSingleton<IResourceRegistryClient, ResourceRegistryClient>();
     }
 
-    if (mockSettings.RoleClient)
-    {
-        services.AddSingleton<IRoleClient, RoleClientMock>();
-    }
-    else
-    {
-        services.AddSingleton<IRoleClient, RoleClient>();
-    }
-
     if (mockSettings.KeyVault)
     {
         services.AddSingleton<IKeyVaultService, LocalKeyVaultService>();
