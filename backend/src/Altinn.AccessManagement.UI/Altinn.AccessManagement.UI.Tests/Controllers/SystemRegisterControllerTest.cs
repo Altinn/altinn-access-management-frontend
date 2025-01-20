@@ -1,10 +1,9 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.SystemUser;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 
@@ -16,14 +15,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     [Collection("SystemRegisterControllerTest")]
     public class SystemRegisterControllerTest : IClassFixture<CustomWebApplicationFactory<SystemRegisterController>>
     {
-        JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<SystemRegisterController> _factory;
-         private readonly string _expectedDataPath = "Data/ExpectedResults";
+        private readonly string _expectedDataPath = "Data/ExpectedResults";
 
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
@@ -31,7 +24,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// <param name="factory">CustomWebApplicationFactory</param>
         public SystemRegisterControllerTest(CustomWebApplicationFactory<SystemRegisterController> factory)
         {
-            _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -47,11 +39,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string path = Path.Combine(_expectedDataPath, "SystemRegister", "allSystems.json");
-            List<RegisteredSystem> expectedResponse = Util.GetMockData<List<RegisteredSystem>>(path);
+            List<RegisteredSystemFE> expectedResponse = Util.GetMockData<List<RegisteredSystemFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister");
-            List<RegisteredSystem> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RegisteredSystem>>();
+            List<RegisteredSystemFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RegisteredSystemFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);

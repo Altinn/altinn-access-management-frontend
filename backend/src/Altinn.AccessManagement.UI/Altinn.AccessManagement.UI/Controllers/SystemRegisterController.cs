@@ -1,6 +1,6 @@
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.SystemUser;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +39,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         public async Task<ActionResult> GetListOfRegisteredSystems(CancellationToken cancellationToken)
         {
-            List<RegisteredSystem> lista = await _systemRegisterService.GetSystems(cancellationToken);
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            List<RegisteredSystemFE> lista = await _systemRegisterService.GetSystems(languageCode, cancellationToken);
 
             return Ok(lista);
         }
