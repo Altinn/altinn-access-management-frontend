@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public SystemUserRequestClient(
-            ILogger<SystemUserClient> logger, 
+            ILogger<SystemUserRequestClient> logger, 
             HttpClient httpClient, 
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings) 

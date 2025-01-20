@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="requestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
-        Task<Result<SystemUserRequest>> GetSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken = default);
+        Task<Result<SystemUserRequest>> GetSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Approve a system user request to create a new system user
@@ -24,7 +24,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="requestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the create system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken = default);
+        Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Reject a system user request
@@ -33,6 +33,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="requestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the rejest system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken = default);
+        Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken);
     }
 }
