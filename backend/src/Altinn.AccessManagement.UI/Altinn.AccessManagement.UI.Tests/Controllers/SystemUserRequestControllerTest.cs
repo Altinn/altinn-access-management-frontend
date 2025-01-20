@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -50,6 +51,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetSystemUserRequest checks that an error is returned when system user request is not found
+        ///     Expected: GetSystemUserRequest returns the error
+        /// </summary>
+        [Fact]
+        public async Task GetSystemUserRequest_ReturnsError()
+        {
+            // Arrange
+            string expectedResponse = "AUTH-00010";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/51329012/e71a293a-3e7b-42f4-9315-81aa8c2515e5");
+            AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse.ErrorCode.ToString());
+        }
+
+        /// <summary>
         ///     Test case: ApproveSystemUserRequest checks that the system user request is approved
         ///     Expected: ApproveSystemUserRequest returns true
         /// </summary>
@@ -57,7 +77,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task ApproveSystemUserRequest_ApproveOk()
         {
             // Arrange
-            string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserRequest.json");
             bool expectedResponse = true;
 
             // Act
@@ -70,14 +89,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: ApproveSystemUserRequest checks that the system user request is rejected
-        ///     Expected: ApproveSystemUserRequest returns true
+        ///     Test case: ApproveSystemUserRequest checks that an error is returned when system user request is not found
+        ///     Expected: ApproveSystemUserRequest returns the error
+        /// </summary>
+        [Fact]
+        public async Task ApproveSystemUserRequest_ReturnsError()
+        {
+            // Arrange
+            string expectedResponse = "AUTH-00010";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/e71a293a-3e7b-42f4-9315-81aa8c2515e5/approve", null);
+            AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse.ErrorCode.ToString());
+        }
+
+        /// <summary>
+        ///     Test case: RejectSystemUserRequest checks that the system user request is rejected
+        ///     Expected: RejectSystemUserRequest returns true
         /// </summary>
         [Fact]
         public async Task RejectSystemUserRequest_ApproveOk()
         {
             // Arrange
-            string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserRequest.json");
             bool expectedResponse = true;
 
             // Act
@@ -87,6 +124,46 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: RejectSystemUserRequest checks that an error is returned when system user request is not found
+        ///     Expected: RejectSystemUserRequest returns the error
+        /// </summary>
+        [Fact]
+        public async Task RejectSystemUserRequest_ReturnsError()
+        {
+            // Arrange
+            string expectedResponse = "AUTH-00010";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/e71a293a-3e7b-42f4-9315-81aa8c2515e5/reject", null);
+            AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse.ErrorCode.ToString());
+        }
+
+        /// <summary>
+        ///     Test case: RejectSystemUserRequest checks that an error is returned when system user request is not found
+        ///     Expected: RejectSystemUserRequest returns the error
+        /// </summary>
+        [Fact]
+        public async Task Logout_RedirectsToLogoutUrl()
+        {
+            // Arrange
+            string expectedResponseUrl = "http://localhost:5101/authentication/api/v1/logout";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3/logout");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Redirect, httpResponse.StatusCode);
+            if (httpResponse.Headers.TryGetValues("location", out IEnumerable<string> values))
+            {
+                Assert.Equal(expectedResponseUrl, values.First());
+            }
         }
     }
 }

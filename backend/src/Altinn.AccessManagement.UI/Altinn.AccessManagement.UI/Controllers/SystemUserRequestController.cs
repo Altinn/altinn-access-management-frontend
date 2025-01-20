@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{partyId}/{requestId}/logout")]
+        [HttpGet("{requestId}/logout")]
         public IActionResult Logout(Guid requestId)
         {
             CookieOptions cookieOptions = new()

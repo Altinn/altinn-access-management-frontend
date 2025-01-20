@@ -181,8 +181,12 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
             });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient();
+            return factory.CreateClient(opts);
         }
 
 
