@@ -26,6 +26,7 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
       <TechnicalErrorParagraphs
         status={error.status}
         time={error.time}
+        size='sm'
       />
     );
   }
