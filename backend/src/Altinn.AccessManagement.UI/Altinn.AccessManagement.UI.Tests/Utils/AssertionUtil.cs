@@ -424,5 +424,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
+
+        public static void AssertEqual(SystemUserRequestFE expected, SystemUserRequestFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.System.SystemId, actual.System.SystemId);
+            Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
+            Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
     }
 }
