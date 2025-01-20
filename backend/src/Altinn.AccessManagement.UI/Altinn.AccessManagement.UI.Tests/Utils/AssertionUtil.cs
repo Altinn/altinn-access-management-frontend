@@ -401,12 +401,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(RegisteredSystem expected, RegisteredSystem actual)
+        public static void AssertEqual(RegisteredSystemFE expected, RegisteredSystemFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
             Assert.Equal(expected.SystemId, actual.SystemId);
+            Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.SystemVendorOrgNumber, actual.SystemVendorOrgNumber);
             Assert.Equal(expected.SystemVendorOrgName, actual.SystemVendorOrgName);
         }

@@ -25,6 +25,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// <summary>
         /// A short name of the product, used when displaying to the user
         /// </summary>
-        public string SystemName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }

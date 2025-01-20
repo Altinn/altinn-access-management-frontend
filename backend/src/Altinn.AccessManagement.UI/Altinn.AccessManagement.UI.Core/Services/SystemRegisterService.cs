@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -40,12 +41,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IEnumerable<RegisteredSystem> visibleSystems = lista.Where(system => system.IsVisible);
 
             IEnumerable<string> orgNumbers = visibleSystems.Select(x => x.SystemVendorOrgNumber);
-            var orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
+            List<PartyName> orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
 
             return visibleSystems.Select(system => new RegisteredSystemFE
             {
                 SystemId = system.SystemId,
-                SystemName = system.Name[languageCode],
+                Name = system.Name.TryGetValue(languageCode, out string name) ? name : "N/A",
                 SystemVendorOrgNumber = system.SystemVendorOrgNumber,
                 SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A"
             }).ToList();

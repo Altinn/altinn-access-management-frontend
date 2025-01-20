@@ -131,7 +131,10 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 });
             });
             factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient();
+            var client = factory.CreateClient();
+            client.DefaultRequestHeaders.Add("Cookie", "altinnPersistentContext=UL=1044");
+            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
+            return client;
         }
 
         /// <summary>
