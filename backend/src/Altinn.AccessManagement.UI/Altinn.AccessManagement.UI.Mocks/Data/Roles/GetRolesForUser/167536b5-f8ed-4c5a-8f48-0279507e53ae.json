@@ -7,11 +7,7 @@
         "name": "Styremedlem",
         "code": "MEDL",
         "description": "Fysisk- eller juridisk person som inngår i et styre",
-        "urn": "brreg:role:medl",
-        "provider": {
-          "Name": "Brønnøysundregistrene",
-          "Uuid": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75"
-        }
+        "urn": "brreg:role:medl"
       },
       "from": {
         "Name": "DISKRET NÆR TIGER AS",
@@ -35,11 +31,7 @@
         "name": "Styrets leder",
         "code": "LEDE",
         "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
-        "urn": "brreg:role:lede",
-        "provider": {
-          "Name": "Brønnøysundregistrene",
-          "Uuid": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75"
-        }
+        "urn": "brreg:role:lede"
       },
       "from": {
         "Name": "DISKRET NÆR TIGER AS",
@@ -63,11 +55,7 @@
         "name": "Tilgangsstyrer",
         "code": "TS",
         "description": "Gir mulighet til å gi videre tilganger for virksomheten som man selv har mottatt",
-        "urn": "digdir:role:ts",
-        "provider": {
-          "Name": "Digdir",
-          "Uuid": "73dfe32a-8f21-465c-9242-40d82e61f320"
-        }
+        "urn": "digdir:role:ts"
       },
       "from": {
         "Name": "Digdir",
