@@ -17,13 +17,17 @@ export const UserRoles = ({ rightOwnerUuid, rightHolderUuid }: UserRulesProps) =
   });
   return (
     <div className={classes.userRoles}>
-      {data?.map((role) => (
-        <Badge
-          color={'info' as BadgeColor}
-          label={role.role.name}
-          key={role.id}
-        />
-      ))}
+      {data?.map((assignment) => {
+        const color =
+          assignment?.role?.provider?.name === 'Digdir' ? 'warning' : ('info' as BadgeColor);
+        return (
+          <Badge
+            color={color}
+            label={assignment.role.name}
+            key={assignment.id}
+          />
+        );
+      })}
     </div>
   );
 };

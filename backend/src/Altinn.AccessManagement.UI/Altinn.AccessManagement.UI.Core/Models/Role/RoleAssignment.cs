@@ -29,4 +29,5 @@ public class RoleAssignment
     /// Role
     /// </summary>
     public Role Role { get; set; }
+
 }

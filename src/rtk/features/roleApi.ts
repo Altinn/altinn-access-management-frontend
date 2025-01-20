@@ -11,7 +11,6 @@ interface EntityType {
 interface Provider {
   id: string;
   name: string;
-  refId: string | null;
 }
 
 export interface Role {

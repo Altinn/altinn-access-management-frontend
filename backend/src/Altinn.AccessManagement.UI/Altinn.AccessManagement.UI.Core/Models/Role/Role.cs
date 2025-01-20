@@ -27,4 +27,10 @@ public class Role
     /// e.g The main operator of the organization
     /// </summary>
     public string Description { get; set; }
+
+    /// <summary>
+    /// Provider
+    /// e.g Altinn
+    /// </summary>
+    public Provider Provider { get; set; }
 }
