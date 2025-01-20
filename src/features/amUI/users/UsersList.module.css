@@ -16,9 +16,15 @@
   padding-top: 1rem;
 }
 
+.searchAndAddUser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 10px;
+}
+
 .searchBar {
   max-width: 27rem;
-  padding-bottom: 10px;
 }
 
 .usersListHeading {

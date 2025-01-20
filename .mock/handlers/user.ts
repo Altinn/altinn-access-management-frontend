@@ -35,4 +35,19 @@ export const userHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       },
     });
   }),
+  http.post(
+    new RegExp(`${ACCESSMANAGEMENT_BASE_URL}/user/reportee/(?:/[^/]+)?/rightholder/person`),
+    async (req: any) => {
+      const requestBody = await req.request.json();
+      const ssn = requestBody?.ssn;
+      const lastName = requestBody?.lastName;
+      if (lastName.length < 4 || ssn.length !== 11) {
+        return HttpResponse.json({ error: 'Invalid input' }, { status: 404 });
+      } else {
+        return HttpResponse.json({
+          partyUuid: '54f128f7-ca7c-4a57-ad49-3787eb79b506',
+        });
+      }
+    },
+  ),
 ];

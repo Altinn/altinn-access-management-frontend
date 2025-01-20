@@ -37,5 +37,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="rightHolderUuid">The uuid for the right holder whose accesses are to be returned</param>
         /// <returns>All right holder's accesses</returns>
         Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid);
+
+        /// <summary>
+        /// Checks that a person with the provided ssn and lastname exists. If they do, the person's partyUuid is returned.
+        /// </summary>
+        /// <param name="ssn">The ssn of the user</param>
+        /// <param name="lastname">The last name of the user</param>
+        /// <returns>The person's partyUuid if ssn and lastname correspond to the same person. Returns null if matching person is not found</returns>
+        Task<Guid?> ValidatePerson(string ssn, string lastname);
     }
 }

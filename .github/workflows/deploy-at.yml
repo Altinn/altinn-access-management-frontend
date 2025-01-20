@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT21, AT22, AT23, AT24]
+        environment: [AT22, AT23, AT24]
     uses: './.github/workflows/template-deploy-container.yml'
     secrets: inherit
     with:
