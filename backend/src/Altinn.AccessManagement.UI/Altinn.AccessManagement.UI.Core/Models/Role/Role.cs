@@ -33,4 +33,9 @@ public class Role
     /// e.g Altinn
     /// </summary>
     public Provider Provider { get; set; }
+
+    /// <summary>
+    /// URN
+    /// </summary>
+    public string Urn { get; set; }
 }

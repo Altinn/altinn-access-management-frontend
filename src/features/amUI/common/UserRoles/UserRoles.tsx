@@ -1,4 +1,3 @@
-import type { BadgeColor } from '@altinn/altinn-components';
 import { Badge } from '@altinn/altinn-components';
 
 import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
@@ -18,8 +17,7 @@ export const UserRoles = ({ rightOwnerUuid, rightHolderUuid }: UserRulesProps) =
   return (
     <div className={classes.userRoles}>
       {data?.map((assignment) => {
-        const color =
-          assignment?.role?.provider?.name === 'Digdir' ? 'warning' : ('info' as BadgeColor);
+        const color = assignment?.role?.urn?.includes('brreg') ? 'company' : 'accent';
         return (
           <Badge
             color={color}
