@@ -5,7 +5,9 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -33,34 +35,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken)
+        public async Task<List<RegisteredSystemFE>> GetSystems(string languageCode, CancellationToken cancellationToken)
         {
             List<RegisteredSystem> lista = await _systemRegisterClient.GetSystems(cancellationToken);
             IEnumerable<RegisteredSystem> visibleSystems = lista.Where(system => system.IsVisible);
 
             IEnumerable<string> orgNumbers = visibleSystems.Select(x => x.SystemVendorOrgNumber);
-            var orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
-            foreach (RegisteredSystem system in visibleSystems)
-            {
-                try
-                {
-                    system.SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A";
-                }
-                catch (Exception ex)
-                {
-                    system.SystemVendorOrgName = "N/A"; // "N/A" stands for "Not Available
-                    Console.Write(ex.ToString());
-                }
-            }
+            List<PartyName> orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
 
-            return visibleSystems.ToList();
+            return visibleSystems.Select(system => new RegisteredSystemFE
+            {
+                SystemId = system.SystemId,
+                Name = system.Name.TryGetValue(languageCode, out string name) ? name : "N/A",
+                SystemVendorOrgNumber = system.SystemVendorOrgNumber,
+                SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A"
+            }).ToList();
         }
 
         /// <inheritdoc />
         public async Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
         {
             List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemId, cancellationToken);
-            List<string> resourceIds = GetResourceIdsFromRights(rights);
+            List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
 
             IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
             IEnumerable<ServiceResource> resources = await Task.WhenAll(resourceTasks);
@@ -68,21 +64,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
         
             return ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
-        }
-        
-        private static List<string> GetResourceIdsFromRights(IEnumerable<Right> rights)
-        {
-            List<string> resourceIds = new List<string>();
-            foreach (Right right in rights)
-            {
-                string resourceId = right.Resource.Find(x => x.Id == "urn:altinn:resource")?.Value;
-                if (resourceId != null)
-                {
-                    resourceIds.Add(resourceId);
-                }
-            }
-
-            return resourceIds;
         }
     }
 }
