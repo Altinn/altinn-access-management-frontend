@@ -417,11 +417,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected.SystemId, actual.SystemId);
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.IntegrationTitle, actual.IntegrationTitle);
-            Assert.Equal(expected.SupplierName, actual.SupplierName);
-            Assert.Equal(expected.SupplierOrgNo, actual.SupplierOrgNo);
+            Assert.Equal(expected.System.SystemId, actual.System.SystemId);
+            Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
+            Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
     }

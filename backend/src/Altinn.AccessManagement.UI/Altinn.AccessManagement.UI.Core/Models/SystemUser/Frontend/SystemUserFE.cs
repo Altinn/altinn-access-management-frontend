@@ -25,13 +25,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public string IntegrationTitle { get; set; }
 
         /// <summary>
-        /// Identifier for off the shelf systems, registered in the SystemRegister db.
-        /// Should be human readable (instead of a GUID) and unique string without whitespace.
-        /// </summary>
-        [JsonPropertyName("systemId")]
-        public string SystemId { get; set; } = string.Empty;
-
-        /// <summary>
         /// The PartyID identifies the end-user Organisation, and is fetched from the login Context and
         /// user party serivces
         /// </summary>
@@ -45,18 +38,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
         /// <summary>
-        /// The name of the Supplier of the Product used in this Integration.
-        /// In later phases, it will be possible to use non-supplier based Products, in which case the ClientId property should be filled out.
+        /// System information from the system register
         /// </summary>
-        [JsonPropertyName("supplierName")]
-        public string SupplierName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The organization number for the Supplier of the Product 
-        /// In later phases, it will be possible to use non-supplier based Products, in which case the ClientId property should be filled out.
-        /// </summary>
-        [JsonPropertyName("supplierOrgno")]
-        public string SupplierOrgNo { get; set; } = string.Empty;
+        [JsonPropertyName("system")]
+        public RegisteredSystemFE System { get; set; }
 
         /// <summary>
         /// List of resources information

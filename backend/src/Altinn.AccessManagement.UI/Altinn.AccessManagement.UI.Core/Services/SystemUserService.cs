@@ -105,15 +105,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
                 IEnumerable<ServiceResource> systemUserResources = resources.Where(x => resourceIds.Contains(x.Identifier));
 
+                RegisteredSystemFE systemFE = new RegisteredSystemFE
+                {
+                    SystemId = systemUser.SystemId,
+                    Name = "N/A", // not set since frontend does not use this (and we don't want to look up the system)
+                    SystemVendorOrgNumber = systemUser.SupplierOrgNo,
+                    SystemVendorOrgName = partyNames.Find(x => x.OrgNo == systemUser.SupplierOrgNo)?.Name ?? "N/A",
+                };
+
                 lista.Add(new SystemUserFE
                 {
                     Id = systemUser.Id,
                     IntegrationTitle = systemUser.IntegrationTitle,
                     PartyId = systemUser.PartyId,
-                    SupplierOrgNo = systemUser.SupplierOrgNo,
-                    SystemId = systemUser.SystemId,
                     Created = systemUser.Created,
-                    SupplierName = partyNames.Find(x => x.OrgNo == systemUser.SupplierOrgNo)?.Name ?? "N/A",
+                    System = systemFE,
                     Resources = ResourceUtils.MapToServiceResourcesFE(languageCode, systemUserResources, orgList)
                 });
             }

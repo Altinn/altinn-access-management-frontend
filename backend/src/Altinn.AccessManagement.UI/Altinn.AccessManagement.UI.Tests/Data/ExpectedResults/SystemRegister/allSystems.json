@@ -3,34 +3,12 @@
     "systemId": "910493353_fiken_demo_product",
     "systemVendorOrgNumber": "910493353",
     "systemVendorOrgName": "LEPSØY OG TONSTAD",
-    "name": "Fiken",
-    "description": "Fiken",
-    "rights": [
-      {
-        "resource": [
-          {
-            "id": "urn:altinn:resource",
-            "value": "ske-innrapportering-boligsameie"
-          }
-        ]
-      }
-    ]
+    "name": "Fiken"
   },
   {
     "systemId": "310144827_smartcloud",
     "systemVendorOrgNumber": "310144827",
     "systemVendorOrgName": "N/A",
-    "name": "SmartCloud",
-    "description": "SmartCloud er verdens beste system.",
-    "rights": [
-      {
-        "resource": [
-          {
-            "id": "urn:altinn:resource",
-            "value": "ske-innrapportering-boligsameie"
-          }
-        ]
-      }
-    ]
+    "name": "SmartCloud"
   }
 ]
