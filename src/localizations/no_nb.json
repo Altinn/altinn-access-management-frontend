@@ -70,7 +70,8 @@
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
     "org_number": "Organisasjonsnummer",
-    "org_name": "Organisasjonsnavn"
+    "org_name": "Organisasjonsnavn",
+    "subunit": "Underenhet"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -280,7 +281,7 @@
   },
   "new_user_modal": {
     "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
-    "not_found_error_org": "Fant ingen organisasjon med dette navnet og organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
     "organization": "Virksomhet",

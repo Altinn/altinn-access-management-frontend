@@ -75,21 +75,9 @@ export const userInfoApi = createApi({
     }),
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/person`,
+        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
         method: 'POST',
         body: JSON.stringify({ ssn, lastName }),
-        transformErrorResponse: (response: {
-          status: string | number;
-        }): { status: string | number } => {
-          return { status: response.status };
-        },
-      }),
-    }),
-    validateNewUserOrg: builder.mutation<string, { orgNumber: string; orgName: string }>({
-      query: ({ orgNumber, orgName }) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/organization`,
-        method: 'POST',
-        body: JSON.stringify({ orgNumber, orgName }),
         transformErrorResponse: (response: {
           status: string | number;
         }): { status: string | number } => {
@@ -106,7 +94,6 @@ export const {
   useGetRightHoldersQuery,
   useGetRightHolderAccessesQuery,
   useValidateNewUserPersonMutation,
-  useValidateNewUserOrgMutation,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

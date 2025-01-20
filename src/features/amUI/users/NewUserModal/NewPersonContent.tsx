@@ -34,7 +34,7 @@ export const NewPersonContent = () => {
   };
 
   return (
-    <div className={classes.newUserContent}>
+    <div className={classes.newPersonContent}>
       {isError && (
         <NewUserAlert
           userType='person'

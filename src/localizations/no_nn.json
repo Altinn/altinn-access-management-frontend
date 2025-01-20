@@ -68,7 +68,8 @@
     "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
     "error_status": "Status: {{status}}",
     "ssn": "Fødselsnummer",
-    "last_name": "Etternavn"
+    "last_name": "Etternavn",
+    "subunit": "Underenhet"
   },
   "header": {
     "menu-label": "Meny",
@@ -275,7 +276,8 @@
     }
   },
   "new_user_modal": {
-    "not_found_error": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperra pga for mange feilande forsøk. Du kan prøve igjen om ei time.",
     "person": "Person",
     "organization": "Virksemnd",
