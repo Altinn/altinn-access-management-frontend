@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -33,27 +34,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<RegisteredSystem>> GetSystems(CancellationToken cancellationToken)
+        public async Task<List<RegisteredSystemFE>> GetSystems(string languageCode, CancellationToken cancellationToken)
         {
             List<RegisteredSystem> lista = await _systemRegisterClient.GetSystems(cancellationToken);
             IEnumerable<RegisteredSystem> visibleSystems = lista.Where(system => system.IsVisible);
 
             IEnumerable<string> orgNumbers = visibleSystems.Select(x => x.SystemVendorOrgNumber);
             var orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
-            foreach (RegisteredSystem system in visibleSystems)
-            {
-                try
-                {
-                    system.SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A";
-                }
-                catch (Exception ex)
-                {
-                    system.SystemVendorOrgName = "N/A"; // "N/A" stands for "Not Available
-                    Console.Write(ex.ToString());
-                }
-            }
 
-            return visibleSystems.ToList();
+            return visibleSystems.Select(system => new RegisteredSystemFE
+            {
+                SystemId = system.SystemId,
+                SystemName = system.Name[languageCode],
+                SystemVendorOrgNumber = system.SystemVendorOrgNumber,
+                SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A"
+            }).ToList();
         }
 
         /// <inheritdoc />
