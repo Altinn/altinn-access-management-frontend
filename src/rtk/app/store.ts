@@ -12,6 +12,7 @@ import { resourceApi } from '../features/resourceApi';
 import { accessPackageApi } from '../features/accessPackageApi';
 import { lookupApi } from '../features/lookupApi';
 import { userInfoApi } from '../features/userInfoApi';
+import { roleApi } from '../features/roleApi';
 
 const logger = createLogger();
 
@@ -27,6 +28,7 @@ const store = configureStore({
     [overviewOrgApi.reducerPath]: overviewOrgApi.reducer,
     [resourceApi.reducerPath]: resourceApi.reducer,
     [accessPackageApi.reducerPath]: accessPackageApi.reducer,
+    [roleApi.reducerPath]: roleApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -38,6 +40,7 @@ const store = configureStore({
       resourceApi.middleware,
       userInfoApi.middleware,
       accessPackageApi.middleware,
+      roleApi.middleware,
     ),
 });
 

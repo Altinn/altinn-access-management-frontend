@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
@@ -9,10 +10,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// </summary>
     public static class ResourceUtils
     {
-        // Add your utility methods here
-
         /// <summary>
-        /// Example utility method
+        /// Map a list of resources to frontend resource objects
         /// </summary>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="resources">List of resources to map to frontend resource objects</param>
@@ -40,6 +39,26 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     authorizationReference: resource.AuthorizationReference,
                     resourceOwnerLogoUrl: org?.Logo);
             }).ToList();
+        }
+
+        /// <summary>
+        /// Get resource ids from a list of rights
+        /// </summary>
+        /// <param name="rights">List of rigts to get resource ids from</param>
+        /// <returns>Output result</returns>
+        public static List<string> GetResourceIdsFromRights(IEnumerable<Right> rights)
+        {
+            List<string> resourceIds = new List<string>();
+            foreach (Right right in rights)
+            {
+                string resourceId = right.Resource.Find(x => x.Id == "urn:altinn:resource")?.Value;
+                if (resourceId != null)
+                {
+                    resourceIds.Add(resourceId);
+                }
+            }
+
+            return resourceIds;
         }
     }
 }

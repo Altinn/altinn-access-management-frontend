@@ -11,6 +11,12 @@
   padding-bottom: 10px;
 }
 
+.headingContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .subheading {
   color: var(--ds-color-neutral-text-subtle);
 }

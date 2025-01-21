@@ -18,6 +18,7 @@ import { amUIPath } from '@/routes/paths';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
+import { UserRoles } from '../common/UserRoles/UserRoles';
 
 import classes from './UserRightsPage.module.css';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
@@ -52,13 +53,23 @@ export const UserRightsPage = () => {
                     type={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
                   <div>
-                    <Heading
-                      level={1}
-                      size='sm'
-                      className={classes.heading}
-                    >
-                      {party?.name}
-                    </Heading>
+                    <div className={classes.headingContainer}>
+                      <Heading
+                        level={1}
+                        size='sm'
+                        className={classes.heading}
+                      >
+                        {party?.name}
+                      </Heading>
+
+                      {!!reportee?.partyUuid && !!party?.partyUuid && (
+                        <UserRoles
+                          rightOwnerUuid={reportee.partyUuid}
+                          rightHolderUuid={party.partyUuid}
+                        />
+                      )}
+                    </div>
+
                     <Paragraph
                       className={classes.subheading}
                       size='xs'
@@ -67,6 +78,7 @@ export const UserRightsPage = () => {
                     </Paragraph>
                   </div>
                 </div>
+
                 <Tabs
                   defaultValue='packages'
                   size='sm'
@@ -81,7 +93,7 @@ export const UserRightsPage = () => {
                         color={chosenTab === 'packages' ? 'accent' : 'neutral'}
                         count={allAccesses.accessPackages.length}
                         maxCount={99}
-                      ></Badge>
+                      />
                       {t('user_rights_page.access_packages_title')}
                     </Tabs.Tab>
                     <Tabs.Tab value='singleRights'>
@@ -90,7 +102,7 @@ export const UserRightsPage = () => {
                         color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
                         count={allAccesses.services.length}
                         maxCount={99}
-                      ></Badge>
+                      />
                       {t('user_rights_page.single_rights_title')}
                     </Tabs.Tab>
                   </Tabs.List>

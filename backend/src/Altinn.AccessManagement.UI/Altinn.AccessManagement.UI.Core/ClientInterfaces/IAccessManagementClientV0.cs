@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         public interface IAccessManagementClientV0
         {
                 /// <summary>
-                /// Retreive party if party exists in the authenticated users reporteelist
+                /// Retrieve party if party exists in the authenticated users reporteelist
                 /// </summary>
                 /// <param name="partyId">party id</param>
                 /// <returns></returns>

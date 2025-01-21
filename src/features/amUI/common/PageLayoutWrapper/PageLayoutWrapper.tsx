@@ -1,6 +1,5 @@
 import { Layout } from '@altinn/altinn-components';
 import { RootProvider } from '@altinn/altinn-components';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -12,11 +11,11 @@ interface PageLayoutWrapperProps {
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-  // const [menuOpen, setMenuOpen] = React.useState(false);
   return (
     <RootProvider>
       <Layout
-        theme={'neutral'}
+        color={'neutral'}
+        theme='subtle'
         header={{
           currentAccount: {
             name: reportee?.name || '',
@@ -69,7 +68,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             ],
           },
         }}
-        content={{ theme: 'neutral' }}
+        content={{ color: 'neutral' }}
       >
         {children}
       </Layout>

@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -8,11 +9,19 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     public interface IAccessPackageClient
     {
         /// <summary>
-        /// Retreive result of a search in all access packages. If no parameters are given, all access packages are returned
+        /// Retrieve result of a search in all access packages. If no parameters are given, all access packages are returned
         /// </summary>
         /// <param name="languageCode">the language to use in texts returned and searched in</param>
         /// <param name="searchString">the text to be searched for</param>
         /// <returns>List of access packages matching the search parameters</returns>
         Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString);
+
+        /// <summary>
+        /// Retrieve all roles for a user
+        /// </summary>
+        /// <param name="languageCode">the language to use in texts returned and searched in</param>
+        /// <param name="rightOwnerUuid">The right owner to retrieve roles for</param>
+        /// <param name="rightHolderUuid">The right holder to retrieve roles for</param>
+        Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
     }
 }
