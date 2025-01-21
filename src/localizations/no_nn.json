@@ -240,6 +240,8 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
+    "roles_title": "Administratortilganger",
+    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukarar. Det er ikkje knytt nokon spesifikke tenester til desse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },

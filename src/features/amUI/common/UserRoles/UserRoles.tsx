@@ -17,7 +17,7 @@ export const UserRoles = ({ rightOwnerUuid, rightHolderUuid }: UserRulesProps) =
   return (
     <div className={classes.userRoles}>
       {data?.map((assignment) => {
-        const color = assignment?.role?.urn?.includes('brreg') ? 'company' : 'accent';
+        const color = assignment?.role?.urn?.includes('brreg:') ? 'company' : 'accent';
         return (
           <Badge
             color={color}
