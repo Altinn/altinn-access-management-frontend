@@ -79,7 +79,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     isDelegationCheckError && delegationCheckError && 'status' in delegationCheckError
       ? {
           status: delegationCheckError.status.toString(),
-          time: delegationCheckError.data as number,
+          time: delegationCheckError.data as string,
         }
       : null;
 

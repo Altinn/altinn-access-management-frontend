@@ -68,7 +68,10 @@
     "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
     "error_status": "Status: {{status}}",
     "ssn": "Fødselsnummer",
-    "last_name": "Etternavn"
+    "last_name": "Etternavn",
+    "org_number": "Organisasjonsnummer",
+    "org_name": "Organisasjonsnavn",
+    "subunit": "Underenhet"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -240,6 +243,8 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
+    "roles_title": "Administratortilganger",
+    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukere. Det er ikke knyttet noen spesifikke tjenester til disse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -277,7 +282,8 @@
     }
   },
   "new_user_modal": {
-    "not_found_error": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
     "organization": "Virksomhet",

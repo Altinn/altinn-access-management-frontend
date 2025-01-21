@@ -53,7 +53,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
             
             AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
-           
         }
 
 
@@ -65,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRolesForUser_HasNoRoles()
         {
             string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
-            string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; // Valid user that doesn't has role-assignments for the reportee
+            string rightHolderUuid = "26ca8b02-c455-4dc0-96be-f92864837ff9"; // Valid user that doesn't has role-assignments for the reportee
             List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>> (_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
 
             // Act
@@ -77,7 +76,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
             
             AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
-           
         }
 
         /// <summary>

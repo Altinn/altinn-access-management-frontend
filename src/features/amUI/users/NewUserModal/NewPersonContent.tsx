@@ -35,7 +35,12 @@ export const NewPersonContent = () => {
 
   return (
     <div className={classes.newPersonContent}>
-      {isError && <NewUserAlert error={errorDetails} />}
+      {isError && (
+        <NewUserAlert
+          userType='person'
+          error={errorDetails}
+        />
+      )}
       <TextField
         className={classes.textField}
         label={t('common.ssn')}

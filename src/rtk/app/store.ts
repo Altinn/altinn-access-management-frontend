@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createLogger } from 'redux-logger';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import delegableApiReducer from '../features/apiDelegation/delegableApi/delegableApiSlice';
@@ -13,8 +12,6 @@ import { accessPackageApi } from '../features/accessPackageApi';
 import { lookupApi } from '../features/lookupApi';
 import { userInfoApi } from '../features/userInfoApi';
 import { roleApi } from '../features/roleApi';
-
-const logger = createLogger();
 
 const store = configureStore({
   reducer: {
@@ -32,7 +29,6 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
-      logger,
       lookupApi.middleware,
       singleRightsApi.middleware,
       apiDelegationApi.middleware,
