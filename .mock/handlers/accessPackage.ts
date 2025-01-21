@@ -1,7 +1,35 @@
 import { http, HttpResponse } from 'msw';
 
 export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
-  http.get(ACCESSMANAGEMENT_BASE_URL + '/accesspackage/search', () => {
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/role/assignments/:ownerId/:holderId`, () => {
+    HttpResponse.json([
+      {
+        id: '461b0ec2-6795-4055-9306-2acefd7c6a31  ',
+        roleId: 'de42ae15-c265-42b3-8060-64c779684902',
+        fromId: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
+        toId: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
+        role: {
+          id: 'de42ae15-c265-42b3-8060-64c779684902',
+          name: 'Styremedlem',
+          code: 'MEDL',
+          description: 'Fysisk- eller juridisk person som inngår i et styre',
+        },
+      },
+      {
+        id: '43f42152-8900-4fcf-ac70-62d2d566581c',
+        roleId: 'de42ae15-c265-42b3-8060-64c779684902',
+        fromId: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
+        toId: '167536b5-f8ed-4c5a-8f48-0279507e53ae',
+        role: {
+          id: '72c336a2-1705-4aef-b220-7f4aa6c0e69d',
+          name: 'Styrets leder',
+          code: 'LEDE',
+          description: 'Fysisk- eller juridisk person som er styremedlem og leder et styre',
+        },
+      },
+    ]);
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/search`, () => {
     return HttpResponse.json([
       {
         id: '589217CF-6070-474F-9989-8C5359C740F4',

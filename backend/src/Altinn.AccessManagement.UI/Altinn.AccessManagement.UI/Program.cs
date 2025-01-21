@@ -209,6 +209,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemRegisterService, SystemRegisterService>();
     services.AddSingleton<ISystemUserService, SystemUserService>();
 
+    services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();

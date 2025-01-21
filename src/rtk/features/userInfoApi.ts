@@ -18,6 +18,7 @@ interface ReporteeInfo {
   name: string;
   organizationNumber?: string;
   type?: string;
+  partyUuid: string;
 }
 
 export enum PartyType {
