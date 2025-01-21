@@ -316,9 +316,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act - reapeat the request 4 times to lock the user
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.TooManyRequests, httpResponse.StatusCode);
