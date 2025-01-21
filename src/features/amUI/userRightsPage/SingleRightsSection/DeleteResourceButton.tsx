@@ -46,9 +46,9 @@ export const DeleteResourceButton = ({
         message={t('user_rights_page.delete_confirm_message')}
         triggerButtonProps={{
           disabled: false,
-          variant: 'secondary',
-          color: 'danger',
-          size: 'sm',
+          variant: 'outline',
+          color: 'accent',
+          size: fullText ? 'md' : 'sm',
         }}
         triggerButtonContent={<>{fullText ? t('common.delete_poa') : t('common.delete')}</>}
         confirmButtonProps={{

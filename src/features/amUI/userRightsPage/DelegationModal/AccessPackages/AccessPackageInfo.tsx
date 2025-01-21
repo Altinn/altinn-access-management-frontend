@@ -151,16 +151,18 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
   if (list.length <= MINIMIZED_LIST_SIZE) {
     return { listItems: list.map(mapResourceToListItem) };
   }
-  const toggleListItem: ListItemProps = {
-    title: t(showAll ? 'common.show_less' : 'common.show_more'),
+  const showMoreListItem: ListItemProps = {
+    title: t('common.show_more'),
     description: '',
     onClick: () => setShowAll(!showAll),
     icon: 'menu-elipsis-horizontal',
     as: 'button' as React.ElementType,
     size: 'xs',
   };
-  const minimizedList = list.slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE);
+  const minimizedList = list
+    .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
+    .map(mapResourceToListItem);
   return {
-    listItems: [...minimizedList.map(mapResourceToListItem), toggleListItem],
+    listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem],
   };
 };

@@ -63,7 +63,6 @@ export const DeletePackageButton = ({
       <Button
         {...props}
         variant={'outline'}
-        color={'secondary'}
         size='md'
         onClick={onClick}
       >
