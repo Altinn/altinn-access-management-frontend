@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Microsoft.AspNetCore.Http;
@@ -69,5 +70,32 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw error;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
+        {
+            try
+            {
+                var endpointUrl = $"/assignment?from={rightOwnerUuid}&to={rightHolderUuid}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return JsonSerializer.Deserialize<List<RoleAssignment>>(responseContent, _serializerOptions);
+                }
+                else
+                {
+                    _logger.LogError("AccessManagement.UI // RoleClient // GetRolesForUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
+                return null;
+            }
+        }  
     }
 }

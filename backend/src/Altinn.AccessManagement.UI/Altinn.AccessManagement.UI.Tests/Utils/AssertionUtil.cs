@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -425,6 +426,27 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
 
+        public static void AssertEqual(RoleAssignment expected, RoleAssignment actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+          
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.RoleId, actual.RoleId);
+            Assert.Equal(expected.ToId, actual.ToId);
+            AssertEqual(expected.Role, actual.Role);
+        }
+      
+        static void AssertEqual(Role expected, Role actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            
+            Assert.Equal(expected.Code, actual.Code);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+        }
+        
         public static void AssertEqual(SystemUserRequestFE expected, SystemUserRequestFE actual)
         {
             Assert.NotNull(actual);

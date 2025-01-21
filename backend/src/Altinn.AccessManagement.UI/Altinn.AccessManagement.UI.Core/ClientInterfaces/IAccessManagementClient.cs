@@ -13,7 +13,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     public interface IAccessManagementClient
     {
         /// <summary>
-        /// Retreive party if party exists in the authenticated users reporteelist
+        /// Retrieve party if party exists in the authenticated users reporteelist
         /// </summary>
         /// <param name="partyId">party id</param>
         /// <returns></returns>
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         ///     Gets all access package delegations from someone to someone (or multiple someones)
         /// </summary>
-        /// <param name="to">the one(s) who has received the delegated access. Can be either a guid or one of the following strigns: "all", "me"</param>
+        /// <param name="to">the one(s) who has received the delegated access. Can be either a guid or one of the following strings: "all", "me"</param>
         /// <param name="from">The the one(s) whose rights have been delegated to the one(s) specified in to. Can be either a guid or one of the following strigns: "all", "me"</param>
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A list of all access package delegations</returns>
@@ -107,14 +107,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="from">The party which has granted access to the package to the right holder</param>
         /// <param name="to">The right holder which currently has access to the access package</param>
         /// <param name="packageId">The access package which the right holder is to lose access to on behalf of the given party (from)</param>
-        /// <returns>A HttpResponseMessage denoting whether or not the action was successfull.</returns>
+        /// <returns>A HttpResponseMessage denoting whether or not the action was successful.</returns>
         Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, string packageId);
 
         /// <summary>
         ///    Creates a new delegation of an access package
         /// </summary>
         /// <param name="party">The party that is delegating the access</param>
-        /// <param name="to">The id of the right holder that will recieve the delegation</param>
+        /// <param name="to">The id of the right holder that will receive the delegation</param>
         /// <param name="packageId">The id of the package to be delegated</param>
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode);
