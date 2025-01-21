@@ -425,18 +425,18 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
-
+        
         public static void AssertEqual(RoleAssignment expected, RoleAssignment actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
-          
+
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.RoleId, actual.RoleId);
             Assert.Equal(expected.ToId, actual.ToId);
             AssertEqual(expected.Role, actual.Role);
         }
-      
+
         static void AssertEqual(Role expected, Role actual)
         {
             Assert.NotNull(actual);
