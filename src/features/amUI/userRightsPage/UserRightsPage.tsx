@@ -14,6 +14,7 @@ import {
   useGetRightHolderAccessesQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+import { filterDigdirRole } from '@/resources/utils/roleUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -23,6 +24,7 @@ import { UserRoles } from '../common/UserRoles/UserRoles';
 import classes from './UserRightsPage.module.css';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
+import { RoleSection } from './RoleSection/RoleSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -91,7 +93,7 @@ export const UserRightsPage = () => {
                       <Badge
                         size='sm'
                         color={chosenTab === 'packages' ? 'accent' : 'neutral'}
-                        count={allAccesses.accessPackages.length}
+                        count={allAccesses.accessPackages?.length ?? 0}
                         maxCount={99}
                       />
                       {t('user_rights_page.access_packages_title')}
@@ -100,17 +102,29 @@ export const UserRightsPage = () => {
                       <Badge
                         size='sm'
                         color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-                        count={allAccesses.services.length}
+                        count={allAccesses.services?.length ?? 0}
                         maxCount={99}
                       />
                       {t('user_rights_page.single_rights_title')}
                     </Tabs.Tab>
+                    <Tabs.Tab value='roleAssignments'>
+                      <Badge
+                        size='sm'
+                        color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
+                        count={filterDigdirRole(allAccesses.roles).length ?? 0}
+                        maxCount={99}
+                      />
+                      {t('user_rights_page.roles_title')}
+                    </Tabs.Tab>
                   </Tabs.List>
                   <Tabs.Panel value='packages'>
-                    <AccessPackageSection numberOfAccesses={allAccesses.accessPackages.length} />
+                    <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
                   </Tabs.Panel>
                   <Tabs.Panel value='singleRights'>
                     <SingleRightsSection />
+                  </Tabs.Panel>
+                  <Tabs.Panel value='roleAssignments'>
+                    <RoleSection />
                   </Tabs.Panel>
                 </Tabs>
               </>

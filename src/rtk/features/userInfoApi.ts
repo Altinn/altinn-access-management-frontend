@@ -41,6 +41,7 @@ export interface RightHolder {
 export interface RightHolderAccesses {
   accessPackages: string[];
   services: string[];
+  roles: string[];
 }
 
 export const userInfoApi = createApi({

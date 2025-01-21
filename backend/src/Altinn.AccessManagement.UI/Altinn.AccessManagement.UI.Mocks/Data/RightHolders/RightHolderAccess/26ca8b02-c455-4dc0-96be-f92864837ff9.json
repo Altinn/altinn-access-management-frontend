@@ -1,4 +1,5 @@
 {
   "accessPackages": [],
-  "services": [ "appid-502", "a3-app2" ]
+  "services": [ "appid-502", "a3-app2" ],
+  "roles": ["digdir:role:ts"]
 }

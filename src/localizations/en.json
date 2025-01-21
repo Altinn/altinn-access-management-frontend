@@ -242,6 +242,8 @@
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
+    "roles_title": "Administrative accesses",
+    "roles_description": "Administrator access grants the ability to delegate permissions to other users. No specific services are associated with these permissions.",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
