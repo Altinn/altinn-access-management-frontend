@@ -37,6 +37,8 @@ export enum UserType {
 export interface Organization {
   orgNumber: string;
   name: string;
+  partyUuid: string;
+  unitType: string;
 }
 
 const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'lookup';
@@ -63,6 +65,11 @@ export const lookupApi = createApi({
     }),
     getOrganization: builder.query<Organization, string>({
       query: (orgNumber) => `org/${orgNumber}`,
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
     }),
     getReporteeParty: builder.query<Party, void>({
       query: () => `party/${getCookie('AltinnPartyUuid')}`,

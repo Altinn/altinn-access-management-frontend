@@ -76,7 +76,7 @@ export const userInfoApi = createApi({
     }),
     validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
       query: ({ ssn, lastName }) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/person`,
+        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
         method: 'POST',
         body: JSON.stringify({ ssn, lastName }),
         transformErrorResponse: (response: {

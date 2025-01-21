@@ -128,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("reportee/{partyId}/rightholder/person")]
+        [Route("reportee/{partyId}/rightholder/validateperson")]
         public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput)
         {
             if (!ModelState.IsValid)
@@ -162,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetUserByUUID failed to fetch party information");
+                _logger.LogError(ex, "ValidatePerson failed unexpectedly");
                 return StatusCode(500);
             }
         }

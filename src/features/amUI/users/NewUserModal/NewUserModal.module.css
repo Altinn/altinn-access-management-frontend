@@ -16,3 +16,14 @@
   flex-direction: column;
   gap: 15px;
 }
+
+.newOrgContent {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.searchResult {
+  padding: 10px 0 10px 0;
+}

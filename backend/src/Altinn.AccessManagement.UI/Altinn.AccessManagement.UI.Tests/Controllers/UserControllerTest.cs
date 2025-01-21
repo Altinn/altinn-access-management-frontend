@@ -233,7 +233,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             var expectedResponse = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -263,7 +263,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
@@ -289,7 +289,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
@@ -315,10 +315,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
             // Act - reapeat the request 4 times to lock the user
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
-            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
+            httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.TooManyRequests, httpResponse.StatusCode);
@@ -342,7 +342,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
 
             // Act 
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/person", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
