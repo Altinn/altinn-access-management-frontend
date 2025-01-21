@@ -53,7 +53,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
             
             AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
-           
         }
 
 
@@ -77,7 +76,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
             
             AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
-           
         }
 
         /// <summary>

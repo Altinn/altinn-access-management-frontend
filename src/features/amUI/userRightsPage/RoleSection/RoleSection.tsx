@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { AccessPackageListItem, Heading } from '@altinn/altinn-components';
+import { AccessPackageListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { Paragraph } from '@digdir/designsystemet-react';
+import { Paragraph, Heading } from '@digdir/designsystemet-react';
 
 import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -21,8 +21,9 @@ export const RoleSection = () => {
   return (
     <div className={classes.roleSection}>
       <Heading
-        as='h2'
-        size='md'
+        level={2}
+        size='xs'
+        id='role_title'
       >
         {t('user_rights_page.roles_title')}
       </Heading>
@@ -34,7 +35,7 @@ export const RoleSection = () => {
               <li key={assignment.id}>
                 <AccessPackageListItem
                   onClick={() => {
-                    console.log('clicked');
+                    //
                   }}
                   as='button'
                   title={assignment.role.name}
