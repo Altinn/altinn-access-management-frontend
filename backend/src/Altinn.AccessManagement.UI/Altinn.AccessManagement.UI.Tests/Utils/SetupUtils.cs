@@ -137,7 +137,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for AccessPackageController tests</param>
+        /// <param name="customFactory">Web app factory to configure test services for SystemRegisterController tests</param>
         /// <returns>HttpClient</returns>
         public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemRegisterController> customFactory)
         {
@@ -162,7 +162,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for AccessPackageController tests</param>
+        /// <param name="customFactory">Web app factory to configure test services for SystemUserController tests</param>
         /// <returns>HttpClient</returns>
         public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserController> customFactory)
         {
@@ -186,7 +186,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for AccessPackageController tests</param>
+        /// <param name="customFactory">Web app factory to configure test services for SystemUserRequestController tests</param>
         /// <returns>HttpClient</returns>
         public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserRequestController> customFactory)
         {
@@ -195,6 +195,34 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<ISystemUserRequestClient, SystemUserRequestClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
+                    services.AddTransient<IRegisterClient, RegisterClientMock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for SystemUserChangeRequestController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserChangeRequestController> customFactory)
+        {
+            WebApplicationFactory<SystemUserChangeRequestController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<ISystemUserChangeRequestClient, SystemUserChangeRequestClientMock>();
                     services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
