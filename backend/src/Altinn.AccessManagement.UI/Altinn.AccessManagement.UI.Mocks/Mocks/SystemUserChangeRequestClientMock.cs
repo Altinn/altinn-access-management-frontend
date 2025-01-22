@@ -22,10 +22,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
-            if (requestId != systemUserChangeRequest.Id)
+            if (changeRequestId != systemUserChangeRequest.Id)
             {
                 return Task.FromResult(new Result<SystemUserChangeRequest>(TestErrors.RequestNotFound));
             }
@@ -34,10 +34,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Result<bool>> ApproveSystemUserChangeRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> ApproveSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
-            if (requestId != systemUserChangeRequest.Id)
+            if (changeRequestId != systemUserChangeRequest.Id)
             {
                 return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
             }
@@ -45,10 +45,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
                 /// <inheritdoc />
-        public Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
-            if (requestId != systemUserChangeRequest.Id)
+            if (changeRequestId != systemUserChangeRequest.Id)
             {
                 return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
             }
