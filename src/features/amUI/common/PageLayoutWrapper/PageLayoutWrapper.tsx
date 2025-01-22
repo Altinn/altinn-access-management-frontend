@@ -48,10 +48,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             items: [
               {
                 groupId: 1,
-                icon: 'buildings2',
+                icon: 'handshake',
                 id: '1',
                 size: 'lg',
-                title: 'Bedriftsprofil',
+                title: 'Tilgangsstyring',
               },
               {
                 groupId: 2,
@@ -60,33 +60,39 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 title: 'Brukere',
               },
               {
-                groupId: 2,
-                icon: 'handshake',
-                id: '3',
-                title: 'Fullmakter',
-              },
-              {
                 groupId: 3,
                 icon: 'inbox',
-                id: '4',
+                id: '3',
                 title: 'Våre tilganger hos andre',
-              },
-              {
-                groupId: 3,
-                icon: 'database',
-                id: '5',
-                title: 'Klientdelegering',
-              },
-              {
-                groupId: 4,
-                icon: 'clock-dashed',
-                id: '6',
-                title: 'Aktivitetslogg',
               },
             ],
           },
         }}
         content={{ color: 'neutral' }}
+        footer={{
+          address: 'Postboks 1382 Vika, 0114 Oslo.',
+          address2: 'Org.nr. 991 825 827',
+          menu: {
+            items: [
+              {
+                id: '1',
+                title: 'Om Altinn',
+              },
+              {
+                id: '2',
+                title: 'Driftsmeldinger',
+              },
+              {
+                id: '3',
+                title: 'Personvern',
+              },
+              {
+                id: '4',
+                title: 'Tilgjengelighet',
+              },
+            ],
+          },
+        }}
       >
         {children}
       </Layout>

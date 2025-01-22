@@ -68,7 +68,10 @@
     "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
     "error_status": "Status: {{status}}",
     "ssn": "Fødselsnummer",
-    "last_name": "Etternavn"
+    "last_name": "Etternavn",
+    "org_number": "Organisasjonsnummer",
+    "org_name": "Organisasjonsnavn",
+    "subunit": "Underenhet"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -240,6 +243,8 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
+    "roles_title": "Administratortilganger",
+    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukere. Det er ikke knyttet noen spesifikke tjenester til disse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -252,8 +257,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "{{name}} gir tilgang til {{count}} tjenester",
-    "inherited_role_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes eller endres.",
+    "package_services": "Gir tilgang til {{count}} tjenester",
+    "inherited_role_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
@@ -277,7 +282,8 @@
     }
   },
   "new_user_modal": {
-    "not_found_error": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
     "person": "Person",
     "organization": "Virksomhet",

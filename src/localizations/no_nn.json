@@ -68,7 +68,8 @@
     "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
     "error_status": "Status: {{status}}",
     "ssn": "Fødselsnummer",
-    "last_name": "Etternavn"
+    "last_name": "Etternavn",
+    "subunit": "Underenhet"
   },
   "header": {
     "menu-label": "Meny",
@@ -239,6 +240,8 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
+    "roles_title": "Administratortilganger",
+    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukarar. Det er ikkje knytt nokon spesifikke tenester til desse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -251,8 +254,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "{{name}} gir tilgang til {{count}} tenester",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom si rolle i <b>{{org_name}}</b>. Den kan derfor ikkje slettast eller endrast.",
+    "package_services": "Gir tilgang til {{count}} tenester",
+    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom si rolle i <b>{{org_name}}</b>. Den kan derfor ikkje slettast.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
@@ -275,7 +278,8 @@
     }
   },
   "new_user_modal": {
-    "not_found_error": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
     "too_many_requests_error": "Du er blitt sperra pga for mange feilande forsøk. Du kan prøve igjen om ei time.",
     "person": "Person",
     "organization": "Virksemnd",

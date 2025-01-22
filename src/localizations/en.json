@@ -69,7 +69,8 @@
     "time_of_error": "Error occurred at time: {{time}}",
     "error_status": "Status: {{status}}",
     "ssn": "National identity number",
-    "last_name": "Last name"
+    "last_name": "Last name",
+    "subunit": "Subunit"
   },
   "header": {
     "menu-label": "Menu",
@@ -241,6 +242,8 @@
     "page_title": "User access - Altinn",
     "access_packages_title": "Access packages",
     "single_rights_title": "Services",
+    "roles_title": "Administrative accesses",
+    "roles_description": "Administrator access grants the ability to delegate permissions to other users. No specific services are associated with these permissions.",
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
@@ -253,8 +256,8 @@
     "success_message": "Power of attorney was successfully given to {{name}}",
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
-    "package_services": "{{name}} provides access to {{count}} services",
-    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted or changed.",
+    "package_services": "Grants access to {{count}} services",
+    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -277,7 +280,8 @@
     }
   },
   "new_user_modal": {
-    "not_found_error": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
+    "not_found_error_person": "Did not find a user with the given name and national identity number. Please check that you entered the correct information.",
+    "not_found_error_org": "Did not find an organization with the given number. Please check that you entered the correct information.",
     "too_many_requests_error": "You have been blocked due to too many failing attempts. Try again in an hour.",
     "person": "Person",
     "organization": "Organization",
