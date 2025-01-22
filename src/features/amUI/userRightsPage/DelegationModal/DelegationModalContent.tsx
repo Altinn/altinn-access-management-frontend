@@ -98,7 +98,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     <Modal.Context>
       <Modal.Trigger
         size='sm'
-        variant='secondary'
+        variant='primary'
         className={classes.triggerButton}
       >
         {triggerButtonText} <PlusIcon />
