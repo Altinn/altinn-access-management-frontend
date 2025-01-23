@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSearch_withSearchString()
         {
             // Arrange
-            string searchString = "a"; // Will return all packages in mocked data except "Ordinær post til virksomheten"
+            string searchString = "sjøfart"; // Will return only one package
             List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/Search/searchString_a.json");
 
             // Act

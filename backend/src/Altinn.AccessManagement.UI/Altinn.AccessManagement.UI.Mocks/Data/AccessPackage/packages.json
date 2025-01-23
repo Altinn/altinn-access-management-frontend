@@ -678,8 +678,28 @@
         "Name": "Det magiske klesskapet"
       },
       {
-        "Id": "se_3225_1596",
-        "Name": "A2 skjema"
+        "Id": "appid-503",
+        "Name": "Snarveien"
+      },
+      {
+        "Id": "app_ttd_a3-app",
+        "Name": "A3 app"
+      },
+      {
+        "Id": "app_ttd_a3-app2",
+        "Name": "A3 app 2"
+      },
+      {
+        "Id": "appid-509",
+        "Name": "Kaffemaskinen i 4. etasje"
+      },
+      {
+        "Id": "appid-512",
+        "Name": "Lønningsoversikt"
+      },
+      {
+        "Id": "appid-513",
+        "Name": "Kaffemaskinen i 5. etasje"
       }
     ]
   },
@@ -806,7 +826,7 @@
       "id": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b",
       "name": "Post og arkiv",
       "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
-      "IconUrl": "https://www.svgrepo.com/show/459050/envelope.svg",
+      "IconUrl": "https://www.svgrepo.com/show/472590/envelope.svg",
       "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145"
     },
     "id": "91cf61ae-69ab-49d5-b51a-80591c91f255",
@@ -878,7 +898,7 @@
       "id": "6f938de8-34f2-4bab-a0c6-3a3eb64aad3b",
       "name": "Post og arkiv",
       "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
-      "IconUrl": "https://www.svgrepo.com/show/459050/envelope.svg",
+      "IconUrl": "https://www.svgrepo.com/show/472590/envelope.svg",
       "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145"
     },
     "id": "bb0569a6-2268-49b5-9d38-8158b26124c3",
@@ -2223,11 +2243,11 @@
     "Resources": [
       {
         "Id": "appid-402",
-        "Name": "Det magiske klesskapet"
+        "Name": "Bra sjøfartstjeneste"
       },
       {
         "Id": "se_3225_1596",
-        "Name": "A2 skjema"
+        "Name": "Veldig bra sjøfartstjeneste"
       }
     ]
   },
