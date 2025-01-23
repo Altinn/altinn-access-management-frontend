@@ -1,40 +1,60 @@
 [
   {
     "AccessPackage": {
-        "Id": "annleggadmin",
-        "Name": "Annleggsadministrasjon",
-        "Description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
-        "Tags": [
-            {
-                "Id": "F28F5F92-0F72-4595-A166-C723E978E690",
-                "Name": "Eiendom"
-            }
-        ],
-        "EntityType": {
-            "Id": "EEC6B868-3DA0-4721-87B2-63C5686014C6",
-            "Name": "Organisasjon"
+      "provider": {
+        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
+        "name": "Digdir",
+        "refId": null
+      },
+      "entityType": {
+        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
+        "name": "Organisasjon"
+      },
+      "area": {
+        "id": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
+        "name": "Miljø, ulykke og sikkerhet",
+        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til miljø, ulykke og sikkerhet.",
+        "IconUrl": "https://www.svgrepo.com/show/522869/hand-heart.svg",
+        "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145"
+      },
+      "id": "bacc9294-56fd-457f-930e-59ee4a7a3894",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
+      "name": "Bærekraft",
+      "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til tiltak og rapportering på bærekraft. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+      "isDelegable": true,
+      "Resources": [
+        {
+          "Id": "appid-402",
+          "Name": "Det magiske klesskapet"
         },
-        "Area": {
-            "Id": "589217CF-6070-474F-9989-8C5359C740F4",
-            "Name": "Bygg og anlegg",
-            "Description": "For de som bygger med anlegg",
-            "IconUrl": "https://www.svgrepo.com/show/437004/hammer.svg",
-            "Group": {
-                "Id": "",
-                "Name": "Bransje",
-                "Description": "....."
-            }
+        {
+          "Id": "appid-503",
+          "Name": "Snarveien"
         },
-        "Provider": {
-            "Id": "181C5364-2988-4F48-925C-62844576B5B0",
-            "Name": "Digdir"
+        {
+          "Id": "app_ttd_a3-app",
+          "Name": "A3 app"
         },
-        "Resources": [
-            {
-                "Id": "appid-512",
-                "Name": "Lønningsoversikt"
-            }
-        ]
+        {
+          "Id": "app_ttd_a3-app2",
+          "Name": "A3 app 2"
+        },
+        {
+          "Id": "appid-509",
+          "Name": "Kaffemaskinen i 4. etasje"
+        },
+        {
+          "Id": "appid-512",
+          "Name": "Lønningsoversikt"
+        },
+        {
+          "Id": "appid-513",
+          "Name": "Kaffemaskinen i 5. etasje"
+        }
+      ]
     },
     "To": {
       "Name": "Intelligent Albatross",
