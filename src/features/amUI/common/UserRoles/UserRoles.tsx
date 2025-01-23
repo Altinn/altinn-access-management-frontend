@@ -1,21 +1,30 @@
 import { Badge } from '@altinn/altinn-components';
+import cn from 'classnames';
 
 import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 
 import classes from './userRoles.module.css';
 
-interface UserRulesProps {
+interface UserRulesProps extends React.HTMLAttributes<HTMLDivElement> {
   rightOwnerUuid: string;
   rightHolderUuid: string;
 }
 
-export const UserRoles = ({ rightOwnerUuid, rightHolderUuid }: UserRulesProps) => {
+export const UserRoles = ({
+  rightOwnerUuid,
+  rightHolderUuid,
+  className,
+  ...props
+}: UserRulesProps) => {
   const { data } = useGetRolesForUserQuery({
     rightOwnerUuid: rightOwnerUuid,
     rightHolderUuid: rightHolderUuid,
   });
   return (
-    <div className={classes.userRoles}>
+    <div
+      className={cn(classes.userRoles, className)}
+      {...props}
+    >
       {data?.map((assignment) => {
         const color = assignment?.role?.urn?.includes('brreg:') ? 'company' : 'accent';
         return (

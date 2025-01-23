@@ -230,7 +230,8 @@
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
-    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}."
+    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
