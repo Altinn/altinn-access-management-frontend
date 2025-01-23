@@ -229,7 +229,8 @@
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
     "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
     "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
-    "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}."
+    "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
+    "delegated_packages_count_badge": "{{delegated}} of {{total}}"
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",
