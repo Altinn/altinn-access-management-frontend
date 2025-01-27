@@ -13,8 +13,17 @@ import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPa
 import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
+import { SystemUserRequestPage } from '@/features/systemUser/SystemUserRequestPage';
+import { SystemUserChangeRequestPage } from '@/features/systemUser/SystemUserChangeRequestPage';
+import { SystemUserOverviewPage } from '@/features/systemUser/SystemUserPage/SystemUserOverviewPage';
 
-import { GeneralPath, SingleRightPath, ApiDelegationPath, amUIPath } from '../paths';
+import {
+  GeneralPath,
+  SingleRightPath,
+  ApiDelegationPath,
+  amUIPath,
+  SystemUserPath,
+} from '../paths';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -85,6 +94,18 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.UserRights}
         element={<UserRightsPage />}
+      />
+      <Route
+        path={SystemUserPath.Overview}
+        element={<SystemUserOverviewPage />}
+      />
+      <Route
+        path={SystemUserPath.Request}
+        element={<SystemUserRequestPage />}
+      />
+      <Route
+        path={SystemUserPath.ChangeRequest}
+        element={<SystemUserChangeRequestPage />}
       />
     </Route>,
   ),

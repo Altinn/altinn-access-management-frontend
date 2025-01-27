@@ -1,0 +1,48 @@
+:root {
+  --vendor-container-padding: var(--ds-size-12);
+}
+
+@media only screen and (max-width: 769px) {
+  :root {
+    --vendor-container-padding: var(--ds-size-4);
+  }
+}
+
+.requestPage {
+  min-height: 100vh;
+  background-color: var(--ds-color-neutral-background-subtle);
+}
+
+.requestWrapper {
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 280px;
+  max-width: 1056px;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: right;
+  font-size: 16px;
+  padding: var(--vendor-container-padding);
+}
+
+.vendorInfo {
+  padding-top: var(--ds-size-4);
+  padding-right: var(--vendor-container-padding);
+  padding-bottom: var(--vendor-container-padding);
+  text-align: right;
+  font-style: italic;
+}
+
+.vendorRequestBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-8);
+  background-color: var(--ds-color-accent-background-default);
+  padding: var(--vendor-container-padding);
+  margin-bottom: 3px;
+}
