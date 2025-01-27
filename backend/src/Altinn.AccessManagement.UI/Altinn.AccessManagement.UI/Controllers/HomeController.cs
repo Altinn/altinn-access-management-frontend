@@ -71,7 +71,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
                 {
-                    HttpOnly = false // Make this cookie readable by Javascript.
+                    HttpOnly = false, // Make this cookie readable by Javascript.
+                    SameSite = SameSiteMode.Strict
                 });
             }
             else
@@ -79,14 +80,16 @@ namespace Altinn.AccessManagement.UI.Controllers
                 HttpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions
                 {
                     Secure = true,
-                    HttpOnly = false // Make this cookie readable by Javascript.
+                    HttpOnly = false, // Make this cookie readable by Javascript.
+                    SameSite = SameSiteMode.Strict
                 });
             }
 
             HttpContext.Response.Cookies.Append("AltinnPartyUuid", "cd35779b-b174-4ecc-bbef-ece13611be7f", new CookieOptions
             {
                 Secure = true,
-                HttpOnly = false // Make this cookie readable by Javascript.
+                HttpOnly = false, // Make this cookie readable by Javascript.
+                SameSite = SameSiteMode.Strict
             });
 
             if (await ShouldShowAppView())
@@ -97,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             string goToUrl = HttpUtility.UrlEncode($"{_generalSettings.FrontendBaseUrl}{Request.Path}{Request.QueryString}");
             string redirectUrl = $"{_platformSettings.ApiAuthenticationEndpoint}authentication?goto={goToUrl}";
-
+            
             return Redirect(redirectUrl);
         }
 
@@ -118,6 +121,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 // Make this cookie readable by Javascript.
                 HttpOnly = false,
+                SameSite = SameSiteMode.Strict
             });
         }
 
