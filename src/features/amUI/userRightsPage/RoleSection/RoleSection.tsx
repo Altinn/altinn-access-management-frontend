@@ -2,17 +2,26 @@ import { useParams } from 'react-router-dom';
 import { AccessPackageListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Paragraph, Heading } from '@digdir/designsystemet-react';
+import { useRef, useState } from 'react';
 
+import type { Role } from '@/rtk/features/roleApi';
 import { useGetRolesForUserQuery } from '@/rtk/features/roleApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { filterDigdirAssignments } from '@/resources/utils/roleUtils';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import classes from './roleSection.module.css';
+import { RoleInfoModal } from './RoleInfoModal';
 
 export const RoleSection = () => {
   const { t } = useTranslation();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
+
   const { data: reportee } = useGetReporteeQuery();
   const { id: rightHolderUuid } = useParams();
+  const { data: party } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
+
   const { data } = useGetRolesForUserQuery({
     rightOwnerUuid: reportee?.partyUuid ?? '',
     rightHolderUuid: rightHolderUuid ?? '',
@@ -35,7 +44,8 @@ export const RoleSection = () => {
               <li key={assignment.id}>
                 <AccessPackageListItem
                   onClick={() => {
-                    //
+                    setModalItem(assignment.role);
+                    modalRef.current?.showModal();
                   }}
                   as='button'
                   title={assignment.role.name}
@@ -48,6 +58,14 @@ export const RoleSection = () => {
             );
           })}
       </ul>
+      {party && (
+        <RoleInfoModal
+          modalRef={modalRef}
+          toParty={party}
+          role={modalItem}
+          onClose={() => setModalItem(undefined)}
+        />
+      )}
     </div>
   );
 };

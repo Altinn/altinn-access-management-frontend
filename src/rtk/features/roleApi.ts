@@ -43,6 +43,7 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
 
 export const roleApi = createApi({
   reducerPath: 'roleApi',
+  tagTypes: ['roles'],
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers: Headers): Headers => {
@@ -59,9 +60,27 @@ export const roleApi = createApi({
       query: ({ rightOwnerUuid, rightHolderUuid }) =>
         `/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
     }),
+    revoke: builder.mutation<void, { to: string; roleId: string }>({
+      query({ to, roleId }) {
+        return {
+          url: `${getCookie('AltinnPartyUuid')}/${to}/${roleId}/revoke`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['roles'],
+    }),
+    delegate: builder.mutation<void, { to: string; roleId: string }>({
+      invalidatesTags: ['roles'],
+      query: (args) => {
+        return {
+          url: `delegate/${getCookie('AltinnPartyId')}/${args.roleId}/${args.to}`,
+          method: 'POST',
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetRolesForUserQuery } = roleApi;
+export const { useGetRolesForUserQuery, useRevokeMutation, useDelegateMutation } = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;
