@@ -35,41 +35,9 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     // WHEN user delegates to ROMANTISK ESKE
     await delegate.delegateToSSN('19856097121', 'GATE');
     await delegateRights.delegateRightsToSSN('Altinn2 non-delegable Reporting service');
+
+    // Forsøk å deleger Altinn2 non-delegable Reporting service
+    // Lag ny metode som forsøker å delegere en enkelttjeneste (dublisere fra annen metode)
+    // Verifiser at det kommer opp feilmelding "Du kan ikke gi fullmakt til denne tjenesten"
   });
-  /*  await delegateRoles.delegateRoles(
-      'Tilgangsstyring',
-      'Begrenset signeringsrettighet',
-      'SKYFRI GATE',
-    );
-    await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
-    await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
-    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
-    // await context1.close();
-    await context.clearCookies();
-
-    //Login with coveredby User
-
-    await login.loginWithUser('19856097121');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
-    await coverebyRights.checkCoverebyRights();
-
-    //Instantiate app to which user had got rights
-    await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
-    // await context.close();
-
-    //To delegate rights
-    // WHEN user delegates to KLIPPFISK
-    await delegate.delegateToSSN('04880748144', 'KLIPPFISK');
-    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
-    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
-    await context.clearCookies();
-
-    //Instantiate app to which user had got rights
-    await login.loginWithUser('04880748144');
-    await login.chooseReportee('ULIK FLAT TIGER AS');
-    await coverebyRights.checkCoverebyRights();
-    await instantiateResources.instantiateApp('ULIK FLAT TIGER AS');
-    await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
-  }); */
 });
