@@ -66,6 +66,13 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
     <PageContainer onNavigateBack={onNavigateBack}>
       <div className={classes.creationPageContainer}>
         <Heading
+          level={1}
+          data-size='xs'
+          className={classes.creationPageHeader}
+        >
+          {t('systemuser_creationpage.banner_title')}
+        </Heading>
+        <Heading
           level={2}
           data-size='sm'
         >
