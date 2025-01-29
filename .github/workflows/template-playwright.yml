@@ -1,6 +1,23 @@
 name: template-playwright.yml
 
 on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Playwright project
+        type: string
+        required: true
+      environment:
+        type: choice
+        required: true
+        options:
+          - AT21
+          - AT22
+          - AT23
+          - AT24
+          - TT02
+        description: Environment
+
   workflow_call:
     inputs:
       project:
@@ -23,6 +40,7 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn --immutable
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Running yarn tests
