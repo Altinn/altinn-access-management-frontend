@@ -42,7 +42,7 @@ jobs:
       project: ${{ matrix.project }}
 
   playwright-accessibility-tests:
-    name: "Playwright"
+    name: "Playwright Accessibility"
     secrets: inherit
     uses: "./.github/workflows/template-playwright.yml"
     needs: deploy-main
