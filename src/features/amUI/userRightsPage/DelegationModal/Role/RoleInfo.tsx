@@ -32,6 +32,9 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
     return null;
   }, [activeDelegations, isFetching, role.id]);
 
+  const userHasRole = !!assignment;
+  const userHasInheritedRole = assignment?.inherited && assignment.inherited.length > 0;
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -53,7 +56,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
       <Paragraph>{role?.description}</Paragraph>
 
       <div className={classes.actions}>
-        {!assignment ? (
+        {!userHasRole ? (
           <DelegateRoleButton
             roleId={role.id}
             roleName={role.name}
@@ -67,7 +70,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             roleName={role.name}
             toParty={toParty}
             fullText
-            disabled={isFetching || (assignment?.inherited && assignment.inherited.length > 0)}
+            disabled={isFetching || userHasInheritedRole}
           />
         )}
       </div>
