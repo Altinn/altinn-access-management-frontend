@@ -27,7 +27,7 @@ jobs:
       tag: ${{ github.sha }}
 
   playwright-e2e-tests:
-    name: "Playwright"
+    name: "Playwright E2E-tests"
     secrets: inherit
     uses: "./.github/workflows/template-playwright.yml"
     needs: deploy-main
@@ -42,7 +42,7 @@ jobs:
       project: ${{ matrix.project }}
 
   playwright-accessibility-tests:
-    name: "Playwright Accessibility"
+    name: "Playwright Accessibility-tests"
     secrets: inherit
     uses: "./.github/workflows/template-playwright.yml"
     needs: deploy-main
