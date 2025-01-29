@@ -1,6 +1,7 @@
 [
     {
         "role": {
+          "isDelegable": true,
           "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
           "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
           "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",

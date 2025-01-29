@@ -53,22 +53,21 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
       <Paragraph>{role?.description}</Paragraph>
 
       <div className={classes.actions}>
-        {assignment?.isDelegable && (
+        {!assignment ? (
           <DelegateRoleButton
             roleId={role.id}
             roleName={role.name}
             toParty={toParty}
             fullText
-            disabled={isFetching}
+            disabled={isFetching || !role.isDelegable}
           />
-        )}
-        {assignment?.inherited && assignment.inherited.length > 0 && (
+        ) : (
           <RevokeRoleButton
             roleId={role.id}
             roleName={role.name}
             toParty={toParty}
             fullText
-            disabled={isFetching}
+            disabled={isFetching || (assignment?.inherited && assignment.inherited.length > 0)}
           />
         )}
       </div>

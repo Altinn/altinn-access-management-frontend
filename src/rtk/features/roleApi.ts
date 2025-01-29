@@ -24,6 +24,7 @@ export interface Role {
   description: string;
   urn: string;
   area: Area;
+  isDelegable: boolean;
 }
 
 interface Area {
@@ -38,7 +39,6 @@ export interface Assignment {
   roleId: string;
   fromId: string;
   toId: string;
-  isDelegable: boolean;
   role: Role;
   inherited: string[];
 }

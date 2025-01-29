@@ -1,6 +1,7 @@
 [
   {
     "role": {
+      "isDelegable": true,
       "id": "de42ae15-c265-42b3-8060-64c779684902",
       "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
       "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
@@ -32,6 +33,7 @@
   },
   {
     "role": {
+      "isDelegable": true,
       "id": "72c336a2-1705-4aef-b220-7f4aa6c0e69d",
       "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
       "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
@@ -63,6 +65,7 @@
   },
   {
     "role": {
+      "isDelegable": true,
       "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
       "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
       "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
@@ -90,7 +93,6 @@
     "roleId": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
     "fromId": "73dfe32a-8f21-465c-9242-40d82e61f320",
     "toId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "isDelegable": true,
     "inherited": ["brreg:role:lede"]
   }
 ]

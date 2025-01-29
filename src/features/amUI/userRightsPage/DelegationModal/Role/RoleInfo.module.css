@@ -10,3 +10,8 @@
   gap: 0.5rem;
   align-items: center;
 }
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
