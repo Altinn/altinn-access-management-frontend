@@ -29,10 +29,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
             _lookupService = lookupService;
         }
 
+
         /// <inheritdoc />
         public async Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
             return await _accessPackageClient.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
         }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
+        {
+            return await _accessPackageClient.CreateRoleDelegation(from, to, roleId);
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
+        {
+            return _accessPackageClient.DeleteRoleDelegation(assignmentId);
+        }
+
     }
 }

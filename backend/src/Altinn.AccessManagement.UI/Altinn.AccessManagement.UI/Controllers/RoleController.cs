@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Net;
-using System.Text.Json; 
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -58,5 +58,55 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
+
+
+        [HttpPost]
+        [Authorize]
+        [Route("delegate/{from}/{to}/{roleId}")]
+        public async Task<ActionResult> DelegateRoleToUser([FromRoute] Guid from, [FromRoute] Guid to, [FromRoute] Guid roleId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var response = await _roleService.CreateRoleDelegation(from, to, roleId);
+                return StatusCode((int)response.StatusCode, response.Content);
+            }
+            catch (HttpStatusException ex)
+            {
+                _logger.LogError(ex, "Error delegating role");
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Revoke role for user
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("assignments/{assignmentId}")]
+        public async Task<ActionResult> RevokeRoleForUser([FromRoute]Guid assignmentId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var response = await _roleService.DeleteRoleDelegation(assignmentId);
+                return StatusCode((int)response.StatusCode, response.Content);
+            }
+            catch (HttpStatusException ex)
+            {
+                _logger.LogError(ex, "Error deleting assignment");
+                return StatusCode((int)ex.StatusCode, ex.Message);
+            }
+        }
+
     }
 }

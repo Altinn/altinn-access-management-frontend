@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
@@ -54,6 +55,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             } catch {
                 return Task.FromResult(new List<RoleAssignment>());
             }
+        }
+
+         /// <inheritdoc />
+        public Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
+        {
+            if (to == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
+        {
+            if (assignmentId == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
         }
     }
 }

@@ -1,12 +1,14 @@
-import * as React from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
-import { useTranslation } from 'react-i18next';
-import { Button, Header, Icon, PageHeader } from '@altinn/altinn-components';
+import { Paragraph } from '@digdir/designsystemet-react';
+// import { useTranslation } from 'react-i18next';
+import { PageHeader } from '@altinn/altinn-components';
+import { useMemo } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
-import { useSnackbar } from '@/features/amUI/common/Snackbar';
-import { useDelegateMutation, type Role } from '@/rtk/features/roleApi';
-import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvider';
+import { useGetRolesForUserQuery, type Role } from '@/rtk/features/roleApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+
+import { RevokeRoleButton } from '../../RoleSection/RevokeRoleButton';
+import { DelegateRoleButton } from '../../RoleSection/DelegateRoleButton';
 
 import classes from './RoleInfo.module.css';
 
@@ -16,49 +18,24 @@ export interface PackageInfoProps {
   onDelegate?: () => void;
 }
 
-export const RoleInfo = ({ role, toParty, onDelegate }: PackageInfoProps) => {
-  console.log('🚀 ~ RoleInfo ~ role:', role);
-  const { t } = useTranslation();
+export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
+  // const { t } = useTranslation();
 
-  const [delegateRole, { isLoading }] = useDelegateMutation();
-  const { openSnackbar } = useSnackbar();
+  const { data: reportee } = useGetReporteeQuery();
 
-  //   const { data: activeDelegations, isFetching } = useGetRightHolderDelegationsQuery(
-  //     toParty.partyUuid,
-  //   );
+  const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
+    rightOwnerUuid: reportee?.partyUuid ?? '',
+    rightHolderUuid: toParty.partyUuid ?? '',
+  });
 
-  //   const userHasPackage = React.useMemo(() => {
-  //     if (activeDelegations && !isFetching) {
-  //       return Object.values(activeDelegations)
-  //         .flat()
-  //         .some((delegation) => delegation.accessPackageId === accessPackage.id);
-  //     }
-  //     return false;
-  //   }, [activeDelegations, isFetching, accessPackage.id]);
-
-  const handleDelegate = async () => {
-    try {
-      delegateRole({ to: toParty.partyUuid, roleId: role.id });
-      openSnackbar({
-        message: t('access_packages.package_delegation_success', {
-          name: toParty.name,
-          accessPackage: role.name,
-        }),
-      });
-      if (onDelegate) {
-        onDelegate();
-      }
-    } catch (e) {
-      console.log(e);
-      openSnackbar({
-        message: t('access_packages.package_delegation_error', {
-          name: toParty.name,
-          accessPackage: role.name,
-        }),
-        duration: SnackbarDuration.infinite,
-      });
+  const userHasPackage = useMemo(() => {
+    if (activeDelegations && !isFetching) {
+      return Object.values(activeDelegations)
+        .flat()
+        .some((assignment) => assignment.roleId === role.id);
     }
-  };
+    return false;
+  }, [activeDelegations, isFetching, role.id]);
 
   return (
     <div className={classes.container}>
@@ -69,12 +46,23 @@ export const RoleInfo = ({ role, toParty, onDelegate }: PackageInfoProps) => {
       <Paragraph>{role?.description}</Paragraph>
 
       <div className={classes.actions}>
-        <Button
-          onClick={handleDelegate}
-          disabled={isLoading}
-        >
-          {t('common.give_poa')}
-        </Button>
+        {userHasPackage ? (
+          <RevokeRoleButton
+            roleId={role.id}
+            roleName={role.name}
+            toParty={toParty}
+            fullText
+            disabled={isFetching}
+          />
+        ) : (
+          <DelegateRoleButton
+            roleId={role.id}
+            roleName={role.name}
+            toParty={toParty}
+            fullText
+            disabled={isFetching}
+          />
+        )}
       </div>
     </div>
   );

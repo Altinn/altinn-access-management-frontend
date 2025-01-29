@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
@@ -49,6 +50,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _accessTokenProvider = accessTokenProvider;
         }
 
+
+
         /// <inheritdoc />
         public async Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {
@@ -96,6 +99,65 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
                 return null;
             }
-        }  
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
+        {
+             try
+            {
+                var roleAssignment = new RoleAssignment
+                {
+                    RoleId = roleId,
+                    FromId = from,
+                    ToId = to
+                };
+                StringContent requestBody = new StringContent(JsonSerializer.Serialize(roleAssignment, _serializerOptions), Encoding.UTF8, "application/json");
+                var endpointUrl = $"/assignment";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                               
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return response;
+                }
+                else
+                {
+                    _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyForOrganization // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, response);
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
+                return null;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
+        {
+             try
+            {
+                var endpointUrl = $"/assignment{assignmentId}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                               
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return response;
+                }
+                else
+                {
+                    _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyForOrganization // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, response);
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
+                return null;
+            }
+        }
     }
 }

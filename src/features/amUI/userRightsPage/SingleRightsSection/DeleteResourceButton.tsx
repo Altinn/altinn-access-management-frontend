@@ -50,7 +50,7 @@ export const DeleteResourceButton = ({
           color: 'accent',
           size: fullText ? 'md' : 'sm',
         }}
-        triggerButtonContent={<>{fullText ? t('common.delete_poa') : t('common.delete')}</>}
+        triggerButtonContent={fullText ? t('common.delete_poa') : t('common.delete')}
         confirmButtonProps={{
           color: 'danger',
         }}
