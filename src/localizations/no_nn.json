@@ -217,8 +217,8 @@
     "popular_services": "Populære tenester:",
     "give_new_single_right": "Gi fullmakt til ny teneste",
     "current_services_title": "Fullmakt til {{count}} tenester",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikkje slette tilgang til tenesta {{servicename}}"
+    "delete_singleRight_success_message": "Slettet tilgang til ",
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",

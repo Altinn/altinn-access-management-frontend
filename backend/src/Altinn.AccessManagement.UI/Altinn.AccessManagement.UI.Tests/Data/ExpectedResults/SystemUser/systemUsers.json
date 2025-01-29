@@ -2,11 +2,8 @@
   {
     "id": "123e4567-e89b-12d3-a456-426614174000",
     "integrationTitle": "SmartCloud",
-    "systemId": "310144827_smartcloud",
     "partyId": "51329012",
     "created": "2023-10-10T12:00:00Z",
-    "supplierName": "N/A",
-    "supplierOrgno": "310144827",
     "system": {
       "systemId": "310144827_smartcloud",
       "systemVendorOrgNumber": "310144827",

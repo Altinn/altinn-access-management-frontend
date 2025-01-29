@@ -219,8 +219,8 @@
     "popular_services": "Popular services",
     "give_new_single_right": "Give power of attorney to new service",
     "current_services_title": "Power of attorney to {{count}} services",
-    "delete_singleRight_success_message": "Access to service: {{servicename}} was successfully deleted",
-    "delete_singleRight_error_message": "Failed to delete access to service: {{servicename}}"
+    "delete_singleRight_success_message": "Deleted access to ",
+    "delete_singleRight_error_message": "Failed to delete access to "
   },
   "access_packages": {
     "current_access_packages_title": "Power of attorney to {{count}} access package(s)",

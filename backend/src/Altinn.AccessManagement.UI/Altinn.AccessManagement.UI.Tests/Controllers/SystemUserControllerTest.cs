@@ -41,11 +41,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUsers_ReturnsAllSystemUsers()
         {
             // Arrange
+            int partyId = 51329012;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUsers.json");
             List<SystemUserFE> expectedResponse = Util.GetMockData<List<SystemUserFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/51329012");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}");
             List<SystemUserFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserFE>>();
 
             // Assert
@@ -61,11 +62,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUser_ReturnsSpecificSystemUser()
         {
             // Arrange
+            int partyId = 51329012;
+            string systemUserId = "123e4567-e89b-12d3-a456-426614174000";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUsers.json");
             SystemUserFE expectedResponse = Util.GetMockData<List<SystemUserFE>>(path)[0];
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/51329012/123e4567-e89b-12d3-a456-426614174000");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
             SystemUserFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserFE>();
 
             // Assert
@@ -81,10 +84,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUser_ReturnsNotFound()
         {
             // Arrange
+            int partyId = 51329012;
+            string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/51329012/e60073ad-c661-4ca0-b74c-40238ad333e9");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -98,10 +103,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteSystemUser_ReturnsAccepted()
         {
             // Arrange
+            int partyId = 51329012;
+            string systemUserId = "123e4567-e89b-12d3-a456-426614174000";
             HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/51329012/123e4567-e89b-12d3-a456-426614174000");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -115,10 +122,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteSystemUser_ReturnsNoContent()
         {
             // Arrange
+            int partyId = 51329012;
+            string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/51329012/e60073ad-c661-4ca0-b74c-40238ad333e9");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -132,6 +141,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostSystemUser_ReturnsNewSystemUserId()
         {
             // Arrange
+            int partyId = 51329012;
             string expectedResponse = "eb9c9edf-a32f-424c-b475-6d47a0e7621f";
             NewSystemUserRequest dto = new NewSystemUserRequest
             {
@@ -143,7 +153,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/51329012", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/{partyId}", content);
             string actualResponse = await httpResponse.Content.ReadFromJsonAsync<string>();
 
             // Assert
@@ -159,6 +169,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostSystemUser_ReturnsSystemNotFound()
         {
             // Arrange
+            int partyId = 51329012;
             string expectedResponse = "AUTH-00011";
             NewSystemUserRequest dto = new NewSystemUserRequest
             {
@@ -170,7 +181,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/51329012", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/{partyId}", content);
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
