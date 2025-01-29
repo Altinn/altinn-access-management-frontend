@@ -1,7 +1,6 @@
 .creationPageContainer {
   display: flex;
   flex-direction: column;
-  padding: var(--ds-size-8);
   gap: var(--ds-size-4);
 }
 

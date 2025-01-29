@@ -4,18 +4,10 @@
   margin: 0;
 }
 
-.logoWrapper {
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  position: relative;
+.resourceInfoHeader {
   display: flex;
+  flex-direction: row;
   align-items: center;
-}
-
-.logoImg {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  position: absolute;
+  gap: var(--ds-size-4);
+  margin-bottom: var(--ds-size-4);
 }

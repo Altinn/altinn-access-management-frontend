@@ -1,0 +1,5 @@
+.systemUserDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-8);
+}

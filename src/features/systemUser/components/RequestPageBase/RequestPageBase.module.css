@@ -26,7 +26,6 @@
   justify-content: space-between;
   align-items: center;
   text-align: right;
-  font-size: 16px;
   padding: var(--vendor-container-padding);
 }
 
