@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { Avatar, List, Button } from '@altinn/altinn-components';
+import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
@@ -74,12 +74,11 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Avatar
-          imageUrl={accessPackage?.area?.iconUrl ?? undefined}
-          name={accessPackage?.name}
-          type='company'
-          size='lg'
-        />
+        <Icon
+          size='xl'
+          name='package'
+          className={classes.headerIcon}
+        ></Icon>
         <Heading
           size='md'
           level={1}

@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config({
   path: [
     `config/.env`,
-    `config/.env.${process.env.environment ?? 'at24'}`,
+    `config/.env.${process.env.environment ?? 'at22'}`,
     `config/.env.local`,
     `config/.env.${process.env.environment ?? 'at22'}.local`,
   ],
@@ -15,10 +15,7 @@ dotenv.config({
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
-  testMatch: ['playwright/e2eTests/*.spec.ts'],
-  timeout: 60 * 1000, //30 seconds default timeout
   use: {
-    headless: true,
     // screenshot: 'only-on-failure',
     screenshot: { mode: 'only-on-failure', fullPage: true },
     video: { mode: 'retain-on-failure', size: { width: 1600, height: 1300 } },
@@ -43,6 +40,26 @@ const config: PlaywrightTestConfig = {
         outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
       },
     ],
+  ],
+
+  projects: [
+    {
+      name: 'e2e-tests',
+      testMatch: 'playwright/e2eTests/*.spec.ts',
+      timeout: 60 * 1000, //30 seconds default timeout
+      use: {
+        browserName: 'chromium',
+        headless: true,
+      },
+    },
+    {
+      name: 'accessibility-tests',
+      testMatch: 'playwright/uuTests/accessibilityTests/*.spec.ts',
+      use: {
+        browserName: 'chromium',
+        headless: true,
+      },
+    },
   ],
 };
 

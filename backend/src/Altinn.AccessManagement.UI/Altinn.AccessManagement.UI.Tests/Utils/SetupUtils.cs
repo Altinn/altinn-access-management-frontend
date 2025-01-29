@@ -239,7 +239,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return factory.CreateClient(opts);
         }
 
-
         /// <summary>
         ///     Adds an auth cookie to the request message
         /// </summary>

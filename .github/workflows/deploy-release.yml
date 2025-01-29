@@ -27,8 +27,13 @@ jobs:
     needs: deploy-release-to-tt02
     uses: './.github/workflows/template-playwright.yml'
     secrets: inherit
+    strategy:
+      matrix:
+        environment: [TT02]
+        project: [ e2e-tests ]
     with:
-      environment: TT02
+      environment: ${{ matrix.environment }}
+      project: ${{ matrix.project }}
 
   deploys-release-to-prod:
     name: 'Environment (Prod)'

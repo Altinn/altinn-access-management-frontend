@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         {
             _logger = logger;
             _platformSettings = platformSettings.Value;
-            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint); // TODO: Change to ApiAccessPackageEndpoint
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessPackageEndpoint);
             httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
             _client = httpClient;
             _httpContextAccessor = httpContextAccessor;
@@ -52,10 +52,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {
-            string endpointUrl = $"accesspackages/package?searchterm={searchString}";
+            string endpointUrl = $"package/search/term={searchString}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

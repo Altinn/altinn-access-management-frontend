@@ -38,11 +38,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserRequest_ReturnsRequest()
         {
             // Arrange
+            int partyId = 51329012;
+            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserRequest.json");
             SystemUserRequestFE expectedResponse = Util.GetMockData<SystemUserRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/51329012/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}");
             SystemUserRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserRequestFE>();
 
             // Assert
@@ -58,10 +60,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserRequest_ReturnsError()
         {
             // Arrange
+            int partyId = 51329012;
+            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/51329012/e71a293a-3e7b-42f4-9315-81aa8c2515e5");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}");
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
@@ -77,10 +81,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task ApproveSystemUserRequest_ApproveOk()
         {
             // Arrange
+            int partyId = 51329012;
+            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3/approve", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/approve", null);
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -96,10 +102,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task ApproveSystemUserRequest_ReturnsError()
         {
             // Arrange
+            int partyId = 51329012;
+            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/e71a293a-3e7b-42f4-9315-81aa8c2515e5/approve", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/approve", null);
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
@@ -115,10 +123,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RejectSystemUserRequest_ApproveOk()
         {
             // Arrange
+            int partyId = 51329012;
+            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3/reject", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/reject", null);
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -134,10 +144,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RejectSystemUserRequest_ReturnsError()
         {
             // Arrange
+            int partyId = 51329012;
+            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/e71a293a-3e7b-42f4-9315-81aa8c2515e5/reject", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/reject", null);
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
@@ -153,10 +165,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task Logout_RedirectsToLogoutUrl()
         {
             // Arrange
+            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             string expectedResponseUrl = "http://localhost:5101/authentication/api/v1/logout";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3/logout");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/{requestId}/logout");
 
             // Assert
             Assert.Equal(HttpStatusCode.Redirect, httpResponse.StatusCode);
