@@ -32,4 +32,9 @@ public class Role
     /// URN
     /// </summary>
     public string Urn { get; set; }
+    
+    /// <summary>
+    /// Area
+    /// </summary>
+    public RoleArea Area { get; set; }
 }

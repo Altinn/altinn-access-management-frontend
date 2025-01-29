@@ -1,6 +1,5 @@
-import { Paragraph } from '@digdir/designsystemet-react';
-// import { useTranslation } from 'react-i18next';
-import { PageHeader } from '@altinn/altinn-components';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Avatar } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -19,8 +18,6 @@ export interface PackageInfoProps {
 }
 
 export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
-  // const { t } = useTranslation();
-
   const { data: reportee } = useGetReporteeQuery();
 
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
@@ -28,34 +25,45 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
     rightHolderUuid: toParty.partyUuid ?? '',
   });
 
-  const userHasPackage = useMemo(() => {
+  const assignment = useMemo(() => {
     if (activeDelegations && !isFetching) {
-      return Object.values(activeDelegations)
-        .flat()
-        .some((assignment) => assignment.roleId === role.id);
+      return activeDelegations.find((assignment) => assignment.role.id === role.id);
     }
-    return false;
+    return null;
   }, [activeDelegations, isFetching, role.id]);
 
   return (
     <div className={classes.container}>
-      <PageHeader
-        title={role?.name}
-        icon='package'
-      />
+      <div className={classes.header}>
+        <Avatar
+          size='md'
+          name={role?.name}
+          imageUrl={role?.area?.iconUrl}
+          imageUrlAlt={role?.area?.name}
+          type='company'
+        />
+        <Heading
+          level={3}
+          title={role?.name}
+          size='sm'
+        >
+          {role?.name}
+        </Heading>
+      </div>
       <Paragraph>{role?.description}</Paragraph>
 
       <div className={classes.actions}>
-        {userHasPackage ? (
-          <RevokeRoleButton
+        {assignment?.isDelegable && (
+          <DelegateRoleButton
             roleId={role.id}
             roleName={role.name}
             toParty={toParty}
             fullText
             disabled={isFetching}
           />
-        ) : (
-          <DelegateRoleButton
+        )}
+        {assignment?.inherited && assignment.inherited.length > 0 && (
+          <RevokeRoleButton
             roleId={role.id}
             roleName={role.name}
             toParty={toParty}

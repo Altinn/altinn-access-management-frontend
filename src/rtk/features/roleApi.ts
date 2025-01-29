@@ -23,6 +23,14 @@ export interface Role {
   code: string;
   description: string;
   urn: string;
+  area: Area;
+}
+
+interface Area {
+  id: string;
+  name: string;
+  description: string;
+  iconUrl: string;
 }
 
 export interface Assignment {
@@ -32,6 +40,7 @@ export interface Assignment {
   toId: string;
   isDelegable: boolean;
   role: Role;
+  inherited: string[];
 }
 
 interface RoleApiRequest {
@@ -60,10 +69,10 @@ export const roleApi = createApi({
       query: ({ rightOwnerUuid, rightHolderUuid }) =>
         `/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
     }),
-    revoke: builder.mutation<void, { to: string; roleId: string }>({
-      query({ to, roleId }) {
+    revoke: builder.mutation<void, { assignmentId: string }>({
+      query({ assignmentId }) {
         return {
-          url: `${getCookie('AltinnPartyUuid')}/${to}/${roleId}/revoke`,
+          url: `/assignments/${assignmentId}`,
           method: 'DELETE',
         };
       },
@@ -73,7 +82,7 @@ export const roleApi = createApi({
       invalidatesTags: ['roles'],
       query: (args) => {
         return {
-          url: `delegate/${getCookie('AltinnPartyId')}/${args.roleId}/${args.to}`,
+          url: `delegate/${getCookie('AltinnPartyUuid')}/${args.roleId}/${args.to}`,
           method: 'POST',
         };
       },
