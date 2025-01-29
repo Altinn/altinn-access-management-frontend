@@ -220,8 +220,8 @@
     "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt til ny tjeneste",
     "current_services_title": "Fullmakt til {{count}} tjenester",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
+    "delete_singleRight_success_message": "Slettet tilgang til ",
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
