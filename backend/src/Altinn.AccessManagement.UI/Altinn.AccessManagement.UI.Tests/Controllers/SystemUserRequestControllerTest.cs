@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3/approve", null);
-            bool actualResponse = true;
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/51329012/24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3/reject", null);
-            bool actualResponse = true;
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
