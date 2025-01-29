@@ -40,6 +40,7 @@
     "react-router-dom": "^7.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
     "@playwright/test": "^1.47.2",
     "@storybook/addon-a11y": "^8.3.5",
     "@storybook/addon-essentials": "8.4.7",
