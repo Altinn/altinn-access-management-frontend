@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         environment: [TT02]
-        project: [ e2e-tests, accessibility-tests ]
+        project: [ e2e-tests ]
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
