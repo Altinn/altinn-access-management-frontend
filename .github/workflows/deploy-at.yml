@@ -13,28 +13,29 @@ jobs:
     with:
       tag: ${{ github.sha }}
 
-  deploy-main:
-    name: 'Environment'
-    needs: containerize
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [AT21, AT22, AT23, AT24]
-    uses: './.github/workflows/template-deploy-container.yml'
-    secrets: inherit
-    with:
-      environment: ${{ matrix.environment }}
-      tag: ${{ github.sha }}
+ # deploy-main:
+ #   name: 'Environment'
+ #   needs: containerize
+ #   strategy:
+ #     fail-fast: false
+ #     matrix:
+ #       environment: [AT21, AT22, AT23, AT24]
+ #   uses: './.github/workflows/template-deploy-container.yml'
+ #   secrets: inherit
+ #   with:
+ #     environment: ${{ matrix.environment }}
+ #     tag: ${{ github.sha }}
 
   playwright-main:
     name: 'Playwright'
     secrets: inherit
     uses: './.github/workflows/template-playwright.yml'
-    needs: deploy-main
+   # needs: deploy-main
     strategy:
       fail-fast: false
       matrix:
         environment: [AT24]
-
+        project: [ e2e-tests, accessibility-tests ]
     with:
       environment: ${{ matrix.environment }}
+      project: ${{ matrix.project }}
