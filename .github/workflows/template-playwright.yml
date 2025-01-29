@@ -44,7 +44,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Running yarn tests
-        working-directory: playwright, 
+        working-directory: playwright 
         run: |
           yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }}
       - uses: actions/upload-artifact@v4
