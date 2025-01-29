@@ -58,11 +58,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemRights_ReturnsRights()
         {
             // Arrange
+            string systemId = "310144827_smartcloud";
             string path = Path.Combine(_expectedDataPath, "SystemRegister", "systemRights.json");
             List<ServiceResourceFE> expectedResponse = Util.GetMockData<List<ServiceResourceFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister/rights/310144827_smartcloud");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister/rights/{systemId}");
             List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
 
             // Assert
