@@ -28,12 +28,12 @@ export const DeleteResourceButton = ({
 
   const snackbar = (isSuccessful: boolean) => {
     const snackbarData = {
-      message: t(
-        isSuccessful
-          ? 'single_rights.delete_singleRight_success_message'
-          : 'single_rights.delete_singleRight_error_message',
-        { servicename: resource.title },
-      ),
+      message:
+        t(
+          isSuccessful
+            ? 'single_rights.delete_singleRight_success_message'
+            : 'single_rights.delete_singleRight_error_message',
+        ) + resource.title,
       variant: SnackbarMessageVariant.Default,
       duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
