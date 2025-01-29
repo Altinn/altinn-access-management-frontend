@@ -11,6 +11,11 @@
         public string ApiAccessManagementEndpoint { get; set; }
 
         /// <summary>
+        /// Gets or sets the access packages api endpoint
+        /// </summary>
+        public string ApiAccessPackageEndpoint { get; set; }
+
+        /// <summary>
         /// Gets or sets the authentication api endpoint
         /// </summary>
         public string ApiAuthenticationEndpoint { get; set; }

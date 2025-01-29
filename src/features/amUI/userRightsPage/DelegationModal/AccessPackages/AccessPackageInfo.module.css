@@ -31,6 +31,10 @@
   margin-bottom: 8px;
 }
 
+.headerIcon {
+  font-size: 2.2rem !important;
+}
+
 .actions {
   display: flex;
   gap: 15px;

@@ -1,40 +1,104 @@
 {
-  "589217CF-6070-474F-9989-8C5359C740F4": [
+  "fc93d25e-80bc-469a-aa43-a6cee80eb3e2": [
     {
-        "accessPackageId": "annleggadmin",
-        "delegationDetails": {
-            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-            "lastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
-        }
+      "accessPackageId": "7b8a3aaa-c8ed-4ac4-923a-335f4f9eb45a",
+      "delegationDetails": {
+        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+        "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "lastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
+      },
+      "inherited": false,
+      "inheritedFrom": null
     },
     {
-        "accessPackageId": "eiendom_kjop",
-        "delegationDetails": {
-            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-            "lastChangedOn": "2024-12-22T14:57:39.2568955+01:00"
-        }
+      "accessPackageId": "c5bbbc3f-605a-4dcb-a587-32124d7bb76d",
+      "delegationDetails": {
+        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+        "delegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+        "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
+      },
+      "inherited": true,
+      "inheritedFrom": {
+        "partyId": 51398461,
+        "partyUuid": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+        "partyTypeName": 2,
+        "orgNumber": "310987018",
+        "unitType": "ORGL",
+        "name": "RIKTIG MINIMALISTISK PIGGSVIN",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "person": null,
+        "organization": {
+          "orgNumber": "310987018",
+          "name": "RIKTIG MINIMALISTISK PIGGSVIN",
+          "unitType": "ORGL",
+          "telephoneNumber": null,
+          "mobileNumber": null,
+          "faxNumber": null,
+          "eMailAddress": "copernicus@furudaldhanab.no",
+          "internetAddress": null,
+          "mailingAddress": null,
+          "mailingPostalCode": null,
+          "mailingPostalCity": null,
+          "businessAddress": null,
+          "businessPostalCode": null,
+          "businessPostalCity": null,
+          "unitStatus": "E"
+        },
+        "childParties": null
+      }
     }
   ],
-  "589217CF-6070-474F-9989-8C5359C740GG": [
+  "a8834a7c-ed89-4c73-b5d5-19a2347f3b13": [
     {
-        "accessPackageId": "magibruk",
-        "delegationDetails": {
-            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-            "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
-        }
+      "accessPackageId": "bacc9294-56fd-457f-930e-59ee4a7a3894",
+      "delegationDetails": {
+        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+        "delegatedTo": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
+      },
+      "inherited": false,
+      "inheritedFrom": null
     }
   ],
   "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B": [
     {
-        "accessPackageId": "urn:altinn:accesspackage:ordinaerposttilvirksomheten",
-        "delegationDetails": {
-            "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-            "delegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
-            "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
-        }
+      "accessPackageId": "91cf61ae-69ab-49d5-b51a-80591c91f255",
+      "delegationDetails": {
+        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+        "delegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+        "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
+      },
+      "inherited": true,
+      "inheritedFrom": {
+        "partyId": 51398461,
+        "partyUuid": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+        "partyTypeName": 2,
+        "orgNumber": "310987018",
+        "unitType": "ORGL",
+        "name": "RIKTIG MINIMALISTISK PIGGSVIN",
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "person": null,
+        "organization": {
+          "orgNumber": "310987018",
+          "name": "RIKTIG MINIMALISTISK PIGGSVIN",
+          "unitType": "ORGL",
+          "telephoneNumber": null,
+          "mobileNumber": null,
+          "faxNumber": null,
+          "eMailAddress": "copernicus@furudaldhanab.no",
+          "internetAddress": null,
+          "mailingAddress": null,
+          "mailingPostalCode": null,
+          "mailingPostalCity": null,
+          "businessAddress": null,
+          "businessPostalCode": null,
+          "businessPostalCity": null,
+          "unitStatus": "E"
+        },
+        "childParties": null
+      }
     }
   ]
 }
