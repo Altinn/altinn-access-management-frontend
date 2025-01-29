@@ -10,6 +10,7 @@ import {
   delegateRoleToUser,
   instantiateResource,
 } from 'playwright/pages/profile/delegationPage';
+import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/delegeringHelper.spec';
 
 // Define the fixtures
 const test = baseTest.extend<{
@@ -22,6 +23,7 @@ const test = baseTest.extend<{
   delegateRoles: delegateRoleToUser;
   apiDelegations: apiDelegation;
   instantiateResources: instantiateResource;
+  runAccessibilityTest: runAccessibilityTests;
 }>({
   login: async ({ page }, use) => {
     await use(new loginWithUser(page));
@@ -50,6 +52,10 @@ const test = baseTest.extend<{
 
   apiDelegations: async ({ page }, use) => {
     await use(new apiDelegation(page));
+  },
+
+  runAccessibilityTest: async ({ page }, use) => {
+    await use(new runAccessibilityTests(page));
   },
 });
 
