@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
             string rightHolderUuid = "167536b5-f8ed-4c5a-8f48-0279507e53ae"; // Valid user that has role-assignments for the reportee
-            List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>> (_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
+            List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>>(_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/assignments/{rightOwnerUuid}/{rightHolderUuid}");
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
-            
+
             AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
         }
 
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
             string rightHolderUuid = "26ca8b02-c455-4dc0-96be-f92864837ff9"; // Valid user that doesn't has role-assignments for the reportee
-            List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>> (_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
+            List<RoleAssignment> expectedResult = Util.GetMockData<List<RoleAssignment>>(_expectedDataPath + $"/Role/GetRolesForUser/{rightHolderUuid}.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/assignments/{rightOwnerUuid}/{rightHolderUuid}");
@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<RoleAssignment> actualResult = JsonSerializer.Deserialize<List<RoleAssignment>>(await response.Content.ReadAsStringAsync(), options);
-            
+
             AssertionUtil.AssertCollections(expectedResult, actualResult, AssertionUtil.AssertEqual);
         }
 
@@ -87,12 +87,87 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
             string rightHolderUuid = "00000000-0000-0000-0000-000000000000"; // invalid uuid that will cause internal error
-            
+
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/role/assignments/{rightOwnerUuid}/{rightHolderUuid}");
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
+
+        /// <summary>
+        ///    Test case: Delegate role
+        ///    Expected: Returns OK
+        /// </summary>
+        [Fact]
+        public async Task DelegateRole_ValidRequest()
+        {
+            // Arrange
+            Guid from = Guid.NewGuid();
+            Guid to = Guid.NewGuid();
+            Guid roleId = Guid.NewGuid();
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/role/delegate/{from}/{to}/{roleId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        /// <summary>
+        ///   Test case: Delegate role with invalid request
+        ///   Expected: Returns internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegateRole_InvalidRequest()
+        {
+            // Arrange
+            Guid from = Guid.Empty;
+            Guid to = Guid.Empty;
+            Guid roleId = Guid.Empty;
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync($"accessmanagement/api/v1/role/delegate/{from}/{to}/{roleId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        /// <summary>
+        ///   Test case: Revoke role
+        ///   Expected: Returns OK
+        /// </summary>
+        [Fact]
+        public async Task RevokeRole_ValidRequest()
+        {
+            // Arrange
+            Guid assignmentId = Guid.NewGuid();
+
+            // Act
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/role/assignments/{assignmentId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        }
+
+        /// <summary>
+        ///  Test case: Revoke role with invalid request
+        ///  Expected: Returns internal server error
+        ///  </summary>
+
+        [Fact]
+        public async Task RevokeRole_InvalidRequest()
+        {
+            // Arrange
+            Guid assignmentId = Guid.Empty;
+
+            // Act
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/role/assignments/{assignmentId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
     }
 }
