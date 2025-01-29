@@ -1,0 +1,29 @@
+.textField {
+  max-width: 22rem;
+}
+
+.modalHeading {
+  margin-bottom: 10px;
+}
+
+.validationButton {
+  margin-top: 10px;
+}
+
+.newPersonContent {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.newOrgContent {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.searchResult {
+  padding: 10px 0 10px 0;
+}

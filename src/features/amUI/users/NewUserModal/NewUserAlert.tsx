@@ -1,0 +1,42 @@
+import { Alert, Paragraph } from '@digdir/designsystemet-react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { TechnicalErrorParagraphs } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
+
+export interface NewUserAlertProps {
+  /*** The technical error if one has occured */
+  error?: { status: string; time: string } | null;
+  /*** The type of user to be added */
+  userType: 'person' | 'org';
+}
+
+export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
+  const { t } = useTranslation();
+  let errorText;
+
+  if (error && error.status === '404' && userType === 'person') {
+    errorText = <Paragraph size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
+  } else if (error && error.status === '400' && userType === 'org') {
+    errorText = <Paragraph size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
+  } else if (error && error.status === '429') {
+    errorText = <Paragraph size='sm'>{t('new_user_modal.too_many_requests_error')}</Paragraph>;
+  } else if (error) {
+    errorText = (
+      <TechnicalErrorParagraphs
+        status={error.status}
+        time={error.time}
+        size='sm'
+      />
+    );
+  }
+
+  return (
+    <Alert
+      size='sm'
+      color='danger'
+    >
+      {errorText}
+    </Alert>
+  );
+};

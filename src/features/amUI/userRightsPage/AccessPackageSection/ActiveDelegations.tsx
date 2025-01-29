@@ -106,7 +106,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         <Spinner title={t('common.loading')} />
       ) : isError ? (
         <Alert color='danger'>
-          <Paragraph>{t(`common.general_error_paragraph`)}</Paragraph>
+          <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
         </Alert>
       ) : (
         activeDelegations && (
@@ -116,6 +116,10 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
               .map((area) => {
                 return (
                   <DelegatedAreaListItem
+                    badgeLabel={t('access_packages.delegated_packages_count_badge', {
+                      total: area.accessPackages.length,
+                      delegated: activeDelegations[area.id].length,
+                    })}
                     key={area.id}
                     accessPackageArea={area}
                     expanded={expandedAreas.some((id) => id === area.id)}

@@ -19,14 +19,14 @@
 .infoView {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 20px;
+  gap: 12px;
 }
 
 .rightsSection {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 0px 15px 15px 0;
+  gap: 15px;
+  padding: 10px 15px 20px 0px;
 }
 
 .rightChips {
@@ -34,6 +34,7 @@
   gap: 8px;
   flex-wrap: wrap;
 }
+
 .editButtons {
   display: flex;
   gap: 10px;

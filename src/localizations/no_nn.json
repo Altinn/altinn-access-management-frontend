@@ -63,7 +63,13 @@
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
     "show_more": "Se meir",
-    "show_less": "Se mindre"
+    "show_less": "Se mindre",
+    "technical_error": "Beklagar, det har skjedd ein teknisk feil. Ver venleg å ta kontakt med Altinn brukerservice om problemet held fram.",
+    "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
+    "error_status": "Status: {{status}}",
+    "ssn": "Fødselsnummer",
+    "last_name": "Etternavn",
+    "subunit": "Underenhet"
   },
   "header": {
     "menu-label": "Meny",
@@ -221,7 +227,8 @@
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
-    "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}."
+    "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
@@ -234,6 +241,8 @@
     "page_title": "Brukertilgang - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
+    "roles_title": "Administratortilganger",
+    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukarar. Det er ikkje knytt nokon spesifikke tenester til desse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -246,8 +255,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "{{name}} gir tilgang til {{count}} tenester",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom si rolle i <b>{{org_name}}</b>. Den kan derfor ikkje slettast eller endrast.",
+    "package_services": "Gir tilgang til {{count}} tenester",
+    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom si rolle i <b>{{org_name}}</b>. Den kan derfor ikkje slettast.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
@@ -268,6 +277,16 @@
       "access_list_service": "Kven som får bruke denne tenesta blir bestemt av {{resourceOwner}}, og {{reportee}} har ikkje fått den moglegheita. Vi tilrår å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du kan ikkje gi denne fullmakta til andre fordi du manglar den sjølv. Dagleg leiar eller hovudadministrator kan hjelpe deg med dette."
     }
+  },
+  "new_user_modal": {
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
+    "too_many_requests_error": "Du er blitt sperra pga for mange feilande forsøk. Du kan prøve igjen om ei time.",
+    "person": "Person",
+    "organization": "Virksemnd",
+    "modal_title": "Legg til ny person eller virksemnd",
+    "trigger_button": "Legg til brukar",
+    "add_button": "Legg til brukar"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
