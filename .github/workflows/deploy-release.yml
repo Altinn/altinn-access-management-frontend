@@ -29,10 +29,10 @@ jobs:
     secrets: inherit
     strategy:
       matrix:
-        environment: [AT24]
-        project: [ e2e-tests, accessibility-tests ]
+        environment: [TT02]
+        project: [ e2e-tests ]
     with:
-      environment: AT24
+      environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
 
   deploys-release-to-prod:

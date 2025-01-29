@@ -35,7 +35,10 @@ jobs:
       fail-fast: false
       matrix:
         environment: [AT24]
-        project: [ e2e-tests, accessibility-tests ]
+        project: [ e2e-tests ]
+        environment1: [AT22]
+        project1: [ accessibility-tests ]
+      
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
