@@ -11,7 +11,7 @@ import { useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 
-import { PageLayoutWrapper } from '../../amUI/common/PageLayoutWrapper';
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 
 import classes from './SystemUserOverviewPage.module.css';
 

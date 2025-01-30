@@ -6,7 +6,7 @@ import type {
   SystemUser,
   SystemUserChangeRequest,
   SystemUserRequest,
-} from '@/features/systemUser/types';
+} from '@/features/amUI/systemUser/types';
 
 import type { ServiceResource } from './singleRights/singleRightsApi';
 

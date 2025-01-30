@@ -12,21 +12,21 @@ import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
-import { SnackbarProvider, useSnackbar } from '../../amUI/common/Snackbar';
+import { SnackbarProvider, useSnackbar } from '../../common/Snackbar';
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserDetails.module.css';
 
-export const SystemUserDetails = () => {
+export const SystemUserDetailsPage = () => {
   return (
     <SnackbarProvider>
-      <SystemUserDetailsInner />
+      <SystemUserDetailsPageInner />
     </SnackbarProvider>
   );
 };
 
-const SystemUserDetailsInner = (): React.ReactNode => {
+const SystemUserDetailsPageInner = (): React.ReactNode => {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();

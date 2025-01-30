@@ -7,8 +7,8 @@ import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
-import { ButtonRow } from '../../components/ButtonRow/ButtonRow';
-import type { RegisteredSystem } from '../../types';
+import { ButtonRow } from '../components/ButtonRow/ButtonRow';
+import type { RegisteredSystem } from '../types';
 
 import classes from './CreateSystemUser.module.css';
 

@@ -13,11 +13,11 @@ import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPa
 import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
-import { SystemUserRequestPage } from '@/features/systemUser/SystemUserRequestPage';
-import { SystemUserChangeRequestPage } from '@/features/systemUser/SystemUserChangeRequestPage';
-import { SystemUserOverviewPage } from '@/features/systemUser/SystemUserPage/SystemUserOverviewPage';
-import { SystemUserDetails } from '@/features/systemUser/SystemUserPage/SystemUserDetails';
-import { CreateSystemUser } from '@/features/systemUser/SystemUserPage/CreateSystemUser/CreateSystemUser';
+import { SystemUserRequestPage } from '@/features/amUI/systemUser/SystemUserRequestPage';
+import { SystemUserChangeRequestPage } from '@/features/amUI/systemUser/SystemUserChangeRequestPage';
+import { SystemUserOverviewPage } from '@/features/amUI/systemUser/SystemUsersOverviewPage/SystemUserOverviewPage';
+import { SystemUserDetailsPage } from '@/features/amUI/systemUser/SystemUserDetailPage/SystemUserDetailsPage';
+import { CreateSystemUserPage } from '@/features/amUI/systemUser/CreateSystemUserPage/CreateSystemUserPage';
 
 import {
   GeneralPath,
@@ -103,11 +103,11 @@ export const Router = createBrowserRouter(
       />
       <Route
         path={SystemUserPath.Create}
-        element={<CreateSystemUser />}
+        element={<CreateSystemUserPage />}
       />
       <Route
         path={SystemUserPath.Details}
-        element={<SystemUserDetails />}
+        element={<SystemUserDetailsPage />}
       />
       <Route
         path={SystemUserPath.Request}

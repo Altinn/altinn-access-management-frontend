@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { PageWrapper } from '@/components';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
-import type { RegisteredSystem } from '../../types';
+import type { RegisteredSystem } from '../types';
 
 import { SelectRegisteredSystem } from './SelectRegisteredSystem';
 import { RightsIncluded } from './RightsIncluded';
 
-export const CreateSystemUser = (): React.ReactNode => {
+export const CreateSystemUserPage = (): React.ReactNode => {
   const [selectedSystem, setSelectedSystem] = useState<RegisteredSystem | undefined>(undefined);
   const [isConfirmStep, setIsConfirmStep] = useState<boolean>(false);
 

@@ -11,10 +11,10 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
-import type { ProblemDetail, RegisteredSystem } from '../../types';
-import { RightsList } from '../../components/RightsList/RightsList';
-import { DelegationCheckError } from '../../components/DelegationCheckError/DelegationCheckError';
-import { ButtonRow } from '../../components/ButtonRow/ButtonRow';
+import type { ProblemDetail, RegisteredSystem } from '../types';
+import { RightsList } from '../components/RightsList/RightsList';
+import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
+import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 
 import classes from './CreateSystemUser.module.css';
 
