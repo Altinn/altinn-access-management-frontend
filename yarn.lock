@@ -19,18 +19,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:^0.14.3":
-  version: 0.14.3
-  resolution: "@altinn/altinn-components@npm:0.14.3"
+"@altinn/altinn-components@npm:^0.15.0":
+  version: 0.15.1
+  resolution: "@altinn/altinn-components@npm:0.15.1"
   dependencies:
-    "@navikt/aksel-icons": "npm:^7.2.1"
+    "@navikt/aksel-icons": "npm:^7.9.2"
     classnames: "npm:^2.5.1"
     react: "npm:^18.3.1"
-    react-dom: "npm:>=18.3.1"
+    react-dom: "npm:^18.3.1"
   peerDependencies:
     react: ">=18.3.1"
     react-dom: ">=18.3.1"
-  checksum: 10/25b0ef7d0663dde9573c90e6f5eb64adb39cd17e5f91a5218dba671444bda1e158d35ecd1b73270625442802cae2ecc912a57d0caecd3f0c671a85baff6e10af
+  checksum: 10/155c6e4774f56f0921b8cf98929f88ed793dc5f128241dfcbadf92abf7557ba1831b4e8a92be276764dea0379dddc74c6bf1d7ad296080f3c33522dc8d521943
   languageName: node
   linkType: hard
 
@@ -1260,7 +1260,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.0.0, @navikt/aksel-icons@npm:^7.2.1":
+"@navikt/aksel-icons@npm:^7.0.0, @navikt/aksel-icons@npm:^7.9.2":
   version: 7.10.0
   resolution: "@navikt/aksel-icons@npm:7.10.0"
   checksum: 10/55d4ecc331678625dd45d346578df58e44c76cfaa48b6abb8d3ca3a2fd1839594ac8cbb6252a4814018a2ddfb1c84fc4c5c71f19dc769648774455b0a3224f6f
@@ -2933,7 +2933,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:^0.14.3"
+    "@altinn/altinn-components": "npm:^0.15.0"
     "@axe-core/playwright": "npm:^4.10.1"
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/designsystemet-css": "npm:1.0.0-next.35"
@@ -8793,7 +8793,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:>=18.3.1, react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0, react-dom@npm:^18.3.1":
+"react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0, react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
