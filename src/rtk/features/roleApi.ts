@@ -34,6 +34,10 @@ interface Area {
   iconUrl: string;
 }
 
+export interface AreaFE extends Area {
+  roles: Role[];
+}
+
 export interface Assignment {
   id: string;
   roleId: string;
@@ -65,6 +69,10 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    getRoles: builder.query<AreaFE[], void>({
+      query: () => '/search',
+      providesTags: ['roles'],
+    }),
     getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
       query: ({ rightOwnerUuid, rightHolderUuid }) =>
         `/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
@@ -90,6 +98,7 @@ export const roleApi = createApi({
   }),
 });
 
-export const { useGetRolesForUserQuery, useRevokeMutation, useDelegateMutation } = roleApi;
+export const { useGetRolesForUserQuery, useRevokeMutation, useDelegateMutation, useGetRolesQuery } =
+  roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;

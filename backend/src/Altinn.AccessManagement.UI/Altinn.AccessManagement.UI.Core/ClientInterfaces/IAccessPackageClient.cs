@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -15,6 +16,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="searchString">the text to be searched for</param>
         /// <returns>List of access packages matching the search parameters</returns>
         Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString);
+
+        /// <summary>
+        /// Retrieve result of a search in all access packages. If no parameters are given, all access packages are returned
+        /// </summary>
+        /// <param name="languageCode">the language to use in texts returned and searched in</param>
+        /// <param name="searchString">the text to be searched for</param>
+        /// <returns>List of access packages matching the search parameters</returns>
+        Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString);
 
         /// <summary>
         /// Retrieve all roles for a user
@@ -39,5 +48,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="assignmentId">the assignment id of the role delegation to delete</param>
         /// <returns></returns>
         Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId);
+
+        /// <summary>
+        /// Check if a user has the right to delegate a role
+        /// </summary>
+        Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
     }
 }

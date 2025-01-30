@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
 
 import type { Party } from '@/rtk/features/lookupApi';
@@ -8,10 +9,10 @@ import { useDelegateMutation } from '@/rtk/features/roleApi';
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
 
-interface DelegateRoleButtonProps extends React.ComponentProps<typeof Button> {
+interface DelegateRoleButtonProps extends ButtonProps {
   roleId: string;
   roleName: string;
-  toParty: Party;
+  toParty?: Party;
   fullText?: boolean;
 }
 
@@ -35,7 +36,7 @@ export const DelegateRoleButton = ({
           isSuccessful
             ? 'access_packages.package_deletion_success'
             : 'access_packages.package_deletion_error',
-          { role: roleName, name: toParty.name },
+          { role: roleName, name: toParty?.name },
         ),
         variant: SnackbarMessageVariant.Default,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
@@ -45,7 +46,7 @@ export const DelegateRoleButton = ({
 
     if (representingParty) {
       delegateRole({
-        to: toParty.partyUuid,
+        to: toParty?.partyUuid || '',
         roleId: roleId,
       })
         .unwrap()
@@ -63,7 +64,6 @@ export const DelegateRoleButton = ({
     <Button
       {...props}
       variant={'outline'}
-      size='md'
       onClick={onClick}
       disabled={isLoading || disabled || !representingParty}
     >

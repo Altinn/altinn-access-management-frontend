@@ -4,6 +4,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -64,6 +65,28 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<AccessPackage>>(responseContent, _serializerOptions);
+            }
+            else
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
+
+                throw error;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
+        {
+            string endpointUrl = $"role/search/term={searchString}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<Role>>(responseContent, _serializerOptions);
             }
             else
             {
@@ -158,6 +181,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(e, "AccessManagement.UI // RoleClient // GetRolesForUser // Exception");
                 return null;
             }
+        }
+
+        /// <inheritdoc />
+        public Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
+        {
+            // TODO: Implement this method when the API is ready
+            throw new NotImplementedException();
         }
     }
 }

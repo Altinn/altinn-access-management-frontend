@@ -3,7 +3,9 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +35,71 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Search through all roles and return matches
+        /// </summary>
+        /// <returns>All search results, sorted into areas</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("search")]
+        public async Task<ActionResult<List<RoleAreaFE>>> Search([FromQuery] string searchString)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                return await _roleService.GetSearch(languageCode, searchString);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+
+        /// <summary>
+        ///     Search through all roles and return matches
+        /// </summary>
+        /// <returns>All search results, sorted into areas</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("delegationcheck/{rightOwner}/{roleId}")]
+        public async Task<ActionResult<DelegationCheckResponse>> RoleDelegationCheck([FromRoute] Guid rightOwner, [FromRoute]Guid roleId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                return await _roleService.RoleDelegationCheck(rightOwner, roleId);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+
+        /// <summary>
         ///     Get roles for user
         /// </summary>
-        /// <returns>All search results</returns>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
         [Route("assignments/{rightOwnerUuid}/{rightHolderUuid}")]
@@ -59,7 +123,10 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Delegate role to user
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Authorize]
         [Route("delegate/{from}/{to}/{roleId}")]
@@ -89,7 +156,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpDelete]
         [Authorize]
         [Route("assignments/{assignmentId}")]
-        public async Task<ActionResult> RevokeRoleForUser([FromRoute]Guid assignmentId)
+        public async Task<ActionResult> RevokeRoleForUser([FromRoute] Guid assignmentId)
         {
             if (!ModelState.IsValid)
             {

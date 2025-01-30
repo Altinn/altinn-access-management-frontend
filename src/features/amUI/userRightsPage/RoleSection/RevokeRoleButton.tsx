@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
-import type { ComponentProps } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
@@ -9,10 +9,10 @@ import { useRevokeDelegationMutation } from '@/rtk/features/accessPackageApi';
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
 
-interface RevokeRoleButtonProps extends ComponentProps<typeof Button> {
+interface RevokeRoleButtonProps extends ButtonProps {
   roleId: string;
   roleName: string;
-  toParty: Party;
+  toParty?: Party;
   fullText?: boolean;
 }
 
@@ -36,7 +36,7 @@ export const RevokeRoleButton = ({
           isSuccessful
             ? 'access_packages.package_deletion_success'
             : 'access_packages.package_deletion_error',
-          { role: roleName, name: toParty.name },
+          { role: roleName, name: toParty?.name },
         ),
         variant: SnackbarMessageVariant.Default,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
@@ -46,7 +46,7 @@ export const RevokeRoleButton = ({
 
     if (representingParty) {
       revoke({
-        to: toParty.partyUuid,
+        to: toParty?.partyUuid || '',
         packageId: roleId,
       })
         .unwrap()
@@ -64,7 +64,6 @@ export const RevokeRoleButton = ({
     <Button
       {...props}
       variant={'outline'}
-      size='md'
       onClick={onClick}
       disabled={disabled || isLoading || !representingParty}
     >

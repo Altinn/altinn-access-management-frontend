@@ -2,20 +2,13 @@
     {
         "role": {
           "isDelegable": true,
-          "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+          "id": "4691c710-e0ad-4152-9783-9d1e787f02d3",
           "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
           "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
-          "name": "Tilgangsstyrer",
+          "name": "Tilgangsstyring",
           "code": "TS",
-          "description": "Gir mulighet til å gi videre tilganger for virksomheten som man selv har mottatt",
-          "urn": "digdir:role:ts",
-          "area": {
-            "id": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
-            "name": "Administrere tilganger",
-            "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til administrere tilganger.",
-            "IconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMS43NUM0LjkyODkzIDEuNzUgMy4yNSAzLjQyODkzIDMuMjUgNS41QzMuMjUgNy41NzEwNyA0LjkyODkzIDkuMjUgNyA5LjI1QzkuMDcxMSA5LjI1IDEwLjc1IDcuNTcxMDcgMTAuNzUgNS41QzEwLjc1IDMuNDI4OTMgOS4wNzExIDEuNzUgNyAxLjc1Wk0xLjc1IDUuNUMxLjc1IDIuNjAwNTEgNC4xMDA1MSAwLjI1IDcgMC4yNUM5Ljg5OTUgMC4yNSAxMi4yNSAyLjYwMDUxIDEyLjI1IDUuNUMxMi4yNSA4LjM5OTUgOS44OTk1IDEwLjc1IDcgMTAuNzVDNC4xMDA1MSAxMC43NSAxLjc1IDguMzk5NSAxLjc1IDUuNVpNNyAxMy43NUM1LjYwNzYgMTMuNzUgNC4yNzIyNSAxNC4zMDMxIDMuMjg3NjkgMTUuMjg3N0MyLjMwMzEyIDE2LjI3MjMgMS43NSAxNy42MDc2IDEuNzUgMTlDMS43NSAxOS40MTQyIDEuNDE0MjEgMTkuNzUgMSAxOS43NUMwLjU4NTc5IDE5Ljc1IDAuMjUgMTkuNDE0MiAwLjI1IDE5QzAuMjUgMTcuMjA5OCAwLjk2MTE2IDE1LjQ5MjkgMi4yMjcwMyAxNC4yMjdDMy40OTI5IDEyLjk2MTIgNS4yMDk4IDEyLjI1IDcgMTIuMjVDNy4xODg0IDEyLjI1IDcuMzc2MSAxMi4yNTc5IDcuNTYyNSAxMi4yNzM1QzcuOTc1MiAxMi4zMDggOC4yODE5IDEyLjY3MDYgOC4yNDc0IDEzLjA4MzNDOC4yMTI5IDEzLjQ5NjEgNy44NTAzIDEzLjgwMjggNy40Mzc1IDEzLjc2ODJDNy4yOTI2IDEzLjc1NjEgNy4xNDY2IDEzLjc1IDcgMTMuNzVaTTkuNSAxOUgxMkMxMi4yMTExIDE5LjEwNTYgMTIuNzg4OSAxOS4xMDU2IDEzIDE5SDE0LjVMMTQuMjUgMTguMjVIOS43NUw5LjUgMTlaIiBmaWxsPSIjMjMyNjJBIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05Ljc1MDI0IDEzLjVDOS43NTAyNCAxMi4yNTc0IDEwLjc1NzYgMTEuMjUgMTIuMDAwMiAxMS4yNUMxMy4yNDI5IDExLjI1IDE0LjI1MDIgMTIuMjU3NCAxNC4yNTAyIDEzLjVWMTQuMjVIMTQuNUMxNS4xOTA0IDE0LjI1IDE1Ljc1IDE0LjgwOTYgMTUuNzUgMTUuNVYxOUMxNS43NSAxOS40MTQyIDE1LjQxNDIgMTkuNzUgMTUgMTkuNzVIOUM4LjU4NTggMTkuNzUgOC4yNSAxOS40MTQyIDguMjUgMTlWMTUuNUM4LjI1IDE0LjgwOTYgOC44MDk2NCAxNC4yNSA5LjUgMTQuMjVIOS43NTAyNFYxMy41Wk0xMi43NTAyIDEzLjVWMTQuMjVIMTEuMjUwMlYxMy41QzExLjI1MDIgMTMuMDg1OCAxMS41ODYgMTIuNzUgMTIuMDAwMiAxMi43NUMxMi40MTQ1IDEyLjc1IDEyLjc1MDIgMTMuMDg1OCAxMi43NTAyIDEzLjVaTTkuNzUgMTUuNzVWMTguMjVIMTQuMjVWMTUuNzVIOS43NVoiIGZpbGw9IiMyMzI2MkEiLz48L3N2Zz4=",
-            "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145"
-          }
+          "description": "Denne tilgangspakken gir bruker mulighet til å gi videre tilganger for virksomheten som man selv innehar.",
+          "urn": "digdir:role:ts"
         },
         "from": {
           "Name": "DISKRET NÆR TIGER AS",
@@ -26,7 +19,7 @@
           "Uuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb"
         },
         "id": "43f42152-8900-4fcf-ac70-62d2d566581c",
-        "roleId": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+        "roleId": "4691c710-e0ad-4152-9783-9d1e787f02d3",
         "fromId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
         "toId": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
         "isDelegable": true,

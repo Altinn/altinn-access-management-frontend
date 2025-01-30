@@ -1,6 +1,8 @@
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Avatar } from '@altinn/altinn-components';
 import { useMemo } from 'react';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { Trans } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetRolesForUserQuery, type Role } from '@/rtk/features/roleApi';
@@ -19,7 +21,6 @@ export interface PackageInfoProps {
 
 export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
   const { data: reportee } = useGetReporteeQuery();
-
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
     rightOwnerUuid: reportee?.partyUuid ?? '',
     rightHolderUuid: toParty.partyUuid ?? '',
@@ -34,6 +35,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
 
   const userHasRole = !!assignment;
   const userHasInheritedRole = assignment?.inherited && assignment.inherited.length > 0;
+  const inheritedFromRoleName = (userHasInheritedRole && assignment?.inherited[0]) ?? null;
 
   return (
     <div className={classes.container}>
@@ -54,7 +56,21 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
         </Heading>
       </div>
       <Paragraph>{role?.description}</Paragraph>
-
+      {userHasInheritedRole && (
+        <div className={classes.inherited}>
+          <InformationSquareFillIcon
+            fontSize='1.5rem'
+            className={classes.inheritedInfoIcon}
+          />
+          <Paragraph size='xs'>
+            <Trans
+              i18nKey='delegation_modal.inherited_role_message'
+              values={{ user_name: toParty.name, role_name: inheritedFromRoleName }}
+              components={{ b: <strong /> }}
+            />
+          </Paragraph>
+        </div>
+      )}
       <div className={classes.actions}>
         {!userHasRole ? (
           <DelegateRoleButton
