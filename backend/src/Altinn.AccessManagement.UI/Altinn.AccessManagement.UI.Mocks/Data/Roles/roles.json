@@ -22,6 +22,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
     "name": "Klientadministrasjon for regnskapsfører og revisor",
+    "code": "KLA",
+    "urn": "digdir:role:kla",
     "description": "Denne tilgangspakken gir bruker mulighet til å administrere tilgang til tjenester det er naturlig at regnskapsfører eller revisor utfører. Bruker kan administrere tilgang til tjenestene til ansatte hos regnskapsfører eller revisor på vegne av deres kunder.",
     "isDelegable": true
   },
@@ -48,6 +50,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
     "name": "Tilgangsstyring",
+    "code": "TS",
+    "urn": "digdir:role:ts",
     "description": "Denne tilgangspakken gir bruker mulighet til å gi videre tilganger for virksomheten som man selv innehar.",
     "isDelegable": true
   },
@@ -74,6 +78,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
     "name": "Hovedadministrator",
+    "code": "HA",
+    "urn": "digdir:role:ha",
     "description": "Denne tilgangspakken gir bruker mulighet til å administrere alle tilganger for virksomheten.",
     "isDelegable": true
   },
@@ -100,6 +106,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
     "name": "Kundeadministrator",
+    "code": "KUA",
+    "urn": "digdir:role:kua",
     "description": "Denne tilgangspakken gir bruker mulighet til å administrere tilganger man har mottatt for sine kunder til ansatte i egen virksomheten.",
     "isDelegable": true
   },
@@ -126,6 +134,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "892e98c6-1696-46e7-9bb1-59c08761ec64",
     "name": "Programmeringsgrensesnitt (API)",
+    "code": "API",
+    "urn": "digdir:role:api",
     "description": "Denne tilgangspakken gir fullmakter til å administrere tilgang til data og programmeringsgrensenitt (API) som benytter Maskinporten eller tilsvarende løsninger for APIsikring. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
     "isDelegable": true
   },
@@ -152,6 +162,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "892e98c6-1696-46e7-9bb1-59c08761ec64",
     "name": "Maskinlesbare hendelser",
+    "code": "MLH",
+    "urn": "digdir:role:mlh",
     "description": "Denne tilgangspakken gir fullmakter til å administrere tilgang til maskinlesbare hendelser. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
     "isDelegable": true
   },
@@ -178,6 +190,8 @@
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
     "areaId": "892e98c6-1696-46e7-9bb1-59c08761ec64",
     "name": "Programmeringsgrensesnitt NUF (API)",
+    "code": "NUF",
+    "urn": "digdir:role:nuf",
     "description": "Denne tilgangspakken gir fullmakter til å administrere tilgang til data og programmeringsgrensenitt (API) som benytter Maskinporten eller tilsvarende løsninger for APIsikring på vegne av norskregistrerte utenlandske foretak (NUF). Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
     "isDelegable": true
   }

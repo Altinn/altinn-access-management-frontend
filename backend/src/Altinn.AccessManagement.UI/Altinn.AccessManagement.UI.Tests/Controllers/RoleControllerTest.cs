@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -187,6 +188,45 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.True(responseData.CanDelegate);
             Assert.Equal(DetailCode.RoleAccess, responseData.DetailCode);
 
+        }
+
+        [Fact]
+        public async Task RoleDelegationCheck_MissingRoleAccess() 
+        {
+            // uuid for Intelligent Albatross
+            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; 
+            // roleId for Programmeringsgrensesnitt (API)
+            var roleUuid = "37d2ba7f-187f-45f5-9a96-2f23cf328dab";
+            
+            var res = await _client.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
+
+            DelegationCheckResponse responseData = JsonSerializer.Deserialize<DelegationCheckResponse>(await res.Content.ReadAsStringAsync(), options);
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+            Assert.False(responseData.CanDelegate);
+            Assert.Equal(DetailCode.MissingRoleAccess, responseData.DetailCode);
+
+        }
+
+        /// <summary>
+        ///     Test case: Search roles with empty input
+        ///     Expected: Search returns all roles
+        /// </summary>
+        [Fact]
+        public async Task GetRoleSearch_EmptySearch()
+        {
+            // Arrange
+            List<RoleAreaFE> expectedResult = Util.GetMockData<List<RoleAreaFE>>(_expectedDataPath + "/Role/Search/emptySearch.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/search");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<RoleAreaFE> actualResources = JsonSerializer.Deserialize<List<RoleAreaFE>>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
         }
     }
 }

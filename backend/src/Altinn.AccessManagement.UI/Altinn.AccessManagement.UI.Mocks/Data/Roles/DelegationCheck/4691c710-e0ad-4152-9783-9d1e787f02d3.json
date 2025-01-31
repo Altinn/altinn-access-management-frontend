@@ -1,4 +1,4 @@
 {
-    "canDelegate": false,
+    "canDelegate": true,
     "detailCode": "RoleAccess"
 }

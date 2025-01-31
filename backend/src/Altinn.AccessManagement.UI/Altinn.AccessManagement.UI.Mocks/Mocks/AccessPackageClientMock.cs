@@ -96,11 +96,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new Exception("Right holder uuid is not valid");
             }
-
-            return Task.FromResult(new DelegationCheckResponse() {
-                CanDelegate = true,
-                DetailCode = DetailCode.RoleAccess
-            });
+            try
+            {
+                DelegationCheckResponse res = Util.GetMockData<DelegationCheckResponse>($"{dataFolder}/Roles/DelegationCheck/{roleId}.json");
+                return Task.FromResult(res);
+            }
+            catch
+            {
+                return Task.FromResult(new DelegationCheckResponse()
+                {
+                    CanDelegate = false,
+                    DetailCode = DetailCode.Unknown
+                });
+            }
         }
     }
 }
