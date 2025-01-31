@@ -402,7 +402,8 @@
     "delete_systemuser_error": "Kunne ikkje slette systemtilgang",
     "update_systemuser_error": "Kunne ikkje oppdatere systemtilgang",
     "save_systemuser": "Lagre endringar",
-    "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn."
+    "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
+    "created_by": "Oppretta {{created}}"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

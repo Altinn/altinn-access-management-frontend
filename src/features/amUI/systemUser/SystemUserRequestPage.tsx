@@ -18,6 +18,7 @@ import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
+import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
@@ -146,7 +147,6 @@ export const SystemUserRequestPage = () => {
           </div>
           <Paragraph>{t('systemuser_request.withdraw_consent_info')}</Paragraph>
           <div>
-            {/*!userInfo.canCreateSystemUser && <RightsError /> */}
             {acceptCreationRequestError && (
               <DelegationCheckError
                 defaultError='systemuser_includedrightspage.create_systemuser_error'
@@ -161,28 +161,30 @@ export const SystemUserRequestPage = () => {
                 {t('systemuser_request.reject_error')}
               </Alert>
             )}
-            <ButtonRow>
-              <Button
-                variant='primary'
-                aria-disabled={isActionButtonDisabled}
-                onClick={acceptSystemUser}
-                loading={isAcceptingSystemUser}
-              >
-                {isAcceptingSystemUser
-                  ? t('systemuser_request.accept_loading')
-                  : t('systemuser_request.accept')}
-              </Button>
-              <Button
-                variant='tertiary'
-                aria-disabled={isActionButtonDisabled}
-                onClick={rejectSystemUser}
-                loading={isRejectingSystemUser}
-              >
-                {isRejectingSystemUser
-                  ? t('systemuser_request.reject_loading')
-                  : t('systemuser_request.reject')}
-              </Button>
-            </ButtonRow>
+            <CreateSystemUserCheck>
+              <ButtonRow>
+                <Button
+                  variant='primary'
+                  aria-disabled={isActionButtonDisabled}
+                  onClick={acceptSystemUser}
+                  loading={isAcceptingSystemUser}
+                >
+                  {isAcceptingSystemUser
+                    ? t('systemuser_request.accept_loading')
+                    : t('systemuser_request.accept')}
+                </Button>
+                <Button
+                  variant='tertiary'
+                  aria-disabled={isActionButtonDisabled}
+                  onClick={rejectSystemUser}
+                  loading={isRejectingSystemUser}
+                >
+                  {isRejectingSystemUser
+                    ? t('systemuser_request.reject_loading')
+                    : t('systemuser_request.reject')}
+                </Button>
+              </ButtonRow>
+            </CreateSystemUserCheck>
           </div>
         </>
       )}

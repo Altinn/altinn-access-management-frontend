@@ -9,6 +9,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import type { RegisteredSystem } from '../types';
+import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './CreateSystemUser.module.css';
 
@@ -50,60 +51,62 @@ export const SelectRegisteredSystem = ({
         >
           {t('systemuser_creationpage.banner_title')}
         </Heading>
-        <Heading
-          level={2}
-          data-size='sm'
-        >
-          {t('systemuser_creationpage.sub_title')}
-        </Heading>
-        <Paragraph data-size='sm'>{t('systemuser_creationpage.content_text1')}</Paragraph>
-        <div className={classes.inputContainer}>
-          <Combobox
-            label={t('systemuser_creationpage.pull_down_menu_label')}
-            loading={isLoadingRegisteredSystems}
-            loadingLabel={t('systemuser_creationpage.loading_systems')}
-            placeholder={t('systemuser_creationpage.choose')}
-            value={selectedSystem ? [selectedSystem.systemId] : undefined}
-            onValueChange={onSelectSystem}
-            filter={(inputValue: string, { label, description }) => {
-              const isLabelMatch = isStringMatch(inputValue, label);
-              const isDescriptionMatch = isStringMatch(inputValue, description);
-              return isLabelMatch || isDescriptionMatch;
-            }}
-          >
-            {registeredSystems?.map((system) => {
-              return (
-                <Combobox.Option
-                  key={system.systemId}
-                  value={system.systemId}
-                  description={`${system.systemVendorOrgName} (${system.systemVendorOrgNumber})`}
-                >
-                  {system.name}
-                </Combobox.Option>
-              );
-            })}
-          </Combobox>
-          {isLoadRegisteredSystemsError && (
-            <Alert data-color='danger'>{t('systemuser_creationpage.load_vendors_error')}</Alert>
-          )}
-        </div>
-        <ButtonRow>
-          <Button
-            variant='primary'
+        <CreateSystemUserCheck>
+          <Heading
+            level={2}
             data-size='sm'
-            onClick={handleConfirm}
-            disabled={!selectedSystem}
           >
-            {t('systemuser_creationpage.confirm_button')}
-          </Button>
-          <Button
-            variant='tertiary'
-            data-size='sm'
-            asChild
-          >
-            <Link to={'/' + SystemUserPath.Overview}>{t('common.cancel')}</Link>
-          </Button>
-        </ButtonRow>
+            {t('systemuser_creationpage.sub_title')}
+          </Heading>
+          <Paragraph data-size='sm'>{t('systemuser_creationpage.content_text1')}</Paragraph>
+          <div className={classes.inputContainer}>
+            <Combobox
+              label={t('systemuser_creationpage.pull_down_menu_label')}
+              loading={isLoadingRegisteredSystems}
+              loadingLabel={t('systemuser_creationpage.loading_systems')}
+              placeholder={t('systemuser_creationpage.choose')}
+              value={selectedSystem ? [selectedSystem.systemId] : undefined}
+              onValueChange={onSelectSystem}
+              filter={(inputValue: string, { label, description }) => {
+                const isLabelMatch = isStringMatch(inputValue, label);
+                const isDescriptionMatch = isStringMatch(inputValue, description);
+                return isLabelMatch || isDescriptionMatch;
+              }}
+            >
+              {registeredSystems?.map((system) => {
+                return (
+                  <Combobox.Option
+                    key={system.systemId}
+                    value={system.systemId}
+                    description={`${system.systemVendorOrgName} (${system.systemVendorOrgNumber})`}
+                  >
+                    {system.name}
+                  </Combobox.Option>
+                );
+              })}
+            </Combobox>
+            {isLoadRegisteredSystemsError && (
+              <Alert data-color='danger'>{t('systemuser_creationpage.load_vendors_error')}</Alert>
+            )}
+          </div>
+          <ButtonRow>
+            <Button
+              variant='primary'
+              data-size='sm'
+              onClick={handleConfirm}
+              disabled={!selectedSystem}
+            >
+              {t('systemuser_creationpage.confirm_button')}
+            </Button>
+            <Button
+              variant='tertiary'
+              data-size='sm'
+              asChild
+            >
+              <Link to={'/' + SystemUserPath.Overview}>{t('common.cancel')}</Link>
+            </Button>
+          </ButtonRow>
+        </CreateSystemUserCheck>
       </div>
     </PageContainer>
   );

@@ -405,7 +405,8 @@
     "delete_systemuser_error": "Kunne ikke slette systemtilgang",
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
     "save_systemuser": "Lagre endringer",
-    "name_too_long": "Navn på systemtilgang kan kun være 255 tegn, du har skrevet inn {{ nameLength }} tegn."
+    "name_too_long": "Navn på systemtilgang kan kun være 255 tegn, du har skrevet inn {{ nameLength }} tegn.",
+    "created_by": "Opprettet {{created}}"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

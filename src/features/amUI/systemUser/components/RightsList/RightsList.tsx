@@ -14,9 +14,10 @@ export const RightsList = ({ resources }: RightsListProps): React.ReactNode => {
   return (
     <ul className={classes.unstyledList}>
       {resources.map((resource) => (
-        <li key={resource.identifier}>
-          <ResourceInfo resource={resource} />
-        </li>
+        <ResourceInfo
+          resource={resource}
+          key={resource.identifier}
+        />
       ))}
     </ul>
   );
@@ -37,7 +38,7 @@ const ResourceInfo = ({ resource }: ResourceInfo): React.ReactNode => {
   };
 
   return (
-    <li key={resource.identifier}>
+    <li>
       <ResourceListItem
         id={resource.identifier}
         ownerName={resource.resourceOwnerName}

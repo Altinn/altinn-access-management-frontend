@@ -1,0 +1,7 @@
+.noRightsParagraph {
+  margin: 2rem 0;
+  font-style: italic;
+}
+.noRightsParagraphBold {
+  font-weight: 600;
+}

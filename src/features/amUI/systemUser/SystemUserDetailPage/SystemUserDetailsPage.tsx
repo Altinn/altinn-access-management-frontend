@@ -16,7 +16,7 @@ import { SnackbarProvider, useSnackbar } from '../../common/Snackbar';
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
 
-import classes from './SystemUserDetails.module.css';
+import classes from './SystemUserDetailsPage.module.css';
 
 export const SystemUserDetailsPage = () => {
   return (
@@ -136,6 +136,18 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
                   </Popover>
                 </Popover.Context>
               </div>
+              <Paragraph
+                data-size='xs'
+                className={classes.createdBy}
+              >
+                {t('systemuser_detailpage.created_by', {
+                  created: new Date(systemUser.created).toLocaleDateString('no-NB', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  }),
+                })}
+              </Paragraph>
             </div>
           )}
         </PageContainer>

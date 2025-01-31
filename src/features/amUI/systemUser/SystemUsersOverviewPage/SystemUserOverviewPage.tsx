@@ -12,6 +12,7 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
+import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './SystemUserOverviewPage.module.css';
 
@@ -51,41 +52,42 @@ export const SystemUserOverviewPage = () => {
         >
           {t('systemuser_overviewpage.sub_title_text')}
         </Paragraph>
-        <Button
-          variant='secondary'
-          className={classes.createSystemUserButton}
-          asChild
-        >
-          <Link to={'/' + SystemUserPath.Create}>
-            <PlusIcon fontSize={28} />
-            {t('systemuser_overviewpage.new_system_user_button')}
-          </Link>
-        </Button>
-        {/*!userCanCreateSystemUser && <RightsError />*/}
-        {isLoadSystemUsersError && (
-          <Alert data-color='danger'>{t('systemuser_overviewpage.systemusers_load_error')}</Alert>
-        )}
-        <Heading
-          level={2}
-          data-size='xs'
-          className={classes.systemUserHeader}
-        >
-          {t('systemuser_overviewpage.existing_system_users_title')}
-        </Heading>
-        <ul className={classes.unstyledList}>
-          {systemUsers?.map((systemUser) => (
-            <li key={systemUser.id}>
-              <ListItem
-                size='lg'
-                title={systemUser.integrationTitle}
-                description={systemUser.system.systemVendorOrgName}
-                icon={{ name: 'tenancy', theme: 'surface' }}
-                linkIcon='chevron-right'
-                onClick={() => navigate(`/systemuser/${systemUser.id}`)}
-              />
-            </li>
-          ))}
-        </ul>
+        <CreateSystemUserCheck>
+          <Button
+            variant='secondary'
+            className={classes.createSystemUserButton}
+            asChild
+          >
+            <Link to={'/' + SystemUserPath.Create}>
+              <PlusIcon fontSize={28} />
+              {t('systemuser_overviewpage.new_system_user_button')}
+            </Link>
+          </Button>
+          <Heading
+            level={2}
+            data-size='xs'
+            className={classes.systemUserHeader}
+          >
+            {t('systemuser_overviewpage.existing_system_users_title')}
+          </Heading>
+          {isLoadSystemUsersError && (
+            <Alert data-color='danger'>{t('systemuser_overviewpage.systemusers_load_error')}</Alert>
+          )}
+          <ul className={classes.unstyledList}>
+            {systemUsers?.map((systemUser) => (
+              <li key={systemUser.id}>
+                <ListItem
+                  size='lg'
+                  title={systemUser.integrationTitle}
+                  description={systemUser.system.systemVendorOrgName}
+                  icon={{ name: 'tenancy', theme: 'surface' }}
+                  linkIcon='chevron-right'
+                  onClick={() => navigate(`/systemuser/${systemUser.id}`)}
+                />
+              </li>
+            ))}
+          </ul>
+        </CreateSystemUserCheck>
       </PageLayoutWrapper>
     </PageWrapper>
   );

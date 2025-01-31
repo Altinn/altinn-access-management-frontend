@@ -404,7 +404,8 @@
     "delete_systemuser_error": "Could not delete system access",
     "update_systemuser_error": "Failed to update system access",
     "save_systemuser": "Save changes",
-    "name_too_long": "Name of system access cannot be longer than 255 characters, you have entered {{ nameLength }} characters."
+    "name_too_long": "Name of system access cannot be longer than 255 characters, you have entered {{ nameLength }} characters.",
+    "created_by": "Created {{created}}"
   },
   "systemuser_request": {
     "banner_title": "Give access to system",

@@ -23,16 +23,17 @@ export const CreateSystemUserPage = (): React.ReactNode => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        {isConfirmStep && selectedSystem ? (
-          <RightsIncluded
-            selectedSystem={selectedSystem}
-            onNavigateBack={handleNavigateBack}
-          />
-        ) : (
+        {!isConfirmStep && (
           <SelectRegisteredSystem
             selectedSystem={selectedSystem}
             setSelectedSystem={setSelectedSystem}
             handleConfirm={handleConfirmSystem}
+          />
+        )}
+        {isConfirmStep && selectedSystem && (
+          <RightsIncluded
+            selectedSystem={selectedSystem}
+            onNavigateBack={handleNavigateBack}
           />
         )}
       </PageLayoutWrapper>
