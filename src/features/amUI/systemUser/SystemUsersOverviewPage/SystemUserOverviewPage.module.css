@@ -16,3 +16,7 @@
 .createSystemUserButton {
   align-self: flex-end;
 }
+
+.systemUserListItem {
+  padding-bottom: var(--ds-size-2);
+}

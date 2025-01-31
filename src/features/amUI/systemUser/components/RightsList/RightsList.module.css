@@ -11,3 +11,7 @@
   gap: var(--ds-size-4);
   margin-bottom: var(--ds-size-4);
 }
+
+.resourceListItem {
+  padding-bottom: var(--ds-size-2);
+}

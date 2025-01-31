@@ -38,7 +38,7 @@ const ResourceInfo = ({ resource }: ResourceInfo): React.ReactNode => {
   };
 
   return (
-    <li>
+    <li className={classes.resourceListItem}>
       <ResourceListItem
         id={resource.identifier}
         ownerName={resource.resourceOwnerName}

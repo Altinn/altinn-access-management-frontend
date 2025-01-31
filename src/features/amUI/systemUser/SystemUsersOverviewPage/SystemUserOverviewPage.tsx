@@ -28,15 +28,6 @@ export const SystemUserOverviewPage = () => {
     isError: isLoadSystemUsersError,
   } = useGetSystemUsersQuery(partyId);
 
-  if (isLoadingSystemUsers) {
-    return (
-      <Spinner
-        aria-label={t('systemuser_overviewpage.loading_systemusers')}
-        title={''}
-      />
-    );
-  }
-
   return (
     <PageWrapper>
       <PageLayoutWrapper>
@@ -73,12 +64,21 @@ export const SystemUserOverviewPage = () => {
           >
             {t('systemuser_overviewpage.existing_system_users_title')}
           </Heading>
+          {isLoadingSystemUsers && (
+            <Spinner
+              aria-label={t('systemuser_overviewpage.loading_systemusers')}
+              title={''}
+            />
+          )}
           {isLoadSystemUsersError && (
             <Alert data-color='danger'>{t('systemuser_overviewpage.systemusers_load_error')}</Alert>
           )}
           <ul className={classes.unstyledList}>
             {systemUsers?.map((systemUser) => (
-              <li key={systemUser.id}>
+              <li
+                key={systemUser.id}
+                className={classes.systemUserListItem}
+              >
                 <ListItem
                   size='lg'
                   title={systemUser.integrationTitle}
