@@ -1,9 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -16,22 +14,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
-        private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemRegisterService"/> class.
         /// </summary>
         /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
-        /// <param name="resourceRegistryClient">The resource registry client.</param>
+        /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemRegisterService(
             ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
-            IResourceRegistryClient resourceRegistryClient)
+            ResourceHelper resourceHelper)
         {
             _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
-            _resourceRegistryClient = resourceRegistryClient;
+            _resourceHelper = resourceHelper;
         }
 
         /// <inheritdoc />
@@ -42,14 +40,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             IEnumerable<string> orgNumbers = visibleSystems.Select(x => x.SystemVendorOrgNumber);
             List<PartyName> orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
-
-            return visibleSystems.Select(system => new RegisteredSystemFE
-            {
-                SystemId = system.SystemId,
-                Name = system.Name.TryGetValue(languageCode, out string name) ? name : "N/A",
-                SystemVendorOrgNumber = system.SystemVendorOrgNumber,
-                SystemVendorOrgName = orgNames.Find(x => x.OrgNo == system.SystemVendorOrgNumber)?.Name ?? "N/A"
-            }).ToList();
+            
+            return visibleSystems.Select(system => SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames)).ToList();
         }
 
         /// <inheritdoc />
@@ -58,12 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemId, cancellationToken);
             List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
 
-            IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
-            IEnumerable<ServiceResource> resources = await Task.WhenAll(resourceTasks);
-
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
-        
-            return ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
+            return await _resourceHelper.EnrichResources(resourceIds, languageCode);
         }
     }
 }
