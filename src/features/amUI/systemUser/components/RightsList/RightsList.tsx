@@ -44,6 +44,7 @@ const ResourceInfo = ({ resource }: ResourceInfo): React.ReactNode => {
         ownerName={resource.resourceOwnerName}
         resourceName={resource.title}
         ownerLogoUrl={resource.resourceOwnerLogoUrl}
+        ownerLogoUrlAlt={resource.resourceOwnerName}
         size='md'
         onClick={showResourceInfo}
       />
@@ -57,6 +58,7 @@ const ResourceInfo = ({ resource }: ResourceInfo): React.ReactNode => {
             size='xl'
             type='company'
             imageUrl={resource.resourceOwnerLogoUrl}
+            imageUrlAlt={resource.resourceOwnerName}
             name={resource.resourceOwnerName ?? ''}
           />
           <div>

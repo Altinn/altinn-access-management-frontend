@@ -98,7 +98,7 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
                     data-color='danger'
                     onClick={() => setIsPopoverOpen(true)}
                   >
-                    <TrashIcon />
+                    <TrashIcon aria-hidden />
                     {t('systemuser_detailpage.delete_systemuser')}
                   </Popover.Trigger>
                   <Popover
