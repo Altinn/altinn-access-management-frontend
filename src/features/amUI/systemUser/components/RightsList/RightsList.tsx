@@ -64,14 +64,14 @@ const ResourceInfo = ({ resource }: ResourceInfo): React.ReactNode => {
           <div>
             <Heading
               level={1}
-              size='xs'
+              data-size='xs'
             >
               {resource.title}
             </Heading>
-            <Paragraph size='xs'>{resource.resourceOwnerName}</Paragraph>
+            <Paragraph data-size='xs'>{resource.resourceOwnerName}</Paragraph>
           </div>
         </div>
-        <Paragraph size='sm'>{resource.description}</Paragraph>
+        <Paragraph data-size='sm'>{resource.description}</Paragraph>
       </Modal>
     </li>
   );

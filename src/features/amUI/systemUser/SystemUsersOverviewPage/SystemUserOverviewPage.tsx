@@ -42,7 +42,7 @@ export const SystemUserOverviewPage = () => {
       <PageLayoutWrapper>
         <Heading
           level={1}
-          size='md'
+          data-size='md'
         >
           {t('systemuser_overviewpage.banner_title')}
         </Heading>
@@ -83,7 +83,7 @@ export const SystemUserOverviewPage = () => {
                   size='lg'
                   title={systemUser.integrationTitle}
                   description={systemUser.system.systemVendorOrgName}
-                  icon={{ name: 'tenancy', theme: 'surface' }}
+                  icon='tenancy'
                   linkIcon='chevron-right'
                   onClick={() => navigate(`/systemuser/${systemUser.id}`)}
                 />
