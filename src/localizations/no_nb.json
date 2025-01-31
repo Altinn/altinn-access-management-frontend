@@ -220,8 +220,8 @@
     "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt til ny tjeneste",
     "current_services_title": "Fullmakt til {{count}} tjenester",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
+    "delete_singleRight_success_message": "Slettet tilgang til ",
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
@@ -230,7 +230,8 @@
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
-    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}."
+    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",

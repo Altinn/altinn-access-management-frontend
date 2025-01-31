@@ -384,3 +384,4 @@ playwright/jsonReports
 
 # Storybook build files
 storybook-static/
+test-results

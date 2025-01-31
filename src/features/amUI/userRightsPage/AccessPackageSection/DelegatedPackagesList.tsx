@@ -1,9 +1,8 @@
 import { Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@altinn/altinn-components';
-import { AccessPackageList } from '@altinn/altinn-components';
+import { Button, List } from '@altinn/altinn-components';
 
-import { type AccessPackage, type AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
+import type { AccessPackage, AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
 
 import classes from './AccessPackageSection.module.css';
 
@@ -65,8 +64,10 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   return (
     <>
       {delegatedPackages.length > 0 && (
-        <AccessPackageList
+        <List
           items={delegatedPackages.map((item) => ({
+            color: 'company',
+            icon: 'package',
             id: item.id,
             title: item.name,
             description: `${item.resources.length} tjenester`,
@@ -92,8 +93,10 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
           {delegatedPackages.length > 0 && (
             <Paragraph size='sm'>{t('access_packages.other_packages_in_area_title')}</Paragraph>
           )}
-          <AccessPackageList
+          <List
             items={notDelegatedPackages.map((item) => ({
+              icon: 'package',
+              color: 'neutral',
               id: item.id,
               title: item.name,
               description: `${item.resources.length} tjenester`,

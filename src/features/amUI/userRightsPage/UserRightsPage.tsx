@@ -48,37 +48,33 @@ export const UserRightsPage = () => {
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
             {!isLoading && allAccesses ? (
               <>
-                <div className={classes.headingRow}>
+                <div className={classes.headingContainer}>
                   <Avatar
+                    className={classes.avatar}
                     name={name || ''}
                     size={'lg'}
                     type={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
-                  <div>
-                    <div className={classes.headingContainer}>
-                      <Heading
-                        level={1}
-                        size='sm'
-                        className={classes.heading}
-                      >
-                        {party?.name}
-                      </Heading>
-
-                      {!!reportee?.partyUuid && !!party?.partyUuid && (
-                        <UserRoles
-                          rightOwnerUuid={reportee.partyUuid}
-                          rightHolderUuid={party.partyUuid}
-                        />
-                      )}
-                    </div>
-
-                    <Paragraph
-                      className={classes.subheading}
-                      size='xs'
-                    >
-                      for {reportee?.name}
-                    </Paragraph>
-                  </div>
+                  <Heading
+                    level={1}
+                    size='sm'
+                    className={classes.heading}
+                  >
+                    {party?.name}
+                  </Heading>
+                  <Paragraph
+                    className={classes.subheading}
+                    size='xs'
+                  >
+                    for {reportee?.name}
+                  </Paragraph>
+                  {!!reportee?.partyUuid && !!party?.partyUuid && (
+                    <UserRoles
+                      className={classes.userRoles}
+                      rightOwnerUuid={reportee.partyUuid}
+                      rightHolderUuid={party.partyUuid}
+                    />
+                  )}
                 </div>
 
                 <Tabs
