@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { AccessPackageListItem } from '@altinn/altinn-components';
 import { Paragraph, Heading } from '@digdir/designsystemet-react';
 import { useRef, useState } from 'react';
 
@@ -12,6 +11,7 @@ import classes from './roleSection.module.css';
 import { RoleInfoModal } from './RoleInfoModal';
 import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
+import { RoleListItem } from './RoleListItem';
 
 export const RoleSection = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -31,8 +31,23 @@ export const RoleSection = () => {
   return (
     <div className={classes.roleSection}>
       {roleAreas?.map((roleArea) => {
+        const { activeRoles, availableRoles } = roleArea.roles.reduce(
+          (res, role) => {
+            const userHasRole = userRoles?.find((userRole) => userRole.role.id === role.id);
+            if (userHasRole) res.activeRoles.push(role);
+            else res.availableRoles.push(role);
+            return res;
+          },
+          {
+            activeRoles: [] as Role[],
+            availableRoles: [] as Role[],
+          },
+        );
         return (
-          <div key={roleArea.id}>
+          <div
+            key={roleArea.id}
+            className={classes.roleArea}
+          >
             <Heading
               level={2}
               size='xs'
@@ -41,46 +56,60 @@ export const RoleSection = () => {
               {roleArea.name}
             </Heading>
             <Paragraph size='sm'>{roleArea.description}</Paragraph>
-            <ul className={classes.roleList}>
-              {roleArea.roles.map((role) => {
-                const userHasRole = userRoles?.find((userRole) => userRole.role.id === role.id);
-                return (
-                  <li key={role.id}>
-                    <AccessPackageListItem
-                      id={role.id}
+            {activeRoles.length > 0 && (
+              <ul className={classes.roleList}>
+                {activeRoles.map((role) => {
+                  return (
+                    <RoleListItem
+                      reporteeUuid={reportee?.partyUuid || ''}
+                      key={role.id}
+                      role={role}
                       onClick={() => {
                         setModalItem(role);
                         modalRef.current?.showModal();
                       }}
-                      as='button'
-                      title={role.name}
-                      size='sm'
                       controls={[
-                        userHasRole ? (
-                          <RevokeRoleButton
-                            key={role.id}
-                            roleId={role.id}
-                            roleName={role.name}
-                            toParty={party}
-                            fullText={false}
-                            size='sm'
-                          />
-                        ) : (
-                          <DelegateRoleButton
-                            key={role.id}
-                            roleId={role.id}
-                            roleName={role.name}
-                            toParty={party}
-                            fullText={false}
-                            size='sm'
-                          />
-                        ),
+                        <RevokeRoleButton
+                          key={role.id}
+                          roleId={role.id}
+                          roleName={role.name}
+                          toParty={party}
+                          fullText={false}
+                          size='sm'
+                        />,
                       ]}
                     />
-                  </li>
-                );
-              })}
-            </ul>
+                  );
+                })}
+              </ul>
+            )}
+            {availableRoles.length > 0 && (
+              <ul className={classes.roleList}>
+                {availableRoles.map((role) => {
+                  return (
+                    <RoleListItem
+                      reporteeUuid={reportee?.partyUuid || ''}
+                      key={role.id}
+                      role={role}
+                      onClick={() => {
+                        setModalItem(role);
+                        modalRef.current?.showModal();
+                      }}
+                      controls={[
+                        <DelegateRoleButton
+                          key={role.id}
+                          roleId={role.id}
+                          roleName={role.name}
+                          toParty={party}
+                          fullText={false}
+                          size='sm'
+                        />,
+                      ]}
+                    />
+                  );
+                })}
+              </ul>
+            )}
           </div>
         );
       })}

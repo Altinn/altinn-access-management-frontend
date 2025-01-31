@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 interface EntityType {
   id: string;
@@ -52,6 +53,11 @@ interface RoleApiRequest {
   rightHolderUuid: string;
 }
 
+interface DelegationCheckResponse {
+  reasonCode: ErrorCode;
+  canDelegate: boolean;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
 
 export const roleApi = createApi({
@@ -95,10 +101,26 @@ export const roleApi = createApi({
         };
       },
     }),
+    delegationCheck: builder.query<
+      DelegationCheckResponse,
+      { rightownerUuid: string; roleUuid: string }
+    >({
+      query({ rightownerUuid, roleUuid }) {
+        return {
+          url: `/delegationcheck/${rightownerUuid}/${roleUuid}`,
+          method: 'GET',
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetRolesForUserQuery, useRevokeMutation, useDelegateMutation, useGetRolesQuery } =
-  roleApi;
+export const {
+  useGetRolesForUserQuery,
+  useRevokeMutation,
+  useDelegateMutation,
+  useGetRolesQuery,
+  useDelegationCheckQuery,
+} = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;
