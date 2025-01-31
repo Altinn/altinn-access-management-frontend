@@ -9,3 +9,7 @@
   font-style: italic;
   align-self: flex-end;
 }
+
+.deletePopover {
+  max-width: 23rem;
+}

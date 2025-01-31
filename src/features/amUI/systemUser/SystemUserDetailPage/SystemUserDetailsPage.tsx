@@ -51,7 +51,7 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
       .then(() => {
         setIsPopoverOpen(false);
         handleNavigateBack();
-        openSnackbar({ message: 'Systemtilgang slettet', duration: 3000 });
+        openSnackbar({ message: t('systemuser_detailpage.systemuser_deleted'), duration: 3000 });
       });
   };
 
@@ -104,7 +104,7 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
                   <Popover
                     open={isPopoverOpen}
                     data-color='danger'
-                    style={{ maxWidth: '350px' }}
+                    className={classes.deletePopover}
                     onClose={() => setIsPopoverOpen(false)}
                   >
                     {t('systemuser_detailpage.delete_systemuser_body', {

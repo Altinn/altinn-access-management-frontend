@@ -404,6 +404,7 @@
     "delete_systemuser_body": "Er du sikker på at du vil slette systemtilgangen \"{{title}}\"?",
     "delete_systemuser_error": "Kunne ikke slette systemtilgang",
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
+    "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",
     "name_too_long": "Navn på systemtilgang kan kun være 255 tegn, du har skrevet inn {{ nameLength }} tegn.",
     "created_by": "Opprettet {{created}}"

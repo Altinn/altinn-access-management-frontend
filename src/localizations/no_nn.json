@@ -401,6 +401,7 @@
     "delete_systemuser_body": "Er du sikker på at du vil slette systemtilgangen \"{{title}}\"?",
     "delete_systemuser_error": "Kunne ikkje slette systemtilgang",
     "update_systemuser_error": "Kunne ikkje oppdatere systemtilgang",
+    "systemuser_deleted": "Systemtilgang sletta",
     "save_systemuser": "Lagre endringar",
     "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
     "created_by": "Oppretta {{created}}"
