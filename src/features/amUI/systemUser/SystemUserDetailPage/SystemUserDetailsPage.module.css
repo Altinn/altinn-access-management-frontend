@@ -1,0 +1,15 @@
+.systemUserDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-8);
+}
+
+.createdBy {
+  color: var(--ds-color-text-subtle);
+  font-style: italic;
+  align-self: flex-end;
+}
+
+.deletePopover {
+  max-width: 23rem;
+}

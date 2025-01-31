@@ -1,0 +1,17 @@
+.unstyledList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resourceInfoHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ds-size-4);
+  margin-bottom: var(--ds-size-4);
+}
+
+.resourceListItem {
+  padding-bottom: var(--ds-size-2);
+}

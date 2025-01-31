@@ -1,0 +1,22 @@
+.systemUserHeader {
+  margin-top: var(--ds-size-12);
+  margin-bottom: var(--ds-size-1);
+}
+
+.unstyledList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.systemUserIngress {
+  max-width: 40rem;
+}
+
+.createSystemUserButton {
+  align-self: flex-end;
+}
+
+.systemUserListItem {
+  padding-bottom: var(--ds-size-2);
+}
