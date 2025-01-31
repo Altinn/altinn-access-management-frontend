@@ -58,7 +58,12 @@ export const SelectRegisteredSystem = ({
           >
             {t('systemuser_creationpage.sub_title')}
           </Heading>
-          <Paragraph data-size='sm'>{t('systemuser_creationpage.content_text1')}</Paragraph>
+          <Paragraph
+            data-size='sm'
+            className={classes.systemDescription}
+          >
+            {t('systemuser_creationpage.content_text1')}
+          </Paragraph>
           <div className={classes.inputContainer}>
             <Combobox
               label={t('systemuser_creationpage.pull_down_menu_label')}
