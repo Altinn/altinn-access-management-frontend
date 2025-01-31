@@ -2,6 +2,8 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -155,7 +157,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///  Test case: Revoke role with invalid request
         ///  Expected: Returns internal server error
         ///  </summary>
-
         [Fact]
         public async Task RevokeRole_InvalidRequest()
         {
@@ -169,5 +170,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
+        [Fact]
+        public async Task RoleDelegationCheck_CanDelegate() 
+        {
+            // uuid for Intelligent Albatross
+            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; 
+            // roleId for Tilgangsstyring
+            var roleUuid = "4691c710-e0ad-4152-9783-9d1e787f02d3";
+            
+            var res = await _client.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
+
+            DelegationCheckResponse responseData = JsonSerializer.Deserialize<DelegationCheckResponse>(await res.Content.ReadAsStringAsync(), options);
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, res.StatusCode);
+            Assert.True(responseData.CanDelegate);
+            Assert.Equal(DetailCode.RoleAccess, responseData.DetailCode);
+
+        }
     }
 }
