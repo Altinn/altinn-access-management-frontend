@@ -405,7 +405,9 @@
     "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
     "created_by": "Oppretta {{created}}",
     "accesspackage_resources_singular": "Tilgangspakka inneheld en teneste:",
-    "accesspackage_resources_plural": "Tilgangspakka inneheld {{resourcesCount}} tenestar:"
+    "accesspackage_resources_plural": "Tilgangspakka inneheld {{resourcesCount}} tenestar:",
+    "accesspackage_badge_singular": "1 enkeltteneste",
+    "accesspackage_badge_plural": "{{resourcesCount}} enkelttenestar"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

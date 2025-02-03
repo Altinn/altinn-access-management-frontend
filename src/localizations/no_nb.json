@@ -407,7 +407,9 @@
     "save_systemuser": "Lagre endringer",
     "created_by": "Opprettet {{created}}",
     "accesspackage_resources_singular": "Tilgangspakken inneholder en enkelttjeneste:",
-    "accesspackage_resources_plural": "Tilgangspakken inneholder {{resourcesCount}} enkelttjenester:"
+    "accesspackage_resources_plural": "Tilgangspakken inneholder {{resourcesCount}} enkelttjenester:",
+    "accesspackage_badge_singular": "1 enkelttjeneste",
+    "accesspackage_badge_plural": "{{resourcesCount}} enkelttjenester"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

@@ -406,7 +406,9 @@
     "name_too_long": "Name of system access cannot be longer than 255 characters, you have entered {{ nameLength }} characters.",
     "created_by": "Created {{created}}",
     "accesspackage_resources_singular": "The access package contains this service:",
-    "accesspackage_resources_plural": "The access package contains {{resourcesCount}} services:"
+    "accesspackage_resources_plural": "The access package contains {{resourcesCount}} services:",
+    "accesspackage_badge_singular": "1 single right",
+    "accesspackage_badge_plural": "{{resourcesCount}} single rights"
   },
   "systemuser_request": {
     "banner_title": "Give access to system",

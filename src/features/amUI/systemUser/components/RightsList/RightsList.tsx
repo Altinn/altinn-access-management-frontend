@@ -127,8 +127,10 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
         badge={{
           label:
             accessPackage.resources.length === 1
-              ? '1 enkelttjeneste'
-              : `${accessPackage.resources.length} enkelttjenester`,
+              ? t('systemuser_detailpage.accesspackage_badge_singular')
+              : t('systemuser_detailpage.accesspackage_badge_plural', {
+                  resourcesCount: accessPackage.resources.length,
+                }),
         }}
         onClick={showResourceInfo}
       />
@@ -144,6 +146,7 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
                 <Button
                   variant='tertiary'
                   color='neutral'
+                  data-size='sm'
                   onClick={navigateToFirstStep}
                   icon
                 >
