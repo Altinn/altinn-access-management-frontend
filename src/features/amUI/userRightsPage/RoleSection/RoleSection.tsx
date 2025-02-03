@@ -31,8 +31,13 @@ export const RoleSection = () => {
       {roleAreas?.map((roleArea) => {
         const { activeRoles, availableRoles } = roleArea.roles.reduce(
           (res, role) => {
-            const userHasRole = userRoles?.find((userRole) => userRole.role.id === role.id);
-            if (userHasRole) res.activeRoles.push({ ...role, inherited: userHasRole.inherited });
+            const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
+            if (roleAssignment)
+              res.activeRoles.push({
+                ...role,
+                inherited: roleAssignment.inherited,
+                assignmentId: roleAssignment.id,
+              });
             else res.availableRoles.push({ ...role, inherited: [] });
             return res;
           },
@@ -67,7 +72,7 @@ export const RoleSection = () => {
                         modalRef.current?.showModal();
                       }}
                       toParty={party}
-                      hasRole
+                      assignmentId={role.assignmentId}
                     />
                   );
                 })}

@@ -47,7 +47,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
 
   const userHasRole = !!assignment;
   const userHasInheritedRole = assignment?.inherited && assignment.inherited.length > 0;
-  const inheritedFromRoleName = (userHasInheritedRole && assignment?.inherited[0]) ?? null;
+  const inheritedFromRoleName = (userHasInheritedRole && assignment?.inherited[0]?.name) ?? null;
 
   return (
     <div className={classes.container}>
@@ -68,7 +68,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
         </Heading>
       </div>
       <Paragraph>{role?.description}</Paragraph>
-      {!delegationCheckResult?.canDelegate && (
+      {!userHasRole && !delegationCheckResult?.canDelegate && (
         <div className={classes.inherited}>
           <ExclamationmarkTriangleFillIcon
             fontSize='1.5rem'
@@ -95,7 +95,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
           />
           <Paragraph size='xs'>
             <Trans
-              i18nKey='delegation_modal.inherited_role_message'
+              i18nKey='role.inherited_role_message'
               values={{ user_name: toParty.name, role_name: inheritedFromRoleName }}
               components={{ b: <strong /> }}
             />
@@ -113,7 +113,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
           />
         ) : (
           <RevokeRoleButton
-            roleId={role.id}
+            assignmentId={assignment.id}
             roleName={role.name}
             toParty={toParty}
             fullText

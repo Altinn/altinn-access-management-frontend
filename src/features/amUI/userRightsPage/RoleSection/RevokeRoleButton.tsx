@@ -4,20 +4,20 @@ import { Button } from '@altinn/altinn-components';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { useRevokeDelegationMutation } from '@/rtk/features/accessPackageApi';
+import { useRevokeMutation } from '@/rtk/features/roleApi';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
 
 interface RevokeRoleButtonProps extends ButtonProps {
-  roleId: string;
+  assignmentId: string;
   roleName: string;
   toParty?: Party;
   fullText?: boolean;
 }
 
 export const RevokeRoleButton = ({
-  roleId,
+  assignmentId,
   roleName,
   toParty,
   fullText = false,
@@ -27,17 +27,15 @@ export const RevokeRoleButton = ({
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { data: representingParty } = useGetReporteePartyQuery();
-  const [revoke, { isLoading }] = useRevokeDelegationMutation();
+  const [revoke, { isLoading }] = useRevokeMutation();
 
   const onClick = () => {
     const snackbar = (isSuccessful: boolean) => {
       const snackbarData = {
-        message: t(
-          isSuccessful
-            ? 'access_packages.package_deletion_success'
-            : 'access_packages.package_deletion_error',
-          { role: roleName, name: toParty?.name },
-        ),
+        message: t(isSuccessful ? 'role.role_deletion_success' : 'role.role_deletion_error', {
+          role: roleName,
+          name: toParty?.name,
+        }),
         variant: SnackbarMessageVariant.Default,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
       };
@@ -46,8 +44,7 @@ export const RevokeRoleButton = ({
 
     if (representingParty) {
       revoke({
-        to: toParty?.partyUuid || '',
-        packageId: roleId,
+        assignmentId: assignmentId,
       })
         .unwrap()
         .then(() => {

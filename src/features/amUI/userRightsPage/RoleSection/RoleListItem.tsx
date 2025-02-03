@@ -11,16 +11,16 @@ interface RoleLIstItemProps {
   reporteeUuid: string;
   role: ExtendedRole;
   onClick: () => void;
-  hasRole?: boolean;
+  assignmentId?: string;
   toParty: Party;
 }
 
 export const RoleListItem = ({
   reporteeUuid,
   role,
-  hasRole,
   onClick,
   toParty,
+  assignmentId,
 }: RoleLIstItemProps) => {
   const { data: delegationCheckResult, isFetching } = useDelegationCheckQuery({
     rightownerUuid: reporteeUuid,
@@ -36,10 +36,10 @@ export const RoleListItem = ({
         title={role.name}
         size='sm'
         controls={
-          hasRole ? (
+          assignmentId ? (
             <RevokeRoleButton
               key={role.id}
-              roleId={role.id}
+              assignmentId={assignmentId}
               roleName={role.name}
               toParty={toParty}
               fullText={false}

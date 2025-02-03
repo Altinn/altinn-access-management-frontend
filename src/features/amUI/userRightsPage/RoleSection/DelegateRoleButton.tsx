@@ -32,12 +32,10 @@ export const DelegateRoleButton = ({
   const onClick = () => {
     const snackbar = (isSuccessful: boolean) => {
       const snackbarData = {
-        message: t(
-          isSuccessful
-            ? 'access_packages.package_delegation_success'
-            : 'access_packages.package_delegation_error',
-          { role: roleName, name: toParty?.name },
-        ),
+        message: t(isSuccessful ? 'role.role_delegation_success' : 'role.role_delegation_error', {
+          role: roleName,
+          name: toParty?.name,
+        }),
         variant: SnackbarMessageVariant.Default,
         duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
       };

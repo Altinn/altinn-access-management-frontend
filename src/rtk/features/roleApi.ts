@@ -30,6 +30,7 @@ export interface Role {
 
 export interface ExtendedRole extends Role {
   inherited: string[];
+  assignmentId?: string;
 }
 
 interface Area {
@@ -49,7 +50,7 @@ export interface Assignment {
   fromId: string;
   toId: string;
   role: Role;
-  inherited: string[];
+  inherited: Role[];
 }
 
 interface RoleApiRequest {

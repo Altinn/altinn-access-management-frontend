@@ -230,6 +230,13 @@
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}"
   },
+  "role": {
+    "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
+    "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
+    "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
+    "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
+    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes."
+  },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",
     "main_page_heading": "Brukarar med fullmakter i {{name}}",
@@ -257,7 +264,6 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
-    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."

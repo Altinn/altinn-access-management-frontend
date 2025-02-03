@@ -40,5 +40,5 @@ public class RoleAssignment
     /// <summary>
     /// Inherited
     /// </summary>
-    public string[] Inherited { get; set; }
+    public Role[] Inherited { get; set; }
 }
