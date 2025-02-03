@@ -132,17 +132,15 @@ export const SystemUserChangeRequestPage = () => {
             ></Trans>
           </Paragraph>
           <div />
-          <div>
-            <Heading
-              level={3}
-              data-size='xs'
-            >
-              {changeRequest.resources.length === 1
-                ? t('systemuser_change_request.rights_list_header_single')
-                : t('systemuser_change_request.rights_list_header')}
-            </Heading>
-            <RightsList resources={changeRequest.resources} />
-          </div>
+          <Heading
+            level={3}
+            data-size='xs'
+          >
+            {changeRequest.resources.length === 1
+              ? t('systemuser_change_request.rights_list_header_single')
+              : t('systemuser_change_request.rights_list_header')}
+          </Heading>
+          <RightsList resources={changeRequest.resources} />
           <Paragraph>{t('systemuser_request.withdraw_consent_info')}</Paragraph>
           <div>
             {acceptChangeRequestError && (

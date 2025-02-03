@@ -1,3 +1,9 @@
+.rightsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-10);
+}
+
 .unstyledList {
   list-style-type: none;
   padding: 0;
@@ -14,4 +20,10 @@
 
 .resourceListItem {
   padding-bottom: var(--ds-size-2);
+}
+
+.accessPackages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
 }

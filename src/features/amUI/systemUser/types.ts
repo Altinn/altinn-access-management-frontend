@@ -1,3 +1,4 @@
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 export interface RegisteredSystem {
@@ -38,5 +39,10 @@ export interface SystemUserChangeRequest {
   status: RequestStatus;
   redirectUrl?: string;
   system: RegisteredSystem;
+  resources: ServiceResource[];
+}
+
+// TODO: temp? type for access package with enriched resources
+export interface SysteUserAccessPackage extends Omit<AccessPackage, 'resources'> {
   resources: ServiceResource[];
 }

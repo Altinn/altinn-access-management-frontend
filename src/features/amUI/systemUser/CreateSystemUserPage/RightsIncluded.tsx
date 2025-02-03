@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Spinner } from '@digdir/designsystemet-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
@@ -80,11 +80,6 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
             ? t('systemuser_includedrightspage.sub_title_single')
             : t('systemuser_includedrightspage.sub_title')}
         </Heading>
-        <Paragraph data-size='sm'>
-          {rights?.length === 1
-            ? t('systemuser_includedrightspage.content_text_single')
-            : t('systemuser.content_text')}
-        </Paragraph>
         <div>
           <RightsList resources={rights ?? []} />
           {createSystemUserError && (
