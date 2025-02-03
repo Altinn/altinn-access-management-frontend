@@ -42,4 +42,9 @@ public class Role
     ///  ProviderId
     /// </summary>
     public Guid ProviderId { get; set; }
+
+    /// <summary>
+    /// IsDelegable
+    /// </summary>
+    public bool IsDelegable { get; set; }
 }

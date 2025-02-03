@@ -1,12 +1,17 @@
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Avatar } from '@altinn/altinn-components';
 import { useMemo } from 'react';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
-import { Trans } from 'react-i18next';
+import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
+import { Trans, useTranslation } from 'react-i18next';
 
 import type { Party } from '@/rtk/features/lookupApi';
-import { useGetRolesForUserQuery, type Role } from '@/rtk/features/roleApi';
+import {
+  useDelegationCheckQuery,
+  useGetRolesForUserQuery,
+  type Role,
+} from '@/rtk/features/roleApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 import { RevokeRoleButton } from '../../RoleSection/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleSection/DelegateRoleButton';
@@ -20,10 +25,17 @@ export interface PackageInfoProps {
 }
 
 export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
+  const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
+
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
     rightOwnerUuid: reportee?.partyUuid ?? '',
     rightHolderUuid: toParty.partyUuid ?? '',
+  });
+
+  const { data: delegationCheckResult } = useDelegationCheckQuery({
+    rightownerUuid: reportee?.partyUuid ?? '',
+    roleUuid: role.id,
   });
 
   const assignment = useMemo(() => {
@@ -56,6 +68,25 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
         </Heading>
       </div>
       <Paragraph>{role?.description}</Paragraph>
+      {!delegationCheckResult?.canDelegate && (
+        <div className={classes.inherited}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={classes.nonDelegableIcon}
+          />
+          <Paragraph size='xs'>
+            <Trans
+              i18nKey={getErrorCodeTextKey(delegationCheckResult?.detailCode || ErrorCode.Unknown)}
+              components={{ b: <strong /> }}
+              values={{
+                you: t('common.you_uppercase'),
+                serviceowner: role.provider?.name,
+                reporteeorg: reportee?.name,
+              }}
+            />
+          </Paragraph>
+        </div>
+      )}
       {userHasInheritedRole && (
         <div className={classes.inherited}>
           <InformationSquareFillIcon
@@ -78,7 +109,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             roleName={role.name}
             toParty={toParty}
             fullText
-            disabled={isFetching || !role.isDelegable}
+            disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
           />
         ) : (
           <RevokeRoleButton

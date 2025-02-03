@@ -1,21 +1,32 @@
-import type { ReactNode } from 'react';
 import { AccessPackageListItem } from '@altinn/altinn-components';
 
-import { useDelegationCheckQuery, type Role } from '@/rtk/features/roleApi';
+import type { ExtendedRole } from '@/rtk/features/roleApi';
+import { useDelegationCheckQuery } from '@/rtk/features/roleApi';
+import type { Party } from '@/rtk/features/lookupApi';
+
+import { RevokeRoleButton } from './RevokeRoleButton';
+import { DelegateRoleButton } from './DelegateRoleButton';
 
 interface RoleLIstItemProps {
   reporteeUuid: string;
-  role: Role;
+  role: ExtendedRole;
   onClick: () => void;
-  controls: ReactNode;
+  hasRole?: boolean;
+  toParty: Party;
 }
 
-export const RoleListItem = ({ reporteeUuid, role, onClick, controls }: RoleLIstItemProps) => {
-  const isDelegatable = useDelegationCheckQuery({
+export const RoleListItem = ({
+  reporteeUuid,
+  role,
+  hasRole,
+  onClick,
+  toParty,
+}: RoleLIstItemProps) => {
+  const { data: delegationCheckResult, isFetching } = useDelegationCheckQuery({
     rightownerUuid: reporteeUuid,
     roleUuid: role.id,
   });
-  console.log('🚀 ~ RoleListItem ~ isDelegatable:', isDelegatable.data);
+
   return (
     <li>
       <AccessPackageListItem
@@ -24,7 +35,29 @@ export const RoleListItem = ({ reporteeUuid, role, onClick, controls }: RoleLIst
         as='button'
         title={role.name}
         size='sm'
-        controls={controls}
+        controls={
+          hasRole ? (
+            <RevokeRoleButton
+              key={role.id}
+              roleId={role.id}
+              roleName={role.name}
+              toParty={toParty}
+              fullText={false}
+              size='sm'
+              disabled={role.inherited?.length > 0}
+            />
+          ) : (
+            <DelegateRoleButton
+              key={role.id}
+              roleId={role.id}
+              roleName={role.name}
+              toParty={toParty}
+              fullText={false}
+              size='sm'
+              disabled={isFetching || !delegationCheckResult?.canDelegate}
+            />
+          )
+        }
       />
     </li>
   );

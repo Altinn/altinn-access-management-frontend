@@ -28,6 +28,10 @@ export interface Role {
   isDelegable: boolean;
 }
 
+export interface ExtendedRole extends Role {
+  inherited: string[];
+}
+
 interface Area {
   id: string;
   name: string;
@@ -54,7 +58,7 @@ interface RoleApiRequest {
 }
 
 interface DelegationCheckResponse {
-  reasonCode: ErrorCode;
+  detailCode: ErrorCode;
   canDelegate: boolean;
 }
 
@@ -94,9 +98,10 @@ export const roleApi = createApi({
     }),
     delegate: builder.mutation<void, { to: string; roleId: string }>({
       invalidatesTags: ['roles'],
-      query: (args) => {
+      query: ({ to, roleId }) => {
+        const from = getCookie('AltinnPartyUuid');
         return {
-          url: `delegate/${getCookie('AltinnPartyUuid')}/${args.roleId}/${args.to}`,
+          url: `delegate/${from}/${to}/${roleId}`,
           method: 'POST',
         };
       },

@@ -2,15 +2,13 @@ import { useParams } from 'react-router-dom';
 import { Paragraph, Heading } from '@digdir/designsystemet-react';
 import { useRef, useState } from 'react';
 
-import type { Role } from '@/rtk/features/roleApi';
+import type { ExtendedRole, Role } from '@/rtk/features/roleApi';
 import { useGetRolesForUserQuery, useGetRolesQuery } from '@/rtk/features/roleApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import classes from './roleSection.module.css';
 import { RoleInfoModal } from './RoleInfoModal';
-import { RevokeRoleButton } from './RevokeRoleButton';
-import { DelegateRoleButton } from './DelegateRoleButton';
 import { RoleListItem } from './RoleListItem';
 
 export const RoleSection = () => {
@@ -34,13 +32,13 @@ export const RoleSection = () => {
         const { activeRoles, availableRoles } = roleArea.roles.reduce(
           (res, role) => {
             const userHasRole = userRoles?.find((userRole) => userRole.role.id === role.id);
-            if (userHasRole) res.activeRoles.push(role);
-            else res.availableRoles.push(role);
+            if (userHasRole) res.activeRoles.push({ ...role, inherited: userHasRole.inherited });
+            else res.availableRoles.push({ ...role, inherited: [] });
             return res;
           },
           {
-            activeRoles: [] as Role[],
-            availableRoles: [] as Role[],
+            activeRoles: [] as ExtendedRole[],
+            availableRoles: [] as ExtendedRole[],
           },
         );
         return (
@@ -56,7 +54,7 @@ export const RoleSection = () => {
               {roleArea.name}
             </Heading>
             <Paragraph size='sm'>{roleArea.description}</Paragraph>
-            {activeRoles.length > 0 && (
+            {party && activeRoles.length > 0 && (
               <ul className={classes.roleList}>
                 {activeRoles.map((role) => {
                   return (
@@ -68,22 +66,14 @@ export const RoleSection = () => {
                         setModalItem(role);
                         modalRef.current?.showModal();
                       }}
-                      controls={[
-                        <RevokeRoleButton
-                          key={role.id}
-                          roleId={role.id}
-                          roleName={role.name}
-                          toParty={party}
-                          fullText={false}
-                          size='sm'
-                        />,
-                      ]}
+                      toParty={party}
+                      hasRole
                     />
                   );
                 })}
               </ul>
             )}
-            {availableRoles.length > 0 && (
+            {party && availableRoles.length > 0 && (
               <ul className={classes.roleList}>
                 {availableRoles.map((role) => {
                   return (
@@ -95,16 +85,7 @@ export const RoleSection = () => {
                         setModalItem(role);
                         modalRef.current?.showModal();
                       }}
-                      controls={[
-                        <DelegateRoleButton
-                          key={role.id}
-                          roleId={role.id}
-                          roleName={role.name}
-                          toParty={party}
-                          fullText={false}
-                          size='sm'
-                        />,
-                      ]}
+                      toParty={party}
                     />
                   );
                 })}

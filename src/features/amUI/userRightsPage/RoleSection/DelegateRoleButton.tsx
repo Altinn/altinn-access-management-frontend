@@ -12,7 +12,7 @@ import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/
 interface DelegateRoleButtonProps extends ButtonProps {
   roleId: string;
   roleName: string;
-  toParty?: Party;
+  toParty: Party;
   fullText?: boolean;
 }
 
@@ -34,8 +34,8 @@ export const DelegateRoleButton = ({
       const snackbarData = {
         message: t(
           isSuccessful
-            ? 'access_packages.package_deletion_success'
-            : 'access_packages.package_deletion_error',
+            ? 'access_packages.package_delegation_success'
+            : 'access_packages.package_delegation_error',
           { role: roleName, name: toParty?.name },
         ),
         variant: SnackbarMessageVariant.Default,

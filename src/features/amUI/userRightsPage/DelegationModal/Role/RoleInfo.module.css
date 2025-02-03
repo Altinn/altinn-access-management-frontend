@@ -26,3 +26,8 @@
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;
 }
+
+.nonDelegableIcon {
+  color: var(--ds-color-warning-base-default);
+  margin-right: 0.3rem;
+}
