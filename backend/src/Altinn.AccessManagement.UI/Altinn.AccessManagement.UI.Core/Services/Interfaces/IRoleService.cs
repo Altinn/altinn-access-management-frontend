@@ -9,7 +9,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         public interface IRoleService
         {
-
                 /// <summary>
                 ///    Search through all roles and return matches
                 /// </summary>
