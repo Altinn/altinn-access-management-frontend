@@ -173,6 +173,5 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return StatusCode((int)ex.StatusCode, ex.Message);
             }
         }
-
     }
 }
