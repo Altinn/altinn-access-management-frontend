@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Paragraph, Heading } from '@digdir/designsystemet-react';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import type { ExtendedRole, Role } from '@/rtk/features/roleApi';
 import { useGetRolesForUserQuery, useGetRolesQuery } from '@/rtk/features/roleApi';
@@ -12,6 +13,7 @@ import { RoleInfoModal } from './RoleInfoModal';
 import { RoleListItem } from './RoleListItem';
 
 export const RoleSection = () => {
+  const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
 
@@ -60,7 +62,10 @@ export const RoleSection = () => {
             </Heading>
             <Paragraph size='sm'>{roleArea.description}</Paragraph>
             {party && activeRoles.length > 0 && (
-              <ul className={classes.roleList}>
+              <ul
+                className={classes.roleList}
+                aria-label={t('role.activeRolesLabel')}
+              >
                 {activeRoles.map((role) => {
                   return (
                     <RoleListItem
@@ -79,7 +84,10 @@ export const RoleSection = () => {
               </ul>
             )}
             {party && availableRoles.length > 0 && (
-              <ul className={classes.roleList}>
+              <ul
+                className={classes.roleList}
+                aria-label={t('role.availableRolesLabel')}
+              >
                 {availableRoles.map((role) => {
                   return (
                     <RoleListItem

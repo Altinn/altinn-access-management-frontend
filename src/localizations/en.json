@@ -237,7 +237,9 @@
     "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
     "role_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{role}}.",
-    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted."
+    "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
+    "activeRolesLabel": "List of roles the user has been granted",
+    "availableRolesLabel" : "List of roles available for the user"
   },
   "users_page": {
     "page_title": "Users and groups - Altinn",

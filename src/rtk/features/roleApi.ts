@@ -29,7 +29,7 @@ export interface Role {
 }
 
 export interface ExtendedRole extends Role {
-  inherited: string[];
+  inherited: Role[];
   assignmentId?: string;
 }
 
