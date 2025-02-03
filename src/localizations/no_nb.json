@@ -405,7 +405,7 @@
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",
-    "created_by": "Opprettet {{created}}",
+    "created_by": "Systemtilgang opprettet {{created}}",
     "accesspackage_resources_singular": "Tilgangspakken inneholder en enkelttjeneste:",
     "accesspackage_resources_plural": "Tilgangspakken inneholder {{resourcesCount}} enkelttjenester:",
     "accesspackage_badge_singular": "1 enkelttjeneste",

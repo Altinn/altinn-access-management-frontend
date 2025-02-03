@@ -403,7 +403,7 @@
     "systemuser_deleted": "Systemtilgang sletta",
     "save_systemuser": "Lagre endringar",
     "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
-    "created_by": "Oppretta {{created}}",
+    "created_by": "Systemtilgang oppretta {{created}}",
     "accesspackage_resources_singular": "Tilgangspakka inneheld en teneste:",
     "accesspackage_resources_plural": "Tilgangspakka inneheld {{resourcesCount}} tenestar:",
     "accesspackage_badge_singular": "1 enkeltteneste",
