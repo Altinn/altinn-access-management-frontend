@@ -9,6 +9,15 @@ import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test: {
+    exclude: [
+      '**/node_modules/**',
+      '**/cypress/**',
+      '**/playwrite/**',
+      '**/*.spec.ts',
+      '**/*.test.cy.tsx',
+    ],
+  },
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
   },
