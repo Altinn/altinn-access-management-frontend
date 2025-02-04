@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
 
-            return await MapToSystemUsersFE(lista, languageCode, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             if (systemUser != null)
             {
-                return (await MapToSystemUsersFE([systemUser], languageCode, cancellationToken))[0] ?? null;
+                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
             }
 
             return null;
@@ -90,15 +90,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return createdSystemUser;
         }
 
-        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, CancellationToken cancellationToken)
+        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, bool includeRights, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
             List<SystemUserFE> lista = new List<SystemUserFE>();
             foreach (SystemUser systemUser in systemUsers)
             {
-                // TODO: get rights from systemuser when API to look up actual rights is implmented
-                List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemUser.SystemId, cancellationToken);
-                RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(rights, languageCode);
+                RegisteredSystemRightsFE enrichedRights = new();
+                if (includeRights)
+                {
+                    // TODO: get rights from systemuser when API to look up actual rights is implmented
+                    List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemUser.SystemId, cancellationToken);
+                    enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(rights, languageCode);
+                }
 
                 RegisteredSystemFE systemFE = new RegisteredSystemFE
                 {

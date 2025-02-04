@@ -38,7 +38,20 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         {
             // GET resources
             IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
-            IEnumerable<ServiceResource> resources = await Task.WhenAll(resourceTasks);
+            
+            List<ServiceResource> resources = [];
+            try 
+            {
+                await Task.WhenAll(resourceTasks.Select(async task =>
+                {
+                    await task;
+                    resources.Add(task.Result);
+                }));
+            } 
+            catch
+            {
+            }
+
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
             List<ServiceResourceFE> resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
             return resourcesFE;
