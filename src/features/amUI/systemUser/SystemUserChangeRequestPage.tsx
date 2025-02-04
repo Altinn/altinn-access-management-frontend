@@ -140,7 +140,10 @@ export const SystemUserChangeRequestPage = () => {
               ? t('systemuser_change_request.rights_list_header_single')
               : t('systemuser_change_request.rights_list_header')}
           </Heading>
-          <RightsList resources={changeRequest.resources} />
+          <RightsList
+            resources={changeRequest.resources}
+            accessPackages={changeRequest.accessPackages}
+          />
           <Paragraph>{t('systemuser_request.withdraw_consent_info')}</Paragraph>
           <div>
             {acceptChangeRequestError && (

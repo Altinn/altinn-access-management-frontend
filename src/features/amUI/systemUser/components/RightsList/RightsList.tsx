@@ -119,7 +119,7 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
   };
 
   return (
-    <li>
+    <li className={classes.resourceListItem}>
       <ListItem
         title={accessPackage.name}
         icon='package'
@@ -183,16 +183,20 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
               </Paragraph>
               <ul className={classes.unstyledList}>
                 {accessPackage.resources.map((resource) => (
-                  <ResourceListItem
+                  <li
                     key={resource.identifier}
-                    id={resource.identifier}
-                    ownerName={resource.resourceOwnerName}
-                    resourceName={resource.title}
-                    ownerLogoUrl={resource.resourceOwnerLogoUrl}
-                    ownerLogoUrlAlt={resource.resourceOwnerName}
-                    size='sm'
-                    onClick={() => setSelectedResource(resource)}
-                  />
+                    className={classes.resourceListItem}
+                  >
+                    <ResourceListItem
+                      id={resource.identifier}
+                      ownerName={resource.resourceOwnerName}
+                      resourceName={resource.title}
+                      ownerLogoUrl={resource.resourceOwnerLogoUrl}
+                      ownerLogoUrlAlt={resource.resourceOwnerName}
+                      size='sm'
+                      onClick={() => setSelectedResource(resource)}
+                    />
+                  </li>
                 ))}
               </ul>
             </>

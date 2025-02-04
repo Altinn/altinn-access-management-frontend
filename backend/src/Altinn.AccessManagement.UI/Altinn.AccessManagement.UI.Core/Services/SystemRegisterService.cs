@@ -45,12 +45,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
+        public async Task<RegisteredSystemRightsFE> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
         {
             List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemId, cancellationToken);
-            List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-
-            return await _resourceHelper.EnrichResources(resourceIds, languageCode);
+            return await _resourceHelper.MapRightsToFrontendObjects(rights, languageCode);
         }
     }
 }

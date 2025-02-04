@@ -95,47 +95,7 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
               </Heading>
               <RightsList
                 resources={systemUser.resources ?? []}
-                accessPackages={[
-                  {
-                    id: 'urn:altinn:accesspackage:sjofart',
-                    name: 'Sjøfart',
-                    description:
-                      'Denne fullmakten gir tilgang til tjenester knyttet til skipsarbeidstakere og fartøy til sjøs. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.',
-                    resources: [
-                      {
-                        identifier: 'ske-innrapportering-boligsameie',
-                        title: 'Innrapportering Boligsameie',
-                        description:
-                          'Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.',
-                        rightDescription:
-                          'Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.',
-
-                        delegable: true,
-
-                        resourceOwnerName: 'Skatteetaten',
-                        resourceOwnerOrgNumber: '974761076',
-                        resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/skd/skd.png',
-
-                        resourceType: 'GenericAccessResource',
-                        authorizationReference: [
-                          {
-                            id: 'urn:altinn:resource',
-                            value: 'ske-innrapportering-boligsameie',
-                          },
-                        ],
-                        resourceReferences: [],
-                      },
-                    ],
-                    area: {
-                      id: '6ff90072-566b-4acd-baac-ec477534e712',
-                      description:
-                        'Dette fullmaktsområdet omfatter tilgangspakker knyttet til transport og lagring.',
-                      name: 'Transport og lagring',
-                      iconUrl: '',
-                      accessPackages: [],
-                    },
-                  },
-                ]}
+                accessPackages={systemUser.accessPackages}
               />
               <div>
                 <Popover.Context>

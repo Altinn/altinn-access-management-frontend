@@ -142,7 +142,10 @@ export const SystemUserRequestPage = () => {
               ? t('systemuser_request.rights_list_header_single')
               : t('systemuser_request.rights_list_header')}
           </Heading>
-          <RightsList resources={request.resources} />
+          <RightsList
+            resources={request.resources}
+            accessPackages={request.accessPackages}
+          />
           <Paragraph>{t('systemuser_request.withdraw_consent_info')}</Paragraph>
           <div>
             {acceptCreationRequestError && (

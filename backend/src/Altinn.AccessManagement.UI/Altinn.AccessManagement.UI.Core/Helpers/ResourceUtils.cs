@@ -44,21 +44,36 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Get resource ids from a list of rights
         /// </summary>
-        /// <param name="rights">List of rigts to get resource ids from</param>
-        /// <returns>Output result</returns>
+        /// <param name="rights">List of rights to get resource ids from</param>
+        /// <returns>List of resource ids</returns>
         public static List<string> GetResourceIdsFromRights(IEnumerable<Right> rights)
         {
-            List<string> resourceIds = new List<string>();
+            return GetRightsOfType(rights, "urn:altinn:resource");
+        }
+
+        /// <summary>
+        /// Get access package ids from a list of rights
+        /// </summary>
+        /// <param name="rights">List of rights to get access package ids from</param>
+        /// <returns>List of access package ids</returns>
+        public static List<string> GetAccessPackageIdsFromRights(IEnumerable<Right> rights)
+        {
+            return GetRightsOfType(rights, "urn:altinn:accesspackage");
+        }
+
+        private static List<string> GetRightsOfType(IEnumerable<Right> rights, string typeUrn)
+        {
+            List<string> matchIds = [];
             foreach (Right right in rights)
             {
-                string resourceId = right.Resource.Find(x => x.Id == "urn:altinn:resource")?.Value;
-                if (resourceId != null)
+                string matchId = right.Resource.Find(x => x.Id == typeUrn)?.Value;
+                if (matchId != null)
                 {
-                    resourceIds.Add(resourceId);
+                    matchIds.Add(matchId);
                 }
             }
 
-            return resourceIds;
+            return matchIds;
         }
     }
 }

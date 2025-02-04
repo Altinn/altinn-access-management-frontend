@@ -98,8 +98,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 // TODO: get rights from systemuser when API to look up actual rights is implmented
                 List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemUser.SystemId, cancellationToken);
-                List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-                List<ServiceResourceFE> resourcesFE = await _resourceHelper.EnrichResources(resourceIds, languageCode);
+                RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(rights, languageCode);
 
                 RegisteredSystemFE systemFE = new RegisteredSystemFE
                 {
@@ -116,7 +115,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = systemUser.PartyId,
                     Created = systemUser.Created,
                     System = systemFE,
-                    Resources = resourcesFE
+                    Resources = enrichedRights.Resources,
+                    AccessPackages = enrichedRights.AccessPackages
                 });
             }
 

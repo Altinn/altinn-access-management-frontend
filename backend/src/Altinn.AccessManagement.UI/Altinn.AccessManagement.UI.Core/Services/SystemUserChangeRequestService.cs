@@ -45,9 +45,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new Result<SystemUserChangeRequestFE>(changeRequest.Problem);
             }
 
-            List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(changeRequest.Value.RequiredRights);
-            List<ServiceResourceFE> resourcesFE = await _resourceHelper.EnrichResources(resourceIds, languageCode);
-            
+            // GET resources & access packages
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(changeRequest.Value.RequiredRights, languageCode);
+
             RegisteredSystem system = await _systemRegisterClient.GetSystem(changeRequest.Value.SystemId, cancellationToken);
             var orgNames = await _registerClient.GetPartyNames([system.SystemVendorOrgNumber], cancellationToken);
             RegisteredSystemFE systemFE = SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames);
@@ -57,7 +57,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Id = changeRequest.Value.Id,
                 Status = changeRequest.Value.Status,
                 RedirectUrl = changeRequest.Value.RedirectUrl,
-                Resources = resourcesFE,
+                Resources = enrichedRights.Resources,
+                AccessPackages = enrichedRights.AccessPackages,
                 System = systemFE
             };
         }
