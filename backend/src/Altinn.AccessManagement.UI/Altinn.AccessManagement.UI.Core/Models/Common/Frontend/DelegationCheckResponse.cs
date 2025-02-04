@@ -4,7 +4,7 @@ using Microsoft.Identity.Client;
 namespace Altinn.AccessManagement.UI.Core.Models
 {
     /// <summary>
-    /// An area for grouping similar types of roles
+    /// The response of a delegation check
     /// </summary>
     public class DelegationCheckResponse
     {
