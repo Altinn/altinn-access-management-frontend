@@ -81,17 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<Role>>(responseContent, _serializerOptions);
-            }
-            else
-            {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                HttpStatusException error = JsonSerializer.Deserialize<HttpStatusException>(responseContent, _serializerOptions);
-
-                throw error;
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Role>>(response, _logger, "AccessPackageClient // GetRoleSearchMatches");
             }
         }
 
