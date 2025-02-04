@@ -18,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString);
 
         /// <summary>
-        /// Retrieve result of a search in all access packages. If no parameters are given, all access packages are returned
+        /// Retrieve result of a search in all roles. If no parameters are given, all roles are returned
         /// </summary>
         /// <param name="languageCode">the language to use in texts returned and searched in</param>
         /// <param name="searchString">the text to be searched for</param>
