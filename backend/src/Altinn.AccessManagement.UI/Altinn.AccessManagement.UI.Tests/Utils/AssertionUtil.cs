@@ -177,6 +177,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Assert that two <see cref="AccessPackageFE" /> have the same property in the same positions.
+        /// </summary>
+        /// <param name="expected">An instance with the expected values.</param>
+        /// <param name="actual">The instance to verify.</param>
+        public static void AssertEqual(AccessPackageFE expected, AccessPackageFE actual)
+        {
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Urn, actual.Urn);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
+
+        /// <summary>
         ///     Assert that two Lists of <see cref="ResourceReference" /> have the same property in the same positions.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>

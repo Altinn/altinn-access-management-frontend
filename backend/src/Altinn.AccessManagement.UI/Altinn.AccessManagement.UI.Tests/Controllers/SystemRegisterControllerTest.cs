@@ -60,15 +60,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string systemId = "310144827_smartcloud";
             string path = Path.Combine(_expectedDataPath, "SystemRegister", "systemRights.json");
-            List<ServiceResourceFE> expectedResponse = Util.GetMockData<List<ServiceResourceFE>>(path);
+            RegisteredSystemRightsFE expectedResponse = Util.GetMockData<RegisteredSystemRightsFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister/rights/{systemId}");
-            List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
+            RegisteredSystemRightsFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RegisteredSystemRightsFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedResponse.Resources, actualResponse.Resources, AssertionUtil.AssertEqual);
         }
     }
 }

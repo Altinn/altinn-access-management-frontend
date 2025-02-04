@@ -1,35 +1,38 @@
-[
-  {
-    "identifier": "ske-innrapportering-boligsameie",
-    "title": "Innrapportering Boligsameie",
-    "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
-    "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
-    "homepage": null,
-    "status": "Completed",
-    "spatial": null,
-    "contactPoints": [
-      {
-        "category": "Innrapportering",
-        "email": "",
-        "telephone": "",
-        "contactPage": "www.skatteetaten.no"
-      }
-    ],
-    "delegable": true,
-    "visible": true,
-    "resourceOwnerName": "Skatteetaten",
-    "resourceOwnerOrgNumber": "974761076",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
-    "resourceOwnerOrgcode": "skd",
-    "resourceReferences": null,
-    "priorityCounter": null,
-    "resourceType": "GenericAccessResource",
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "ske-innrapportering-boligsameie"
-      }
-    ],
-    "keywords": ["Boligsameie", "innrapportering"]
-  }
-]
+{
+  "accessPackages": [],
+  "resources": [
+    {
+      "identifier": "ske-innrapportering-boligsameie",
+      "title": "Innrapportering Boligsameie",
+      "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
+      "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
+      "homepage": null,
+      "status": "Completed",
+      "spatial": null,
+      "contactPoints": [
+        {
+          "category": "Innrapportering",
+          "email": "",
+          "telephone": "",
+          "contactPage": "www.skatteetaten.no"
+        }
+      ],
+      "delegable": true,
+      "visible": true,
+      "resourceOwnerName": "Skatteetaten",
+      "resourceOwnerOrgNumber": "974761076",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+      "resourceOwnerOrgcode": "skd",
+      "resourceReferences": null,
+      "priorityCounter": null,
+      "resourceType": "GenericAccessResource",
+      "authorizationReference": [
+        {
+          "id": "urn:altinn:resource",
+          "value": "ske-innrapportering-boligsameie"
+        }
+      ],
+      "keywords": ["Boligsameie", "innrapportering"]
+    }
+  ]
+}
