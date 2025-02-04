@@ -5,9 +5,9 @@ import { Alert, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useGetRightHolderDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import { List } from '@/components';
-import { type Party } from '@/rtk/features/lookupApi';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
+import type { Party } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration } from '../../common/Snackbar/SnackbarProvider';

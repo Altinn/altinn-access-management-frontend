@@ -19,7 +19,7 @@ jobs:
     uses: './.github/workflows/template-deploy-container.yml'
     secrets: inherit
     with:
-      environment: tt02
+      environment: TT02
       tag: ${{ github.ref_name }}
 
   playwright-release-to-tt02:
@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         environment: [TT02]
-        project: [ e2e-tests ]
+        project: [e2e-tests]
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
@@ -41,5 +41,5 @@ jobs:
     uses: './.github/workflows/template-deploy-container.yml'
     secrets: inherit
     with:
-      environment: prod
+      environment: PROD
       tag: ${{ github.ref_name }}

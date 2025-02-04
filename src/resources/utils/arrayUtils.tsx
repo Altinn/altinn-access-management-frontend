@@ -29,9 +29,13 @@ export function arraysEqualUnordered<T>(arr1: T[], arr2: T[]) {
   }
 
   for (const item of arr2) {
-    if (!countMap.has(item)) return false;
-    countMap.set(item, countMap.get(item)! - 1);
-    if (countMap.get(item) === 0) countMap.delete(item);
+    const count = countMap.get(item);
+    if (count === undefined) return false;
+    if (count === 1) {
+      countMap.delete(item);
+    } else {
+      countMap.set(item, count - 1);
+    }
   }
 
   return countMap.size === 0;
@@ -71,7 +75,7 @@ export function getTotalNumOfPages<T>(array: T[], numPerPage: number): number {
     throw new RangeError('numPerPage must be greater than 0');
   }
 
-  if (!array || array.length == 0) {
+  if (!array || array.length === 0) {
     return 1;
   }
 

@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.inherited {
+  display: flex;
+  color: var(--ds-text-color-secondary);
+  margin-right: 0.3rem;
+}
+
+.inheritedInfoIcon {
+  color: var(--ds-color-info-base-default);
+  margin-right: 0.3rem;
+}
+
+.nonDelegableIcon {
+  color: var(--ds-color-warning-base-default);
+  margin-right: 0.3rem;
+}

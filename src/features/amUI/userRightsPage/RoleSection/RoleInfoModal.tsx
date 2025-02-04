@@ -1,23 +1,18 @@
 import { useEffect } from 'react';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
+import type { Role } from '@/rtk/features/roleApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
 
-interface AccessPackageInfoModalProps {
+interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
   toParty: Party;
-  modalItem: AccessPackage | undefined;
+  role?: Role;
   onClose?: () => void;
 }
 
-export const AccessPackageInfoModal = ({
-  modalRef,
-  toParty,
-  modalItem,
-  onClose,
-}: AccessPackageInfoModalProps) => {
+export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
 
@@ -29,7 +24,7 @@ export const AccessPackageInfoModal = ({
     <EditModal
       ref={modalRef}
       toParty={toParty}
-      accessPackage={modalItem}
+      role={role}
     />
   );
 };

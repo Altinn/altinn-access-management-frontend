@@ -8,6 +8,7 @@ import { DelegationModalContent } from './DelegationModalContent';
 export enum DelegationType {
   SingleRights = 'SingleRights',
   AccessPackage = 'AccessPackage',
+  Role = 'Role',
 }
 export interface DelegationModalProps {
   toParty: Party;

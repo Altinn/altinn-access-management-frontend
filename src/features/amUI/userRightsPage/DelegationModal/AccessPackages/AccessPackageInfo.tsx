@@ -78,7 +78,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
           size='xl'
           name='package'
           className={classes.headerIcon}
-        ></Icon>
+        />
         <Heading
           size='md'
           level={1}
@@ -95,7 +95,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
           />
           <Paragraph size='xs'>
             <Trans
-              i18nKey='delegation_modal.inherited_role_message'
+              i18nKey='delegation_modal.inherited_role_org_message'
               values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
               components={{ b: <strong /> }}
             />
