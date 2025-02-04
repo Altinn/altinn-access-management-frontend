@@ -233,6 +233,16 @@
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}"
   },
+  "role": {
+    "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
+    "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
+    "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
+    "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
+    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
+    "activeRolesLabel": "Liste over roller som er tildelt brukeren",
+    "availableRolesLabel" : "Liste over roller som kan tildeles brukeren",
+    "cant_delegate_generic": "Du kan ikke delegere denne rollen"
+  },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
     "main_page_heading": "Brukere med fullmakter i {{name}}",
@@ -259,7 +269,7 @@
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tjenester",
-    "inherited_role_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
+    "inherited_role_org_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",

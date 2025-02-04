@@ -1,26 +1,28 @@
 [
     {
         "role": {
-          "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
+          "isDelegable": true,
+          "id": "4691c710-e0ad-4152-9783-9d1e787f02d3",
           "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
           "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
-          "name": "Tilgangsstyrer",
+          "name": "Tilgangsstyring",
           "code": "TS",
-          "description": "Gir mulighet til å gi videre tilganger for virksomheten som man selv har mottatt",
+          "description": "Denne tilgangspakken gir bruker mulighet til å gi videre tilganger for virksomheten som man selv innehar.",
           "urn": "digdir:role:ts"
         },
         "from": {
-          "Name": "Digdir",
-          "Uuid": "73dfe32a-8f21-465c-9242-40d82e61f320"
+          "Name": "DISKRET NÆR TIGER AS",
+          "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
         },
         "to": {
-          "Name": "Sitrongul Medaljong",
-          "Uuid": "167536b5-f8ed-4c5a-8f48-0279507e53ae"
+          "Name": "Intelligent Albatross",
+          "Uuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb"
         },
         "id": "43f42152-8900-4fcf-ac70-62d2d566581c",
-        "roleId": "de42ae15-c265-42b3-8060-64c779684902",
-        "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
-        "isDelegable": false
+        "roleId": "4691c710-e0ad-4152-9783-9d1e787f02d3",
+        "fromId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+        "toId": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+        "isDelegable": true,
+        "inherited": null
       }
 ]

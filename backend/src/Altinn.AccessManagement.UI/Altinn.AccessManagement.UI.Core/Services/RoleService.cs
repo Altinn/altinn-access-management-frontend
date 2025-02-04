@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -33,6 +35,48 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
             return await _accessPackageClient.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
+        {
+            return await _accessPackageClient.CreateRoleDelegation(from, to, roleId);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
+        {
+            return await _accessPackageClient.DeleteRoleDelegation(assignmentId);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<RoleAreaFE>> GetSearch(string languageCode, string searchString)
+        {
+            var searchMatches = await _accessPackageClient.GetRoleSearchMatches(languageCode, searchString);
+
+            var sortedAreas = new List<RoleAreaFE>();
+
+            foreach (Role searchMatch in searchMatches)
+            {
+                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Area.Id);
+
+                if (premadeAreaIndex < 0)
+                {
+                    sortedAreas.Add(new RoleAreaFE(searchMatch.Area, new List<Role> { searchMatch }));
+                }
+                else
+                {
+                    sortedAreas[premadeAreaIndex].Roles.Add(searchMatch);
+                }
+            }
+
+            return sortedAreas;
+        }
+
+        /// <inheritdoc />
+        public async Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
+        {
+            return await _accessPackageClient.RoleDelegationCheck(rightOwner, roleId);
         }
     }
 }

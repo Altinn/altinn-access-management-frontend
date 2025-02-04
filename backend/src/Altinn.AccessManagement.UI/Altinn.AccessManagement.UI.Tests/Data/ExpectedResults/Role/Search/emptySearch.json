@@ -1,0 +1,116 @@
+[
+  {
+    "id": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
+    "name": "Administrere tilganger",
+    "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til administrere tilganger.",
+    "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMS43NUM0LjkyODkzIDEuNzUgMy4yNSAzLjQyODkzIDMuMjUgNS41QzMuMjUgNy41NzEwNyA0LjkyODkzIDkuMjUgNyA5LjI1QzkuMDcxMSA5LjI1IDEwLjc1IDcuNTcxMDcgMTAuNzUgNS41QzEwLjc1IDMuNDI4OTMgOS4wNzExIDEuNzUgNyAxLjc1Wk0xLjc1IDUuNUMxLjc1IDIuNjAwNTEgNC4xMDA1MSAwLjI1IDcgMC4yNUM5Ljg5OTUgMC4yNSAxMi4yNSAyLjYwMDUxIDEyLjI1IDUuNUMxMi4yNSA4LjM5OTUgOS44OTk1IDEwLjc1IDcgMTAuNzVDNC4xMDA1MSAxMC43NSAxLjc1IDguMzk5NSAxLjc1IDUuNVpNNyAxMy43NUM1LjYwNzYgMTMuNzUgNC4yNzIyNSAxNC4zMDMxIDMuMjg3NjkgMTUuMjg3N0MyLjMwMzEyIDE2LjI3MjMgMS43NSAxNy42MDc2IDEuNzUgMTlDMS43NSAxOS40MTQyIDEuNDE0MjEgMTkuNzUgMSAxOS43NUMwLjU4NTc5IDE5Ljc1IDAuMjUgMTkuNDE0MiAwLjI1IDE5QzAuMjUgMTcuMjA5OCAwLjk2MTE2IDE1LjQ5MjkgMi4yMjcwMyAxNC4yMjdDMy40OTI5IDEyLjk2MTIgNS4yMDk4IDEyLjI1IDcgMTIuMjVDNy4xODg0IDEyLjI1IDcuMzc2MSAxMi4yNTc5IDcuNTYyNSAxMi4yNzM1QzcuOTc1MiAxMi4zMDggOC4yODE5IDEyLjY3MDYgOC4yNDc0IDEzLjA4MzNDOC4yMTI5IDEzLjQ5NjEgNy44NTAzIDEzLjgwMjggNy40Mzc1IDEzLjc2ODJDNy4yOTI2IDEzLjc1NjEgNy4xNDY2IDEzLjc1IDcgMTMuNzVaTTkuNSAxOUgxMkMxMi4yMTExIDE5LjEwNTYgMTIuNzg4OSAxOS4xMDU2IDEzIDE5SDE0LjVMMTQuMjUgMTguMjVIOS43NUw5LjUgMTlaIiBmaWxsPSIjMjMyNjJBIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05Ljc1MDI0IDEzLjVDOS43NTAyNCAxMi4yNTc0IDEwLjc1NzYgMTEuMjUgMTIuMDAwMiAxMS4yNUMxMy4yNDI5IDExLjI1IDE0LjI1MDIgMTIuMjU3NCAxNC4yNTAyIDEzLjVWMTQuMjVIMTQuNUMxNS4xOTA0IDE0LjI1IDE1Ljc1IDE0LjgwOTYgMTUuNzUgMTUuNVYxOUMxNS43NSAxOS40MTQyIDE1LjQxNDIgMTkuNzUgMTUgMTkuNzVIOUM4LjU4NTggMTkuNzUgOC4yNSAxOS40MTQyIDguMjUgMTlWMTUuNUM4LjI1IDE0LjgwOTYgOC44MDk2NCAxNC4yNSA5LjUgMTQuMjVIOS43NTAyNFYxMy41Wk0xMi43NTAyIDEzLjVWMTQuMjVIMTEuMjUwMlYxMy41QzExLjI1MDIgMTMuMDg1OCAxMS41ODYgMTIuNzUgMTIuMDAwMiAxMi43NUMxMi40MTQ1IDEyLjc1IDEyLjc1MDIgMTMuMDg1OCAxMi43NTAyIDEzLjVaTTkuNzUgMTUuNzVWMTguMjVIMTQuMjVWMTUuNzVIOS43NVoiIGZpbGw9IiMyMzI2MkEiLz48L3N2Zz4=",
+    "roles": [
+      {
+        "id": "c46a568e-59ba-4835-8c0f-9a3e7d3d308c",
+        "name": "Klientadministrasjon for regnskapsfører og revisor",
+        "code": "KLA",
+        "description": "Denne tilgangspakken gir bruker mulighet til å administrere tilgang til tjenester det er naturlig at regnskapsfører eller revisor utfører. Bruker kan administrere tilgang til tjenestene til ansatte hos regnskapsfører eller revisor på vegne av deres kunder.",
+        "urn": "digdir:role:kla",
+        "area": {
+          "id": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
+          "name": "Administrere tilganger",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til administrere tilganger.",
+          "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMS43NUM0LjkyODkzIDEuNzUgMy4yNSAzLjQyODkzIDMuMjUgNS41QzMuMjUgNy41NzEwNyA0LjkyODkzIDkuMjUgNyA5LjI1QzkuMDcxMSA5LjI1IDEwLjc1IDcuNTcxMDcgMTAuNzUgNS41QzEwLjc1IDMuNDI4OTMgOS4wNzExIDEuNzUgNyAxLjc1Wk0xLjc1IDUuNUMxLjc1IDIuNjAwNTEgNC4xMDA1MSAwLjI1IDcgMC4yNUM5Ljg5OTUgMC4yNSAxMi4yNSAyLjYwMDUxIDEyLjI1IDUuNUMxMi4yNSA4LjM5OTUgOS44OTk1IDEwLjc1IDcgMTAuNzVDNC4xMDA1MSAxMC43NSAxLjc1IDguMzk5NSAxLjc1IDUuNVpNNyAxMy43NUM1LjYwNzYgMTMuNzUgNC4yNzIyNSAxNC4zMDMxIDMuMjg3NjkgMTUuMjg3N0MyLjMwMzEyIDE2LjI3MjMgMS43NSAxNy42MDc2IDEuNzUgMTlDMS43NSAxOS40MTQyIDEuNDE0MjEgMTkuNzUgMSAxOS43NUMwLjU4NTc5IDE5Ljc1IDAuMjUgMTkuNDE0MiAwLjI1IDE5QzAuMjUgMTcuMjA5OCAwLjk2MTE2IDE1LjQ5MjkgMi4yMjcwMyAxNC4yMjdDMy40OTI5IDEyLjk2MTIgNS4yMDk4IDEyLjI1IDcgMTIuMjVDNy4xODg0IDEyLjI1IDcuMzc2MSAxMi4yNTc5IDcuNTYyNSAxMi4yNzM1QzcuOTc1MiAxMi4zMDggOC4yODE5IDEyLjY3MDYgOC4yNDc0IDEzLjA4MzNDOC4yMTI5IDEzLjQ5NjEgNy44NTAzIDEzLjgwMjggNy40Mzc1IDEzLjc2ODJDNy4yOTI2IDEzLjc1NjEgNy4xNDY2IDEzLjc1IDcgMTMuNzVaTTkuNSAxOUgxMkMxMi4yMTExIDE5LjEwNTYgMTIuNzg4OSAxOS4xMDU2IDEzIDE5SDE0LjVMMTQuMjUgMTguMjVIOS43NUw5LjUgMTlaIiBmaWxsPSIjMjMyNjJBIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05Ljc1MDI0IDEzLjVDOS43NTAyNCAxMi4yNTc0IDEwLjc1NzYgMTEuMjUgMTIuMDAwMiAxMS4yNUMxMy4yNDI5IDExLjI1IDE0LjI1MDIgMTIuMjU3NCAxNC4yNTAyIDEzLjVWMTQuMjVIMTQuNUMxNS4xOTA0IDE0LjI1IDE1Ljc1IDE0LjgwOTYgMTUuNzUgMTUuNVYxOUMxNS43NSAxOS40MTQyIDE1LjQxNDIgMTkuNzUgMTUgMTkuNzVIOUM4LjU4NTggMTkuNzUgOC4yNSAxOS40MTQyIDguMjUgMTlWMTUuNUM4LjI1IDE0LjgwOTYgOC44MDk2NCAxNC4yNSA5LjUgMTQuMjVIOS43NTAyNFYxMy41Wk0xMi43NTAyIDEzLjVWMTQuMjVIMTEuMjUwMlYxMy41QzExLjI1MDIgMTMuMDg1OCAxMS41ODYgMTIuNzUgMTIuMDAwMiAxMi43NUMxMi40MTQ1IDEyLjc1IDEyLjc1MDIgMTMuMDg1OCAxMi43NTAyIDEzLjVaTTkuNzUgMTUuNzVWMTguMjVIMTQuMjVWMTUuNzVIOS43NVoiIGZpbGw9IiMyMzI2MkEiLz48L3N2Zz4="
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      },
+      {
+        "id": "4691c710-e0ad-4152-9783-9d1e787f02d3",
+        "name": "Tilgangsstyring",
+        "code": "TS",
+        "description": "Denne tilgangspakken gir bruker mulighet til å gi videre tilganger for virksomheten som man selv innehar.",
+        "urn": "digdir:role:ts",
+        "area": {
+          "id": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
+          "name": "Administrere tilganger",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til administrere tilganger.",
+          "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMS43NUM0LjkyODkzIDEuNzUgMy4yNSAzLjQyODkzIDMuMjUgNS41QzMuMjUgNy41NzEwNyA0LjkyODkzIDkuMjUgNyA5LjI1QzkuMDcxMSA5LjI1IDEwLjc1IDcuNTcxMDcgMTAuNzUgNS41QzEwLjc1IDMuNDI4OTMgOS4wNzExIDEuNzUgNyAxLjc1Wk0xLjc1IDUuNUMxLjc1IDIuNjAwNTEgNC4xMDA1MSAwLjI1IDcgMC4yNUM5Ljg5OTUgMC4yNSAxMi4yNSAyLjYwMDUxIDEyLjI1IDUuNUMxMi4yNSA4LjM5OTUgOS44OTk1IDEwLjc1IDcgMTAuNzVDNC4xMDA1MSAxMC43NSAxLjc1IDguMzk5NSAxLjc1IDUuNVpNNyAxMy43NUM1LjYwNzYgMTMuNzUgNC4yNzIyNSAxNC4zMDMxIDMuMjg3NjkgMTUuMjg3N0MyLjMwMzEyIDE2LjI3MjMgMS43NSAxNy42MDc2IDEuNzUgMTlDMS43NSAxOS40MTQyIDEuNDE0MjEgMTkuNzUgMSAxOS43NUMwLjU4NTc5IDE5Ljc1IDAuMjUgMTkuNDE0MiAwLjI1IDE5QzAuMjUgMTcuMjA5OCAwLjk2MTE2IDE1LjQ5MjkgMi4yMjcwMyAxNC4yMjdDMy40OTI5IDEyLjk2MTIgNS4yMDk4IDEyLjI1IDcgMTIuMjVDNy4xODg0IDEyLjI1IDcuMzc2MSAxMi4yNTc5IDcuNTYyNSAxMi4yNzM1QzcuOTc1MiAxMi4zMDggOC4yODE5IDEyLjY3MDYgOC4yNDc0IDEzLjA4MzNDOC4yMTI5IDEzLjQ5NjEgNy44NTAzIDEzLjgwMjggNy40Mzc1IDEzLjc2ODJDNy4yOTI2IDEzLjc1NjEgNy4xNDY2IDEzLjc1IDcgMTMuNzVaTTkuNSAxOUgxMkMxMi4yMTExIDE5LjEwNTYgMTIuNzg4OSAxOS4xMDU2IDEzIDE5SDE0LjVMMTQuMjUgMTguMjVIOS43NUw5LjUgMTlaIiBmaWxsPSIjMjMyNjJBIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05Ljc1MDI0IDEzLjVDOS43NTAyNCAxMi4yNTc0IDEwLjc1NzYgMTEuMjUgMTIuMDAwMiAxMS4yNUMxMy4yNDI5IDExLjI1IDE0LjI1MDIgMTIuMjU3NCAxNC4yNTAyIDEzLjVWMTQuMjVIMTQuNUMxNS4xOTA0IDE0LjI1IDE1Ljc1IDE0LjgwOTYgMTUuNzUgMTUuNVYxOUMxNS43NSAxOS40MTQyIDE1LjQxNDIgMTkuNzUgMTUgMTkuNzVIOUM4LjU4NTggMTkuNzUgOC4yNSAxOS40MTQyIDguMjUgMTlWMTUuNUM4LjI1IDE0LjgwOTYgOC44MDk2NCAxNC4yNSA5LjUgMTQuMjVIOS43NTAyNFYxMy41Wk0xMi43NTAyIDEzLjVWMTQuMjVIMTEuMjUwMlYxMy41QzExLjI1MDIgMTMuMDg1OCAxMS41ODYgMTIuNzUgMTIuMDAwMiAxMi43NUMxMi40MTQ1IDEyLjc1IDEyLjc1MDIgMTMuMDg1OCAxMi43NTAyIDEzLjVaTTkuNzUgMTUuNzVWMTguMjVIMTQuMjVWMTUuNzVIOS43NVoiIGZpbGw9IiMyMzI2MkEiLz48L3N2Zz4="
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      },
+      {
+        "id": "15d0015f-e21d-405a-89c5-a21476ba3df0",
+        "name": "Hovedadministrator",
+        "code": "HA",
+        "description": "Denne tilgangspakken gir bruker mulighet til å administrere alle tilganger for virksomheten.",
+        "urn": "digdir:role:ha",
+        "area": {
+          "id": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
+          "name": "Administrere tilganger",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til administrere tilganger.",
+          "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMS43NUM0LjkyODkzIDEuNzUgMy4yNSAzLjQyODkzIDMuMjUgNS41QzMuMjUgNy41NzEwNyA0LjkyODkzIDkuMjUgNyA5LjI1QzkuMDcxMSA5LjI1IDEwLjc1IDcuNTcxMDcgMTAuNzUgNS41QzEwLjc1IDMuNDI4OTMgOS4wNzExIDEuNzUgNyAxLjc1Wk0xLjc1IDUuNUMxLjc1IDIuNjAwNTEgNC4xMDA1MSAwLjI1IDcgMC4yNUM5Ljg5OTUgMC4yNSAxMi4yNSAyLjYwMDUxIDEyLjI1IDUuNUMxMi4yNSA4LjM5OTUgOS44OTk1IDEwLjc1IDcgMTAuNzVDNC4xMDA1MSAxMC43NSAxLjc1IDguMzk5NSAxLjc1IDUuNVpNNyAxMy43NUM1LjYwNzYgMTMuNzUgNC4yNzIyNSAxNC4zMDMxIDMuMjg3NjkgMTUuMjg3N0MyLjMwMzEyIDE2LjI3MjMgMS43NSAxNy42MDc2IDEuNzUgMTlDMS43NSAxOS40MTQyIDEuNDE0MjEgMTkuNzUgMSAxOS43NUMwLjU4NTc5IDE5Ljc1IDAuMjUgMTkuNDE0MiAwLjI1IDE5QzAuMjUgMTcuMjA5OCAwLjk2MTE2IDE1LjQ5MjkgMi4yMjcwMyAxNC4yMjdDMy40OTI5IDEyLjk2MTIgNS4yMDk4IDEyLjI1IDcgMTIuMjVDNy4xODg0IDEyLjI1IDcuMzc2MSAxMi4yNTc5IDcuNTYyNSAxMi4yNzM1QzcuOTc1MiAxMi4zMDggOC4yODE5IDEyLjY3MDYgOC4yNDc0IDEzLjA4MzNDOC4yMTI5IDEzLjQ5NjEgNy44NTAzIDEzLjgwMjggNy40Mzc1IDEzLjc2ODJDNy4yOTI2IDEzLjc1NjEgNy4xNDY2IDEzLjc1IDcgMTMuNzVaTTkuNSAxOUgxMkMxMi4yMTExIDE5LjEwNTYgMTIuNzg4OSAxOS4xMDU2IDEzIDE5SDE0LjVMMTQuMjUgMTguMjVIOS43NUw5LjUgMTlaIiBmaWxsPSIjMjMyNjJBIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05Ljc1MDI0IDEzLjVDOS43NTAyNCAxMi4yNTc0IDEwLjc1NzYgMTEuMjUgMTIuMDAwMiAxMS4yNUMxMy4yNDI5IDExLjI1IDE0LjI1MDIgMTIuMjU3NCAxNC4yNTAyIDEzLjVWMTQuMjVIMTQuNUMxNS4xOTA0IDE0LjI1IDE1Ljc1IDE0LjgwOTYgMTUuNzUgMTUuNVYxOUMxNS43NSAxOS40MTQyIDE1LjQxNDIgMTkuNzUgMTUgMTkuNzVIOUM4LjU4NTggMTkuNzUgOC4yNSAxOS40MTQyIDguMjUgMTlWMTUuNUM4LjI1IDE0LjgwOTYgOC44MDk2NCAxNC4yNSA5LjUgMTQuMjVIOS43NTAyNFYxMy41Wk0xMi43NTAyIDEzLjVWMTQuMjVIMTEuMjUwMlYxMy41QzExLjI1MDIgMTMuMDg1OCAxMS41ODYgMTIuNzUgMTIuMDAwMiAxMi43NUMxMi40MTQ1IDEyLjc1IDEyLjc1MDIgMTMuMDg1OCAxMi43NTAyIDEzLjVaTTkuNzUgMTUuNzVWMTguMjVIMTQuMjVWMTUuNzVIOS43NVoiIGZpbGw9IiMyMzI2MkEiLz48L3N2Zz4="
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      },
+      {
+        "id": "3abe9842-06a5-483f-b76d-a65dec152b2d",
+        "name": "Kundeadministrator",
+        "code": "KUA",
+        "description": "Denne tilgangspakken gir bruker mulighet til å administrere tilganger man har mottatt for sine kunder til ansatte i egen virksomheten.",
+        "urn": "digdir:role:kua",
+        "area": {
+          "id": "e4ae823f-41db-46ed-873f-8a5d1378fff8",
+          "name": "Administrere tilganger",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til administrere tilganger.",
+          "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAxNiAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTcgMS43NUM0LjkyODkzIDEuNzUgMy4yNSAzLjQyODkzIDMuMjUgNS41QzMuMjUgNy41NzEwNyA0LjkyODkzIDkuMjUgNyA5LjI1QzkuMDcxMSA5LjI1IDEwLjc1IDcuNTcxMDcgMTAuNzUgNS41QzEwLjc1IDMuNDI4OTMgOS4wNzExIDEuNzUgNyAxLjc1Wk0xLjc1IDUuNUMxLjc1IDIuNjAwNTEgNC4xMDA1MSAwLjI1IDcgMC4yNUM5Ljg5OTUgMC4yNSAxMi4yNSAyLjYwMDUxIDEyLjI1IDUuNUMxMi4yNSA4LjM5OTUgOS44OTk1IDEwLjc1IDcgMTAuNzVDNC4xMDA1MSAxMC43NSAxLjc1IDguMzk5NSAxLjc1IDUuNVpNNyAxMy43NUM1LjYwNzYgMTMuNzUgNC4yNzIyNSAxNC4zMDMxIDMuMjg3NjkgMTUuMjg3N0MyLjMwMzEyIDE2LjI3MjMgMS43NSAxNy42MDc2IDEuNzUgMTlDMS43NSAxOS40MTQyIDEuNDE0MjEgMTkuNzUgMSAxOS43NUMwLjU4NTc5IDE5Ljc1IDAuMjUgMTkuNDE0MiAwLjI1IDE5QzAuMjUgMTcuMjA5OCAwLjk2MTE2IDE1LjQ5MjkgMi4yMjcwMyAxNC4yMjdDMy40OTI5IDEyLjk2MTIgNS4yMDk4IDEyLjI1IDcgMTIuMjVDNy4xODg0IDEyLjI1IDcuMzc2MSAxMi4yNTc5IDcuNTYyNSAxMi4yNzM1QzcuOTc1MiAxMi4zMDggOC4yODE5IDEyLjY3MDYgOC4yNDc0IDEzLjA4MzNDOC4yMTI5IDEzLjQ5NjEgNy44NTAzIDEzLjgwMjggNy40Mzc1IDEzLjc2ODJDNy4yOTI2IDEzLjc1NjEgNy4xNDY2IDEzLjc1IDcgMTMuNzVaTTkuNSAxOUgxMkMxMi4yMTExIDE5LjEwNTYgMTIuNzg4OSAxOS4xMDU2IDEzIDE5SDE0LjVMMTQuMjUgMTguMjVIOS43NUw5LjUgMTlaIiBmaWxsPSIjMjMyNjJBIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik05Ljc1MDI0IDEzLjVDOS43NTAyNCAxMi4yNTc0IDEwLjc1NzYgMTEuMjUgMTIuMDAwMiAxMS4yNUMxMy4yNDI5IDExLjI1IDE0LjI1MDIgMTIuMjU3NCAxNC4yNTAyIDEzLjVWMTQuMjVIMTQuNUMxNS4xOTA0IDE0LjI1IDE1Ljc1IDE0LjgwOTYgMTUuNzUgMTUuNVYxOUMxNS43NSAxOS40MTQyIDE1LjQxNDIgMTkuNzUgMTUgMTkuNzVIOUM4LjU4NTggMTkuNzUgOC4yNSAxOS40MTQyIDguMjUgMTlWMTUuNUM4LjI1IDE0LjgwOTYgOC44MDk2NCAxNC4yNSA5LjUgMTQuMjVIOS43NTAyNFYxMy41Wk0xMi43NTAyIDEzLjVWMTQuMjVIMTEuMjUwMlYxMy41QzExLjI1MDIgMTMuMDg1OCAxMS41ODYgMTIuNzUgMTIuMDAwMiAxMi43NUMxMi40MTQ1IDEyLjc1IDEyLjc1MDIgMTMuMDg1OCAxMi43NTAyIDEzLjVaTTkuNzUgMTUuNzVWMTguMjVIMTQuMjVWMTUuNzVIOS43NVoiIGZpbGw9IiMyMzI2MkEiLz48L3N2Zz4="
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      }
+    ]
+  },
+  {
+    "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
+    "name": "Integrasjoner",
+    "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
+    "iconUrl": "https://www.svgrepo.com/show/437209/rotate-left.svg",
+    "roles": [
+      {
+        "id": "37d2ba7f-187f-45f5-9a96-2f23cf328dab",
+        "name": "Programmeringsgrensesnitt (API)",
+        "code": "API",
+        "description": "Denne tilgangspakken gir fullmakter til å administrere tilgang til data og programmeringsgrensenitt (API) som benytter Maskinporten eller tilsvarende løsninger for APIsikring. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "urn": "digdir:role:api",
+        "area": {
+          "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
+          "name": "Integrasjoner",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
+          "iconUrl": "https://www.svgrepo.com/show/437209/rotate-left.svg"
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      },
+      {
+        "id": "66bd8101-fbd8-491b-b1f5-2f53a9476ffd",
+        "name": "Maskinlesbare hendelser",
+        "code": "MLH",
+        "description": "Denne tilgangspakken gir fullmakter til å administrere tilgang til maskinlesbare hendelser. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "urn": "digdir:role:mlh",
+        "area": {
+          "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
+          "name": "Integrasjoner",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
+          "iconUrl": "https://www.svgrepo.com/show/437209/rotate-left.svg"
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      },
+      {
+        "id": "44746bad-aae5-4a83-b2e1-30a7cc9b809d",
+        "name": "Programmeringsgrensesnitt NUF (API)",
+        "code": "NUF",
+        "description": "Denne tilgangspakken gir fullmakter til å administrere tilgang til data og programmeringsgrensenitt (API) som benytter Maskinporten eller tilsvarende løsninger for APIsikring på vegne av norskregistrerte utenlandske foretak (NUF). Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
+        "urn": "digdir:role:nuf",
+        "area": {
+          "id": "892e98c6-1696-46e7-9bb1-59c08761ec64",
+          "name": "Integrasjoner",
+          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til integrasjoner.",
+          "iconUrl": "https://www.svgrepo.com/show/437209/rotate-left.svg"
+        },
+        "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320"
+      }
+    ]
+  }
+]

@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { ErrorCode } from '@/resources/utils/errorCodeUtils';
 
 interface EntityType {
   id: string;
@@ -23,6 +24,24 @@ export interface Role {
   code: string;
   description: string;
   urn: string;
+  area: Area;
+  isDelegable: boolean;
+}
+
+export interface ExtendedRole extends Role {
+  inherited: Role[];
+  assignmentId?: string;
+}
+
+interface Area {
+  id: string;
+  name: string;
+  description: string;
+  iconUrl: string;
+}
+
+export interface AreaFE extends Area {
+  roles: Role[];
 }
 
 export interface Assignment {
@@ -30,8 +49,8 @@ export interface Assignment {
   roleId: string;
   fromId: string;
   toId: string;
-  isDelegable: boolean;
   role: Role;
+  inherited: Role[];
 }
 
 interface RoleApiRequest {
@@ -39,10 +58,16 @@ interface RoleApiRequest {
   rightHolderUuid: string;
 }
 
+interface DelegationCheckResponse {
+  detailCode: ErrorCode;
+  canDelegate: boolean;
+}
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
 
 export const roleApi = createApi({
   reducerPath: 'roleApi',
+  tagTypes: ['roles'],
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers: Headers): Headers => {
@@ -55,13 +80,53 @@ export const roleApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    getRoles: builder.query<AreaFE[], void>({
+      query: () => '/search',
+      providesTags: ['roles'],
+    }),
     getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
       query: ({ rightOwnerUuid, rightHolderUuid }) =>
         `/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
     }),
+    revoke: builder.mutation<void, { assignmentId: string }>({
+      query({ assignmentId }) {
+        return {
+          url: `/assignments/${assignmentId}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['roles'],
+    }),
+    delegate: builder.mutation<void, { to: string; roleId: string }>({
+      invalidatesTags: ['roles'],
+      query: ({ to, roleId }) => {
+        const from = getCookie('AltinnPartyUuid');
+        return {
+          url: `delegate/${from}/${to}/${roleId}`,
+          method: 'POST',
+        };
+      },
+    }),
+    delegationCheck: builder.query<
+      DelegationCheckResponse,
+      { rightownerUuid: string; roleUuid: string }
+    >({
+      query({ rightownerUuid, roleUuid }) {
+        return {
+          url: `/delegationcheck/${rightownerUuid}/${roleUuid}`,
+          method: 'GET',
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetRolesForUserQuery } = roleApi;
+export const {
+  useGetRolesForUserQuery,
+  useRevokeMutation,
+  useDelegateMutation,
+  useGetRolesQuery,
+  useDelegationCheckQuery,
+} = roleApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = roleApi;

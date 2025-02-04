@@ -1,3 +1,7 @@
+.roleArea {
+  padding-top: 1.5rem;
+}
+
 .roleList {
   display: flex;
   flex-direction: column;
