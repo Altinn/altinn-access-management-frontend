@@ -41,5 +41,5 @@ jobs:
     uses: './.github/workflows/template-deploy-container.yml'
     secrets: inherit
     with:
-      environment: PROD
+      environment: prod
       tag: ${{ github.ref_name }}
