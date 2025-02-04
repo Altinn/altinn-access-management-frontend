@@ -1,7 +1,6 @@
 /* eslint-disable import/default */
 /* eslint-disable import/no-named-as-default-member */
 
-import { delegateToUser } from '../pages/profile/delegationPage';
 import { test } from './../fixture/pomFixture';
 test.describe('User with DAGL/HADM role without having resource access themselves', () => {
   // Testscenario:
@@ -34,7 +33,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     //To delegate rights
     // WHEN user delegates to ROMANTISK ESKE
     await delegate.delegateToSSN('19856097121', 'GATE');
-    await delegateRights.delegateRightsToSSN('Altinn2 non-delegable Reporting service');
+    await delegateRights.nonDelegatebleRightsToSSN('Altinn2 non-delegable Reporting service');
 
     // Forsøk å deleger Altinn2 non-delegable Reporting service
     // Lag ny metode som forsøker å delegere en enkelttjeneste (dublisere fra annen metode)
