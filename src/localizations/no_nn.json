@@ -237,7 +237,8 @@
     "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
     "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
     "activeRolesLabel": "Liste over roller som er tildelt brukeren",
-    "availableRolesLabel" : "Liste over roller som kan tildeles brukeren"
+    "availableRolesLabel" : "Liste over roller som kan tildeles brukeren",
+    "cant_delegate_generic": "Du kan ikkje delegere denne rollen"
   },
   "users_page": {
     "page_title": "Brukarar og grupper - Altinn",

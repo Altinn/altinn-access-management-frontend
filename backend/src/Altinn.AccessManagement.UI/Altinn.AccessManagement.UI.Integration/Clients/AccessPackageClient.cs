@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -82,7 +83,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<Role>>(response, _logger, "AccessPackageClient // GetRoleSearchMatches");
-            }
         }
 
         /// <inheritdoc />

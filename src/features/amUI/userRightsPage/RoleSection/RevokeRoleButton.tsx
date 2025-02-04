@@ -22,6 +22,7 @@ export const RevokeRoleButton = ({
   toParty,
   fullText = false,
   disabled,
+  variant = 'outline',
   ...props
 }: RevokeRoleButtonProps) => {
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ export const RevokeRoleButton = ({
   return (
     <Button
       {...props}
-      variant={'outline'}
+      variant={variant}
       onClick={onClick}
       disabled={disabled || isLoading || !representingParty}
     >

@@ -64,11 +64,31 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
+        
+        /// <summary>
+        ///     Test case: Search roles with "hovedadmin" as input
+        ///     Expected: Search returns all matching roles
+        /// </summary>
+        [Fact]
+        public async Task GetRoleSearch_Search_HovedAdmin()
+        {
+            // Arrange
+            List<RoleAreaFE> expectedResult = Util.GetMockData<List<RoleAreaFE>>(_expectedDataPath + "/Role/Search/search_hovedadmin.json");
+
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/role/search?searchString=hovedadmin");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<RoleAreaFE> actualResources = JsonSerializer.Deserialize<List<RoleAreaFE>>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
+        }
 
         /// <summary>
-        ///     Search through all roles and return matches
+        ///     Check if a role can be delegated 
         /// </summary>
-        /// <returns>All search results, sorted into areas</returns>
+        /// <returns>If the role can be delegated and the reason</returns>
         [HttpGet]
         [Authorize]
         [Route("delegationcheck/{rightOwner}/{roleId}")]

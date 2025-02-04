@@ -22,6 +22,7 @@ export const DelegateRoleButton = ({
   toParty,
   fullText = false,
   disabled,
+  variant = 'outline',
   ...props
 }: DelegateRoleButtonProps) => {
   const { t } = useTranslation();
@@ -61,7 +62,7 @@ export const DelegateRoleButton = ({
   return (
     <Button
       {...props}
-      variant={'outline'}
+      variant={variant}
       onClick={onClick}
       disabled={isLoading || disabled || !representingParty}
     >

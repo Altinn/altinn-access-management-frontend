@@ -75,15 +75,19 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             className={classes.nonDelegableIcon}
           />
           <Paragraph size='xs'>
-            <Trans
-              i18nKey={getErrorCodeTextKey(delegationCheckResult?.detailCode || ErrorCode.Unknown)}
-              components={{ b: <strong /> }}
-              values={{
-                you: t('common.you_uppercase'),
-                serviceowner: role.provider?.name,
-                reporteeorg: reportee?.name,
-              }}
-            />
+            {delegationCheckResult?.detailCode === ErrorCode.Unknown ? (
+              <Trans i18nKey='role.cant_delegate_generic' />
+            ) : (
+              <Trans
+                i18nKey={getErrorCodeTextKey(delegationCheckResult?.detailCode)}
+                components={{ b: <strong /> }}
+                values={{
+                  you: t('common.you_uppercase'),
+                  serviceowner: role.provider?.name,
+                  reporteeorg: reportee?.name,
+                }}
+              />
+            )}
           </Paragraph>
         </div>
       )}
@@ -110,6 +114,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             toParty={toParty}
             fullText
             disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
+            variant='solid'
           />
         ) : (
           <RevokeRoleButton
@@ -118,6 +123,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             toParty={toParty}
             fullText
             disabled={isFetching || userHasInheritedRole}
+            variant='solid'
           />
         )}
       </div>
