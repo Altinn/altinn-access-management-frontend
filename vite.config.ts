@@ -8,16 +8,7 @@ import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  test: {
-    exclude: [
-      '**/node_modules/**',
-      '**/cypress/**',
-      '**/playwrite/**',
-      '**/*.spec.ts',
-      '**/*.test.cy.tsx',
-    ],
-  },
+export default defineConfig(
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
   },
