@@ -6,7 +6,7 @@ import type {
   SystemUser,
   SystemUserChangeRequest,
   SystemUserRequest,
-  SysteUserAccessPackage,
+  SystemUserAccessPackage,
 } from '@/features/amUI/systemUser/types';
 
 import type { ServiceResource } from './singleRights/singleRightsApi';
@@ -40,7 +40,7 @@ export const systemUserApi = createApi({
       keepUnusedDataFor: Infinity,
     }),
     getRegisteredSystemRights: builder.query<
-      { resources: ServiceResource[]; accessPackages: SysteUserAccessPackage[] },
+      { resources: ServiceResource[]; accessPackages: SystemUserAccessPackage[] },
       string
     >({
       query: (systemId) => `systemregister/rights/${systemId}`,

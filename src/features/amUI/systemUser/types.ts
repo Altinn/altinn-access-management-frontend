@@ -22,7 +22,7 @@ export interface SystemUser {
   created: string;
   system: RegisteredSystem;
   resources: ServiceResource[];
-  accessPackages: SysteUserAccessPackage[];
+  accessPackages: SystemUserAccessPackage[];
 }
 
 type RequestStatus = 'New' | 'Accepted' | 'Rejected' | 'Denied' | 'Timedout';
@@ -33,7 +33,7 @@ export interface SystemUserRequest {
   redirectUrl?: string;
   system: RegisteredSystem;
   resources: ServiceResource[];
-  accessPackages: SysteUserAccessPackage[];
+  accessPackages: SystemUserAccessPackage[];
 }
 
 export interface SystemUserChangeRequest {
@@ -42,10 +42,10 @@ export interface SystemUserChangeRequest {
   redirectUrl?: string;
   system: RegisteredSystem;
   resources: ServiceResource[];
-  accessPackages: SysteUserAccessPackage[];
+  accessPackages: SystemUserAccessPackage[];
 }
 
 // TODO: temp? type for access package with enriched resources
-export interface SysteUserAccessPackage extends Omit<AccessPackage, 'resources'> {
+export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'> {
   resources: ServiceResource[];
 }

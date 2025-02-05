@@ -1,19 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { Avatar, ListItem, ResourceListItem } from '@altinn/altinn-components';
 import { Button, Heading, Modal, Paragraph } from '@digdir/designsystemet-react';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { useTranslation } from 'react-i18next';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getButtonIconSize } from '@/resources/utils';
+
+import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { getButtonIconSize } from '@/resources/utils';
 import { ResourceDetails } from './ResourceDetails';
-import { SysteUserAccessPackage } from '../../types';
-import { useTranslation } from 'react-i18next';
 
 interface RightsListProps {
   resources: ServiceResource[];
-  accessPackages?: SysteUserAccessPackage[];
+  accessPackages?: SystemUserAccessPackage[];
 }
 
 export const RightsList = ({ resources, accessPackages }: RightsListProps): React.ReactNode => {
@@ -98,7 +99,7 @@ const ResourceInfo = ({ resource }: ResourceInfoProps): React.ReactNode => {
 };
 
 interface AccessPackageInfoProps {
-  accessPackage: SysteUserAccessPackage;
+  accessPackage: SystemUserAccessPackage;
 }
 const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.ReactElement => {
   const { t } = useTranslation();
