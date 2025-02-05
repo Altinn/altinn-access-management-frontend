@@ -50,5 +50,39 @@
       }
     ],
     "isVisible": true
+  },
+  {
+    "systemId": "310144827_invalid_resource",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Invalid resource",
+      "nb": "Invalid resource",
+      "nn": "Invalid resource"
+    },
+    "description": {
+      "en": "Invalid resource",
+      "nb": "Invalid resource",
+      "nn": "Invalid resource"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ]
+      },
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "invalid-resource-not-returned"
+          }
+        ]
+      }
+    ],
+    "isVisible": true
   }
 ]
