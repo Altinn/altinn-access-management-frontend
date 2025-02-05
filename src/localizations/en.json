@@ -239,7 +239,7 @@
     "role_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{role}}.",
     "inherited_role_message": "<b>{{user_name}}</b> has access to this through their role {{role_name}}. Therefore, it cannot be deleted.",
     "activeRolesLabel": "List of roles the user has been granted",
-    "availableRolesLabel" : "List of roles available for the user",
+    "availableRolesLabel": "List of roles available for the user",
     "cant_delegate_generic": "You can't delegate this role"
   },
   "users_page": {
@@ -418,7 +418,11 @@
     "accesspackage_resources_singular": "The access package contains this service:",
     "accesspackage_resources_plural": "The access package contains {{resourcesCount}} services:",
     "accesspackage_badge_singular": "1 single right",
-    "accesspackage_badge_plural": "{{resourcesCount}} single rights"
+    "accesspackage_badge_plural": "{{resourcesCount}} single rights",
+    "right_resource_singular": "Power of attorney for a single right",
+    "right_resource_plural": "Power of attorney for {{resourcesCount}} single rights",
+    "right_accesspackage_singular": "Power of attorney for one access package",
+    "right_accesspackage_plural": "Power of attorney for {{accessPackageCount}} access packages"
   },
   "systemuser_request": {
     "banner_title": "Give access to system",

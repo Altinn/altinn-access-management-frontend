@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { Avatar, ListItem, ResourceListItem } from '@altinn/altinn-components';
+import { ListItem, ResourceListItem } from '@altinn/altinn-components';
 import { Button, Heading, Modal, Paragraph } from '@digdir/designsystemet-react';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { ArrowLeftIcon, PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -18,26 +18,31 @@ interface RightsListProps {
 }
 
 export const RightsList = ({ resources, accessPackages }: RightsListProps): React.ReactNode => {
+  const { t } = useTranslation();
   return (
     <div className={classes.rightsList}>
-      <div>
-        <Heading
-          data-size='2xs'
-          level={3}
-        >
-          {resources.length === 1
-            ? 'Fullmakt til en enkelttjeneste'
-            : `Fullmakt til ${resources.length} enkelttjenester`}
-        </Heading>
-        <ul className={classes.unstyledList}>
-          {resources.map((resource) => (
-            <ResourceInfo
-              resource={resource}
-              key={resource.identifier}
-            />
-          ))}
-        </ul>
-      </div>
+      {resources.length > 0 && (
+        <div>
+          <Heading
+            data-size='2xs'
+            level={3}
+          >
+            {resources.length === 1
+              ? t('systemuser_detailpage.right_resource_singular')
+              : t('systemuser_detailpage.right_resource_plural', {
+                  resourcesCount: resources.length,
+                })}
+          </Heading>
+          <ul className={classes.unstyledList}>
+            {resources.map((resource) => (
+              <ResourceInfo
+                key={resource.identifier}
+                resource={resource}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
       {accessPackages.length > 0 && (
         <div>
           <Heading
@@ -45,8 +50,10 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
             level={3}
           >
             {accessPackages.length === 1
-              ? 'Fullmakt til en tilgangspakke'
-              : `Fullmakt til ${accessPackages.length} tilgangspakker`}
+              ? t('systemuser_detailpage.right_accesspackage_singular')
+              : t('systemuser_detailpage.right_accesspackage_plural', {
+                  accessPackageCount: accessPackages.length,
+                })}
           </Heading>
           <ul className={classes.unstyledList}>
             {accessPackages.map((accessPackage) => (
@@ -160,11 +167,7 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
           ) : (
             <>
               <div className={classes.resourceInfoHeader}>
-                <Avatar
-                  size='xl'
-                  type='company'
-                  name={accessPackage.name}
-                />
+                <PackageIcon fontSize={28} />
                 <div>
                   <Heading
                     level={1}

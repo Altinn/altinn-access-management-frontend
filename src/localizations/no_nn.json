@@ -237,7 +237,7 @@
     "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
     "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
     "activeRolesLabel": "Liste over roller som er tildelt brukeren",
-    "availableRolesLabel" : "Liste over roller som kan tildeles brukeren",
+    "availableRolesLabel": "Liste over roller som kan tildeles brukeren",
     "cant_delegate_generic": "Du kan ikkje delegere denne rollen"
   },
   "users_page": {
@@ -266,7 +266,7 @@
     "error_message": "Kunne ikkje gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
-    "inherited_role_org_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
+    "inherited_role_org_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
@@ -417,7 +417,11 @@
     "accesspackage_resources_singular": "Tilgangspakka inneheld en teneste:",
     "accesspackage_resources_plural": "Tilgangspakka inneheld {{resourcesCount}} tenestar:",
     "accesspackage_badge_singular": "1 enkeltteneste",
-    "accesspackage_badge_plural": "{{resourcesCount}} enkelttenestar"
+    "accesspackage_badge_plural": "{{resourcesCount}} enkelttenestar",
+    "right_resource_singular": "Fullmakt til en enkeltteneste",
+    "right_resource_plural": "Fullmakt til {{resourcesCount}} enkelttenestar",
+    "right_accesspackage_singular": "Fullmakt til en tilgangspakke",
+    "right_accesspackage_plural": "Fullmakt til {{accessPackageCount}} tilgangspakker"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

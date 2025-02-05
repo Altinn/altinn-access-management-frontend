@@ -12,6 +12,22 @@
           "value": "ske-innrapportering-boligsameie"
         }
       ]
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:accesspackage",
+          "value": "sjofart"
+        }
+      ]
+    },
+    {
+      "resource": [
+        {
+          "id": "urn:altinn:accesspackage",
+          "value": "baerekraft"
+        }
+      ]
     }
   ]
 }

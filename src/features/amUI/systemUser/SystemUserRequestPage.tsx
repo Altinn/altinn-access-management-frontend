@@ -138,7 +138,7 @@ export const SystemUserRequestPage = () => {
             level={3}
             data-size='xs'
           >
-            {request.resources.length === 1
+            {request.resources.length + request.accessPackages.length === 1
               ? t('systemuser_request.rights_list_header_single')
               : t('systemuser_request.rights_list_header')}
           </Heading>

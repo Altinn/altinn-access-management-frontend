@@ -136,7 +136,7 @@ export const SystemUserChangeRequestPage = () => {
             level={3}
             data-size='xs'
           >
-            {changeRequest.resources.length === 1
+            {changeRequest.resources.length + changeRequest.accessPackages.length === 1
               ? t('systemuser_change_request.rights_list_header_single')
               : t('systemuser_change_request.rights_list_header')}
           </Heading>

@@ -100,5 +100,31 @@
       }
     ],
     "isVisible": true
+  },
+  {
+    "systemId": "310144827_bare_tilgangspakke",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Accesspackage without resource",
+      "nb": "Accesspackage without resource",
+      "nn": "Accesspackage without resource"
+    },
+    "description": {
+      "en": "Accesspackage without resource",
+      "nb": "Accesspackage without resource",
+      "nn": "Accesspackage without resource"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:accesspackage",
+            "value": "baerekraft"
+          }
+        ]
+      }
+    ],
+    "isVisible": true
   }
 ]
