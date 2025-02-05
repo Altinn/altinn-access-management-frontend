@@ -5,21 +5,24 @@ import { forwardRef } from 'react';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Role } from '@/rtk/features/roleApi';
 
 import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
 import { SnackbarProvider } from '../../common/Snackbar';
 
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+import { RoleInfo } from './Role/RoleInfo';
 
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
+  role?: Role;
   toParty: Party;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage }, ref) => {
+  ({ toParty, resource, accessPackage, role }, ref) => {
     return (
       <Modal.Context>
         <Modal
@@ -29,7 +32,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage)}
+              {renderModalContent(toParty, resource, accessPackage, role)}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -42,6 +45,7 @@ const renderModalContent = (
   toParty: Party,
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
+  role?: Role,
 ) => {
   if (resource) {
     return (
@@ -50,14 +54,24 @@ const renderModalContent = (
         toParty={toParty}
       />
     );
-  } else if (accessPackage) {
+  }
+  if (accessPackage) {
     return (
       <AccessPackageInfo
         accessPackage={accessPackage}
         toParty={toParty}
       />
     );
-  } else return null;
+  }
+  if (role) {
+    return (
+      <RoleInfo
+        role={role}
+        toParty={toParty}
+      />
+    );
+  }
+  return null;
 };
 
 EditModal.displayName = 'EditModal';

@@ -30,6 +30,10 @@ jobs:
         working-directory: ./
         run: yarn coverage
 
+      - name: run unit-test
+        working-directory: ./
+        run: yarn vitest
+
       - name: run build
         working-directory: ./
         run: yarn build

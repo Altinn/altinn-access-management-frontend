@@ -32,4 +32,19 @@ public class Role
     /// URN
     /// </summary>
     public string Urn { get; set; }
+
+    /// <summary>
+    /// Area
+    /// </summary>
+    public RoleArea Area { get; set; }
+
+    /// <summary>
+    ///  ProviderId
+    /// </summary>
+    public Guid ProviderId { get; set; }
+
+    /// <summary>
+    /// IsDelegable
+    /// </summary>
+    public bool IsDelegable { get; set; }
 }
