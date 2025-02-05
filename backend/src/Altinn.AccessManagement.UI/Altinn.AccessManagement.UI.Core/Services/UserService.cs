@@ -65,6 +65,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
+        public async Task<List<Reportee>> GetReporteeList(Guid partyUuid)
+        {
+            List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(partyUuid);
+
+            return rightOwners.Select(rightOwner => new Reportee(rightOwner)).ToList();
+        }
+
+        /// <inheritdoc/>
         public Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
         {
             return _accessManagementClient.GetRightHolderAccesses(reporteeUuid, rightHolderUuid);

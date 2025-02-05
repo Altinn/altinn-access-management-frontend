@@ -63,11 +63,18 @@ export const userInfoApi = createApi({
       },
     }),
     getReportee: builder.query<ReporteeInfo, void>({
-      query: () => `reporteelist/${getCookie('AltinnPartyId')}`,
+      query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
     getRightHolders: builder.query<RightHolder[], void>({
       query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
+      keepUnusedDataFor: 300,
+    }),
+    getReporteeListForParty: builder.query<ReporteeInfo[], string>({
+      query: () => {
+        const partyUuid = getCookie('AltinnPartyUuid');
+        return `/reporteelist/${partyUuid}`;
+      },
       keepUnusedDataFor: 300,
     }),
     getRightHolderAccesses: builder.query<RightHolderAccesses, string>({

@@ -1,8 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -25,6 +23,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="partyId">The party Id of the reportee</param>
         /// <returns>List of parties holding rights for the partyId</returns>
         Task<List<AuthorizedParty>> GetReporteeRightHolders(int partyId);
+
+        /// <summary>
+        /// Gets a list of all reportees for a given party
+        /// </summary>
+        /// <param name="partyId">The id of the party</param>
+        Task<List<AuthorizedParty>> GetReporteeList(Guid partyId);
 
         /// <summary>
         /// Gets all accesses of a given right holder for a reportee
@@ -96,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         ///     Gets all access package delegations from someone to someone (or multiple someones)
         /// </summary>
         /// <param name="to">the one(s) who has received the delegated access. Can be either a guid or one of the following strings: "all", "me"</param>
-        /// <param name="from">The the one(s) whose rights have been delegated to the one(s) specified in to. Can be either a guid or one of the following strigns: "all", "me"</param>
+        /// <param name="from">The the one(s) whose rights have been delegated to the one(s) specified in to. Can be either a guid or one of the following strings: "all", "me"</param>
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         /// <returns>A list of all access package delegations</returns>
         Task<List<AccessPackageAccess>> GetAccessPackageAccesses(string to, string from, string languageCode);

@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>Reportee if party is in authenticated users reporteelist</returns>
         [HttpGet]
         [Authorize]
-        [Route("reporteelist/{partyId}")]
+        [Route("reportee/{partyId}")]
         public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(int partyId)
         {
             try
@@ -108,6 +108,29 @@ namespace Altinn.AccessManagement.UI.Controllers
                 List<RightHolder> rightHolders = await _userService.GetReporteeRightHolders(partyId);
 
                 return rightHolders;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch right holders");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving all right holders of a reportee
+        /// </summary>
+        /// <param name="partyUuid">The partyId for the reportee who's right holders to return</param>
+        /// <returns>List of right holders</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("reporteelist/{partyUuid}")]
+        public async Task<ActionResult<List<Reportee>>> GetReporteeList(Guid partyUuid)
+        {
+            try
+            {
+                List<Reportee> reportees = await _userService.GetReporteeList(partyUuid);
+
+                return reportees;
             }
             catch (Exception ex)
             {

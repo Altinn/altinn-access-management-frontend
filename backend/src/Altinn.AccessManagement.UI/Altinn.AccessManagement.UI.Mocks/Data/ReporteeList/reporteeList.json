@@ -1,0 +1,130 @@
+﻿[
+  {
+    "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
+    "name": "Narnia Economics",
+    "organizationNumber": "644227165",
+    "personId": null,
+    "partyId": 81373770,
+    "type": "Organization",
+    "unitType": "LLC",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": ["REGN"],
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff8",
+        "name": "Aslan Lion",
+        "organizationNumber": null,
+        "personId": "21030098626",
+        "partyId": 41126876,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": ["DAGL"],
+        "subunits": []
+      },
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff6",
+        "name": "Tumulus Deer",
+        "organizationNumber": null,
+        "personId": "22030098626",
+        "partyId": 41126875,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": ["LEDE"],
+        "subunits": []
+      },
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
+        "name": "Santa Claus",
+        "organizationNumber": null,
+        "personId": "24120098626",
+        "partyId": 41126874,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": ["REGN"],
+        "subunits": []
+      }
+    ]
+  },
+  {
+    "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
+    "name": "Kunze - Kunde",
+    "organizationNumber": "400928636",
+    "personId": null,
+    "partyId": 75306803,
+    "type": "Organization",
+    "unitType": "Group",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": [
+      {
+        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff1",
+        "name": "Malin Kunze",
+        "organizationNumber": null,
+        "personId": "24110098626",
+        "partyId": 41126878,
+        "type": "Person",
+        "unitType": null,
+        "isDeleted": false,
+        "onlyHierarchyElementWithNoAccess": false,
+        "authorizedResources": [],
+        "authorizedRoles": ["DAGL"],
+        "subunits": []
+      }
+    ]
+  },
+  {
+    "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
+    "name": "Vanessa Schmitt",
+    "organizationNumber": null,
+    "personId": "23088826000",
+    "partyId": 49721067,
+    "type": "Person",
+    "unitType": null,
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+    "subunits": []
+  },
+  {
+    "partyUuid": "f8022101-70f5-098b-91ff-f19c05f3e9b3",
+    "name": "Kristopher Blanda",
+    "organizationNumber": null,
+    "personId": "08099016729",
+    "partyId": 85638494,
+    "type": "Person",
+    "unitType": null,
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  },
+  {
+    "partyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
+    "name": "Ken Kuvalis",
+    "organizationNumber": null,
+    "personId": "01010276396",
+    "partyId": 87038023,
+    "type": "Person",
+    "unitType": null,
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  }
+]

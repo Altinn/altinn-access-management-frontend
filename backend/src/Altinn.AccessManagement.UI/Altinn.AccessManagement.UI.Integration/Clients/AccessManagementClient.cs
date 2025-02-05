@@ -99,6 +99,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<List<AuthorizedParty>> GetReporteeList(Guid partyId)
+        {
+            string endpointUrl = $"enduser/access/parties?party={partyId}"; // TODO: Switch with actual backend endpoint when available
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<AuthorizedParty>>(response);
+        }
+
+        /// <inheritdoc />
         public async Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
         {
             string endpointUrl = $"enduser/{reporteeUuid}/access/{rightHolderUuid}/accesspackages"; // TODO: Switch with actual backend endpoint when available

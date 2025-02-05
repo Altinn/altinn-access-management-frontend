@@ -31,6 +31,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<List<RightHolder>> GetReporteeRightHolders(int partyId);
 
         /// <summary>
+        /// Gets a list of all reportees for a given party
+        /// </summary>
+        /// <param name="partyUuid">The id of the party</param>
+        Task<List<Reportee>> GetReporteeList(Guid partyUuid);
+
+        /// <summary>
         /// Gets all accesses of a given right holder for a reportee
         /// </summary>
         /// <param name = "reporteeUuid" > The uuid for the reportee which the right holder has access to</param>
