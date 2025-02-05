@@ -91,6 +91,10 @@
     "change-label": "Bytt",
     "back-label": "Tilbake"
   },
+  "sidebar": {
+    "users": "Brukere",
+    "reportees": "Våre tilganger hos andre"
+  },
   "profile": {
     "received": "Mottatte",
     "sent": "Sendte",
@@ -249,6 +253,10 @@
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter person eller virksomhet",
     "user_no_search_result": "Ingen brukere funnet"
+  },
+  "reportees_page": {
+    "page_title": "Våre tilganger hos andre - Altinn",
+    "main_page_heading": "Våre fullmakter hos andre"
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",

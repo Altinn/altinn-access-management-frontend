@@ -1,8 +1,10 @@
-import { Layout } from '@altinn/altinn-components';
+import { Layout, MenuItem } from '@altinn/altinn-components';
 import { RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -56,14 +58,29 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               {
                 groupId: 2,
                 id: '2',
-                icon: 'person-group',
-                title: 'Brukere',
+                as: () => (
+                  <Link to={`/${amUIPath.Users}`}>
+                    <MenuItem
+                      as='div'
+                      id={'users'}
+                      title={t('sidebar.users')}
+                      icon='person-group'
+                    />
+                  </Link>
+                ),
               },
               {
                 groupId: 3,
-                icon: 'inbox',
                 id: '3',
-                title: 'Våre tilganger hos andre',
+                as: () => (
+                  <Link to={`/${amUIPath.Reportees}`}>
+                    <MenuItem
+                      id={'inbox'}
+                      title={t('sidebar.reportees')}
+                      icon='inbox'
+                    />
+                  </Link>
+                ),
               },
             ],
           },

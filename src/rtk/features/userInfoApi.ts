@@ -70,7 +70,7 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
       keepUnusedDataFor: 300,
     }),
-    getReporteeListForParty: builder.query<ReporteeInfo[], string>({
+    getReporteeListForParty: builder.query<ReporteeInfo[], void>({
       query: () => {
         const partyUuid = getCookie('AltinnPartyUuid');
         return `/reporteelist/${partyUuid}`;
@@ -103,6 +103,7 @@ export const {
   useGetRightHoldersQuery,
   useGetRightHolderAccessesQuery,
   useValidateNewUserPersonMutation,
+  useGetReporteeListForPartyQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;
