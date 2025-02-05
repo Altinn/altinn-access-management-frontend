@@ -14,7 +14,7 @@ import { ResourceDetails } from './ResourceDetails';
 
 interface RightsListProps {
   resources: ServiceResource[];
-  accessPackages?: SystemUserAccessPackage[];
+  accessPackages: SystemUserAccessPackage[];
 }
 
 export const RightsList = ({ resources, accessPackages }: RightsListProps): React.ReactNode => {
@@ -38,7 +38,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           ))}
         </ul>
       </div>
-      {!!accessPackages?.length && (
+      {accessPackages.length > 0 && (
         <div>
           <Heading
             data-size='2xs'

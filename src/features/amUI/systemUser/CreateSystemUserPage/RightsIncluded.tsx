@@ -76,14 +76,14 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
           level={2}
           data-size='sm'
         >
-          {rights?.resources.length === 1
+          {(rights?.resources.length || 0) + (rights?.accessPackages.length || 0) === 1
             ? t('systemuser_includedrightspage.sub_title_single')
             : t('systemuser_includedrightspage.sub_title')}
         </Heading>
         <div>
           <RightsList
             resources={rights?.resources ?? []}
-            accessPackages={rights?.accessPackages}
+            accessPackages={rights?.accessPackages ?? []}
           />
           {createSystemUserError && (
             <DelegationCheckError

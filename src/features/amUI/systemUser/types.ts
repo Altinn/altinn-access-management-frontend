@@ -8,6 +8,11 @@ export interface RegisteredSystem {
   name: string;
 }
 
+export interface RegisteredSystemRights {
+  resources: ServiceResource[];
+  accessPackages: SystemUserAccessPackage[];
+}
+
 export interface ProblemDetail {
   code: string;
   detail: string;
