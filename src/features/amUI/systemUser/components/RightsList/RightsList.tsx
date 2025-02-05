@@ -37,7 +37,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           ))}
         </ul>
       </div>
-      {accessPackages?.length && (
+      {!!accessPackages?.length && (
         <div>
           <Heading
             data-size='2xs'

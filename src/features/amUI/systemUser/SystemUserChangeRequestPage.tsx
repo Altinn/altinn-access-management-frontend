@@ -103,7 +103,7 @@ export const SystemUserChangeRequestPage = () => {
           title={''}
         />
       )}
-      {changeRequest && changeRequest.system && (
+      {changeRequest?.system && (
         <>
           {changeRequest.status === 'Accepted' && (
             <Alert data-color='info'>{t('systemuser_change_request.request_accepted')}</Alert>

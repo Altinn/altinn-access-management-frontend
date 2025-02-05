@@ -1,41 +1,81 @@
 [
   {
-    "id": "461b0ec2-6795-4055-9306-2acefd7c6a31",
-    "roleId": "de42ae15-c265-42b3-8060-64c779684902",
-    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
     "role": {
+      "isDelegable": false,
       "id": "de42ae15-c265-42b3-8060-64c779684902",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
       "name": "Styremedlem",
       "code": "MEDL",
       "description": "Fysisk- eller juridisk person som inngår i et styre",
       "urn": "brreg:role:medl"
-    }
-  },
-  {
-    "id": "43f42152-8900-4fcf-ac70-62d2d566581c",
+    },
+    "id": "461b0ec2-6795-4055-9306-2acefd7c6a31",
     "roleId": "de42ae15-c265-42b3-8060-64c779684902",
     "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
     "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "inherited": null
+  },
+  {
     "role": {
+      "isDelegable": false,
       "id": "72c336a2-1705-4aef-b220-7f4aa6c0e69d",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
       "name": "Styrets leder",
       "code": "LEDE",
       "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
       "urn": "brreg:role:lede"
-    }
+    },
+    "id": "43f42152-8900-4fcf-ac70-62d2d566581c",
+    "roleId": "72c336a2-1705-4aef-b220-7f4aa6c0e69d",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "inherited": null
   },
   {
-    "id": "eaea9647-4e95-4c22-8243-a917e0b19d47",
-    "roleId": "de42ae15-c265-42b3-8060-64c779684902",
-    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae", 
     "role": {
-      "id": "6c1fbcb9-609c-4ab8-a048-3be8d7da5a82",
-      "name": "Tilgangsstyrer",
+      "isDelegable": true,
+      "id": "4691c710-e0ad-4152-9783-9d1e787f02d3",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "name": "Tilgangsstyring",
       "code": "TS",
       "description": "Gir mulighet til å gi videre tilganger for virksomheten som man selv har mottatt",
       "urn": "digdir:role:ts"
-    }
+    },
+    "id": "eaea9647-4e95-4c22-8243-a917e0b19d47",
+    "roleId": "4691c710-e0ad-4152-9783-9d1e787f02d3",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "inherited": []
+  },
+  {
+    "role": {
+      "isDelegable": true,
+      "id": "15d0015f-e21d-405a-89c5-a21476ba3df0",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "name": "Hovedadministrator",
+      "code": "HA",
+      "description": "Denne tilgangspakken gir bruker mulighet til å administrere alle tilganger for virksomheten.",
+      "urn": "digdir:role:ha"
+    },
+    "id": "eaea9647-4e95-4c22-8243-a917e0b19d47",
+    "roleId": "15d0015f-e21d-405a-89c5-a21476ba3df0",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "inherited": [
+      {
+        "isDelegable": false,
+        "id": "72c336a2-1705-4aef-b220-7f4aa6c0e69d",
+        "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
+        "name": "Styrets leder",
+        "code": "LEDE",
+        "description": "Fysisk- eller juridisk person som er styremedlem og leder et styre",
+        "urn": "brreg:role:lede"
+      }
+    ]
   }
 ]

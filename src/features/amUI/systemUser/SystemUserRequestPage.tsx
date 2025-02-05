@@ -3,12 +3,12 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Alert, Spinner, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 
-import { useGetSystemUserRequestQuery } from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
 import {
+  useGetSystemUserRequestQuery,
   useApproveSystemUserRequestMutation,
   useRejectSystemUserRequestMutation,
 } from '@/rtk/features/systemUserApi';
+import { SystemUserPath } from '@/routes/paths';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -105,7 +105,7 @@ export const SystemUserRequestPage = () => {
           title={''}
         />
       )}
-      {request && request.system && (
+      {request?.system && (
         <>
           {request.status === 'Accepted' && (
             <Alert data-color='info'>{t('systemuser_request.request_accepted')}</Alert>

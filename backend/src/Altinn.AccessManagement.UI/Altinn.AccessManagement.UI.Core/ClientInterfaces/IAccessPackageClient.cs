@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+﻿using Altinn.AccessManagement.UI.Core.Models;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -17,11 +18,40 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString);
 
         /// <summary>
+        /// Retrieve result of a search in all roles. If no parameters are given, all roles are returned
+        /// </summary>
+        /// <param name="languageCode">the language to use in texts returned and searched in</param>
+        /// <param name="searchString">the text to be searched for</param>
+        /// <returns>List of access packages matching the search parameters</returns>
+        Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString);
+
+        /// <summary>
         /// Retrieve all roles for a user
         /// </summary>
         /// <param name="languageCode">the language to use in texts returned and searched in</param>
         /// <param name="rightOwnerUuid">The right owner to retrieve roles for</param>
         /// <param name="rightHolderUuid">The right holder to retrieve roles for</param>
         Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid);
+
+        /// <summary>
+        /// Create a role delegation
+        /// </summary>
+        /// <param name="from">the user to delegate the role from</param>
+        /// <param name="to">the user to delegate the role to</param>
+        /// <param name="roleId">the role to delegate</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId);
+        
+        /// <summary>
+        /// Delete a role delegation
+        /// </summary>
+        /// <param name="assignmentId">the assignment id of the role delegation to delete</param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId);
+
+        /// <summary>
+        /// Check if a user has the right to delegate a role
+        /// </summary>
+        Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
     }
 }

@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
@@ -358,7 +359,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(AccessPackage expected, AccessPackage actual)
+        public static void AssertEqual(RoleAreaFE expected, RoleAreaFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -366,7 +367,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
-            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            Assert.Equal(expected.IconUrl, actual.IconUrl);
+            AssertCollections(expected.Roles, actual.Roles, AssertEqual);
+
         }
 
         public static void AssertEqual(RightHolderAccesses expected, RightHolderAccesses actual)
@@ -437,6 +440,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
         
+
+        public static void AssertEqual(AccessPackage expected, AccessPackage actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
+
+
         public static void AssertEqual(RoleAssignment expected, RoleAssignment actual)
         {
             Assert.NotNull(actual);
