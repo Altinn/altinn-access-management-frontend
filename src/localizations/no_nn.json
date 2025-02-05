@@ -375,7 +375,8 @@
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilgangar",
     "no_key_role1": "Du manglar nødvendige fullmakter.",
-    "no_key_role2": "For å lage ein systemtilgang treng du rolla Tilgangsstyrar, Hovudadministrator eller Dagleg leiar."
+    "no_key_role2": "For å lage ein systemtilgang treng du rolla Tilgangsstyrar, Hovudadministrator eller Dagleg leiar.",
+    "new_system_user": "NY"
   },
   "systemuser_creationpage": {
     "banner_title": "Opprett ny systemtilgang",
@@ -389,8 +390,7 @@
     "loading_systems": "Lastar leverandørar og system..."
   },
   "systemuser_includedrightspage": {
-    "sub_title": "Systemtilgangen vil få desse fullmaktene",
-    "sub_title_single": "Systemtilgangen vil få denne fullmakten",
+    "header": "Systemtilgangen {{integrationTitle}} vil få disse fullmaktene for {{companyName}}",
     "confirm_button": "Opprett systemtilgang",
     "create_systemuser_error": "Kunne ikkje opprette systemtilgang",
     "loading_rights": "Lastar førehandsvalde tenester for fagsystemet",
@@ -398,12 +398,11 @@
     "creating_systemuser": "Opprettar systemtilgang..."
   },
   "systemuser_detailpage": {
+    "header": "Systemtilgangen {{integrationTitle}} har disse fullmaktene for {{companyName}}",
     "edit_systemuser": "Rediger systemtilgang",
     "load_systemuser_error": "Kunne ikkje laste systemtilgang",
     "loading_systemuser": "lastar systemtilgang",
     "no_name": "<Systemtilgang utan namn>",
-    "system_rights_header": "Systemtilgangen har disse fullmaktene:",
-    "system_rights_header_single": "Systemtilgangen har denne fullmakten:",
     "edit_systemuser_name": "Endre namn på systemtilgang",
     "delete_systemuser": "Slett systemtilgang",
     "delete_systemuser_header": "Slette systemtilgang",
@@ -414,14 +413,14 @@
     "save_systemuser": "Lagre endringar",
     "name_too_long": "Namn på systemtilgang kan berre vere 255 teikn, du har skrive inn {{ nameLength }} teikn.",
     "created_by": "Systemtilgang oppretta {{created}}",
-    "accesspackage_resources_singular": "Tilgangspakka inneheld en teneste:",
-    "accesspackage_resources_plural": "Tilgangspakka inneheld {{resourcesCount}} tenestar:",
+    "accesspackage_resources_singular": "1 teneste:",
+    "accesspackage_resources_plural": "{{resourcesCount}} tenestar:",
     "accesspackage_badge_singular": "1 enkeltteneste",
     "accesspackage_badge_plural": "{{resourcesCount}} enkelttenestar",
-    "right_resource_singular": "Fullmakt til en enkeltteneste",
-    "right_resource_plural": "Fullmakt til {{resourcesCount}} enkelttenestar",
-    "right_accesspackage_singular": "Fullmakt til en tilgangspakke",
-    "right_accesspackage_plural": "Fullmakt til {{accessPackageCount}} tilgangspakker"
+    "right_resource_singular": "1 enkeltteneste",
+    "right_resource_plural": "{{resourcesCount}} enkelttenestar",
+    "right_accesspackage_singular": "1 tilgangspakke",
+    "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakker"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

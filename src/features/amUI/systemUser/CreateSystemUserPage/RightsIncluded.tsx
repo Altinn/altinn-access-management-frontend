@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Heading, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Spinner } from '@digdir/designsystemet-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
@@ -15,6 +15,7 @@ import type { ProblemDetail, RegisteredSystem } from '../types';
 import { RightsList } from '../components/RightsList/RightsList';
 import { DelegationCheckError } from '../components/DelegationCheckError/DelegationCheckError';
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 
 import classes from './CreateSystemUser.module.css';
 
@@ -48,7 +49,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
       postNewSystemUser(postObjekt)
         .unwrap()
         .then((newSystemUserId: string) => {
-          navigate(`/systemuser/${newSystemUserId}`);
+          navigate('/' + SystemUserPath.Overview, { state: { createdId: newSystemUserId } });
         });
     }
   };
@@ -65,21 +66,12 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   return (
     <PageContainer onNavigateBack={onNavigateBack}>
       <div className={classes.creationPageContainer}>
-        <Heading
-          level={1}
-          data-size='xs'
-          className={classes.creationPageHeader}
-        >
-          {t('systemuser_creationpage.banner_title')}
-        </Heading>
-        <Heading
-          level={2}
-          data-size='sm'
-        >
-          {(rights?.resources.length || 0) + (rights?.accessPackages.length || 0) === 1
-            ? t('systemuser_includedrightspage.sub_title_single')
-            : t('systemuser_includedrightspage.sub_title')}
-        </Heading>
+        <div className={classes.creationPageHeader}>
+          <SystemUserHeader
+            title='systemuser_includedrightspage.header'
+            integrationTitle={selectedSystem.name}
+          />
+        </div>
         <div>
           <RightsList
             resources={rights?.resources ?? []}

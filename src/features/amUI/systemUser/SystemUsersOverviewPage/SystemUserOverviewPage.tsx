@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -20,6 +20,9 @@ export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
+  const routerLocation = useLocation();
+  const newlyCreatedId = routerLocation?.state?.createdId;
+
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
 
   const {
@@ -84,6 +87,11 @@ export const SystemUserOverviewPage = () => {
                   title={systemUser.integrationTitle}
                   description={systemUser.system.systemVendorOrgName}
                   icon='tenancy'
+                  badge={
+                    newlyCreatedId === systemUser.id
+                      ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
+                      : undefined
+                  }
                   linkIcon='chevron-right'
                   onClick={() => navigate(`/systemuser/${systemUser.id}`)}
                 />

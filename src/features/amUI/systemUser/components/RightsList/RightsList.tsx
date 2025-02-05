@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ListItem, ResourceListItem } from '@altinn/altinn-components';
-import { Button, Heading, Modal, Paragraph } from '@digdir/designsystemet-react';
+import { Button, Heading, Modal, Paragraph, Tabs } from '@digdir/designsystemet-react';
 import { ArrowLeftIcon, PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
@@ -21,33 +21,11 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
   const { t } = useTranslation();
   return (
     <div className={classes.rightsList}>
-      {resources.length > 0 && (
-        <div>
-          <Heading
-            data-size='2xs'
-            level={3}
-          >
-            {resources.length === 1
-              ? t('systemuser_detailpage.right_resource_singular')
-              : t('systemuser_detailpage.right_resource_plural', {
-                  resourcesCount: resources.length,
-                })}
-          </Heading>
-          <ul className={classes.unstyledList}>
-            {resources.map((resource) => (
-              <ResourceInfo
-                key={resource.identifier}
-                resource={resource}
-              />
-            ))}
-          </ul>
-        </div>
-      )}
       {accessPackages.length > 0 && (
         <div>
           <Heading
             data-size='2xs'
-            level={3}
+            level={2}
           >
             {accessPackages.length === 1
               ? t('systemuser_detailpage.right_accesspackage_singular')
@@ -60,6 +38,28 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
               <AccessPackageInfo
                 key={accessPackage.id}
                 accessPackage={accessPackage}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
+      {resources.length > 0 && (
+        <div>
+          <Heading
+            data-size='2xs'
+            level={2}
+          >
+            {resources.length === 1
+              ? t('systemuser_detailpage.right_resource_singular')
+              : t('systemuser_detailpage.right_resource_plural', {
+                  resourcesCount: resources.length,
+                })}
+          </Heading>
+          <ul className={classes.unstyledList}>
+            {resources.map((resource) => (
+              <ResourceInfo
+                key={resource.identifier}
+                resource={resource}
               />
             ))}
           </ul>
@@ -178,13 +178,19 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
                 </div>
               </div>
               <Paragraph data-size='sm'>{accessPackage.description}</Paragraph>
-              <Paragraph data-size='sm'>
-                {accessPackage.resources.length === 1
-                  ? t('systemuser_detailpage.accesspackage_resources_singular')
-                  : t('systemuser_detailpage.accesspackage_resources_plural', {
-                      resourcesCount: accessPackage.resources.length,
-                    })}
-              </Paragraph>
+              <div className={classes.servicesHeader}>
+                <Tabs defaultValue='value1'>
+                  <Tabs.List>
+                    <Tabs.Tab value='value1'>
+                      {accessPackage.resources.length === 1
+                        ? t('systemuser_detailpage.accesspackage_resources_singular')
+                        : t('systemuser_detailpage.accesspackage_resources_plural', {
+                            resourcesCount: accessPackage.resources.length,
+                          })}
+                    </Tabs.Tab>
+                  </Tabs.List>
+                </Tabs>
+              </div>
               <ul className={classes.unstyledList}>
                 {accessPackage.resources.map((resource) => (
                   <li

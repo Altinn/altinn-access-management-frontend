@@ -27,3 +27,7 @@
   flex-direction: column;
   gap: var(--ds-size-4);
 }
+
+.servicesHeader {
+  align-self: flex-start;
+}

@@ -379,7 +379,8 @@
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilganger",
     "no_key_role1": "Du mangler nødvendige fullmakter.",
-    "no_key_role2": "For å lage en systemtilgang trenger du rollen Tilgangsstyrer, Hovedadministrator eller Daglig leder."
+    "no_key_role2": "For å lage en systemtilgang trenger du rollen Tilgangsstyrer, Hovedadministrator eller Daglig leder.",
+    "new_system_user": "NY"
   },
   "systemuser_creationpage": {
     "banner_title": "Lag ny systemtilgang",
@@ -392,8 +393,7 @@
     "loading_systems": "Laster leverandører og system..."
   },
   "systemuser_includedrightspage": {
-    "sub_title": "Systemtilgangen vil få disse fullmaktene",
-    "sub_title_single": "Systemtilgangen vil få denne fullmakten",
+    "header": "Systemtilgangen {{integrationTitle}} vil få disse fullmaktene for {{companyName}}",
     "confirm_button": "Opprett systemtilgang",
     "create_systemuser_error": "Kunne ikke opprette systemtilgang",
     "loading_rights": "Laster forhåndsvalgte tjenester for fagsystemet",
@@ -401,12 +401,11 @@
     "creating_systemuser": "Oppretter systemtilgang..."
   },
   "systemuser_detailpage": {
+    "header": "Systemtilgangen {{integrationTitle}} har disse fullmaktene for {{companyName}}",
     "edit_systemuser": "Rediger systemtilgang",
     "load_systemuser_error": "Kunne ikke laste systemtilgang",
     "loading_systemuser": "laster systemtilgang",
     "no_name": "<Systemtilgang uten navn>",
-    "system_rights_header": "Systemtilgangen har disse fullmaktene:",
-    "system_rights_header_single": "Systemtilgangen har denne fullmakten:",
     "edit_systemuser_name": "Endre navn på systemtilgang",
     "delete_systemuser": "Slett systemtilgang",
     "delete_systemuser_header": "Slette systemtilgang",
@@ -416,14 +415,14 @@
     "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",
     "created_by": "Systemtilgang opprettet {{created}}",
-    "accesspackage_resources_singular": "Tilgangspakken inneholder en enkelttjeneste:",
-    "accesspackage_resources_plural": "Tilgangspakken inneholder {{resourcesCount}} enkelttjenester:",
+    "accesspackage_resources_singular": "1 tjeneste",
+    "accesspackage_resources_plural": "{{resourcesCount}} tjenester",
     "accesspackage_badge_singular": "1 enkelttjeneste",
     "accesspackage_badge_plural": "{{resourcesCount}} enkelttjenester",
-    "right_resource_singular": "Fullmakt til en enkelttjeneste",
-    "right_resource_plural": "Fullmakt til {{resourcesCount}} enkelttjenester",
-    "right_accesspackage_singular": "Fullmakt til en tilgangspakke",
-    "right_accesspackage_plural": "Fullmakt til {{accessPackageCount}} tilgangspakker"
+    "right_resource_singular": "1 enkelttjeneste",
+    "right_resource_plural": "{{resourcesCount}} enkelttjenester",
+    "right_accesspackage_singular": "1 tilgangspakke",
+    "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakker"
   },
   "systemuser_request": {
     "banner_title": "Gi tilgang til system",

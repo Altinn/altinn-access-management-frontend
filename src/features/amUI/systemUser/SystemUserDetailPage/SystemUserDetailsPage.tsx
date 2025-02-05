@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Heading, Alert, Spinner, Paragraph, Popover } from '@digdir/designsystemet-react';
+import { Button, Alert, Spinner, Paragraph, Popover } from '@digdir/designsystemet-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -15,6 +15,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import { SnackbarProvider, useSnackbar } from '../../common/Snackbar';
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 
 import classes from './SystemUserDetailsPage.module.css';
 
@@ -74,74 +75,58 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
           )}
           {systemUser && (
             <div className={classes.systemUserDetails}>
-              <div>
-                <Heading
-                  level={1}
-                  data-size='md'
+              <SystemUserHeader
+                title='systemuser_detailpage.header'
+                integrationTitle={systemUser.integrationTitle}
+              />
+              <Popover.Context>
+                <Popover.Trigger
+                  variant='tertiary'
+                  data-color='danger'
+                  className={classes.systemUserDeleteButton}
+                  onClick={() => setIsPopoverOpen(true)}
                 >
-                  {systemUser.integrationTitle || t('systemuser_detailpage.no_name')}
-                </Heading>
-                <Paragraph data-size='sm'>
-                  {systemUser.system.systemVendorOrgName.toUpperCase()}
-                </Paragraph>
-              </div>
-              <Heading
-                level={2}
-                data-size='xs'
-              >
-                {systemUser.resources.length === 1
-                  ? t('systemuser_detailpage.system_rights_header_single')
-                  : t('systemuser_detailpage.system_rights_header')}
-              </Heading>
+                  <TrashIcon aria-hidden />
+                  {t('systemuser_detailpage.delete_systemuser')}
+                </Popover.Trigger>
+                <Popover
+                  open={isPopoverOpen}
+                  data-color='danger'
+                  className={classes.deletePopover}
+                  onClose={() => setIsPopoverOpen(false)}
+                >
+                  {t('systemuser_detailpage.delete_systemuser_body', {
+                    title: systemUser.integrationTitle,
+                  })}
+                  {isDeleteError && (
+                    <Alert
+                      data-color='danger'
+                      role='alert'
+                    >
+                      {t('systemuser_detailpage.delete_systemuser_error')}
+                    </Alert>
+                  )}
+                  <ButtonRow>
+                    <Button
+                      data-color='danger'
+                      disabled={isDeletingSystemUser}
+                      onClick={handleDeleteSystemUser}
+                    >
+                      {t('systemuser_detailpage.delete_systemuser')}
+                    </Button>
+                    <Button
+                      variant='tertiary'
+                      onClick={() => setIsPopoverOpen(false)}
+                    >
+                      {t('common.cancel')}
+                    </Button>
+                  </ButtonRow>
+                </Popover>
+              </Popover.Context>
               <RightsList
-                resources={systemUser.resources ?? []}
+                resources={systemUser.resources}
                 accessPackages={systemUser.accessPackages}
               />
-              <div>
-                <Popover.Context>
-                  <Popover.Trigger
-                    variant='tertiary'
-                    data-color='danger'
-                    onClick={() => setIsPopoverOpen(true)}
-                  >
-                    <TrashIcon aria-hidden />
-                    {t('systemuser_detailpage.delete_systemuser')}
-                  </Popover.Trigger>
-                  <Popover
-                    open={isPopoverOpen}
-                    data-color='danger'
-                    className={classes.deletePopover}
-                    onClose={() => setIsPopoverOpen(false)}
-                  >
-                    {t('systemuser_detailpage.delete_systemuser_body', {
-                      title: systemUser.integrationTitle,
-                    })}
-                    {isDeleteError && (
-                      <Alert
-                        data-color='danger'
-                        role='alert'
-                      >
-                        {t('systemuser_detailpage.delete_systemuser_error')}
-                      </Alert>
-                    )}
-                    <ButtonRow>
-                      <Button
-                        data-color='danger'
-                        disabled={isDeletingSystemUser}
-                        onClick={handleDeleteSystemUser}
-                      >
-                        {t('systemuser_detailpage.delete_systemuser')}
-                      </Button>
-                      <Button
-                        variant='tertiary'
-                        onClick={() => setIsPopoverOpen(false)}
-                      >
-                        {t('common.cancel')}
-                      </Button>
-                    </ButtonRow>
-                  </Popover>
-                </Popover.Context>
-              </div>
               <Paragraph
                 data-size='xs'
                 className={classes.createdBy}

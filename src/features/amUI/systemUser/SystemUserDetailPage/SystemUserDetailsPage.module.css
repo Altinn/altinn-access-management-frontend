@@ -13,3 +13,7 @@
 .deletePopover {
   max-width: 23rem;
 }
+
+.systemUserDeleteButton {
+  align-self: flex-end;
+}
