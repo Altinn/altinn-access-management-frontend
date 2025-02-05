@@ -10,11 +10,8 @@ using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
-using Altinn.AccessManagement.UI.Core.Services;
-using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Tests.Utils
@@ -464,6 +461,20 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
         
         public static void AssertEqual(SystemUserRequestFE expected, SystemUserRequestFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.System.SystemId, actual.System.SystemId);
+            Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
+            Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
+
+        public static void AssertEqual(SystemUserChangeRequestFE expected, SystemUserChangeRequestFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
