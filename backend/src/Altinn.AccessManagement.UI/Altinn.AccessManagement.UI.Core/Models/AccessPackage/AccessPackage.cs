@@ -13,6 +13,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
         public string Id { get; set; }
 
         /// <summary>
+        /// Urn for the access package
+        /// </summary>
+        public string Urn { get; set; }
+
+        /// <summary>
         /// Name
         /// </summary>
         public string Name { get; set; }

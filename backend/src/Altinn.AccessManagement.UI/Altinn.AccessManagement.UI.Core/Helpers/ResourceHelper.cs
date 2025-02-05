@@ -65,15 +65,16 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         public async Task<List<AccessPackageFE>> EnrichAccessPackages(IEnumerable<string> accessPackageIds, string languageCode)
         {
             // GET access packages.
-            // TODO: use accessPackageIds instead of search string
-            List<AccessPackage> accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, "Sjøfart");
+            List<AccessPackage> accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+            IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
+
             List<AccessPackageFE> accessPackagesFE = [];
-            foreach (AccessPackage accessPackage in accessPackages)
+            foreach (AccessPackage accessPackage in usedAccessPackages)
             {
                 accessPackagesFE.Add(new AccessPackageFE()
                 {
                     Id = accessPackage.Id,
-                    Urn = "TODO",
+                    Urn = accessPackage.Urn,
                     Description = accessPackage.Description,
                     Name = accessPackage.Name,
                     Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id), languageCode)
@@ -91,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, string languageCode)
         {
             List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-            List<string> accessPackageIds = ResourceUtils.GetResourceIdsFromRights(rights);
+            List<string> accessPackageIds = ResourceUtils.GetAccessPackageIdsFromRights(rights);
             
             return new()
             {
