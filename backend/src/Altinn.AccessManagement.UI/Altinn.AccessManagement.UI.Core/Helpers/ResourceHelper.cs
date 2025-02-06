@@ -50,6 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             } 
             catch
             {
+                // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
             }
 
             OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
