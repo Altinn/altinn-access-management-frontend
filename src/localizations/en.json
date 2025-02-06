@@ -378,7 +378,9 @@
     "loading_systemusers": "Loading system accesses",
     "no_key_role1": "You do not have sufficient rights.",
     "no_key_role2": "To create a system access you need the role Access controller, Main administrator or General manager",
-    "new_system_user": "NEW"
+    "new_system_user": "NEW",
+    "systemuser_tab": "System accesses",
+    "api_tab": "API-accesses"
   },
   "systemuser_creationpage": {
     "banner_title": "Create new system access",

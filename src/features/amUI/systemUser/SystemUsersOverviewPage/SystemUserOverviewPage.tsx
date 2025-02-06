@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Paragraph, Spinner, Tabs } from '@digdir/designsystemet-react';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { ListItem } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -15,6 +14,7 @@ import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './SystemUserOverviewPage.module.css';
+import { SystemUserActionBar } from './SystemUserActionBar';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
@@ -34,71 +34,76 @@ export const SystemUserOverviewPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Heading
-          level={1}
-          data-size='md'
+        <Tabs
+          defaultValue='systemtilganger'
+          className={classes.flexContainer}
         >
-          {t('systemuser_overviewpage.banner_title')}
-        </Heading>
-        <Paragraph
-          data-size='sm'
-          className={classes.systemUserIngress}
-        >
-          {t('systemuser_overviewpage.sub_title_text')}
-        </Paragraph>
-        <CreateSystemUserCheck>
-          <Button
-            variant='secondary'
-            className={classes.createSystemUserButton}
-            asChild
-          >
-            <Link to={'/' + SystemUserPath.Create}>
-              <PlusIcon
-                fontSize={28}
-                aria-hidden
-              />
-              {t('systemuser_overviewpage.new_system_user_button')}
-            </Link>
-          </Button>
-          <Heading
-            level={2}
-            data-size='xs'
-            className={classes.systemUserHeader}
-          >
-            {t('systemuser_overviewpage.existing_system_users_title')}
-          </Heading>
-          {isLoadingSystemUsers && (
-            <Spinner
-              aria-label={t('systemuser_overviewpage.loading_systemusers')}
-              title={''}
-            />
-          )}
-          {isLoadSystemUsersError && (
-            <Alert data-color='danger'>{t('systemuser_overviewpage.systemusers_load_error')}</Alert>
-          )}
-          <ul className={classes.unstyledList}>
-            {systemUsers?.map((systemUser) => (
-              <li
-                key={systemUser.id}
-                className={classes.systemUserListItem}
+          <Tabs.List className={classes.systemUserTabs}>
+            <Tabs.Tab value='systemtilganger'>
+              {t('systemuser_overviewpage.systemuser_tab')}
+            </Tabs.Tab>
+            <Tabs.Tab value='apitilganger'>{t('systemuser_overviewpage.api_tab')}</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel value='systemtilganger'>
+            <div className={classes.flexContainer}>
+              <Heading
+                level={1}
+                data-size='md'
               >
-                <ListItem
-                  size='lg'
-                  title={systemUser.integrationTitle}
-                  description={systemUser.system.systemVendorOrgName}
-                  icon='tenancy'
-                  badge={
-                    newlyCreatedId === systemUser.id
-                      ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
-                      : undefined
-                  }
-                  linkIcon='chevron-right'
-                  onClick={() => navigate(`/systemuser/${systemUser.id}`)}
-                />
-              </li>
-            ))}
-          </ul>
-        </CreateSystemUserCheck>
+                {t('systemuser_overviewpage.banner_title')}
+              </Heading>
+              <Paragraph
+                data-size='sm'
+                className={classes.systemUserIngress}
+              >
+                {t('systemuser_overviewpage.sub_title_text')}
+              </Paragraph>
+              <CreateSystemUserCheck>
+                <Button
+                  variant='secondary'
+                  className={classes.createSystemUserButton}
+                  asChild
+                >
+                  <Link to={'/' + SystemUserPath.Create}>
+                    <PlusIcon
+                      fontSize={28}
+                      aria-hidden
+                    />
+                    {t('systemuser_overviewpage.new_system_user_button')}
+                  </Link>
+                </Button>
+                <Heading
+                  level={2}
+                  data-size='xs'
+                  className={classes.systemUserHeader}
+                >
+                  {t('systemuser_overviewpage.existing_system_users_title')}
+                </Heading>
+                {isLoadingSystemUsers && (
+                  <Spinner
+                    aria-label={t('systemuser_overviewpage.loading_systemusers')}
+                    title={''}
+                  />
+                )}
+                {isLoadSystemUsersError && (
+                  <Alert data-color='danger'>
+                    {t('systemuser_overviewpage.systemusers_load_error')}
+                  </Alert>
+                )}
+                <ul className={classes.unstyledList}>
+                  {systemUsers?.map((systemUser) => (
+                    <SystemUserActionBar
+                      key={systemUser.id}
+                      systemUser={systemUser}
+                      isNew={newlyCreatedId === systemUser.id}
+                      onClick={(systemUserId) => navigate(`/systemuser/${systemUserId}`)}
+                    />
+                  ))}
+                </ul>
+              </CreateSystemUserCheck>
+            </div>
+          </Tabs.Panel>
+        </Tabs>
       </PageLayoutWrapper>
     </PageWrapper>
   );

@@ -20,3 +20,12 @@
 .systemUserListItem {
   padding-bottom: var(--ds-size-2);
 }
+
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.systemUserTabs {
+  align-self: flex-start;
+}

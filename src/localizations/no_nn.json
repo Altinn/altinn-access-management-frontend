@@ -376,7 +376,9 @@
     "loading_systemusers": "Laster systemtilgangar",
     "no_key_role1": "Du manglar nødvendige fullmakter.",
     "no_key_role2": "For å lage ein systemtilgang treng du rolla Tilgangsstyrar, Hovudadministrator eller Dagleg leiar.",
-    "new_system_user": "NY"
+    "new_system_user": "NY",
+    "systemuser_tab": "Systemtilganger",
+    "api_tab": "API-tilganger"
   },
   "systemuser_creationpage": {
     "banner_title": "Opprett ny systemtilgang",
