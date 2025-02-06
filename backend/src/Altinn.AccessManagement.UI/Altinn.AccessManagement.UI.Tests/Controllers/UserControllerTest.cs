@@ -124,11 +124,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string reporteePartyID = "51329012";
 
-            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", $"{reporteePartyID}.json");
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetPartyFromReporteeList", $"{reporteePartyID}.json");
             AuthorizedParty expectedResponse = Util.GetMockData<AuthorizedParty>(path);
 
 
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{reporteePartyID}");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}");
             AuthorizedParty actualResponse = await response.Content.ReadFromJsonAsync<AuthorizedParty>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -146,9 +146,33 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string reporteePartyID = "51320000";
 
-            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{reporteePartyID}");
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        ///  Test case: Get reportee list
+        ///  Expected: Returns a list of reportees
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeList_ReturnsList()
+        {
+            // Arrange
+            string partyId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", $"{partyId}.json");
+            const int userId = 1234;
+            List<Reportee> expectedResponse = Util.GetMockData<List<Reportee>>(path);
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{partyId}");
+            List<Reportee> actualResponse = await response.Content.ReadFromJsonAsync<List<Reportee>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
 
         /// <summary>

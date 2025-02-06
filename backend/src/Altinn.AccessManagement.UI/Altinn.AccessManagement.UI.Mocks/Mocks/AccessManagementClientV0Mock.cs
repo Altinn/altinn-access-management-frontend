@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             try
             {
-                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
+                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", "GetPartyFromReporteeList", partyId + ".json")));
             }
             catch (FileNotFoundException)
             {

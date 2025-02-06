@@ -476,5 +476,19 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
+
+         public static void AssertEqual(Reportee expected, Reportee actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.PartyUuid, actual.PartyUuid);
+            Assert.Equal(expected.PartyType, actual.PartyType);
+            Assert.Equal(expected.Name, actual.Name);
+            AssertCollections(expected.RegistryRoles, actual.RegistryRoles, Assert.Equal);
+            Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
+            Assert.Equal(expected.UnitType, actual.UnitType);
+            AssertCollections(expected.InheritingReportees, actual.InheritingReportees, AssertEqual);
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// <summary>
         /// Key persons inheriting rights from the organization
         /// </summary>
-        public List<RightHolder> InheritingRightHolders { get; set; }
+        public List<Reportee> InheritingReportees { get; set; }
 
         /// <summary>
         /// Default constructor
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
             RegistryRoles = party.AuthorizedRoles.Where(role => Enum.IsDefined(typeof(RegistryRoleType), role.ToUpper()))
                 .Select(role => (RegistryRoleType)Enum.Parse(typeof(RegistryRoleType), role.ToUpper()))
                 .ToList();
-            InheritingRightHolders = party.Subunits.Select(unit => new RightHolder(unit)).ToList();
+            InheritingReportees = party.Subunits.Select(unit => new Reportee(unit)).ToList();
         }
     }
 }
