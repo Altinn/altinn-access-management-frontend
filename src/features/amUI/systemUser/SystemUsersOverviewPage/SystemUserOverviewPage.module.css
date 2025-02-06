@@ -17,10 +17,6 @@
   align-self: flex-end;
 }
 
-.systemUserListItem {
-  padding-bottom: var(--ds-size-2);
-}
-
 .flexContainer {
   display: flex;
   flex-direction: column;

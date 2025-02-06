@@ -366,14 +366,10 @@
   "systemuser_overviewpage": {
     "page_title": "System access - Altinn",
     "banner_title": "System access",
-    "sub_title": "Create a system access",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
     "new_system_user_button": "Create new system access",
-    "new_first_system_user_button": "Create system access",
-    "existing_earlier_system_users_title": "Previously created system accesses:",
     "existing_system_users_title": "Our system accesses",
-    "created_system_user_title": "You have now created this system access:",
     "edit_system_user": "Edit system access",
     "loading_systemusers": "Loading system accesses",
     "no_key_role1": "You do not have sufficient rights.",
@@ -383,6 +379,7 @@
     "api_tab": "API-accesses"
   },
   "systemuser_creationpage": {
+    "page_title": "Create new system access - Altinn",
     "banner_title": "Create new system access",
     "sub_title": "Select vendor system",
     "content_text1": "If you are unsure about which vendor system to choose, we recommend that you contact the provider of the vendor system. Altinn has not made any assessment of the quality and safety of the vendor systems in the list.",
@@ -424,6 +421,7 @@
     "right_accesspackage_plural": "{{accessPackageCount}} access packages"
   },
   "systemuser_request": {
+    "page_title": "Give access to system - Altinn",
     "banner_title": "Give access to system",
     "creation_header": "{{vendorName}} is requesting permission to create a system access",
     "system_description": "Through the system access <strong>{{systemName}}</strong> will be able to solve issues on behalf of <strong>{{partyName}}</strong>.",
@@ -444,14 +442,10 @@
     "reject_loading": "Rejecting system access...",
     "request_accepted": "This request is already approved",
     "request_rejected": "This request is already rejected",
-    "request_expired": "This request has expired",
-    "receipt_header": "The system access is ready",
-    "receipt_ingress": "You can now use {{systemName}}",
-    "receipt_body": "At altinn.no you will find and overview of your system accesses. There you can also edit the name of the system accesses, and withdraw the approval at any time.",
-    "receipt_close": "Close",
-    "receipt_go_to_overview": "Go to overview in Altinn"
+    "request_expired": "This request has expired"
   },
   "systemuser_change_request": {
+    "page_title": "Update system access - Altinn",
     "banner_title": "Change system access",
     "change_request_header": "{{vendorName}} is requesting permission to update system access",
     "rights_list_header": "After the update the system access will have these power of attorney:",

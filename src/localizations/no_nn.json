@@ -364,14 +364,10 @@
   "systemuser_overviewpage": {
     "page_title": "Systemtilgang - Altinn",
     "banner_title": "Systemtilgangar",
-    "sub_title": "Her kan du administrere systemtilgangane dine",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
     "new_system_user_button": "Lag ny systemtilgang",
-    "new_first_system_user_button": "Lag systemtilgang",
-    "existing_earlier_system_users_title": "Tidlegare oppretta systemtilgangar:",
     "existing_system_users_title": "Våre systemtilgangar",
-    "created_system_user_title": "Du har no laga denne systemtilgangen:",
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilgangar",
     "no_key_role1": "Du manglar nødvendige fullmakter.",
@@ -381,6 +377,7 @@
     "api_tab": "API-tilganger"
   },
   "systemuser_creationpage": {
+    "page_title": "Lag ny systemtilgang - Altinn",
     "banner_title": "Opprett ny systemtilgang",
     "sub_title": "Knyt systemtilgang til systemleverandør",
     "content_text1": "Er du usikker på kva fagsystem du skal velje, anbefaler vi at du kontaktar leverandøren av fagsystemet. Altinn har ikkje gjort noka vurdering av kvalitet og tryggleik på fagsystema i lista.",
@@ -423,6 +420,7 @@
     "right_accesspackage_plural": "{{accessPackageCount}} tilgangspakker"
   },
   "systemuser_request": {
+    "page_title": "Gi tilgang til system - Altinn",
     "banner_title": "Gi tilgang til system",
     "creation_header": "{{vendorName}} ber om godkjenning til å lage ein systemtilgang",
     "system_description": "Gjennom systemtilgangen kan <strong>{{systemName}}</strong> løyse oppgåver på vegne av <strong>{{partyName}}</strong>.",
@@ -443,14 +441,10 @@
     "reject_loading": "Avviser systemtilgang...",
     "request_accepted": "Denne førespurnaden er allereie godkjend",
     "request_rejected": "Denne førespurnaden er allereie avvist",
-    "request_expired": "Denne førespurnaden har gått ut",
-    "receipt_header": "Systemtilgangen er klar",
-    "receipt_ingress": " Du kan no ta i bruk {{systemName}}",
-    "receipt_body": "På altinn.no finn du ei oversikt over systemtilgangane dine. Der kan du også endre navn på systemtilgangen, og når som helst trekke tilbake godkjenninga.",
-    "receipt_close": "Lukk",
-    "receipt_go_to_overview": "Sjå oversikt i Altinn"
+    "request_expired": "Denne førespurnaden har gått ut"
   },
   "systemuser_change_request": {
+    "page_title": "Oppdater systemtilgang - Altinn",
     "banner_title": "Oppdatering av systemtilgang",
     "change_request_header": "{{vendorName}} ber om godkjenning til å gjøre endringar i systemtilgang",
     "rights_list_header": "Etter oppdateringen vil systemtilgangen ha disse fullmaktene:",

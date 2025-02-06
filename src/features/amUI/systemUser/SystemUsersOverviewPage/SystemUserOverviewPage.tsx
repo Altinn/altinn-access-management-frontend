@@ -12,18 +12,18 @@ import { SystemUserPath } from '@/routes/paths';
 
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
+import { SystemUserActionBar } from '../components/SystemUserActionBar/SystemUserActionBar';
 
 import classes from './SystemUserOverviewPage.module.css';
-import { SystemUserActionBar } from './SystemUserActionBar';
 
 export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const partyId = getCookie('AltinnPartyId');
-  const routerLocation = useLocation();
-  const newlyCreatedId = routerLocation?.state?.createdId;
-
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
+  const routerLocation = useLocation();
+
+  const partyId = getCookie('AltinnPartyId');
+  const newlyCreatedId = routerLocation?.state?.createdId;
 
   const {
     data: systemUsers,

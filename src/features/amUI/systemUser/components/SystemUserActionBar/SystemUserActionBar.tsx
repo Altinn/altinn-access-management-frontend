@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ListItem } from '@altinn/altinn-components';
 
-import type { SystemUser } from '../types';
+import type { SystemUser } from '../../types';
 
-import classes from './SystemUserOverviewPage.module.css';
+import classes from './SystemUserActionBar.module.css';
 
 interface SystemUserActionBarProps {
   systemUser: SystemUser;

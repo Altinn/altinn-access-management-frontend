@@ -11,6 +11,7 @@ import {
 import { SystemUserPath } from '@/routes/paths';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
@@ -23,6 +24,7 @@ import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreat
 export const SystemUserRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  useDocumentTitle(t('systemuser_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
   const partyId = getCookie('AltinnPartyId');
