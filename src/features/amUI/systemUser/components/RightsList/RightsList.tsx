@@ -130,16 +130,15 @@ const AccessPackageInfo = ({ accessPackage }: AccessPackageInfoProps): React.Rea
     <li className={classes.resourceListItem}>
       <ListItem
         title={accessPackage.name}
+        description={
+          accessPackage.resources.length === 1
+            ? t('systemuser_detailpage.accesspackage_resources_singular')
+            : t('systemuser_detailpage.accesspackage_resources_plural', {
+                resourcesCount: accessPackage.resources.length,
+              })
+        }
         icon='package'
         size='md'
-        badge={{
-          label:
-            accessPackage.resources.length === 1
-              ? t('systemuser_detailpage.accesspackage_badge_singular')
-              : t('systemuser_detailpage.accesspackage_badge_plural', {
-                  resourcesCount: accessPackage.resources.length,
-                }),
-        }}
         onClick={showResourceInfo}
       />
       <Modal

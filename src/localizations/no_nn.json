@@ -417,8 +417,6 @@
     "created_by": "Systemtilgang oppretta {{created}}",
     "accesspackage_resources_singular": "1 teneste:",
     "accesspackage_resources_plural": "{{resourcesCount}} tenestar:",
-    "accesspackage_badge_singular": "1 enkeltteneste",
-    "accesspackage_badge_plural": "{{resourcesCount}} enkelttenestar",
     "right_resource_singular": "1 enkeltteneste",
     "right_resource_plural": "{{resourcesCount}} enkelttenestar",
     "right_accesspackage_singular": "1 tilgangspakke",
