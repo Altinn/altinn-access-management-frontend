@@ -10,5 +10,17 @@
     "systemVendorOrgNumber": "310144827",
     "systemVendorOrgName": "N/A",
     "name": "SmartCloud"
+  },
+  {
+    "systemId": "310144827_invalid_resource",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "N/A",
+    "name": "Invalid resource"
+  },
+  {
+    "systemId": "310144827_bare_tilgangspakke",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "N/A",
+    "name": "Accesspackage without resource"
   }
 ]
