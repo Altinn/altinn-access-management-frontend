@@ -36,25 +36,31 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="languageCode">Language code</param>
         public async Task<List<ServiceResourceFE>> EnrichResources(IEnumerable<string> resourceIds, string languageCode)
         {
-            // GET resources
-            IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
-            
-            List<ServiceResource> resources = [];
-            try 
-            {
-                await Task.WhenAll(resourceTasks.Select(async task =>
-                {
-                    await task;
-                    resources.Add(task.Result);
-                }));
-            } 
-            catch
-            {
-                // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
-            }
+            List<ServiceResourceFE> resourcesFE = [];
 
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
-            List<ServiceResourceFE> resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
+            if (resourceIds.Any())
+            {
+                // GET resources
+                IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
+                
+                List<ServiceResource> resources = [];
+                try 
+                {
+                    await Task.WhenAll(resourceTasks.Select(async task =>
+                    {
+                        await task;
+                        resources.Add(task.Result);
+                    }));
+                } 
+                catch
+                {
+                    // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
+                }
+
+                OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+                resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
+            }
+           
             return resourcesFE;
         }
 
@@ -65,21 +71,25 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="languageCode">Language code</param>
         public async Task<List<AccessPackageFE>> EnrichAccessPackages(IEnumerable<string> accessPackageIds, string languageCode)
         {
-            // GET access packages.
-            List<AccessPackage> accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
-            IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
-
             List<AccessPackageFE> accessPackagesFE = [];
-            foreach (AccessPackage accessPackage in usedAccessPackages)
+            
+            if (accessPackageIds.Any())
             {
-                accessPackagesFE.Add(new AccessPackageFE()
+                // GET access packages.
+                List<AccessPackage> accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
+                
+                foreach (AccessPackage accessPackage in usedAccessPackages)
                 {
-                    Id = accessPackage.Id,
-                    Urn = accessPackage.Urn,
-                    Description = accessPackage.Description,
-                    Name = accessPackage.Name,
-                    Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id), languageCode)
-                });
+                    accessPackagesFE.Add(new AccessPackageFE()
+                    {
+                        Id = accessPackage.Id,
+                        Urn = accessPackage.Urn,
+                        Description = accessPackage.Description,
+                        Name = accessPackage.Name,
+                        Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id), languageCode)
+                    });
+                }
             }
 
             return accessPackagesFE;
