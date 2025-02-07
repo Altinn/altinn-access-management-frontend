@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">Used to identify the party the system user request is for.</param>
         /// <param name="changeRequestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Boolean, result of the rejest system user operation, or a ProblemDetails result with error</returns>
+        /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken);
     }
 }
