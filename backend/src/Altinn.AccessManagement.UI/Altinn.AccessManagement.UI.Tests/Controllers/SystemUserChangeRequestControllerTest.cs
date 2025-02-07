@@ -10,10 +10,10 @@ using Altinn.Authorization.ProblemDetails;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="SystemUserRequestControllerTest"></see>
+    ///     Test class for <see cref="SystemUserChangeRequestControllerTest"></see>
     /// </summary>
-    [Collection("SystemUserRequestControllerTest")]
-    public class SystemUserRequestControllerTest : IClassFixture<CustomWebApplicationFactory<SystemUserRequestController>>
+    [Collection("SystemUserChangeRequestControllerTest")]
+    public class SystemUserChangeRequestControllerTest : IClassFixture<CustomWebApplicationFactory<SystemUserChangeRequestController>>
     {
         private readonly HttpClient _client;
         private readonly string _expectedDataPath = "Data/ExpectedResults";
@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public SystemUserRequestControllerTest(CustomWebApplicationFactory<SystemUserRequestController> factory)
+        public SystemUserChangeRequestControllerTest(CustomWebApplicationFactory<SystemUserChangeRequestController> factory)
         {
             _client = SetupUtils.GetTestClient(factory);
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
@@ -31,21 +31,21 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetSystemUserRequest checks that the system user request is returned
-        ///     Expected: GetSystemUserRequest returns the system user request
+        ///     Test case: GetSystemUserChangeRequest checks that the system user change request is returned
+        ///     Expected: GetSystemUserChangeRequest returns the system user change request
         /// </summary>
         [Fact]
-        public async Task GetSystemUserRequest_ReturnsRequest()
+        public async Task GetSystemUserChangeRequest_ReturnsRequest()
         {
             // Arrange
             int partyId = 51329012;
-            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
-            string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserRequest.json");
-            SystemUserRequestFE expectedResponse = Util.GetMockData<SystemUserRequestFE>(path);
+            string changeRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserChangeRequest.json");
+            SystemUserChangeRequestFE expectedResponse = Util.GetMockData<SystemUserChangeRequestFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}");
-            SystemUserRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserRequestFE>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}");
+            SystemUserChangeRequestFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserChangeRequestFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -53,19 +53,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetSystemUserRequest checks that an error is returned when system user request is not found
-        ///     Expected: GetSystemUserRequest returns the error
+        ///     Test case: GetSystemUserChangeRequest checks that an error is returned when system user change request is not found
+        ///     Expected: GetSystemUserChangeRequest returns the error
         /// </summary>
         [Fact]
-        public async Task GetSystemUserRequest_ReturnsError()
+        public async Task GetSystemUserChangeRequest_ReturnsError()
         {
             // Arrange
             int partyId = 51329012;
-            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
+            string changeRequestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}");
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
@@ -74,19 +74,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: ApproveSystemUserRequest checks that the system user request is approved
-        ///     Expected: ApproveSystemUserRequest returns true
+        ///     Test case: ApproveSystemUserChangeRequest checks that the system user change request is approved
+        ///     Expected: ApproveSystemUserChangeRequest returns true
         /// </summary>
         [Fact]
-        public async Task ApproveSystemUserRequest_ApproveOk()
+        public async Task ApproveSystemUserChangeRequest_ApproveOk()
         {
             // Arrange
             int partyId = 51329012;
-            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
+            string changeRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/approve", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}/approve", null);
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -95,19 +95,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: ApproveSystemUserRequest checks that an error is returned when system user request is not found
-        ///     Expected: ApproveSystemUserRequest returns the error
+        ///     Test case: ApproveSystemUserChangeRequest checks that an error is returned when system user change request is not found
+        ///     Expected: ApproveSystemUserChangeRequest returns the error
         /// </summary>
         [Fact]
-        public async Task ApproveSystemUserRequest_ReturnsError()
+        public async Task ApproveSystemUserChangeRequest_ReturnsError()
         {
             // Arrange
             int partyId = 51329012;
-            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
+            string changeRequestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/approve", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}/approve", null);
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
@@ -116,19 +116,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: RejectSystemUserRequest checks that the system user request is rejected
-        ///     Expected: RejectSystemUserRequest returns true
+        ///     Test case: RejectSystemUserChangeRequest checks that the system user change request is rejected
+        ///     Expected: RejectSystemUserChangeRequest returns true
         /// </summary>
         [Fact]
-        public async Task RejectSystemUserRequest_ApproveOk()
+        public async Task RejectSystemUserChangeRequest_RejectOk()
         {
             // Arrange
             int partyId = 51329012;
-            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
+            string changeRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/reject", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}/reject", null);
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -137,19 +137,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: RejectSystemUserRequest checks that an error is returned when system user request is not found
-        ///     Expected: RejectSystemUserRequest returns the error
+        ///     Test case: RejectSystemUserChangeRequest checks that an error is returned when system user change request is not found
+        ///     Expected: RejectSystemUserChangeRequest returns the error
         /// </summary>
         [Fact]
-        public async Task RejectSystemUserRequest_ReturnsError()
+        public async Task RejectSystemUserChangeRequest_ReturnsError()
         {
             // Arrange
             int partyId = 51329012;
-            string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
+            string changeRequestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/request/{partyId}/{requestId}/reject", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/changerequest/{partyId}/{changeRequestId}/reject", null);
             AltinnProblemDetails actualResponse = await httpResponse.Content.ReadFromJsonAsync<AltinnProblemDetails>();
 
             // Assert
@@ -158,18 +158,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: RejectSystemUserRequest checks that an error is returned when system user request is not found
-        ///     Expected: RejectSystemUserRequest returns the error
+        ///     Test case: Logout checks that redirect to logout url is called
+        ///     Expected: Logout asserts that the location is to the logout url
         /// </summary>
         [Fact]
         public async Task Logout_RedirectsToLogoutUrl()
         {
             // Arrange
-            string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
+            string changeRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             string expectedResponseUrl = "http://localhost:5101/authentication/api/v1/logout";
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/request/{requestId}/logout");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/changerequest/{changeRequestId}/logout");
 
             // Assert
             Assert.Equal(HttpStatusCode.Redirect, httpResponse.StatusCode);

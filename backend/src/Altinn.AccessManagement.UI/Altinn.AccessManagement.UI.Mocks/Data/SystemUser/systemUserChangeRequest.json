@@ -4,7 +4,7 @@
   "systemId": "910493353_fiken_demo_product",
   "partyOrgNo": "51329012",
   "redirectUrl": "https://smartcloudaltinn.azurewebsites.net/receipt",
-  "rights": [
+  "requiredRights": [
     {
       "resource": [
         {
