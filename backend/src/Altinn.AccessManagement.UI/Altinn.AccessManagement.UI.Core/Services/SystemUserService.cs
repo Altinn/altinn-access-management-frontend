@@ -58,6 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
+            lista.Reverse();
 
             return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
         }
