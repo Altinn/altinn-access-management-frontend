@@ -5,30 +5,33 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeListForPartyQuery } from '@/rtk/features/userInfoApi';
+import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
-// import classes from './UsersList.module.css';
+import { ReporteeList } from './RepporteeList';
+import classes from './ReporteePage.module.css';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('reportees_page.page_title'));
   const { data: reporteeList } = useGetReporteeListForPartyQuery();
-
+  const { data: party } = useGetReporteePartyQuery();
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Heading
-          level={1}
-          size='md'
-        >
-          {t('reportees_page.main_page_heading')}
-        </Heading>
-        {reporteeList?.map((reportee) => (
-          <div key={reportee.partyUuid}>
-            {reportee.name} - {reportee.organizationNumber} - {reportee.type}
-          </div>
-        ))}
+        <div className={classes.reporteeListHeading}>
+          <Heading
+            level={1}
+            size='md'
+          >
+            {t('reportees_page.main_page_heading', { name: party?.name || '' })}
+          </Heading>
+        </div>
+        <ReporteeList
+          reporteeList={reporteeList || []}
+          size='lg'
+        />
       </PageLayoutWrapper>
     </PageWrapper>
   );

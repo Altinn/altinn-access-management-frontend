@@ -70,7 +70,9 @@
     "error_status": "Status: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
-    "subunit": "Subunit"
+    "subunit": "Subunit",
+    "unauthorized_for_party_title": "Missing delegation access",
+    "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators."
   },
   "header": {
     "menu-label": "Menu",
@@ -183,8 +185,8 @@
     "new_error_title": "New error",
     "generic_error_try_again_title": "Whoops, we stumbled on a technical error",
     "generic_error_try_again": "Try adding the service again by clicking on the plus sign again. Contact Altinn support if the problem persists.",
-    "unauthorized_for_party_title": "Manglar delegasjonstilgang",
-    "unauthorized_for_party": "Du kan ikkje delegere tenester for valde aktør. Om du meinte å delegere på vegner av nokon andre, vennlegst gå til profilen og vel denne aktøren frå avgjevarlista.",
+    "unauthorized_for_party_title": "Missing delegation access",
+    "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators.",
     "give_more_rights": "Give more rights",
     "has_received_these_rights": "{{name}} has received these rights:",
     "rights_are_valid_until_deletion": "The rights are valid until they're deleted or withdrawn",
@@ -255,7 +257,7 @@
   },
   "reportees_page": {
     "page_title": "Our access to other companies - Altinn",
-    "main_page_heading": "Our access to other companies"
+    "main_page_heading": "Authorizations {{name}} has with others"
   },
   "user_rights_page": {
     "page_title": "User access - Altinn",

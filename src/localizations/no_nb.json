@@ -256,7 +256,7 @@
   },
   "reportees_page": {
     "page_title": "Våre tilganger hos andre - Altinn",
-    "main_page_heading": "Våre fullmakter hos andre"
+    "main_page_heading": "Fullmakter {{name}} har hos andre"
   },
   "user_rights_page": {
     "page_title": "Brukertilganger - Altinn",
