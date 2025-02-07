@@ -391,6 +391,7 @@
   },
   "systemuser_includedrightspage": {
     "header": "The system access {{integrationTitle}} will be granted these power of attorney for {{companyName}}",
+    "header_single": "The system access {{integrationTitle}} will be granted this power of attorney for {{companyName}}",
     "confirm_button": "Create system access",
     "create_systemuser_error": "Could not create system access",
     "loading_rights": "Loading pre-selected services for vendor system",
@@ -399,6 +400,7 @@
   },
   "systemuser_detailpage": {
     "header": "The system access {{integrationTitle}} has these power of attorney for {{companyName}}",
+    "header_single": "The system access {{integrationTitle}} has this power of attorney for {{companyName}}",
     "edit_systemuser": "Edit system access",
     "load_systemuser_error": "Could not load system access",
     "loading_systemuser": "loading system access",

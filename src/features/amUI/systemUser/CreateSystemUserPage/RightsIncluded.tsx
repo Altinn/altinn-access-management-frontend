@@ -54,6 +54,8 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
     }
   };
 
+  const numberOfRights = (rights?.resources?.length || 0) + (rights?.accessPackages?.length || 0);
+
   if (isLoadingRights) {
     return (
       <Spinner
@@ -68,7 +70,11 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
       <div className={classes.creationPageContainer}>
         <div className={classes.creationPageHeader}>
           <SystemUserHeader
-            title='systemuser_includedrightspage.header'
+            title={
+              numberOfRights === 1
+                ? 'systemuser_includedrightspage.header_single'
+                : 'systemuser_includedrightspage.header'
+            }
             integrationTitle={selectedSystem.name}
           />
         </div>

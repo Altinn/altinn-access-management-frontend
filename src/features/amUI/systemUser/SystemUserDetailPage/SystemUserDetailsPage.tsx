@@ -60,6 +60,9 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
     navigate(`/${SystemUserPath.Overview}`);
   };
 
+  const numberOfRights =
+    (systemUser?.resources?.length || 0) + (systemUser?.accessPackages?.length || 0);
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
@@ -76,7 +79,11 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
           {systemUser && (
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
-                title='systemuser_detailpage.header'
+                title={
+                  numberOfRights === 1
+                    ? 'systemuser_detailpage.header_single'
+                    : 'systemuser_detailpage.header'
+                }
                 integrationTitle={systemUser.integrationTitle}
               />
               <Popover.Context>
