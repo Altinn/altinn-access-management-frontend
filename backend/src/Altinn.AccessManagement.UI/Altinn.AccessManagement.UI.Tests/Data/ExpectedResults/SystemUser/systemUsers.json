@@ -1,5 +1,18 @@
 [
   {
+    "id": "9c9e995b-3d6c-40e0-99fb-bdb353d44ac6",
+    "integrationTitle": "Fiken",
+    "partyId": "51329012",
+    "created": "2022-11-11T12:00:00Z",
+    "system": {
+      "systemId": "910493353_fiken_demo_product",
+      "systemVendorOrgNumber": "910493353",
+      "systemVendorOrgName": "N/A",
+      "name": "N/A"
+    },
+    "resources": []
+  },
+  {
     "id": "123e4567-e89b-12d3-a456-426614174000",
     "integrationTitle": "SmartCloud",
     "partyId": "51329012",

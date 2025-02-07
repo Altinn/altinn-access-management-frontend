@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
@@ -38,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: GetSystemUsers returns the system users for given party
         /// </summary>
         [Fact]
-        public async Task GetSystemUsers_ReturnsAllSystemUsers()
+        public async Task GetSystemUsers_ReturnsAllSystemUsersNewestFirst()
         {
             // Arrange
             int partyId = 51329012;
