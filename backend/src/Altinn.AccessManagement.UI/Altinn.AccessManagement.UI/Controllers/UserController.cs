@@ -1,11 +1,10 @@
-﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+﻿using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
-using Altinn.Platform.Profile.Models;
-using Altinn.Platform.Register.Models;
+using Altinn.AccessManagement.UI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -113,6 +112,57 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetReportee failed to fetch right holders");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for validating a new rightholder through an ssn and last name combination.
+        /// If the ssn and last name does not match, the endpoint will return 404.
+        /// If the endpont is called with unmatching input too many times, the user calling the endpoint will be blocked for an hour and the request will return 429.
+        /// If the combination is valid, the endpoint will return the partyUuid of the person.
+        /// </summary>
+        /// <param name="validationInput">The ssn and last name of the person to be looked up</param>
+        /// <returns>The partyUuid of the person</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("reportee/{partyId}/rightholder/validateperson")]
+        public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                Guid? partyUuid = await _userService.ValidatePerson(validationInput.Ssn, validationInput.LastName);
+
+                if (partyUuid != null)
+                {
+                    return partyUuid;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    return StatusCode(429);
+                }
+                else
+                {
+                    return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ValidatePerson failed unexpectedly");
                 return StatusCode(500);
             }
         }

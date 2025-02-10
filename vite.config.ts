@@ -12,6 +12,16 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
   },
+  server: {
+    cors: {
+      origin: [
+        'https://am.ui.at22.altinn.cloud',
+        'https://am.ui.altinn.no',
+        'https://am.ui.tt02.altinn.no',
+      ],
+      credentials: true,
+    },
+  },
   plugins: [svgr(), react()],
   build: {
     target: 'es2020',

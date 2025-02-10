@@ -14,14 +14,17 @@ import {
   useGetRightHolderAccessesQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+import { filterDigdirRole } from '@/resources/utils/roleUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
+import { UserRoles } from '../common/UserRoles/UserRoles';
 
 import classes from './UserRightsPage.module.css';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
+import { RoleSection } from './RoleSection/RoleSection';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -45,28 +48,35 @@ export const UserRightsPage = () => {
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
             {!isLoading && allAccesses ? (
               <>
-                <div className={classes.headingRow}>
+                <div className={classes.headingContainer}>
                   <Avatar
+                    className={classes.avatar}
                     name={name || ''}
                     size={'lg'}
                     type={party?.partyTypeName === PartyType.Organization ? 'company' : 'person'}
                   />
-                  <div>
-                    <Heading
-                      level={1}
-                      size='sm'
-                      className={classes.heading}
-                    >
-                      {party?.name}
-                    </Heading>
-                    <Paragraph
-                      className={classes.subheading}
-                      size='xs'
-                    >
-                      for {reportee?.name}
-                    </Paragraph>
-                  </div>
+                  <Heading
+                    level={1}
+                    size='sm'
+                    className={classes.heading}
+                  >
+                    {party?.name}
+                  </Heading>
+                  <Paragraph
+                    className={classes.subheading}
+                    size='xs'
+                  >
+                    for {reportee?.name}
+                  </Paragraph>
+                  {!!reportee?.partyUuid && !!party?.partyUuid && (
+                    <UserRoles
+                      className={classes.userRoles}
+                      rightOwnerUuid={reportee.partyUuid}
+                      rightHolderUuid={party.partyUuid}
+                    />
+                  )}
                 </div>
+
                 <Tabs
                   defaultValue='packages'
                   size='sm'
@@ -79,26 +89,38 @@ export const UserRightsPage = () => {
                       <Badge
                         size='sm'
                         color={chosenTab === 'packages' ? 'accent' : 'neutral'}
-                        count={allAccesses.accessPackages.length}
+                        count={allAccesses.accessPackages?.length ?? 0}
                         maxCount={99}
-                      ></Badge>
+                      />
                       {t('user_rights_page.access_packages_title')}
                     </Tabs.Tab>
                     <Tabs.Tab value='singleRights'>
                       <Badge
                         size='sm'
                         color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-                        count={allAccesses.services.length}
+                        count={allAccesses.services?.length ?? 0}
                         maxCount={99}
-                      ></Badge>
+                      />
                       {t('user_rights_page.single_rights_title')}
+                    </Tabs.Tab>
+                    <Tabs.Tab value='roleAssignments'>
+                      <Badge
+                        size='sm'
+                        color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
+                        count={filterDigdirRole(allAccesses.roles).length ?? 0}
+                        maxCount={99}
+                      />
+                      {t('user_rights_page.roles_title')}
                     </Tabs.Tab>
                   </Tabs.List>
                   <Tabs.Panel value='packages'>
-                    <AccessPackageSection numberOfAccesses={allAccesses.accessPackages.length} />
+                    <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
                   </Tabs.Panel>
                   <Tabs.Panel value='singleRights'>
                     <SingleRightsSection />
+                  </Tabs.Panel>
+                  <Tabs.Panel value='roleAssignments'>
+                    <RoleSection />
                   </Tabs.Panel>
                 </Tabs>
               </>

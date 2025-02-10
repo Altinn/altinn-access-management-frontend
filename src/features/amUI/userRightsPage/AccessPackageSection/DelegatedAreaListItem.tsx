@@ -1,4 +1,4 @@
-import { AccessAreaListItem } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 import { Paragraph } from '@digdir/designsystemet-react';
 
 import type { AccessArea } from '@/rtk/features/accessPackageApi';
@@ -8,6 +8,8 @@ import classes from './AccessPackageSection.module.css';
 interface AccessAreaListItemProps {
   /** The area to be presented */
   accessPackageArea: AccessArea;
+  /** The badge label to be displayed */
+  badgeLabel: string;
   /** External control of the Areas expanded state */
   expanded: boolean;
   /** Toggle the external expanded state */
@@ -18,6 +20,7 @@ interface AccessAreaListItemProps {
 
 export const DelegatedAreaListItem: React.FC<AccessAreaListItemProps> = ({
   accessPackageArea,
+  badgeLabel,
   expanded,
   toggleExpanded,
   children,
@@ -26,19 +29,29 @@ export const DelegatedAreaListItem: React.FC<AccessAreaListItemProps> = ({
   return (
     <>
       <li key={id}>
-        <AccessAreaListItem
+        <ListItem
           id={id}
           size='lg'
-          name={name}
-          icon={iconUrl}
+          title={name}
+          badge={{ label: badgeLabel, color: 'company' }}
+          avatar={{
+            name: name,
+            imageUrl: iconUrl,
+            imageUrlAlt: name,
+            type: 'company',
+            className: classes.areaIcon,
+          }}
           onClick={toggleExpanded}
           expanded={expanded}
+          collapsible
         >
-          <div className={classes.accessAreaContent}>
-            <Paragraph size='sm'>{description}</Paragraph>
-            {children}
-          </div>
-        </AccessAreaListItem>
+          {expanded && (
+            <div className={classes.accessAreaContent}>
+              <Paragraph size='sm'>{description}</Paragraph>
+              {children}
+            </div>
+          )}
+        </ListItem>
       </li>
     </>
   );

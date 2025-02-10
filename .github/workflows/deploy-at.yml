@@ -19,22 +19,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT21, AT22, AT23, AT24]
+        environment: [AT22, AT23, AT24]
     uses: './.github/workflows/template-deploy-container.yml'
     secrets: inherit
     with:
       environment: ${{ matrix.environment }}
       tag: ${{ github.sha }}
 
-  playwright-main:
-    name: 'Playwright'
+  playwright-e2e-tests:
+    name: "Playwright E2E-tests"
     secrets: inherit
-    uses: './.github/workflows/template-playwright.yml'
+    uses: "./.github/workflows/template-playwright.yml"
     needs: deploy-main
     strategy:
       fail-fast: false
       matrix:
-        environment: [AT22, AT23, AT24]
+        environment: [AT24]
+        project: [e2e-tests]
 
     with:
       environment: ${{ matrix.environment }}
+      project: ${{ matrix.project }}
+
+  playwright-accessibility-tests:
+    name: "Playwright Accessibility-tests"
+    secrets: inherit
+    uses: "./.github/workflows/template-playwright.yml"
+    needs: deploy-main
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [AT22]
+        project: [accessibility-tests]
+    with:
+      environment: ${{ matrix.environment }}
+      project: ${{ matrix.project }}
+      

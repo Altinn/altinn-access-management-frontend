@@ -2,17 +2,24 @@
   display: flex;
   flex-direction: column;
   padding: 4px 2px;
-  height: 230px;
+  max-height: 282px;
   justify-content: space-between;
   overflow-y: auto;
   overflow-x: visible;
   gap: 10px;
 }
 
+.services {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   padding: 0.5rem;
 }
 
@@ -21,7 +28,11 @@
   justify-content: flex-start;
   gap: 15px;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+
+.headerIcon {
+  font-size: 2.2rem !important;
 }
 
 .actions {
@@ -30,4 +41,13 @@
   align-items: center;
   padding-top: 10px;
   margin-bottom: 5px;
+}
+
+.inherited {
+  display: flex;
+}
+
+.inheritedInfoIcon {
+  color: var(--ds-color-info-base-default);
+  margin-right: 0.3rem;
 }

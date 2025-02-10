@@ -28,12 +28,12 @@ export const DeleteResourceButton = ({
 
   const snackbar = (isSuccessful: boolean) => {
     const snackbarData = {
-      message: t(
-        isSuccessful
-          ? 'single_rights.delete_singleRight_success_message'
-          : 'single_rights.delete_singleRight_error_message',
-        { servicename: resource.title },
-      ),
+      message:
+        t(
+          isSuccessful
+            ? 'single_rights.delete_singleRight_success_message'
+            : 'single_rights.delete_singleRight_error_message',
+        ) + resource.title,
       variant: SnackbarMessageVariant.Default,
       duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
@@ -46,17 +46,16 @@ export const DeleteResourceButton = ({
         message={t('user_rights_page.delete_confirm_message')}
         triggerButtonProps={{
           disabled: false,
-          variant: 'secondary',
-          color: 'danger',
-          size: 'sm',
+          variant: 'outline',
+          color: 'accent',
+          size: fullText ? 'md' : 'sm',
         }}
-        triggerButtonContent={<>{fullText ? t('common.delete_poa') : t('common.delete')}</>}
+        triggerButtonContent={fullText ? t('common.delete_poa') : t('common.delete')}
         confirmButtonProps={{
-          variant: 'primary',
           color: 'danger',
         }}
         confirmButtonContent={t('common.delete')}
-        cancelButtonProps={{ variant: 'tertiary' }}
+        cancelButtonProps={{ variant: 'text' }}
         cancelButtonContent={t('common.cancel')}
         onConfirm={() =>
           revoke(

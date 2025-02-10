@@ -26,7 +26,7 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
       <li className={classes.singleRightItem}>
         <ResourceListItem
           resourceName={resource.title}
-          ownerName={resource.resourceOwnerName}
+          ownerName={resource.resourceOwnerName ?? ''}
           ownerLogoUrl={resource.resourceOwnerLogoUrl}
           id={resource.identifier}
           size='lg'

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { Avatar, List } from '@altinn/altinn-components';
-import { useTranslation } from 'react-i18next';
+import { List, Button, Icon } from '@altinn/altinn-components';
+import { Trans, useTranslation } from 'react-i18next';
+import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
@@ -73,11 +74,10 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Avatar
-          imageUrl={accessPackage?.area?.iconUrl ?? undefined}
-          name={accessPackage?.name}
-          type='company'
-          size='lg'
+        <Icon
+          size='xl'
+          name='package'
+          className={classes.headerIcon}
         />
         <Heading
           size='md'
@@ -87,22 +87,37 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
         </Heading>
       </div>
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
-
-      <Heading
-        size='sm'
-        level={2}
-      >
-        {t('delegation_modal.package_services', {
-          count: accessPackage.resources.length,
-          name: accessPackage?.name,
-        })}
-      </Heading>
-      <div className={classes.service_list}>
-        <List
+      {accessPackage?.inherited && (
+        <div className={classes.inherited}>
+          <InformationSquareFillIcon
+            fontSize='1.5rem'
+            className={classes.inheritedInfoIcon}
+          />
+          <Paragraph size='xs'>
+            <Trans
+              i18nKey='delegation_modal.inherited_role_org_message'
+              values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
+              components={{ b: <strong /> }}
+            />
+          </Paragraph>
+        </div>
+      )}
+      <div className={classes.services}>
+        <Heading
           size='xs'
-          items={listItems}
-          spacing='none'
-        />
+          level={2}
+        >
+          {t('delegation_modal.package_services', {
+            count: accessPackage.resources.length,
+            name: accessPackage?.name,
+          })}
+        </Heading>
+        <div className={classes.service_list}>
+          <List
+            items={listItems}
+            spacing='xs'
+          />
+        </div>
       </div>
       <div className={classes.actions}>
         {userHasPackage ? (
@@ -110,6 +125,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
             accessPackage={accessPackage}
             toParty={toParty}
             fullText
+            disabled={isFetching || accessPackage.inherited}
           />
         ) : (
           <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
@@ -125,6 +141,7 @@ const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
   title: resource.name,
   avatar: { type: 'company', name: resource.name },
   as: 'div' as React.ElementType,
+  size: 'xs',
 });
 
 const useMinimizableResourceList = (list: IdNamePair[]) => {
@@ -133,15 +150,18 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
   if (list.length <= MINIMIZED_LIST_SIZE) {
     return { listItems: list.map(mapResourceToListItem) };
   }
-  const toggleListItem: ListItemProps = {
-    title: t(showAll ? 'common.show_less' : 'common.show_more'),
+  const showMoreListItem: ListItemProps = {
+    title: t('common.show_more'),
     description: '',
     onClick: () => setShowAll(!showAll),
     icon: 'menu-elipsis-horizontal',
     as: 'button' as React.ElementType,
+    size: 'xs',
   };
-  const minimizedList = list.slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE);
+  const minimizedList = list
+    .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
+    .map(mapResourceToListItem);
   return {
-    listItems: [...minimizedList.map(mapResourceToListItem), toggleListItem],
+    listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem],
   };
 };

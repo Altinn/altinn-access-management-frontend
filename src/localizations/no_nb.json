@@ -63,7 +63,15 @@
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt.",
     "show_more": "Se mer",
-    "show_less": "Se mindre"
+    "show_less": "Se mindre",
+    "technical_error": "Beklager, det har skjedd en teknisk feil. Vennligst ta kontakt med Altinn brukerservice hvis problemet fortsetter.",
+    "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
+    "error_status": "Status: {{status}}",
+    "ssn": "Fødselsnummer",
+    "last_name": "Etternavn",
+    "org_number": "Organisasjonsnummer",
+    "org_name": "Organisasjonsnavn",
+    "subunit": "Underenhet"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
@@ -212,8 +220,8 @@
     "popular_services": "Populære tjenester:",
     "give_new_single_right": "Gi fullmakt til ny tjeneste",
     "current_services_title": "Fullmakt til {{count}} tjenester",
-    "delete_singleRight_success_message": "Tilgang til tjenesten: {{servicename}} er slettet",
-    "delete_singleRight_error_message": "Kunne ikke slette tilgang til tjenesten {{servicename}}"
+    "delete_singleRight_success_message": "Slettet tilgang til ",
+    "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakke(r)",
@@ -222,7 +230,18 @@
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
-    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}."
+    "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
+  },
+  "role": {
+    "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
+    "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
+    "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
+    "role_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{role}} fra {{name}}.",
+    "inherited_role_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle <b>{{role_name}}</b>. Den kan derfor ikke slettes.",
+    "activeRolesLabel": "Liste over roller som er tildelt brukeren",
+    "availableRolesLabel" : "Liste over roller som kan tildeles brukeren",
+    "cant_delegate_generic": "Du kan ikke delegere denne rollen"
   },
   "users_page": {
     "page_title": "Brukere og grupper - Altinn",
@@ -235,6 +254,8 @@
     "page_title": "Brukertilganger - Altinn",
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
+    "roles_title": "Administratortilganger",
+    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukere. Det er ikke knyttet noen spesifikke tjenester til disse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -247,7 +268,8 @@
     "success_message": "Fullmakt gitt til {{name}}",
     "error_message": "Kunne ikke gi fullmakt til {{name}}",
     "edit_success": "Fullmakt oppdatert",
-    "package_services": "{{name}} gir tilgang til {{count}} tjenester",
+    "package_services": "Gir tilgang til {{count}} tjenester",
+    "inherited_role_org_message":  "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
@@ -269,6 +291,16 @@
       "access_list_service": "Hvem som får benytte denne tjenesten bestemmes av {{resourceOwner}}, og {{reportee}} er ikke gitt den muligheten. Vi anbefaler dere å ta kontakt med {{resourceOwner}}.",
       "missing_rights": "Du får ikke gitt denne fullmakten til andre fordi du mangler den selv. Daglig leder eller hovedadministrator kan hjelpe deg med dette."
     }
+  },
+  "new_user_modal": {
+    "not_found_error_person": "Fant ingen bruker med dette fødselsnummeret og navnet. Vennligst sjekk at informasjonen er korrekt.",
+    "not_found_error_org": "Fant ingen organisasjon med dette organisasjonsnummeret. Vennligst sjekk at informasjonen er korrekt.",
+    "too_many_requests_error": "Du er blitt sperret pga for mange feilende forsøk. Du kan prøve igjen om en time.",
+    "person": "Person",
+    "organization": "Virksomhet",
+    "modal_title": "Legg til ny person eller virksomhet",
+    "trigger_button": "Legg til bruker",
+    "add_button": "Legg til bruker"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

@@ -2,6 +2,7 @@ using Altinn.AccessManagement.Configuration;
 using Altinn.AccessManagement.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Services;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Extensions;
@@ -206,8 +207,14 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<ISingleRightService, SingleRightService>();
     services.AddSingleton<IAccessPackageService, AccessPackageService>();
+    services.AddSingleton<ISystemRegisterService, SystemRegisterService>();
+    services.AddSingleton<ISystemUserService, SystemUserService>();
+    services.AddSingleton<ISystemUserRequestService, SystemUserRequestService>();
+    services.AddSingleton<ISystemUserChangeRequestService, SystemUserChangeRequestService>();
 
+    services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
+    services.AddTransient<ResourceHelper, ResourceHelper>();
 
     PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
@@ -339,5 +346,27 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     else
     {
         services.AddSingleton<IKeyVaultService, KeyVaultService>();
+    }
+
+    if (mockSettings.SystemRegister)
+    {
+        services.AddSingleton<ISystemRegisterClient, SystemRegisterClientMock>();
+    }
+    else
+    {
+        services.AddSingleton<ISystemRegisterClient, SystemRegisterClient>();
+    }
+
+    if (mockSettings.SystemUser)
+    {
+        services.AddSingleton<ISystemUserClient, SystemUserClientMock>();
+        services.AddSingleton<ISystemUserRequestClient, SystemUserRequestClientMock>();
+        services.AddSingleton<ISystemUserChangeRequestClient, SystemUserChangeRequestClientMock>();
+    }
+    else
+    {
+        services.AddSingleton<ISystemUserClient, SystemUserClient>();
+        services.AddSingleton<ISystemUserRequestClient, SystemUserRequestClient>();
+        services.AddSingleton<ISystemUserChangeRequestClient, SystemUserChangeRequestClient>();
     }
 }

@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 env:
-  dotnet_version: 8.0.x
+  dotnet_version: 9.0.x
 
 jobs:
   build:
@@ -42,8 +42,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
+          dotnet-version: ${{ env.dotnet_version }}
       - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
@@ -77,7 +76,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Altinn_altinn-access-management-frontend" /o:"altinn" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.cpd.exclusions="**/Swagger/*Filter.cs"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Altinn_altinn-access-management-frontend" /o:"altinn" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="src/**/*,**/*mock*/**,**/*Mock*/**, **/Altinn.AccessManagement.UI.Integration/**"
 
           dotnet build backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln
           dotnet test backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln `

@@ -6,11 +6,12 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Delegation.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Role;
+using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.User;
-using Altinn.AccessManagement.UI.Core.Services;
-using Altinn.Platform.Register.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Tests.Utils
@@ -344,7 +345,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(AccessPackage expected, AccessPackage actual)
+        public static void AssertEqual(RoleAreaFE expected, RoleAreaFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -352,7 +353,9 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.Description, actual.Description);
-            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            Assert.Equal(expected.IconUrl, actual.IconUrl);
+            AssertCollections(expected.Roles, actual.Roles, AssertEqual);
+
         }
 
         public static void AssertEqual(RightHolderAccesses expected, RightHolderAccesses actual)
@@ -397,6 +400,92 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.DelegatedTo, actual.DelegatedTo);
             Assert.Equal(expected.LastChangedOn, actual.LastChangedOn);
 
+        }
+
+        public static void AssertEqual(RegisteredSystemFE expected, RegisteredSystemFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.SystemId, actual.SystemId);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.SystemVendorOrgNumber, actual.SystemVendorOrgNumber);
+            Assert.Equal(expected.SystemVendorOrgName, actual.SystemVendorOrgName);
+        }
+
+        public static void AssertEqual(SystemUserFE expected, SystemUserFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.IntegrationTitle, actual.IntegrationTitle);
+            Assert.Equal(expected.System.SystemId, actual.System.SystemId);
+            Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
+            Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
+        
+
+        public static void AssertEqual(AccessPackage expected, AccessPackage actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
+
+
+        public static void AssertEqual(RoleAssignment expected, RoleAssignment actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.RoleId, actual.RoleId);
+            Assert.Equal(expected.ToId, actual.ToId);
+            AssertEqual(expected.Role, actual.Role);
+        }
+
+        static void AssertEqual(Role expected, Role actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+            
+            Assert.Equal(expected.Code, actual.Code);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Description, actual.Description);
+        }
+        
+        public static void AssertEqual(SystemUserRequestFE expected, SystemUserRequestFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.System.SystemId, actual.System.SystemId);
+            Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
+            Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+        }
+
+        public static void AssertEqual(SystemUserChangeRequestFE expected, SystemUserChangeRequestFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.RedirectUrl, actual.RedirectUrl);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.System.SystemId, actual.System.SystemId);
+            Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
+            Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+            AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
     }
 }

@@ -23,7 +23,7 @@ export const AccessPackageInfoModal = ({
 
     modalRef.current?.addEventListener('close', handleClose);
     return () => modalRef.current?.removeEventListener('close', handleClose);
-  }, [onClose]);
+  }, [onClose, modalRef]);
 
   return (
     <EditModal

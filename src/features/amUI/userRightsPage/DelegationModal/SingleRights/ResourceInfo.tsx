@@ -79,7 +79,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     isDelegationCheckError && delegationCheckError && 'status' in delegationCheckError
       ? {
           status: delegationCheckError.status.toString(),
-          time: delegationCheckError.data as number,
+          time: delegationCheckError.data as string,
         }
       : null;
 
@@ -297,7 +297,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               size='lg'
               type='company'
               imageUrl={resource.resourceOwnerLogoUrl}
-              name={resource.resourceOwnerName}
+              name={resource.resourceOwnerName ?? ''}
             />
             <div className={classes.resource}>
               <Heading

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "integrationTitle": "SmartCloud",
+    "systemId": "310144827_smartcloud",
+    "systemInternalId": "123e4567-e89b-12d3-a456-426614174001",
+    "partyId": "51329012",
+    "reporteeOrgNo": "123456789",
+    "created": "2023-10-10T12:00:00Z",
+    "supplierOrgNo": "310144827",
+    "externalRef": ""
+  }
+]

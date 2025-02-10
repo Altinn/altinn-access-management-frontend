@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 export interface ResourceAlertProps {
   /*** The resource */
   resource: ServiceResource;
   /*** The technical error if one has occured */
-  error?: { status: string; time: number } | null;
+  error?: { status: string; time: string } | null;
   /*** The reasons why each right is not delegable */
   rightReasons?: string[];
 }
@@ -33,23 +34,10 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
   } else if (error) {
     headingText = t('delegation_modal.service_error.technical_error_heading');
     content = (
-      <>
-        <Paragraph variant='long'>{t('delegation_modal.service_error.technical_error')}</Paragraph>
-        <Paragraph>
-          {t('delegation_modal.service_error.time_of_error', {
-            time: new Date(error.time).toLocaleDateString('nb-NO', {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-            }),
-          })}
-        </Paragraph>
-        <Paragraph>
-          {t('delegation_modal.service_error.error_status', {
-            status: error.status,
-          })}
-        </Paragraph>
-      </>
+      <TechnicalErrorParagraphs
+        status={error.status}
+        time={error.time}
+      />
     );
   } else if (rightReasons) {
     if (
