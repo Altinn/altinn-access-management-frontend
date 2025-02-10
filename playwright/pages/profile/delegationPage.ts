@@ -81,11 +81,10 @@ export class delegateRightsToUser {
         resolve(null);
       }, 500),
     );
-    await this.page.getByRole('button', { name: resourceName }).first().click();
-    await this.page.getByLabel('Du kan ikke gi fullmakt til denne tjenesten').isVisible();
-    if (await this.page.getByLabel('Du kan ikke gi fullmakt til denne tjenesten').isVisible()) {
-      console.log(`Negativ test vellykket`);
-    }
+
+    await this.page.getByRole('button', { name: 'Legg til' }).first().click();
+    var fullmaktsheader = this.page.getByRole('heading', { name: 'Du kan ikke gi fullmakt til' });
+    await expect(fullmaktsheader).toBeVisible();
   }
 }
 
