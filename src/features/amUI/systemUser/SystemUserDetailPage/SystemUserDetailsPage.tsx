@@ -12,27 +12,17 @@ import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
-import { SnackbarProvider, useSnackbar } from '../../common/Snackbar';
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 
 import classes from './SystemUserDetailsPage.module.css';
 
-export const SystemUserDetailsPage = () => {
-  return (
-    <SnackbarProvider>
-      <SystemUserDetailsPageInner />
-    </SnackbarProvider>
-  );
-};
-
-const SystemUserDetailsPageInner = (): React.ReactNode => {
+export const SystemUserDetailsPage = (): React.ReactNode => {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
-  const { openSnackbar } = useSnackbar();
   const partyId = getCookie('AltinnPartyId');
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
@@ -52,7 +42,6 @@ const SystemUserDetailsPageInner = (): React.ReactNode => {
       .then(() => {
         setIsPopoverOpen(false);
         handleNavigateBack();
-        openSnackbar({ message: t('systemuser_detailpage.systemuser_deleted'), duration: 3000 });
       });
   };
 
