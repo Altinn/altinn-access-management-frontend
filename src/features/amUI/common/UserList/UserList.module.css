@@ -1,0 +1,19 @@
+.UserList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.spacing_sm {
+  gap: 0.2rem;
+}
+
+.spacing_md {
+  gap: 0.3rem;
+}
+
+.indent {
+  margin-left: 1rem;
+}

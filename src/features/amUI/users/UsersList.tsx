@@ -5,10 +5,10 @@ import type { AvatarType, ListItemSize } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
 import { Link } from 'react-router-dom';
 
-import { type RightHolder } from '@/rtk/features/userInfoApi';
 import { debounce } from '@/resources/utils';
 import { AmPagination } from '@/components/Paginering';
 import { List } from '@/components';
+import type { User } from '@/rtk/features/userInfoApi';
 
 import { useFilteredRightHolders } from './useFilteredRightHolders';
 import classes from './UsersList.module.css';
@@ -107,10 +107,9 @@ export const UsersList = () => {
   );
 };
 
-const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
+const RightholderListItem = ({ rightholder }: { rightholder: User }) => {
   const [expanded, setExpanded] = useState(false);
-  const collapsible =
-    rightholder.inheritingRightHolders && rightholder.inheritingRightHolders.length > 0;
+  const collapsible = rightholder.inheritingUsers && rightholder.inheritingUsers.length > 0;
 
   const avatar = {
     type:
@@ -128,7 +127,7 @@ const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
     avatar,
   };
   const rightHoldersList = useMemo(
-    () => [rightholder, ...rightholder.inheritingRightHolders],
+    () => [rightholder, ...rightholder.inheritingUsers],
     [rightholder],
   );
   return (
@@ -158,7 +157,7 @@ const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
   );
 };
 
-const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: RightHolder[] }) => {
+const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: User[] }) => {
   const items =
     rightHolders?.map((inheritingRightHolder) => ({
       id: inheritingRightHolder.partyUuid,

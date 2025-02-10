@@ -99,13 +99,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("reportee/{partyId}/rightholders")]
-        public async Task<ActionResult<List<RightHolder>>> GetReporteeRightHolders(int partyId)
+        public async Task<ActionResult<List<User>>> GetReporteeRightHolders(int partyId)
         {
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                List<RightHolder> rightHolders = await _userService.GetReporteeRightHolders(partyId);
+                List<User> rightHolders = await _userService.GetReporteeRightHolders(partyId);
 
                 return rightHolders;
             }
@@ -124,13 +124,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("reporteelist/{partyUuid}")]
-        public async Task<ActionResult<List<Reportee>>> GetReporteeList(Guid partyUuid)
+        public async Task<ActionResult<List<User>>> GetReporteeList(Guid partyUuid)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             try
             {
-                List<Reportee> reportees = await _userService.GetReporteeList(partyUuid);
-
-                return reportees;
+                return await _userService.GetReporteeList(partyUuid);
             }
             catch (Exception ex)
             {

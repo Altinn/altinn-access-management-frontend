@@ -4,9 +4,9 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 namespace Altinn.AccessManagement.UI.Core.Models.User
 {
     /// <summary>
-    /// Someone who holds some kind of right/power of atturney for someone else
+    /// Someone who owns some kind of right/power and can delegate it to others
     /// </summary>
-    public class RightHolder
+    public class User
     {
         /// <summary>
         /// The universally unique identifier of the RightHolder party
@@ -14,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         public Guid PartyUuid { get; set; }
 
         /// <summary>
-        /// The type of Party (person, org, etc)
+        /// The type of Party (person, org, etc.)
         /// </summary>
         public AuthorizedPartyType PartyType { get; set; }
 
@@ -41,19 +41,19 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
         /// <summary>
         /// Key persons inheriting rights from the organization
         /// </summary>
-        public List<RightHolder> InheritingRightHolders { get; set; }
+        public List<User> InheritingUsers { get; set; }
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RightHolder()
+        public User()
         {
         }
 
         /// <summary>
         /// Mapping from AuthorizedParty
         /// </summary>
-        public RightHolder(AuthorizedParty party)
+        public User(AuthorizedParty party)
         {
             PartyUuid = party.PartyUuid;
             PartyType = party.Type;
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User
             RegistryRoles = party.AuthorizedRoles.Where(role => Enum.IsDefined(typeof(RegistryRoleType), role.ToUpper()))
                 .Select(role => (RegistryRoleType)Enum.Parse(typeof(RegistryRoleType), role.ToUpper()))
                 .ToList();
-            InheritingRightHolders = party.Subunits.Select(unit => new RightHolder(unit)).ToList();
+            InheritingUsers = party.Subunits.Select(unit => new User(unit)).ToList();
         }
     }
 }

@@ -16,6 +16,7 @@ using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -162,13 +163,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string partyId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", $"{partyId}.json");
             const int userId = 1234;
-            List<Reportee> expectedResponse = Util.GetMockData<List<Reportee>>(path);
+            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
             var token = PrincipalUtil.GetToken(userId, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{partyId}");
-            List<Reportee> actualResponse = await response.Content.ReadFromJsonAsync<List<Reportee>>();
+            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -187,10 +188,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string reporteePartyID = "51329012";
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", $"{reporteePartyID}.json");
-            List<RightHolder> expectedResponse = Util.GetMockData<List<RightHolder>>(path);
+            List<User> expectedResponse = Util.GetMockData<List<User>>(path);
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteePartyID}/rightholders");
-            List<RightHolder> actualResponse = await response.Content.ReadFromJsonAsync<List<RightHolder>>();
+            List<User> actualResponse = await response.Content.ReadFromJsonAsync<List<User>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);

@@ -8,14 +8,14 @@ import { useGetReporteeListForPartyQuery } from '@/rtk/features/userInfoApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { UserList } from '../common/UserList/UserList';
 
-import { ReporteeList } from './RepporteeList';
 import classes from './ReporteePage.module.css';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('reportees_page.page_title'));
-  const { data: reporteeList } = useGetReporteeListForPartyQuery();
+  const { data: userList } = useGetReporteeListForPartyQuery();
   const { data: party } = useGetReporteePartyQuery();
   return (
     <PageWrapper>
@@ -28,8 +28,8 @@ export const ReporteesPage = () => {
             {t('reportees_page.main_page_heading', { name: party?.name || '' })}
           </Heading>
         </div>
-        <ReporteeList
-          reporteeList={reporteeList || []}
+        <UserList
+          userList={userList || []}
           size='lg'
         />
       </PageLayoutWrapper>

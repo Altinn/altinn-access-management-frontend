@@ -28,24 +28,14 @@ export enum PartyType {
   SelfIdentified = 'SelfIdentified',
 }
 
-export interface RightHolder {
+export interface User {
   partyUuid: string;
   partyType: PartyType;
   name: string;
   registryRoles: string[];
   organizationNumber?: string;
   unitType?: string;
-  inheritingRightHolders: RightHolder[];
-}
-
-export interface Reportee {
-  partyUuid: string;
-  partyType: PartyType;
-  name: string;
-  registryRoles: string[];
-  organizationNumber?: string;
-  unitType?: string;
-  inheritingReportees: Reportee[];
+  inheritingUsers: User[];
 }
 
 export interface RightHolderAccesses {
@@ -76,11 +66,11 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    getRightHolders: builder.query<RightHolder[], void>({
+    getRightHolders: builder.query<User[], void>({
       query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
       keepUnusedDataFor: 300,
     }),
-    getReporteeListForParty: builder.query<Reportee[], void>({
+    getReporteeListForParty: builder.query<User[], void>({
       query: () => {
         const partyUuid = getCookie('AltinnPartyUuid');
         return `/reporteelist/${partyUuid}`;

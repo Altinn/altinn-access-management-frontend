@@ -477,7 +477,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
 
-         public static void AssertEqual(Reportee expected, Reportee actual)
+         public static void AssertEqual(User expected, User actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -488,7 +488,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.RegistryRoles, actual.RegistryRoles, Assert.Equal);
             Assert.Equal(expected.OrganizationNumber, actual.OrganizationNumber);
             Assert.Equal(expected.UnitType, actual.UnitType);
-            AssertCollections(expected.InheritingReportees, actual.InheritingReportees, AssertEqual);
+            AssertCollections(expected.InheritingUsers, actual.InheritingUsers, AssertEqual);
         }
     }
 }
