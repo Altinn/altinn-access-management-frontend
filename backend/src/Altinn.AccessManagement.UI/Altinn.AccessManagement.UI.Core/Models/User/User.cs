@@ -4,7 +4,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 namespace Altinn.AccessManagement.UI.Core.Models.User
 {
     /// <summary>
-    /// Someone who owns some kind of right/power and can delegate it to others
+    /// A person or entity with delegable rights or power of attorney.
     /// </summary>
     public class User
     {
