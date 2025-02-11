@@ -1,9 +1,7 @@
 /* eslint-disable import/default */
 /* eslint-disable import/no-named-as-default-member */
-
 import { test } from './../fixture/pomFixture';
-
-test.describe('User with DAGL/HADM role without having resource access themselves', () => {
+test.describe('User with DAGL/HADM role without having resource access themselves debug', () => {
   test('User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to User B', async ({
     login,
     delegate,
@@ -175,5 +173,17 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     await login.loginWithUser('07885798378');
     await login.chooseReportee('ULIK FLAT TIGER AS');
     await coverebyRights.checkCoverebyRights();
+  });
+
+  test('Singleright delegation - Non-delegable service', async ({
+    login,
+    delegate,
+    delegateRights,
+  }) => {
+    await login.loginWithUser('04885299593');
+    await login.chooseReportee('ULIK FLAT TIGER AS');
+
+    await delegate.delegateToSSN('19856097121', 'GATE');
+    await delegateRights.nonDelegatebleRightsToSSN('Altinn2 non-delegable');
   });
 });

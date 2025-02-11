@@ -3,8 +3,7 @@ using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -20,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
-        private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
@@ -29,19 +28,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="accessManagementClient">The access management client.</param>
         /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
-        /// <param name="resourceRegistryClient">The resource registry client.</param>
+        /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
             IAccessManagementClient accessManagementClient,
             ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
-            IResourceRegistryClient resourceRegistryClient)
+            ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
             _accessManagementClient = accessManagementClient;
             _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
-            _resourceRegistryClient = resourceRegistryClient;
+            _resourceHelper = resourceHelper;
         }
 
         /// <inheritdoc />
@@ -94,16 +93,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
-            List<ServiceResource> resources = await _resourceRegistryClient.GetResources();
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
-            
             List<SystemUserFE> lista = new List<SystemUserFE>();
             foreach (SystemUser systemUser in systemUsers)
             {
                 // TODO: get rights from systemuser when API to look up actual rights is implmented
                 List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemUser.SystemId, cancellationToken);
                 List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-                IEnumerable<ServiceResource> systemUserResources = resources.Where(x => resourceIds.Contains(x.Identifier));
+                List<ServiceResourceFE> resourcesFE = await _resourceHelper.EnrichResources(resourceIds, languageCode);
 
                 RegisteredSystemFE systemFE = new RegisteredSystemFE
                 {
@@ -120,7 +116,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = systemUser.PartyId,
                     Created = systemUser.Created,
                     System = systemFE,
-                    Resources = ResourceUtils.MapToServiceResourcesFE(languageCode, systemUserResources, orgList)
+                    Resources = resourcesFE
                 });
             }
 

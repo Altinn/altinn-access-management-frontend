@@ -1,4 +1,4 @@
-import { Layout, MenuItem } from '@altinn/altinn-components';
+import { Layout } from '@altinn/altinn-components';
 import { RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
