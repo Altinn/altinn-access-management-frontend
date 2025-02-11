@@ -58,28 +58,25 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               {
                 groupId: 2,
                 id: '2',
-                as: () => (
-                  <Link to={`/${amUIPath.Users}`}>
-                    <MenuItem
-                      as='div'
-                      id={'users'}
-                      title={t('sidebar.users')}
-                      icon='person-group'
-                    />
-                  </Link>
+                title: t('sidebar.users'),
+                icon: 'person-group',
+                as: (props) => (
+                  <Link
+                    to={`/${amUIPath.Users}`}
+                    {...props}
+                  />
                 ),
               },
               {
                 groupId: 3,
                 id: '3',
-                as: () => (
-                  <Link to={`/${amUIPath.Reportees}`}>
-                    <MenuItem
-                      id={'inbox'}
-                      title={t('sidebar.reportees')}
-                      icon='inbox'
-                    />
-                  </Link>
+                title: t('sidebar.reportees'),
+                icon: 'inbox',
+                as: (props) => (
+                  <Link
+                    to={`/${amUIPath.Reportees}`}
+                    {...props}
+                  />
                 ),
               },
             ],
