@@ -177,6 +177,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///  Test case: Get reportee list
+        ///  Expected: Returns Bad Request if model state is invalid
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeList_InvalidModelState_ReturnsBadRequest()
+        {
+            // Arrange
+            string invalidPartyId = "1234";
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/reporteelist/{invalidPartyId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Assert that List of right holders is returned when valid input
         /// </summary>
         [Fact]
