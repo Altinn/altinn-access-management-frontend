@@ -40,14 +40,9 @@ const sortUserList = (list: User[]): User[] => {
 
 export const useFilteredUsers = ({ users, searchString }: useFilteredUsersProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  if (!users) {
-    return {
-      users: [] as ExtendedUser[],
-      hasNextPage: false,
-    };
-  }
 
   const filtered = useMemo(() => {
+    if (!users) return [];
     setCurrentPage(1);
     const sorted = sortUserList(users);
     return sorted.reduce((acc, user) => {
