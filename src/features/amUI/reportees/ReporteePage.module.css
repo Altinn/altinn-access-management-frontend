@@ -11,14 +11,13 @@
   flex-direction: column;
 }
 
-.spacing_sm {
-  gap: 0.2rem;
+.searchBar {
+  max-width: 27rem;
 }
 
-.spacing_md {
-  gap: 0.3rem;
-}
-
-.indent {
-  margin-left: 1rem;
+.search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 10px;
 }

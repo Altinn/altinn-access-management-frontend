@@ -1,27 +1,39 @@
 import type { ListItemProps } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-import type { User } from '@/rtk/features/userInfoApi';
-
-import { UserList } from './UserList';
 import classes from './UserList.module.css';
+import { ListWrapper } from './ListWrapper';
+import type { ExtendedUser } from './useFilteredUsers';
 
 interface UserListItemProps extends ListItemProps {
-  user: User;
+  user: ExtendedUser;
 }
 
 export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps) => {
+  const { t } = useTranslation();
   const hasInheritingUsers = user.inheritingUsers.length > 0;
   const [isExpanded, setExpanded] = useState(false);
+
+  useEffect(
+    () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
+    [user.matchInInheritingUsers, hasInheritingUsers],
+  );
+
   return (
     <li className={cn(classes.UserList, classes.spacing_md)}>
       <ListItem
         {...props}
         size={size}
         title={user.name}
-        description={user.unitType}
+        description={
+          user.partyType === 'Organization'
+            ? user.unitType
+            : user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')
+        }
         avatar={{
           name: user.name,
           type: user.partyType === 'Organization' ? 'company' : 'person',
@@ -31,9 +43,19 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
         }}
+        as={
+          hasInheritingUsers
+            ? 'button'
+            : (props) => (
+                <Link
+                  {...props}
+                  to={user.partyUuid}
+                />
+              )
+        }
       />
       {hasInheritingUsers && isExpanded && (
-        <UserList
+        <ListWrapper
           userList={[{ ...user, inheritingUsers: [] }, ...user.inheritingUsers]}
           size='sm'
           spacing='sm'

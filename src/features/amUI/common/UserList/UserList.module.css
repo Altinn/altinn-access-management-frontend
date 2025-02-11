@@ -17,3 +17,9 @@
 .indent {
   margin-left: 1rem;
 }
+
+.showMoreButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}

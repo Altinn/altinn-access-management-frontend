@@ -1,40 +1,51 @@
-import cn from 'classnames';
-import { useMemo } from 'react';
+import { Button } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
+import { Paragraph } from '@digdir/designsystemet-react';
 
 import type { User } from '@/rtk/features/userInfoApi';
 
-import { UserListItem } from './UserListItem';
+import { ListWrapper } from './ListWrapper';
+import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 
-interface UserListProps {
+export interface UserListProps {
   userList: User[];
-  spacing?: 'sm' | 'md' | 'lg';
-  size?: 'sm' | 'md' | 'lg';
-  indent?: boolean;
+  searchString: string;
+  isLoading?: boolean;
 }
 
-export const UserList = ({ userList, size, spacing, indent }: UserListProps) => {
-  const sortedUsers = useMemo(() => {
-    return [...userList].sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
-  }, [userList]);
+export const UserList = ({ userList, searchString, isLoading }: UserListProps) => {
+  const { t } = useTranslation();
+  const { users, hasNextPage, goNextPage } = useFilteredUsers({
+    users: userList,
+    searchString,
+  });
 
   return (
-    <ul
-      className={cn(
-        classes.UserList,
-        classes[`spacing_${spacing || 'md'}`],
-        indent ? classes.indent : '',
+    <>
+      <Paragraph
+        role='alert'
+        size='lg'
+      >
+        {users.length === 0 ? t('users_page.user_no_search_result') : ''}
+      </Paragraph>
+      <ListWrapper
+        userList={users}
+        spacing='sm'
+        size='lg'
+        isLoading={isLoading}
+      />
+      {hasNextPage && (
+        <div className={classes.showMoreButton}>
+          <Button
+            onClick={goNextPage}
+            disabled={!hasNextPage}
+            variant='text'
+          >
+            {t('common.show_more')}
+          </Button>
+        </div>
       )}
-    >
-      {sortedUsers?.map((user) => (
-        <UserListItem
-          size={size}
-          key={user.partyUuid}
-          user={user}
-        />
-      ))}
-    </ul>
+    </>
   );
 };
