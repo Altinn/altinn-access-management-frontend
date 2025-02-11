@@ -71,7 +71,23 @@ export class delegateRightsToUser {
       }
     }
   }
+  async nonDelegatebleRightsToSSN(resourceName: string) {
+    await this.page.getByRole('link', { name: 'Gi tilgang til enkelttjenester' }).click();
+    await this.page.getByLabel('Søk etter skjema og tjeneste').click();
+    await this.page.getByLabel('Søk etter skjema og tjeneste').fill(resourceName);
+    await this.page.keyboard.press('Enter');
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        resolve(null);
+      }, 500),
+    );
+
+    await this.page.getByRole('button', { name: 'Legg til' }).first().click();
+    var fullmaktsheader = this.page.getByRole('heading', { name: 'Du kan ikke gi fullmakt til' });
+    await expect(fullmaktsheader).toBeVisible();
+  }
 }
+
 export class coverebyUserRights {
   constructor(public page: Page) {}
 
