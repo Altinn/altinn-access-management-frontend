@@ -31,7 +31,7 @@ export const UserList = ({ userList, searchString, isLoading }: UserListProps) =
       </Paragraph>
       <ListWrapper
         userList={users}
-        spacing='md'
+        spacing={2}
         size='md'
         isLoading={isLoading}
       />

@@ -58,7 +58,7 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
         <ListWrapper
           userList={[{ ...user, inheritingUsers: [] }, ...user.inheritingUsers]}
           size='sm'
-          spacing='sm'
+          spacing={1}
           indent
         />
       )}
