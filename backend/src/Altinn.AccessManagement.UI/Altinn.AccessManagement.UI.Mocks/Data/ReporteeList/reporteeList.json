@@ -11,50 +11,7 @@
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
     "authorizedRoles": ["REGN"],
-    "subunits": [
-      {
-        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff8",
-        "name": "Aslan Lion",
-        "organizationNumber": null,
-        "personId": "21030098626",
-        "partyId": 41126876,
-        "type": "Person",
-        "unitType": null,
-        "isDeleted": false,
-        "onlyHierarchyElementWithNoAccess": false,
-        "authorizedResources": [],
-        "authorizedRoles": ["DAGL"],
-        "subunits": []
-      },
-      {
-        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff6",
-        "name": "Tumulus Deer",
-        "organizationNumber": null,
-        "personId": "22030098626",
-        "partyId": 41126875,
-        "type": "Person",
-        "unitType": null,
-        "isDeleted": false,
-        "onlyHierarchyElementWithNoAccess": false,
-        "authorizedResources": [],
-        "authorizedRoles": ["LEDE"],
-        "subunits": []
-      },
-      {
-        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
-        "name": "Santa Claus",
-        "organizationNumber": null,
-        "personId": "24120098626",
-        "partyId": 41126874,
-        "type": "Person",
-        "unitType": null,
-        "isDeleted": false,
-        "onlyHierarchyElementWithNoAccess": false,
-        "authorizedResources": [],
-        "authorizedRoles": ["REGN"],
-        "subunits": []
-      }
-    ]
+    "subunits": []
   },
   {
     "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
@@ -68,22 +25,7 @@
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
     "authorizedRoles": [],
-    "subunits": [
-      {
-        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff1",
-        "name": "Malin Kunze",
-        "organizationNumber": null,
-        "personId": "24110098626",
-        "partyId": 41126878,
-        "type": "Person",
-        "unitType": null,
-        "isDeleted": false,
-        "onlyHierarchyElementWithNoAccess": false,
-        "authorizedResources": [],
-        "authorizedRoles": ["DAGL"],
-        "subunits": []
-      }
-    ]
+    "subunits": []
   },
   {
     "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
