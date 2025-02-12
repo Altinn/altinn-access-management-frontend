@@ -26,15 +26,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// The requested system
         /// </returns>
         Task<RegisteredSystem> GetSystem(string systemId, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Get rights of a specific system in the system register
-        /// </summary>
-        /// <param name="systemId">The system to get rights from</param>
-        /// <param name="cancellationToken">CancellationToken token</param>
-        /// <returns>
-        /// The rights of the requested system
-        /// </returns>
-        Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken);
     }
 }

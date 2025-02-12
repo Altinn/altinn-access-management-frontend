@@ -47,22 +47,16 @@
             "value": "ske-innrapportering-boligsameie"
           }
         ]
+      }
+    ],
+    "accessPackages": [
+      {
+        "id": "urn:altinn:accesspackage",
+        "value": "sjofart"
       },
       {
-        "resource": [
-          {
-            "id": "urn:altinn:accesspackage",
-            "value": "sjofart"
-          }
-        ]
-      },
-      {
-        "resource": [
-          {
-            "id": "urn:altinn:accesspackage",
-            "value": "baerekraft"
-          }
-        ]
+        "id": "urn:altinn:accesspackage",
+        "value": "baerekraft"
       }
     ],
     "isVisible": true
@@ -115,14 +109,11 @@
       "nb": "Accesspackage without resource",
       "nn": "Accesspackage without resource"
     },
-    "rights": [
+    "rights": [],
+    "accessPackages": [
       {
-        "resource": [
-          {
-            "id": "urn:altinn:accesspackage",
-            "value": "baerekraft"
-          }
-        ]
+        "id": "urn:altinn:accesspackage",
+        "value": "baerekraft"
       }
     ],
     "isVisible": true

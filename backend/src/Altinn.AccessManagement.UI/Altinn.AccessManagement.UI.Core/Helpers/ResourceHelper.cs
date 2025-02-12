@@ -99,11 +99,12 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// Maps a list of rights to lists of <see cref="ServiceResourceFE"/> and <see cref="AccessPackageFE"/>
         /// </summary>
         /// <param name="rights">List of rights</param>
+        /// <param name="accessPackages">List of access packages</param>
         /// <param name="languageCode">Language code</param>
-        public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, string languageCode)
+        public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, IEnumerable<IdValuePair> accessPackages, string languageCode)
         {
             List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-            List<string> accessPackageIds = ResourceUtils.GetAccessPackageIdsFromRights(rights);
+            List<string> accessPackageIds = ResourceUtils.GetAccessPackageIdsFromRights(accessPackages);
             
             return new()
             {

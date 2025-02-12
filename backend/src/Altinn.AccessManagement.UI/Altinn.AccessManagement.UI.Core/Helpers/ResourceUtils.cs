@@ -64,21 +64,18 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <summary>
         /// Get access package ids from a list of rights
         /// </summary>
-        /// <param name="rights">List of rights to get access package ids from</param>
+        /// <param name="accessPackages">List of accessPackages to get access package ids from</param>
         /// <returns>List of access package ids</returns>
-        public static List<string> GetAccessPackageIdsFromRights(IEnumerable<Right> rights)
+        public static List<string> GetAccessPackageIdsFromRights(IEnumerable<IdValuePair> accessPackages)
         {
-            List<string> matchIds = [];
-            foreach (Right right in rights)
+            if (accessPackages == null) 
             {
-                string matchId = right.Resource.Find(x => x.Id == "urn:altinn:accesspackage")?.Value;
-                if (matchId != null)
-                {
-                    matchIds.Add($"urn:altinn:accesspackage:{matchId}");
-                }
+                return [];
             }
 
-            return matchIds;
+            return accessPackages
+                .Where(accessPackage => accessPackage.Id == "urn:altinn:accesspackage")
+                .Select(accessPackage => $"{accessPackage.Id}:{accessPackage.Value}").ToList();
         }
     }
 }
