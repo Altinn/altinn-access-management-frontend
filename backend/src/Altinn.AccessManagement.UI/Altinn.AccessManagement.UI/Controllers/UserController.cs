@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Endpoint for retrieving all right holders of a reportee
         /// </summary>
-        /// <param name="partyUuid">The partyId for the reportee who's right holders to return</param>
+        /// <param name="partyUuid">The partyId for the reportee whose right holders to return</param>
         /// <returns>List of right holders</returns>
         [HttpGet]
         [Authorize]
