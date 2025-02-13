@@ -43,7 +43,7 @@ export const ReporteeRightsPage = () => {
               <UserPageHeader
                 userName={name}
                 userType={party?.partyTypeName}
-                subHeading={t('reportees_page.heading_subtitle', { name: reportee?.name })}
+                subHeading={t('reportee_rights_page.heading_subtitle', { name: reportee?.name })}
                 roles={
                   !!reportee?.partyUuid &&
                   !!party?.partyUuid && (

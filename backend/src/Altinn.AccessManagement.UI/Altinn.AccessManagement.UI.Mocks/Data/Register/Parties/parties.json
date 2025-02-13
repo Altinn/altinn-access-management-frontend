@@ -620,19 +620,5 @@
     "Person": null,
     "Organisation": null,
     "ChildParties": null
-  },
-  {
-    "PartyId": 87038023,
-    "PartyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
-    "PartyTypeName": 1,
-    "OrgNumber": null,
-    "Ssn": "21915399719",
-    "UnitType": null,
-    "Name": "Ken Kuvalis",
-    "IsDeleted": false,
-    "OnlyHierarchyElementWithNoAccess": false,
-    "Person": null,
-    "Organisation": null,
-    "ChildParties": null
   }
 ]
