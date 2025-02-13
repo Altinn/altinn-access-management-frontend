@@ -46,7 +46,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   };
 
   const handleNavigateBack = (): void => {
-    navigate(`/${SystemUserPath.Overview}`);
+    navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
   };
 
   const numberOfRights =

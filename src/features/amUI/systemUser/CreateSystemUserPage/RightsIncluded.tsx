@@ -49,7 +49,9 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
       postNewSystemUser(postObjekt)
         .unwrap()
         .then((newSystemUserId: string) => {
-          navigate('/' + SystemUserPath.Overview, { state: { createdId: newSystemUserId } });
+          navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`, {
+            state: { createdId: newSystemUserId },
+          });
         });
     }
   };
@@ -114,7 +116,9 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
               data-size='sm'
               asChild
             >
-              <Link to={'/' + SystemUserPath.Overview}>{t('common.cancel')}</Link>
+              <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
+                {t('common.cancel')}
+              </Link>
             </Button>
           </ButtonRow>
         </div>

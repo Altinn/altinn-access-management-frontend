@@ -62,7 +62,7 @@ export const SystemUserRequestPage = () => {
           if (request.redirectUrl) {
             logoutAndRedirectToVendor();
           } else {
-            navigate(SystemUserPath.Overview);
+            navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
           }
         });
     }

@@ -64,7 +64,7 @@ export const SystemUserOverviewPage = () => {
                   className={classes.createSystemUserButton}
                   asChild
                 >
-                  <Link to={'/' + SystemUserPath.Create}>
+                  <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
                     <PlusIcon
                       fontSize={28}
                       aria-hidden

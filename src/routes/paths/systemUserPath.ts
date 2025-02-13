@@ -1,7 +1,8 @@
 export enum SystemUserPath {
-  Overview = 'systemuser/overview',
-  Create = 'systemuser/create',
-  Details = 'systemuser/:id',
-  Request = 'systemuser/request',
-  ChangeRequest = 'systemuser/changerequest',
+  SystemUser = 'systemuser',
+  Overview = 'overview',
+  Create = 'create',
+  Details = ':id',
+  Request = 'request',
+  ChangeRequest = 'changerequest',
 }

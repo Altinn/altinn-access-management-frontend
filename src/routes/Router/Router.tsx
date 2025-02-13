@@ -103,24 +103,30 @@ export const Router = createBrowserRouter(
         element={<ReporteesPage />}
       />
       <Route
-        path={SystemUserPath.Overview}
-        element={<SystemUserOverviewPage />}
-      />
-      <Route
-        path={SystemUserPath.Create}
-        element={<CreateSystemUserPage />}
-      />
-      <Route
-        path={SystemUserPath.Details}
-        element={<SystemUserDetailsPage />}
-      />
-      <Route
-        path={SystemUserPath.Request}
-        element={<SystemUserRequestPage />}
-      />
-      <Route
-        path={SystemUserPath.ChangeRequest}
-        element={<SystemUserChangeRequestPage />}
+        path={SystemUserPath.SystemUser}
+        errorElement={<ErrorPage />}
+      >
+        <Route
+          path={SystemUserPath.Overview}
+          element={<SystemUserOverviewPage />}
+        />
+        <Route
+          path={SystemUserPath.Create}
+          element={<CreateSystemUserPage />}
+        />
+        <Route
+          path={SystemUserPath.Details}
+          element={<SystemUserDetailsPage />}
+        />
+        <Route
+          path={SystemUserPath.Request}
+          element={<SystemUserRequestPage />}
+        />
+        <Route
+          path={SystemUserPath.ChangeRequest}
+          element={<SystemUserChangeRequestPage />}
+        />
+      </Route>
     </Route>,
   ),
   { basename: GeneralPath.BasePath },

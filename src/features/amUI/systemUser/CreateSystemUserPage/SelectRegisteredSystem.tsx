@@ -42,7 +42,9 @@ export const SelectRegisteredSystem = ({
   };
 
   return (
-    <PageContainer onNavigateBack={() => navigate(`/${SystemUserPath.Overview}`)}>
+    <PageContainer
+      onNavigateBack={() => navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`)}
+    >
       <div className={classes.creationPageContainer}>
         <Heading
           level={1}
@@ -108,7 +110,9 @@ export const SelectRegisteredSystem = ({
               data-size='sm'
               asChild
             >
-              <Link to={'/' + SystemUserPath.Overview}>{t('common.cancel')}</Link>
+              <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
+                {t('common.cancel')}
+              </Link>
             </Button>
           </ButtonRow>
         </CreateSystemUserCheck>
