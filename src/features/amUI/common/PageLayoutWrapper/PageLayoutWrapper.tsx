@@ -1,8 +1,10 @@
 import { Layout } from '@altinn/altinn-components';
 import { RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -56,14 +58,26 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
               {
                 groupId: 2,
                 id: '2',
+                title: t('sidebar.users'),
                 icon: 'person-group',
-                title: 'Brukere',
+                as: (props) => (
+                  <Link
+                    to={`/${amUIPath.Users}`}
+                    {...props}
+                  />
+                ),
               },
               {
                 groupId: 3,
-                icon: 'inbox',
                 id: '3',
-                title: 'Våre tilganger hos andre',
+                title: t('sidebar.reportees'),
+                icon: 'inbox',
+                as: (props) => (
+                  <Link
+                    to={`/${amUIPath.Reportees}`}
+                    {...props}
+                  />
+                ),
               },
             ],
           },

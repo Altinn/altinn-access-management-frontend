@@ -1,11 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference types="vite-plugin-svgr/client" />
 
-import path from 'path';
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
+import path from 'node:path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,9 +33,9 @@ export default defineConfig({
         assetFileNames: (assetInfo) => {
           const extType = assetInfo.name.split('.')[1];
           if (/css/i.test(extType)) {
-            return `assets/accessmanagement.css`;
+            return 'assets/accessmanagement.css';
           }
-          return `assets/[name]-[hash][extname]`;
+          return 'assets/[name]-[hash][extname]';
         },
       },
     },

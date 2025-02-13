@@ -17,6 +17,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<UserProfileFE> GetUserProfile(int userId);
 
         /// <summary>
+        /// Get the reportees for the user 
+        /// </summary>
+        /// <param name="userId">The userId</param>
+        /// <returns></returns>
+        Task<List<User>> GetReporteeList(Guid userId);
+        
+        /// <summary>
         /// Gets a Party based on partyId if the party is in the users reporteelist
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
@@ -28,8 +35,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyId">The party Id of the reportee</param>
         /// <returns>List of right holders</returns>
-        Task<List<RightHolder>> GetReporteeRightHolders(int partyId);
-
+        Task<List<User>> GetReporteeRightHolders(int partyId);
+        
         /// <summary>
         /// Gets all accesses of a given right holder for a reportee
         /// </summary>

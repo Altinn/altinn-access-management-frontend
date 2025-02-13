@@ -22,20 +22,20 @@ interface ReporteeInfo {
 }
 
 export enum PartyType {
-  None,
-  Person,
-  Organization,
-  SelfIdentified,
+  None = 'None',
+  Person = 'Person',
+  Organization = 'Organization',
+  SelfIdentified = 'SelfIdentified',
 }
 
-export interface RightHolder {
+export interface User {
   partyUuid: string;
   partyType: PartyType;
   name: string;
   registryRoles: string[];
   organizationNumber?: string;
   unitType?: string;
-  inheritingRightHolders: RightHolder[];
+  inheritingUsers: User[];
 }
 
 export interface RightHolderAccesses {
@@ -63,11 +63,18 @@ export const userInfoApi = createApi({
       },
     }),
     getReportee: builder.query<ReporteeInfo, void>({
-      query: () => `reporteelist/${getCookie('AltinnPartyId')}`,
+      query: () => `reportee/${getCookie('AltinnPartyId')}`,
       keepUnusedDataFor: 300,
     }),
-    getRightHolders: builder.query<RightHolder[], void>({
+    getRightHolders: builder.query<User[], void>({
       query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
+      keepUnusedDataFor: 300,
+    }),
+    getReporteeListForParty: builder.query<User[], void>({
+      query: () => {
+        const partyUuid = getCookie('AltinnPartyUuid');
+        return `/reporteelist/${partyUuid}`;
+      },
       keepUnusedDataFor: 300,
     }),
     getRightHolderAccesses: builder.query<RightHolderAccesses, string>({
@@ -96,6 +103,7 @@ export const {
   useGetRightHoldersQuery,
   useGetRightHolderAccessesQuery,
   useValidateNewUserPersonMutation,
+  useGetReporteeListForPartyQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;
