@@ -551,6 +551,20 @@
     "ChildParties": null
   },
   {
+    "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
+    "name": "Kunze - Kunde",
+    "organizationNumber": "400928636",
+    "personId": null,
+    "partyId": 75306803,
+    "type": "Organization",
+    "unitType": "Group",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  },
+  {
     "PartyId": 12345678,
     "PartyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
     "PartyTypeName": 1,
@@ -601,6 +615,20 @@
     "Ssn": "21915399719",
     "UnitType": null,
     "Name": "LIVSGLAD FILM",
+    "IsDeleted": false,
+    "OnlyHierarchyElementWithNoAccess": false,
+    "Person": null,
+    "Organisation": null,
+    "ChildParties": null
+  },
+  {
+    "PartyId": 87038023,
+    "PartyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
+    "PartyTypeName": 1,
+    "OrgNumber": null,
+    "Ssn": "21915399719",
+    "UnitType": null,
+    "Name": "Ken Kuvalis",
     "IsDeleted": false,
     "OnlyHierarchyElementWithNoAccess": false,
     "Person": null,

@@ -230,10 +230,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string rightHolderUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; // Valid user that has rights for the reportee
 
             string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "RightHolders", "RightHolderAccess", $"{rightHolderUuid}.json");
-            RightHolderAccesses expectedResponse = Util.GetMockData<RightHolderAccesses>(path);
+            UserAccesses expectedResponse = Util.GetMockData<UserAccesses>(path);
 
             var response = await _client.GetAsync($"accessmanagement/api/v1/user/reportee/{reporteeUuid}/rightholders/{rightHolderUuid}/accesses");
-            RightHolderAccesses actualResponse = await response.Content.ReadFromJsonAsync<RightHolderAccesses>();
+            UserAccesses actualResponse = await response.Content.ReadFromJsonAsync<UserAccesses>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
