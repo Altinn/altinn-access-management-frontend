@@ -1,5 +1,5 @@
 {
   "accessPackages": [ "annleggadmin", "eiendom_kjop", "magibruk" ],
   "services": [ "appid-502", "a3-app2" ],
-  "roles": [ "brreg:role:medl", "brreg:role:lede", "digdir:role:ts" ]
+  "roles": [ "brreg:role:medl", "brreg:role:lede", "digdir:role:ts", "digdir:role:one_more" ]
 }

@@ -108,9 +108,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
+        public async Task<UserAccesses> GetUserAccesses(Guid from, Guid to)
         {
-            string endpointUrl = $"enduser/{reporteeUuid}/access/{rightHolderUuid}/accesspackages"; // TODO: Switch with actual backend endpoint when available
+            string endpointUrl = $"enduser/{from}/access/{to}"; // TODO: Switch with actual backend endpoint when available
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<RightHolderAccesses>(responseContent, _serializerOptions);
+                return JsonSerializer.Deserialize<UserAccesses>(responseContent, _serializerOptions);
             }
 
             _logger.LogError("Getting right holders from accessmanagement failed with {StatusCode}", response.StatusCode);

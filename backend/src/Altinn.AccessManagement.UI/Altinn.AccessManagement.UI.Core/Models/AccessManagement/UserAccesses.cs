@@ -1,9 +1,9 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Models.AccessManagement
 {
     /// <summary>
-    /// An simplified overview of what a rightholder has access to
+    /// An simplified overview of what a user has access to
     /// </summary>
-    public class RightHolderAccesses
+    public class UserAccesses
     {
         /// <summary>
         /// List of IDs for access packages the right holder has access to

@@ -551,6 +551,20 @@
     "ChildParties": null
   },
   {
+    "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
+    "name": "Kunze - Kunde",
+    "organizationNumber": "400928636",
+    "personId": null,
+    "partyId": 75306803,
+    "type": "Organization",
+    "unitType": "Group",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  },
+  {
     "PartyId": 12345678,
     "PartyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
     "PartyTypeName": 1,
