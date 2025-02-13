@@ -13,9 +13,20 @@ import { ChooseRightsPage } from '@/features/singleRight/delegate/ChooseRightsPa
 import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/delegate/ReceiptPage/ReceiptPage';
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
+import { SystemUserRequestPage } from '@/features/amUI/systemUser/SystemUserRequestPage';
+import { SystemUserChangeRequestPage } from '@/features/amUI/systemUser/SystemUserChangeRequestPage';
+import { SystemUserOverviewPage } from '@/features/amUI/systemUser/SystemUsersOverviewPage/SystemUserOverviewPage';
+import { SystemUserDetailsPage } from '@/features/amUI/systemUser/SystemUserDetailPage/SystemUserDetailsPage';
+import { CreateSystemUserPage } from '@/features/amUI/systemUser/CreateSystemUserPage/CreateSystemUserPage';
 import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
 
-import { GeneralPath, SingleRightPath, ApiDelegationPath, amUIPath } from '../paths';
+import {
+  GeneralPath,
+  SingleRightPath,
+  ApiDelegationPath,
+  amUIPath,
+  SystemUserPath,
+} from '../paths';
 
 export const Router = createBrowserRouter(
   createRoutesFromElements(
@@ -91,6 +102,31 @@ export const Router = createBrowserRouter(
         path={amUIPath.Reportees}
         element={<ReporteesPage />}
       />
+      <Route
+        path={SystemUserPath.SystemUser}
+        errorElement={<ErrorPage />}
+      >
+        <Route
+          path={SystemUserPath.Overview}
+          element={<SystemUserOverviewPage />}
+        />
+        <Route
+          path={SystemUserPath.Create}
+          element={<CreateSystemUserPage />}
+        />
+        <Route
+          path={SystemUserPath.Details}
+          element={<SystemUserDetailsPage />}
+        />
+        <Route
+          path={SystemUserPath.Request}
+          element={<SystemUserRequestPage />}
+        />
+        <Route
+          path={SystemUserPath.ChangeRequest}
+          element={<SystemUserChangeRequestPage />}
+        />
+      </Route>
     </Route>,
   ),
   { basename: GeneralPath.BasePath },

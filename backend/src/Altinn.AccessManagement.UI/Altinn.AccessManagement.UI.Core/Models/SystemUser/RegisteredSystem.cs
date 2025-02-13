@@ -38,6 +38,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public List<Right> Rights { get; set; } = new List<Right>();
 
         /// <summary>
+        /// Array of access packages set for this system
+        /// </summary>
+        public List<IdValuePair> AccessPackages { get; set; } = new List<IdValuePair>();
+
+        /// <summary>
         /// True if the registered system is visible to the user in the UI
         /// </summary>
         public bool IsVisible { get; set; }

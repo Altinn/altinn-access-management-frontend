@@ -60,15 +60,36 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string systemId = "310144827_smartcloud";
             string path = Path.Combine(_expectedDataPath, "SystemRegister", "systemRights.json");
-            List<ServiceResourceFE> expectedResponse = Util.GetMockData<List<ServiceResourceFE>>(path);
+            RegisteredSystemRightsFE expectedResponse = Util.GetMockData<RegisteredSystemRightsFE>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister/rights/{systemId}");
-            List<ServiceResourceFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ServiceResourceFE>>();
+            RegisteredSystemRightsFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RegisteredSystemRightsFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+            AssertionUtil.AssertCollections(expectedResponse.Resources, actualResponse.Resources, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetSystemRights checks that system rights found for requested system are returned
+        ///     Expected: GetSystemRights returns the system rights for the requested system that exists in resource registry. Does not crash
+        /// </summary>
+        [Fact]
+        public async Task GetSystemRights_ReturnsFoundRights()
+        {
+            // Arrange
+            string systemId = "310144827_invalid_resource";
+            string path = Path.Combine(_expectedDataPath, "SystemRegister", "systemRights.json");
+            RegisteredSystemRightsFE expectedResponse = Util.GetMockData<RegisteredSystemRightsFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemregister/rights/{systemId}");
+            RegisteredSystemRightsFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<RegisteredSystemRightsFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse.Resources, actualResponse.Resources, AssertionUtil.AssertEqual);
         }
     }
 }

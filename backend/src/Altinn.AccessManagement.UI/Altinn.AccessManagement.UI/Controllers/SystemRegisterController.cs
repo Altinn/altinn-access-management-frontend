@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> GetSystemRights(string systemId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            List<ServiceResourceFE> rights = await _systemRegisterService.GetSystemRights(languageCode, systemId, cancellationToken);
+            RegisteredSystemRightsFE rights = await _systemRegisterService.GetSystemRights(languageCode, systemId, cancellationToken);
 
             return Ok(rights);
         }

@@ -1,6 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -45,9 +44,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new Result<SystemUserRequestFE>(request.Problem);
             }
 
-            // GET resources
-            List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(request.Value.Rights);
-            List<ServiceResourceFE> resourcesFE = await _resourceHelper.EnrichResources(resourceIds, languageCode);
+            // GET resources & access packages
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(request.Value.Rights, request.Value.AccessPackages, languageCode);
             
             // GET system
             RegisteredSystem system = await _systemRegisterClient.GetSystem(request.Value.SystemId, cancellationToken);
@@ -59,7 +57,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 Id = request.Value.Id,
                 Status = request.Value.Status,
                 RedirectUrl = request.Value.RedirectUrl,
-                Resources = resourcesFE,
+                Resources = enrichedRights.Resources,
+                AccessPackages = enrichedRights.AccessPackages,
                 System = systemFE
             };
         }

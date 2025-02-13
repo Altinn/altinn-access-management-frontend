@@ -39,6 +39,7 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off',
     'eol-last': 'error',
     '@typescript-eslint/no-invalid-void-type': 0,
+    'import/no-duplicates': 'warn',
     'import/order': [
       'warn',
       {

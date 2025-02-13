@@ -33,7 +33,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:skattnaering"
   },
   {
     "provider": {
@@ -69,7 +70,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:skattegrunnlag"
   },
   {
     "provider": {
@@ -105,7 +107,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:merverdiavgift"
   },
   {
     "provider": {
@@ -141,7 +144,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:motorvognavgifter"
   },
   {
     "provider": {
@@ -177,7 +181,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:regnskapogokonomirapportering"
   },
   {
     "provider": {
@@ -213,7 +218,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:kravbetalingerogutlegg"
   },
   {
     "provider": {
@@ -249,7 +255,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:revisorattesterer"
   },
   {
     "provider": {
@@ -285,7 +292,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:saeravgifter"
   },
   {
     "provider": {
@@ -321,7 +329,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:kredittogoppgjorsordninger"
   },
   {
     "provider": {
@@ -357,7 +366,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:toll"
   },
   {
     "provider": {
@@ -393,7 +403,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:ansettelsesforhold"
   },
   {
     "provider": {
@@ -429,7 +440,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:lonn"
   },
   {
     "provider": {
@@ -465,7 +477,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:aordningen"
   },
   {
     "provider": {
@@ -501,7 +514,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:pensjon"
   },
   {
     "provider": {
@@ -537,7 +551,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:sykefravaer"
   },
   {
     "provider": {
@@ -573,7 +588,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:permisjon"
   },
   {
     "provider": {
@@ -609,7 +625,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:renovasjon"
   },
   {
     "provider": {
@@ -645,7 +662,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:miljoryddingmiljorensingoglignende"
   },
   {
     "provider": {
@@ -701,7 +719,8 @@
         "Id": "appid-513",
         "Name": "Kaffemaskinen i 5. etasje"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:baerekraft"
   },
   {
     "provider": {
@@ -737,7 +756,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:sikkerhetoginternkontroll"
   },
   {
     "provider": {
@@ -773,7 +793,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:ulykke"
   },
   {
     "provider": {
@@ -809,7 +830,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:yrkesskade"
   },
   {
     "provider": {
@@ -845,7 +867,8 @@
         "Id": "appid-514",
         "Name": "ikke_sensitiv_post"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:ordinaerposttilvirksomheten"
   },
   {
     "provider": {
@@ -881,7 +904,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:dyrehold"
   },
   {
     "provider": {
@@ -917,7 +941,8 @@
         "Id": "appid-514",
         "Name": "sensitiv_post"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:posttilvirksomhetenmedtaushetsbelagtinnhold"
   },
   {
     "provider": {
@@ -953,7 +978,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:generellehelfotjenester"
   },
   {
     "provider": {
@@ -989,7 +1015,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:helfotjenestermedpersonopplysningeravsaerligkategori"
   },
   {
     "provider": {
@@ -1025,7 +1052,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:starteendreogavviklevirksomhet"
   },
   {
     "provider": {
@@ -1061,7 +1089,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:aksjerogeierforhold"
   },
   {
     "provider": {
@@ -1097,7 +1126,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:attester"
   },
   {
     "provider": {
@@ -1133,7 +1163,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:dokumentbaserttilsyn"
   },
   {
     "provider": {
@@ -1169,7 +1200,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:infrastruktur"
   },
   {
     "provider": {
@@ -1205,7 +1237,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:patentvaremerkeogdesign"
   },
   {
     "provider": {
@@ -1241,7 +1274,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:tilskuddstotteogerstatning"
   },
   {
     "provider": {
@@ -1277,7 +1311,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:minesiderhoskommunen"
   },
   {
     "provider": {
@@ -1313,7 +1348,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:politiogdomstol"
   },
   {
     "provider": {
@@ -1349,7 +1385,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:rapporteringavstatistikk"
   },
   {
     "provider": {
@@ -1385,7 +1422,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:forskning"
   },
   {
     "provider": {
@@ -1421,7 +1459,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:eksplisitttjenestedelegering"
   },
   {
     "provider": {
@@ -1457,7 +1496,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:jordbruk"
   },
   {
     "provider": {
@@ -1493,7 +1533,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:reindrift"
   },
   {
     "provider": {
@@ -1529,7 +1570,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:jaktogviltstell"
   },
   {
     "provider": {
@@ -1565,7 +1607,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:skogbruk"
   },
   {
     "provider": {
@@ -1601,7 +1644,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:fiske"
   },
   {
     "provider": {
@@ -1637,7 +1681,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:akvakultur"
   },
   {
     "provider": {
@@ -1673,7 +1718,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:byggesoknad"
   },
   {
     "provider": {
@@ -1709,7 +1755,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:plansak"
   },
   {
     "provider": {
@@ -1745,7 +1792,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:mottanaboogplanvarsel"
   },
   {
     "provider": {
@@ -1781,7 +1829,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:oppforingavbyggoganlegg"
   },
   {
     "provider": {
@@ -1817,7 +1866,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:kjopogsalgaveiendom"
   },
   {
     "provider": {
@@ -1853,7 +1903,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:utleieaveiendom"
   },
   {
     "provider": {
@@ -1889,7 +1940,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:eiendomsmegler"
   },
   {
     "provider": {
@@ -1925,7 +1977,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:veitransport"
   },
   {
     "provider": {
@@ -1961,7 +2014,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:transportiror"
   },
   {
     "provider": {
@@ -1997,7 +2051,8 @@
         "Id": "se_3225_1596",
         "Name": "Veldig bra sjøfartstjeneste"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:sjofart"
   },
   {
     "provider": {
@@ -2033,7 +2088,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:lufttransport"
   },
   {
     "provider": {
@@ -2069,7 +2125,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:jernbanetransport"
   },
   {
     "provider": {
@@ -2105,7 +2162,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:lagringogandretjenestertilknyttettransport"
   },
   {
     "provider": {
@@ -2141,7 +2199,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:kommuneoverlege"
   },
   {
     "provider": {
@@ -2177,7 +2236,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:helsetjenestermedpersonopplysningeravsaerligkategori"
   },
   {
     "provider": {
@@ -2213,7 +2273,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:helsetjenester"
   },
   {
     "provider": {
@@ -2249,7 +2310,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:samleoppogbehandleavlopsvann"
   },
   {
     "provider": {
@@ -2285,7 +2347,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:pleieogomsorgstjeneteriinstitusjon"
   },
   {
     "provider": {
@@ -2321,7 +2384,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:sosialeomsorgstjenesterutenbotilbudogflyktningemottak"
   },
   {
     "provider": {
@@ -2357,7 +2421,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:familievern"
   },
   {
     "provider": {
@@ -2393,7 +2458,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:barnevern"
   },
   {
     "provider": {
@@ -2429,7 +2495,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:godkjenningavpersonell"
   },
   {
     "provider": {
@@ -2465,7 +2532,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:godkjenningavutdanningsvirksomhet"
   },
   {
     "provider": {
@@ -2501,7 +2569,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:hoyereutdanningoghoyereyrkesfagligutdanning"
   },
   {
     "provider": {
@@ -2537,7 +2606,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:sfoleder"
   },
   {
     "provider": {
@@ -2573,7 +2643,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:pptleder"
   },
   {
     "provider": {
@@ -2609,7 +2680,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:opplaeringskontorleder"
   },
   {
     "provider": {
@@ -2645,7 +2717,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:skoleleder"
   },
   {
     "provider": {
@@ -2681,7 +2754,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:skoleeier"
   },
   {
     "provider": {
@@ -2717,7 +2791,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:statsforvalterskoleogopplaering"
   },
   {
     "provider": {
@@ -2753,7 +2828,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:statsforvalterbarnehage"
   },
   {
     "provider": {
@@ -2789,7 +2865,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:barnehagemyndighet"
   },
   {
     "provider": {
@@ -2825,7 +2902,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:barnehageleder"
   },
   {
     "provider": {
@@ -2861,7 +2939,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:barnehageeier"
   },
   {
     "provider": {
@@ -2897,7 +2976,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:elektrisitetprodusereoverforeogdistribuere"
   },
   {
     "provider": {
@@ -2933,7 +3013,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:dampogvarmtvann"
   },
   {
     "provider": {
@@ -2969,7 +3050,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:vanntautfrakilderenseogdistribuere"
   },
   {
     "provider": {
@@ -3005,7 +3087,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:avfallsamleinnbehandlebrukeoggjenvinne"
   },
   {
     "provider": {
@@ -3041,7 +3124,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:miljoryddingrensingoglignendevirksomhet"
   },
   {
     "provider": {
@@ -3077,7 +3161,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:utvinningavraoljenaturgassogkull"
   },
   {
     "provider": {
@@ -3113,7 +3198,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:naeringsmidlerdrikkevarerogtobakk"
   },
   {
     "provider": {
@@ -3149,7 +3235,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:tekstilerklaeroglaervarer"
   },
   {
     "provider": {
@@ -3185,7 +3272,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:trelasttrevarerogpapirvarer"
   },
   {
     "provider": {
@@ -3221,7 +3309,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:trykkerierogreproduksjonavinnspilteopptak"
   },
   {
     "provider": {
@@ -3257,7 +3346,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:oljeraffineringkjemiskogfarmasoytiskindustri"
   },
   {
     "provider": {
@@ -3293,7 +3383,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:gummiplastogikkemetallholdigemineralprodukter"
   },
   {
     "provider": {
@@ -3329,7 +3420,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:metallerogmineraler"
   },
   {
     "provider": {
@@ -3365,7 +3457,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:metallvarerelektriskutstyrogmaskiner"
   },
   {
     "provider": {
@@ -3401,7 +3494,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:verftogandretransportmidler"
   },
   {
     "provider": {
@@ -3437,7 +3531,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:moblerogannenindustri"
   },
   {
     "provider": {
@@ -3473,7 +3568,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:reparasjonoginstallasjonavmaskinerogutstyr"
   },
   {
     "provider": {
@@ -3509,7 +3605,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:bergverk"
   },
   {
     "provider": {
@@ -3545,7 +3642,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:kunstogunderholdning"
   },
   {
     "provider": {
@@ -3581,7 +3679,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:bibliotekermuseerarkiverogannenkultur"
   },
   {
     "provider": {
@@ -3617,7 +3716,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:lotteriogspill"
   },
   {
     "provider": {
@@ -3653,7 +3753,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:sportogfritid"
   },
   {
     "provider": {
@@ -3689,7 +3790,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:fornoyelser"
   },
   {
     "provider": {
@@ -3725,7 +3827,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:politikk"
   },
   {
     "provider": {
@@ -3761,7 +3864,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:varehandel"
   },
   {
     "provider": {
@@ -3797,7 +3901,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:overnatting"
   },
   {
     "provider": {
@@ -3833,7 +3938,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:servering"
   },
   {
     "provider": {
@@ -3869,7 +3975,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:postogtelekommunikasjon"
   },
   {
     "provider": {
@@ -3905,7 +4012,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:informasjonogkommunikasjon"
   },
   {
     "provider": {
@@ -3941,7 +4049,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:finansieringogforsikring"
   },
   {
     "provider": {
@@ -3977,7 +4086,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:annentjenesteyting"
   },
   {
     "provider": {
@@ -4013,7 +4123,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:regnskapsforermedsigneringsrettighet"
   },
   {
     "provider": {
@@ -4049,7 +4160,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:regnskapsforerutensigneringsrettighet"
   },
   {
     "provider": {
@@ -4085,7 +4197,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:regnskapsforerlonn"
   },
   {
     "provider": {
@@ -4121,7 +4234,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:ansvarligrevisor"
   },
   {
     "provider": {
@@ -4157,7 +4271,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:revisormedarbeider"
   },
   {
     "provider": {
@@ -4193,7 +4308,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:konkursbotilgangsstyring"
   },
   {
     "provider": {
@@ -4229,7 +4345,8 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:konkursbolesetilgang"
   },
   {
     "provider": {
@@ -4265,6 +4382,7 @@
         "Id": "se_3225_1596",
         "Name": "A2 skjema"
       }
-    ]
+    ],
+    "urn": "urn:altinn:accesspackage:konkursboskrivetilgang"
   }
 ]

@@ -1,0 +1,6 @@
+.systemUserDetailsHeader {
+  display: flex;
+  gap: var(--ds-size-4);
+  align-items: center;
+  max-width: 42rem;
+}

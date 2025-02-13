@@ -12,7 +12,7 @@
   "homepage": null,
   "isPartOf": null,
   "keywords": null,
-  "identifier": "appid-513",
+  "identifier": "appid-514",
   "contactPoints": [
     {
       "category": "Some category",
@@ -40,7 +40,7 @@
   "authorizationReference": [
     {
       "id": "urn:altinn:resource",
-      "value": "appid-513"
+      "value": "appid-514"
     }
   ],
   "hasCompetentAuthority": {
