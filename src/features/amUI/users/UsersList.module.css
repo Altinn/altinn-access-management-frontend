@@ -1,36 +1,3 @@
-.usersList {
-  padding: 1rem 0;
-}
-
-.currentUser {
-  margin-bottom: 2rem;
-}
-
-.inheritingUsers {
-  margin-left: 3rem;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  padding-top: 1rem;
-}
-
-.searchAndAddUser {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-bottom: 10px;
-}
-
-.searchBar {
-  max-width: 27rem;
-}
-
-.usersListHeading {
-  margin-bottom: 10px;
-}
-
 .inheritingRightHoldersList {
   margin: 0.5rem;
   margin-right: 0;
@@ -40,4 +7,23 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.usersList {
+  padding: 1rem 0;
+}
+
+.usersListHeading {
+  margin-bottom: 10px;
+}
+
+.searchBar {
+  max-width: 27rem;
+}
+
+.searchAndAddUser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 10px;
 }

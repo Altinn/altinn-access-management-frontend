@@ -57,11 +57,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<RightHolder>> GetReporteeRightHolders(int partyId)
+        public async Task<List<User>> GetReporteeRightHolders(int partyId)
         {
             List<AuthorizedParty> rightHolders = await _accessManagementClient.GetReporteeRightHolders(partyId);
 
-            return rightHolders.Select(rightHolder => new RightHolder(rightHolder)).ToList();
+            return rightHolders.Select(party => new User(party)).ToList();
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<User>> GetReporteeList(Guid partyUuid)
+        {
+            List<AuthorizedParty> rightOwners = await _accessManagementClient.GetReporteeList(partyUuid);
+
+            return rightOwners.Select(party => new User(party)).ToList();
         }
 
         /// <inheritdoc/>

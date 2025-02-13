@@ -1,0 +1,23 @@
+.reporteeListHeading {
+  margin-bottom: 2rem;
+  padding: 0;
+}
+
+.reporteeList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchBar {
+  max-width: 27rem;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 10px;
+}

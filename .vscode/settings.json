@@ -28,4 +28,10 @@
     "peacock.color": "#42b883",
     "dotnet.defaultSolution": "backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln",
     "editor.accessibilitySupport": "off",
+    "cSpell.words": [
+      "Altinn",
+      "Reportee",
+      "reporteelist",
+      "reportees"
+    ],
 }

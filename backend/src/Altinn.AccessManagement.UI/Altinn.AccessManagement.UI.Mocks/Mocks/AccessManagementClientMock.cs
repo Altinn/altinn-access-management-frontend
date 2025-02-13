@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             try
             {
-                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", partyId + ".json")));
+                return Task.FromResult(Util.GetMockData<AuthorizedParty>(Path.Combine(dataFolder, "ReporteeList", "GetPartyFromReporteeList", partyId + ".json")));
             }
             catch (FileNotFoundException)
             {
@@ -84,6 +84,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 };
                 reportees.Add(currentUser);
                 return Task.FromResult(reportees);
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<List<AuthorizedParty>> GetReporteeList(Guid partyId)
+        {
+              try
+            {
+                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", "reporteeList.json")));
+            }
+            catch (FileNotFoundException)
+            {
+
+                return Task.FromResult<List<AuthorizedParty>>(null);
             }
         }
 

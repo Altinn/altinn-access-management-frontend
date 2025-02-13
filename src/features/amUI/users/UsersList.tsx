@@ -1,58 +1,72 @@
-import React, { useMemo, useState } from 'react';
-import { Heading, Search, Paragraph } from '@digdir/designsystemet-react';
+import { useMemo, useState } from 'react';
+import { Heading, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import type { AvatarType, ListItemSize } from '@altinn/altinn-components';
-import { ListItem } from '@altinn/altinn-components';
 import { Link } from 'react-router-dom';
 
-import { type RightHolder } from '@/rtk/features/userInfoApi';
+import type { User } from '@/rtk/features/userInfoApi';
+import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { debounce } from '@/resources/utils';
-import { AmPagination } from '@/components/Paginering';
-import { List } from '@/components';
 
-import { useFilteredRightHolders } from './useFilteredRightHolders';
+import { UserList } from '../common/UserList/UserList';
+import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
+
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
+
+const extractFromList = (
+  list: User[],
+  uuidToRemove: string,
+  onRemove: (removed: User) => void,
+): User[] => {
+  const remainingList = list.reduce<User[]>((acc, item) => {
+    if (item.partyUuid === uuidToRemove) {
+      onRemove(item);
+    } else {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+  return remainingList;
+};
 
 export const UsersList = () => {
   const { t } = useTranslation();
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const { data: rightHolders, isLoading } = useGetRightHoldersQuery();
+  const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
+
+  const [currentUserAsRightHolder, setCurrentUserAsRightHolder] = useState<User>();
   const [searchString, setSearchString] = useState<string>('');
 
-  const pageSize = 10;
-
-  const { pageEntries, numOfPages, searchResultLength, currentUserAsRightHolder } =
-    useFilteredRightHolders(searchString, currentPage, pageSize);
+  const userList = useMemo(() => {
+    const remainingAfterExtraction = extractFromList(
+      rightHolders || [],
+      currentUser?.uuid ?? 'loading',
+      setCurrentUserAsRightHolder,
+    );
+    return remainingAfterExtraction;
+  }, [rightHolders, currentUser]);
 
   const onSearch = debounce((newSearchString: string) => {
     setSearchString(newSearchString);
-    setCurrentPage(1); // reset current page when searching
   }, 300);
 
   return (
     <div className={classes.usersList}>
-      {currentUserAsRightHolder && (
-        <div className={classes.currentUser}>
-          <ListItem
-            size='xl'
-            title={currentUserAsRightHolder.name}
-            description={currentUserAsRightHolder.registryRoles
-              .map((role) => t(`user_role.${role}`))
-              .join(', ')}
-            avatar={{
-              type: 'person',
-              name: currentUserAsRightHolder.name,
-            }}
-            as={(props) => (
-              <Link
-                {...props}
-                to={`${currentUserAsRightHolder.partyUuid}`}
-              />
-            )}
-          />
-        </div>
-      )}
+      <CurrentUserPageHeader
+        currentUser={currentUserAsRightHolder}
+        loading={currentUserLoading}
+        as={(props) =>
+          currentUserAsRightHolder ? (
+            <Link
+              {...props}
+              to={`${currentUserAsRightHolder?.partyUuid}`}
+            />
+          ) : (
+            <div {...props} />
+          )
+        }
+      />
       <Heading
         level={2}
         size='sm'
@@ -65,133 +79,20 @@ export const UsersList = () => {
         <Search
           className={classes.searchBar}
           placeholder={t('users_page.user_search_placeholder')}
-          onChange={(event) => onSearch(event.target.value)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
           onClear={() => {
             setSearchString('');
-            setCurrentPage(1);
           }}
           hideLabel
           label={t('users_page.user_search_placeholder')}
         />
         <NewUserButton />
       </div>
-      <List
-        spacing
-        className={classes.usersListItems}
-      >
-        {pageEntries.map((entry) => (
-          <RightholderListItem
-            rightholder={entry}
-            key={entry.partyUuid}
-          />
-        ))}
-      </List>
-
-      <Paragraph
-        role='alert'
-        size='lg'
-      >
-        {searchResultLength === 0 ? t('users_page.user_no_search_result') : ''}
-      </Paragraph>
-      {numOfPages > 1 && (
-        <AmPagination
-          className={classes.pagination}
-          size='sm'
-          hideLabels={true}
-          currentPage={currentPage}
-          totalPages={numOfPages}
-          setCurrentPage={setCurrentPage}
-        />
-      )}
-    </div>
-  );
-};
-
-const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
-  const [expanded, setExpanded] = useState(false);
-  const collapsible =
-    rightholder.inheritingRightHolders && rightholder.inheritingRightHolders.length > 0;
-
-  const avatar = {
-    type:
-      rightholder.partyType.toString() === 'Organization'
-        ? ('company' as AvatarType)
-        : ('person' as AvatarType),
-    name: rightholder.name,
-  };
-  const baseListItemProps = {
-    id: rightholder.partyUuid,
-    title: rightholder.name,
-    description: rightholder.unitType,
-    size: 'lg' as ListItemSize,
-    linkIcon: true,
-    avatar,
-  };
-  const rightHoldersList = useMemo(
-    () => [rightholder, ...rightholder.inheritingRightHolders],
-    [rightholder],
-  );
-  return (
-    <li>
-      {collapsible ? (
-        <ListItem
-          {...baseListItemProps}
-          collapsible
-          as='button'
-          expanded={expanded}
-          onClick={() => setExpanded(!expanded)}
-        />
-      ) : (
-        <ListItem
-          {...baseListItemProps}
-          as={(props) => (
-            <Link
-              {...props}
-              to={`${rightholder.partyUuid}`}
-            />
-          )}
-        />
-      )}
-
-      {expanded && collapsible && <ExpandedRightHoldersListItem rightHolders={rightHoldersList} />}
-    </li>
-  );
-};
-
-const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: RightHolder[] }) => {
-  const items =
-    rightHolders?.map((inheritingRightHolder) => ({
-      id: inheritingRightHolder.partyUuid,
-      title: inheritingRightHolder.name,
-      description: inheritingRightHolder.unitType,
-      linkIcon: true,
-      avatar: {
-        type:
-          inheritingRightHolder.partyType.toString() === 'Organization'
-            ? ('company' as AvatarType)
-            : ('person' as AvatarType),
-        name: inheritingRightHolder.name,
-      },
-    })) || [];
-
-  return (
-    <div className={classes.inheritingRightHoldersList}>
-      <ul className={classes.usersListItems}>
-        {items.map((item) => (
-          <li key={item.id}>
-            <ListItem
-              size='sm'
-              as={(props) => (
-                <Link
-                  {...props}
-                  to={`${item.id}`}
-                />
-              )}
-              {...item}
-            />
-          </li>
-        ))}
-      </ul>
+      <UserList
+        userList={userList || []}
+        searchString={searchString}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
