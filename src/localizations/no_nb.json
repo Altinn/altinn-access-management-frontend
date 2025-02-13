@@ -93,7 +93,8 @@
   },
   "sidebar": {
     "users": "Brukere",
-    "reportees": "Våre tilganger hos andre"
+    "reportees": "Våre tilganger hos andre",
+    "systemaccess": "API- og systemtilganger"
   },
   "profile": {
     "received": "Mottatte",

@@ -78,7 +78,8 @@
   },
   "sidebar": {
     "users": "Brukere",
-    "reportees": "Våre tilganger hos andre"
+    "reportees": "Våre tilganger hos andre",
+    "systemaccess": "API- og systemtilganger"
   },
   "error_page": {
     "not_found_site_error_type": "Feil 404",

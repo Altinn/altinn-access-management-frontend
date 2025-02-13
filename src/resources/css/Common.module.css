@@ -64,6 +64,7 @@ body {
   margin: 0;
 }
 
+/* TODO: copied values from designsystemet. Can be removed when we upgrade designsystemet to version > 0.45 */
 :root {
   --ds-size-base: 18;
   --ds-size-step: 4;

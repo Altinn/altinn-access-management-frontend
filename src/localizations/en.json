@@ -81,7 +81,8 @@
   },
   "sidebar": {
     "users": "Users",
-    "reportees": "Our access to other companies"
+    "reportees": "Our access to other companies",
+    "systemaccess": "API- and system access"
   },
   "error_page": {
     "not_found_site_type": "Error 404",
