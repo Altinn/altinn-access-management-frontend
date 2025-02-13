@@ -194,7 +194,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving all accesses a specified right holder has on behalf of a party (the reportee)
+        /// Endpoint for retrieving all accesses a specified user has on behalf of a party
         /// </summary>
         /// <param name="from">The uuid for the user which the right holder has access to</param>
         /// <param name="to">The uuid for the user whose accesses are to be returned</param>
@@ -202,8 +202,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("from/{from}/to/{to}/accesses")]
-        public async Task<ActionResult<UserAccesses>> GetRightholderAccesses(Guid from, Guid to)
+        public async Task<ActionResult<UserAccesses>> GetUserAccesses(Guid from, Guid to)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);

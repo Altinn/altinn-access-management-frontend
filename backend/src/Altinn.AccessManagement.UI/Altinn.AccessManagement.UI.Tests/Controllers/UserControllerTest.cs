@@ -240,6 +240,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Right holder's list of accesses is returned when valid input
+        /// </summary>
+        [Fact]
+        public async Task GetRightholderAccesses_Invalid_ModelState()
+        {
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "invalid_guid"; // invalid user uuid
+
+            var response = await _client.GetAsync($"accessmanagement/api/v1/user/from/{reporteeUuid}/to/{rightHolderUuid}/accesses");
+            UserAccesses actualResponse = await response.Content.ReadFromJsonAsync<UserAccesses>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Invalid rightHolderUuid returns HTTP error when invalid input is provided
         /// </summary>
         [Fact]
