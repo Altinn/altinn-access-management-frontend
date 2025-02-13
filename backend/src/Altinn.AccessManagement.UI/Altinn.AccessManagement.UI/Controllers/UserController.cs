@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>Reportee if party is in authenticated users reporteelist</returns>
         [HttpGet]
         [Authorize]
-        [Route("reporteelist/{partyId}")]
+        [Route("reportee/{partyId}")]
         public async Task<ActionResult<AuthorizedParty>> GetPartyFromReporteeListIfExists(int partyId)
         {
             try
@@ -99,15 +99,41 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet]
         [Authorize]
         [Route("reportee/{partyId}/rightholders")]
-        public async Task<ActionResult<List<RightHolder>>> GetReporteeRightHolders(int partyId)
+        public async Task<ActionResult<List<User>>> GetReporteeRightHolders(int partyId)
         {
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                List<RightHolder> rightHolders = await _userService.GetReporteeRightHolders(partyId);
+                List<User> rightHolders = await _userService.GetReporteeRightHolders(partyId);
 
                 return rightHolders;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch right holders");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving all right holders of a reportee
+        /// </summary>
+        /// <param name="partyUuid">The partyId for the reportee whose right holders to return</param>
+        /// <returns>List of right holders</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("reporteelist/{partyUuid}")]
+        public async Task<ActionResult<List<User>>> GetReporteeList(Guid partyUuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            try
+            {
+                return await _userService.GetReporteeList(partyUuid);
             }
             catch (Exception ex)
             {

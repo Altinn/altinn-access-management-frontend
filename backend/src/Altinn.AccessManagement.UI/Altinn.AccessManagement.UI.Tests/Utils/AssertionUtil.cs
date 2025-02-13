@@ -301,7 +301,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(RightHolder expected, RightHolder actual)
+        public static void AssertEqual(User expected, User actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);
@@ -501,5 +501,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
+        
     }
 }

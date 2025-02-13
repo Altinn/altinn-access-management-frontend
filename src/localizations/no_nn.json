@@ -76,6 +76,10 @@
     "change-label": "Bytt",
     "back-label": "Tilbake"
   },
+  "sidebar": {
+    "users": "Brukere",
+    "reportees": "Våre tilganger hos andre"
+  },
   "error_page": {
     "not_found_site_error_type": "Feil 404",
     "not_found_site_header": "Oi! Du prøvde å komme til ei side vi ikkje veit om",
@@ -246,6 +250,10 @@
     "user_list_heading": "Andre med fullmakt",
     "user_search_placeholder": "Søk etter brukarar eller virksomheter",
     "user_no_search_result": "Inga resultat for søket"
+  },
+  "reportees_page": {
+    "page_title": "Våre tilganger hos andre - Altinn",
+    "main_page_heading": "Fullmakter {{name}} har hos andre"
   },
   "user_rights_page": {
     "page_title": "Brukertilgang - Altinn",

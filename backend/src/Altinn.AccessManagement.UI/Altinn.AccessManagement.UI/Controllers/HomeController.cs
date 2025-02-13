@@ -85,13 +85,6 @@ namespace Altinn.AccessManagement.UI.Controllers
                 });
             }
 
-            HttpContext.Response.Cookies.Append("AltinnPartyUuid", "cd35779b-b174-4ecc-bbef-ece13611be7f", new CookieOptions
-            {
-                Secure = true,
-                HttpOnly = false, // Make this cookie readable by Javascript.
-                SameSite = SameSiteMode.Strict
-            });
-
             if (await ShouldShowAppView())
             {
                 ViewBag.featureFlags = _featureFlags;

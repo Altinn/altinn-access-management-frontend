@@ -18,6 +18,7 @@ import { SystemUserChangeRequestPage } from '@/features/amUI/systemUser/SystemUs
 import { SystemUserOverviewPage } from '@/features/amUI/systemUser/SystemUsersOverviewPage/SystemUserOverviewPage';
 import { SystemUserDetailsPage } from '@/features/amUI/systemUser/SystemUserDetailPage/SystemUserDetailsPage';
 import { CreateSystemUserPage } from '@/features/amUI/systemUser/CreateSystemUserPage/CreateSystemUserPage';
+import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
 
 import {
   GeneralPath,
@@ -98,6 +99,10 @@ export const Router = createBrowserRouter(
         element={<UserRightsPage />}
       />
       <Route
+        path={amUIPath.Reportees}
+        element={<ReporteesPage />}
+      />
+      <Route
         path={SystemUserPath.Overview}
         element={<SystemUserOverviewPage />}
       />
@@ -116,7 +121,6 @@ export const Router = createBrowserRouter(
       <Route
         path={SystemUserPath.ChangeRequest}
         element={<SystemUserChangeRequestPage />}
-      />
     </Route>,
   ),
   { basename: GeneralPath.BasePath },
