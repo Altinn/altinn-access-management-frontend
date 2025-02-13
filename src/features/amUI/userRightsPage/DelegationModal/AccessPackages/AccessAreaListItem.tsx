@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paragraph } from '@digdir/designsystemet-react';
 import { AccessAreaListItem as AreaListItem } from '@altinn/altinn-components';
+import { HeartBrokenIcon } from '@navikt/aksel-icons';
 
 import {
   useGetRightHolderDelegationsQuery,
@@ -39,7 +40,7 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
       name={name}
       expanded={expanded}
       onClick={() => toggleExpanded(!expanded, id)}
-      icon={iconUrl}
+      icon={HeartBrokenIcon}
       id={id}
     >
       <div className={classes.accessAreaContent}>

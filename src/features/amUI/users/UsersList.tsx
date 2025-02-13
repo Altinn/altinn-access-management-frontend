@@ -124,7 +124,7 @@ const RightholderListItem = ({ rightholder }: { rightholder: RightHolder }) => {
     title: rightholder.name,
     description: rightholder.unitType,
     size: 'lg' as ListItemSize,
-    linkIcon: 'chevron-right' as const,
+    linkIcon: true,
     avatar,
   };
   const rightHoldersList = useMemo(
@@ -164,7 +164,7 @@ const ExpandedRightHoldersListItem = ({ rightHolders }: { rightHolders: RightHol
       id: inheritingRightHolder.partyUuid,
       title: inheritingRightHolder.name,
       description: inheritingRightHolder.unitType,
-      linkIcon: 'chevron-right' as const,
+      linkIcon: true,
       avatar: {
         type:
           inheritingRightHolder.partyType.toString() === 'Organization'
