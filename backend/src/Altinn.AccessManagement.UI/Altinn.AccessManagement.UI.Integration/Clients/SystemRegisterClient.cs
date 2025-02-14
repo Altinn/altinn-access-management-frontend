@@ -3,7 +3,6 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -100,33 +99,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemRegisterClient // GetSystem // Exception");
-                throw;
-            }
-        }
-
-        /// <inheritdoc/>
-        public async Task<List<Right>> GetRightsFromSystem(string systemId, CancellationToken cancellationToken)
-        {
-            try
-            {
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemregister/{systemId}/rights";
-                var accessToken = await _accessTokenProvider.GetAccessToken();
-
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, accessToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonSerializer.Deserialize<List<Right>>(responseContent, _jsonSerializerOptions);
-                }
-                
-                _logger.LogError("AccessManagement.UI // SystemRegisterClient // GetRightsFromSystem // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SystemRegisterClient // GetRightsFromSystem // Exception");
                 throw;
             }
         }

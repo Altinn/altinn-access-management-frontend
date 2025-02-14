@@ -14,11 +14,12 @@ interface UserInfo {
   uuid: string;
 }
 
-interface ReporteeInfo {
+export interface ReporteeInfo {
   name: string;
   organizationNumber?: string;
   type?: string;
   partyUuid: string;
+  authorizedRoles: string[];
 }
 
 export enum PartyType {

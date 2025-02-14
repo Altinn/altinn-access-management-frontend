@@ -55,6 +55,20 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public List<Right> UnwantedRights { get; set; }
 
         /// <summary>
+        ///  The set of Access Packages requested as Required for this system user. 
+        /// </summary>
+        [Required]
+        [JsonPropertyName("requiredAccessPackages")]
+        public List<IdValuePair> RequiredAccessPackages { get; set; }
+
+        /// <summary>
+        /// The set of Access Packages to be ensured are not delegeted to this system user.
+        /// </summary>
+        [Required]
+        [JsonPropertyName("unwantedAccessPackages")]
+        public List<IdValuePair> UnwantedAccessPackages { get; set; }
+
+        /// <summary>
         /// Initially the request is "new", 
         /// other values are "accepted", "rejected", "denied"
         /// </summary>

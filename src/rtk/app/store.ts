@@ -12,6 +12,7 @@ import { accessPackageApi } from '../features/accessPackageApi';
 import { lookupApi } from '../features/lookupApi';
 import { userInfoApi } from '../features/userInfoApi';
 import { roleApi } from '../features/roleApi';
+import { systemUserApi } from '../features/systemUserApi';
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     [resourceApi.reducerPath]: resourceApi.reducer,
     [accessPackageApi.reducerPath]: accessPackageApi.reducer,
     [roleApi.reducerPath]: roleApi.reducer,
+    [systemUserApi.reducerPath]: systemUserApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -37,6 +39,7 @@ const store = configureStore({
       userInfoApi.middleware,
       accessPackageApi.middleware,
       roleApi.middleware,
+      systemUserApi.middleware,
     ),
 });
 

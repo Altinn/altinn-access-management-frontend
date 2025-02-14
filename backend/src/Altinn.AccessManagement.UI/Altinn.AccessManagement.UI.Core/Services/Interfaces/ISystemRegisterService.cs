@@ -25,8 +25,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="systemId">The system to get rights from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
-        /// A list of frontend resource objects (with logo)
+        /// A list of frontend resource objects (with logo) and access packages
         /// </returns>
-        Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken);
+        Task<RegisteredSystemRightsFE> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken);
     }
 }
