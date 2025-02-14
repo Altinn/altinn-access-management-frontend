@@ -198,7 +198,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="from">The uuid for the user which the right holder has access to</param>
         /// <param name="to">The uuid for the user whose accesses are to be returned</param>
-        /// <returns>All right holder's accesses</returns>
+        /// <returns>All accesses a user (to) has on behalf of a party (from)</returns>
         [HttpGet]
         [Authorize]
         [Route("from/{from}/to/{to}/accesses")]
