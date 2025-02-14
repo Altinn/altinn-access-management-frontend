@@ -52,10 +52,61 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const numberOfRights =
     (systemUser?.resources?.length || 0) + (systemUser?.accessPackages?.length || 0);
 
+  const deletePopover = (
+    <div className={classes.systemUserDeleteButtonContainer}>
+      <Popover.Context>
+        <Popover.Trigger
+          variant='tertiary'
+          data-color='danger'
+          onClick={() => setIsPopoverOpen(true)}
+        >
+          <TrashIcon aria-hidden />
+          {t('systemuser_detailpage.delete_systemuser')}
+        </Popover.Trigger>
+        <Popover
+          open={isPopoverOpen}
+          data-color='danger'
+          className={classes.deletePopover}
+          onClose={() => setIsPopoverOpen(false)}
+        >
+          {t('systemuser_detailpage.delete_systemuser_body', {
+            title: systemUser?.integrationTitle,
+          })}
+          {isDeleteError && (
+            <Alert
+              data-color='danger'
+              role='alert'
+            >
+              {t('systemuser_detailpage.delete_systemuser_error')}
+            </Alert>
+          )}
+          <ButtonRow>
+            <Button
+              data-color='danger'
+              disabled={isDeletingSystemUser}
+              onClick={handleDeleteSystemUser}
+            >
+              {t('systemuser_detailpage.delete_systemuser')}
+            </Button>
+            <Button
+              variant='tertiary'
+              onClick={() => setIsPopoverOpen(false)}
+            >
+              {t('common.cancel')}
+            </Button>
+          </ButtonRow>
+        </Popover>
+      </Popover.Context>
+    </div>
+  );
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <PageContainer onNavigateBack={handleNavigateBack}>
+        <PageContainer
+          onNavigateBack={handleNavigateBack}
+          pageActions={deletePopover}
+        >
           {isLoadingSystemUser && (
             <Spinner
               aria-label={t('systemuser_detailpage.loading_systemuser')}
@@ -75,50 +126,6 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
                 }
                 integrationTitle={systemUser.integrationTitle}
               />
-              <Popover.Context>
-                <Popover.Trigger
-                  variant='tertiary'
-                  data-color='danger'
-                  className={classes.systemUserDeleteButton}
-                  onClick={() => setIsPopoverOpen(true)}
-                >
-                  <TrashIcon aria-hidden />
-                  {t('systemuser_detailpage.delete_systemuser')}
-                </Popover.Trigger>
-                <Popover
-                  open={isPopoverOpen}
-                  data-color='danger'
-                  className={classes.deletePopover}
-                  onClose={() => setIsPopoverOpen(false)}
-                >
-                  {t('systemuser_detailpage.delete_systemuser_body', {
-                    title: systemUser.integrationTitle,
-                  })}
-                  {isDeleteError && (
-                    <Alert
-                      data-color='danger'
-                      role='alert'
-                    >
-                      {t('systemuser_detailpage.delete_systemuser_error')}
-                    </Alert>
-                  )}
-                  <ButtonRow>
-                    <Button
-                      data-color='danger'
-                      disabled={isDeletingSystemUser}
-                      onClick={handleDeleteSystemUser}
-                    >
-                      {t('systemuser_detailpage.delete_systemuser')}
-                    </Button>
-                    <Button
-                      variant='tertiary'
-                      onClick={() => setIsPopoverOpen(false)}
-                    >
-                      {t('common.cancel')}
-                    </Button>
-                  </ButtonRow>
-                </Popover>
-              </Popover.Context>
               <RightsList
                 resources={systemUser.resources}
                 accessPackages={systemUser.accessPackages}

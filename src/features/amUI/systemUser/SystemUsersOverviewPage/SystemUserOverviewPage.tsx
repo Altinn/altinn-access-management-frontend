@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Heading, Paragraph, Spinner, Tabs } from '@digdir/designsystemet-react';
-import { PlusIcon } from '@navikt/aksel-icons';
+import { PlusIcon, TenancyIcon } from '@navikt/aksel-icons';
+import { List } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -12,7 +13,6 @@ import { SystemUserPath } from '@/routes/paths';
 
 import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
-import { SystemUserActionBar } from '../components/SystemUserActionBar/SystemUserActionBar';
 
 import classes from './SystemUserOverviewPage.module.css';
 
@@ -90,16 +90,22 @@ export const SystemUserOverviewPage = () => {
                     {t('systemuser_overviewpage.systemusers_load_error')}
                   </Alert>
                 )}
-                <ul className={classes.unstyledList}>
-                  {systemUsers?.map((systemUser) => (
-                    <SystemUserActionBar
-                      key={systemUser.id}
-                      systemUser={systemUser}
-                      isNew={newlyCreatedId === systemUser.id}
-                      onClick={(systemUserId) => navigate(`/systemuser/${systemUserId}`)}
-                    />
-                  ))}
-                </ul>
+                <List
+                  defaultItemSize='lg'
+                  items={systemUsers?.map((systemUser) => {
+                    const isNew = newlyCreatedId === systemUser.id;
+                    return {
+                      title: systemUser.integrationTitle,
+                      description: systemUser.system.systemVendorOrgName,
+                      icon: TenancyIcon,
+                      linkIcon: true,
+                      badge: isNew
+                        ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
+                        : undefined,
+                      onClick: () => navigate(`/systemuser/${systemUser.id}`),
+                    };
+                  })}
+                />
               </CreateSystemUserCheck>
             </div>
           </Tabs.Panel>

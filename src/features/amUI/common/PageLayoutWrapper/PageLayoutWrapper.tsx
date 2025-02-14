@@ -1,7 +1,7 @@
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { HandshakeIcon, PersonGroupIcon, InboxIcon } from '@navikt/aksel-icons';
+import { HandshakeIcon, PersonGroupIcon, InboxIcon, TenancyIcon } from '@navikt/aksel-icons';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath, SystemUserPath } from '@/routes/paths';
@@ -83,7 +83,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 groupId: 4,
                 id: '4',
                 title: t('sidebar.systemaccess'),
-                icon: 'tenancy',
+                icon: TenancyIcon,
                 as: (props) => (
                   <Link
                     to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}

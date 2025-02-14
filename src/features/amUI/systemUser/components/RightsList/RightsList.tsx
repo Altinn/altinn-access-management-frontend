@@ -1,6 +1,7 @@
 import React from 'react';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Modal } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
+import { AccessPackageList, ResourceList } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
@@ -8,7 +9,7 @@ import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
 import { AccessPackageInfo } from './AccessPackageInfo';
-import { ResourceInfo } from './ResourceInfo';
+import { ResourceDetails } from './ResourceDetails';
 
 interface RightsListProps {
   resources: ServiceResource[];
@@ -17,6 +18,29 @@ interface RightsListProps {
 
 export const RightsList = ({ resources, accessPackages }: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
+  const modalRef = React.useRef<HTMLDialogElement>(null);
+  const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
+  const [selectedAccessPackage, setSelectedAccessPackage] =
+    React.useState<SystemUserAccessPackage | null>(null);
+
+  const onSelectResource = (resource: ServiceResource): void => {
+    setSelectedAccessPackage(null);
+    setSelectedResource(resource);
+    modalRef.current?.showModal();
+  };
+
+  const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
+    setSelectedResource(null);
+    setSelectedAccessPackage(accessPackage);
+    modalRef.current?.showModal();
+  };
+
+  const closeModal = (): void => {
+    setSelectedResource(null);
+    setSelectedAccessPackage(null);
+    modalRef.current?.close();
+  };
+
   return (
     <div className={classes.rightsList}>
       {accessPackages.length > 0 && (
@@ -31,14 +55,21 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
                   accessPackageCount: accessPackages.length,
                 })}
           </Heading>
-          <ul className={classes.unstyledList}>
-            {accessPackages.map((accessPackage) => (
-              <AccessPackageInfo
-                key={accessPackage.id}
-                accessPackage={accessPackage}
-              />
-            ))}
-          </ul>
+          <AccessPackageList
+            items={accessPackages.map((accessPackage) => {
+              return {
+                id: accessPackage.id,
+                title: accessPackage.name,
+                description:
+                  accessPackage.resources.length === 1
+                    ? t('systemuser_detailpage.accesspackage_resources_list_singular')
+                    : t('systemuser_detailpage.accesspackage_resources_list_plural', {
+                        resourcesCount: accessPackage.resources.length,
+                      }),
+                onClick: () => onSelectAccessPackage(accessPackage),
+              };
+            })}
+          />
         </div>
       )}
       {resources.length > 0 && (
@@ -53,14 +84,27 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
                   resourcesCount: resources.length,
                 })}
           </Heading>
-          <ul className={classes.unstyledList}>
-            {resources.map((resource) => (
-              <ResourceInfo
-                key={resource.identifier}
-                resource={resource}
-              />
-            ))}
-          </ul>
+          <ResourceList
+            defaultItemSize='sm'
+            items={resources.map((resource) => {
+              return {
+                id: resource.identifier,
+                ownerLogoUrl: resource.resourceOwnerLogoUrl,
+                ownerLogoUrlAlt: resource.resourceOwnerName,
+                ownerName: resource.resourceOwnerName,
+                resourceName: resource.title,
+                onClick: () => onSelectResource(resource),
+              };
+            })}
+          />
+          <Modal
+            ref={modalRef}
+            onClose={closeModal}
+            backdropClose
+          >
+            {selectedResource && <ResourceDetails resource={selectedResource} />}
+            {selectedAccessPackage && <AccessPackageInfo accessPackage={selectedAccessPackage} />}
+          </Modal>
         </div>
       )}
     </div>
