@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { chromium, type Page, expect } from '@playwright/test';
-
+import { login } from '../pageSelectors/login';
 export class loginWithUser {
   constructor(public page: Page) {}
 
   async loginWithUser(testUser: string) {
     await this.page.goto(process.env.BASE_URL as string);
-    await this.page.click("'Logg inn/Min profil'");
-    await this.page.getByText('TestID Lag din egen').click();
-    await this.page.locator("input[name='pid']").fill(testUser);
-    await this.page.click("'Autentiser'");
+    await this.page.click(login.egenDefBruker.loggInn);
+    await this.page.getByText(login.egenDefBruker.testID).click();
+    await this.page.locator(login.egenDefBruker.ident).fill(testUser);
+    await this.page.click(login.egenDefBruker.autentiser);
   }
 
   async chooseReportee(reportee: string) {
