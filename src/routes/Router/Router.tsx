@@ -103,7 +103,7 @@ export const Router = createBrowserRouter(
         path={amUIPath.Reportees}
         element={<ReporteesPage />}
       />
-      <Route>
+      <Route
         path={amUIPath.ReporteeRights}
         element={<ReporteeRightsPage />}
       />
