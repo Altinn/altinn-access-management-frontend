@@ -178,36 +178,33 @@
     ]
   },
   {
-    "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
-    "name": "Kunze - Kunde",
-    "organizationNumber": "400928636",
-    "personId": null,
-    "partyId": 75306803,
-    "type": "Organization",
-    "unitType": "Group",
+    "partyId": 51541420,
+    "partyUuid": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+    "partyTypeName": 2,
+    "orgNumber": "312229854",
+    "unitType": "OPMV",
+    "name": "Sein Dyktig Mår",
     "isDeleted": false,
     "onlyHierarchyElementWithNoAccess": false,
-    "authorizedResources": [],
-    "authorizedRoles": [
-    ],
-    "subunits": [
-      {
-        "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff1",
-        "name": "Malin Kunze",
-        "organizationNumber": null,
-        "personId": "24110098626",
-        "partyId": 41126878,
-        "type": "Person",
-        "unitType": null,
-        "isDeleted": false,
-        "onlyHierarchyElementWithNoAccess": false,
-        "authorizedResources": [],
-        "authorizedRoles": [
-          "DAGL"
-        ],
-        "subunits": []
-      }
-    ]
+    "person": null,
+    "organization": {
+        "orgNumber": "312229854",
+        "name": "Sein Dyktig Mår",
+        "unitType": "OPMV",
+        "telephoneNumber": null,
+        "mobileNumber": null,
+        "faxNumber": null,
+        "eMailAddress": "",
+        "internetAddress": null,
+        "mailingAddress": null,
+        "mailingPostalCode": null,
+        "mailingPostalCity": null,
+        "businessAddress": null,
+        "businessPostalCode": null,
+        "businessPostalCity": null,
+        "unitStatus": "N"
+    },
+    "childParties": null
   },
   {
     "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",

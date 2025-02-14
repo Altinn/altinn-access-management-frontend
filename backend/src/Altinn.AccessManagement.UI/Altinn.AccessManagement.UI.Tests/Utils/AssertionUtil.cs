@@ -372,7 +372,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(RightHolderAccesses expected, RightHolderAccesses actual)
+        public static void AssertEqual(UserAccesses expected, UserAccesses actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

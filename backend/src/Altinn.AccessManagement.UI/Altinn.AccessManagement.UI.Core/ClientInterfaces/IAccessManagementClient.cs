@@ -33,10 +33,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <summary>
         /// Gets all accesses of a given right holder for a reportee
         /// </summary>
-        /// <param name = "reporteeUuid" > The uuid for the reportee which the right holder has access to</param>
-        /// <param name="rightHolderUuid">The uuid for the right holder whose accesses are to be returned</param>
+        /// <param name = "from" > The uuid for the reportee which the right holder has access to</param>
+        /// <param name="to">The uuid for the right holder whose accesses are to be returned</param>
         /// <returns>All right holder's accesses</returns>
-        Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid);
+        Task<UserAccesses> GetUserAccesses(Guid from, Guid to);
 
         //// Single Rights
 

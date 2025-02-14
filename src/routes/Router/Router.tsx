@@ -19,6 +19,7 @@ import { SystemUserOverviewPage } from '@/features/amUI/systemUser/SystemUsersOv
 import { SystemUserDetailsPage } from '@/features/amUI/systemUser/SystemUserDetailPage/SystemUserDetailsPage';
 import { CreateSystemUserPage } from '@/features/amUI/systemUser/CreateSystemUserPage/CreateSystemUserPage';
 import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
+import { ReporteeRightsPage } from '@/features/amUI/ReporteeRightsPage/ReporteeRightsPage';
 
 import {
   GeneralPath,
@@ -101,6 +102,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.Reportees}
         element={<ReporteesPage />}
+      />
+      <Route>
+        path={amUIPath.ReporteeRights}
+        element={<ReporteeRightsPage />}
       />
       <Route
         path={SystemUserPath.SystemUser}

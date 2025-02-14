@@ -194,21 +194,26 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for retrieving all accesses a specified right holder has on behalf of a party (the reportee)
+        /// Endpoint for retrieving all accesses a specified user has on behalf of a party
         /// </summary>
-        /// <param name="reporteeUuid">The uuid for the reportee which the right holder has access to</param>
-        /// <param name="rightHolderUuid">The uuid for the right holder whose accesses are to be returned</param>
-        /// <returns>All right holder's accesses</returns>
+        /// <param name="from">The uuid for the user which the right holder has access to</param>
+        /// <param name="to">The uuid for the user whose accesses are to be returned</param>
+        /// <returns>All accesses a user (to) has on behalf of a party (from)</returns>
         [HttpGet]
         [Authorize]
-        [Route("reportee/{reporteeUuid}/rightholders/{rightHolderUuid}/accesses")]
-        public async Task<ActionResult<RightHolderAccesses>> GetRightholderAccesses(string reporteeUuid, string rightHolderUuid)
+        [Route("from/{from}/to/{to}/accesses")]
+        public async Task<ActionResult<UserAccesses>> GetUserAccesses(Guid from, Guid to)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             try
             {
                 string userPartyID = AuthenticationHelper.GetUserPartyId(_httpContextAccessor.HttpContext);
 
-                RightHolderAccesses accesses = await _userService.GetRightHolderAccesses(reporteeUuid, rightHolderUuid);
+                UserAccesses accesses = await _userService.GetUserAccesses(from, to);
 
                 return accesses;
             }

@@ -7,63 +7,15 @@
             "REGN"
         ],
         "organizationNumber": "644227165",
-        "unitType": "LLC",
-        "inheritingReportees": [
-            {
-                "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff8",
-                "partyType": "Person",
-                "name": "Aslan Lion",
-                "registryRoles": [
-                    "DAGL"
-                ],
-                "organizationNumber": null,
-                "unitType": null,
-                "inheritingReportees": []
-            },
-            {
-                "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff6",
-                "partyType": "Person",
-                "name": "Tumulus Deer",
-                "registryRoles": [
-                    "LEDE"
-                ],
-                "organizationNumber": null,
-                "unitType": null,
-                "inheritingReportees": []
-            },
-            {
-                "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
-                "partyType": "Person",
-                "name": "Santa Claus",
-                "registryRoles": [
-                    "REGN"
-                ],
-                "organizationNumber": null,
-                "unitType": null,
-                "inheritingReportees": []
-            }
-        ]
+        "unitType": "LLC"
     },
     {
-        "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
+        "partyUuid": "05bbad70-90db-4900-8f29-0a09cf6db1af",
         "partyType": "Organization",
-        "name": "Kunze - Kunde",
+        "name": "Sein Dyktig Mår",
         "registryRoles": [],
-        "organizationNumber": "400928636",
-        "unitType": "Group",
-        "inheritingReportees": [
-            {
-                "partyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff1",
-                "partyType": "Person",
-                "name": "Malin Kunze",
-                "registryRoles": [
-                    "DAGL"
-                ],
-                "organizationNumber": null,
-                "unitType": null,
-                "inheritingReportees": []
-            }
-        ]
+        "organizationNumber": "312229854",
+        "unitType": "OPMV"
     },
     {
         "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
@@ -72,24 +24,6 @@
         "registryRoles": [
             "LEDE"
         ],
-        "organizationNumber": null,
-        "unitType": null,
-        "inheritingReportees": []
-    },
-    {
-        "partyUuid": "f8022101-70f5-098b-91ff-f19c05f3e9b3",
-        "partyType": "Person",
-        "name": "Kristopher Blanda",
-        "registryRoles": [],
-        "organizationNumber": null,
-        "unitType": null,
-        "inheritingReportees": []
-    },
-    {
-        "partyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
-        "partyType": "Person",
-        "name": "Ken Kuvalis",
-        "registryRoles": [],
         "organizationNumber": null,
         "unitType": null,
         "inheritingReportees": []

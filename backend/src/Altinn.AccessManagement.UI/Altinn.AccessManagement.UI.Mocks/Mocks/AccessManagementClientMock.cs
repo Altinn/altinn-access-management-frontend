@@ -102,12 +102,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public async Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
+        public async Task<UserAccesses> GetUserAccesses(Guid from, Guid to)
         {
             try
             {
-                string dataPath = Path.Combine(dataFolder, "RightHolders", "RightHolderAccess", $"{rightHolderUuid}.json");
-                return await Task.FromResult(Util.GetMockData<RightHolderAccesses>(dataPath));
+                string dataPath = Path.Combine(dataFolder, "RightHolders", "UserAccesses", $"{from}_{to}.json");
+                return await Task.FromResult(Util.GetMockData<UserAccesses>(dataPath));
             }
             catch
             {
