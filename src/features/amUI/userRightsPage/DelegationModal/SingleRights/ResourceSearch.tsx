@@ -150,6 +150,11 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
   };
 
   const listedResources = resources?.map((resource: ServiceResource, index: number) => {
+    const hasPoa =
+      !!delegatedResources &&
+      delegatedResources.some(
+        (delegation) => delegation.resource?.identifier === resource.identifier,
+      );
     return (
       <li
         key={resource.identifier ?? index}
@@ -162,19 +167,10 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           ownerLogoUrl={resource.resourceOwnerLogoUrl}
           ownerLogoUrlAlt={resource.resourceOwnerName}
           onClick={() => onSelection(resource)}
+          badge={
+            hasPoa ? { label: t('common.has_poa'), theme: 'base', color: 'success' } : undefined
+          }
         />
-
-        {!!delegatedResources &&
-          delegatedResources.some(
-            (delegation) => delegation.resource?.identifier === resource.identifier,
-          ) && (
-            <Paragraph
-              size='xs'
-              className={classes.infoText}
-            >
-              {t('common.has_poa')}
-            </Paragraph>
-          )}
       </li>
     );
   });

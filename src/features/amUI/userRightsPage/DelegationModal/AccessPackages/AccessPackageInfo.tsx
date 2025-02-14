@@ -3,7 +3,11 @@ import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
-import { InformationSquareFillIcon } from '@navikt/aksel-icons';
+import {
+  InformationSquareFillIcon,
+  MenuElipsisHorizontalIcon,
+  PackageIcon,
+} from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
@@ -76,7 +80,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
       <div className={classes.header}>
         <Icon
           size='xl'
-          name='package'
+          svgElement={PackageIcon}
           className={classes.headerIcon}
         />
         <Heading
@@ -154,7 +158,7 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     title: t('common.show_more'),
     description: '',
     onClick: () => setShowAll(!showAll),
-    icon: 'menu-elipsis-horizontal',
+    icon: MenuElipsisHorizontalIcon,
     as: 'button' as React.ElementType,
     size: 'xs',
   };

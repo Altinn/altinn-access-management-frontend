@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
-import type { IconName } from '@altinn/altinn-components';
 
 import { SnackbarContainer } from './Snackbar';
 
@@ -14,7 +13,7 @@ export interface SnackbarMessage {
   variant: SnackbarMessageVariant;
   duration: number;
   dismissable: boolean;
-  icon?: IconName;
+  icon?: SVGElement;
 }
 
 interface SnackbarConfig {

@@ -39,8 +39,9 @@ const AccessAreaListItem: React.FC<AccessAreaListItemProps> = ({
       name={name}
       expanded={expanded}
       onClick={() => toggleExpanded(!expanded, id)}
-      icon={iconUrl}
+      iconUrl={iconUrl}
       id={id}
+      colorTheme='company'
     >
       <div className={classes.accessAreaContent}>
         <Paragraph size='sm'>{description}</Paragraph>

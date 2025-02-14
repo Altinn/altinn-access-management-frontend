@@ -2,6 +2,7 @@ import { Layout } from '@altinn/altinn-components';
 import { RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { HandshakeIcon, PersonGroupIcon, InboxIcon } from '@navikt/aksel-icons';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
@@ -50,7 +51,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             items: [
               {
                 groupId: 1,
-                icon: 'handshake',
+                icon: HandshakeIcon,
                 id: '1',
                 size: 'lg',
                 title: 'Tilgangsstyring',
@@ -59,7 +60,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 groupId: 2,
                 id: '2',
                 title: t('sidebar.users'),
-                icon: 'person-group',
+                icon: PersonGroupIcon,
                 as: (props) => (
                   <Link
                     to={`/${amUIPath.Users}`}
@@ -71,7 +72,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
                 groupId: 3,
                 id: '3',
                 title: t('sidebar.reportees'),
-                icon: 'inbox',
+                icon: InboxIcon,
                 as: (props) => (
                   <Link
                     to={`/${amUIPath.Reportees}`}

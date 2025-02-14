@@ -1,4 +1,4 @@
-import { AccessPackageListItem } from '@altinn/altinn-components';
+import { ListItem } from '@altinn/altinn-components';
 
 import type { ExtendedRole } from '@/rtk/features/roleApi';
 import { useDelegationCheckQuery } from '@/rtk/features/roleApi';
@@ -13,6 +13,7 @@ interface RoleLIstItemProps {
   onClick: () => void;
   assignmentId?: string;
   toParty: Party;
+  active?: boolean;
 }
 
 export const RoleListItem = ({
@@ -21,6 +22,7 @@ export const RoleListItem = ({
   onClick,
   toParty,
   assignmentId,
+  active = false,
 }: RoleLIstItemProps) => {
   const { data: delegationCheckResult, isFetching } = useDelegationCheckQuery({
     rightownerUuid: reporteeUuid,
@@ -28,37 +30,37 @@ export const RoleListItem = ({
   });
 
   return (
-    <li>
-      <AccessPackageListItem
-        id={role.id}
-        onClick={onClick}
-        as='button'
-        title={role.name}
-        size='sm'
-        controls={
-          assignmentId ? (
-            <RevokeRoleButton
-              key={role.id}
-              assignmentId={assignmentId}
-              roleName={role.name}
-              toParty={toParty}
-              fullText={false}
-              size='sm'
-              disabled={role.inherited?.length > 0}
-            />
-          ) : (
-            <DelegateRoleButton
-              key={role.id}
-              roleId={role.id}
-              roleName={role.name}
-              toParty={toParty}
-              fullText={false}
-              size='sm'
-              disabled={isFetching || !delegationCheckResult?.canDelegate}
-            />
-          )
-        }
-      />
-    </li>
+    <ListItem
+      id={role.id}
+      onClick={onClick}
+      as='button'
+      title={role.name}
+      size='sm'
+      color={active ? 'company' : 'neutral'}
+      theme='subtle'
+      controls={
+        assignmentId ? (
+          <RevokeRoleButton
+            key={role.id}
+            assignmentId={assignmentId}
+            roleName={role.name}
+            toParty={toParty}
+            fullText={false}
+            size='sm'
+            disabled={role.inherited?.length > 0}
+          />
+        ) : (
+          <DelegateRoleButton
+            key={role.id}
+            roleId={role.id}
+            roleName={role.name}
+            toParty={toParty}
+            fullText={false}
+            size='sm'
+            disabled={isFetching || !delegationCheckResult?.canDelegate}
+          />
+        )
+      }
+    />
   );
 };

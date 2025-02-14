@@ -46,6 +46,7 @@ export const ButtonWithConfirmPopup = ({
         id={id.current}
         open={open}
         onClose={() => setOpen(false)}
+        className={classes.popover}
         {...popoverProps}
       >
         <Paragraph className={classes.confirmPopupMessage}>{message}</Paragraph>
