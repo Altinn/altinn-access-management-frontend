@@ -240,7 +240,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Right holder's list of accesses is returned when valid input
+        /// Returns Bad Request when invalid input
         /// </summary>
         [Fact]
         public async Task GetRightholderAccesses_Invalid_ModelState()
