@@ -3558,7 +3558,7 @@ __metadata:
     axios: "npm:^1.7.2"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^7.0.3"
-    cypress: "npm:^13.15.0"
+    cypress: "npm:^14.0.0"
     cypress-real-events: "npm:^1.10.0"
     cypress-recurse: "npm:^1.35.2"
     dotenv: "npm:^16.4.5"
@@ -4713,9 +4713,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.15.0":
-  version: 13.17.0
-  resolution: "cypress@npm:13.17.0"
+"cypress@npm:^14.0.0":
+  version: 14.0.2
+  resolution: "cypress@npm:14.0.2"
   dependencies:
     "@cypress/request": "npm:^3.0.6"
     "@cypress/xvfb": "npm:^1.2.4"
@@ -4762,7 +4762,7 @@ __metadata:
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10/6c548e2adf7ae127365570680aa32015dbeb94cad30ce4f8a92e2e58d8ef7033b7f0ece50579a0a13eb07061feede0c813ff8d1e50e0feb87520dece5be4ba95
+  checksum: 10/1adb4dd7559c8e483815fa682a8e02115e654e3dd6cd006cd0c7ea97c88acb4dcbe5feaa8a5d8b67e034883c208cd3d5c18f6e8df50a38e1d8dd1449ce7fd889
   languageName: node
   linkType: hard
 
