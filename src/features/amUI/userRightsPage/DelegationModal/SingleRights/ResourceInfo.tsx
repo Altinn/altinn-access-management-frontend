@@ -3,7 +3,7 @@ import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Avatar } from '@altinn/altinn-components';
+import { Avatar, Badge } from '@altinn/altinn-components';
 
 import type {
   DelegationCheckedRight,
@@ -300,12 +300,22 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               name={resource.resourceOwnerName ?? ''}
             />
             <div className={classes.resource}>
-              <Heading
-                level={3}
-                size='sm'
-              >
-                {resource.title}
-              </Heading>
+              <div className={classes.infoHeading}>
+                <Heading
+                  level={3}
+                  size='sm'
+                >
+                  {resource.title}
+                </Heading>
+                {hasAccess && (
+                  <Badge
+                    label={t('common.has_poa')}
+                    theme='base'
+                    color='success'
+                  />
+                )}
+              </div>
+
               <Paragraph>{resource.resourceOwnerName}</Paragraph>
             </div>
           </div>

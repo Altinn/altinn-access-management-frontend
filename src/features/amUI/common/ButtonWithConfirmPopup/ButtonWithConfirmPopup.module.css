@@ -5,6 +5,11 @@
 
 .confirmPopupButtons {
   display: flex;
-  justify-content: space-between;
-  margin: 0 1rem 0 1rem;
+  gap: 2rem;
+  justify-content: center;
+  margin: 1rem 1rem 0 1rem;
+}
+
+.popover {
+  min-width: fit-content;
 }

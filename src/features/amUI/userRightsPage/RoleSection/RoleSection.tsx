@@ -78,6 +78,7 @@ export const RoleSection = () => {
                       }}
                       toParty={party}
                       assignmentId={role.assignmentId}
+                      active
                     />
                   );
                 })}

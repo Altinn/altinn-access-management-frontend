@@ -15,7 +15,7 @@ interface UserListItemProps extends ListItemProps {
 
 export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps) => {
   const { t } = useTranslation();
-  const hasInheritingUsers = user.inheritingUsers.length > 0;
+  const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
 
   useEffect(
@@ -40,6 +40,7 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}
+        linkIcon={!hasInheritingUsers}
         onClick={() => {
           if (hasInheritingUsers) setExpanded(!isExpanded);
         }}
