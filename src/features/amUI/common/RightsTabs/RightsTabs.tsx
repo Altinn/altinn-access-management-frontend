@@ -3,8 +3,6 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import classes from './RightsTabs.module.css';
-
 interface RightsTabsProps {
   tabBadge?: {
     accessPackages: number;
@@ -30,7 +28,6 @@ export const RightsTabs = ({
       size='sm'
       value={chosenTab}
       onChange={setChosenTab}
-      className={classes.tabs}
     >
       <Tabs.List>
         <Tabs.Tab value='packages'>

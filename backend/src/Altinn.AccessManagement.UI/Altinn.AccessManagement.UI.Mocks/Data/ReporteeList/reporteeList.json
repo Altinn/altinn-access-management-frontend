@@ -14,13 +14,13 @@
     "subunits": []
   },
   {
-    "partyUuid": "9d62a1ad-bd1c-4bcb-b5fb-d2adc4b25123",
-    "name": "Rimelig Helle",
-    "organizationNumber": "400928636",
+    "partyUuid": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+    "name": "Sein Dyktig Mår",
+    "organizationNumber": "312229854",
     "personId": null,
-    "partyId": 75306803,
+    "partyId": 51541420,
     "type": "Organization",
-    "unitType": "Group",
+    "unitType": "OPMV",
     "isDeleted": false,
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
