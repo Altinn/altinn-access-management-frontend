@@ -442,7 +442,7 @@
     "system_description": "Through the system access <strong>{{systemName}}</strong> will be able to solve issues on behalf of <strong>{{partyName}}</strong>.",
     "rights_list_header": "The system access will be granted these power of attorney:",
     "rights_list_header_single": "The system access will be granted this power of attorney:",
-    "withdraw_consent_info": "You can withdraw your consent or change the system access at altinn.no at any time.",
+    "withdraw_consent_info": "You can withdraw your consent at altinn.no at any time.",
     "accept": "Approve system access",
     "reject": "Reject",
     "org_nr": "{{systemName}} is delivered by {{vendorName}}, org.nr. {{vendorOrg}}",

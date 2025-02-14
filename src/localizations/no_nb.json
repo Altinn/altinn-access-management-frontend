@@ -441,7 +441,7 @@
     "system_description": "Gjennom systemtilgangen kan <strong>{{systemName}}</strong> løse oppgaver på vegne av <strong>{{partyName}}</strong>.",
     "rights_list_header": "Systemtilgangen vil få disse fullmaktene:",
     "rights_list_header_single": "Systemtilgangen vil få denne fullmakten:",
-    "withdraw_consent_info": "Du kan når som helst trekke tilbake godkjenningen og endre systemtilgangen på altinn.no.",
+    "withdraw_consent_info": "Du kan når som helst trekke tilbake godkjenningen på altinn.no.",
     "accept": "Godkjenn systemtilgang",
     "reject": "Avvis",
     "org_nr": "{{systemName}} blir levert av {{vendorName}}, org.nr. {{vendorOrg}}",
