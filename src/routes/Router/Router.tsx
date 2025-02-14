@@ -14,6 +14,7 @@ import { ReceiptPage as SingleRightReceiptPage } from '@/features/singleRight/de
 import { UserRightsPage } from '@/features/amUI/userRightsPage/UserRightsPage';
 import { UsersPage } from '@/features/amUI/users/UsersPage';
 import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
+import { ReporteeRightsPage } from '@/features/amUI/ReporteeRightsPage/ReporteeRightsPage';
 
 import { GeneralPath, SingleRightPath, ApiDelegationPath, amUIPath } from '../paths';
 
@@ -90,6 +91,10 @@ export const Router = createBrowserRouter(
       <Route
         path={amUIPath.Reportees}
         element={<ReporteesPage />}
+      />
+      <Route
+        path={amUIPath.ReporteeRights}
+        element={<ReporteeRightsPage />}
       />
     </Route>,
   ),

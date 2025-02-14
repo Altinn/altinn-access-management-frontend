@@ -73,9 +73,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public Task<RightHolderAccesses> GetRightHolderAccesses(string reporteeUuid, string rightHolderUuid)
+        public Task<UserAccesses> GetUserAccesses(Guid from, Guid to)
         {
-            return _accessManagementClient.GetRightHolderAccesses(reporteeUuid, rightHolderUuid);
+            return _accessManagementClient.GetUserAccesses(from, to);
         }
 
         /// <inheritdoc/>

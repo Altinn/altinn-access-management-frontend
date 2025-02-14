@@ -14,13 +14,13 @@
     "subunits": []
   },
   {
-    "partyUuid": "5de64166-5020-72c5-f0f2-1a6d5f594936",
-    "name": "Kunze - Kunde",
-    "organizationNumber": "400928636",
+    "partyUuid": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+    "name": "Sein Dyktig Mår",
+    "organizationNumber": "312229854",
     "personId": null,
-    "partyId": 75306803,
+    "partyId": 51541420,
     "type": "Organization",
-    "unitType": "Group",
+    "unitType": "OPMV",
     "isDeleted": false,
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
@@ -39,34 +39,6 @@
     "onlyHierarchyElementWithNoAccess": false,
     "authorizedResources": [],
     "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
-    "subunits": []
-  },
-  {
-    "partyUuid": "f8022101-70f5-098b-91ff-f19c05f3e9b3",
-    "name": "Kristopher Blanda",
-    "organizationNumber": null,
-    "personId": "08099016729",
-    "partyId": 85638494,
-    "type": "Person",
-    "unitType": null,
-    "isDeleted": false,
-    "onlyHierarchyElementWithNoAccess": false,
-    "authorizedResources": [],
-    "authorizedRoles": [],
-    "subunits": []
-  },
-  {
-    "partyUuid": "069ba1f0-363c-6e46-62a1-7b3e19bb2a07",
-    "name": "Ken Kuvalis",
-    "organizationNumber": null,
-    "personId": "01010276396",
-    "partyId": 87038023,
-    "type": "Person",
-    "unitType": null,
-    "isDeleted": false,
-    "onlyHierarchyElementWithNoAccess": false,
-    "authorizedResources": [],
-    "authorizedRoles": [],
     "subunits": []
   }
 ]

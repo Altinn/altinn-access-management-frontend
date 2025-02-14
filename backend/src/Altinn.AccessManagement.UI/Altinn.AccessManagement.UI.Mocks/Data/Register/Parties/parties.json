@@ -551,6 +551,20 @@
     "ChildParties": null
   },
   {
+    "partyUuid": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+    "name": "Sein Dyktig Mår",
+    "organizationNumber": "312229854",
+    "personId": null,
+    "partyId": 51541420,
+    "type": "Organization",
+    "unitType": "OPMV",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  },
+  {
     "PartyId": 12345678,
     "PartyUuid": "26ca8b02-c455-4dc0-96be-f92864837ff4",
     "PartyTypeName": 1,

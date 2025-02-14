@@ -268,6 +268,10 @@
     "resource_type_text": "Single right",
     "delete_confirm_message": "Are you sure you want to delete this?"
   },
+  "reportee_rights_page": {
+    "page_title": "Our access to other companies - Altinn",
+    "heading_subtitle": "Power of attorney given to {{name}}"
+  },
   "delegation_modal": {
     "give_service_to_name": "Give <strong>{{name}}</strong> power of attorney for new service",
     "give_package_to_name": "Give <strong>{{name}}</strong> power of attorney for new access package",
