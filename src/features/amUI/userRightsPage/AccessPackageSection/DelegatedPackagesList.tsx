@@ -1,6 +1,7 @@
 import { Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import { Button, List } from '@altinn/altinn-components';
+import { AccessPackageList, Button } from '@altinn/altinn-components';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { AccessPackage, AccessPackageDelegation } from '@/rtk/features/accessPackageApi';
 
@@ -64,10 +65,9 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
   return (
     <>
       {delegatedPackages.length > 0 && (
-        <List
+        <AccessPackageList
           items={delegatedPackages.map((item) => ({
             color: 'company',
-            icon: 'package',
             id: item.id,
             title: item.name,
             description: `${item.resources.length} tjenester`,
@@ -75,7 +75,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
             controls: (
               <div className={classes.controls}>
                 <Button
-                  icon='minus-circle'
+                  icon={MinusCircleIcon}
                   variant='text'
                   size='sm'
                   onClick={() => onRevoke(item)}
@@ -93,9 +93,8 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
           {delegatedPackages.length > 0 && (
             <Paragraph size='sm'>{t('access_packages.other_packages_in_area_title')}</Paragraph>
           )}
-          <List
+          <AccessPackageList
             items={notDelegatedPackages.map((item) => ({
-              icon: 'package',
               color: 'neutral',
               id: item.id,
               title: item.name,
@@ -104,7 +103,7 @@ export const DelegatedPackagesList: React.FC<DelegatedPackagesListProps> = ({
               controls: (
                 <div className={classes.controls}>
                   <Button
-                    icon='plus-circle'
+                    icon={PlusCircleIcon}
                     variant='text'
                     size='sm'
                     onClick={() => onDelegate(item)}
