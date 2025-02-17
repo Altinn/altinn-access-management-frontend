@@ -72,13 +72,7 @@ export const SystemUserOverviewPage = () => {
                     {t('systemuser_overviewpage.new_system_user_button')}
                   </Link>
                 </Button>
-                <Heading
-                  level={2}
-                  data-size='xs'
-                  className={classes.systemUserHeader}
-                >
-                  {t('systemuser_overviewpage.existing_system_users_title')}
-                </Heading>
+
                 {isLoadingSystemUsers && (
                   <Spinner
                     aria-label={t('systemuser_overviewpage.loading_systemusers')}
@@ -90,22 +84,33 @@ export const SystemUserOverviewPage = () => {
                     {t('systemuser_overviewpage.systemusers_load_error')}
                   </Alert>
                 )}
-                <List
-                  defaultItemSize='lg'
-                  items={systemUsers?.map((systemUser) => {
-                    const isNew = newlyCreatedId === systemUser.id;
-                    return {
-                      title: systemUser.integrationTitle,
-                      description: systemUser.system.systemVendorOrgName,
-                      icon: TenancyIcon,
-                      linkIcon: true,
-                      badge: isNew
-                        ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
-                        : undefined,
-                      onClick: () => navigate(`/systemuser/${systemUser.id}`),
-                    };
-                  })}
-                />
+                {systemUsers && systemUsers.length > 0 && (
+                  <>
+                    <Heading
+                      level={2}
+                      data-size='xs'
+                      className={classes.systemUserHeader}
+                    >
+                      {t('systemuser_overviewpage.existing_system_users_title')}
+                    </Heading>
+                    <List
+                      defaultItemSize='lg'
+                      items={systemUsers?.map((systemUser) => {
+                        const isNew = newlyCreatedId === systemUser.id;
+                        return {
+                          title: systemUser.integrationTitle,
+                          description: systemUser.system.systemVendorOrgName,
+                          icon: TenancyIcon,
+                          linkIcon: true,
+                          badge: isNew
+                            ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
+                            : undefined,
+                          onClick: () => navigate(`/systemuser/${systemUser.id}`),
+                        };
+                      })}
+                    />
+                  </>
+                )}
               </CreateSystemUserCheck>
             </div>
           </Tabs.Panel>
