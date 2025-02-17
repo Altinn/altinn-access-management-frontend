@@ -1,9 +1,11 @@
 import React from 'react';
-import { Heading, Modal } from '@digdir/designsystemet-react';
+import { Button, Heading, Modal } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { AccessPackageList, ResourceList } from '@altinn/altinn-components';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { getButtonIconSize } from '@/resources/utils';
 
 import type { SystemUserAccessPackage } from '../../types';
 
@@ -97,16 +99,33 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
               };
             })}
           />
-          <Modal
-            ref={modalRef}
-            onClose={closeModal}
-            backdropClose
-          >
-            {selectedResource && <ResourceDetails resource={selectedResource} />}
-            {selectedAccessPackage && <AccessPackageInfo accessPackage={selectedAccessPackage} />}
-          </Modal>
         </div>
       )}
+      <Modal
+        ref={modalRef}
+        onClose={closeModal}
+        backdropClose
+      >
+        {selectedAccessPackage && selectedResource && (
+          <Button
+            variant='tertiary'
+            color='neutral'
+            data-size='sm'
+            onClick={() => setSelectedResource(null)}
+            icon
+          >
+            <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
+            {t('common.back')}
+          </Button>
+        )}
+        {selectedAccessPackage && !selectedResource && (
+          <AccessPackageInfo
+            accessPackage={selectedAccessPackage}
+            onSelectResource={(resource: ServiceResource) => setSelectedResource(resource)}
+          />
+        )}
+        {selectedResource && <ResourceDetails resource={selectedResource} />}
+      </Modal>
     </div>
   );
 };
