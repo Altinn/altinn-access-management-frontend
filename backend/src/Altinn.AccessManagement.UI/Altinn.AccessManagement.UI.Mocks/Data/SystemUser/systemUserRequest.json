@@ -13,5 +13,15 @@
         }
       ]
     }
+  ],
+  "accessPackages": [
+    {
+      "id": "urn:altinn:accesspackage",
+      "value": "sjofart"
+    },
+    {
+      "id": "urn:altinn:accesspackage",
+      "value": "baerekraft"
+    }
   ]
 }

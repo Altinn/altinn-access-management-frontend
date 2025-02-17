@@ -49,6 +49,73 @@
         ]
       }
     ],
+    "accessPackages": [
+      {
+        "id": "urn:altinn:accesspackage",
+        "value": "sjofart"
+      },
+      {
+        "id": "urn:altinn:accesspackage",
+        "value": "baerekraft"
+      }
+    ],
+    "isVisible": true
+  },
+  {
+    "systemId": "310144827_invalid_resource",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Invalid resource",
+      "nb": "Invalid resource",
+      "nn": "Invalid resource"
+    },
+    "description": {
+      "en": "Invalid resource",
+      "nb": "Invalid resource",
+      "nn": "Invalid resource"
+    },
+    "rights": [
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "ske-innrapportering-boligsameie"
+          }
+        ]
+      },
+      {
+        "resource": [
+          {
+            "id": "urn:altinn:resource",
+            "value": "invalid-resource-not-returned"
+          }
+        ]
+      }
+    ],
+    "isVisible": true
+  },
+  {
+    "systemId": "310144827_bare_tilgangspakke",
+    "systemVendorOrgNumber": "310144827",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Accesspackage without resource",
+      "nb": "Accesspackage without resource",
+      "nn": "Accesspackage without resource"
+    },
+    "description": {
+      "en": "Accesspackage without resource",
+      "nb": "Accesspackage without resource",
+      "nn": "Accesspackage without resource"
+    },
+    "rights": [],
+    "accessPackages": [
+      {
+        "id": "urn:altinn:accesspackage",
+        "value": "baerekraft"
+      }
+    ],
     "isVisible": true
   }
 ]

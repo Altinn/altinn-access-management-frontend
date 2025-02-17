@@ -1,0 +1,21 @@
+.systemUserHeader {
+  margin-top: var(--ds-size-12);
+  margin-bottom: var(--ds-size-1);
+}
+
+.systemUserIngress {
+  max-width: 40rem;
+}
+
+.createSystemUserButton {
+  align-self: flex-end;
+}
+
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.systemUserTabs {
+  align-self: flex-start;
+}

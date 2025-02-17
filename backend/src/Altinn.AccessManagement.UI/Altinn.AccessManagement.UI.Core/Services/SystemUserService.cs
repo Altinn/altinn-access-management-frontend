@@ -3,7 +3,6 @@ using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -59,8 +58,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
+            lista.Reverse();
 
-            return await MapToSystemUsersFE(lista, languageCode, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             if (systemUser != null)
             {
-                return (await MapToSystemUsersFE([systemUser], languageCode, cancellationToken))[0] ?? null;
+                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
             }
 
             return null;
@@ -90,16 +90,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return createdSystemUser;
         }
 
-        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, CancellationToken cancellationToken)
+        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, bool includeRights, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
             List<SystemUserFE> lista = new List<SystemUserFE>();
             foreach (SystemUser systemUser in systemUsers)
             {
-                // TODO: get rights from systemuser when API to look up actual rights is implmented
-                List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemUser.SystemId, cancellationToken);
-                List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-                List<ServiceResourceFE> resourcesFE = await _resourceHelper.EnrichResources(resourceIds, languageCode);
+                RegisteredSystemRightsFE enrichedRights = new();
+                if (includeRights)
+                {
+                    // TODO: get rights from systemuser when API to look up actual rights is implmented
+                    RegisteredSystem system = await _systemRegisterClient.GetSystem(systemUser.SystemId, cancellationToken);
+                    enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(system.Rights, system.AccessPackages, languageCode);
+                }
 
                 RegisteredSystemFE systemFE = new RegisteredSystemFE
                 {
@@ -116,7 +119,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = systemUser.PartyId,
                     Created = systemUser.Created,
                     System = systemFE,
-                    Resources = resourcesFE
+                    Resources = enrichedRights.Resources,
+                    AccessPackages = enrichedRights.AccessPackages
                 });
             }
 

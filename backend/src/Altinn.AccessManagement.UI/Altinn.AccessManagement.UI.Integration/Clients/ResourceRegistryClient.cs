@@ -56,21 +56,29 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<ServiceResource> GetResource(string resourceId)
         {
-            ServiceResource result = null;
-            string endpointUrl = $"resource/{resourceId}";
-
-            HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
-            if (response.StatusCode == HttpStatusCode.OK)
+            try 
             {
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-                string content = await response.Content.ReadAsStringAsync();
-                result = JsonSerializer.Deserialize<ServiceResource>(content, options);
-            }
+                ServiceResource result = null;
+                string endpointUrl = $"resource/{resourceId}";
 
-            return await Task.FromResult(result);
+                HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    JsonSerializerOptions options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    };
+                    string content = await response.Content.ReadAsStringAsync();
+                    result = JsonSerializer.Deserialize<ServiceResource>(content, options);
+                }
+
+                return await Task.FromResult(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // ResourceClient // GetResource // Exception");
+                throw;
+            }
         }
 
         /// <inheritdoc />

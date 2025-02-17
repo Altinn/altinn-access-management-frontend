@@ -1,7 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -45,12 +44,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResourceFE>> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
+        public async Task<RegisteredSystemRightsFE> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
         {
-            List<Right> rights = await _systemRegisterClient.GetRightsFromSystem(systemId, cancellationToken);
-            List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
-
-            return await _resourceHelper.EnrichResources(resourceIds, languageCode);
+            RegisteredSystem system = await _systemRegisterClient.GetSystem(systemId, cancellationToken);
+            return await _resourceHelper.MapRightsToFrontendObjects(system.Rights, system.AccessPackages, languageCode);
         }
     }
 }

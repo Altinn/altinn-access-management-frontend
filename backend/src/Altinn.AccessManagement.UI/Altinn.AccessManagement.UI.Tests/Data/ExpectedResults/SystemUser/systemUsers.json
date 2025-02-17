@@ -1,5 +1,18 @@
 [
   {
+    "id": "9c9e995b-3d6c-40e0-99fb-bdb353d44ac6",
+    "integrationTitle": "Fiken",
+    "partyId": "51329012",
+    "created": "2022-11-11T12:00:00Z",
+    "system": {
+      "systemId": "910493353_fiken_demo_product",
+      "systemVendorOrgNumber": "910493353",
+      "systemVendorOrgName": "LEPSØY OG TONSTAD",
+      "name": "N/A"
+    },
+    "resources": []
+  },
+  {
     "id": "123e4567-e89b-12d3-a456-426614174000",
     "integrationTitle": "SmartCloud",
     "partyId": "51329012",
@@ -10,40 +23,6 @@
       "systemVendorOrgName": "N/A",
       "name": "N/A"
     },
-    "resources": [
-      {
-        "identifier": "ske-innrapportering-boligsameie",
-        "title": "Innrapportering Boligsameie",
-        "description": "Sameier med 9 eller flere boligseksjoner skal levere opplysninger om sameiers andel av felles inntekter, utgifter, formue og gjeld. Det er vanligvis sameiets styre eller forretningsfører som leverer opplysningene.",
-        "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
-        "homepage": null,
-        "status": "Completed",
-        "spatial": null,
-        "contactPoints": [
-          {
-            "category": "Innrapportering",
-            "email": "",
-            "telephone": "",
-            "contactPage": "www.skatteetaten.no"
-          }
-        ],
-        "delegable": true,
-        "visible": true,
-        "resourceOwnerName": "Skatteetaten",
-        "resourceOwnerOrgNumber": "974761076",
-        "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
-        "resourceOwnerOrgcode": "skd",
-        "resourceReferences": null,
-        "priorityCounter": null,
-        "resourceType": "GenericAccessResource",
-        "authorizationReference": [
-          {
-            "id": "urn:altinn:resource",
-            "value": "ske-innrapportering-boligsameie"
-          }
-        ],
-        "keywords": ["Boligsameie", "innrapportering"]
-      }
-    ]
+    "resources": []
   }
 ]

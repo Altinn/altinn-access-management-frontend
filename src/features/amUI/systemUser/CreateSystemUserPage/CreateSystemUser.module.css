@@ -1,0 +1,18 @@
+.creationPageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
+.creationPageHeader {
+  margin-bottom: var(--ds-size-15);
+}
+
+.inputContainer {
+  margin-top: var(--ds-size-6);
+  max-width: 27rem;
+}
+
+.systemDescription {
+  max-width: 37rem;
+}
