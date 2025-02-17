@@ -1,7 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
@@ -15,7 +14,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserService : ISystemUserService
     {
         private readonly ISystemUserClient _systemUserClient;
-        private readonly IAccessManagementClient _accessManagementClient;
+        private readonly IAccessManagementClientV0 _accessManagementClientV0;
         private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
@@ -30,13 +29,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
-            IAccessManagementClient accessManagementClient,
+            IAccessManagementClientV0 accessManagementClient,
             ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
             ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
-            _accessManagementClient = accessManagementClient;
+            _accessManagementClientV0 = accessManagementClient;
             _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
             _resourceHelper = resourceHelper;
@@ -51,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
         {
-            AuthorizedParty party = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
+            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
             if (party is null)
             {
                 return Problem.Reportee_Orgno_NotFound;
@@ -79,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
-            AuthorizedParty party = await _accessManagementClient.GetPartyFromReporteeListIfExists(partyId);
+            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
             if (party is null)
             {
                 return Problem.Reportee_Orgno_NotFound;
