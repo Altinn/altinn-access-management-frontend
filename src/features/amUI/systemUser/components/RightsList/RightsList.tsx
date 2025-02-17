@@ -111,6 +111,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
             variant='tertiary'
             color='neutral'
             data-size='sm'
+            className={classes.backButton}
             onClick={() => setSelectedResource(null)}
             icon
           >
