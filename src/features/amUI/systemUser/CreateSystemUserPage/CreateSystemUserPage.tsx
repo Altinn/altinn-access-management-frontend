@@ -25,22 +25,24 @@ export const CreateSystemUserPage = (): React.ReactNode => {
   };
 
   return (
-    <PageWrapper>
-      <PageLayoutWrapper>
-        {!isConfirmStep && (
-          <SelectRegisteredSystem
-            selectedSystem={selectedSystem}
-            setSelectedSystem={setSelectedSystem}
-            handleConfirm={handleConfirmSystem}
-          />
-        )}
-        {isConfirmStep && selectedSystem && (
-          <RightsIncluded
-            selectedSystem={selectedSystem}
-            onNavigateBack={handleNavigateBack}
-          />
-        )}
-      </PageLayoutWrapper>
-    </PageWrapper>
+    <div className='systemuser_combobox_workaround'>
+      <PageWrapper>
+        <PageLayoutWrapper>
+          {!isConfirmStep && (
+            <SelectRegisteredSystem
+              selectedSystem={selectedSystem}
+              setSelectedSystem={setSelectedSystem}
+              handleConfirm={handleConfirmSystem}
+            />
+          )}
+          {isConfirmStep && selectedSystem && (
+            <RightsIncluded
+              selectedSystem={selectedSystem}
+              onNavigateBack={handleNavigateBack}
+            />
+          )}
+        </PageLayoutWrapper>
+      </PageWrapper>
+    </div>
   );
 };
