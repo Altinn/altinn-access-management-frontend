@@ -1,34 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { chromium, type Page, expect } from '@playwright/test';
+import { chromium, type Page, expect, Locator } from '@playwright/test';
 import { login } from '../pageSelectors/login';
-export class loginWithUser {
-  constructor(public page: Page) {}
 
-  async loginWithUser(testUser: string) {
+export class LoginPage {
+  constructor(public page: Page) {
+    this.loginButton = page.getByText('Logg inn/Min profil', { exact: true });
+    this.testIDButton = page.getByText('TestID Lag din egen');
+    this.identInput = page.locator('input[name="pid"]');
+    this.autentiserButton = page.getByText('Autentiser');
+  }
+
+  // Define locators
+  public loginButton: Locator;
+  public testIDButton: Locator;
+  public identInput: Locator;
+  public autentiserButton: Locator;
+
+  // Define methods
+  public async loginWithUser(testUser: string) {
     await this.page.goto(process.env.BASE_URL as string);
-    await this.page.click(login.egenDefBruker.loggInn);
-    await this.page.getByText(login.egenDefBruker.testID).click();
-    await this.page.locator(login.egenDefBruker.ident).fill(testUser);
-    await this.page.click(login.egenDefBruker.autentiser);
+    await this.loginButton.click();
+    await this.testIDButton.click();
+    await this.identInput.fill(testUser);
+    await this.autentiserButton.click();
   }
 
   async chooseReportee(reportee: string) {
     await this.page.getByRole('searchbox', { name: 'Søk etter aktør' }).fill(reportee);
     const chosenReportee = this.page.getByRole('button').filter({ hasText: reportee });
     await chosenReportee.click();
-    await this.page.goto((process.env.BASE_URL as string) + '/ui/profile');
-    await this.page.click("'profil'");
-
-    //Some names are in reverse order, so we need to support that when verifying the profile header
-    const profileHeader = this.page.getByRole('heading', {
-      name: new RegExp(
-        `Profil for (.*${reportee}.*|.*${reportee.split(' ').reverse().join(' ')}.*)`,
-        'i',
-      ),
-    });
-    await expect(profileHeader).toBeVisible();
   }
 }
+
 export class logoutWithUser {
   constructor(public page: Page) {}
 

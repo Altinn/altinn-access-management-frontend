@@ -1,6 +1,6 @@
 import { test as baseTest } from '@playwright/test';
 
-import { loginWithUser, logoutWithUser } from 'playwright/pages/loginPage';
+import { LoginPage, logoutWithUser } from 'playwright/pages/loginPage';
 import { apiDelegation } from 'playwright/pages/profile/apidelegeringPage';
 import {
   delegateRightsToUser,
@@ -14,7 +14,7 @@ import { runAccessibilityTests } from 'playwright/uuTests/accessibilityHelpers/d
 
 // Define the fixtures
 const test = baseTest.extend<{
-  login: loginWithUser;
+  login: LoginPage;
   delegate: delegateToUser;
   delegateRights: delegateRightsToUser;
   deleteRights: revokeRights;
@@ -26,7 +26,7 @@ const test = baseTest.extend<{
   runAccessibilityTest: runAccessibilityTests;
 }>({
   login: async ({ page }, use) => {
-    await use(new loginWithUser(page));
+    await use(new LoginPage(page));
   },
   delegate: async ({ page }, use) => {
     await use(new delegateToUser(page));

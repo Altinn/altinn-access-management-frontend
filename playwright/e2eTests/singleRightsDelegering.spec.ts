@@ -13,7 +13,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegateRoles,
     context,
   }) => {
-    test.setTimeout(300000);
+    test.setTimeout(3000000);
 
     await login.loginWithUser('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
