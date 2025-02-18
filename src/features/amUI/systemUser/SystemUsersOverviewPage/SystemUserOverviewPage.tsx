@@ -72,7 +72,6 @@ export const SystemUserOverviewPage = () => {
                     {t('systemuser_overviewpage.new_system_user_button')}
                   </Link>
                 </Button>
-
                 {isLoadingSystemUsers && (
                   <Spinner
                     aria-label={t('systemuser_overviewpage.loading_systemusers')}
