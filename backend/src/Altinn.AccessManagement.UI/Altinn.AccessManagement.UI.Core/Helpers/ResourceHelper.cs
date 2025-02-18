@@ -49,7 +49,10 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     await Task.WhenAll(resourceTasks.Select(async task =>
                     {
                         await task;
-                        resources.Add(task.Result);
+                        if (task.Result != null)
+                        {
+                            resources.Add(task.Result);
+                        }
                     }));
                 } 
                 catch
