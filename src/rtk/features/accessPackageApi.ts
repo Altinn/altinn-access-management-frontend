@@ -55,15 +55,12 @@ export const accessPackageApi = createApi({
         return `search?&searchString=${searchString}`;
       },
     }),
-    getRightHolderDelegations: builder.query<{ [key: string]: AccessPackageDelegation[] }, string>({
-      query: (rightHolderUuid) => {
-        return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
-      },
-      providesTags: ['AccessPackages'],
-    }),
-    getReporteeDelegations: builder.query<{ [key: string]: AccessPackageDelegation[] }, string>({
-      query: (reporteeUuid) => {
-        return `delegations/${reporteeUuid}/${getCookie('AltinnPartyUuid')}`;
+    getUserDelegations: builder.query<
+      { [key: string]: AccessPackageDelegation[] },
+      { from: string; to: string }
+    >({
+      query: ({ from, to }) => {
+        return `delegations/${from}/${to}`;
       },
       providesTags: ['AccessPackages'],
     }),
@@ -90,8 +87,7 @@ export const accessPackageApi = createApi({
 
 export const {
   useSearchQuery,
-  useGetRightHolderDelegationsQuery,
-  useGetReporteeDelegationsQuery,
+  useGetUserDelegationsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
 } = accessPackageApi;

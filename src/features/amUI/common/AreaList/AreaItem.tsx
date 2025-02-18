@@ -17,6 +17,7 @@ export const AreaItem = ({ area, expanded, toggleExpandedArea, children }: AreaI
       key={area.id}
       id={area.id}
       name={area.name}
+      colorTheme='company'
       iconUrl={area.iconUrl}
       badgeText={t('access_packages.delegated_packages_count_badge', {
         delegated: area.packages.assigned.length,

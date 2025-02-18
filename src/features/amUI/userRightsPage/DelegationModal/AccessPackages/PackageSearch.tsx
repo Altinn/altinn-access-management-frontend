@@ -3,15 +3,13 @@ import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
-import {
-  useGetRightHolderDelegationsQuery,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
-import { useSnackbar } from '@/features/amUI/common/Snackbar';
-import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
-import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
+// import { useSnackbar } from '@/features/amUI/common/Snackbar';
+// import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
+// import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 import { AreaList } from '@/features/amUI/common/AreaList/AreaList';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
@@ -33,58 +31,55 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
     setCurrentPage(1);
   }, 300);
 
-  const { openSnackbar } = useSnackbar();
-  const delegate = useDelegateAccessPackage();
-  const revoke = useRevokeAccessPackage();
+  // const { openSnackbar } = useSnackbar();
+  // const delegate = useDelegateAccessPackage();
+  // const revoke = useRevokeAccessPackage();
 
-  const onDelegate = async (accessPackage: AccessPackage) => {
-    delegate(
-      toParty,
-      accessPackage,
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_delegation_success', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_delegation_error', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-    );
-  };
+  // const onDelegate = async (accessPackage: AccessPackage) => {
+  //   delegate(
+  //     toParty,
+  //     accessPackage,
+  //     () => {
+  //       openSnackbar({
+  //         message: t('access_packages.package_delegation_success', {
+  //           accessPackage: accessPackage.name,
+  //           name: toParty.name,
+  //         }),
+  //       });
+  //     },
+  //     () => {
+  //       openSnackbar({
+  //         message: t('access_packages.package_delegation_error', {
+  //           accessPackage: accessPackage.name,
+  //           name: toParty.name,
+  //         }),
+  //       });
+  //     },
+  //   );
+  // };
 
-  const onRevoke = async (accessPackage: AccessPackage) => {
-    revoke(
-      toParty,
-      accessPackage,
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_deletion_success', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_deletion_error', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-    );
-  };
-  const { data: activeDelegations, isLoading } = useGetRightHolderDelegationsQuery(
-    toParty.partyUuid,
-  );
+  // const onRevoke = async (accessPackage: AccessPackage) => {
+  //   revoke(
+  //     toParty,
+  //     accessPackage,
+  //     () => {
+  //       openSnackbar({
+  //         message: t('access_packages.package_deletion_success', {
+  //           accessPackage: accessPackage.name,
+  //           name: toParty.name,
+  //         }),
+  //       });
+  //     },
+  //     () => {
+  //       openSnackbar({
+  //         message: t('access_packages.package_deletion_error', {
+  //           accessPackage: accessPackage.name,
+  //           name: toParty.name,
+  //         }),
+  //       });
+  //     },
+  //   );
+  // };
 
   return (
     <>
@@ -120,13 +115,13 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
         </div>
         <div className={classes.searchResults}>
           <AreaList
-            isLoading={isLoading}
-            activeDelegations={activeDelegations}
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
+            toPartyUuid={toParty.partyUuid}
             showAllAreas={true}
             showAllPackages={true}
             onSelect={onSelection}
-            onDelegate={onDelegate}
-            onRevoke={onRevoke}
+            // onDelegateSuccess={onDelegate}
+            // onRevokeSuccess={onRevoke}
             searchString={debouncedSearchString}
           />
         </div>

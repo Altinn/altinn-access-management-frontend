@@ -11,13 +11,11 @@ import {
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import {
-  useGetRightHolderDelegationsQuery,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
+import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useSnackbar } from '@/features/amUI/common/Snackbar';
 import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvider';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
@@ -35,9 +33,10 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
   const delegatePackage = useDelegateAccessPackage();
   const { openSnackbar } = useSnackbar();
 
-  const { data: activeDelegations, isFetching } = useGetRightHolderDelegationsQuery(
-    toParty.partyUuid,
-  );
+  const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
+    to: toParty.partyUuid,
+    from: getCookie('partyUuid'),
+  });
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
       return Object.values(activeDelegations)
