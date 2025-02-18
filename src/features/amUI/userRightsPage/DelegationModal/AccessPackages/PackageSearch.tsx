@@ -1,20 +1,21 @@
-import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
-import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { List } from '@/components';
+import {
+  useGetRightHolderDelegationsQuery,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useSnackbar } from '@/features/amUI/common/Snackbar';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
+import { AreaList } from '@/features/amUI/common/AreaList/AreaList';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './PackageSearch.module.css';
-import AccessAreaListItem from './AccessAreaListItem';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -81,8 +82,9 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
       },
     );
   };
-
-  const { data } = useSearchQuery(debouncedSearchString);
+  const { data: activeDelegations, isLoading } = useGetRightHolderDelegationsQuery(
+    toParty.partyUuid,
+  );
 
   return (
     <>
@@ -116,19 +118,18 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             />
           </div>
         </div>
-
-        <List className={classes.searchResults}>
-          {data?.map((a) => (
-            <AccessAreaListItem
-              toParty={toParty}
-              key={a.id}
-              accessPackageArea={a}
-              onSelection={(ap: AccessPackage) => onSelection(ap)}
-              onDelegate={onDelegate}
-              onRevoke={onRevoke}
-            />
-          ))}
-        </List>
+        <div className={classes.searchResults}>
+          <AreaList
+            isLoading={isLoading}
+            activeDelegations={activeDelegations}
+            showAllAreas={true}
+            showAllPackages={true}
+            onSelect={onSelection}
+            onDelegate={onDelegate}
+            onRevoke={onRevoke}
+            searchString={debouncedSearchString}
+          />
+        </div>
       </search>
     </>
   );

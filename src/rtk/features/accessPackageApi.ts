@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import { Party } from './lookupApi';
+
+import type { Party } from './lookupApi';
 
 export interface AccessArea {
   id: string;
@@ -35,7 +36,7 @@ export interface DelegationDetails {
   lastChangedOn: Date;
 }
 
-const baseUrl = import.meta.env.BASE_URL + 'accessmanagement/api/v1/' + 'accesspackage';
+const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/accesspackage`;
 
 export const accessPackageApi = createApi({
   reducerPath: 'accessPackageApi',
@@ -57,6 +58,12 @@ export const accessPackageApi = createApi({
     getRightHolderDelegations: builder.query<{ [key: string]: AccessPackageDelegation[] }, string>({
       query: (rightHolderUuid) => {
         return `delegations/${getCookie('AltinnPartyUuid')}/${rightHolderUuid}`;
+      },
+      providesTags: ['AccessPackages'],
+    }),
+    getReporteeDelegations: builder.query<{ [key: string]: AccessPackageDelegation[] }, string>({
+      query: (reporteeUuid) => {
+        return `delegations/${reporteeUuid}/${getCookie('AltinnPartyUuid')}`;
       },
       providesTags: ['AccessPackages'],
     }),
@@ -84,6 +91,7 @@ export const accessPackageApi = createApi({
 export const {
   useSearchQuery,
   useGetRightHolderDelegationsQuery,
+  useGetReporteeDelegationsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
 } = accessPackageApi;

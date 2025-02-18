@@ -17,6 +17,8 @@ import { UserRoles } from '../common/UserRoles/UserRoles';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 
+import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
+
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
@@ -60,7 +62,7 @@ export const ReporteeRightsPage = () => {
                   services: allAccesses?.services?.length ?? 0,
                   roles: filterDigdirRole(allAccesses?.roles).length ?? 0,
                 }}
-                packagesPanel={<div>AccessPackageSection</div>}
+                packagesPanel={<ReporteeAccessPackageSection reporteeUuid={reporteeUuid} />}
                 singleRightsPanel={<div>SingleRightsSection</div>}
                 roleAssignmentsPanel={<div>RoleSection</div>}
               />

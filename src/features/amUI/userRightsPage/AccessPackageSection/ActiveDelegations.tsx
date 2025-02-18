@@ -1,30 +1,27 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Paragraph } from '@digdir/designsystemet-react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useGetRightHolderDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
-import { List } from '@/components';
+import { useGetRightHolderDelegationsQuery } from '@/rtk/features/accessPackageApi';
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 import type { Party } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../../common/Snackbar';
 import { SnackbarDuration } from '../../common/Snackbar/SnackbarProvider';
+import { AreaList } from '../../common/AreaList/AreaList';
 
-import { DelegatedAreaListItem } from './DelegatedAreaListItem';
-import { DelegatedPackagesList } from './DelegatedPackagesList';
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
   const { openSnackbar } = useSnackbar();
   const {
     data: activeDelegations,
-    isFetching: isGetDelegationFetching,
+    isLoading: isGetDelegationLoading,
     isError: isGetDelegationError,
   } = useGetRightHolderDelegationsQuery(toParty.partyUuid);
 
@@ -79,67 +76,26 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
     );
   };
 
-  const {
-    data: allPackageAreas,
-    isFetching: isGetPackageFetching,
-    isError: isGetPackageError,
-  } = useSearchQuery('');
-
-  const isError = isGetDelegationError || isGetPackageError;
-  const isFetching = isGetDelegationFetching || isGetPackageFetching;
-
-  const areasToShow = Object.keys(activeDelegations ?? {});
-
-  const toggleExpandedArea = (areaId: string) => {
-    if (expandedAreas.some((id) => id === areaId)) {
-      const newExpandedState = expandedAreas.filter((id) => id !== areaId);
-      setExpandedAreas(newExpandedState);
-    } else {
-      const newExpandedState = [...expandedAreas, areaId];
-      setExpandedAreas(newExpandedState);
-    }
-  };
+  const isError = isGetDelegationError;
 
   return (
     <>
-      {isFetching ? (
-        <Spinner title={t('common.loading')} />
-      ) : isError ? (
+      {isError ? (
         <Alert color='danger'>
           <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
         </Alert>
       ) : (
-        activeDelegations && (
-          <List spacing>
-            {allPackageAreas
-              ?.filter((area) => areasToShow.some((areaId) => areaId === area.id))
-              .map((area) => {
-                return (
-                  <DelegatedAreaListItem
-                    badgeLabel={t('access_packages.delegated_packages_count_badge', {
-                      total: area.accessPackages.length,
-                      delegated: activeDelegations[area.id].length,
-                    })}
-                    key={area.id}
-                    accessPackageArea={area}
-                    expanded={expandedAreas.some((id) => id === area.id)}
-                    toggleExpanded={() => toggleExpandedArea(area.id)}
-                  >
-                    <DelegatedPackagesList
-                      packageDelegations={activeDelegations[area.id]}
-                      accessPackages={area.accessPackages}
-                      onSelection={(pack) => {
-                        setModalItem(pack);
-                        modalRef.current?.showModal();
-                      }}
-                      onDelegate={onDelegate}
-                      onRevoke={onRevoke}
-                    />
-                  </DelegatedAreaListItem>
-                );
-              })}
-          </List>
-        )
+        <AreaList
+          isLoading={isGetDelegationLoading}
+          activeDelegations={activeDelegations}
+          showAllPackages
+          onSelect={(accessPackage) => {
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          onDelegate={onDelegate}
+          onRevoke={onRevoke}
+        />
       )}
       <AccessPackageInfoModal
         modalRef={modalRef}

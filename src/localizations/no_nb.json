@@ -236,7 +236,8 @@
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
-    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}",
+    "package_number_of_resources": "{{count}} tjenester"
   },
   "role": {
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
