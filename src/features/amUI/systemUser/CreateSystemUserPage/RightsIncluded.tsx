@@ -48,9 +48,9 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
 
       postNewSystemUser(postObjekt)
         .unwrap()
-        .then((newSystemUserId: string) => {
+        .then((newSystemUser: { id: string }) => {
           navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`, {
-            state: { createdId: newSystemUserId },
+            state: { createdId: newSystemUser.id },
           });
         });
     }

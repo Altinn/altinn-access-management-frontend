@@ -47,12 +47,11 @@ export const systemUserApi = createApi({
     getSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/${partyId}/${systemUserId}`,
     }),
-    createSystemUser: builder.mutation<string, NewSystemUserRequest>({
+    createSystemUser: builder.mutation<{ id: string }, NewSystemUserRequest>({
       query: ({ partyId, ...systemUser }) => ({
         url: `systemuser/${partyId}`,
         method: 'POST',
         body: systemUser,
-        responseHandler: 'text',
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
@@ -112,6 +111,10 @@ export const systemUserApi = createApi({
   }),
 });
 
+const apiWithTag = systemUserApi.enhanceEndpoints({
+  addTagTypes: [Tags.SystemUsers],
+});
+
 export const {
   useCreateSystemUserMutation,
   useDeleteSystemuserMutation,
@@ -126,6 +129,6 @@ export const {
   useGetChangeRequestQuery,
   useApproveChangeRequestMutation,
   useRejectChangeRequestMutation,
-} = systemUserApi;
+} = apiWithTag;
 
-export const { endpoints, reducerPath, reducer, middleware } = systemUserApi;
+export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;

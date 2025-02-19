@@ -91,7 +91,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // CreateNewSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
-                return await response.Content.ReadFromJsonAsync<ProblemInstance>(cancellationToken);
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
