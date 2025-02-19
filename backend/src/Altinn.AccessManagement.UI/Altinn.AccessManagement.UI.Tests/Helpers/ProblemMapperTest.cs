@@ -66,8 +66,8 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         public void MapToAuthUiError_ShouldReturnError11()
         {
             // Arrange
-            string errorCode = "AUTH-000011";
-            string expectedErrorCode = "AMUI-000011";
+            string errorCode = "AUTH-00011";
+            string expectedErrorCode = "AMUI-00011";
 
             // Act
             ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(errorCode);
@@ -80,8 +80,8 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         public void MapToAuthUiError_ShouldReturnError14()
         {
             // Arrange
-            string errorCode = "AUTH-000014";
-            string expectedErrorCode = "AMUI-000014";
+            string errorCode = "AUTH-00014";
+            string expectedErrorCode = "AMUI-00014";
 
             // Act
             ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(errorCode);
@@ -94,8 +94,8 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         public void MapToAuthUiError_ShouldReturnError16()
         {
             // Arrange
-            string errorCode = "AUTH-000016";
-            string expectedErrorCode = "AMUI-000016";
+            string errorCode = "AUTH-00016";
+            string expectedErrorCode = "AMUI-00016";
 
             // Act
             ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(errorCode);
@@ -108,8 +108,8 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         public void MapToAuthUiError_ShouldReturnError18()
         {
             // Arrange
-            string errorCode = "AUTH-000018";
-            string expectedErrorCode = "AMUI-000018";
+            string errorCode = "AUTH-00018";
+            string expectedErrorCode = "AMUI-00018";
 
             // Act
             ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(errorCode);
@@ -122,8 +122,8 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         public void MapToAuthUiError_ShouldReturnError19()
         {
             // Arrange
-            string errorCode = "AUTH-000019";
-            string expectedErrorCode = "AMUI-000019";
+            string errorCode = "AUTH-00019";
+            string expectedErrorCode = "AMUI-00019";
 
             // Act
             ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(errorCode);
@@ -136,8 +136,8 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
         public void MapToAuthUiError_ShouldReturnError20()
         {
             // Arrange
-            string errorCode = "AUTH-000020";
-            string expectedErrorCode = "AMUI-000020";
+            string errorCode = "AUTH-00020";
+            string expectedErrorCode = "AMUI-00020";
 
             // Act
             ProblemDescriptor actualError = ProblemMapper.MapToAuthUiError(errorCode);
