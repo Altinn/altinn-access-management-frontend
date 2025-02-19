@@ -1,25 +1,5 @@
-.UserList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-}
-
-.spacing_sm {
-  gap: 0.2rem;
-}
-
-.spacing_md {
-  gap: 0.3rem;
-}
-
 .indent {
+  margin-top: 0.3rem;
   margin-left: 1rem;
-}
-
-.showMoreButton {
-  display: flex;
-  justify-content: center;
-  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
