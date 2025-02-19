@@ -31,56 +31,6 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
     setCurrentPage(1);
   }, 300);
 
-  // const { openSnackbar } = useSnackbar();
-  // const delegate = useDelegateAccessPackage();
-  // const revoke = useRevokeAccessPackage();
-
-  // const onDelegate = async (accessPackage: AccessPackage) => {
-  //   delegate(
-  //     toParty,
-  //     accessPackage,
-  //     () => {
-  //       openSnackbar({
-  //         message: t('access_packages.package_delegation_success', {
-  //           accessPackage: accessPackage.name,
-  //           name: toParty.name,
-  //         }),
-  //       });
-  //     },
-  //     () => {
-  //       openSnackbar({
-  //         message: t('access_packages.package_delegation_error', {
-  //           accessPackage: accessPackage.name,
-  //           name: toParty.name,
-  //         }),
-  //       });
-  //     },
-  //   );
-  // };
-
-  // const onRevoke = async (accessPackage: AccessPackage) => {
-  //   revoke(
-  //     toParty,
-  //     accessPackage,
-  //     () => {
-  //       openSnackbar({
-  //         message: t('access_packages.package_deletion_success', {
-  //           accessPackage: accessPackage.name,
-  //           name: toParty.name,
-  //         }),
-  //       });
-  //     },
-  //     () => {
-  //       openSnackbar({
-  //         message: t('access_packages.package_deletion_error', {
-  //           accessPackage: accessPackage.name,
-  //           name: toParty.name,
-  //         }),
-  //       });
-  //     },
-  //   );
-  // };
-
   return (
     <>
       <Heading
@@ -120,8 +70,6 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             showAllAreas={true}
             showAllPackages={true}
             onSelect={onSelection}
-            // onDelegateSuccess={onDelegate}
-            // onRevokeSuccess={onRevoke}
             searchString={debouncedSearchString}
           />
         </div>

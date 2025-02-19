@@ -1,8 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+
+import { useSnackbar } from '../Snackbar';
 
 interface useAccessPackageActionsProps {
   toUuid: string;
@@ -21,8 +25,57 @@ export const useAccessPackageActions = ({
 }: useAccessPackageActionsProps) => {
   const delegatePackage = useDelegateAccessPackage();
   const revokePackage = useRevokeAccessPackage();
-
+  const { t } = useTranslation();
   const { data: toParty } = useGetPartyByUUIDQuery(toUuid ?? '');
+  const { openSnackbar } = useSnackbar();
+
+  const handleDelegateSuccess = (accessPackage: AccessPackage, toParty: Party) => {
+    if (onDelegateSuccess) onDelegateSuccess(accessPackage, toParty);
+    else {
+      openSnackbar({
+        message: t('access_packages.package_delegation_success', {
+          name: toParty.name,
+          accessPackage: accessPackage.name,
+        }),
+      });
+    }
+  };
+
+  const handleDelegateError = (accessPackage: AccessPackage, toParty: Party) => {
+    if (onDelegateError) onDelegateError(accessPackage, toParty);
+    else {
+      openSnackbar({
+        message: t('access_packages.package_delegation_error', {
+          name: toParty.name,
+          accessPackage: accessPackage.name,
+        }),
+      });
+    }
+  };
+
+  const handleRevokeSuccess = (accessPackage: AccessPackage, toParty: Party) => {
+    if (onRevokeSuccess) onRevokeSuccess(accessPackage, toParty);
+    else {
+      openSnackbar({
+        message: t('access_packages.package_deletion_success', {
+          name: toParty.name,
+          accessPackage: accessPackage.name,
+        }),
+      });
+    }
+  };
+
+  const handleRevokeError = (accessPackage: AccessPackage, toParty: Party) => {
+    if (onRevokeError) onRevokeError(accessPackage, toParty);
+    else {
+      openSnackbar({
+        message: t('access_packages.package_deletion_error', {
+          name: toParty.name,
+          accessPackage: accessPackage.name,
+        }),
+      });
+    }
+  };
 
   const onDelegate = async (accessPackage: AccessPackage) => {
     if (!toParty) {
@@ -32,10 +85,10 @@ export const useAccessPackageActions = ({
       toParty,
       accessPackage,
       () => {
-        onDelegateSuccess?.(accessPackage, toParty);
+        handleDelegateSuccess(accessPackage, toParty);
       },
       () => {
-        onDelegateError?.(accessPackage, toParty);
+        handleDelegateError(accessPackage, toParty);
       },
     );
   };
@@ -48,66 +101,12 @@ export const useAccessPackageActions = ({
       toParty,
       accessPackage,
       () => {
-        onRevokeSuccess?.(accessPackage, toParty);
+        handleRevokeSuccess(accessPackage, toParty);
       },
       () => {
-        onRevokeError?.(accessPackage, toParty);
+        handleRevokeError(accessPackage, toParty);
       },
     );
   };
   return { onDelegate, onRevoke };
 };
-
-// const { t } = useTranslation();
-// const { openSnackbar } = useSnackbar();
-
-// const delegate = useDelegateAccessPackage();
-// const revoke = useRevokeAccessPackage();
-
-// const onDelegate = async (accessPackage: AccessPackage) => {
-//   delegate(
-//     toParty,
-//     accessPackage,
-//     () => {
-//       openSnackbar({
-//         message: t('access_packages.package_delegation_success', {
-//           name: toParty.name,
-//           accessPackage: accessPackage.name,
-//         }),
-//       });
-//     },
-//     () => {
-//       openSnackbar({
-//         message: t('access_packages.package_delegation_error', {
-//           name: toParty.name,
-//           accessPackage: accessPackage.name,
-//         }),
-//         duration: SnackbarDuration.infinite,
-//       });
-//     },
-//   );
-// };
-
-// const onRevoke = async (accessPackage: AccessPackage) => {
-//   revoke(
-//     toParty,
-//     accessPackage,
-//     () => {
-//       openSnackbar({
-//         message: t('access_packages.package_deletion_success', {
-//           name: toParty.name,
-//           accessPackage: accessPackage.name,
-//         }),
-//       });
-//     },
-//     () => {
-//       openSnackbar({
-//         message: t('access_packages.package_deletion_error', {
-//           name: toParty.name,
-//           accessPackage: accessPackage.name,
-//         }),
-//         duration: SnackbarDuration.infinite,
-//       });
-//     },
-//   );
-// };

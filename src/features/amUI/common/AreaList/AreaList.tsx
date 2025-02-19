@@ -48,6 +48,7 @@ export const AreaList = ({
     to: toPartyUuid,
   });
   const { t } = useTranslation();
+
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
   const toggleExpandedArea = (areaId: string) => {
     if (expandedAreas.some((id) => id === areaId)) {
@@ -76,6 +77,7 @@ export const AreaList = ({
   const sortedAreas = [...assignedAreas, ...availableAreas].sort((a, b) =>
     a.name.localeCompare(b.name),
   );
+
   return (
     <div className={classes.accessAreaList}>
       {loadingDelegations || loadingPackageAreas ? (
