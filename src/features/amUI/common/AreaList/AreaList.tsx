@@ -20,6 +20,7 @@ interface AreaListProps {
   fromPartyUuid: string;
   toPartyUuid: string;
   showAllAreas?: boolean;
+  editable?: boolean;
   searchString?: string;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -31,6 +32,7 @@ interface AreaListProps {
 export const AreaList = ({
   showAllAreas,
   showAllPackages,
+  editable = true,
   onSelect,
   onDelegateSuccess,
   onDelegateError,
@@ -106,15 +108,17 @@ export const AreaList = ({
                           onSelect={onSelect}
                           hasAccess
                           controls={
-                            <Button
-                              icon={MinusCircleIcon}
-                              variant='text'
-                              size='sm'
-                              onClick={() => onDelegate(pkg)}
-                              disabled={pkg.inherited}
-                            >
-                              {t('common.delete_poa')}
-                            </Button>
+                            editable && (
+                              <Button
+                                icon={MinusCircleIcon}
+                                variant='text'
+                                size='sm'
+                                onClick={() => onRevoke(pkg)}
+                                disabled={pkg.inherited}
+                              >
+                                {t('common.delete_poa')}
+                              </Button>
+                            )
                           }
                         />
                       ))}
@@ -128,14 +132,16 @@ export const AreaList = ({
                           pkg={pkg}
                           onSelect={onSelect}
                           controls={
-                            <Button
-                              icon={PlusCircleIcon}
-                              variant='text'
-                              size='sm'
-                              onClick={() => onRevoke(pkg)}
-                            >
-                              {t('common.give_poa')}
-                            </Button>
+                            editable && (
+                              <Button
+                                icon={PlusCircleIcon}
+                                variant='text'
+                                size='sm'
+                                onClick={() => onDelegate(pkg)}
+                              >
+                                {t('common.give_poa')}
+                              </Button>
+                            )
                           }
                         />
                       ))}

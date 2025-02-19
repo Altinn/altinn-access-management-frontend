@@ -13,6 +13,7 @@ export const ReporteeAccessPackageSection = ({
     <AreaList
       fromPartyUuid={reporteeUuid ?? ''}
       toPartyUuid={getCookie('AltinnPartyUuid')}
+      editable={false}
     />
   );
 };
