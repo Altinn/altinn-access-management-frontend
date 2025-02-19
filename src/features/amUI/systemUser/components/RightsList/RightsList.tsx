@@ -60,6 +60,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           <AccessPackageList
             items={accessPackages.map((accessPackage) => {
               return {
+                size: 'md',
                 id: accessPackage.id,
                 title: accessPackage.name,
                 description:
@@ -87,7 +88,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
                 })}
           </Heading>
           <ResourceList
-            defaultItemSize='sm'
+            defaultItemSize='md'
             items={resources.map((resource) => {
               return {
                 id: resource.identifier,

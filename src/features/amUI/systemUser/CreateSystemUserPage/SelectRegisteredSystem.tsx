@@ -99,7 +99,6 @@ export const SelectRegisteredSystem = ({
           <ButtonRow>
             <Button
               variant='primary'
-              data-size='sm'
               onClick={handleConfirm}
               disabled={!selectedSystem}
             >
@@ -107,7 +106,6 @@ export const SelectRegisteredSystem = ({
             </Button>
             <Button
               variant='tertiary'
-              data-size='sm'
               asChild
             >
               <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>
