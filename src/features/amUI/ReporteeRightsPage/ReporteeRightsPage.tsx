@@ -62,7 +62,12 @@ export const ReporteeRightsPage = () => {
                   services: allAccesses?.services?.length ?? 0,
                   roles: filterDigdirRole(allAccesses?.roles).length ?? 0,
                 }}
-                packagesPanel={<ReporteeAccessPackageSection reporteeUuid={reporteeUuid} />}
+                packagesPanel={
+                  <ReporteeAccessPackageSection
+                    numberOfAccesses={allAccesses?.accessPackages?.length}
+                    reporteeUuid={reporteeUuid}
+                  />
+                }
                 singleRightsPanel={<div>SingleRightsSection</div>}
                 roleAssignmentsPanel={<div>RoleSection</div>}
               />
