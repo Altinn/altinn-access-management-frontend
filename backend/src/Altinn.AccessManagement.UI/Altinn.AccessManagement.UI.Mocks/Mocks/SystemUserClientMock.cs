@@ -71,7 +71,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory
-                = ProblemDescriptorFactory.New("AUTH");
+                = ProblemDescriptorFactory.New("AMUI");
 
             public static ProblemDescriptor SystemNotFound { get; }
                 = _factory.Create(11, HttpStatusCode.NotFound, "System not found");

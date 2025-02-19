@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
@@ -155,11 +154,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/{partyId}", content);
-            string actualResponse = await httpResponse.Content.ReadFromJsonAsync<string>();
+            SystemUserCreateResponseFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserCreateResponseFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(expectedResponse, actualResponse);
+            Assert.Equal(expectedResponse, actualResponse.Id);
         }
 
         /// <summary>
@@ -171,7 +170,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             int partyId = 51329012;
-            string expectedResponse = "AUTH-00011";
+            string expectedResponse = "AMUI-00011";
             NewSystemUserRequest dto = new NewSystemUserRequest
             {
                 IntegrationTitle = "NotFound",
