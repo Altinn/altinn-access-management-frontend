@@ -40,7 +40,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// <summary>
         /// Array of access packages set for this system
         /// </summary>
-        public List<IdValuePair> AccessPackages { get; set; } = new List<IdValuePair>();
+        public List<RegisteredSystemAccessPackage> AccessPackages { get; set; } = new List<RegisteredSystemAccessPackage>();
 
         /// <summary>
         /// True if the registered system is visible to the user in the UI

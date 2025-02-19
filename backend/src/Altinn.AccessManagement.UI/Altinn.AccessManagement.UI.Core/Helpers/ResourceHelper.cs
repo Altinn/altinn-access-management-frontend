@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
@@ -104,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="rights">List of rights</param>
         /// <param name="accessPackages">List of access packages</param>
         /// <param name="languageCode">Language code</param>
-        public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, IEnumerable<IdValuePair> accessPackages, string languageCode)
+        public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, IEnumerable<RegisteredSystemAccessPackage> accessPackages, string languageCode)
         {
             List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
             List<string> accessPackageIds = ResourceUtils.GetAccessPackageIdsFromRights(accessPackages);
