@@ -6,7 +6,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
-import { useAccessPackageActions } from '../../common/AreaList/useAccessPackageActions';
+import { useAccessPackageActions } from '../../common/AccessPackageList/useAccessPackageActions';
 
 interface DeletePackageButtonProps {
   accessPackage: AccessPackage;

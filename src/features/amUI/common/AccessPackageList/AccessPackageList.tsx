@@ -4,16 +4,16 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Paragraph } from '@digdir/designsystemet-react';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
-
 import { SkeletonAreaList } from './SkeletonAreaList';
 import classes from './AreaList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
 import { AreaItem } from './AreaItem';
 import { PackageItem } from './PackageItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
+
+import type { Party } from '@/rtk/features/lookupApi';
+import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface AreaListProps {
   showAllPackages?: boolean;

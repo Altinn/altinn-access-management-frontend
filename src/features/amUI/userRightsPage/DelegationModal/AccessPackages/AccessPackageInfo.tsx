@@ -13,7 +13,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useAccessPackageActions } from '@/features/amUI/common/AreaList/useAccessPackageActions';
+import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 

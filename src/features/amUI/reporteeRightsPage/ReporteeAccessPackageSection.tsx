@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { AreaList } from '../common/AreaList/AreaList';
+import { AreaList } from '../common/AccessPackageList/AccessPackageList';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;

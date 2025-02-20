@@ -8,7 +8,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 // import { useSnackbar } from '@/features/amUI/common/Snackbar';
 // import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 // import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
-import { AreaList } from '@/features/amUI/common/AreaList/AreaList';
+import { AreaList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { useDelegationModalContext } from '../DelegationModalContext';

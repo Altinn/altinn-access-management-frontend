@@ -4,7 +4,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { AreaList } from '../../common/AreaList/AreaList';
+import { AreaList } from '../../common/AccessPackageList/AccessPackageList';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 

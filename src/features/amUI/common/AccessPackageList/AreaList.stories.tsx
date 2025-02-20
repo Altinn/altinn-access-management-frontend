@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import store from '@/rtk/app/store';
 
-import { AreaList } from './AreaList';
+import { AreaList } from './AccessPackageList';
 
 type AreaListPropsAndCustomArgs = React.ComponentProps<typeof AreaList>;
 
