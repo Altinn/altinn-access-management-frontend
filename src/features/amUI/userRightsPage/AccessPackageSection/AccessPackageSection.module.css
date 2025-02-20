@@ -1,28 +1,6 @@
-.singleRightsSectionContainer {
+.accessPackageSectionContainer {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem 0 0.5rem 0;
-}
-
-.accessAreaContent {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  margin: 0 1.5rem 1.5rem 4rem;
-}
-
-.controls {
-  display: flex;
-  gap: 1rem;
-  margin-right: 0.625rem;
-}
-
-.controls > button {
-  white-space: nowrap;
-}
-
-.areaIcon {
-  background-color: var(--ds-color-company-surface-default);
 }

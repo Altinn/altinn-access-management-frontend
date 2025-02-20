@@ -11,13 +11,9 @@ import {
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import {
-  useGetRightHolderDelegationsQuery,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
-import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
-import { useSnackbar } from '@/features/amUI/common/Snackbar';
-import { SnackbarDuration } from '@/features/amUI/common/Snackbar/SnackbarProvider';
+import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
@@ -26,18 +22,17 @@ import classes from './AccessPackageInfo.module.css';
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
   toParty: Party;
-  onDelegate?: () => void;
 }
 
-export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
   const { t } = useTranslation();
 
-  const delegatePackage = useDelegateAccessPackage();
-  const { openSnackbar } = useSnackbar();
+  const { onDelegate } = useAccessPackageActions({ toUuid: toParty.partyUuid });
 
-  const { data: activeDelegations, isFetching } = useGetRightHolderDelegationsQuery(
-    toParty.partyUuid,
-  );
+  const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
+    to: toParty.partyUuid,
+    from: getCookie('partyUuid'),
+  });
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
       return Object.values(activeDelegations)
@@ -46,33 +41,6 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
     }
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
-
-  const handleDelegate = async () => {
-    delegatePackage(
-      toParty,
-      accessPackage,
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_delegation_success', {
-            name: toParty.name,
-            accessPackage: accessPackage.name,
-          }),
-        });
-        if (onDelegate) {
-          onDelegate();
-        }
-      },
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_delegation_error', {
-            name: toParty.name,
-            accessPackage: accessPackage.name,
-          }),
-          duration: SnackbarDuration.infinite,
-        });
-      },
-    );
-  };
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
   return (
@@ -132,7 +100,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, onDelegate }: Packag
             disabled={isFetching || accessPackage.inherited}
           />
         ) : (
-          <Button onClick={handleDelegate}>{t('common.give_poa')}</Button>
+          <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
         )}
       </div>
     </div>

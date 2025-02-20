@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import packages from './data/packages.json';
 
 export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/role/assignments/:ownerId/:holderId`, () => {
@@ -29,62 +30,60 @@ export const accessPackageHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       },
     ]);
   }),
-  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/search`, () => {
-    return HttpResponse.json([
-      {
-        id: '589217CF-6070-474F-9989-8C5359C740F4',
-        name: 'Bygg og anlegg',
-        description: 'For de som bygger med anlegg',
-        iconUrl: 'https://www.svgrepo.com/show/437004/hammer.svg',
-        accessPackages: [
-          {
-            id: '3490203E-876E-4EF9-B774-9A0CD9B7E9CD',
-            name: 'Kjøp og salg av eiendom',
-            description:
-              'Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.',
-            area: {
-              id: '589217CF-6070-474F-9989-8C5359C740F4',
-              name: 'Bygg og anlegg',
-              description: 'For de som bygger med anlegg',
-              iconUrl: 'https://www.svgrepo.com/show/437004/hammer.svg',
-            },
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/:search`, ({ params }) => {
+    const { search } = params;
+    if (search === 'error') {
+      return HttpResponse.error();
+    }
+    return HttpResponse.json(packages);
+  }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/accesspackage/delegations/:from/:to`, ({ params }) => {
+    const { from, to } = params;
+    return HttpResponse.json({
+      'fc93d25e-80bc-469a-aa43-a6cee80eb3e2': [
+        {
+          accessPackageId: '7b8a3aaa-c8ed-4ac4-923a-335f4f9eb45a',
+          delegationDetails: {
+            delegatedFrom: from,
+            delegatedTo: to,
+            lastChangedOn: '2024-11-22T14:57:39.2568955+01:00',
           },
-          {
-            id: '3490203E-876E-4EF9-B774-9A0CD9B7E9CC',
-            name: 'Annleggsadministrasjon',
-            description:
-              'Denne tilgangspakken gir fullmakter til tjenester knyttet til kjøp og salg av eiendom. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.',
-            area: {
-              id: '589217CF-6070-474F-9989-8C5359C740F4',
-              name: 'Bygg og anlegg',
-              description: 'For de som bygger med anlegg',
-              iconUrl: 'https://www.svgrepo.com/show/437004/hammer.svg',
-            },
+          inherited: false,
+          inheritedFrom: null,
+        },
+        {
+          accessPackageId: 'c5bbbc3f-605a-4dcb-a587-32124d7bb76d',
+          delegationDetails: {
+            delegatedFrom: from,
+            delegatedTo: to,
+            lastChangedOn: '2024-10-22T15:57:39.2568955+02:00',
           },
-        ],
-      },
-      {
-        id: '589217CF-6070-474F-9989-8C5359C740GG',
-        name: 'Overnaturligheter',
-        description:
-          'Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.',
-        iconUrl: 'https://www.svgrepo.com/show/509156/magic-wand.svg',
-        accessPackages: [
-          {
-            id: '3490203E-876E-4EF9-B774-9A0CD9B7E9CFG',
-            name: 'Magibruk',
-            description:
-              'Cat ipsum dolor sit amet, i will ruin the couch with my claws and have secret plans so pretend not to be evil.',
-            area: {
-              id: '589217CF-6070-474F-9989-8C5359C740GG',
-              name: 'Overnaturligheter',
-              description:
-                'Howl on top of tall thing walk on keyboard or fight own tail or look pawmazing and drink the soapy mopping up water then puke giant foamy fur-balls.',
-              iconUrl: 'https://www.svgrepo.com/show/509156/magic-wand.svg',
-            },
+          inherited: false,
+        },
+      ],
+      'a8834a7c-ed89-4c73-b5d5-19a2347f3b13': [
+        {
+          accessPackageId: 'bacc9294-56fd-457f-930e-59ee4a7a3894',
+          delegationDetails: {
+            delegatedFrom: from,
+            delegatedTo: to,
+            lastChangedOn: '2024-10-22T15:57:39.2568955+02:00',
           },
-        ],
-      },
-    ]);
+          inherited: false,
+          inheritedFrom: null,
+        },
+      ],
+      '6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B': [
+        {
+          accessPackageId: '91cf61ae-69ab-49d5-b51a-80591c91f255',
+          delegationDetails: {
+            delegatedFrom: from,
+            delegatedTo: to,
+            lastChangedOn: '2024-10-22T15:57:39.2568955+02:00',
+          },
+          inherited: false,
+        },
+      ],
+    });
   }),
 ];

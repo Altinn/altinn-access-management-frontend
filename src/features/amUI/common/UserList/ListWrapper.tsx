@@ -24,21 +24,20 @@ export const ListWrapper = ({
   indent,
 }: UserListProps) => {
   return (
-    <ListBase
-      spacing={spacing}
-      className={cn(classes.UserList, indent ? classes.indent : '')}
-    >
-      {isLoading ? (
-        <SkeletonUserList />
-      ) : (
-        userList?.map((user) => (
-          <UserListItem
-            size={size}
-            key={user.partyUuid}
-            user={user}
-          />
-        ))
-      )}
-    </ListBase>
+    <div className={cn(indent ? classes.indent : '')}>
+      <ListBase spacing={spacing}>
+        {isLoading ? (
+          <SkeletonUserList />
+        ) : (
+          userList?.map((user) => (
+            <UserListItem
+              size={size}
+              key={user.partyUuid}
+              user={user}
+            />
+          ))
+        )}
+      </ListBase>
+    </div>
   );
 };
