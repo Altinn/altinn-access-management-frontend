@@ -2,14 +2,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-import { PageWrapper } from '@/components';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
-import { amUIPath } from '@/routes/paths';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { filterDigdirRole } from '@/resources/utils/roleUtils';
-
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
@@ -18,6 +10,14 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
+
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { PageWrapper } from '@/components';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
+import { amUIPath } from '@/routes/paths';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { filterDigdirRole } from '@/resources/utils/roleUtils';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
