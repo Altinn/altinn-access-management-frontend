@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 
 namespace Altinn.AccessManagement.UI.Core.Helpers
 {
@@ -66,16 +67,14 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// </summary>
         /// <param name="accessPackages">List of accessPackages to get access package ids from</param>
         /// <returns>List of access package ids</returns>
-        public static List<string> GetAccessPackageIdsFromRights(IEnumerable<IdValuePair> accessPackages)
+        public static List<string> GetAccessPackageIdsFromRights(IEnumerable<RegisteredSystemAccessPackage> accessPackages)
         {
             if (accessPackages == null) 
             {
                 return [];
             }
 
-            return accessPackages
-                .Where(accessPackage => accessPackage.Id == "urn:altinn:accesspackage")
-                .Select(accessPackage => $"{accessPackage.Id}:{accessPackage.Value}").ToList();
+            return accessPackages.Select(accessPackage => accessPackage.Urn).ToList();
         }
     }
 }

@@ -16,12 +16,10 @@
   ],
   "accessPackages": [
     {
-      "id": "urn:altinn:accesspackage",
-      "value": "sjofart"
+      "urn": "urn:altinn:accesspackage:sjofart"
     },
     {
-      "id": "urn:altinn:accesspackage",
-      "value": "baerekraft"
+      "urn": "urn:altinn:accesspackage:baerekraft"
     }
   ]
 }

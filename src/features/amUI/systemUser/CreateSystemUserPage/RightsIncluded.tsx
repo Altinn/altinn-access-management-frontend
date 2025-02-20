@@ -48,9 +48,9 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
 
       postNewSystemUser(postObjekt)
         .unwrap()
-        .then((newSystemUserId: string) => {
+        .then((newSystemUser: { id: string }) => {
           navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`, {
-            state: { createdId: newSystemUserId },
+            state: { createdId: newSystemUser.id },
           });
         });
     }
@@ -101,7 +101,6 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
           )}
           <ButtonRow>
             <Button
-              data-size='sm'
               variant='primary'
               onClick={handleConfirmSystemUser}
               disabled={isCreatingSystemUser || isLoadRightsError}
@@ -113,7 +112,6 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
             </Button>
             <Button
               variant='tertiary'
-              data-size='sm'
               asChild
             >
               <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}>

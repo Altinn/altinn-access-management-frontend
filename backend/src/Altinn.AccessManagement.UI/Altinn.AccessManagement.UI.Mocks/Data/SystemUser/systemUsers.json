@@ -1,16 +1,5 @@
 [
   {
-    "id": "123e4567-e89b-12d3-a456-426614174000",
-    "integrationTitle": "SmartCloud",
-    "systemId": "310144827_smartcloud",
-    "systemInternalId": "123e4567-e89b-12d3-a456-426614174001",
-    "partyId": "51329012",
-    "reporteeOrgNo": "123456789",
-    "created": "2023-10-10T12:00:00Z",
-    "supplierOrgNo": "310144827",
-    "externalRef": ""
-  },
-  {
     "id": "9c9e995b-3d6c-40e0-99fb-bdb353d44ac6",
     "integrationTitle": "Fiken",
     "systemId": "910493353_fiken_demo_product",
@@ -19,6 +8,17 @@
     "reporteeOrgNo": "123456789",
     "created": "2022-11-11T12:00:00Z",
     "supplierOrgNo": "910493353",
+    "externalRef": ""
+  },
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "integrationTitle": "SmartCloud",
+    "systemId": "310144827_smartcloud",
+    "systemInternalId": "123e4567-e89b-12d3-a456-426614174001",
+    "partyId": "51329012",
+    "reporteeOrgNo": "123456789",
+    "created": "2023-10-10T12:00:00Z",
+    "supplierOrgNo": "310144827",
     "externalRef": ""
   }
 ]

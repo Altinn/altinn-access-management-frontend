@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [Required]
         [JsonPropertyName("accessPackages")]
-        public List<IdValuePair> AccessPackages { get; set; }
+        public List<RegisteredSystemAccessPackage> AccessPackages { get; set; }
 
         /// <summary>
         /// Initially the request is "new", 

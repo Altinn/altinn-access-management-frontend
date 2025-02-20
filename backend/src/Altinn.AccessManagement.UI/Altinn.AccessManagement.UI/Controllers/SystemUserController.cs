@@ -103,7 +103,11 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return systemUserResult.Problem.ToActionResult(); 
             }
 
-            return Ok(systemUserResult.Value.Id);
+            SystemUserCreateResponseFE createResponse = new SystemUserCreateResponseFE()
+            {
+                Id = systemUserResult.Value.Id,
+            };
+            return Ok(createResponse);
         }
 
         /// <summary>

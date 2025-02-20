@@ -63,7 +63,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // GetSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
-                return await response.Content.ReadFromJsonAsync<ProblemInstance>(cancellationToken);
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
@@ -89,7 +90,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // ApproveSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
-                return await response.Content.ReadFromJsonAsync<ProblemInstance>(cancellationToken);
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
@@ -115,7 +117,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 _logger.LogError("AccessManagement.UI // SystemUserRequestClient // RejectSystemUserRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
-                return await response.Content.ReadFromJsonAsync<ProblemInstance>(cancellationToken);
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {

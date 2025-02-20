@@ -57,9 +57,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
-            lista.Reverse();
+            List<SystemUser> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
 
-            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(sortedList, languageCode, false, cancellationToken);
         }
 
         /// <inheritdoc />
