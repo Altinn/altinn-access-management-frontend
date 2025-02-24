@@ -18,6 +18,7 @@ import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/use
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { filterDigdirRole } from '@/resources/utils/roleUtils';
+import { RoleList } from '../common/RoleList/RoleList';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -69,7 +70,14 @@ export const ReporteeRightsPage = () => {
                   />
                 }
                 singleRightsPanel={<div>SingleRightsSection</div>}
-                roleAssignmentsPanel={<div>RoleSection</div>}
+                roleAssignmentsPanel={
+                  <div>
+                    <RoleList
+                      from={''}
+                      to={''}
+                    />
+                  </div>
+                }
               />
             </>
           </PageContainer>

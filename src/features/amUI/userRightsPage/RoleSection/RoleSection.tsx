@@ -10,7 +10,7 @@ import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import classes from './roleSection.module.css';
 import { RoleInfoModal } from './RoleInfoModal';
-import { RoleListItem } from './RoleListItem';
+import { RoleListItem } from '../../common/RoleList/RoleListItem';
 
 export const RoleSection = () => {
   const { t } = useTranslation();
