@@ -81,6 +81,12 @@
     "change-label": "Change",
     "back-label": "Back"
   },
+  "footer": {
+    "about_altinn": "About Altinn",
+    "service_messages": "Service messages",
+    "privacy_policy": "Privacy policy",
+    "accessibility": "Accessibility"
+  },
   "sidebar": {
     "users": "Users",
     "reportees": "Our access to other companies",
