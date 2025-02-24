@@ -4,8 +4,8 @@ import type { ExtendedRole } from '@/rtk/features/roleApi';
 import { useDelegationCheckQuery } from '@/rtk/features/roleApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
-import { RevokeRoleButton } from './RevokeRoleButton';
-import { DelegateRoleButton } from './DelegateRoleButton';
+import { RevokeRoleButton } from '../../userRightsPage/RoleSection/RevokeRoleButton';
+import { DelegateRoleButton } from '../../userRightsPage/RoleSection/DelegateRoleButton';
 
 interface RoleLIstItemProps {
   reporteeUuid: string;
