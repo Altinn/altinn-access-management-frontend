@@ -13,8 +13,8 @@ import {
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
-import { RevokeRoleButton } from '../../RoleSection/RevokeRoleButton';
-import { DelegateRoleButton } from '../../RoleSection/DelegateRoleButton';
+import { RevokeRoleButton } from '../../../common/RoleList/RevokeRoleButton';
+import { DelegateRoleButton } from '../../../common/RoleList/DelegateRoleButton';
 
 import classes from './RoleInfo.module.css';
 

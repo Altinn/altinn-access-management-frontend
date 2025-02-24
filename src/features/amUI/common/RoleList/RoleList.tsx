@@ -22,7 +22,7 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
   const { id: rightHolderUuid } = useParams();
   const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
-  const { data: userRoles, isLoading: iserRolesIsLoading } = useGetRolesForUserQuery({
+  const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
     from,
     to,
   });
@@ -56,7 +56,7 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
     [roleAreas, userRoles],
   );
 
-  if (partyIsLoading || roleAreasIsLoading || iserRolesIsLoading) {
+  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading) {
     return <SkeletonRoleList />;
   }
   return (
@@ -78,6 +78,7 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
               <RoleListItem
                 key={role.id}
                 role={role}
+                active
                 reporteeUuid={from}
                 toParty={party}
                 assignmentId={role.assignmentId}
