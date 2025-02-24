@@ -30,6 +30,7 @@ interface AccessPackageListProps {
   isLoading?: boolean;
   availableActions?: packageActions[];
   searchString?: string;
+  useDeleteConfirm?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onDelegateError?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -43,6 +44,7 @@ export const AccessPackageList = ({
   isLoading,
   availableActions,
   onSelect,
+  useDeleteConfirm,
   onDelegateSuccess,
   onDelegateError,
   onRevokeSuccess,
@@ -118,7 +120,8 @@ export const AccessPackageList = ({
                           onSelect={onSelect}
                           hasAccess
                           controls={
-                            availableActions?.includes(packageActions.REVOKE) && (
+                            availableActions?.includes(packageActions.REVOKE) &&
+                            useDeleteConfirm ? (
                               <ButtonWithConfirmPopup
                                 triggerButtonContent={t('common.delete_poa')}
                                 triggerButtonProps={{
@@ -133,6 +136,16 @@ export const AccessPackageList = ({
                                 size='sm'
                                 onConfirm={() => onRevoke(pkg)}
                               />
+                            ) : (
+                              <Button
+                                icon={MinusCircleIcon}
+                                variant='text'
+                                size='sm'
+                                disabled={pkg.inherited}
+                                onClick={() => onRevoke(pkg)}
+                              >
+                                {t('common.delete_poa')}
+                              </Button>
                             )
                           }
                         />

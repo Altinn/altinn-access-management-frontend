@@ -28,6 +28,7 @@ export const ReporteeAccessPackageSection = ({
         fromPartyUuid={reporteeUuid ?? ''}
         toPartyUuid={getCookie('AltinnPartyUuid')}
         availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
+        useDeleteConfirm
         showAllPackages
       />
     </>

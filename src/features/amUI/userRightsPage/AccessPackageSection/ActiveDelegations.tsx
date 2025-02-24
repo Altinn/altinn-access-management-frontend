@@ -17,7 +17,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
-  const isUserViewingSelf = currentUser?.uuid === toParty.partyUuid;
+  const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
 
   return (
     <>
@@ -30,9 +30,10 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         }}
         fromPartyUuid={getCookie('AltinnPartyUuid')}
         toPartyUuid={toParty.partyUuid}
+        useDeleteConfirm={isCurrentUser}
         availableActions={[
           packageActions.REVOKE,
-          isUserViewingSelf ? packageActions.REQUEST : packageActions.DELEGATE,
+          isCurrentUser ? packageActions.REQUEST : packageActions.DELEGATE,
         ]}
       />
 
