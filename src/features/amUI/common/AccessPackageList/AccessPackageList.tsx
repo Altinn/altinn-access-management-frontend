@@ -81,7 +81,7 @@ export const AccessPackageList = ({
   );
 
   return (
-    <div className={classes.accessAccessPackageList}>
+    <div className={classes.accessAreaList}>
       {loadingDelegations || loadingPackageAreas ? (
         <SkeletonAccessPackageList />
       ) : (
