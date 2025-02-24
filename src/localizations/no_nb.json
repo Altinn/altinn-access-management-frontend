@@ -59,7 +59,9 @@
     "org_nr": "Org.nr.",
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
+    "request_poa": "Be om fullmakt",
     "delete_poa": "Slett fullmakt",
+    "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i en annen fane. For å sykronisere visningen vil denne siden bli lastet på nytt.",
     "show_more": "Se mer",
@@ -236,7 +238,8 @@
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
-    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}",
+    "package_number_of_resources": "{{count}} tjenester"
   },
   "role": {
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",

@@ -18,7 +18,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
 
   return (
     party && (
-      <div className={classes.singleRightsSectionContainer}>
+      <div className={classes.accessPackageSectionContainer}>
         <Heading
           level={2}
           size='xs'

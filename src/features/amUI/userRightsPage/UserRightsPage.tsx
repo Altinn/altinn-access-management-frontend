@@ -18,8 +18,8 @@ import { UserRoles } from '../common/UserRoles/UserRoles';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 
-import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
+import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
 
 export const UserRightsPage = () => {

@@ -211,7 +211,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             try
             {
-                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{to}.json");
+                string dataPath = Path.Combine(dataFolder, "AccessPackage", "GetDelegations", $"{from}_{to}.json");
                 return await Task.FromResult(Util.GetMockData<List<AccessPackageAccess>>(dataPath));
             }
             catch
