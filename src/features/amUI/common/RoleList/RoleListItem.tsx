@@ -12,7 +12,7 @@ interface RoleLIstItemProps {
   role: ExtendedRole;
   onClick: () => void;
   assignmentId?: string;
-  toParty: Party;
+  toParty?: Party;
   active?: boolean;
 }
 
@@ -24,7 +24,7 @@ export const RoleListItem = ({
   assignmentId,
   active = false,
 }: RoleLIstItemProps) => {
-  const { data: delegationCheckResult, isFetching } = useDelegationCheckQuery({
+  const { data: delegationCheckResult, isLoading } = useDelegationCheckQuery({
     rightownerUuid: reporteeUuid,
     roleUuid: role.id,
   });
@@ -38,6 +38,7 @@ export const RoleListItem = ({
       size='sm'
       color={active ? 'company' : 'neutral'}
       theme='subtle'
+      loading={isLoading}
       controls={
         assignmentId ? (
           <RevokeRoleButton
@@ -57,7 +58,7 @@ export const RoleListItem = ({
             toParty={toParty}
             fullText={false}
             size='sm'
-            disabled={isFetching || !delegationCheckResult?.canDelegate}
+            disabled={isLoading || !delegationCheckResult?.canDelegate}
           />
         )
       }

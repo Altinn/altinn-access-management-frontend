@@ -73,8 +73,9 @@ export const ReporteeRightsPage = () => {
                 roleAssignmentsPanel={
                   <div>
                     <RoleList
-                      from={''}
-                      to={''}
+                      from={reporteeUuid ?? ''}
+                      to={getCookie('AltinnPartyUuid')}
+                      onSelect={(role) => console.log(role)}
                     />
                   </div>
                 }

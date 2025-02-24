@@ -12,7 +12,7 @@ import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/
 interface DelegateRoleButtonProps extends ButtonProps {
   roleId: string;
   roleName: string;
-  toParty: Party;
+  toParty?: Party;
   fullText?: boolean;
 }
 

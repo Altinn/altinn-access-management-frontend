@@ -15,9 +15,10 @@ import { SkeletonRoleList } from './SkeletonRoleList';
 interface RoleListProps {
   from: string;
   to: string;
+  onSelect: (role: ExtendedRole) => void;
 }
 
-export const RoleList = ({ from, to }: RoleListProps) => {
+export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
   const { id: rightHolderUuid } = useParams();
   const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
@@ -80,7 +81,7 @@ export const RoleList = ({ from, to }: RoleListProps) => {
                 reporteeUuid={from}
                 toParty={party}
                 assignmentId={role.assignmentId}
-                //   onClick={() => setModalItem(role)}
+                onClick={() => onSelect(role)}
               />
             ))}
           </ListBase>
@@ -91,7 +92,7 @@ export const RoleList = ({ from, to }: RoleListProps) => {
                 role={role}
                 reporteeUuid={from}
                 toParty={party}
-                //   onClick={() => setModalItem(role)}
+                onClick={() => onSelect(role)}
               />
             ))}
           </ListBase>
