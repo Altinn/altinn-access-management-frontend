@@ -1,7 +1,7 @@
 import type { AccessAreaListItemProps } from '@altinn/altinn-components';
 import { AccessAreaListItem, ListBase } from '@altinn/altinn-components';
 
-export const SkeletonAreaList = () => {
+export const SkeletonAccessPackageList = () => {
   const areaSkeletons = [
     {
       id: '1',

@@ -4,18 +4,18 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Paragraph } from '@digdir/designsystemet-react';
 
-import { SkeletonAreaList } from './SkeletonAreaList';
-import classes from './AreaList.module.css';
-import { useAreaPackageList } from './useAreaPackageList';
-import { AreaItem } from './AreaItem';
-import { PackageItem } from './PackageItem';
-import { useAccessPackageActions } from './useAccessPackageActions';
-
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
-interface AreaListProps {
+import classes from './AccessPackageList.module.css';
+import { useAreaPackageList } from './useAreaPackageList';
+import { AreaItem } from './AreaItem';
+import { PackageItem } from './PackageItem';
+import { useAccessPackageActions } from './useAccessPackageActions';
+import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
+
+interface AccessPackageListProps {
   showAllPackages?: boolean;
   fromPartyUuid: string;
   toPartyUuid: string;
@@ -29,7 +29,7 @@ interface AreaListProps {
   onRevokeError?: (accessPackage: AccessPackage, toParty: Party) => void;
 }
 
-export const AreaList = ({
+export const AccessPackageList = ({
   showAllAreas,
   showAllPackages,
   editable = true,
@@ -41,7 +41,7 @@ export const AreaList = ({
   searchString,
   fromPartyUuid,
   toPartyUuid,
-}: AreaListProps) => {
+}: AccessPackageListProps) => {
   const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
     searchString ?? '',
   );
@@ -81,9 +81,9 @@ export const AreaList = ({
   );
 
   return (
-    <div className={classes.accessAreaList}>
+    <div className={classes.accessAccessPackageList}>
       {loadingDelegations || loadingPackageAreas ? (
-        <SkeletonAreaList />
+        <SkeletonAccessPackageList />
       ) : (
         <ListBase>
           {sortedAreas.map((area) => {
@@ -96,6 +96,7 @@ export const AreaList = ({
                 area={area}
                 expanded={expanded}
                 toggleExpandedArea={toggleExpandedArea}
+                showBadge={editable}
               >
                 <div className={classes.accessAreaContent}>
                   <Paragraph>{area.description}</Paragraph>
