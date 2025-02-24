@@ -1,7 +1,7 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
-import { AreaList } from '../common/AccessPackageList/AccessPackageList';
+import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -24,7 +24,7 @@ export const ReporteeAccessPackageSection = ({
       >
         {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
       </Heading>
-      <AreaList
+      <AccessPackageList
         fromPartyUuid={reporteeUuid ?? ''}
         toPartyUuid={getCookie('AltinnPartyUuid')}
         editable={false}

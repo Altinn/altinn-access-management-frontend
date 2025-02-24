@@ -3,16 +3,16 @@ import { Provider } from 'react-redux';
 
 import store from '@/rtk/app/store';
 
-import { AreaList } from './AccessPackageList';
+import { AccessPackageList } from './AccessPackageList';
 
-type AreaListPropsAndCustomArgs = React.ComponentProps<typeof AreaList>;
+type AreaListPropsAndCustomArgs = React.ComponentProps<typeof AccessPackageList>;
 
 export default {
   title: 'Features/AMUI/AreaList',
-  component: AreaList,
+  component: AccessPackageList,
   render: (args) => (
     <Provider store={store}>
-      <AreaList
+      <AccessPackageList
         fromPartyUuid={''}
         toPartyUuid={''}
         {...args}

@@ -5,10 +5,7 @@ import { useState } from 'react';
 import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
-// import { useSnackbar } from '@/features/amUI/common/Snackbar';
-// import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
-// import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
-import { AreaList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
+import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -64,7 +61,7 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
           </div>
         </div>
         <div className={classes.searchResults}>
-          <AreaList
+          <AccessPackageList
             fromPartyUuid={getCookie('AltinnPartyUuid')}
             toPartyUuid={toParty.partyUuid}
             showAllAreas={true}
