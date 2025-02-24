@@ -5,6 +5,7 @@ import { HandshakeIcon, PersonGroupIcon, InboxIcon, TenancyIcon } from '@navikt/
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath, SystemUserPath } from '@/routes/paths';
+import { getAltinnStartPageUrl } from '@/resources/utils/pathUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -19,6 +20,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         color={'neutral'}
         theme='subtle'
         header={{
+          logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
             name: reportee?.name || '',
             type: reportee?.type === 'Organization' ? 'company' : 'person',
@@ -99,24 +101,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           address: 'Postboks 1382 Vika, 0114 Oslo.',
           address2: 'Org.nr. 991 825 827',
           menu: {
-            items: [
-              {
-                id: '1',
-                title: 'Om Altinn',
-              },
-              {
-                id: '2',
-                title: 'Driftsmeldinger',
-              },
-              {
-                id: '3',
-                title: 'Personvern',
-              },
-              {
-                id: '4',
-                title: 'Tilgjengelighet',
-              },
-            ],
+            items: footerLinks.map((link) => ({
+              href: link.href,
+              id: link.resourceId,
+              title: t(link.resourceId),
+            })),
           },
         }}
       >
@@ -125,3 +114,22 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     </RootProvider>
   );
 };
+
+const footerLinks = [
+  {
+    href: 'https://info.altinn.no/om-altinn/',
+    resourceId: 'footer.about_altinn',
+  },
+  {
+    href: 'https://info.altinn.no/om-altinn/driftsmeldinger/',
+    resourceId: 'footer.service_messages',
+  },
+  {
+    href: 'https://info.altinn.no/om-altinn/personvern/',
+    resourceId: 'footer.privacy_policy',
+  },
+  {
+    href: 'https://info.altinn.no/om-altinn/tilgjengelighet/',
+    resourceId: 'footer.accessibility',
+  },
+];
