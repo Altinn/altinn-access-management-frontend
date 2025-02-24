@@ -1,7 +1,7 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
-import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
@@ -27,7 +27,8 @@ export const ReporteeAccessPackageSection = ({
       <AccessPackageList
         fromPartyUuid={reporteeUuid ?? ''}
         toPartyUuid={getCookie('AltinnPartyUuid')}
-        editable={false}
+        availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
+        showAllPackages
       />
     </>
   );

@@ -4,16 +4,25 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
+import {
+  AccessPackageList,
+  packageActions,
+} from '../../common/AccessPackageList/AccessPackageList';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
+  const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
+
+  const isUserViewingSelf = currentUser?.uuid === toParty.partyUuid;
+
   return (
     <>
       <AccessPackageList
+        isLoading={currentUserLoading}
         showAllPackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
@@ -21,6 +30,10 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         }}
         fromPartyUuid={getCookie('AltinnPartyUuid')}
         toPartyUuid={toParty.partyUuid}
+        availableActions={[
+          packageActions.REVOKE,
+          isUserViewingSelf ? packageActions.REQUEST : packageActions.DELEGATE,
+        ]}
       />
 
       <AccessPackageInfoModal

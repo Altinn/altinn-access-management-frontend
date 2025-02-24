@@ -25,6 +25,7 @@ export const useAccessPackageActions = ({
 }: useAccessPackageActionsProps) => {
   const delegatePackage = useDelegateAccessPackage();
   const revokePackage = useRevokeAccessPackage();
+
   const { t } = useTranslation();
   const { data: toParty } = useGetPartyByUUIDQuery(toUuid ?? '');
   const { openSnackbar } = useSnackbar();
@@ -108,5 +109,9 @@ export const useAccessPackageActions = ({
       },
     );
   };
-  return { onDelegate, onRevoke };
+
+  const onRequest = (accessPackage: AccessPackage) =>
+    console.error('requestPackage is not implemented');
+
+  return { onDelegate, onRevoke, onRequest };
 };

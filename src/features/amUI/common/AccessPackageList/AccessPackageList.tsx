@@ -14,13 +14,21 @@ import { AreaItem } from './AreaItem';
 import { PackageItem } from './PackageItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
+import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
+
+export enum packageActions {
+  DELEGATE = 'DELEGATE',
+  REQUEST = 'REQUEST',
+  REVOKE = 'REVOKE',
+}
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
   fromPartyUuid: string;
   toPartyUuid: string;
   showAllAreas?: boolean;
-  editable?: boolean;
+  isLoading?: boolean;
+  availableActions?: packageActions[];
   searchString?: string;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
@@ -32,7 +40,8 @@ interface AccessPackageListProps {
 export const AccessPackageList = ({
   showAllAreas,
   showAllPackages,
-  editable = true,
+  isLoading,
+  availableActions,
   onSelect,
   onDelegateSuccess,
   onDelegateError,
@@ -68,7 +77,7 @@ export const AccessPackageList = ({
     showAllPackages,
   });
 
-  const { onDelegate, onRevoke } = useAccessPackageActions({
+  const { onDelegate, onRevoke, onRequest } = useAccessPackageActions({
     toUuid: toPartyUuid,
     onDelegateSuccess,
     onDelegateError,
@@ -82,7 +91,7 @@ export const AccessPackageList = ({
 
   return (
     <div className={classes.accessAreaList}>
-      {loadingDelegations || loadingPackageAreas ? (
+      {loadingDelegations || loadingPackageAreas || isLoading ? (
         <SkeletonAccessPackageList />
       ) : (
         <ListBase>
@@ -96,7 +105,7 @@ export const AccessPackageList = ({
                 area={area}
                 expanded={expanded}
                 toggleExpandedArea={toggleExpandedArea}
-                showBadge={editable}
+                showBadge={showAllPackages}
               >
                 <div className={classes.accessAreaContent}>
                   <Paragraph>{area.description}</Paragraph>
@@ -109,16 +118,21 @@ export const AccessPackageList = ({
                           onSelect={onSelect}
                           hasAccess
                           controls={
-                            editable && (
-                              <Button
-                                icon={MinusCircleIcon}
-                                variant='text'
+                            availableActions?.includes(packageActions.REVOKE) && (
+                              <ButtonWithConfirmPopup
+                                triggerButtonContent={t('common.delete_poa')}
+                                triggerButtonProps={{
+                                  icon: MinusCircleIcon,
+                                  variant: 'text',
+                                  size: 'sm',
+                                  disabled: pkg.inherited,
+                                }}
+                                message={t('user_rights_page.delete_confirm_message', {
+                                  name: pkg.name,
+                                })}
                                 size='sm'
-                                onClick={() => onRevoke(pkg)}
-                                disabled={pkg.inherited}
-                              >
-                                {t('common.delete_poa')}
-                              </Button>
+                                onConfirm={() => onRevoke(pkg)}
+                              />
                             )
                           }
                         />
@@ -133,16 +147,29 @@ export const AccessPackageList = ({
                           pkg={pkg}
                           onSelect={onSelect}
                           controls={
-                            editable && (
-                              <Button
-                                icon={PlusCircleIcon}
-                                variant='text'
-                                size='sm'
-                                onClick={() => onDelegate(pkg)}
-                              >
-                                {t('common.give_poa')}
-                              </Button>
-                            )
+                            <>
+                              {availableActions?.includes(packageActions.DELEGATE) && (
+                                <Button
+                                  icon={PlusCircleIcon}
+                                  variant='text'
+                                  size='sm'
+                                  onClick={() => onDelegate(pkg)}
+                                >
+                                  {t('common.give_poa')}
+                                </Button>
+                              )}
+                              {availableActions?.includes(packageActions.REQUEST) && (
+                                <Button
+                                  icon={PlusCircleIcon}
+                                  variant='text'
+                                  size='sm'
+                                  disabled
+                                  onClick={() => onRequest(pkg)}
+                                >
+                                  {t('common.request_poa')}
+                                </Button>
+                              )}
+                            </>
                           }
                         />
                       ))}
