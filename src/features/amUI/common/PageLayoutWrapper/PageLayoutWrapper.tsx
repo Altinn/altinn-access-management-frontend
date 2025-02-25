@@ -16,7 +16,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   return (
     <RootProvider>
       <Layout
-        color={'neutral'}
+        color={'company'}
         theme='subtle'
         header={{
           currentAccount: {
