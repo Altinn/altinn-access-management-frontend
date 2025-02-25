@@ -7,10 +7,12 @@ import { Provider } from 'react-redux';
 import { http, HttpResponse } from 'msw';
 
 import store from '@/rtk/app/store';
-import { server } from '@/mocks/node';
+// @ts-ignore
+import { server } from '../../../../../.mock/node';
+// @ts-ignore
+import { ACCESSMANAGEMENT_BASE_URL } from '../../../../../.mock/handlers';
 
 import { SystemUserOverviewPage } from './SystemUserOverviewPage';
-import { TEST_BASE_URL } from '../../../../../tests/consts';
 
 const systemUsers = [
   {
@@ -60,7 +62,7 @@ vi.mock('react-router-dom', async () => {
 describe('SystemUserOverviewPage', () => {
   test('should show error message if loading system users fail', async () => {
     server.use(
-      http.get(`${TEST_BASE_URL}accessmanagement/api/v1/systemuser/*`, () => {
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/*`, () => {
         return new HttpResponse(null, {
           status: 500,
         });
@@ -74,7 +76,7 @@ describe('SystemUserOverviewPage', () => {
 
   test('should show "new" badge for created system user', async () => {
     server.use(
-      http.get(`${TEST_BASE_URL}accessmanagement/api/v1/systemuser/*`, () => {
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/*`, () => {
         return HttpResponse.json(systemUsers);
       }),
     );
@@ -88,7 +90,7 @@ describe('SystemUserOverviewPage', () => {
   test('should navigate to system user when system user is clicked', async () => {
     const user = userEvent.setup();
     server.use(
-      http.get(`${TEST_BASE_URL}accessmanagement/api/v1/systemuser/*`, () => {
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/*`, () => {
         return HttpResponse.json(systemUsers);
       }),
     );
