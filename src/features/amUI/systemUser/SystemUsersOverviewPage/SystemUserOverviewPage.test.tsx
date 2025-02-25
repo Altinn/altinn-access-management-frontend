@@ -7,9 +7,9 @@ import { Provider } from 'react-redux';
 import { http, HttpResponse } from 'msw';
 
 import store from '@/rtk/app/store';
-// @ts-ignore
+
 import { server } from '../../../../../.mock/node';
-// @ts-ignore
+
 import { ACCESSMANAGEMENT_BASE_URL } from '../../../../../.mock/handlers';
 
 import { SystemUserOverviewPage } from './SystemUserOverviewPage';

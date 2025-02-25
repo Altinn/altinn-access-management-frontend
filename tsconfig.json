@@ -29,9 +29,7 @@
     "**/*.js",
     "**/.eslintrc.js",
     "test/vitest.setup.ts",
-    ".mock/mockServiceWorker.js",
-    ".mock/browser.js",
-    ".mock/handlers.js"
+    ".mock/mockServiceWorker.js"
   ],
   "exclude": ["node_modules", "dist", "eslint.config.cjs", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

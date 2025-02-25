@@ -18,7 +18,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "vitest": "vitest",
-    "vitest:ci": "vitest run --coverage"
+    "vitest:ci": "vitest --coverage"
   },
   "dependencies": {
     "@altinn/altinn-components": "^0.18.3",
