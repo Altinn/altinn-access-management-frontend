@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { PageWrapper } from '@/components';
 import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -15,6 +14,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import { SystemUserPageLayoutWrapper } from '../SystemUserPageLayoutWrapper';
 
 import classes from './SystemUserDetailsPage.module.css';
 
@@ -102,7 +102,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
 
   return (
     <PageWrapper>
-      <PageLayoutWrapper>
+      <SystemUserPageLayoutWrapper>
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={deletePopover}
@@ -145,7 +145,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             </div>
           )}
         </PageContainer>
-      </PageLayoutWrapper>
+      </SystemUserPageLayoutWrapper>
     </PageWrapper>
   );
 };

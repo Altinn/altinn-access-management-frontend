@@ -11,8 +11,8 @@ import { useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
+import { SystemUserPageLayoutWrapper } from '../SystemUserPageLayoutWrapper';
 
 import classes from './SystemUserOverviewPage.module.css';
 
@@ -33,7 +33,7 @@ export const SystemUserOverviewPage = () => {
 
   return (
     <PageWrapper>
-      <PageLayoutWrapper>
+      <SystemUserPageLayoutWrapper>
         <div className={classes.flexContainer}>
           <Heading
             level={1}
@@ -101,7 +101,7 @@ export const SystemUserOverviewPage = () => {
             )}
           </CreateSystemUserCheck>
         </div>
-      </PageLayoutWrapper>
+      </SystemUserPageLayoutWrapper>
     </PageWrapper>
   );
 };

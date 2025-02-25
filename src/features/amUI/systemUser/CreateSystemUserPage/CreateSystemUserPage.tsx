@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PageWrapper } from '@/components';
-import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import type { RegisteredSystem } from '../types';
+import { SystemUserPageLayoutWrapper } from '../SystemUserPageLayoutWrapper';
 
 import { SelectRegisteredSystem } from './SelectRegisteredSystem';
 import { RightsIncluded } from './RightsIncluded';
@@ -27,7 +27,7 @@ export const CreateSystemUserPage = (): React.ReactNode => {
   return (
     <div className='systemuser_combobox_workaround'>
       <PageWrapper>
-        <PageLayoutWrapper>
+        <SystemUserPageLayoutWrapper>
           {!isConfirmStep && (
             <SelectRegisteredSystem
               selectedSystem={selectedSystem}
@@ -41,7 +41,7 @@ export const CreateSystemUserPage = (): React.ReactNode => {
               onNavigateBack={handleNavigateBack}
             />
           )}
-        </PageLayoutWrapper>
+        </SystemUserPageLayoutWrapper>
       </PageWrapper>
     </div>
   );
