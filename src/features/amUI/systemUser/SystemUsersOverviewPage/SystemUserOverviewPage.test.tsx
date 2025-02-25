@@ -2,14 +2,13 @@ import React from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { http, HttpResponse } from 'msw';
 
 import store from '@/rtk/app/store';
 
 import { server } from '../../../../../.mock/node';
-
 import { ACCESSMANAGEMENT_BASE_URL } from '../../../../../.mock/handlers';
 
 import { SystemUserOverviewPage } from './SystemUserOverviewPage';
@@ -46,8 +45,8 @@ const systemUsers = [
 ];
 
 const mockedUseNavigate = vi.fn();
-vi.mock('react-router-dom', async () => {
-  const mod = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+vi.mock('react-router', async () => {
+  const mod = await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...mod,
     useNavigate: () => mockedUseNavigate,
