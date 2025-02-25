@@ -1,15 +1,17 @@
+import { useMemo } from 'react';
+import { Heading } from '@digdir/designsystemet-react';
+import { ListBase } from '@altinn/altinn-components';
+import { useParams } from 'react-router-dom';
+
 import {
   type ExtendedRole,
   useGetRolesForUserQuery,
   useGetRolesQuery,
 } from '@/rtk/features/roleApi';
-import classes from './roleSection.module.css';
-import { useMemo } from 'react';
-import { Heading } from '@digdir/designsystemet-react';
-import { ListBase } from '@altinn/altinn-components';
-import { RoleListItem } from './RoleListItem';
-import { useParams } from 'react-router-dom';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+
+import { RoleListItem } from './RoleListItem';
+import classes from './roleSection.module.css';
 import { SkeletonRoleList } from './SkeletonRoleList';
 
 interface RoleListProps {

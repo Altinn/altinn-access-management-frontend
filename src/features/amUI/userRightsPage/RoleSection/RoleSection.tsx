@@ -5,9 +5,10 @@ import type { Role } from '@/rtk/features/roleApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
+import { RoleList } from '../../common/RoleList/RoleList';
+
 import classes from './roleSection.module.css';
 import { RoleInfoModal } from './RoleInfoModal';
-import { RoleList } from '../../common/RoleList/RoleList';
 
 export const RoleSection = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -22,7 +23,7 @@ export const RoleSection = () => {
       <RoleList
         from={reportee?.partyUuid ?? ''}
         to={rightHolderUuid ?? ''}
-        onSelect={(role) => console.log(role)}
+        onSelect={(role) => setModalItem(role)}
       />
       {party && (
         <RoleInfoModal
