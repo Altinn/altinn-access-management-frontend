@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { Page, PageHeader, PageContent, PageContainer } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/rtk/app/hooks';

@@ -60,7 +60,9 @@
     "org_nr": "Org.no.",
     "update_poa": "Update power of attorney",
     "give_poa": "Give power of attorney",
+    "request_poa": "Request power of attorney",
     "delete_poa": "Delete power of attorney",
+    "delete_pos_confirm": "Are you sure you want to delete the power of attorney?",
     "has_poa": "Has power of attorney",
     "refresh_cookie_alert": "The chosen actor has been changed in another tab. To synchronize with the change, this page will now reload.",
     "show_more": "Show more",
@@ -78,6 +80,12 @@
     "menu-label": "Menu",
     "change-label": "Change",
     "back-label": "Back"
+  },
+  "footer": {
+    "about_altinn": "About Altinn",
+    "service_messages": "Service messages",
+    "privacy_policy": "Privacy policy",
+    "accessibility": "Accessibility"
   },
   "sidebar": {
     "users": "Users",
@@ -237,7 +245,8 @@
     "package_delegation_error": "Failed to grant power of attorney over {{accessPackage}} to {{name}}.",
     "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
-    "delegated_packages_count_badge": "{{delegated}} of {{total}}"
+    "delegated_packages_count_badge": "{{delegated}} of {{total}}",
+    "package_number_of_resources": "{{count}} services"
   },
   "role": {
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",

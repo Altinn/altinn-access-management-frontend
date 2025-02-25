@@ -1,7 +1,7 @@
 import { Heading } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
@@ -18,7 +18,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
 
   return (
     party && (
-      <div className={classes.singleRightsSectionContainer}>
+      <div className={classes.accessPackageSectionContainer}>
         <Heading
           level={2}
           size='xs'

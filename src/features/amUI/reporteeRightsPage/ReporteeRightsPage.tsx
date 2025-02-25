@@ -1,6 +1,15 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
+
+import { PageContainer } from '../common/PageContainer/PageContainer';
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
+import { UserRoles } from '../common/UserRoles/UserRoles';
+import { RightsTabs } from '../common/RightsTabs/RightsTabs';
+import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
+
+import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -9,13 +18,6 @@ import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/use
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { filterDigdirRole } from '@/resources/utils/roleUtils';
-
-import { PageContainer } from '../common/PageContainer/PageContainer';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
-import { UserRoles } from '../common/UserRoles/UserRoles';
-import { RightsTabs } from '../common/RightsTabs/RightsTabs';
-import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -60,7 +62,12 @@ export const ReporteeRightsPage = () => {
                   services: allAccesses?.services?.length ?? 0,
                   roles: filterDigdirRole(allAccesses?.roles).length ?? 0,
                 }}
-                packagesPanel={<div>AccessPackageSection</div>}
+                packagesPanel={
+                  <ReporteeAccessPackageSection
+                    numberOfAccesses={allAccesses?.accessPackages?.length}
+                    reporteeUuid={reporteeUuid}
+                  />
+                }
                 singleRightsPanel={<div>SingleRightsSection</div>}
                 roleAssignmentsPanel={<div>RoleSection</div>}
               />

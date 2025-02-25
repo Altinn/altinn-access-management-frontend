@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@digdir/designsystemet-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -18,8 +18,8 @@ import { UserRoles } from '../common/UserRoles/UserRoles';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 
-import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
+import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
 
 export const UserRightsPage = () => {

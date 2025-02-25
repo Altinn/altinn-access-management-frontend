@@ -2,7 +2,7 @@ import type { ListItemProps } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import classes from './UserList.module.css';

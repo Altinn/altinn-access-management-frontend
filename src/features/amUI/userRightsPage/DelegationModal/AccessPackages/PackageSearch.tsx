@@ -1,20 +1,16 @@
-import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
 import { debounce } from '@/resources/utils';
-import { useSearchQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { List } from '@/components';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
-import { useSnackbar } from '@/features/amUI/common/Snackbar';
-import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
-import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
+import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './PackageSearch.module.css';
-import AccessAreaListItem from './AccessAreaListItem';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -31,58 +27,6 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
     setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
-
-  const { openSnackbar } = useSnackbar();
-  const delegate = useDelegateAccessPackage();
-  const revoke = useRevokeAccessPackage();
-
-  const onDelegate = async (accessPackage: AccessPackage) => {
-    delegate(
-      toParty,
-      accessPackage,
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_delegation_success', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_delegation_error', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-    );
-  };
-
-  const onRevoke = async (accessPackage: AccessPackage) => {
-    revoke(
-      toParty,
-      accessPackage,
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_deletion_success', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-      () => {
-        openSnackbar({
-          message: t('access_packages.package_deletion_error', {
-            accessPackage: accessPackage.name,
-            name: toParty.name,
-          }),
-        });
-      },
-    );
-  };
-
-  const { data } = useSearchQuery(debouncedSearchString);
 
   return (
     <>
@@ -116,19 +60,16 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             />
           </div>
         </div>
-
-        <List className={classes.searchResults}>
-          {data?.map((a) => (
-            <AccessAreaListItem
-              toParty={toParty}
-              key={a.id}
-              accessPackageArea={a}
-              onSelection={(ap: AccessPackage) => onSelection(ap)}
-              onDelegate={onDelegate}
-              onRevoke={onRevoke}
-            />
-          ))}
-        </List>
+        <div className={classes.searchResults}>
+          <AccessPackageList
+            fromPartyUuid={getCookie('AltinnPartyUuid')}
+            toPartyUuid={toParty.partyUuid}
+            showAllAreas={true}
+            showAllPackages={true}
+            onSelect={onSelection}
+            searchString={debouncedSearchString}
+          />
+        </div>
       </search>
     </>
   );

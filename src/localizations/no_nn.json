@@ -59,7 +59,9 @@
     "org_nr": "Org.nr.",
     "update_poa": "Oppdater fullmakt",
     "give_poa": "Gi fullmakt",
+    "request_poa": "Be om fullmakt",
     "delete_poa": "Slett fullmakt",
+    "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valgt aktør er endret i ein annen fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
     "show_more": "Se meir",
@@ -75,6 +77,12 @@
     "menu-label": "Meny",
     "change-label": "Bytt",
     "back-label": "Tilbake"
+  },
+  "footer": {
+    "about_altinn": "Om Altinn",
+    "service_messages": "Driftsmeldingar",
+    "privacy_policy": "Personvern",
+    "accessibility": "Tilgjengeligheit"
   },
   "sidebar": {
     "users": "Brukere",
@@ -233,7 +241,8 @@
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
     "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
-    "delegated_packages_count_badge": "{{delegated}} av {{total}}"
+    "delegated_packages_count_badge": "{{delegated}} av {{total}}",
+    "package_number_of_resources": "{{count}} tenester"
   },
   "role": {
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
