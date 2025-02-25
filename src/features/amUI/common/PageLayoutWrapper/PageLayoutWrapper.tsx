@@ -1,6 +1,6 @@
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { HandshakeIcon, PersonGroupIcon, InboxIcon, TenancyIcon } from '@navikt/aksel-icons';
 
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';

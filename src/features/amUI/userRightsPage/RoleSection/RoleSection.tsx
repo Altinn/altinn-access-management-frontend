@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Paragraph, Heading } from '@digdir/designsystemet-react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
