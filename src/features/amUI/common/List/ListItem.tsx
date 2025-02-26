@@ -1,4 +1,3 @@
-import React from 'react';
 import cn from 'classnames';
 
 import classes from './List.module.css';
@@ -17,6 +16,7 @@ export const ListItem = ({ children, onClick, className, ...props }: ListItemPro
     >
       {onClick ? (
         <button
+          type='button'
           className={cn(classes.clickableItem, className)}
           onClick={onClick}
         >

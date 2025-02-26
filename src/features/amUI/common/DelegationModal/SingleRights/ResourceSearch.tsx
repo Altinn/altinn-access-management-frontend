@@ -5,6 +5,10 @@ import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
 import { ResourceListItem } from '@altinn/altinn-components';
 
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './ResourceSearch.module.css';
+
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useGetPaginatedSearchQuery,
@@ -16,9 +20,6 @@ import { Filter, List } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import type { Party } from '@/rtk/features/lookupApi';
-
-import classes from './ResourceSearch.module.css';
-import { useDelegationModalContext } from './../DelegationModalContext';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
@@ -81,7 +82,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         <Chip.Removable
           size='sm'
           key={filterValue}
-          aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
+          aria-label={`${t('common.remove')} ${String(getFilterLabel(filterValue))}`}
           onClick={() => {
             unCheckFilter(filterValue);
           }}
@@ -102,7 +103,8 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           />
         </div>
       );
-    } else if (error) {
+    }
+    if (error) {
       return (
         <Alert
           role='alert'
@@ -118,35 +120,34 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
           <Paragraph>{t('common.general_error_paragraph')}</Paragraph>
         </Alert>
       );
-    } else {
-      return (
-        <>
-          <div className={classes.resultCountAndChips}>
-            {totalNumberOfResults !== undefined && (
-              <Paragraph>
-                {displayPopularResources
-                  ? t('single_rights.popular_services')
-                  : String(totalNumberOfResults) + ' ' + t('single_rights.search_hits')}
-              </Paragraph>
-            )}
-            {filterChips()}
-          </div>
-          <List className={classes.resourceList}>{listedResources}</List>
-          {totalNumberOfResults !== undefined &&
-            totalNumberOfResults > searchResultsPerPage &&
-            !displayPopularResources && (
-              <AmPagination
-                className={classes.pagination}
-                currentPage={currentPage}
-                totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
-                setCurrentPage={setCurrentPage}
-                size='sm'
-                hideLabels={true}
-              />
-            )}
-        </>
-      );
     }
+    return (
+      <>
+        <div className={classes.resultCountAndChips}>
+          {totalNumberOfResults !== undefined && (
+            <Paragraph>
+              {displayPopularResources
+                ? t('single_rights.popular_services')
+                : `${String(totalNumberOfResults)} ${t('single_rights.search_hits')}`}
+            </Paragraph>
+          )}
+          {filterChips()}
+        </div>
+        <List className={classes.resourceList}>{listedResources}</List>
+        {totalNumberOfResults !== undefined &&
+          totalNumberOfResults > searchResultsPerPage &&
+          !displayPopularResources && (
+            <AmPagination
+              className={classes.pagination}
+              currentPage={currentPage}
+              totalPages={Math.ceil(totalNumberOfResults / searchResultsPerPage)}
+              setCurrentPage={setCurrentPage}
+              size='sm'
+              hideLabels={true}
+            />
+          )}
+      </>
+    );
   };
 
   const listedResources = resources?.map((resource: ServiceResource, index: number) => {

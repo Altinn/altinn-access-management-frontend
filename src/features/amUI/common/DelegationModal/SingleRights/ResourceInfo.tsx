@@ -26,12 +26,9 @@ import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlic
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useGetReporteePartyQuery, type Party } from '@/rtk/features/lookupApi';
 
-import { useSnackbar } from '../../../common/Snackbar';
-import {
-  SnackbarDuration,
-  SnackbarMessageVariant,
-} from '../../../common/Snackbar/SnackbarProvider';
-import { DeleteResourceButton } from '../../SingleRightsSection/DeleteResourceButton';
+import { useSnackbar } from '../../Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../../Snackbar/SnackbarProvider';
+import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';

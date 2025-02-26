@@ -2,6 +2,13 @@ import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
 import { forwardRef, useEffect } from 'react';
 
+import { SnackbarProvider } from '../Snackbar';
+
+import { ResourceInfo } from './SingleRights/ResourceInfo';
+import classes from './DelegationModal.module.css';
+import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+import { RoleInfo } from './Role/RoleInfo';
+
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';

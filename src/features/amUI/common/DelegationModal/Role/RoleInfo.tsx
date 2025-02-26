@@ -4,6 +4,11 @@ import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
+import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
+
+import classes from './RoleInfo.module.css';
+
 import type { Party } from '@/rtk/features/lookupApi';
 import {
   useDelegationCheckQuery,
@@ -12,11 +17,6 @@ import {
 } from '@/rtk/features/roleApi';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-
-import { RevokeRoleButton } from '../../../common/RoleList/RevokeRoleButton';
-import { DelegateRoleButton } from '../../../common/RoleList/DelegateRoleButton';
-
-import classes from './RoleInfo.module.css';
 
 export interface PackageInfoProps {
   role: Role;
@@ -29,8 +29,8 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
   const { data: reportee } = useGetReporteeQuery();
 
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    rightOwnerUuid: reportee?.partyUuid ?? '',
-    rightHolderUuid: toParty.partyUuid ?? '',
+    from: reportee?.partyUuid ?? '',
+    to: toParty.partyUuid ?? '',
   });
 
   const { data: delegationCheckResult } = useDelegationCheckQuery({

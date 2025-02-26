@@ -19,8 +19,8 @@ export interface ResourceAlertProps {
 export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertProps) => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-  let headingText;
-  let content;
+  let headingText = '';
+  let content = null;
 
   if (resource.delegable === false) {
     headingText = t('delegation_modal.service_error.general_heading');

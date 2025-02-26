@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-
-import { SnackbarProvider } from '../../common/Snackbar';
+import { SnackbarProvider } from '../Snackbar';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -17,6 +13,10 @@ import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Party } from '@/rtk/features/lookupApi';
 
 export interface DelegationModalProps {
   toParty: Party;
@@ -57,14 +57,14 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
 
   /* handle closing */
   useEffect(() => {
-    const handleClose = () => onClose?.();
+    const handleClose = () => onClose();
     modalRef.current?.addEventListener('close', handleClose);
     return () => modalRef.current?.removeEventListener('close', handleClose);
   }, [onClose]);
 
-  let searchViewContent;
-  let infoViewContent;
-  let triggerButtonText;
+  let searchViewContent: JSX.Element | undefined;
+  let infoViewContent: JSX.Element | undefined;
+  let triggerButtonText: string | undefined;
 
   switch (delegationType) {
     case DelegationType.AccessPackage:

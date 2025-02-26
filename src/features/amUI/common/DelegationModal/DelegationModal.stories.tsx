@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { PartyType } from '@/rtk/features/userInfoApi';
 import store from '@/rtk/app/store';
 
-import { SnackbarProvider } from '../../common/Snackbar';
+import { SnackbarProvider } from '../Snackbar';
 
 import { DelegationModal } from './DelegationModal';
 import { DelegationType } from './DelegationModal';

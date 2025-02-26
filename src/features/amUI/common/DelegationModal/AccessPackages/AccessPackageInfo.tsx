@@ -9,6 +9,10 @@ import {
   PackageIcon,
 } from '@navikt/aksel-icons';
 
+import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
+
+import classes from './AccessPackageInfo.module.css';
+
 import type { Party } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';

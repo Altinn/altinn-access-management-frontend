@@ -1,6 +1,6 @@
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ChipRight } from '@/features/amUI/userRightsPage/DelegationModal/SingleRights/ResourceInfo';
+import type { ChipRight } from '@/features/amUI/common/DelegationModal/SingleRights/ResourceInfo';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 
