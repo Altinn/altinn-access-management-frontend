@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import {
   AccessPackageList,
@@ -10,7 +11,6 @@ import {
 } from '../../common/AccessPackageList/AccessPackageList';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);

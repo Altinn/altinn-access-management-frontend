@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { RoleList } from '../common/RoleList/RoleList';
-import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
+
+import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
+import { RoleActions, RoleList } from '../common/RoleList/RoleList';
 
 interface ReporteeRoleSectionProps {
   reporteeUuid?: string;
@@ -39,7 +39,11 @@ export const ReporteeRoleSection = ({
         <RoleList
           from={reporteeUuid ?? ''}
           to={getCookie('AltinnPartyUuid')}
-          onSelect={(role) => console.log(role)}
+          onSelect={(role) => {
+            setModalItem(role);
+            modalRef.current?.showModal();
+          }}
+          availableActions={[RoleActions.REVOKE, RoleActions.REQUEST]}
         />
       </div>
       {party && (
