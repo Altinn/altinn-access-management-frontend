@@ -21,7 +21,6 @@ export const DelegateRoleButton = ({
   roleName,
   toParty,
   fullText = false,
-  disabled,
   variant = 'outline',
   ...props
 }: DelegateRoleButtonProps) => {
@@ -37,10 +36,7 @@ export const DelegateRoleButton = ({
     });
 
   const canDelegate =
-    delegationCheckResult?.canDelegate &&
-    !delegateRoleLoading &&
-    !delegationCheckLoading &&
-    !disabled;
+    delegationCheckResult?.canDelegate && !delegateRoleLoading && !delegationCheckLoading;
 
   const onClick = () => {
     const snackbar = (isSuccessful: boolean) => {
@@ -76,7 +72,7 @@ export const DelegateRoleButton = ({
       {...props}
       variant={variant}
       onClick={onClick}
-      disabled={!canDelegate}
+      disabled={!canDelegate || props.disabled}
     >
       {fullText ? t('common.give_poa') : t('common.give_poa')}
     </Button>
