@@ -1,5 +1,7 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useRef, useState } from 'react';
@@ -10,7 +12,7 @@ import { useParams } from 'react-router';
 import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
