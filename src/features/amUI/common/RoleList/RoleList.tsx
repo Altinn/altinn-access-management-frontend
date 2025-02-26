@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Heading } from '@digdir/designsystemet-react';
-import { ListBase } from '@altinn/altinn-components';
+import { Button, ListBase } from '@altinn/altinn-components';
+import { useTranslation } from 'react-i18next';
 
 import {
   type ExtendedRole,
@@ -12,14 +13,25 @@ import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { RoleListItem } from './RoleListItem';
 import classes from './roleSection.module.css';
 import { SkeletonRoleList } from './SkeletonRoleList';
+import { RevokeRoleButton } from './RevokeRoleButton';
+import { DelegateRoleButton } from './DelegateRoleButton';
+
+export enum RoleActions {
+  DELEGATE = 'DELEGATE',
+  REQUEST = 'REQUEST',
+  REVOKE = 'REVOKE',
+}
 
 interface RoleListProps {
   from: string;
   to: string;
   onSelect: (role: ExtendedRole) => void;
+  availableActions?: RoleActions[];
+  isLoading?: boolean;
 }
 
-export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
+export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: RoleListProps) => {
+  const { t } = useTranslation();
   const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(to ?? '');
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
   const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
@@ -56,7 +68,7 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
     [roleAreas, userRoles],
   );
 
-  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading) {
+  if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
   return (
@@ -79,12 +91,23 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
                 key={role.id}
                 role={role}
                 active
-                reporteeUuid={from}
                 toParty={party}
-                assignmentId={role.assignmentId}
                 onClick={() => {
                   onSelect(role);
                 }}
+                controls={
+                  availableActions?.includes(RoleActions.REVOKE) && (
+                    <RevokeRoleButton
+                      key={role.id}
+                      assignmentId={role?.assignmentId ?? ''}
+                      roleName={role.name}
+                      toParty={party}
+                      fullText={false}
+                      size='sm'
+                      disabled={role.inherited?.length > 0}
+                    />
+                  )
+                }
               />
             ))}
           </ListBase>
@@ -93,9 +116,32 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
               <RoleListItem
                 key={role.id}
                 role={role}
-                reporteeUuid={from}
                 toParty={party}
                 onClick={() => onSelect(role)}
+                controls={
+                  <>
+                    {availableActions?.includes(RoleActions.DELEGATE) && (
+                      <DelegateRoleButton
+                        key={role.id}
+                        roleId={role.id}
+                        roleName={role.name}
+                        toParty={party}
+                        fullText={false}
+                        size='sm'
+                      />
+                    )}
+                    {availableActions?.includes(RoleActions.REQUEST) && (
+                      <Button
+                        key={role.id}
+                        size='sm'
+                        variant='outline'
+                        disabled
+                      >
+                        {t('common.request_poa')}
+                      </Button>
+                    )}
+                  </>
+                }
               />
             ))}
           </ListBase>

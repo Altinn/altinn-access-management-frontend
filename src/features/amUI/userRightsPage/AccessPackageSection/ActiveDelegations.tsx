@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import {
   AccessPackageList,

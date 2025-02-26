@@ -2,12 +2,12 @@ import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
 
+import { useSnackbar } from '../Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
+
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
-
-import { useSnackbar } from '../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
 
 interface DelegateRoleButtonProps extends ButtonProps {
   roleId: string;
@@ -16,7 +16,7 @@ interface DelegateRoleButtonProps extends ButtonProps {
   fullText?: boolean;
 }
 
-export const DelegateRoleButton = ({
+export const RequestRoleButton = ({
   roleId,
   roleName,
   toParty,
@@ -28,19 +28,19 @@ export const DelegateRoleButton = ({
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { data: representingParty } = useGetReporteePartyQuery();
-  const [delegateRole, { isLoading: delegateRoleLoading }] = useDelegateMutation();
+  // const [delegateRole, { isLoading: delegateRoleLoading }] = useDelegateMutation();
 
-  const { data: delegationCheckResult, isLoading: delegationCheckLoading } =
-    useDelegationCheckQuery({
-      rightownerUuid: representingParty?.partyUuid || '',
-      roleUuid: roleId,
-    });
+  // const { data: delegationCheckResult, isLoading: delegationCheckLoading } =
+  //   useDelegationCheckQuery({
+  //     rightownerUuid: representingParty?.partyUuid || '',
+  //     roleUuid: roleId,
+  //   });
 
-  const canDelegate =
-    delegationCheckResult?.canDelegate &&
-    !delegateRoleLoading &&
-    !delegationCheckLoading &&
-    !disabled;
+  // const canDelegate =
+  //   delegationCheckResult?.canDelegate &&
+  //   !delegateRoleLoading &&
+  //   !delegationCheckLoading &&
+  //   !disabled;
 
   const onClick = () => {
     const snackbar = (isSuccessful: boolean) => {

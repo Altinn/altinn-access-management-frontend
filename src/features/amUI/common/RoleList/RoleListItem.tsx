@@ -1,34 +1,24 @@
 import { ListItem } from '@altinn/altinn-components';
 
 import type { ExtendedRole } from '@/rtk/features/roleApi';
-import { useDelegationCheckQuery } from '@/rtk/features/roleApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
-import { RevokeRoleButton } from './RevokeRoleButton';
-import { DelegateRoleButton } from './DelegateRoleButton';
-
 interface RoleLIstItemProps {
-  reporteeUuid: string;
   role: ExtendedRole;
   onClick: () => void;
-  assignmentId?: string;
   toParty?: Party;
   active?: boolean;
+  controls: React.ReactNode;
+  loading?: boolean;
 }
 
 export const RoleListItem = ({
-  reporteeUuid,
   role,
   onClick,
-  toParty,
-  assignmentId,
   active = false,
+  loading,
+  controls,
 }: RoleLIstItemProps) => {
-  const { data: delegationCheckResult, isLoading } = useDelegationCheckQuery({
-    rightownerUuid: reporteeUuid,
-    roleUuid: role.id,
-  });
-
   return (
     <ListItem
       id={role.id}
@@ -38,30 +28,8 @@ export const RoleListItem = ({
       size='sm'
       color={active ? 'company' : 'neutral'}
       theme='subtle'
-      loading={isLoading}
-      controls={
-        assignmentId ? (
-          <RevokeRoleButton
-            key={role.id}
-            assignmentId={assignmentId}
-            roleName={role.name}
-            toParty={toParty}
-            fullText={false}
-            size='sm'
-            disabled={role.inherited?.length > 0}
-          />
-        ) : (
-          <DelegateRoleButton
-            key={role.id}
-            roleId={role.id}
-            roleName={role.name}
-            toParty={toParty}
-            fullText={false}
-            size='sm'
-            disabled={isLoading || !delegationCheckResult?.canDelegate}
-          />
-        )
-      }
+      loading={loading}
+      controls={controls}
     />
   );
 };
