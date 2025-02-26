@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
 import { ActionError } from '@/resources/hooks/useActionError';

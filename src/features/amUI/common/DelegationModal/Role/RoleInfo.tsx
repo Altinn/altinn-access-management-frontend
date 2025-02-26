@@ -1,5 +1,5 @@
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Avatar, Button } from '@altinn/altinn-components';
+import { Avatar } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
 import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
+import { DelegationAction } from '../EditModal';
 
 import classes from './RoleInfo.module.css';
 
@@ -16,16 +17,17 @@ import {
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 export interface PackageInfoProps {
   role: Role;
   toParty: Party;
   onDelegate?: () => void;
+  availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
+export const RoleInfo = ({ role, toParty, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
 
@@ -38,9 +40,6 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
     rightownerUuid: reportee?.partyUuid ?? '',
     roleUuid: role.id,
   });
-  const { data: currentUser } = useGetUserInfoQuery();
-
-  const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
 
   const assignment = useMemo(() => {
     if (activeDelegations && !isFetching) {
@@ -111,20 +110,20 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
         </div>
       )}
       <div className={classes.actions}>
-        {!userHasRole ? (
-          isCurrentUser ? (
-            <RequestRoleButton />
-          ) : (
-            <DelegateRoleButton
-              roleId={role.id}
-              roleName={role.name}
-              toParty={toParty}
-              fullText
-              disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
-              variant='solid'
-            />
-          )
-        ) : (
+        {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (
+          <RequestRoleButton />
+        )}
+        {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
+          <DelegateRoleButton
+            roleId={role.id}
+            roleName={role.name}
+            toParty={toParty}
+            fullText
+            disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
+            variant='solid'
+          />
+        )}
+        {userHasRole && availableActions.includes(DelegationAction.REVOKE) && (
           <RevokeRoleButton
             assignmentId={assignment.id}
             roleName={role.name}

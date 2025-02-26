@@ -1,8 +1,6 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
-import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useRef, useState } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -10,6 +8,8 @@ import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/A
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useParams } from 'react-router';
 import { useActionError } from '@/resources/hooks/useActionError';
+
+import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;

@@ -14,55 +14,22 @@ import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 
-import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
-import { SnackbarProvider } from '../../common/Snackbar';
-
-import classes from './DelegationModal.module.css';
-import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
-import { RoleInfo } from './Role/RoleInfo';
-import { ActionError } from '@/resources/hooks/useActionError';
-import { useDelegationModalContext } from './DelegationModalContext';
+export enum DelegationAction {
+  DELEGATE = 'DELEGATE',
+  REQUEST = 'REQUEST',
+  REVOKE = 'REVOKE',
+}
 
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   toParty: Party;
-  openWithError?: ActionError | null;
-  onClose?: () => void;
+  availableActions?: DelegationAction[];
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role, openWithError, onClose }, ref) => {
-    const { setActionError, actionError, reset } = useDelegationModalContext();
-
-    useEffect(() => {
-      if (!!openWithError) {
-        setActionError(openWithError);
-      } else {
-        setActionError(null);
-      }
-    }, [openWithError]);
-
-    const onClosing = () => {
-      onClose?.();
-      reset();
-    };
-
-    /* handle closing */
-    useEffect(() => {
-      const handleClose = () => onClosing?.();
-
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.addEventListener('close', handleClose);
-      }
-      return () => {
-        if (ref && 'current' in ref && ref.current) {
-          ref.current.removeEventListener('close', handleClose);
-        }
-      };
-    }, [onClosing, ref]);
-
+  ({ toParty, resource, accessPackage, role, availableActions }, ref) => {
     return (
       <Modal.Context>
         <Modal
@@ -75,7 +42,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage, role)}
+              {renderModalContent(toParty, resource, accessPackage, role, availableActions)}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -89,6 +56,7 @@ const renderModalContent = (
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
+  availableActions?: DelegationAction[],
 ) => {
   if (resource) {
     return (
@@ -103,6 +71,7 @@ const renderModalContent = (
       <AccessPackageInfo
         accessPackage={accessPackage}
         toParty={toParty}
+        availableActions={availableActions}
       />
     );
   }
@@ -111,6 +80,7 @@ const renderModalContent = (
       <RoleInfo
         role={role}
         toParty={toParty}
+        availableActions={availableActions}
       />
     );
   }

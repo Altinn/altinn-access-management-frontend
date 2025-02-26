@@ -10,6 +10,7 @@ import {
 } from '@navikt/aksel-icons';
 
 import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
+import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
 
@@ -29,9 +30,14 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
   toParty: Party;
+  availableActions?: DelegationAction[];
 }
 
-export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
+export const AccessPackageInfo = ({
+  accessPackage,
+  toParty,
+  availableActions = [],
+}: PackageInfoProps) => {
   const { t } = useTranslation();
   const { actionError, setActionError } = useDelegationModalContext();
 
@@ -124,7 +130,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
         </div>
       </div>
       <div className={classes.actions}>
-        {userHasPackage ? (
+        {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
           <DeletePackageButton
             accessPackage={accessPackage}
             toParty={toParty}
@@ -132,8 +138,13 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
             disabled={isFetching || accessPackage.inherited}
             onClick={() => onRevoke(accessPackage)}
           />
-        ) : (
+        )}
+        {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
           <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
+        )}
+        {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
+          // Todo: Implement request access package
+          <Button disabled>{t('common.request_poa')}</Button>
         )}
       </div>
     </div>
