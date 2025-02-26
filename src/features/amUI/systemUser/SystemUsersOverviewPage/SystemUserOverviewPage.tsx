@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Heading, Paragraph, Spinner, Tabs } from '@digdir/designsystemet-react';
 import { PlusIcon, TenancyIcon } from '@navikt/aksel-icons';

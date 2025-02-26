@@ -2,7 +2,7 @@ import { Button, Spinner, Search, Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import cn from 'classnames';
 
 import { Page, PageHeader, PageContent, PageContainer, RestartPrompter } from '@/components';
