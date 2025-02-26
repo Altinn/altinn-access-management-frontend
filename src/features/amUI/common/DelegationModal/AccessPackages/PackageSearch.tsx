@@ -2,15 +2,15 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './PackageSearch.module.css';
+
 import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './PackageSearch.module.css';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;

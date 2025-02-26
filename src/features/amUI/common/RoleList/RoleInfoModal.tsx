@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { EditModal } from '../../userRightsPage/DelegationModal/EditModal';
+import { EditModal } from '../DelegationModal/EditModal';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';

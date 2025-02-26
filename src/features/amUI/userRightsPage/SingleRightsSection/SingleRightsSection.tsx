@@ -10,7 +10,7 @@ import usePagination from '@/resources/hooks/usePagination';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { AmPagination } from '@/components/Paginering';
 
-import { DelegationModal, DelegationType } from '../DelegationModal/DelegationModal';
+import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 
 import classes from './SingleRightsSection.module.css';
 import SingleRightItem from './SingleRightItem';

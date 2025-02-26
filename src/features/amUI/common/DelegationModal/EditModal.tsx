@@ -2,17 +2,17 @@ import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
 import { forwardRef } from 'react';
 
+import { SnackbarProvider } from '../Snackbar';
+
+import { ResourceInfo } from './SingleRights/ResourceInfo';
+import classes from './DelegationModal.module.css';
+import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+import { RoleInfo } from './Role/RoleInfo';
+
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
-
-import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
-import { SnackbarProvider } from '../../common/Snackbar';
-
-import classes from './DelegationModal.module.css';
-import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
-import { RoleInfo } from './Role/RoleInfo';
 
 export interface EditModalProps {
   resource?: ServiceResource;

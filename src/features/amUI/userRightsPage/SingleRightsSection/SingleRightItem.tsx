@@ -8,7 +8,7 @@ import { useRef } from 'react';
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { type Party } from '@/rtk/features/lookupApi';
 
-import { EditModal } from '../DelegationModal/EditModal';
+import { EditModal } from '../../common/DelegationModal/EditModal';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
 import classes from './SingleRightsSection.module.css';

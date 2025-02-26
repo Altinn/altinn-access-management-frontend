@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
-import { DelegationModal, DelegationType } from '../DelegationModal/DelegationModal';
+import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 
 import classes from './AccessPackageSection.module.css';
 import { ActiveDelegations } from './ActiveDelegations';

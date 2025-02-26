@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import type { Party } from '@/rtk/features/lookupApi';
-
 import { DelegationModalProvider } from './DelegationModalContext';
 import { DelegationModalContent } from './DelegationModalContent';
+
+import type { Party } from '@/rtk/features/lookupApi';
 
 export enum DelegationType {
   SingleRights = 'SingleRights',
