@@ -17,27 +17,26 @@ import {
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 export interface PackageInfoProps {
   role: Role;
   toParty: Party;
+  fromParty: Party;
   onDelegate?: () => void;
   availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({ role, toParty, availableActions = [] }: PackageInfoProps) => {
+export const RoleInfo = ({ role, toParty, fromParty, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { data: reportee } = useGetReporteeQuery();
 
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: reportee?.partyUuid ?? '',
+    from: fromParty.partyUuid ?? '',
     to: toParty.partyUuid ?? '',
   });
 
   const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: reportee?.partyUuid ?? '',
+    rightownerUuid: fromParty?.partyUuid ?? '',
     roleUuid: role.id,
   });
 
@@ -87,7 +86,7 @@ export const RoleInfo = ({ role, toParty, availableActions = [] }: PackageInfoPr
                 values={{
                   you: t('common.you_uppercase'),
                   serviceowner: role.provider?.name,
-                  reporteeorg: reportee?.name,
+                  reporteeorg: fromParty?.name,
                 }}
               />
             )}
