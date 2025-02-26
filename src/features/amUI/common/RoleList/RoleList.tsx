@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { Heading } from '@digdir/designsystemet-react';
 import { ListBase } from '@altinn/altinn-components';
-import { useParams } from 'react-router-dom';
 
 import {
   type ExtendedRole,
@@ -21,8 +20,7 @@ interface RoleListProps {
 }
 
 export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
-  const { id: rightHolderUuid } = useParams();
-  const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
+  const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(to ?? '');
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
   const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
     from,
@@ -84,7 +82,9 @@ export const RoleList = ({ from, to, onSelect }: RoleListProps) => {
                 reporteeUuid={from}
                 toParty={party}
                 assignmentId={role.assignmentId}
-                onClick={() => onSelect(role)}
+                onClick={() => {
+                  onSelect(role);
+                }}
               />
             ))}
           </ListBase>
