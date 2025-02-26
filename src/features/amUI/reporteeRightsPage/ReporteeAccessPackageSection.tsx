@@ -9,7 +9,8 @@ import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useParams } from 'react-router';
 import { useActionError } from '@/resources/hooks/useActionError';
 
-import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
+import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
