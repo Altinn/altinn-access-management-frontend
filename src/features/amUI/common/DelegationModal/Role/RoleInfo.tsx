@@ -1,11 +1,12 @@
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Avatar } from '@altinn/altinn-components';
+import { Avatar, Button } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
+import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
 
 import classes from './RoleInfo.module.css';
 
@@ -15,7 +16,7 @@ import {
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 export interface PackageInfoProps {
@@ -37,6 +38,9 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
     rightownerUuid: reportee?.partyUuid ?? '',
     roleUuid: role.id,
   });
+  const { data: currentUser } = useGetUserInfoQuery();
+
+  const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
 
   const assignment = useMemo(() => {
     if (activeDelegations && !isFetching) {
@@ -108,14 +112,18 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
       )}
       <div className={classes.actions}>
         {!userHasRole ? (
-          <DelegateRoleButton
-            roleId={role.id}
-            roleName={role.name}
-            toParty={toParty}
-            fullText
-            disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
-            variant='solid'
-          />
+          isCurrentUser ? (
+            <RequestRoleButton />
+          ) : (
+            <DelegateRoleButton
+              roleId={role.id}
+              roleName={role.name}
+              toParty={toParty}
+              fullText
+              disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
+              variant='solid'
+            />
+          )
         ) : (
           <RevokeRoleButton
             assignmentId={assignment.id}
