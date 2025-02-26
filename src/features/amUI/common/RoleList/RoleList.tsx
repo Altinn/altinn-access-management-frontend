@@ -15,6 +15,7 @@ import classes from './roleSection.module.css';
 import { SkeletonRoleList } from './SkeletonRoleList';
 import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
+import { RequestRoleButton } from './RequestRoleButton';
 
 export enum RoleActions {
   DELEGATE = 'DELEGATE',
@@ -130,16 +131,7 @@ export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: Ro
                         size='sm'
                       />
                     )}
-                    {availableActions?.includes(RoleActions.REQUEST) && (
-                      <Button
-                        key={role.id}
-                        size='sm'
-                        variant='outline'
-                        disabled
-                      >
-                        {t('common.request_poa')}
-                      </Button>
-                    )}
+                    {availableActions?.includes(RoleActions.REQUEST) && <RequestRoleButton />}
                   </>
                 }
               />
