@@ -8,7 +8,8 @@ import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
-import { RoleActions, RoleList } from '../common/RoleList/RoleList';
+import { RoleList } from '../common/RoleList/RoleList';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
 
 interface ReporteeRoleSectionProps {
   reporteeUuid?: string;
@@ -43,7 +44,7 @@ export const ReporteeRoleSection = ({
             setModalItem(role);
             modalRef.current?.showModal();
           }}
-          availableActions={[RoleActions.REVOKE, RoleActions.REQUEST]}
+          availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
       </div>
       {party && (

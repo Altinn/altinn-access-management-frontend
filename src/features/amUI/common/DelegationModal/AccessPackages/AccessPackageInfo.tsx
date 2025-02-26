@@ -37,7 +37,7 @@ export const AccessPackageInfo = ({
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
     to: toParty.partyUuid,
-    from: getCookie('partyUuid'),
+    from: getCookie('AltinnPartyUuid'),
   });
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {

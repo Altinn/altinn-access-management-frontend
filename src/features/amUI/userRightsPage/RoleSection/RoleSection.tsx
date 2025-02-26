@@ -5,8 +5,9 @@ import type { Role } from '@/rtk/features/roleApi';
 import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
-import { RoleActions, RoleList } from '../../common/RoleList/RoleList';
+import { RoleList } from '../../common/RoleList/RoleList';
 import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
+import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import classes from './roleSection.module.css';
 
@@ -26,8 +27,8 @@ export const RoleSection = () => {
         from={reportee?.partyUuid ?? ''}
         to={rightHolderUuid ?? ''}
         availableActions={[
-          isCurrentUser ? RoleActions.REQUEST : RoleActions.DELEGATE,
-          RoleActions.REVOKE,
+          isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+          DelegationAction.REVOKE,
         ]}
         onSelect={(role) => {
           setModalItem(role);

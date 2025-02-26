@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
+import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
@@ -27,7 +28,7 @@ export const ReporteeAccessPackageSection = ({
       <AccessPackageList
         fromPartyUuid={reporteeUuid ?? ''}
         toPartyUuid={getCookie('AltinnPartyUuid')}
-        availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
+        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm
         showAllPackages
       />
