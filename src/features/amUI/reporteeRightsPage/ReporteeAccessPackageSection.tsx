@@ -1,9 +1,9 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
-import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
-
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+
+import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;

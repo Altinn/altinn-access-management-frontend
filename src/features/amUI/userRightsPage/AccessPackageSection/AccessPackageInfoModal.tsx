@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
-import { EditModal } from '../../common/DelegationModal/EditModal';
+import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
 
 interface AccessPackageInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -20,16 +21,23 @@ export const AccessPackageInfoModal = ({
 }: AccessPackageInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
-
     modalRef.current?.addEventListener('close', handleClose);
     return () => modalRef.current?.removeEventListener('close', handleClose);
   }, [onClose, modalRef]);
+
+  const { data: currentUser } = useGetUserInfoQuery();
+
+  const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
 
   return (
     <EditModal
       ref={modalRef}
       toParty={toParty}
       accessPackage={modalItem}
+      availableActions={[
+        !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+        DelegationAction.REVOKE,
+      ]}
     />
   );
 };

@@ -14,15 +14,22 @@ import type { Party } from '@/rtk/features/lookupApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Role } from '@/rtk/features/roleApi';
 
+export enum DelegationAction {
+  DELEGATE = 'DELEGATE',
+  REQUEST = 'REQUEST',
+  REVOKE = 'REVOKE',
+}
+
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   toParty: Party;
+  availableActions?: DelegationAction[];
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role }, ref) => {
+  ({ toParty, resource, accessPackage, role, availableActions }, ref) => {
     return (
       <Modal.Context>
         <Modal
@@ -32,7 +39,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage, role)}
+              {renderModalContent(toParty, resource, accessPackage, role, availableActions)}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -46,6 +53,7 @@ const renderModalContent = (
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
+  availableActions?: DelegationAction[],
 ) => {
   if (resource) {
     return (
@@ -60,6 +68,7 @@ const renderModalContent = (
       <AccessPackageInfo
         accessPackage={accessPackage}
         toParty={toParty}
+        availableActions={availableActions}
       />
     );
   }
@@ -68,6 +77,7 @@ const renderModalContent = (
       <RoleInfo
         role={role}
         toParty={toParty}
+        availableActions={availableActions}
       />
     );
   }
