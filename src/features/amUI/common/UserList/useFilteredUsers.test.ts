@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react';
 
 import type { User } from '@/rtk/features/userInfoApi';
 import { PartyType } from '@/rtk/features/userInfoApi';
@@ -97,7 +97,7 @@ describe('useFilteredUsers', () => {
     expect(result.current.hasNextPage).toBe(true);
   });
 
-  it('should return all more users if goNextPage is called', () => {
+  it('should return all more users if goNextPage is called', async () => {
     const users = [...mockUsers, ...mockUsers, ...mockUsers];
     const { result } = renderHook(() =>
       useFilteredUsers({
@@ -106,7 +106,7 @@ describe('useFilteredUsers', () => {
       }),
     );
     expect(result.current.hasNextPage).toBe(true);
-    result.current.goNextPage();
+    act(() => result.current.goNextPage());
     expect(result.current.hasNextPage).toBe(false);
     expect(result.current.users).toHaveLength(12);
   });

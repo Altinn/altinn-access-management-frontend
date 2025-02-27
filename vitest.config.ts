@@ -7,11 +7,14 @@ export default defineConfig({
     alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
   },
   test: {
+    globals: true,
     environment: 'jsdom',
+    pool: 'vmThreads',
+    setupFiles: './tests/setupTests.ts',
     exclude: [
       '**/node_modules/**',
       '**/cypress/**',
-      '**/playwrite/**',
+      '**/playwright/**',
       '**/*.spec.ts',
       '**/*.test.cy.tsx',
     ],

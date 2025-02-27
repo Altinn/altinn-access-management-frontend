@@ -45,10 +45,12 @@ export interface UserAccesses {
   roles: string[];
 }
 
+const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/user`;
+
 export const userInfoApi = createApi({
   reducerPath: 'userInfoApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/accessmanagement/api/v1/user/',
+    baseUrl: baseUrl,
     prepareHeaders: (headers) => {
       headers.set('content-type', 'application/json; charset=utf-8');
       headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
