@@ -35,6 +35,10 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
           packageActions.REVOKE,
           isCurrentUser ? packageActions.REQUEST : packageActions.DELEGATE,
         ]}
+        onDelegateError={(accessPackage) => {
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
       />
 
       <AccessPackageInfoModal
