@@ -33,16 +33,14 @@ export const RoleInfo = ({
   fromPartyUuid,
   availableActions = [],
 }: PackageInfoProps) => {
-  console.log('🚀 ~ fromPartyUuid:', fromPartyUuid);
-  console.log('🚀 ~ toPartyUuid:', toPartyUuid);
   const { t } = useTranslation();
 
   const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
   const { data: fromParty } = useGetPartyByUUIDQuery(fromPartyUuid);
 
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: toPartyUuid ?? '',
-    to: fromPartyUuid ?? '',
+    from: fromPartyUuid ?? '',
+    to: toPartyUuid ?? '',
   });
 
   const { data: delegationCheckResult } = useDelegationCheckQuery({

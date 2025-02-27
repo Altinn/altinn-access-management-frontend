@@ -26,6 +26,7 @@ export const ReporteeRoleSection = ({
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
 
   const { data: party } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
+  const toUuid = getCookie('AltinnPartyUuid');
 
   return (
     <>
@@ -38,8 +39,8 @@ export const ReporteeRoleSection = ({
       </Heading>
       <div>
         <RoleList
+          to={toUuid}
           from={reporteeUuid ?? ''}
-          to={getCookie('AltinnPartyUuid')}
           onSelect={(role) => {
             setModalItem(role);
             modalRef.current?.showModal();
@@ -50,7 +51,7 @@ export const ReporteeRoleSection = ({
       {party && (
         <RoleInfoModal
           modalRef={modalRef}
-          toPartyUuid={rightHolderUuid ?? ''}
+          toPartyUuid={toUuid}
           fromPartyUuid={reporteeUuid ?? ''}
           role={modalItem}
           onClose={() => setModalItem(undefined)}
