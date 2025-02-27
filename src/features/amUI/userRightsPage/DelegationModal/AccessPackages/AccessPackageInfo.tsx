@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
@@ -18,6 +18,8 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
+import TechnicalErrorParagraphStories from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraph.stories';
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -26,12 +28,19 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
   const { t } = useTranslation();
+  const [delegationError, setDelegationError] = React.useState<{ status: string; time: string }>({
+    status: '',
+    time: '',
+  });
 
-  const { onDelegate } = useAccessPackageActions({ toUuid: toParty.partyUuid });
+  const { onDelegate } = useAccessPackageActions({
+    toUuid: toParty.partyUuid,
+    onDelegateError: (accessPackage, party, status, time) => setDelegationError({ status, time }),
+  });
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
     to: toParty.partyUuid,
-    from: getCookie('partyUuid'),
+    from: getCookie('AltinnPartyUuid'),
   });
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
@@ -58,7 +67,23 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           {accessPackage?.name}
         </Heading>
       </div>
-      <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
+      {delegationError.status && (
+        <>
+          <Alert
+            color='danger'
+            size='sm'
+          >
+            <Heading size='2xs'>Kunne ikke gi fullmakt</Heading>
+            <TechnicalErrorParagraphs
+              size='xs'
+              status={delegationError.status}
+              time={delegationError.time}
+            />
+          </Alert>
+          <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
+        </>
+      )}
+
       {accessPackage?.inherited && (
         <div className={classes.inherited}>
           <InformationSquareFillIcon

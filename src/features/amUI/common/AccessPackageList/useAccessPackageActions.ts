@@ -11,7 +11,12 @@ import { useSnackbar } from '../Snackbar';
 interface useAccessPackageActionsProps {
   toUuid: string;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onDelegateError?: (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    status: string,
+    timestamp: string,
+  ) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
   onRevokeError?: (accessPackage: AccessPackage, toParty: Party) => void;
 }
@@ -42,8 +47,13 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const handleDelegateError = (accessPackage: AccessPackage, toParty: Party) => {
-    if (onDelegateError) onDelegateError(accessPackage, toParty);
+  const handleDelegateError = (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    status: string,
+    timestamp: string,
+  ) => {
+    if (onDelegateError) onDelegateError(accessPackage, toParty, status, timestamp);
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_error', {
@@ -88,8 +98,8 @@ export const useAccessPackageActions = ({
       () => {
         handleDelegateSuccess(accessPackage, toParty);
       },
-      () => {
-        handleDelegateError(accessPackage, toParty);
+      (status) => {
+        handleDelegateError(accessPackage, toParty, status.toString(), new Date().toISOString());
       },
     );
   };
