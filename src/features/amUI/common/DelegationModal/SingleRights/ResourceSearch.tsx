@@ -5,10 +5,6 @@ import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
 import { ResourceListItem } from '@altinn/altinn-components';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './ResourceSearch.module.css';
-
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useGetPaginatedSearchQuery,
@@ -21,9 +17,13 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import type { Party } from '@/rtk/features/lookupApi';
 
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './ResourceSearch.module.css';
+
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
-  toParty: Party;
+  toParty?: Party;
 }
 
 const searchResultsPerPage = 7;
@@ -189,7 +189,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
       >
         <Trans
           i18nKey='delegation_modal.give_service_to_name'
-          values={{ name: toParty.name }}
+          values={{ name: toParty?.name }}
           components={{ strong: <strong /> }}
         />
       </Heading>

@@ -3,23 +3,27 @@ import * as React from 'react';
 import { DelegationModalProvider } from './DelegationModalContext';
 import { DelegationModalContent } from './DelegationModalContent';
 
-import type { Party } from '@/rtk/features/lookupApi';
-
 export enum DelegationType {
   SingleRights = 'SingleRights',
   AccessPackage = 'AccessPackage',
   Role = 'Role',
 }
 export interface DelegationModalProps {
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   delegationType: DelegationType;
 }
 
-export const DelegationModal = ({ toParty, delegationType }: DelegationModalProps) => {
+export const DelegationModal = ({
+  toPartyUuid,
+  fromPartyUuid,
+  delegationType,
+}: DelegationModalProps) => {
   return (
     <DelegationModalProvider>
       <DelegationModalContent
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
         delegationType={delegationType}
       />
     </DelegationModalProvider>
