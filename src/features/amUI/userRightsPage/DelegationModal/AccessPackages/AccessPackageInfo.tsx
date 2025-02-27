@@ -80,10 +80,9 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
               time={delegationError.time}
             />
           </Alert>
-          <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
         </>
       )}
-
+      <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
       {accessPackage?.inherited && (
         <div className={classes.inherited}>
           <InformationSquareFillIcon
