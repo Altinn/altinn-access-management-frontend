@@ -211,6 +211,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserService, SystemUserService>();
     services.AddSingleton<ISystemUserRequestService, SystemUserRequestService>();
     services.AddSingleton<ISystemUserChangeRequestService, SystemUserChangeRequestService>();
+    services.AddSingleton<ISystemUserClientDelegationRequestService, SystemUserClientDelegationRequestService>();
 
     services.AddSingleton<IRoleService, RoleService>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
@@ -362,11 +363,13 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddSingleton<ISystemUserClient, SystemUserClientMock>();
         services.AddSingleton<ISystemUserRequestClient, SystemUserRequestClientMock>();
         services.AddSingleton<ISystemUserChangeRequestClient, SystemUserChangeRequestClientMock>();
+        services.AddSingleton<ISystemUserClientDelegationRequestClient, SystemUserClientDelegationRequestClientMock>();
     }
     else
     {
         services.AddSingleton<ISystemUserClient, SystemUserClient>();
         services.AddSingleton<ISystemUserRequestClient, SystemUserRequestClient>();
         services.AddSingleton<ISystemUserChangeRequestClient, SystemUserChangeRequestClient>();
+        services.AddSingleton<ISystemUserClientDelegationRequestClient, SystemUserClientDelegationRequestClient>();
     }
 }
