@@ -1,7 +1,6 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';

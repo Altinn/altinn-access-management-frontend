@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import type { Party } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 
@@ -28,7 +29,8 @@ export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModa
   return (
     <EditModal
       ref={modalRef}
-      toParty={toParty}
+      toPartyUuid={getCookie('AltinnPartyUuid')}
+      fromPartyUuid={toParty.partyUuid}
       role={role}
       availableActions={[
         !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
