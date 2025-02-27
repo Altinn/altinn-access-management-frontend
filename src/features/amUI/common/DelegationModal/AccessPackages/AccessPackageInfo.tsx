@@ -42,6 +42,7 @@ export const AccessPackageInfo = ({
     to: toPartyUuid,
     from: fromPartyUuid,
   });
+
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
       return Object.values(activeDelegations)
