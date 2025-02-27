@@ -1,7 +1,6 @@
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useDelegateRightsMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import type { ChipRight } from '@/features/amUI/common/DelegationModal/SingleRights/ResourceInfo';
-import type { Party } from '@/rtk/features/lookupApi';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 
 export const useDelegateRights = () => {
@@ -9,13 +8,13 @@ export const useDelegateRights = () => {
 
   const delegateRights = (
     rights: ChipRight[],
-    toParty: Party,
+    toPartyUuid: string,
     resource: ServiceResource,
     onSuccess?: (response: DelegationResult) => void,
     onError?: (status: string | number) => void,
   ) => {
     delegate({
-      toUuid: toParty.partyUuid,
+      toUuid: toPartyUuid,
       resourceId: resource.identifier,
       rightKeys: rights.map((r) => r.rightKey),
     })

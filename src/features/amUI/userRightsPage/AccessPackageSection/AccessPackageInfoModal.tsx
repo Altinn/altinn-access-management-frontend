@@ -32,7 +32,8 @@ export const AccessPackageInfoModal = ({
   return (
     <EditModal
       ref={modalRef}
-      toParty={toParty}
+      toPartyUuid={toParty.partyUuid}
+      fromPartyUuid={currentUser?.uuid || ''}
       accessPackage={modalItem}
       availableActions={[
         !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,

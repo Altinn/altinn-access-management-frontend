@@ -20,10 +20,9 @@ export const ReporteeAccessPackageSection = ({
   reporteeUuid,
 }: ReporteeAccessPackageSectionProps) => {
   const { t } = useTranslation();
-  const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const { data: party } = useGetPartyByUUIDQuery(id ?? '');
+  const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
 
   useEffect(() => {
     const handleClose = () => setModalItem(undefined);
@@ -54,7 +53,8 @@ export const ReporteeAccessPackageSection = ({
       {party && (
         <EditModal
           ref={modalRef}
-          toParty={party}
+          toPartyUuid={getCookie('AltinnPartyUuid')}
+          fromPartyUuid={party.partyUuid}
           accessPackage={modalItem}
           availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
