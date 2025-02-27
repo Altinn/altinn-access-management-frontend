@@ -2,14 +2,14 @@ import { ListBase, Button } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import classes from './AccessPackageList.module.css';
-import { useAreaPackageList } from './useAreaPackageList';
+import { ExtendedAccessArea, useAreaPackageList } from './useAreaPackageList';
 import { AreaItem } from './AreaItem';
 import { PackageItem } from './PackageItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
@@ -87,113 +87,142 @@ export const AccessPackageList = ({
     onRevokeError,
   });
 
-  const sortedAreas = [...assignedAreas, ...availableAreas].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  );
+  const sortedAssignedAreas = assignedAreas.sort((a, b) => a.name.localeCompare(b.name));
+
+  const sortedAvailableAreas = availableAreas.sort((a, b) => a.name.localeCompare(b.name));
+
+  const AreaList = (areas: ExtendedAccessArea[], assigned: boolean) => {
+    return (
+      <div className={classes.accessAreaList}>
+        {loadingDelegations || loadingPackageAreas || isLoading ? (
+          <SkeletonAccessPackageList />
+        ) : (
+          <ListBase>
+            {areas.map((area) => {
+              const { packages } = area;
+              const expanded =
+                searchString !== '' || expandedAreas.some((areaId) => areaId === area.id);
+
+              return (
+                <AreaItem
+                  key={area.id}
+                  area={area}
+                  expanded={expanded}
+                  toggleExpandedArea={toggleExpandedArea}
+                  showBadge={showAllPackages}
+                  color={assigned ? 'company' : 'neutral'}
+                >
+                  <div className={classes.accessAreaContent}>
+                    <Paragraph>{area.description}</Paragraph>
+                    {packages.assigned.length > 0 && (
+                      <ListBase>
+                        {packages.assigned.map((pkg) => (
+                          <PackageItem
+                            key={pkg.id}
+                            pkg={pkg}
+                            onSelect={onSelect}
+                            hasAccess
+                            controls={
+                              availableActions?.includes(packageActions.REVOKE) &&
+                              useDeleteConfirm ? (
+                                <ButtonWithConfirmPopup
+                                  triggerButtonContent={t('common.delete_poa')}
+                                  triggerButtonProps={{
+                                    icon: MinusCircleIcon,
+                                    variant: 'text',
+                                    size: 'sm',
+                                    disabled: pkg.inherited,
+                                  }}
+                                  message={t('user_rights_page.delete_confirm_message', {
+                                    name: pkg.name,
+                                  })}
+                                  size='sm'
+                                  onConfirm={() => onRevoke(pkg)}
+                                />
+                              ) : (
+                                <Button
+                                  icon={MinusCircleIcon}
+                                  variant='text'
+                                  size='sm'
+                                  disabled={pkg.inherited}
+                                  onClick={() => onRevoke(pkg)}
+                                >
+                                  {t('common.delete_poa')}
+                                </Button>
+                              )
+                            }
+                          />
+                        ))}
+                      </ListBase>
+                    )}
+                    {packages.available.length > 0 && (
+                      <ListBase>
+                        {packages.available.map((pkg) => (
+                          <PackageItem
+                            key={pkg.id}
+                            pkg={pkg}
+                            onSelect={onSelect}
+                            controls={
+                              <>
+                                {availableActions?.includes(packageActions.DELEGATE) && (
+                                  <Button
+                                    icon={PlusCircleIcon}
+                                    variant='text'
+                                    size='sm'
+                                    onClick={() => onDelegate(pkg)}
+                                  >
+                                    {t('common.give_poa')}
+                                  </Button>
+                                )}
+                                {availableActions?.includes(packageActions.REQUEST) && (
+                                  <Button
+                                    icon={PlusCircleIcon}
+                                    variant='text'
+                                    size='sm'
+                                    disabled
+                                    onClick={() => onRequest(pkg)}
+                                  >
+                                    {t('common.request_poa')}
+                                  </Button>
+                                )}
+                              </>
+                            }
+                          />
+                        ))}
+                      </ListBase>
+                    )}
+                  </div>
+                </AreaItem>
+              );
+            })}
+          </ListBase>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <div className={classes.accessAreaList}>
-      {loadingDelegations || loadingPackageAreas || isLoading ? (
-        <SkeletonAccessPackageList />
+    <>
+      {sortedAssignedAreas.length === 0 ? (
+        <Paragraph className={classes.otherAreasHeading}>
+          Albatross har ingen fullmakter som matcher med søket
+        </Paragraph>
       ) : (
-        <ListBase>
-          {sortedAreas.map((area) => {
-            const { packages } = area;
-            const expanded = expandedAreas.some((areaId) => areaId === area.id);
-
-            return (
-              <AreaItem
-                key={area.id}
-                area={area}
-                expanded={expanded}
-                toggleExpandedArea={toggleExpandedArea}
-                showBadge={showAllPackages}
-              >
-                <div className={classes.accessAreaContent}>
-                  <Paragraph>{area.description}</Paragraph>
-                  {packages.assigned.length > 0 && (
-                    <ListBase>
-                      {packages.assigned.map((pkg) => (
-                        <PackageItem
-                          key={pkg.id}
-                          pkg={pkg}
-                          onSelect={onSelect}
-                          hasAccess
-                          controls={
-                            availableActions?.includes(packageActions.REVOKE) &&
-                            useDeleteConfirm ? (
-                              <ButtonWithConfirmPopup
-                                triggerButtonContent={t('common.delete_poa')}
-                                triggerButtonProps={{
-                                  icon: MinusCircleIcon,
-                                  variant: 'text',
-                                  size: 'sm',
-                                  disabled: pkg.inherited,
-                                }}
-                                message={t('user_rights_page.delete_confirm_message', {
-                                  name: pkg.name,
-                                })}
-                                size='sm'
-                                onConfirm={() => onRevoke(pkg)}
-                              />
-                            ) : (
-                              <Button
-                                icon={MinusCircleIcon}
-                                variant='text'
-                                size='sm'
-                                disabled={pkg.inherited}
-                                onClick={() => onRevoke(pkg)}
-                              >
-                                {t('common.delete_poa')}
-                              </Button>
-                            )
-                          }
-                        />
-                      ))}
-                    </ListBase>
-                  )}
-                  {packages.available.length > 0 && (
-                    <ListBase>
-                      {packages.available.map((pkg) => (
-                        <PackageItem
-                          key={pkg.id}
-                          pkg={pkg}
-                          onSelect={onSelect}
-                          controls={
-                            <>
-                              {availableActions?.includes(packageActions.DELEGATE) && (
-                                <Button
-                                  icon={PlusCircleIcon}
-                                  variant='text'
-                                  size='sm'
-                                  onClick={() => onDelegate(pkg)}
-                                >
-                                  {t('common.give_poa')}
-                                </Button>
-                              )}
-                              {availableActions?.includes(packageActions.REQUEST) && (
-                                <Button
-                                  icon={PlusCircleIcon}
-                                  variant='text'
-                                  size='sm'
-                                  disabled
-                                  onClick={() => onRequest(pkg)}
-                                >
-                                  {t('common.request_poa')}
-                                </Button>
-                              )}
-                            </>
-                          }
-                        />
-                      ))}
-                    </ListBase>
-                  )}
-                </div>
-              </AreaItem>
-            );
-          })}
-        </ListBase>
+        AreaList(sortedAssignedAreas, true)
       )}
-    </div>
+
+      {showAllAreas && sortedAvailableAreas.length !== 0 && (
+        <>
+          <Heading
+            className={classes.otherAreasHeading}
+            size='xs'
+            level={2}
+          >
+            Andre tilgjengelige områder
+          </Heading>
+          {AreaList(sortedAvailableAreas, false)}
+        </>
+      )}
+    </>
   );
 };

@@ -26,10 +26,6 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
         </Heading>
-        <DelegationModal
-          toParty={party}
-          delegationType={DelegationType.AccessPackage}
-        />
         <ActiveDelegations toParty={party} />
       </div>
     )

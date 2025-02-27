@@ -1,4 +1,4 @@
-import { AccessAreaListItem } from '@altinn/altinn-components';
+import { AccessAreaListItem, Color } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
@@ -9,6 +9,7 @@ interface AreaItemProps {
   toggleExpandedArea: (areaId: string) => void;
   children?: React.ReactNode;
   showBadge?: boolean;
+  color?: Color;
 }
 
 export const AreaItem = ({
@@ -17,6 +18,7 @@ export const AreaItem = ({
   toggleExpandedArea,
   children,
   showBadge,
+  color = 'company',
 }: AreaItemProps) => {
   const { t } = useTranslation();
   return (
@@ -24,7 +26,7 @@ export const AreaItem = ({
       key={area.id}
       id={area.id}
       name={area.name}
-      colorTheme='company'
+      colorTheme={color}
       iconUrl={area.iconUrl}
       badgeText={
         showBadge
