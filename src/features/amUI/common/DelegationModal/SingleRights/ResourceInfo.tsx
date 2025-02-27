@@ -24,7 +24,7 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useGetReporteePartyQuery, type Party } from '@/rtk/features/lookupApi';
+import { useGetPartyByUUIDQuery, useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../../Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../Snackbar/SnackbarProvider';
@@ -43,11 +43,12 @@ export type ChipRight = {
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   onDelegate?: () => void;
 }
 
-export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProps) => {
+export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfoProps) => {
   const { t } = useTranslation();
   const [hasAccess, setHasAccess] = useState(false);
   const delegateRights = useDelegateRights();
@@ -65,6 +66,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
   const [delegationErrorMessage, setDelegationErrorMessage] = useState<string | null>(null);
   const [missingAccessMessage, setMissingAccessMessage] = useState<string | null>(null);
+  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
   const {
     data: delegationCheckedRights,
@@ -90,9 +92,6 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
     userId: id || '',
   });
 
-  const userHasResource =
-    !!delegatedResources &&
-    delegatedResources.some((delegation) => delegation.resource.identifier == resource.identifier);
   useEffect(() => {
     if (delegatedResources && !isFetching) {
       const resourceDelegation =
@@ -111,7 +110,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         setCurrentRights([]);
       }
     }
-  }, [delegatedResources, userHasResource, isFetching]);
+  }, [delegatedResources, isFetching, resource.identifier]);
 
   const getMissingAccessMessage = (response: DelegationCheckedRight[]) => {
     const hasMissingRoleAccess = response.some((right) =>
@@ -130,7 +129,8 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
     if (hasMissingRoleAccess) {
       return t('delegation_modal.specific_rights.missing_role_message');
-    } else if (hasMissingSrrRightAccess) {
+    }
+    if (hasMissingSrrRightAccess) {
       return t('delegation_modal.specific_rights.missing_srr_right_message', {
         resourceOwner: resource?.resourceOwnerName,
         reportee: reportee?.name,
@@ -159,7 +159,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
       if (hasAccess) {
         const chipRights: ChipRight[] = mapRightsToChipRights(delegationCheckedRights, (right) =>
-          currentRights.some((key) => key === right.rightKey) ? true : false,
+          currentRights.some((key) => key === right.rightKey),
         );
         setRights(chipRights);
       } else {
@@ -178,13 +178,13 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
       setDelegationErrorMessage(null);
       editResource(
         resource.identifier,
-        representingParty,
-        toParty,
+        representingParty.partyUuid,
+        toPartyUuid,
         currentRights,
         newRights,
         () => {
           openSnackbar({
-            message: t('delegation_modal.edit_success', { name: toParty.name }),
+            message: t('delegation_modal.edit_success', { name: toParty?.name }),
             variant: SnackbarMessageVariant.Default,
             duration: SnackbarDuration.long,
           });
@@ -192,7 +192,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
         },
         () =>
           openSnackbar({
-            message: t('delegation_modal.error_message', { name: toParty.name }),
+            message: t('delegation_modal.error_message', { name: toParty?.name }),
             variant: SnackbarMessageVariant.Default,
             duration: SnackbarDuration.infinite,
           }),
@@ -205,13 +205,13 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
 
     delegateRights(
       rightsToDelegate,
-      toParty,
+      toPartyUuid,
       resource,
       (response: DelegationResult) => {
         setDelegationErrorMessage(null);
 
         openSnackbar({
-          message: t('delegation_modal.success_message', { name: toParty.name }),
+          message: t('delegation_modal.success_message', { name: toParty?.name }),
           variant: SnackbarMessageVariant.Default,
           duration: SnackbarDuration.long,
         });
@@ -234,7 +234,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
       },
       () => {
         setDelegationErrorMessage(
-          t('delegation_modal.technical_error_message.all_failed', { name: toParty.name }),
+          t('delegation_modal.technical_error_message.all_failed', { name: toParty?.name }),
         );
       },
     );
@@ -266,11 +266,10 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
               onClick={() => {
                 setRights(
                   rights.map((r) => {
-                    if (r.rightKey == right.rightKey && r.delegable) {
+                    if (r.rightKey === right.rightKey && r.delegable) {
                       return { ...r, checked: !r.checked };
-                    } else {
-                      return r;
                     }
+                    return r;
                   }),
                 );
               }}
@@ -385,7 +384,7 @@ export const ResourceInfo = ({ resource, toParty, onDelegate }: ResourceInfoProp
             >
               {hasAccess ? t('common.update_poa') : t('common.give_poa')}
             </Button>
-            {hasAccess && (
+            {hasAccess && toParty && (
               <DeleteResourceButton
                 resource={resource}
                 toParty={toParty}

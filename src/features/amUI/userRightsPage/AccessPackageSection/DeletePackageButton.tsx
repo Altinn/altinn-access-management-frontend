@@ -10,7 +10,7 @@ import { useAccessPackageActions } from '../../common/AccessPackageList/useAcces
 
 interface DeletePackageButtonProps {
   accessPackage: AccessPackage;
-  toParty: Party;
+  toParty?: Party;
   fullText?: boolean;
   disabled?: boolean;
   onClick?: () => void;
@@ -25,6 +25,11 @@ export const DeletePackageButton = ({
 }: DeletePackageButtonProps) => {
   const { t } = useTranslation();
   const { data: representingParty } = useGetReporteePartyQuery();
+  const { onRevoke } = useAccessPackageActions({ toUuid: toParty?.partyUuid || '' });
+
+  const onClick = () => {
+    onRevoke(accessPackage);
+  };
 
   return (
     representingParty && (

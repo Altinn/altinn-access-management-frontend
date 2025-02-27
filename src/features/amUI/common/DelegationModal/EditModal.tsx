@@ -2,17 +2,16 @@ import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
 import { forwardRef, useEffect } from 'react';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Role } from '@/rtk/features/roleApi';
+
 import { SnackbarProvider } from '../Snackbar';
 
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Role } from '@/rtk/features/roleApi';
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -24,12 +23,13 @@ export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   availableActions?: DelegationAction[];
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role, availableActions }, ref) => {
+  ({ toPartyUuid, fromPartyUuid, resource, accessPackage, role, availableActions }, ref) => {
     return (
       <Modal.Context>
         <Modal
@@ -42,7 +42,14 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage, role, availableActions)}
+              {renderModalContent(
+                toPartyUuid,
+                fromPartyUuid,
+                resource,
+                accessPackage,
+                role,
+                availableActions,
+              )}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -52,7 +59,8 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 );
 
 const renderModalContent = (
-  toParty: Party,
+  toPartyUuid: string,
+  fromPartyUuid: string,
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
@@ -62,7 +70,8 @@ const renderModalContent = (
     return (
       <ResourceInfo
         resource={resource}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
       />
     );
   }
@@ -70,7 +79,8 @@ const renderModalContent = (
     return (
       <AccessPackageInfo
         accessPackage={accessPackage}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
         availableActions={availableActions}
       />
     );
@@ -79,7 +89,8 @@ const renderModalContent = (
     return (
       <RoleInfo
         role={role}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
         availableActions={availableActions}
       />
     );

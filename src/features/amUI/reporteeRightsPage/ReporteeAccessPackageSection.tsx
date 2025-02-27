@@ -26,40 +26,37 @@ export const ReporteeAccessPackageSection = ({
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const { error, setError } = useActionError();
+  const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
 
   const { data: party } = useGetReporteePartyQuery();
 
   return (
-    party && (
-      <>
-        <Heading
-          level={2}
-          size='xs'
-          id='access_packages_title'
-        >
-          {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
-        </Heading>
-        <AccessPackageList
-          fromPartyUuid={reporteeUuid ?? ''}
+    <>
+      <Heading
+        level={2}
+        size='xs'
+        id='access_packages_title'
+      >
+        {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
+      </Heading>
+      <AccessPackageList
+        fromPartyUuid={reporteeUuid ?? ''}
+        toPartyUuid={getCookie('AltinnPartyUuid')}
+        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        useDeleteConfirm
+        showAllPackages
+        onSelect={(accessPackage) => {
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+      />
+      {party && (
+        <EditModal
+          ref={modalRef}
           toPartyUuid={getCookie('AltinnPartyUuid')}
-          availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
-          useDeleteConfirm
-          showAllPackages
-          onSelect={(accessPackage) => {
-            setModalItem(accessPackage);
-            modalRef.current?.showModal();
-          }}
-          onDelegateError={(accessPackage, errorInfo) => {
-            setError(errorInfo);
-            setModalItem(accessPackage);
-            modalRef.current?.showModal();
-          }}
-          onRevokeError={(accessPackage, errorInfo) => {
-            setError(errorInfo);
-            setModalItem(accessPackage);
-            modalRef.current?.showModal();
-          }}
+          fromPartyUuid={party.partyUuid}
+          accessPackage={modalItem}
+          availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
         <AccessPackageInfoModal
           modalRef={modalRef}

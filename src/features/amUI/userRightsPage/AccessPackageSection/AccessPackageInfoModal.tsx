@@ -24,14 +24,15 @@ export const AccessPackageInfoModal = ({
   openWithError,
 }: AccessPackageInfoModalProps) => {
   return (
-    <DelegationModalProvider>
-      <EditModal
-        ref={modalRef}
-        toParty={toParty}
-        accessPackage={modalItem}
-        openWithError={openWithError}
-        onClose={onClose}
-      />
-    </DelegationModalProvider>
+    <EditModal
+      ref={modalRef}
+      toPartyUuid={toParty.partyUuid}
+      fromPartyUuid={currentUser?.uuid || ''}
+      accessPackage={modalItem}
+      availableActions={[
+        !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+        DelegationAction.REVOKE,
+      ]}
+    />
   );
 };

@@ -4,14 +4,7 @@ import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
-import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
-import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
-import { DelegationAction } from '../EditModal';
-
-import classes from './RoleInfo.module.css';
-
-import type { Party } from '@/rtk/features/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import {
   useDelegationCheckQuery,
   useGetRolesForUserQuery,
@@ -19,24 +12,41 @@ import {
 } from '@/rtk/features/roleApi';
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
+import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
+import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
+import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
+import { DelegationAction } from '../EditModal';
+
+import classes from './RoleInfo.module.css';
+
 export interface PackageInfoProps {
   role: Role;
-  toParty: Party;
-  fromParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   onDelegate?: () => void;
   availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({ role, toParty, fromParty, availableActions = [] }: PackageInfoProps) => {
+export const RoleInfo = ({
+  role,
+  toPartyUuid,
+  fromPartyUuid,
+  availableActions = [],
+}: PackageInfoProps) => {
+  console.log('🚀 ~ fromPartyUuid:', fromPartyUuid);
+  console.log('🚀 ~ toPartyUuid:', toPartyUuid);
   const { t } = useTranslation();
 
+  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
+  const { data: fromParty } = useGetPartyByUUIDQuery(fromPartyUuid);
+
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: fromParty.partyUuid ?? '',
-    to: toParty.partyUuid ?? '',
+    from: toPartyUuid ?? '',
+    to: fromPartyUuid ?? '',
   });
 
   const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: fromParty?.partyUuid ?? '',
+    rightownerUuid: fromPartyUuid ?? '',
     roleUuid: role.id,
   });
 
@@ -102,7 +112,7 @@ export const RoleInfo = ({ role, toParty, fromParty, availableActions = [] }: Pa
           <Paragraph size='xs'>
             <Trans
               i18nKey='role.inherited_role_message'
-              values={{ user_name: toParty.name, role_name: inheritedFromRoleName }}
+              values={{ user_name: toParty?.name || '', role_name: inheritedFromRoleName }}
               components={{ b: <strong /> }}
             />
           </Paragraph>

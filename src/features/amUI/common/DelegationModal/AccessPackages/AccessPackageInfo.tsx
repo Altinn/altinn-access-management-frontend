@@ -9,47 +9,39 @@ import {
   PackageIcon,
 } from '@navikt/aksel-icons';
 
-import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
-import { DelegationAction } from '../EditModal';
-
-import classes from './AccessPackageInfo.module.css';
-
-import type { Party } from '@/rtk/features/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 
-import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
+import { DelegationAction } from '../EditModal';
+import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
-import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-import { ActionError, useActionError } from '@/resources/hooks/useActionError';
-import { useDelegationModalContext } from '../DelegationModalContext';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   availableActions?: DelegationAction[];
 }
 
 export const AccessPackageInfo = ({
   accessPackage,
-  toParty,
+  toPartyUuid,
+  fromPartyUuid,
   availableActions = [],
 }: PackageInfoProps) => {
   const { t } = useTranslation();
   const { actionError, setActionError } = useDelegationModalContext();
 
-  const { onDelegate, onRevoke } = useAccessPackageActions({
-    toUuid: toParty.partyUuid,
-    onDelegateError: (_, error: ActionError) => setActionError(error),
-    onRevokeError: (_, error: ActionError) => setActionError(error),
-  });
+  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
+
+  const { onDelegate } = useAccessPackageActions({ toUuid: toPartyUuid });
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
-    to: toParty.partyUuid,
-    from: getCookie('AltinnPartyUuid'),
+    to: toPartyUuid,
+    from: fromPartyUuid,
   });
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
@@ -105,7 +97,7 @@ export const AccessPackageInfo = ({
           <Paragraph size='xs'>
             <Trans
               i18nKey='delegation_modal.inherited_role_org_message'
-              values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
+              values={{ user_name: toParty?.name, org_name: accessPackage.inheritedFrom?.name }}
               components={{ b: <strong /> }}
             />
           </Paragraph>
