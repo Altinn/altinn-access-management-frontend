@@ -16,7 +16,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
   const { id } = useParams();
 
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
-  const fromPartyId = getCookie('AltinnPartyId');
+  const fromPartyId = getCookie('AltinnPartyUuid');
 
   return (
     party && (
