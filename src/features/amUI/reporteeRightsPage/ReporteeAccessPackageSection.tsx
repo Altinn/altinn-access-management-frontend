@@ -9,7 +9,7 @@ import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useParams } from 'react-router-dom';
-import { ActionError, useActionError } from '@/resources/hooks/useActionError';
+import { useActionError } from '@/resources/hooks/useActionError';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
@@ -46,7 +46,6 @@ export const ReporteeAccessPackageSection = ({
           showAllPackages
           onSelect={(accessPackage) => {
             setModalItem(accessPackage);
-            setError(null);
             modalRef.current?.showModal();
           }}
           onDelegateError={(accessPackage, errorInfo) => {
@@ -66,6 +65,7 @@ export const ReporteeAccessPackageSection = ({
           modalItem={modalItem}
           onClose={() => {
             setModalItem(undefined);
+            setError(null);
           }}
           openWithError={error ?? undefined}
         />

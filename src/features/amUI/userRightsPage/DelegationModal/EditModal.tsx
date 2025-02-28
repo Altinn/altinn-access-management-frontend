@@ -21,21 +21,54 @@ export interface EditModalProps {
   accessPackage?: AccessPackage;
   role?: Role;
   toParty: Party;
-  openWithError?: ActionError;
+  openWithError?: ActionError | null;
+  onClose?: () => void;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role, openWithError }, ref) => {
+  ({ toParty, resource, accessPackage, role, openWithError, onClose }, ref) => {
+    const { setActionError, actionError, reset } = useDelegationModalContext();
+
+    useEffect(() => {
+      if (!!openWithError) {
+        setActionError(openWithError);
+      } else {
+        setActionError(null);
+      }
+    }, [openWithError]);
+
+    const onClosing = () => {
+      onClose?.();
+      reset();
+    };
+
+    /* handle closing */
+    useEffect(() => {
+      const handleClose = () => onClosing?.();
+
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.addEventListener('close', handleClose);
+      }
+      return () => {
+        if (ref && 'current' in ref && ref.current) {
+          ref.current.removeEventListener('close', handleClose);
+        }
+      };
+    }, [onClosing, ref]);
+
     return (
       <Modal.Context>
         <Modal
           ref={ref}
           className={classes.modalDialog}
           backdropClose
+          onClose={() => {
+            onClosing();
+          }}
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage, role, openWithError)}
+              {renderModalContent(toParty, resource, accessPackage, role)}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -49,18 +82,7 @@ const renderModalContent = (
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
-  openWithError?: ActionError,
 ) => {
-  const { setActionError } = useDelegationModalContext();
-
-  useEffect(() => {
-    if (openWithError) {
-      setActionError(openWithError);
-    } else {
-      setActionError(null);
-    }
-  }, [openWithError, setActionError]);
-
   if (resource) {
     return (
       <ResourceInfo

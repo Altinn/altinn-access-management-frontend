@@ -12,7 +12,7 @@ interface AccessPackageInfoModalProps {
   toParty: Party;
   modalItem: AccessPackage | undefined;
   onClose?: () => void;
-  openWithError?: ActionError;
+  openWithError?: ActionError | null;
 }
 
 export const AccessPackageInfoModal = ({
@@ -22,13 +22,6 @@ export const AccessPackageInfoModal = ({
   onClose,
   openWithError,
 }: AccessPackageInfoModalProps) => {
-  useEffect(() => {
-    const handleClose = () => onClose?.();
-
-    modalRef.current?.addEventListener('close', handleClose);
-    return () => modalRef.current?.removeEventListener('close', handleClose);
-  }, [onClose, modalRef]);
-
   return (
     <DelegationModalProvider>
       <EditModal
@@ -36,6 +29,7 @@ export const AccessPackageInfoModal = ({
         toParty={toParty}
         accessPackage={modalItem}
         openWithError={openWithError}
+        onClose={onClose}
       />
     </DelegationModalProvider>
   );

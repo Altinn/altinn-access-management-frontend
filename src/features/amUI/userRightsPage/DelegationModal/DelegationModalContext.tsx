@@ -59,6 +59,7 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
   };
 
   const reset = () => {
+    setActionError(null);
     setCurrentPage(1);
     setResourceToView(undefined);
     setPackageToView(undefined);

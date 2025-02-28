@@ -28,7 +28,6 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         showAllPackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
-          setActionError(null);
           modalRef.current?.showModal();
         }}
         fromPartyUuid={getCookie('AltinnPartyUuid')}
@@ -56,8 +55,9 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         modalItem={modalItem}
         onClose={() => {
           setModalItem(undefined);
+          setActionError(null);
         }}
-        openWithError={actionError ?? undefined}
+        openWithError={actionError}
       />
     </>
   );

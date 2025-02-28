@@ -66,7 +66,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           {accessPackage?.name}
         </Heading>
       </div>
-      {actionError && (
+      {!!actionError && (
         <>
           <Alert
             color='danger'
