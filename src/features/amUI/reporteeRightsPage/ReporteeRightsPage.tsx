@@ -71,7 +71,10 @@ export const ReporteeRightsPage = () => {
                 }
                 singleRightsPanel={<div>SingleRightsSection</div>}
                 roleAssignmentsPanel={
-                  <ReporteeRoleSection numberOfAccesses={allAccesses?.roles?.length} />
+                  <ReporteeRoleSection
+                    numberOfAccesses={allAccesses?.roles?.length}
+                    reporteeUuid={reporteeUuid}
+                  />
                 }
               />
             </>

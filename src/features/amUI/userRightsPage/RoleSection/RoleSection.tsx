@@ -43,6 +43,10 @@ export const RoleSection = () => {
           fromPartyUuid={reportee?.partyUuid ?? ''}
           role={modalItem}
           onClose={() => setModalItem(undefined)}
+          availableActions={[
+            isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+            DelegationAction.REVOKE,
+          ]}
         />
       )}
     </div>

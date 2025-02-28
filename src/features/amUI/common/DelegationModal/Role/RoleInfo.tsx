@@ -118,7 +118,11 @@ export const RoleInfo = ({
       )}
       <div className={classes.actions}>
         {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (
-          <RequestRoleButton />
+          <RequestRoleButton
+            variant='solid'
+            size='md'
+            icon={undefined}
+          />
         )}
         {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
           <DelegateRoleButton
@@ -128,6 +132,8 @@ export const RoleInfo = ({
             fullText
             disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
             variant='solid'
+            size='md'
+            icon={undefined}
           />
         )}
         {userHasRole && availableActions.includes(DelegationAction.REVOKE) && (
@@ -138,6 +144,8 @@ export const RoleInfo = ({
             fullText
             disabled={isFetching || userHasInheritedRole}
             variant='solid'
+            size='md'
+            icon={undefined}
           />
         )}
       </div>
