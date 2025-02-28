@@ -68,7 +68,7 @@
     "show_less": "Se mindre",
     "technical_error": "Beklager, det har skjedd en teknisk feil. Vennligst ta kontakt med Altinn brukerservice hvis problemet fortsetter.",
     "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
-    "error_status": "Status: {{status}}",
+    "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
     "org_number": "Organisasjonsnummer",

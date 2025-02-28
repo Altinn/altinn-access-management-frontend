@@ -19,10 +19,11 @@ export interface EditModalProps {
   accessPackage?: AccessPackage;
   role?: Role;
   toParty: Party;
+  openWithError?: { httpStatus: string; timestamp: string };
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role }, ref) => {
+  ({ toParty, resource, accessPackage, role, openWithError }, ref) => {
     return (
       <Modal.Context>
         <Modal
@@ -32,7 +33,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage, role)}
+              {renderModalContent(toParty, resource, accessPackage, role, openWithError)}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -46,6 +47,7 @@ const renderModalContent = (
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
+  openWithError?: { httpStatus: string; timestamp: string },
 ) => {
   if (resource) {
     return (
@@ -60,6 +62,7 @@ const renderModalContent = (
       <AccessPackageInfo
         accessPackage={accessPackage}
         toParty={toParty}
+        openWithError={openWithError}
       />
     );
   }

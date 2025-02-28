@@ -14,10 +14,11 @@ import classes from './PackageSearch.module.css';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
+  onActionError: (accessPackage: AccessPackage, httpStatus: string, timestamp: string) => void;
   toParty: Party;
 }
 
-export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
+export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSearchProps) => {
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
@@ -27,6 +28,15 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
     setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
+
+  const onAccessActionError = (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    httpStatus: string,
+    timestamp: string,
+  ) => {
+    onActionError(accessPackage, httpStatus, timestamp);
+  };
 
   return (
     <>
@@ -68,6 +78,12 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
             showAllPackages={true}
             onSelect={onSelection}
             searchString={debouncedSearchString}
+            onDelegateError={(accessPackage, toParty, httpStatus, timestamp) =>
+              onAccessActionError(accessPackage, toParty, httpStatus, timestamp)
+            }
+            onRevokeError={(accessPackage, toParty, httpStatus, timestamp) =>
+              onAccessActionError(accessPackage, toParty, httpStatus, timestamp)
+            }
           />
         </div>
       </search>

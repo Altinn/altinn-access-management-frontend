@@ -15,6 +15,10 @@ import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
+  const [actionError, setActionError] = useState<{ httpStatus: string; timestamp: string }>({
+    httpStatus: '',
+    timestamp: '',
+  });
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
   const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
@@ -26,6 +30,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         showAllPackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
+          setActionError({ httpStatus: '', timestamp: '' });
           modalRef.current?.showModal();
         }}
         fromPartyUuid={getCookie('AltinnPartyUuid')}
@@ -35,7 +40,13 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
           packageActions.REVOKE,
           isCurrentUser ? packageActions.REQUEST : packageActions.DELEGATE,
         ]}
-        onDelegateError={(accessPackage) => {
+        onDelegateError={(accessPackage, toParty, status, timestamp) => {
+          setActionError({ httpStatus: status, timestamp });
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+        onRevokeError={(accessPackage, toParty, status, timestamp) => {
+          setActionError({ httpStatus: status, timestamp });
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
@@ -48,6 +59,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         onClose={() => {
           setModalItem(undefined);
         }}
+        openWithError={actionError}
       />
     </>
   );

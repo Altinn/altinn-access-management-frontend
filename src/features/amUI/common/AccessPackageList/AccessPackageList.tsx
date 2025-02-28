@@ -33,9 +33,19 @@ interface AccessPackageListProps {
   useDeleteConfirm?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onDelegateError?: (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    status: string,
+    timestamp: string,
+  ) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onRevokeError?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onRevokeError?: (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    status: string,
+    timestamp: string,
+  ) => void;
 }
 
 export const AccessPackageList = ({

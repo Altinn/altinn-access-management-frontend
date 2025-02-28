@@ -17,6 +17,7 @@ import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+import { times } from 'cypress/types/lodash';
 
 export interface DelegationModalProps {
   toParty: Party;
@@ -35,12 +36,20 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     reset,
   } = useDelegationModalContext();
 
+  const [actionError, setActionError] = React.useState<{ httpStatus: string; timestamp: string }>({
+    httpStatus: '',
+    timestamp: '',
+  });
+
   const onResourceSelection = (resource?: ServiceResource) => {
     setInfoView(true);
     setResourceToView(resource);
   };
 
-  const onPackageSelection = (accessPackage?: AccessPackage) => {
+  const onPackageSelection = (accessPackage?: AccessPackage, error: boolean = false) => {
+    if (!error) {
+      setActionError({ httpStatus: '', timestamp: '' });
+    }
     setInfoView(true);
     setPackageToView(accessPackage);
   };
@@ -68,12 +77,17 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
         <PackageSearch
           onSelection={onPackageSelection}
           toParty={toParty}
+          onActionError={(accessPackage, httpStatus, timestamp) => {
+            setActionError({ httpStatus, timestamp });
+            onPackageSelection(accessPackage, true);
+          }}
         />
       );
       infoViewContent = packageToView && (
         <AccessPackageInfo
           accessPackage={packageToView}
           toParty={toParty}
+          openWithError={actionError}
         />
       );
       triggerButtonText = t('access_packages.give_new_button');

@@ -18,24 +18,27 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
-import TechnicalErrorParagraphStories from '@/features/amUI/common/TechnicalErrorParagraphs/TechnicalErrorParagraph.stories';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
   toParty: Party;
+  openWithError?: { httpStatus: string; timestamp: string };
 }
 
-export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, toParty, openWithError }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const [delegationError, setDelegationError] = React.useState<{ status: string; time: string }>({
-    status: '',
-    time: '',
+  const [actionError, setActionError] = React.useState<{ httpStatus: string; timestamp: string }>({
+    httpStatus: openWithError?.httpStatus ?? '',
+    timestamp: openWithError?.timestamp ?? '',
   });
 
-  const { onDelegate } = useAccessPackageActions({
+  const { onDelegate, onRevoke } = useAccessPackageActions({
     toUuid: toParty.partyUuid,
-    onDelegateError: (accessPackage, party, status, time) => setDelegationError({ status, time }),
+    onDelegateError: (accessPackage, party, httpStatus, timestamp) =>
+      setActionError({ httpStatus, timestamp }),
+    onRevokeError: (accessPackage, party, httpStatus, timestamp) =>
+      setActionError({ httpStatus, timestamp }),
   });
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
@@ -67,17 +70,21 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           {accessPackage?.name}
         </Heading>
       </div>
-      {delegationError.status && (
+      {actionError.httpStatus && (
         <>
           <Alert
             color='danger'
             size='sm'
           >
-            <Heading size='2xs'>Kunne ikke gi fullmakt</Heading>
+            {userHasPackage ? (
+              <Heading size='2xs'>Kunne ikke slette fullmakt</Heading>
+            ) : (
+              <Heading size='2xs'>Kunne ikke gi fullmakt</Heading>
+            )}
             <TechnicalErrorParagraphs
               size='xs'
-              status={delegationError.status}
-              time={delegationError.time}
+              status={actionError.httpStatus}
+              time={actionError.timestamp}
             />
           </Alert>
         </>
@@ -112,6 +119,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           <List
             items={listItems}
             spacing='xs'
+            defaultItemSize='xs'
           />
         </div>
       </div>
@@ -122,6 +130,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
             toParty={toParty}
             fullText
             disabled={isFetching || accessPackage.inherited}
+            onClick={() => onRevoke(accessPackage)}
           />
         ) : (
           <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
@@ -157,7 +166,5 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
   const minimizedList = list
     .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
     .map(mapResourceToListItem);
-  return {
-    listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem],
-  };
+  return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };

@@ -10,6 +10,7 @@ interface AccessPackageInfoModalProps {
   toParty: Party;
   modalItem: AccessPackage | undefined;
   onClose?: () => void;
+  openWithError?: { httpStatus: string; timestamp: string };
 }
 
 export const AccessPackageInfoModal = ({
@@ -17,6 +18,7 @@ export const AccessPackageInfoModal = ({
   toParty,
   modalItem,
   onClose,
+  openWithError,
 }: AccessPackageInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
@@ -30,6 +32,7 @@ export const AccessPackageInfoModal = ({
       ref={modalRef}
       toParty={toParty}
       accessPackage={modalItem}
+      openWithError={openWithError}
     />
   );
 };
