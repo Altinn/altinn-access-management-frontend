@@ -363,13 +363,20 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddSingleton<ISystemUserClient, SystemUserClientMock>();
         services.AddSingleton<ISystemUserRequestClient, SystemUserRequestClientMock>();
         services.AddSingleton<ISystemUserChangeRequestClient, SystemUserChangeRequestClientMock>();
-        services.AddSingleton<ISystemUserClientDelegationRequestClient, SystemUserClientDelegationRequestClientMock>();
     }
     else
     {
         services.AddSingleton<ISystemUserClient, SystemUserClient>();
         services.AddSingleton<ISystemUserRequestClient, SystemUserRequestClient>();
         services.AddSingleton<ISystemUserChangeRequestClient, SystemUserChangeRequestClient>();
+    }
+
+    if (mockSettings.SystemUserClientDelegation)
+    {
+        services.AddSingleton<ISystemUserClientDelegationRequestClient, SystemUserClientDelegationRequestClientMock>();
+    }
+    else 
+    {
         services.AddSingleton<ISystemUserClientDelegationRequestClient, SystemUserClientDelegationRequestClient>();
     }
 }
