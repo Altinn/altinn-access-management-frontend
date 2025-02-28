@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useRef, useState } from 'react';
 
 import type { Role } from '@/rtk/features/roleApi';

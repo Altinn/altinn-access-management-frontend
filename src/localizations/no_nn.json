@@ -78,6 +78,12 @@
     "change-label": "Bytt",
     "back-label": "Tilbake"
   },
+  "footer": {
+    "about_altinn": "Om Altinn",
+    "service_messages": "Driftsmeldingar",
+    "privacy_policy": "Personvern",
+    "accessibility": "Tilgjengeligheit"
+  },
   "sidebar": {
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",

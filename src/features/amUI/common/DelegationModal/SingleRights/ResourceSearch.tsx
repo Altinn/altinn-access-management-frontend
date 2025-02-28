@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Alert, Chip, Heading, Paragraph, Search, Spinner } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { FilterIcon } from '@navikt/aksel-icons';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { ResourceListItem } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';

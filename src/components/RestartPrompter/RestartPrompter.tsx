@@ -2,7 +2,7 @@ import type { AlertProps } from '@digdir/designsystemet-react';
 import { Alert, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import classes from './RestartPrompter.module.css';

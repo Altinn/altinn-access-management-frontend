@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';

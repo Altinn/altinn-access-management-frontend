@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import type { User } from '@/rtk/features/userInfoApi';
 import { useGetRightHoldersQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
