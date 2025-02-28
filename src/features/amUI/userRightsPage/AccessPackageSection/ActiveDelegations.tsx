@@ -11,14 +11,12 @@ import {
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useActionError } from '@/resources/hooks/useActionError';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const [actionError, setActionError] = useState<{ httpStatus: string; timestamp: string }>({
-    httpStatus: '',
-    timestamp: '',
-  });
+  const { error: actionError, setError: setActionError } = useActionError();
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
   const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
@@ -30,7 +28,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         showAllPackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
-          setActionError({ httpStatus: '', timestamp: '' });
+          setActionError(null);
           modalRef.current?.showModal();
         }}
         fromPartyUuid={getCookie('AltinnPartyUuid')}
@@ -40,13 +38,13 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
           packageActions.REVOKE,
           isCurrentUser ? packageActions.REQUEST : packageActions.DELEGATE,
         ]}
-        onDelegateError={(accessPackage, toParty, status, timestamp) => {
-          setActionError({ httpStatus: status, timestamp });
+        onDelegateError={(accessPackage, error) => {
+          setActionError(error);
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
-        onRevokeError={(accessPackage, toParty, status, timestamp) => {
-          setActionError({ httpStatus: status, timestamp });
+        onRevokeError={(accessPackage, error) => {
+          setActionError(error);
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
@@ -59,7 +57,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         onClose={() => {
           setModalItem(undefined);
         }}
-        openWithError={actionError}
+        openWithError={actionError ?? undefined}
       />
     </>
   );

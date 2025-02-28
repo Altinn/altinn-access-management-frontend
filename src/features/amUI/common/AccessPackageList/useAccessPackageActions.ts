@@ -7,24 +7,14 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../Snackbar';
-import { times } from 'cypress/types/lodash';
+import { ActionError } from '@/resources/hooks/useActionError';
 
 interface useAccessPackageActionsProps {
   toUuid: string;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (
-    accessPackage: AccessPackage,
-    toParty: Party,
-    status: string,
-    timestamp: string,
-  ) => void;
+  onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onRevokeError?: (
-    accessPackage: AccessPackage,
-    toParty: Party,
-    status: string,
-    timestamp: string,
-  ) => void;
+  onRevokeError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
 }
 
 export const useAccessPackageActions = ({
@@ -56,10 +46,10 @@ export const useAccessPackageActions = ({
   const handleDelegateError = (
     accessPackage: AccessPackage,
     toParty: Party,
-    status: string,
+    httpStatus: string,
     timestamp: string,
   ) => {
-    if (onDelegateError) onDelegateError(accessPackage, toParty, status, timestamp);
+    if (onDelegateError) onDelegateError(accessPackage, { httpStatus, timestamp });
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_error', {
@@ -85,10 +75,10 @@ export const useAccessPackageActions = ({
   const handleRevokeError = (
     accessPackage: AccessPackage,
     toParty: Party,
-    status: string,
+    httpStatus: string,
     timestamp: string,
   ) => {
-    if (onRevokeError) onRevokeError(accessPackage, toParty, status, timestamp);
+    if (onRevokeError) onRevokeError(accessPackage, { httpStatus, timestamp });
     else {
       openSnackbar({
         message: t('access_packages.package_deletion_error', {

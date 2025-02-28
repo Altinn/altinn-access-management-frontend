@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -13,13 +13,15 @@ import { SnackbarProvider } from '../../common/Snackbar';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { useDelegationModalContext } from './DelegationModalContext';
 
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   toParty: Party;
-  openWithError?: { httpStatus: string; timestamp: string };
+  openWithError?: ActionError;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
@@ -47,8 +49,18 @@ const renderModalContent = (
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
-  openWithError?: { httpStatus: string; timestamp: string },
+  openWithError?: ActionError,
 ) => {
+  const { setActionError } = useDelegationModalContext();
+
+  useEffect(() => {
+    if (openWithError) {
+      setActionError(openWithError);
+    } else {
+      setActionError(null);
+    }
+  }, [openWithError, setActionError]);
+
   if (resource) {
     return (
       <ResourceInfo
@@ -62,7 +74,6 @@ const renderModalContent = (
       <AccessPackageInfo
         accessPackage={accessPackage}
         toParty={toParty}
-        openWithError={openWithError}
       />
     );
   }

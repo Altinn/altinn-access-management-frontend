@@ -19,26 +19,22 @@ import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageBut
 
 import classes from './AccessPackageInfo.module.css';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+import { ActionError, useActionError } from '@/resources/hooks/useActionError';
+import { useDelegationModalContext } from '../DelegationModalContext';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
   toParty: Party;
-  openWithError?: { httpStatus: string; timestamp: string };
 }
 
-export const AccessPackageInfo = ({ accessPackage, toParty, openWithError }: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const [actionError, setActionError] = React.useState<{ httpStatus: string; timestamp: string }>({
-    httpStatus: openWithError?.httpStatus ?? '',
-    timestamp: openWithError?.timestamp ?? '',
-  });
+  const { actionError, setActionError } = useDelegationModalContext();
 
   const { onDelegate, onRevoke } = useAccessPackageActions({
     toUuid: toParty.partyUuid,
-    onDelegateError: (accessPackage, party, httpStatus, timestamp) =>
-      setActionError({ httpStatus, timestamp }),
-    onRevokeError: (accessPackage, party, httpStatus, timestamp) =>
-      setActionError({ httpStatus, timestamp }),
+    onDelegateError: (_, error: ActionError) => setActionError(error),
+    onRevokeError: (_, error: ActionError) => setActionError(error),
   });
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
@@ -70,7 +66,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty, openWithError }: Pac
           {accessPackage?.name}
         </Heading>
       </div>
-      {actionError.httpStatus && (
+      {actionError && (
         <>
           <Alert
             color='danger'

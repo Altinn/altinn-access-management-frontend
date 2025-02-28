@@ -4,13 +4,15 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
 
 interface AccessPackageInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
   toParty: Party;
   modalItem: AccessPackage | undefined;
   onClose?: () => void;
-  openWithError?: { httpStatus: string; timestamp: string };
+  openWithError?: ActionError;
 }
 
 export const AccessPackageInfoModal = ({
@@ -28,11 +30,13 @@ export const AccessPackageInfoModal = ({
   }, [onClose, modalRef]);
 
   return (
-    <EditModal
-      ref={modalRef}
-      toParty={toParty}
-      accessPackage={modalItem}
-      openWithError={openWithError}
-    />
+    <DelegationModalProvider>
+      <EditModal
+        ref={modalRef}
+        toParty={toParty}
+        accessPackage={modalItem}
+        openWithError={openWithError}
+      />
+    </DelegationModalProvider>
   );
 };

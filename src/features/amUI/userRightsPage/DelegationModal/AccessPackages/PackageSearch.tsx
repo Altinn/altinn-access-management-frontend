@@ -11,10 +11,11 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './PackageSearch.module.css';
+import { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
-  onActionError: (accessPackage: AccessPackage, httpStatus: string, timestamp: string) => void;
+  onActionError: (accessPackage: AccessPackage) => void;
   toParty: Party;
 }
 
@@ -22,21 +23,13 @@ export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSe
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
-  const { searchString, setSearchString, setCurrentPage } = useDelegationModalContext();
+  const { searchString, setSearchString, setCurrentPage, setActionError } =
+    useDelegationModalContext();
 
   const debouncedSearch = debounce((searchString: string) => {
     setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
-
-  const onAccessActionError = (
-    accessPackage: AccessPackage,
-    toParty: Party,
-    httpStatus: string,
-    timestamp: string,
-  ) => {
-    onActionError(accessPackage, httpStatus, timestamp);
-  };
 
   return (
     <>
@@ -78,12 +71,14 @@ export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSe
             showAllPackages={true}
             onSelect={onSelection}
             searchString={debouncedSearchString}
-            onDelegateError={(accessPackage, toParty, httpStatus, timestamp) =>
-              onAccessActionError(accessPackage, toParty, httpStatus, timestamp)
-            }
-            onRevokeError={(accessPackage, toParty, httpStatus, timestamp) =>
-              onAccessActionError(accessPackage, toParty, httpStatus, timestamp)
-            }
+            onDelegateError={(accessPackage, errorInfo) => {
+              onActionError(accessPackage);
+              setActionError(errorInfo);
+            }}
+            onRevokeError={(accessPackage, errorInfo) => {
+              onActionError(accessPackage);
+              setActionError(errorInfo);
+            }}
           />
         </div>
       </search>

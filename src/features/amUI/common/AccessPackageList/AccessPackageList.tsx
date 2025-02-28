@@ -15,6 +15,7 @@ import { PackageItem } from './PackageItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
+import { ActionError } from '@/resources/hooks/useActionError';
 
 export enum packageActions {
   DELEGATE = 'DELEGATE',
@@ -33,19 +34,9 @@ interface AccessPackageListProps {
   useDeleteConfirm?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (
-    accessPackage: AccessPackage,
-    toParty: Party,
-    status: string,
-    timestamp: string,
-  ) => void;
+  onDelegateError?: (accessPackage: AccessPackage, error: ActionError) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onRevokeError?: (
-    accessPackage: AccessPackage,
-    toParty: Party,
-    status: string,
-    timestamp: string,
-  ) => void;
+  onRevokeError?: (accessPackage: AccessPackage, error: ActionError) => void;
 }
 
 export const AccessPackageList = ({

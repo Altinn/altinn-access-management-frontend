@@ -7,8 +7,9 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useRef, useState } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
-import { useGetPartyByUUIDQuery, useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
+import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useParams } from 'react-router-dom';
+import { ActionError, useActionError } from '@/resources/hooks/useActionError';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
@@ -23,53 +24,52 @@ export const ReporteeAccessPackageSection = ({
   const { id } = useParams<{ id: string }>();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const [actionError, setActionError] = useState<{ httpStatus: string; timestamp: string }>({
-    httpStatus: '',
-    timestamp: '',
-  });
+  const { error, setError } = useActionError();
 
   const { data: party } = useGetReporteePartyQuery();
 
   return (
-    <>
-      <Heading
-        level={2}
-        size='xs'
-        id='access_packages_title'
-      >
-        {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
-      </Heading>
-      <AccessPackageList
-        fromPartyUuid={reporteeUuid ?? ''}
-        toPartyUuid={getCookie('AltinnPartyUuid')}
-        availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
-        useDeleteConfirm
-        showAllPackages
-        onSelect={(accessPackage) => {
-          setModalItem(accessPackage);
-          setActionError({ httpStatus: '', timestamp: '' });
-          modalRef.current?.showModal();
-        }}
-        onDelegateError={(accessPackage, toParty, status, timestamp) => {
-          setActionError({ httpStatus: status, timestamp });
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-        onRevokeError={(accessPackage, toParty, status, timestamp) => {
-          setActionError({ httpStatus: status, timestamp });
-          setModalItem(accessPackage);
-          modalRef.current?.showModal();
-        }}
-      />
-      <AccessPackageInfoModal
-        modalRef={modalRef}
-        toParty={party}
-        modalItem={modalItem}
-        onClose={() => {
-          setModalItem(undefined);
-        }}
-        openWithError={actionError}
-      />
-    </>
+    party && (
+      <>
+        <Heading
+          level={2}
+          size='xs'
+          id='access_packages_title'
+        >
+          {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
+        </Heading>
+        <AccessPackageList
+          fromPartyUuid={reporteeUuid ?? ''}
+          toPartyUuid={getCookie('AltinnPartyUuid')}
+          availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
+          useDeleteConfirm
+          showAllPackages
+          onSelect={(accessPackage) => {
+            setModalItem(accessPackage);
+            setError(null);
+            modalRef.current?.showModal();
+          }}
+          onDelegateError={(accessPackage, errorInfo) => {
+            setError(errorInfo);
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+          onRevokeError={(accessPackage, errorInfo) => {
+            setError(errorInfo);
+            setModalItem(accessPackage);
+            modalRef.current?.showModal();
+          }}
+        />
+        <AccessPackageInfoModal
+          modalRef={modalRef}
+          toParty={party}
+          modalItem={modalItem}
+          onClose={() => {
+            setModalItem(undefined);
+          }}
+          openWithError={error ?? undefined}
+        />
+      </>
+    )
   );
 };
