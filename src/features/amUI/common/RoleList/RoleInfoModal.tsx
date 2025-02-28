@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 import type { Role } from '@/rtk/features/roleApi';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
-import { DelegationAction, EditModal } from '../DelegationModal/EditModal';
+import type { DelegationAction } from '../DelegationModal/EditModal';
+import { EditModal } from '../DelegationModal/EditModal';
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -20,6 +20,7 @@ export const RoleInfoModal = ({
   fromPartyUuid,
   role,
   onClose,
+  availableActions,
 }: RoleInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
@@ -28,20 +29,13 @@ export const RoleInfoModal = ({
     return () => modalRef.current?.removeEventListener('close', handleClose);
   }, [onClose, modalRef]);
 
-  const { data: currentUser } = useGetUserInfoQuery();
-
-  const isCurrentUser = currentUser?.uuid === toPartyUuid;
-
   return (
     <EditModal
       ref={modalRef}
       toPartyUuid={toPartyUuid}
       fromPartyUuid={fromPartyUuid}
       role={role}
-      availableActions={[
-        DelegationAction.REVOKE,
-        isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-      ]}
+      availableActions={availableActions}
     />
   );
 };

@@ -1,10 +1,8 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
@@ -21,11 +19,9 @@ export const ReporteeRoleSection = ({
   reporteeUuid,
 }: ReporteeRoleSectionProps) => {
   const { t } = useTranslation();
-  const { id: rightHolderUuid } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
 
-  const { data: party } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
   const toUuid = getCookie('AltinnPartyUuid');
 
   return (
@@ -48,15 +44,14 @@ export const ReporteeRoleSection = ({
           availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
       </div>
-      {party && (
-        <RoleInfoModal
-          modalRef={modalRef}
-          toPartyUuid={toUuid}
-          fromPartyUuid={reporteeUuid ?? ''}
-          role={modalItem}
-          onClose={() => setModalItem(undefined)}
-        />
-      )}
+      <RoleInfoModal
+        modalRef={modalRef}
+        toPartyUuid={toUuid}
+        fromPartyUuid={reporteeUuid ?? ''}
+        role={modalItem}
+        onClose={() => setModalItem(undefined)}
+        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+      />
     </>
   );
 };

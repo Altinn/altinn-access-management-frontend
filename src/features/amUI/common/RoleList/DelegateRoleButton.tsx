@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
@@ -21,7 +22,7 @@ export const DelegateRoleButton = ({
   roleName,
   toParty,
   fullText = false,
-  variant = 'outline',
+  variant = 'text',
   ...props
 }: DelegateRoleButtonProps) => {
   const { t } = useTranslation();
@@ -69,10 +70,11 @@ export const DelegateRoleButton = ({
 
   return (
     <Button
-      {...props}
+      icon={PlusCircleIcon}
       variant={variant}
       onClick={onClick}
       disabled={!canDelegate || props.disabled}
+      {...props}
     >
       {fullText ? t('common.give_poa') : t('common.give_poa')}
     </Button>

@@ -33,7 +33,7 @@ export const DeletePackageButton = ({
     representingParty && (
       <Button
         {...props}
-        variant={'outline'}
+        variant='solid'
         size='md'
         onClick={onClick}
       >

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
@@ -22,7 +23,7 @@ export const RevokeRoleButton = ({
   toParty,
   fullText = false,
   disabled,
-  variant = 'outline',
+  variant = 'text',
   ...props
 }: RevokeRoleButtonProps) => {
   const { t } = useTranslation();
@@ -60,10 +61,11 @@ export const RevokeRoleButton = ({
 
   return (
     <Button
-      {...props}
       variant={variant}
       onClick={onClick}
       disabled={disabled || isLoading || !representingParty}
+      icon={MinusCircleIcon}
+      {...props}
     >
       {fullText ? t('common.delete_poa') : t('common.delete')}
     </Button>
