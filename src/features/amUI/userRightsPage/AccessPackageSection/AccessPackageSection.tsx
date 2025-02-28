@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { DelegationModal, DelegationType } from '../DelegationModal/DelegationModal';
+import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 
 import classes from './AccessPackageSection.module.css';
 import { ActiveDelegations } from './ActiveDelegations';
@@ -15,6 +16,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
   const { id } = useParams();
 
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
+  const partyUuid = getCookie('AltinnPartyUuid');
 
   return (
     party && (
@@ -27,7 +29,8 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
         </Heading>
         <DelegationModal
-          toParty={party}
+          toPartyUuid={party.partyUuid ?? ''}
+          fromPartyUuid={partyUuid}
           delegationType={DelegationType.AccessPackage}
         />
         <ActiveDelegations toParty={party} />

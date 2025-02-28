@@ -1,9 +1,13 @@
 import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
-
-import { AccessPackageList, packageActions } from '../common/AccessPackageList/AccessPackageList';
+import { useEffect, useRef, useState } from 'react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+
+import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
@@ -15,6 +19,16 @@ export const ReporteeAccessPackageSection = ({
   reporteeUuid,
 }: ReporteeAccessPackageSectionProps) => {
   const { t } = useTranslation();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
+  const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
+
+  useEffect(() => {
+    const handleClose = () => setModalItem(undefined);
+    modalRef.current?.addEventListener('close', handleClose);
+    return () => modalRef.current?.removeEventListener('close', handleClose);
+  }, []);
+
   return (
     <>
       <Heading
@@ -27,10 +41,23 @@ export const ReporteeAccessPackageSection = ({
       <AccessPackageList
         fromPartyUuid={reporteeUuid ?? ''}
         toPartyUuid={getCookie('AltinnPartyUuid')}
-        availableActions={[packageActions.REVOKE, packageActions.REQUEST]}
+        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm
         showAllPackages
+        onSelect={(accessPackage) => {
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
       />
+      {party && (
+        <EditModal
+          ref={modalRef}
+          toPartyUuid={getCookie('AltinnPartyUuid')}
+          fromPartyUuid={party.partyUuid}
+          accessPackage={modalItem}
+          availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        />
+      )}
     </>
   );
 };

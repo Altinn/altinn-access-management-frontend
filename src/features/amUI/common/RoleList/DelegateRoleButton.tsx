@@ -1,39 +1,48 @@
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { useRevokeMutation } from '@/rtk/features/roleApi';
+import { useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
 
-import { useSnackbar } from '../../common/Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
+import { useSnackbar } from '../Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
 
-interface RevokeRoleButtonProps extends ButtonProps {
-  assignmentId: string;
+interface DelegateRoleButtonProps extends ButtonProps {
+  roleId: string;
   roleName: string;
   toParty?: Party;
   fullText?: boolean;
 }
 
-export const RevokeRoleButton = ({
-  assignmentId,
+export const DelegateRoleButton = ({
+  roleId,
   roleName,
   toParty,
   fullText = false,
-  disabled,
-  variant = 'outline',
+  variant = 'text',
   ...props
-}: RevokeRoleButtonProps) => {
+}: DelegateRoleButtonProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
   const { data: representingParty } = useGetReporteePartyQuery();
-  const [revoke, { isLoading }] = useRevokeMutation();
+  const [delegateRole, { isLoading: delegateRoleLoading }] = useDelegateMutation();
+
+  const { data: delegationCheckResult, isLoading: delegationCheckLoading } =
+    useDelegationCheckQuery({
+      rightownerUuid: representingParty?.partyUuid || '',
+      roleUuid: roleId,
+    });
+
+  const canDelegate =
+    delegationCheckResult?.canDelegate && !delegateRoleLoading && !delegationCheckLoading;
 
   const onClick = () => {
     const snackbar = (isSuccessful: boolean) => {
       const snackbarData = {
-        message: t(isSuccessful ? 'role.role_deletion_success' : 'role.role_deletion_error', {
+        message: t(isSuccessful ? 'role.role_delegation_success' : 'role.role_delegation_error', {
           role: roleName,
           name: toParty?.name,
         }),
@@ -44,8 +53,9 @@ export const RevokeRoleButton = ({
     };
 
     if (representingParty) {
-      revoke({
-        assignmentId: assignmentId,
+      delegateRole({
+        to: toParty?.partyUuid || '',
+        roleId: roleId,
       })
         .unwrap()
         .then(() => {
@@ -60,12 +70,13 @@ export const RevokeRoleButton = ({
 
   return (
     <Button
-      {...props}
+      icon={PlusCircleIcon}
       variant={variant}
       onClick={onClick}
-      disabled={disabled || isLoading || !representingParty}
+      disabled={!canDelegate || props.disabled}
+      {...props}
     >
-      {fullText ? t('common.delete_poa') : t('common.delete')}
+      {fullText ? t('common.give_poa') : t('common.give_poa')}
     </Button>
   );
 };

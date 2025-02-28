@@ -8,19 +8,15 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
+import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
+import { DelegationAction } from '../DelegationModal/EditModal';
+
 import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
 import { AreaItem } from './AreaItem';
 import { PackageItem } from './PackageItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
-import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
-
-export enum packageActions {
-  DELEGATE = 'DELEGATE',
-  REQUEST = 'REQUEST',
-  REVOKE = 'REVOKE',
-}
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -28,7 +24,7 @@ interface AccessPackageListProps {
   toPartyUuid: string;
   showAllAreas?: boolean;
   isLoading?: boolean;
-  availableActions?: packageActions[];
+  availableActions?: DelegationAction[];
   searchString?: string;
   useDeleteConfirm?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
@@ -120,7 +116,7 @@ export const AccessPackageList = ({
                           onSelect={onSelect}
                           hasAccess
                           controls={
-                            availableActions?.includes(packageActions.REVOKE) &&
+                            availableActions?.includes(DelegationAction.REVOKE) &&
                             useDeleteConfirm ? (
                               <ButtonWithConfirmPopup
                                 triggerButtonContent={t('common.delete_poa')}
@@ -161,7 +157,7 @@ export const AccessPackageList = ({
                           onSelect={onSelect}
                           controls={
                             <>
-                              {availableActions?.includes(packageActions.DELEGATE) && (
+                              {availableActions?.includes(DelegationAction.DELEGATE) && (
                                 <Button
                                   icon={PlusCircleIcon}
                                   variant='text'
@@ -171,7 +167,7 @@ export const AccessPackageList = ({
                                   {t('common.give_poa')}
                                 </Button>
                               )}
-                              {availableActions?.includes(packageActions.REQUEST) && (
+                              {availableActions?.includes(DelegationAction.REQUEST) && (
                                 <Button
                                   icon={PlusCircleIcon}
                                   variant='text'

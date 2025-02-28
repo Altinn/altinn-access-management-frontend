@@ -1,4 +1,3 @@
-import type { Party } from '@/rtk/features/lookupApi';
 import { useEditResourceMutation } from '@/rtk/features/singleRights/singleRightsApi';
 import type { RightChangesDto } from '@/dataObjects/dtos/resourceDelegation';
 
@@ -7,16 +6,13 @@ export const useEditResource = () => {
 
   const editResource = (
     resourceId: string,
-    fromParty: Party,
-    toParty: Party,
+    fromPartyUuid: string,
+    toPartyUuid: string,
     prevRightKeys: string[],
     newRightKeys: string[],
     onSuccess?: () => void,
     onError?: () => void,
   ) => {
-    const from = fromParty.partyUuid;
-    const to = toParty.partyUuid;
-
     const rightsToAdd = newRightKeys.filter((rk) => !prevRightKeys.includes(rk));
     const rightsToDelete = prevRightKeys.filter((rk) => !newRightKeys.includes(rk));
     const edits: RightChangesDto = {
@@ -25,8 +21,8 @@ export const useEditResource = () => {
     };
 
     edit({
-      from,
-      to,
+      from: fromPartyUuid,
+      to: toPartyUuid,
       resourceId,
       edits,
     })

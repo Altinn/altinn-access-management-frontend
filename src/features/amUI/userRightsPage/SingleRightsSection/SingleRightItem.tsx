@@ -5,10 +5,11 @@ import { ResourceListItem } from '@altinn/altinn-components';
 import type { FC } from 'react';
 import { useRef } from 'react';
 
-import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { type Party } from '@/rtk/features/lookupApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { Party } from '@/rtk/features/lookupApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { EditModal } from '../DelegationModal/EditModal';
+import { EditModal } from '../../common/DelegationModal/EditModal';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
 import classes from './SingleRightsSection.module.css';
@@ -51,9 +52,10 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
       </li>
       <EditModal
         ref={modalRef}
-        toParty={toParty}
+        toPartyUuid={toParty.partyUuid}
+        fromPartyUuid={getCookie('AltinnPartyUuid')}
         resource={resource}
-      ></EditModal>
+      />
     </>
   );
 };

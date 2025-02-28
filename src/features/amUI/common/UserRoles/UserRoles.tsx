@@ -17,8 +17,8 @@ export const UserRoles = ({
   ...props
 }: UserRulesProps) => {
   const { data } = useGetRolesForUserQuery({
-    rightOwnerUuid: rightOwnerUuid,
-    rightHolderUuid: rightHolderUuid,
+    from: rightOwnerUuid,
+    to: rightHolderUuid,
   });
   return (
     <div

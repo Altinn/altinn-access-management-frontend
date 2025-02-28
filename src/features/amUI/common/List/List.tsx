@@ -1,6 +1,5 @@
 import cn from 'classnames';
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import classes from './List.module.css';
 
