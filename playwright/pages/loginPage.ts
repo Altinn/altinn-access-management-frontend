@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { chromium, type Page, expect } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 
 export class loginWithUser {
   constructor(public page: Page) {}

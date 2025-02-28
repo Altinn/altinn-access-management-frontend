@@ -45,7 +45,7 @@ const config: PlaywrightTestConfig = {
   projects: [
     {
       name: 'e2e-tests',
-      testMatch: 'playwright/e2eTests/*.spec.ts',
+      testMatch: 'playwright/e2eTests/**/*.spec.ts',
       timeout: 60 * 1000, //30 seconds default timeout
       use: {
         browserName: 'chromium',
