@@ -16,7 +16,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
   const { id } = useParams();
 
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
-  const fromPartyId = getCookie('AltinnPartyUuid');
+  const partyUuid = getCookie('AltinnPartyUuid');
 
   return (
     party && (
@@ -30,7 +30,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
         </Heading>
         <DelegationModal
           toPartyUuid={party.partyUuid ?? ''}
-          fromPartyUuid={fromPartyId}
+          fromPartyUuid={partyUuid}
           delegationType={DelegationType.AccessPackage}
         />
         <ActiveDelegations toParty={party} />
