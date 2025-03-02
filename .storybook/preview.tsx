@@ -14,7 +14,7 @@ import no_nn from '../src/localizations/no_nn.json';
 import en from '../src/localizations/en.json';
 import { Suspense, useEffect } from 'react';
 import React from 'react';
-import { Router } from 'react-router-dom';
+import { Router } from 'react-router';
 
 import { worker } from '../.mock/browser';
 worker.start();

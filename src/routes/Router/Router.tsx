@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router';
 import * as React from 'react';
 
 import { ChooseApiPage } from '@/features/apiDelegation/offered/ChooseApiPage';

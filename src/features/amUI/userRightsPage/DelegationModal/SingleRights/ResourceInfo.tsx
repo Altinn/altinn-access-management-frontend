@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Avatar, Badge } from '@altinn/altinn-components';
 
 import type {

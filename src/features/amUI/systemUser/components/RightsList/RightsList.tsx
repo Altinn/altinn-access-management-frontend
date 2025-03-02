@@ -37,6 +37,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
     modalRef.current?.showModal();
   };
 
+  // Note! This function is not called on click outside modal. It is fixed in newer versions of designsystemet
   const closeModal = (): void => {
     setSelectedResource(null);
     setSelectedAccessPackage(null);

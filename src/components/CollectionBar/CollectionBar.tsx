@@ -7,7 +7,7 @@ import {
 } from '@navikt/aksel-icons';
 import { Button, Paragraph } from '@digdir/designsystemet-react';
 import cn from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { ActionBar, type ActionBarProps } from '../ActionBar';
 

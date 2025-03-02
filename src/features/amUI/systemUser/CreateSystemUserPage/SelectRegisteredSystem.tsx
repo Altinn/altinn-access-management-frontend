@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Combobox, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 import { useGetRegisteredSystemsQuery } from '@/rtk/features/systemUserApi';
 import { SystemUserPath } from '@/routes/paths';

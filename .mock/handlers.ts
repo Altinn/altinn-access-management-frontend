@@ -5,6 +5,7 @@ import { userHandlers } from './handlers/user';
 import { singlerightHandlers } from './handlers/singleright';
 import { accessPackageHandlers } from './handlers/accessPackage';
 import { lookupHandlers } from './handlers/lookup';
+import { systemUserHandlers } from './handlers/systemUser';
 
 export const ACCESSMANAGEMENT_BASE_URL = 'http://localhost:6006/accessmanagement/api/v1';
 
@@ -15,6 +16,7 @@ export const handlers = [
   ...singlerightHandlers(ACCESSMANAGEMENT_BASE_URL),
   ...accessPackageHandlers(ACCESSMANAGEMENT_BASE_URL),
   ...lookupHandlers(ACCESSMANAGEMENT_BASE_URL),
+  ...systemUserHandlers(ACCESSMANAGEMENT_BASE_URL),
 
   http.get('*', () => {
     return passthrough();
