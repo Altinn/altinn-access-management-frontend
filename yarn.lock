@@ -3312,7 +3312,7 @@ __metadata:
     msw-storybook-addon: "npm:^2.0.3"
     prettier: "npm:^3.2.5"
     react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
+    react-dom: "npm:^19.0.0"
     react-i18next: "npm:^15.0.0"
     react-redux: "npm:^9.0.0"
     react-router: "npm:^7.2.0"
@@ -9394,7 +9394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0":
+"react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0, react-dom@npm:^19.0.0":
   version: 19.0.0
   resolution: "react-dom@npm:19.0.0"
   dependencies:
