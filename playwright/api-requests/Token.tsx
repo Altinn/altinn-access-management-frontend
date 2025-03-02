@@ -10,12 +10,20 @@ export class Token {
     this.org = process.env.ORG || '';
     this.environment = process.env.environment || '';
 
-    if (!this.username || !this.password) {
-      throw new Error('API username or password is not defined in the environment variables.');
+    if (!this.username) {
+      throw new Error('API username is not defined in the environment variables.');
     }
 
-    if (!this.org || !this.environment) {
-      throw new Error('ORG or environment is not defined in the environment variables.');
+    if (!this.password) {
+      throw new Error('API password is not defined in the environment variables.');
+    }
+
+    if (!this.org) {
+      throw new Error('ORG is not defined in the environment variables.');
+    }
+
+    if (!this.environment) {
+      throw new Error('Environment is not defined in the environment variables.');
     }
   }
 
