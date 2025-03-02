@@ -13,23 +13,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ISystemUserClientDelegationRequestClient _systemUserClientDelegationRequestClient;
         private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
-        private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserClientDelegationRequestService"/> class.
         /// </summary>
         /// <param name="systemUserClientDelegationRequestClient">The system user request client.</param>
-        /// <param name="resourceHelper">The resource helper</param>
         /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
         public SystemUserClientDelegationRequestService(
             ISystemUserClientDelegationRequestClient systemUserClientDelegationRequestClient,
-            ResourceHelper resourceHelper,
             ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient)
         {
             _systemUserClientDelegationRequestClient = systemUserClientDelegationRequestClient;
-            _resourceHelper = resourceHelper;
             _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
         }
