@@ -8,7 +8,7 @@ import { useRef, useState } from 'react';
 import { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useActionError } from '@/resources/hooks/useActionError';
 
 interface ReporteeAccessPackageSectionProps {
