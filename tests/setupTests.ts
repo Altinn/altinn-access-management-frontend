@@ -1,8 +1,8 @@
 import { expect, beforeAll, afterEach, afterAll } from 'vitest';
 import '@testing-library/jest-dom';
 import * as matchers from '@testing-library/jest-dom/matchers';
+import { server } from '@mock/node';
 
-import { server } from '../.mock/node';
 import { TEST_BASE_URL, TEST_PARTY_ID } from './consts';
 
 expect.extend(matchers);
