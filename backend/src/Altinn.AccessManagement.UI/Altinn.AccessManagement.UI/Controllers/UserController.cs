@@ -62,6 +62,36 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Endpoint for reportees the authenticated user can act on behalf of
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("userReporteeList")]
+        public async Task<ActionResult<List<AuthorizedParty>>> GetReporteeListForUser()
+        {
+            try
+            {
+                List<AuthorizedParty> reporteelist = await _userService.GetReporteeListForUser();
+
+                if (reporteelist != null)
+                {
+                    return reporteelist;
+                }
+                else
+                {
+                    return StatusCode(404);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetReportee failed to fetch reportee information");
+                return StatusCode(500);
+            }
+        }
+
+
+        /// <summary>
         /// Endpoint for retrieving party if party exists in the authenticated users reporteelist
         /// </summary>
         /// <param name="partyId">The partyId for the reportee to look up</param>

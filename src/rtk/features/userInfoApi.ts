@@ -19,6 +19,7 @@ export interface ReporteeInfo {
   organizationNumber?: string;
   type?: string;
   partyUuid: string;
+  partyId: string;
   authorizedRoles: string[];
 }
 
@@ -80,6 +81,12 @@ export const userInfoApi = createApi({
       },
       keepUnusedDataFor: 300,
     }),
+    getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
+      query: () => {
+        return '/userReporteeList';
+      },
+      keepUnusedDataFor: 300,
+    }),
     getUserAccesses: builder.query<UserAccesses, { from: string; to: string }>({
       query: ({ from, to }) => `from/${from}/to/${to}/accesses`,
       keepUnusedDataFor: 300,
@@ -106,6 +113,7 @@ export const {
   useGetUserAccessesQuery,
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
+  useGetReporteeListForAuthorizedUserQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

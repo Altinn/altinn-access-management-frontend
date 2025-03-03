@@ -77,6 +77,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<List<AuthorizedParty>> GetReporteeListForUser()
+        {
+            try
+            {
+                string endpointUrl = $"authorizedparties?includeAltinn2=true";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<AuthorizedParty>>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("GetPartyFromReporteeListIfExists from accessmanagement failed with {StatusCode}", response.StatusCode);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetPartyFromReporteeListIfExists // Exception");
+                throw;
+            }
+        }
+
+
+        /// <inheritdoc />
         public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
             string endpointUrl = $"internal/{party}/accesscache/clear";

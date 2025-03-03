@@ -239,5 +239,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 throw new Exception();
             }
         }
+
+        public Task<List<AuthorizedParty>> GetReporteeListForUser()
+        {
+            try
+            {
+                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", "reporteeList.json")));
+            }
+            catch (FileNotFoundException)
+            {
+                return Task.FromResult<List<AuthorizedParty>>(null);
+            }
+        }
     }
 }
+
