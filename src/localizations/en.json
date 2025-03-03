@@ -303,6 +303,10 @@
       "all_failed": "No rights were granted to {{name}}",
       "some_failed": "We couldn't grant these rights: {{actions}}"
     },
+    "general_error": {
+      "revoke_heading": "Could not delete power of attorney",
+      "delegate_heading": "Could not give power of attorney"
+    },
     "service_error": {
       "general_heading": "You cannot give access to this service",
       "technical_error_heading": "Something went wrong",

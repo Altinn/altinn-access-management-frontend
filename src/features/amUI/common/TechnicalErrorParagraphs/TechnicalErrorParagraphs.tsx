@@ -34,12 +34,8 @@ export const TechnicalErrorParagraphs = ({
             second: '2-digit',
           }),
         })}{' '}
-        -{' '}
-        {t('common.error_status', {
-          status: status,
-        })}
+        - {t('common.error_status', { status: status })}
       </Paragraph>
-      <Paragraph size={size}></Paragraph>
     </>
   );
 };

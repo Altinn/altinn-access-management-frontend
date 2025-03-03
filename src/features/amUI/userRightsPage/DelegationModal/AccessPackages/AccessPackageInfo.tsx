@@ -73,9 +73,9 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
             size='sm'
           >
             {userHasPackage ? (
-              <Heading size='2xs'>Kunne ikke slette fullmakt</Heading>
+              <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
             ) : (
-              <Heading size='2xs'>Kunne ikke gi fullmakt</Heading>
+              <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
             )}
             <TechnicalErrorParagraphs
               size='xs'

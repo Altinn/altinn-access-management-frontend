@@ -21,7 +21,6 @@ export const ReporteeAccessPackageSection = ({
   reporteeUuid,
 }: ReporteeAccessPackageSectionProps) => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { error, setError } = useActionError();

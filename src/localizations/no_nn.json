@@ -299,6 +299,10 @@
       "all_failed": "Ingen ny fullmakt er gjeven til {{name}}",
       "some_failed": "Fylgjande tilgangar vart ikkje gjevne: {{actions}}"
     },
+    "general_error": {
+      "revoke_heading": "Kunne ikkje slette fullmakt",
+      "delegate_heading": "Kunne ikkje gi fullmakt"
+    },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",
       "technical_error_heading": "Noko gjekk gale",
