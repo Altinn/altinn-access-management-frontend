@@ -41,15 +41,6 @@ export interface SystemUserRequest {
   accessPackages: SystemUserAccessPackage[];
 }
 
-export interface SystemUserChangeRequest {
-  id: string;
-  status: RequestStatus;
-  redirectUrl?: string;
-  system: RegisteredSystem;
-  resources: ServiceResource[];
-  accessPackages: SystemUserAccessPackage[];
-}
-
 // TODO: temp? type for access package with enriched resources
 export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'> {
   resources: ServiceResource[];

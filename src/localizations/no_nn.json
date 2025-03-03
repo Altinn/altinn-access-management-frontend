@@ -487,6 +487,11 @@
     "request_rejected": "Denne oppdaterings-førespurnaden er allerede avvist",
     "request_expired": "Denne oppdaterings-førespurnaden har gått ut"
   },
+  "systemuser_client_delegation_request": {
+    "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
+    "banner_title": "Lag en systemtilgang for kunderelasjoner",
+    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løyse oppgåver på vegne av <strong>{{companyName}}</strong> sine kundar. For å fullføre oppsettet må tilgangane til kundane tildeles i kunderelasjonar i Altinn."
+  },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
     "02_rights_failed_to_delegate": "Kunne ikkje delegere tenester til systembrukar.",
