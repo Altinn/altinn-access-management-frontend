@@ -47,12 +47,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserClientRequest>> GetSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserClientRequest>> GetSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {        
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/ClientRequest/{partyId}/{ClientRequestId}";
+                string endpoint = $"systemuser/clientRequest/{partyId}/{clientRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
 
@@ -74,12 +74,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/ClientRequest/{partyId}/{ClientRequestId}/approve";
+                string endpoint = $"systemuser/clientRequest/{partyId}/{clientRequestId}/approve";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
@@ -101,12 +101,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/ClientRequest/{partyId}/{ClientRequestId}/reject";
+                string endpoint = $"systemuser/clientRequest/{partyId}/{clientRequestId}/reject";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 

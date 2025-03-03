@@ -21,18 +21,18 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Approve a system user client delegation request to create a new system user
         /// </summary>
         /// <param name="partyId">Used to identify the party the system user request is for.</param>
-        /// <param name="ClientRequestId">The id of the system user request</param>
+        /// <param name="clientRequestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the create system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken);
+        Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Reject a system user client delegation request
         /// </summary>
         /// <param name="partyId">Used to identify the party the system user request is for.</param>
-        /// <param name="ClientRequestId">The id of the system user request</param>
+        /// <param name="clientRequestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the rejest system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken);
+        Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken);
     }
 }

@@ -31,9 +31,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUserClientRequestFE>> GetSystemUserClientRequest(int partyId, Guid ClientRequestId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserClientRequestFE>> GetSystemUserClientRequest(int partyId, Guid clientRequestId, string languageCode, CancellationToken cancellationToken)
         {
-            Result<SystemUserClientRequest> clientRequest = await _systemUserClientRequestClient.GetSystemUserClientRequest(partyId, ClientRequestId, cancellationToken);
+            Result<SystemUserClientRequest> clientRequest = await _systemUserClientRequestClient.GetSystemUserClientRequest(partyId, clientRequestId, cancellationToken);
             
             if (clientRequest.IsProblem)
             {
@@ -54,15 +54,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
-            return await _systemUserClientRequestClient.ApproveSystemUserClientRequest(partyId, ClientRequestId, cancellationToken);
+            return await _systemUserClientRequestClient.ApproveSystemUserClientRequest(partyId, clientRequestId, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
-            return await _systemUserClientRequestClient.RejectSystemUserClientRequest(partyId, ClientRequestId, cancellationToken);
+            return await _systemUserClientRequestClient.RejectSystemUserClientRequest(partyId, clientRequestId, cancellationToken);
         }
     }
 }

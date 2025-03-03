@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// API for the Frontend to fetch a Request then reject or approve it.
     /// The adminstration ( CRUD API ) of Requests are done by Vendors directly towards the Authentication component.
     /// </summary>
-    [Route("accessmanagement/api/v1/systemuser/ClientRequest")]
+    [Route("accessmanagement/api/v1/systemuser/clientRequest")]
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class SystemUserClientRequestController(
@@ -29,11 +29,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{partyId}/{ClientRequestId}")]
-        public async Task<ActionResult> GetClientRequestByPartyIdAndRequestId([FromRoute] int partyId, [FromRoute] Guid ClientRequestId, CancellationToken cancellationToken)
+        [HttpGet("{partyId}/{clientRequestId}")]
+        public async Task<ActionResult> GetClientRequestByPartyIdAndRequestId([FromRoute] int partyId, [FromRoute] Guid clientRequestId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            Result<SystemUserClientRequestFE> req = await _systemUserClientRequestService.GetSystemUserClientRequest(partyId, ClientRequestId, languageCode, cancellationToken);
+            Result<SystemUserClientRequestFE> req = await _systemUserClientRequestService.GetSystemUserClientRequest(partyId, clientRequestId, languageCode, cancellationToken);
             if (req.IsProblem)
             {
                 return req.Problem.ToActionResult();
@@ -47,10 +47,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("{partyId}/{ClientRequestId}/approve")]
-        public async Task<ActionResult> ApproveSystemUserClientRequest([FromRoute] int partyId, [FromRoute] Guid ClientRequestId, CancellationToken cancellationToken)
+        [HttpPost("{partyId}/{clientRequestId}/approve")]
+        public async Task<ActionResult> ApproveSystemUserClientRequest([FromRoute] int partyId, [FromRoute] Guid clientRequestId, CancellationToken cancellationToken)
         {
-            Result<bool> req = await _systemUserClientRequestService.ApproveSystemUserClientRequest(partyId, ClientRequestId, cancellationToken);
+            Result<bool> req = await _systemUserClientRequestService.ApproveSystemUserClientRequest(partyId, clientRequestId, cancellationToken);
             if (req.IsProblem)
             {
                 return req.Problem.ToActionResult();
@@ -64,10 +64,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("{partyId}/{ClientRequestId}/reject")]
-        public async Task<ActionResult> RejectSystemUserClientRequest([FromRoute] int partyId, [FromRoute] Guid ClientRequestId, CancellationToken cancellationToken)
+        [HttpPost("{partyId}/{clientRequestId}/reject")]
+        public async Task<ActionResult> RejectSystemUserClientRequest([FromRoute] int partyId, [FromRoute] Guid clientRequestId, CancellationToken cancellationToken)
         {
-            Result<bool> req = await _systemUserClientRequestService.RejectSystemUserClientRequest(partyId, ClientRequestId, cancellationToken);
+            Result<bool> req = await _systemUserClientRequestService.RejectSystemUserClientRequest(partyId, clientRequestId, cancellationToken);
             if (req.IsProblem)
             {
                 return req.Problem.ToActionResult();
@@ -81,8 +81,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{ClientRequestId}/logout")]
-        public IActionResult Logout(Guid ClientRequestId)
+        [HttpGet("{clientRequestId}/logout")]
+        public IActionResult Logout(Guid clientRequestId)
         {
             CookieOptions cookieOptions = new()
             {
@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             };
 
             // store cookie value for redirect
-            HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"SystemuserClientRequestId={ClientRequestId}", cookieOptions);
+            HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"SystemuserClientRequestId={clientRequestId}", cookieOptions);
             
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);
