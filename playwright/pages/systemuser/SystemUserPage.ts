@@ -59,8 +59,8 @@ export class SystemUserPage {
   }
 
   async selectSystem(system: string) {
-    await this.page.getByPlaceholder('Velg').click();
-    await this.page.getByPlaceholder('Velg').fill(system);
+    await this.page.getByPlaceholder('Velg').fill(system.slice(0, -1)); //If you type in the entire length it's auto selected
+    await this.page.getByLabel(system).waitFor({ state: 'visible' });
     await this.page.getByLabel(system).click();
     await this.CONTINUE_BUTTON.click();
     await this.page.getByRole('button', { name: 'Opprett systemtilgang' }).click();

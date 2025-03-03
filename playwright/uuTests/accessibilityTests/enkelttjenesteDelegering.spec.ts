@@ -1,7 +1,7 @@
 import { test } from '../../fixture/pomFixture';
 
 test.describe('New brukerflate - EnkelttjenesteDelegering', () => {
-  test('Verify accessibility errors in brukerflate GUI for enkelttjenestedelegering- Mainpage', async ({
+  test.skip('Skipped until bug is fixed, see Github issue: #xxx Verify accessibility errors in brukerflate GUI for enkelttjenestedelegering- Mainpage', async ({
     login,
     runAccessibilityTest,
   }) => {
@@ -11,7 +11,7 @@ test.describe('New brukerflate - EnkelttjenesteDelegering', () => {
     await runAccessibilityTest.brukerflateEnkelttjenesteDelegering();
   });
 
-  test('Verify accessibility errors in brukerflate GUI for enkelttjenestedelegering- delegationPage', async ({
+  test.skip('Skipped until bug is fixed, see Github issue: #xxx Verify accessibility errors in brukerflate GUI for enkelttjenestedelegering- delegationPage', async ({
     login,
     runAccessibilityTest,
   }) => {

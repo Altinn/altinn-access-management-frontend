@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
-
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { ApiRequests } from 'playwright/api-requests/ApiRequests';
 import { loginWithUser } from 'playwright/pages/loginPage';
-
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
+
+test.describe.configure({ timeout: 20000 }); // Set timeout for all tests in this file
 
 test.describe('System Register', async () => {
   let system: string;
@@ -32,6 +32,7 @@ test.describe('System Register', async () => {
 
   test.afterEach(async () => {
     if (system) {
+      console.log('Removing system');
       await TestdataApi.removeSystem(system);
     }
   });

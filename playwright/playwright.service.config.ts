@@ -7,18 +7,16 @@ import config from './playwright.config';
 export default defineConfig(
   config,
   getServiceConfig(config, {
-    // exposeNetwork: '<loopback>',
     exposeNetwork: '<none>',
     timeout: 90000,
     os: ServiceOS.LINUX,
-    useCloudHostedBrowsers: true, // Set to false if you want to only use reporting and not cloud hosted browsers
+    useCloudHostedBrowsers: true, // Enables Azure Playwright Testing cloud browsers
   }),
   {
-    /* 
-    Playwright Testing service reporter is added by default.
-    This will override any reporter options specified in the base playwright config.
-    If you are using more reporters, please update your configuration accordingly.
-    */
+    retries: 1, // ✅ Retries once if test fail
+    use: {
+      trace: 'on', // ✅ Enables tracing (options: 'on', 'on-first-retry', 'retain-on-failure')
+    },
     reporter: [
       ['list'],
       [

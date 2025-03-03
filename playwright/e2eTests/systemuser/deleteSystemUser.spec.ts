@@ -6,6 +6,8 @@ import { loginWithUser } from 'playwright/pages/loginPage';
 
 import { SystemUserPage } from '../../pages/systemuser/SystemUserPage';
 
+test.describe.configure({ timeout: 20000 }); // Set timeout for all tests in this file
+
 test.describe('System user deletion', () => {
   let systemId: string;
   let api: ApiRequests;
@@ -45,7 +47,9 @@ test.describe('System user deletion', () => {
   });
 
   test.afterEach(async () => {
-    // Remove system
-    await TestdataApi.removeSystem(systemId);
+    if (systemId) {
+      // Remove system
+      await TestdataApi.removeSystem(systemId);
+    }
   });
 });

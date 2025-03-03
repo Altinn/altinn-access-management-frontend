@@ -1,8 +1,8 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
+import { trace } from 'console';
 // eslint-disable-next-line import/default
 import dotenv from 'dotenv';
 
-// eslint-disable-next-line import/no-named-as-default-member
 dotenv.config({
   path: [
     `config/.env`,
@@ -36,6 +36,7 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
+        trace: 'on',
         outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
         outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
       },
