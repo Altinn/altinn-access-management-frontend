@@ -69,7 +69,7 @@
     "show_less": "Show less",
     "technical_error": "Sorry, a technical error has occurred. Please contact Altinn user service if the problem persists.",
     "time_of_error": "Error occurred at time: {{time}}",
-    "error_status": "Status: {{status}}",
+    "error_status": "HttpStatus: {{status}}",
     "ssn": "National identity number",
     "last_name": "Last name",
     "subunit": "Subunit",
@@ -302,6 +302,10 @@
       "message": "We encountered a technical issue. If the problem continues, please contact Altinn user service.",
       "all_failed": "No rights were granted to {{name}}",
       "some_failed": "We couldn't grant these rights: {{actions}}"
+    },
+    "general_error": {
+      "revoke_heading": "Could not delete power of attorney",
+      "delegate_heading": "Could not give power of attorney"
     },
     "service_error": {
       "general_heading": "You cannot give access to this service",

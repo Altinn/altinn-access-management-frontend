@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { Party } from '@/rtk/features/lookupApi';
@@ -13,22 +13,58 @@ import { SnackbarProvider } from '../../common/Snackbar';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { useDelegationModalContext } from './DelegationModalContext';
 
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
   toParty: Party;
+  openWithError?: ActionError | null;
+  onClose?: () => void;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role }, ref) => {
+  ({ toParty, resource, accessPackage, role, openWithError, onClose }, ref) => {
+    const { setActionError, actionError, reset } = useDelegationModalContext();
+
+    useEffect(() => {
+      if (!!openWithError) {
+        setActionError(openWithError);
+      } else {
+        setActionError(null);
+      }
+    }, [openWithError]);
+
+    const onClosing = () => {
+      onClose?.();
+      reset();
+    };
+
+    /* handle closing */
+    useEffect(() => {
+      const handleClose = () => onClosing?.();
+
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.addEventListener('close', handleClose);
+      }
+      return () => {
+        if (ref && 'current' in ref && ref.current) {
+          ref.current.removeEventListener('close', handleClose);
+        }
+      };
+    }, [onClosing, ref]);
+
     return (
       <Modal.Context>
         <Modal
           ref={ref}
           className={classes.modalDialog}
           backdropClose
+          onClose={() => {
+            onClosing();
+          }}
         >
           <SnackbarProvider>
             <div className={classes.content}>
