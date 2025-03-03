@@ -22,10 +22,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUserClientRequest>> GetSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public Task<Result<SystemUserClientRequest>> GetSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
             SystemUserClientRequest systemUserClientRequest = Util.GetMockData<SystemUserClientRequest>($"{dataFolder}/SystemUser/systemUserClientRequest.json");
-            if (ClientRequestId != systemUserClientRequest.Id)
+            if (clientRequestId != systemUserClientRequest.Id)
             {
                 return Task.FromResult(new Result<SystemUserClientRequest>(TestErrors.RequestNotFound));
             }
@@ -34,10 +34,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
             SystemUserClientRequest systemUserClientRequest = Util.GetMockData<SystemUserClientRequest>($"{dataFolder}/SystemUser/systemUserClientRequest.json");
-            if (ClientRequestId != systemUserClientRequest.Id)
+            if (clientRequestId != systemUserClientRequest.Id)
             {
                 return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
             }
@@ -45,10 +45,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
                 /// <inheritdoc />
-        public Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
         {
             SystemUserClientRequest systemUserClientRequest = Util.GetMockData<SystemUserClientRequest>($"{dataFolder}/SystemUser/systemUserClientRequest.json");
-            if (ClientRequestId != systemUserClientRequest.Id)
+            if (clientRequestId != systemUserClientRequest.Id)
             {
                 return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
             }
