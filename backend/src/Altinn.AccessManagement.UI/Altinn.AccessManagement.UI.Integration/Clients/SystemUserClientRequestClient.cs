@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// Client for handling system user client delegation requests.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class SystemUserClientDelegationRequestClient : ISystemUserClientDelegationRequestClient
+    public class SystemUserClientRequestClient : ISystemUserClientRequestClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
@@ -26,14 +26,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemUserClientDelegationRequestClient"/> class.
+        /// Initializes a new instance of the <see cref="SystemUserClientRequestClient"/> class.
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="httpClient">The HTTP client instance.</param>
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
-        public SystemUserClientDelegationRequestClient(
-            ILogger<SystemUserClientDelegationRequestClient> logger, 
+        public SystemUserClientRequestClient(
+            ILogger<SystemUserClientRequestClient> logger, 
             HttpClient httpClient, 
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings) 
@@ -47,39 +47,39 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserClientDelegationRequest>> GetSystemUserClientDelegationRequest(int partyId, Guid clientDelegationRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserClientRequest>> GetSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
         {        
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/clientdelegationrequest/{partyId}/{clientDelegationRequestId}";
+                string endpoint = $"systemuser/ClientRequest/{partyId}/{ClientRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
 
                 if (response.IsSuccessStatusCode) 
                 {
-                    return JsonSerializer.Deserialize<SystemUserClientDelegationRequest>(responseContent, _jsonSerializerOptions);
+                    return JsonSerializer.Deserialize<SystemUserClientRequest>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientDelegationRequestClient // GetSystemUserClientDelegationRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserClientRequestClient // GetSystemUserClientRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientDelegationRequestClient // GetSystemUserClientDelegationRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientRequestClient // GetSystemUserClientRequest // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> ApproveSystemUserClientDelegationRequest(int partyId, Guid clientDelegationRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/clientdelegationrequest/{partyId}/{clientDelegationRequestId}/approve";
+                string endpoint = $"systemuser/ClientRequest/{partyId}/{ClientRequestId}/approve";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
@@ -88,25 +88,25 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientDelegationRequestClient // ApproveSystemUserClientDelegationRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserClientRequestClient // ApproveSystemUserClientRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientDelegationRequestClient // ApproveSystemUserClientDelegationRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientRequestClient // ApproveSystemUserClientRequest // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RejectSystemUserClientDelegationRequest(int partyId, Guid clientDelegationRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid ClientRequestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/clientdelegationrequest/{partyId}/{clientDelegationRequestId}/reject";
+                string endpoint = $"systemuser/ClientRequest/{partyId}/{ClientRequestId}/reject";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
@@ -115,14 +115,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientDelegationRequestClient // RejectSystemUserClientDelegationRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserClientRequestClient // RejectSystemUserClientRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientDelegationRequestClient // RejectSystemUserClientDelegationRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientRequestClient // RejectSystemUserClientRequest // Exception");
                 throw;
             }
         }
