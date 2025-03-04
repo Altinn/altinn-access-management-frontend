@@ -433,5 +433,47 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+        /// <summary>
+        ///   Test case: GetReporteeListForUser returns 400 Bad Request when user id is 0
+        ///   Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeListForUser_Returns_400()
+        {
+            // Arrange
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
+
+            const int userId = 404;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        ///   Test case: GetReporteeListForUser returns 400 Bad Request when user id is 0
+        ///   Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeListForUser_Returns_500()
+        {
+            // Arrange
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
+
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
     }
 }
