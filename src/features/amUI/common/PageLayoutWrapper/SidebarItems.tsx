@@ -1,4 +1,5 @@
 import { amUIPath, SystemUserPath } from '@/routes/paths';
+import React from 'react';
 import { MenuItemProps } from '@altinn/altinn-components';
 import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
