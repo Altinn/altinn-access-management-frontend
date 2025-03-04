@@ -45,3 +45,9 @@ export interface SystemUserRequest {
 export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'> {
   resources: ServiceResource[];
 }
+
+export interface Customer {
+  id: string;
+  displayName: string;
+  orgNo: string;
+}

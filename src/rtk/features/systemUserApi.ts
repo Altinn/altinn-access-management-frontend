@@ -6,6 +6,7 @@ import type {
   SystemUser,
   SystemUserRequest,
   RegisteredSystemRights,
+  Customer,
 } from '@/features/amUI/systemUser/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
@@ -46,6 +47,75 @@ export const systemUserApi = createApi({
     getClientSystemUsers: builder.query<SystemUser[], string>({
       query: (partyId) => `systemuser/${partyId}`,
       providesTags: [Tags.SystemUsers],
+    }),
+    getCustomers: builder.query<Customer[], string>({
+      query: (partyId) => `systemuser/${partyId}`,
+      transformResponse: () => {
+        const generateCustomer = () => {
+          return {
+            id: new Date().getTime().toString() + Math.random(),
+            displayName: Math.random().toString(36).slice(2),
+            orgNo: Math.floor(Math.random() * 1000000000).toString(),
+          };
+        };
+        return [
+          {
+            id: '1',
+            displayName: 'Svindel AS',
+            orgNo: '236147254',
+          },
+          {
+            id: '2',
+            displayName: 'Frø og brød AS',
+            orgNo: '971032081',
+          },
+          {
+            id: '3',
+            displayName: 'Kakespisere AS',
+            orgNo: '974761076',
+          },
+          {
+            id: '4',
+            displayName: 'Stål og skruer AS',
+            orgNo: '991825827',
+          },
+          {
+            id: '5',
+            displayName: 'Gjerrigknarkene AS',
+            orgNo: '994598759',
+          },
+          ...Array.from({ length: 200 }).map(() => generateCustomer()),
+          {
+            id: '6',
+            displayName: 'Siste AS',
+            orgNo: '994598759',
+          },
+        ];
+      },
+    }),
+    getAssignedCustomers: builder.query<string[], { partyId: string; systemUserId: string }>({
+      query: ({ partyId, systemUserId }) => `systemuser/${partyId}/${systemUserId}`,
+      transformResponse: () => {
+        return ['1', '2', '3'];
+      },
+    }),
+    assignCustomer: builder.mutation<
+      void,
+      { partyId: string; systemUserId: string; customerId: string }
+    >({
+      query: ({ partyId, systemUserId }) => ({
+        url: `systemuser/${partyId}/${systemUserId}`,
+        method: 'GET',
+      }),
+    }),
+    removeCustomer: builder.mutation<
+      void,
+      { partyId: string; systemUserId: string; customerId: string }
+    >({
+      query: ({ partyId, systemUserId }) => ({
+        url: `systemuser/${partyId}/${systemUserId}`,
+        method: 'GET',
+      }),
     }),
     getSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/${partyId}/${systemUserId}`,
@@ -143,6 +213,10 @@ export const {
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
   useGetSystemUsersQuery,
+  useGetCustomersQuery,
+  useGetAssignedCustomersQuery,
+  useAssignCustomerMutation,
+  useRemoveCustomerMutation,
   useGetClientSystemUsersQuery,
   useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,

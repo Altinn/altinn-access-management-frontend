@@ -1,0 +1,16 @@
+.loadingSpinner {
+  padding: 2px;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.searchBar {
+  max-width: 20rem;
+}
+
+.pagingContainer {
+  justify-self: center;
+}
