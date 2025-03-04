@@ -43,6 +43,10 @@ export const systemUserApi = createApi({
       query: (partyId) => `systemuser/${partyId}`,
       providesTags: [Tags.SystemUsers],
     }),
+    getClientSystemUsers: builder.query<SystemUser[], string>({
+      query: (partyId) => `systemuser/${partyId}`,
+      providesTags: [Tags.SystemUsers],
+    }),
     getSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/${partyId}/${systemUserId}`,
     }),
@@ -139,6 +143,7 @@ export const {
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
   useGetSystemUsersQuery,
+  useGetClientSystemUsersQuery,
   useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,
   useGetRegisteredSystemRightsQuery,

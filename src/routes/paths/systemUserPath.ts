@@ -3,6 +3,7 @@ export enum SystemUserPath {
   Overview = 'overview',
   Create = 'create',
   Details = ':id',
+  ClientDelegation = ':id/clientdelegations',
   Request = 'request',
   ChangeRequest = 'changerequest',
   ClientRequest = 'clientrequest',

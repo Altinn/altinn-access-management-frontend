@@ -23,6 +23,13 @@
   --ds-size-26: round(down, calc(var(--ds-size-step) / var(--ds-size-base) * 1em * 26), 0.0625rem);
   --ds-size-30: round(down, calc(var(--ds-size-step) / var(--ds-size-base) * 1em * 30), 0.0625rem);
 }
+:is(.ds-pagination :is(ol, ul)) > li:empty::before {
+  content: '…';
+  display: block;
+  min-width: var(--ds-size-12);
+  text-align: center;
+  margin-top: 40%;
+}
 
 @media (min-width: 1024px) {
   .systemuser_combobox_workaround aside {

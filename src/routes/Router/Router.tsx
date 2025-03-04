@@ -21,6 +21,7 @@ import { CreateSystemUserPage } from '@/features/amUI/systemUser/CreateSystemUse
 import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
 import { ReporteeRightsPage } from '@/features/amUI/reporteeRightsPage/ReporteeRightsPage';
 import { SystemUserClientRequestPage } from '@/features/amUI/systemUser/SystemUserClientRequestPage';
+import { SystemUserClientDelegationsPage } from '@/features/amUI/systemUser/SystemUserClientDelegationsPage/SystemUserClientDelegationsPage';
 
 import {
   GeneralPath,
@@ -123,6 +124,10 @@ export const Router = createBrowserRouter(
         <Route
           path={SystemUserPath.Details}
           element={<SystemUserDetailsPage />}
+        />
+        <Route
+          path={SystemUserPath.ClientDelegation}
+          element={<SystemUserClientDelegationsPage />}
         />
         <Route
           path={SystemUserPath.Request}
