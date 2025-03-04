@@ -10,9 +10,9 @@ export const UnknownError = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className={classes.errorContent}>
       <Heading
-        size='xl'
+        size='lg'
         className={classes.header}
       >
         {t('error_page.unknown_error_header')}

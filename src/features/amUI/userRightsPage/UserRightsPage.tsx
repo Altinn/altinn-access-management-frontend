@@ -21,6 +21,7 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ export const UserRightsPage = () => {
     from: getCookie('AltinnPartyUuid'),
     to: id ?? '',
   });
+
+  rerouteIfNotConfetti();
 
   return (
     <SnackbarProvider>
