@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<AuthorizedParty>> GetReporteeList(Guid partyId)
         {
-              try
+            try
             {
                 return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", "reporteeList.json")));
             }
@@ -239,6 +239,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ThrowExceptionIfTriggerParty(party);
 
             if (packageId == string.Empty)
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+            else if (packageId == "5eb07bdc-5c3c-4c85-add3-5405b214b8a3") // Package is Renovasjon
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }

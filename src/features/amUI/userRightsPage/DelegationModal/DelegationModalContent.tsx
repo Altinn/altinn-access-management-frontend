@@ -33,6 +33,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     packageToView,
     infoView,
     reset,
+    setActionError,
   } = useDelegationModalContext();
 
   const onResourceSelection = (resource?: ServiceResource) => {
@@ -40,7 +41,10 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     setResourceToView(resource);
   };
 
-  const onPackageSelection = (accessPackage?: AccessPackage) => {
+  const onPackageSelection = (accessPackage?: AccessPackage, error: boolean = false) => {
+    if (!error) {
+      setActionError(null);
+    }
     setInfoView(true);
     setPackageToView(accessPackage);
   };
@@ -68,6 +72,9 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
         <PackageSearch
           onSelection={onPackageSelection}
           toParty={toParty}
+          onActionError={(accessPackage: AccessPackage) => {
+            onPackageSelection(accessPackage, true);
+          }}
         />
       );
       infoViewContent = packageToView && (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
@@ -18,6 +18,9 @@ import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageLis
 import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
 
 import classes from './AccessPackageInfo.module.css';
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
+import { ActionError, useActionError } from '@/resources/hooks/useActionError';
+import { useDelegationModalContext } from '../DelegationModalContext';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -26,12 +29,17 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
   const { t } = useTranslation();
+  const { actionError, setActionError } = useDelegationModalContext();
 
-  const { onDelegate } = useAccessPackageActions({ toUuid: toParty.partyUuid });
+  const { onDelegate, onRevoke } = useAccessPackageActions({
+    toUuid: toParty.partyUuid,
+    onDelegateError: (_, error: ActionError) => setActionError(error),
+    onRevokeError: (_, error: ActionError) => setActionError(error),
+  });
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
     to: toParty.partyUuid,
-    from: getCookie('partyUuid'),
+    from: getCookie('AltinnPartyUuid'),
   });
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
@@ -58,6 +66,25 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           {accessPackage?.name}
         </Heading>
       </div>
+      {!!actionError && (
+        <>
+          <Alert
+            color='danger'
+            size='sm'
+          >
+            {userHasPackage ? (
+              <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+            ) : (
+              <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
+            )}
+            <TechnicalErrorParagraphs
+              size='xs'
+              status={actionError.httpStatus}
+              time={actionError.timestamp}
+            />
+          </Alert>
+        </>
+      )}
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
       {accessPackage?.inherited && (
         <div className={classes.inherited}>
@@ -88,6 +115,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           <List
             items={listItems}
             spacing='xs'
+            defaultItemSize='xs'
           />
         </div>
       </div>
@@ -98,6 +126,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
             toParty={toParty}
             fullText
             disabled={isFetching || accessPackage.inherited}
+            onClick={() => onRevoke(accessPackage)}
           />
         ) : (
           <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
@@ -133,7 +162,5 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
   const minimizedList = list
     .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
     .map(mapResourceToListItem);
-  return {
-    listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem],
-  };
+  return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };
