@@ -102,7 +102,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
         }
 
-
         /// <inheritdoc />
         public async Task<HttpResponseMessage> ClearAccessCacheOnRecipient(string party, BaseAttribute recipient)
         {
