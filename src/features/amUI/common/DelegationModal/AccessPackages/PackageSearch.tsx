@@ -11,20 +11,17 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './PackageSearch.module.css';
-import { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
-  onActionError: (accessPackage: AccessPackage) => void;
-  toParty: Party;
+  toParty?: Party;
 }
 
-export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSearchProps) => {
+export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
-  const { searchString, setSearchString, setCurrentPage, setActionError } =
-    useDelegationModalContext();
+  const { searchString, setSearchString, setCurrentPage } = useDelegationModalContext();
 
   const debouncedSearch = debounce((searchString: string) => {
     setDebouncedSearchString(searchString);
@@ -74,26 +71,8 @@ export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSe
               searchString={debouncedSearchString}
             />
           </div>
-        </div>
-        <div className={classes.searchResults}>
-          <AccessPackageList
-            fromPartyUuid={getCookie('AltinnPartyUuid')}
-            toPartyUuid={toParty.partyUuid}
-            showAllAreas={true}
-            showAllPackages={true}
-            onSelect={onSelection}
-            searchString={debouncedSearchString}
-            onDelegateError={(accessPackage, errorInfo) => {
-              onActionError(accessPackage);
-              setActionError(errorInfo);
-            }}
-            onRevokeError={(accessPackage, errorInfo) => {
-              onActionError(accessPackage);
-              setActionError(errorInfo);
-            }}
-          />
-        </div>
-      </search>
-    </>
+        </search>
+      </>
+    )
   );
 };

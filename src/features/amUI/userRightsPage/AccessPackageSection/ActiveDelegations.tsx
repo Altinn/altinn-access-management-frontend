@@ -9,8 +9,6 @@ import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageL
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import { useActionError } from '@/resources/hooks/useActionError';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);

@@ -33,8 +33,6 @@ export const AccessPackageInfo = ({
   availableActions = [],
 }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { actionError, setActionError } = useDelegationModalContext();
-
   const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
   const { onDelegate } = useAccessPackageActions({ toUuid: toPartyUuid });

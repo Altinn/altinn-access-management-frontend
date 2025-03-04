@@ -5,8 +5,7 @@ import type { Role } from '@/rtk/features/roleApi';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { EditModal } from '../DelegationModal/EditModal';
-import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
+import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -28,7 +27,6 @@ export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModa
   const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
 
   return (
- <DelegationModalProvider>
     <EditModal
       ref={modalRef}
       toPartyUuid={getCookie('AltinnPartyUuid')}
@@ -39,6 +37,5 @@ export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModa
         DelegationAction.REVOKE,
       ]}
     />
-</DelegationModalProvider>
   );
 };

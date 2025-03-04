@@ -3,12 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useRef, useState } from 'react';
-import { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
-import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
-import { useParams } from 'react-router';
-import { useActionError } from '@/resources/hooks/useActionError';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
@@ -27,7 +23,11 @@ export const ReporteeAccessPackageSection = ({
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
 
-  const { data: party } = useGetReporteePartyQuery();
+  useEffect(() => {
+    const handleClose = () => setModalItem(undefined);
+    modalRef.current?.addEventListener('close', handleClose);
+    return () => modalRef.current?.removeEventListener('close', handleClose);
+  }, []);
 
   return (
     <>
@@ -57,17 +57,7 @@ export const ReporteeAccessPackageSection = ({
           accessPackage={modalItem}
           availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
-        <AccessPackageInfoModal
-          modalRef={modalRef}
-          toParty={party}
-          modalItem={modalItem}
-          onClose={() => {
-            setModalItem(undefined);
-            setError(null);
-          }}
-          openWithError={error ?? undefined}
-        />
-      </>
-    )
+      )}
+    </>
   );
 };
