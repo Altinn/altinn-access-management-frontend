@@ -1,4 +1,3 @@
-import React from 'react';
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
