@@ -1,4 +1,11 @@
-import type { AccountMenuItem, MenuItemProps } from '@altinn/altinn-components';
+import { group } from 'console';
+
+import type {
+  AccountMenuItem,
+  MenuGroupProps,
+  MenuItemGroups,
+  MenuItemProps,
+} from '@altinn/altinn-components';
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -14,7 +21,7 @@ import {
 import {
   useGetReporteeListForAuthorizedUserQuery,
   useGetReporteeQuery,
-  // useGetUserInfoQuery,
+  useGetUserInfoQuery,
 } from '@/rtk/features/userInfoApi';
 import { amUIPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
@@ -23,18 +30,34 @@ interface PageLayoutWrapperProps {
   children?: React.ReactNode;
 }
 
+const getAccountType = (type: string): 'company' | 'person' => {
+  return type === 'Organization' ? 'company' : 'person';
+};
+
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-  // const { data: userinfo } = useGetUserInfoQuery();
+  const { data: userinfo } = useGetUserInfoQuery();
 
   const headerLinks: MenuItemProps[] = [
     {
-      groupId: 1,
-      icon: HandshakeIcon,
-      id: '1',
+      id: 'messagebox',
+      title: t('header.inbox'),
       size: 'lg',
-      title: 'Tilgangsstyring',
+      icon: InboxIcon,
+      as: (props) => (
+        <Link
+          to={`${getHostUrl()}ui/messagebox`}
+          {...props}
+        />
+      ),
+    },
+    {
+      icon: HandshakeIcon,
+      id: 'access_management',
+      size: 'lg',
+      title: t('header.access_management'),
+      selected: true,
       as: (props) => (
         <Link
           to={`/${amUIPath.Users}`}
@@ -82,11 +105,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       icon: HandshakeIcon,
       id: '1',
       size: 'lg',
-      title: 'Tilgangsstyring',
+      title: t('header.access_management'),
     },
     {
-      groupId: 2,
-      id: '2',
+      groupId: 3,
+      id: '3',
       title: t('sidebar.users'),
       icon: PersonGroupIcon,
       as: (props) => (
@@ -97,8 +120,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
     },
     {
-      groupId: 3,
-      id: '3',
+      groupId: 4,
+      id: '4',
       title: t('sidebar.reportees'),
       icon: InboxIcon,
       as: (props) => (
@@ -109,8 +132,8 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
     },
     {
-      groupId: 4,
-      id: '4',
+      groupId: 5,
+      id: '5',
       title: t('sidebar.systemaccess'),
       icon: TenancyIcon,
       as: (props) => (
@@ -124,13 +147,31 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const { data: reporteeList } = useGetReporteeListForAuthorizedUserQuery();
 
+  const accountGroups: Record<string, MenuGroupProps> = {
+    a: {
+      title: t('header.account_you'),
+      divider: true,
+    },
+    b: {
+      title: t('header.account_others'),
+      divider: true,
+    },
+  };
+
   const accounts: AccountMenuItem[] =
-    reporteeList?.map((reportee) => ({
-      id: reportee.partyId,
-      name: reportee?.name || '',
-      selected: true,
-      type: reportee?.type === 'Organization' ? 'company' : 'person',
-    })) ?? [];
+    reporteeList
+      ?.map((account) => {
+        const group = account.partyUuid === userinfo?.uuid ? 'a' : 'b';
+        return {
+          id: account.partyId,
+          name: account?.name || '',
+          group: account.partyUuid === userinfo?.uuid ? 'a' : 'b',
+          groupId: group,
+          type: getAccountType(account?.type ?? ''),
+          selected: account.partyUuid === reportee?.partyUuid,
+        };
+      })
+      .sort((a, b) => (a.groupId > b.groupId ? 1 : -1)) ?? [];
 
   return (
     <RootProvider>
@@ -141,7 +182,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
           logo: { href: getAltinnStartPageUrl(), title: 'Altinn' },
           currentAccount: {
             name: reportee?.name || '',
-            type: reportee?.type === 'Organization' ? 'company' : 'person',
+            type: getAccountType(reportee?.type ?? ''),
             id: reportee?.partyUuid || '',
           },
 
@@ -149,6 +190,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             menuLabel: t('header.menu-label'),
             backLabel: t('header.back-label'),
             changeLabel: t('header.change-label'),
+            accountGroups,
             accounts,
             onSelectAccount: (accountId) => {
               (window as Window).open(

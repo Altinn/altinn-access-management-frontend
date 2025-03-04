@@ -76,7 +76,11 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators."
   },
-  "header": {
+  "header": {    
+    "access_management" : "Access Management",
+    "inbox": "Inbox",
+    "account_you": "Deg selv",
+    "account_others": "Andre kontoer",
     "menu-label": "Menu",
     "change-label": "Change",
     "back-label": "Back",

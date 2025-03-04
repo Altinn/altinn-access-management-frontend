@@ -89,7 +89,11 @@
     "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00"
   },
   "header": {
+    "access_management" : "Tilgangsstyring",
+    "inbox": "Innboks",
     "menu-label": "Meny",
+    "account_you": "Deg selv",
+    "account_others": "Andre kontoer",
     "change-label": "Bytt",
     "back-label": "Tilbake",
     "all_services": "Alle tjenester",
