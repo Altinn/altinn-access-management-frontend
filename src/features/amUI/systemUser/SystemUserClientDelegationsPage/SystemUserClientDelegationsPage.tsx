@@ -235,9 +235,17 @@ const CustomerList = ({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
 
-  const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchValue(event.target.value);
+  const onSearchStringChanged = (newSearchString: string): void => {
+    setSearchValue(newSearchString);
     setCurrentPage(1);
+  };
+
+  const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    onSearchStringChanged(event.target.value);
+  };
+
+  const onClearSearch = (): void => {
+    onSearchStringChanged('');
   };
 
   return (
@@ -249,7 +257,7 @@ const CustomerList = ({
           size='sm'
           placeholder='Søk i kunder'
           onChange={onSearch}
-          onClear={() => setSearchValue('')}
+          onClear={onClearSearch}
           hideLabel
           label='Søk i kunder'
         />
