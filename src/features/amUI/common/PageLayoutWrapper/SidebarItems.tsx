@@ -11,7 +11,7 @@ import { Link } from 'react-router';
  *                            and optionally a confetti package if the feature flag is enabled.
  */
 export const SidebarItems = () => {
-  const displayConfettiPackage = window.featureFlags.confettiPackage;
+  const displayConfettiPackage = window.featureFlags?.confettiPackage;
 
   const heading: MenuItemProps = {
     groupId: 1,

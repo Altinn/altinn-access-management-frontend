@@ -13,7 +13,7 @@ interface PageLayoutWrapperProps {
 export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.ReactNode => {
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
-  const sidebarItems = useMemo(() => SidebarItems(), [window.featureFlags.confettiPackage]);
+  const sidebarItems = useMemo(() => SidebarItems(), [window.featureFlags?.confettiPackage]);
   return (
     <RootProvider>
       <Layout
