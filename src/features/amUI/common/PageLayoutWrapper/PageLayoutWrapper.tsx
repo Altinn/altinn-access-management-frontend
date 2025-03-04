@@ -1,11 +1,4 @@
-import { group } from 'console';
-
-import type {
-  AccountMenuItem,
-  MenuGroupProps,
-  MenuItemGroups,
-  MenuItemProps,
-} from '@altinn/altinn-components';
+import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
