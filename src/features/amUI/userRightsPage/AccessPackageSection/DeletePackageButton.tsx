@@ -13,21 +13,18 @@ interface DeletePackageButtonProps {
   toParty: Party;
   fullText?: boolean;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
 export const DeletePackageButton = ({
   accessPackage,
   toParty,
   fullText = false,
+  onClick,
   ...props
 }: DeletePackageButtonProps) => {
   const { t } = useTranslation();
   const { data: representingParty } = useGetReporteePartyQuery();
-  const { onRevoke } = useAccessPackageActions({ toUuid: toParty.partyUuid });
-
-  const onClick = () => {
-    onRevoke(accessPackage);
-  };
 
   return (
     representingParty && (

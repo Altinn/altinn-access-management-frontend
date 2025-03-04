@@ -12,6 +12,7 @@ import { EditModal } from '../DelegationModal/EditModal';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
 import classes from './SingleRightsSection.module.css';
+import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
 
 interface SingleRightItemProps {
   resource: ServiceResource;
@@ -49,11 +50,13 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
           }}
         ></div>
       </li>
-      <EditModal
-        ref={modalRef}
-        toParty={toParty}
-        resource={resource}
-      ></EditModal>
+      <DelegationModalProvider>
+        <EditModal
+          ref={modalRef}
+          toParty={toParty}
+          resource={resource}
+        ></EditModal>
+      </DelegationModalProvider>
     </>
   );
 };

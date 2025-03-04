@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// API for the Frontend to fetch a Request then reject or approve it.
     /// The adminstration ( CRUD API ) of Requests are done by Vendors directly towards the Authentication component.
     /// </summary>
-    [Route("accessmanagement/api/v1/systemuser/clientRequest")]
+    [Route("accessmanagement/api/v1/systemuser/clientrequest")]
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class SystemUserClientRequestController(

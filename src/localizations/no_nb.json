@@ -68,7 +68,7 @@
     "show_less": "Se mindre",
     "technical_error": "Beklager, det har skjedd en teknisk feil. Vennligst ta kontakt med Altinn brukerservice hvis problemet fortsetter.",
     "time_of_error": "Tidspunkt feilen inntraff: {{time}}",
-    "error_status": "Status: {{status}}",
+    "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
     "org_number": "Organisasjonsnummer",
@@ -302,7 +302,10 @@
       "missing_role_message": "Du får ikke delegert hele tjenesten, fordi du mangler noen av rettighetene selv. Daglig leder eller hovedadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} er ikke gitt tillatelse fra {{resourceOwner}} til å delegere hele tjenesten. Ta kontakt med dem dersom du ønsker å endre dette."
     },
-
+    "general_error": {
+      "revoke_heading": "Kunne ikke slette fullmakt",
+      "delegate_heading": "Kunne ikke gi fullmakt"
+    },
     "service_error": {
       "general_heading": "Du kan ikke gi fullmakt til denne tjenesten",
       "technical_error_heading": "Noe gikk galt",

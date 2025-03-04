@@ -16,8 +16,8 @@ export const useRevokeAccessPackage = () => {
       .then(() => {
         onSuccess?.();
       })
-      .catch((status) => {
-        onError?.(status);
+      .catch((response) => {
+        onError?.(response.status);
       });
   };
 

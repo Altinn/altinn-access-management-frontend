@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { ActionError, useActionError } from '@/resources/hooks/useActionError';
 export interface DelegationModalProps {
   children: React.ReactNode;
 }
@@ -22,6 +23,8 @@ interface DelegationModalContextProps {
   onSelection: (resource?: ServiceResource, accessPackage?: AccessPackage) => void;
   expandedAreas: string[];
   toggleExpanded: (value: boolean, id: string) => void;
+  actionError: ActionError | null;
+  setActionError: (error: ActionError | null) => void;
   reset: () => void;
 }
 
@@ -35,6 +38,7 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
   const [packageToView, setPackageToView] = useState<AccessPackage | undefined>(undefined);
   const [infoView, setInfoView] = useState(false);
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
+  const { error: actionError, setError: setActionError } = useActionError();
 
   const toggleExpanded = (value: boolean, id: string) => {
     if (value) {
@@ -55,6 +59,7 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
   };
 
   const reset = () => {
+    setActionError(null);
     setCurrentPage(1);
     setResourceToView(undefined);
     setPackageToView(undefined);
@@ -82,6 +87,8 @@ export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ childr
         setPackageToView,
         expandedAreas,
         toggleExpanded,
+        actionError,
+        setActionError,
         reset,
       }}
     >
