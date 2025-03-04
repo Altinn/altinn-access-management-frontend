@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeListForPartyQuery } from '@/rtk/features/userInfoApi';
@@ -12,6 +11,7 @@ import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { UserList } from '../common/UserList/UserList';
 
 import classes from './ReporteePage.module.css';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
@@ -24,6 +24,9 @@ export const ReporteesPage = () => {
   useDocumentTitle(t('reportees_page.page_title'));
   const { data: userList, isLoading } = useGetReporteeListForPartyQuery();
   const { data: party } = useGetReporteePartyQuery();
+
+  rerouteIfNotConfetti();
+
   return (
     <PageWrapper>
       <PageLayoutWrapper>

@@ -100,6 +100,7 @@
     "accessibility": "Tilgjengelighet"
   },
   "sidebar": {
+    "access_management": "Tilgangsstyring",
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
     "systemaccess": "API- og systemtilganger"
