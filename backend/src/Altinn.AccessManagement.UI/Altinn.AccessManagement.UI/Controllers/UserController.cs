@@ -88,8 +88,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 _logger.LogError(ex, "GetReportee failed to fetch reportee information");
                 return StatusCode(500);
             }
-        }
-
+        } 
 
         /// <summary>
         /// Endpoint for retrieving party if party exists in the authenticated users reporteelist
