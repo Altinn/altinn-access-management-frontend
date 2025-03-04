@@ -73,3 +73,9 @@ Test data - what do we need?
 - Get reports for WCAG requirements
 - Logging - need a separate application insights instance.
 - Product owners - Ragnhild and Espen. Must decide what we can do here and how we prioritize.
+
+#### Running tests locally simulating Github action runs using Act
+- Install Podman (brew install Podman)
+- Set DOCKER_HOST to relevant url, for instance: export DOCKER_HOST="unix:///var/folders/ts/zbt8gs910p74xgcqj9vwxllc0000gn/T/podman/podman-machine-default-api.sock"
+- podman machine start
+- Run Act using: 'act -j playwright-e2e-tests --container-architecture linux/amd64 --pull=false --verbose'
