@@ -83,7 +83,7 @@ export const userInfoApi = createApi({
     }),
     getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
       query: () => {
-        return '/userReporteeList';
+        return '/actorlist';
       },
       keepUnusedDataFor: 300,
     }),

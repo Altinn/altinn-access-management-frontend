@@ -213,6 +213,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Util.GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
+        /// <inheritdoc />
+        public Task<List<AuthorizedParty>> GetReporteeListForUser()
+        {
+            try
+            {
+                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", "reporteeList.json")));
+            }
+            catch (FileNotFoundException)
+            {
+                return Task.FromResult<List<AuthorizedParty>>(null);
+            }
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();
@@ -237,18 +250,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "********" || id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception();
-            }
-        }
-
-        public Task<List<AuthorizedParty>> GetReporteeListForUser()
-        {
-            try
-            {
-                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", "reporteeList.json")));
-            }
-            catch (FileNotFoundException)
-            {
-                return Task.FromResult<List<AuthorizedParty>>(null);
             }
         }
     }

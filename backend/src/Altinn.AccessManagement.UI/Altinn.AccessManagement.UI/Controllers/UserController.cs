@@ -67,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        [Route("userReporteeList")]
+        [Route("actorlist")]
         public async Task<ActionResult<List<AuthorizedParty>>> GetReporteeListForUser()
         {
             try

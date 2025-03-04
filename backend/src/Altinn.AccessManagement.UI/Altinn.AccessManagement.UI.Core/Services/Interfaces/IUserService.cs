@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
 
         /// <summary>
-        /// Gets the reportee list for the authenticated user
+        /// Endpoint for reportees the authenticated user can act on behalf of
         /// </summary>
         /// <returns>List of reportees</returns>
         Task<List<AuthorizedParty>> GetReporteeListForUser();
