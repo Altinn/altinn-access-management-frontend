@@ -26,12 +26,13 @@ export const UserRoles = ({
       {...props}
     >
       {data?.map((assignment) => {
-        const color = assignment?.role?.urn?.includes('brreg:') ? 'company' : 'accent';
+        const isER = assignment?.role?.urn?.includes('brreg:');
         return (
           <Badge
-            color={color}
+            color={isER ? 'info' : 'company'}
             label={assignment.role.name}
             key={assignment.id}
+            theme={isER ? 'base' : 'subtle'}
           />
         );
       })}

@@ -11,10 +11,12 @@ import {
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useActionError } from '@/resources/hooks/useActionError';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
+  const { error: actionError, setError: setActionError } = useActionError();
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
   const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
@@ -35,6 +37,16 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
           packageActions.REVOKE,
           isCurrentUser ? packageActions.REQUEST : packageActions.DELEGATE,
         ]}
+        onDelegateError={(accessPackage, error) => {
+          setActionError(error);
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+        onRevokeError={(accessPackage, error) => {
+          setActionError(error);
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
       />
 
       <AccessPackageInfoModal
@@ -43,7 +55,9 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         modalItem={modalItem}
         onClose={() => {
           setModalItem(undefined);
+          setActionError(null);
         }}
+        openWithError={actionError}
       />
     </>
   );

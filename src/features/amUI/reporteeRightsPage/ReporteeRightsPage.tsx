@@ -18,6 +18,7 @@ import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/use
 import { amUIPath } from '@/routes/paths';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { filterDigdirRole } from '@/resources/utils/roleUtils';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -35,6 +36,8 @@ export const ReporteeRightsPage = () => {
     from: reporteeUuid ?? '',
     to: getCookie('AltinnPartyUuid'),
   });
+
+  rerouteIfNotConfetti();
 
   return (
     <SnackbarProvider>

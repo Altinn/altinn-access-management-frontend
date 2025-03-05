@@ -1,13 +1,20 @@
-﻿using System.Net;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Security.Principal;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
+using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using AltinnCore.Authentication.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -19,6 +26,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     {
         private static readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string dataFolder;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
@@ -29,6 +37,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IHttpContextAccessor httpContextAccessor)
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <inheritdoc />
@@ -213,6 +222,27 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Util.GetMockedHttpResponse(dataPath, resourceFileName);
         }
 
+        /// <inheritdoc />
+        public Task<List<AuthorizedParty>> GetReporteeListForUser()
+        {
+            try
+            {
+                var token = GetTokenFromRequest();
+                var handler = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = handler.ReadJwtToken(token);
+                var partyId = jwtSecurityToken.Payload["urn:altinn:userid"].ToString();
+                if (partyId == "500")
+                {
+                    throw new Exception("Internal Server Error");
+                }
+                return Task.FromResult(Util.GetMockData<List<AuthorizedParty>>(Path.Combine(dataFolder, "ReporteeList", $"{partyId}.json"))); 
+            }
+            catch (FileNotFoundException)
+            {
+                return Task.FromResult<List<AuthorizedParty>>(null);
+            }
+        }
+
         private static string GetMockDataFilenameFromUrn(List<IdValuePair> resourceReference)
         {
             IdValuePair referencePart = resourceReference.First();
@@ -231,6 +261,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+
+        private string GetTokenFromRequest()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null && httpContext.Request.Headers.ContainsKey("Authorization"))
+            {
+                var token = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                return token;
+            }
+            return null;
+        }
+
         // A helper for testing handling of exceptions in client
         private static void ThrowExceptionIfTriggerParty(string id)
         {
@@ -241,3 +283,4 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
     }
 }
+

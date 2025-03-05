@@ -68,15 +68,22 @@
     "show_less": "Se mindre",
     "technical_error": "Beklagar, det har skjedd ein teknisk feil. Ver venleg å ta kontakt med Altinn brukerservice om problemet held fram.",
     "time_of_error": "Tidspunkt feilen oppstod: {{time}}",
-    "error_status": "Status: {{status}}",
+    "error_status": "HttpStatus: {{status}}",
     "ssn": "Fødselsnummer",
     "last_name": "Etternavn",
     "subunit": "Underenhet"
   },
   "header": {
+    "access_management" : "Tilgangsstyring",
+    "inbox": "Innboks",
     "menu-label": "Meny",
     "change-label": "Bytt",
-    "back-label": "Tilbake"
+    "account_you": "Deg selv",
+    "account_others": "Andre kontoer",
+    "back-label": "Tilbake",
+    "all_services": "Alle tjenester",
+    "chat": "Få hjelp på chat",
+    "log_out" : "Logg ut"
   },
   "footer": {
     "about_altinn": "Om Altinn",
@@ -85,6 +92,7 @@
     "accessibility": "Tilgjengeligheit"
   },
   "sidebar": {
+    "access_management": "Tilgangsstyring",
     "users": "Brukere",
     "reportees": "Våre tilganger hos andre",
     "systemaccess": "API- og systemtilganger"
@@ -298,6 +306,10 @@
       "message": "Grunna ein teknisk feil vart ikkje tenesta delegert. Ver venleg og prøv på nytt, eller kontakt Altinn brukarstøtte dersom feilen held fram.",
       "all_failed": "Ingen ny fullmakt er gjeven til {{name}}",
       "some_failed": "Fylgjande tilgangar vart ikkje gjevne: {{actions}}"
+    },
+    "general_error": {
+      "revoke_heading": "Kunne ikkje slette fullmakt",
+      "delegate_heading": "Kunne ikkje gi fullmakt"
     },
     "service_error": {
       "general_heading": "Du kan ikkje gi fullmakt til denne tenesta",

@@ -4,6 +4,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 import type { Role } from '@/rtk/features/roleApi';
 
 import { EditModal } from '../DelegationModal/EditModal';
+import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -21,10 +22,12 @@ export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModa
   }, [onClose, modalRef]);
 
   return (
-    <EditModal
-      ref={modalRef}
-      toParty={toParty}
-      role={role}
-    />
+    <DelegationModalProvider>
+      <EditModal
+        ref={modalRef}
+        toParty={toParty}
+        role={role}
+      />
+    </DelegationModalProvider>
   );
 };
