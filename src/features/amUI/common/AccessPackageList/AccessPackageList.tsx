@@ -7,6 +7,7 @@ import { Paragraph } from '@digdir/designsystemet-react';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { DelegationAction } from '../DelegationModal/EditModal';

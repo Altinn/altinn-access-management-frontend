@@ -1,4 +1,3 @@
-import React from 'react';
 import { ResourceList } from '@altinn/altinn-components';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { PackageIcon } from '@navikt/aksel-icons';

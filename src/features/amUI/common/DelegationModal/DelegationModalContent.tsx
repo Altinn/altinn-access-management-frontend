@@ -4,10 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-
 import { SnackbarProvider } from '../Snackbar';
 
 import classes from './DelegationModal.module.css';
@@ -17,6 +13,10 @@ import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 export interface DelegationModalProps {
   toPartyUuid: string;

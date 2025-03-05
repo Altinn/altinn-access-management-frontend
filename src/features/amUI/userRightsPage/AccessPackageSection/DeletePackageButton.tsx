@@ -27,8 +27,11 @@ export const DeletePackageButton = ({
   const { data: representingParty } = useGetReporteePartyQuery();
   const { onRevoke } = useAccessPackageActions({ toUuid: toParty?.partyUuid || '' });
 
-  const onClick = () => {
+  const handleOnClick = () => {
     onRevoke(accessPackage);
+    if (onClick) {
+      onClick();
+    }
   };
 
   return (
@@ -37,7 +40,7 @@ export const DeletePackageButton = ({
         {...props}
         variant='solid'
         size='md'
-        onClick={onClick}
+        onClick={handleOnClick}
       >
         {fullText ? t('common.delete_poa') : t('common.delete')}
       </Button>
