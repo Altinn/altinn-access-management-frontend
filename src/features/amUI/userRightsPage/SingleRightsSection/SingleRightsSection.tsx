@@ -36,7 +36,7 @@ export const SingleRightsSection = () => {
       <div className={classes.singleRightsSectionContainer}>
         <Heading
           level={2}
-          size='xs'
+          data-size='xs'
           id='single_rights_title'
         >
           {t('single_rights.current_services_title', { count: singleRights?.length })}

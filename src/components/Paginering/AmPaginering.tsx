@@ -9,6 +9,7 @@ export interface AmPaginationProps extends PaginationProps {
   setCurrentPage?: (page: number) => void;
   currentPage: number;
   hideLabels?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const AmPagination = ({
@@ -17,8 +18,8 @@ export const AmPagination = ({
   currentPage,
   setCurrentPage,
   hideLabels = false,
-  size = 'md',
   className,
+  size,
 }: AmPaginationProps) => {
   const { t } = useTranslation();
   const { pages, prevButtonProps, nextButtonProps } = usePagination({
@@ -31,7 +32,7 @@ export const AmPagination = ({
 
   return (
     <Pagination
-      size={size}
+      data-size={size || 'md'}
       className={className}
     >
       <Pagination.List>

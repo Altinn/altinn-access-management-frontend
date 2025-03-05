@@ -42,7 +42,7 @@ export const DeletableListItem = ({
           color='accent'
           onClick={softRestoreCallback}
           icon={isSm}
-          size='md'
+          data-size='md'
           aria-label={`${t('common.undo')} ${t('api_delegation.delete')} ${item.apiName}`}
         >
           <ArrowUndoIcon fontSize={getButtonIconSize(!isSm)} /> {!isSm && t('common.undo')}
@@ -52,7 +52,7 @@ export const DeletableListItem = ({
           variant='tertiary'
           color='danger'
           icon={isSm}
-          size='md'
+          data-size='md'
           onClick={softDeleteCallback}
           aria-label={String(t('api_delegation.delete') + ' ' + item.apiName)}
         >

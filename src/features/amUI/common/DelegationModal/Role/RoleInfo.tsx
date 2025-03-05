@@ -4,13 +4,6 @@ import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
-import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
-import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
-import { DelegationAction } from '../EditModal';
-
-import classes from './RoleInfo.module.css';
-
 import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import {
   useDelegationCheckQuery,
@@ -18,6 +11,13 @@ import {
   type Role,
 } from '@/rtk/features/roleApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+
+import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
+import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
+import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
+import { DelegationAction } from '../EditModal';
+
+import classes from './RoleInfo.module.css';
 
 export interface PackageInfoProps {
   role: Role;
@@ -72,7 +72,7 @@ export const RoleInfo = ({
         <Heading
           level={3}
           title={role?.name}
-          size='sm'
+          data-size='sm'
         >
           {role?.name}
         </Heading>
@@ -84,7 +84,7 @@ export const RoleInfo = ({
             fontSize='1.5rem'
             className={classes.nonDelegableIcon}
           />
-          <Paragraph size='xs'>
+          <Paragraph data-size='xs'>
             {delegationCheckResult?.detailCode === ErrorCode.Unknown ? (
               <Trans i18nKey='role.cant_delegate_generic' />
             ) : (
@@ -107,7 +107,7 @@ export const RoleInfo = ({
             fontSize='1.5rem'
             className={classes.inheritedInfoIcon}
           />
-          <Paragraph size='xs'>
+          <Paragraph data-size='xs'>
             <Trans
               i18nKey='role.inherited_role_message'
               values={{ user_name: toParty?.name || '', role_name: inheritedFromRoleName }}

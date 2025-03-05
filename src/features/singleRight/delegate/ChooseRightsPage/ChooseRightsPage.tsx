@@ -202,7 +202,7 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <>
-        <Popover.Context>
+        <Popover.TriggerContext>
           <Popover.Trigger
             variant='primary'
             color='accent'
@@ -214,7 +214,7 @@ export const ChooseRightsPage = () => {
           <Popover
             onClose={() => setPopoverOpen(false)}
             open={popoverOpen}
-            variant={'info'}
+            color={'info'}
             placement={'top'}
           >
             <Paragraph>
@@ -230,7 +230,7 @@ export const ChooseRightsPage = () => {
               </Button>
             </div>
           </Popover>
-        </Popover.Context>
+        </Popover.TriggerContext>
         <Button
           variant='secondary'
           color='accent'

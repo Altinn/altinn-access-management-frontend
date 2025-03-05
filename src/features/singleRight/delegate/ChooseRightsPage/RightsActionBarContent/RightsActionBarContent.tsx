@@ -101,7 +101,7 @@ export const RightsActionBarContent = ({
         {serviceType === 'AltinnApp' ? (
           <div>
             <Chip.Checkbox
-              size='sm'
+              data-size='sm'
               checked={altinnAppAccess}
               onClick={toggleAllDelegableRights}
             >
@@ -120,7 +120,7 @@ export const RightsActionBarContent = ({
               return (
                 <div key={index}>
                   <Chip.Checkbox
-                    size='sm'
+                    data-size='sm'
                     checked={right.checked}
                     onClick={() => {
                       toggleRight(serviceIdentifier, right.rightKey);
@@ -140,7 +140,7 @@ export const RightsActionBarContent = ({
     <div className={classes.alertContainer}>
       <Alert color='warning'>
         <Heading
-          size={'xs'}
+          data-size={'xs'}
           level={4}
           className={classes.alertHeader}
         >
@@ -162,7 +162,7 @@ export const RightsActionBarContent = ({
 
         <Heading
           className={classes.undelegableRightsHeader}
-          size='2xs'
+          data-size='2xs'
           level={5}
         >
           {t('single_rights.you_cant_delegate_these_rights')}

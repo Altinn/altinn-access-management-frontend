@@ -5,12 +5,12 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 
 import { UsersList } from './UsersList';
 import classes from './UsersList.module.css';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 export const UsersPage = () => {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ export const UsersPage = () => {
       <PageLayoutWrapper>
         <Heading
           level={1}
-          size='md'
+          data-size='md'
           className={classes.usersListHeading}
         >
           {t('users_page.main_page_heading', { name: reportee?.name || '' })}

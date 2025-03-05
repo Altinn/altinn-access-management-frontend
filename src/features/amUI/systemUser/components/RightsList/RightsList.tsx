@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Heading, Modal } from '@digdir/designsystemet-react';
+import { Button, Heading, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { AccessPackageList, ResourceList } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
@@ -103,10 +103,10 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           />
         </div>
       )}
-      <Modal
+      <Dialog
         ref={modalRef}
         onClose={closeModal}
-        backdropClose
+        closedby='any'
       >
         {selectedAccessPackage && selectedResource && (
           <Button
@@ -128,7 +128,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           />
         )}
         {selectedResource && <ResourceDetails resource={selectedResource} />}
-      </Modal>
+      </Dialog>
     </div>
   );
 };

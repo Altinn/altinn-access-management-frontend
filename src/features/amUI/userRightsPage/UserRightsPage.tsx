@@ -10,6 +10,7 @@ import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/use
 import { amUIPath } from '@/routes/paths';
 import { filterDigdirRole } from '@/resources/utils/roleUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -21,7 +22,6 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -79,7 +79,8 @@ export const UserRightsPage = () => {
                 />
               </>
             ) : (
-              <Spinner title='loading' />
+              // TODO: Add proper aria-label for loading
+              <Spinner aria-label='loading' />
             )}
           </PageContainer>
         </PageLayoutWrapper>

@@ -15,7 +15,7 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
       <Alert color='danger'>
         <Heading
           level={3}
-          size='sm'
+          data-size='sm'
         >
           {t('single_rights.missing_recipient_error_title')}
         </Heading>
@@ -30,7 +30,7 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
       >
         <Heading
           level={3}
-          size='sm'
+          data-size='sm'
         >
           {t('single_rights.faulty_recipient_error_title')}
         </Heading>

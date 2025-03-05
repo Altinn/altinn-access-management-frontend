@@ -130,7 +130,7 @@ export const AccessPackageList = ({
                                 message={t('user_rights_page.delete_confirm_message', {
                                   name: pkg.name,
                                 })}
-                                size='sm'
+                                data-size='sm'
                                 onConfirm={() => onRevoke(pkg)}
                               />
                             ) : (

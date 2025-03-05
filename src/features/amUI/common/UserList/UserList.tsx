@@ -25,7 +25,7 @@ export const UserList = ({ userList, searchString, isLoading }: UserListProps) =
     <>
       <Paragraph
         role='alert'
-        size='lg'
+        data-size='lg'
       >
         {users.length === 0 ? t('users_page.user_no_search_result') : ''}
       </Paragraph>

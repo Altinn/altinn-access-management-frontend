@@ -9,17 +9,17 @@ import {
   PackageIcon,
 } from '@navikt/aksel-icons';
 
-import { DelegationAction } from '../EditModal';
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './AccessPackageInfo.module.css';
-
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import type { ActionError } from '@/resources/hooks/useActionError';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { DelegationAction } from '../EditModal';
+
+import classes from './AccessPackageInfo.module.css';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -68,7 +68,7 @@ export const AccessPackageInfo = ({
           className={classes.headerIcon}
         />
         <Heading
-          size='md'
+          data-size='md'
           level={1}
         >
           {accessPackage?.name}
@@ -77,12 +77,14 @@ export const AccessPackageInfo = ({
       {!!actionError && (
         <Alert
           color='danger'
-          size='sm'
+          data-size='sm'
         >
           {userHasPackage ? (
-            <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+            <Heading data-size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
           ) : (
-            <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
+            <Heading data-size='2xs'>
+              {t('delegation_modal.general_error.delegate_heading')}
+            </Heading>
           )}
           <TechnicalErrorParagraphs
             size='xs'
@@ -98,7 +100,7 @@ export const AccessPackageInfo = ({
             fontSize='1.5rem'
             className={classes.inheritedInfoIcon}
           />
-          <Paragraph size='xs'>
+          <Paragraph data-size='xs'>
             <Trans
               i18nKey='delegation_modal.inherited_role_org_message'
               values={{ user_name: toParty?.name, org_name: accessPackage.inheritedFrom?.name }}
@@ -109,7 +111,7 @@ export const AccessPackageInfo = ({
       )}
       <div className={classes.services}>
         <Heading
-          size='xs'
+          data-size='xs'
           level={2}
         >
           {t('delegation_modal.package_services', {

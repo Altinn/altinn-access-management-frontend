@@ -69,23 +69,25 @@ export const UsersList = () => {
       />
       <Heading
         level={2}
-        size='sm'
+        data-size='sm'
         id='user_list_heading_id'
         className={classes.usersListHeading}
       >
         {t('users_page.user_list_heading')}
       </Heading>
       <div className={classes.searchAndAddUser}>
-        <Search
-          className={classes.searchBar}
-          placeholder={t('users_page.user_search_placeholder')}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
-          onClear={() => {
-            setSearchString('');
-          }}
-          hideLabel
-          label={t('users_page.user_search_placeholder')}
-        />
+        <Search className={classes.searchBar}>
+          <Search.Input
+            aria-label={t('users_page.user_search_placeholder')}
+            placeholder={t('users_page.user_search_placeholder')}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
+          />
+          <Search.Clear
+            onClick={() => {
+              setSearchString('');
+            }}
+          />
+        </Search>
         <NewUserButton />
       </div>
       <UserList

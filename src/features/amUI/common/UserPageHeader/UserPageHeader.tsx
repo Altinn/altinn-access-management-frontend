@@ -24,7 +24,7 @@ export const UserPageHeader = ({ userName, userType, subHeading, roles }: UserPa
       />
       <Heading
         level={1}
-        size='sm'
+        data-size='sm'
         className={classes.heading}
       >
         {userName}
@@ -32,7 +32,7 @@ export const UserPageHeader = ({ userName, userType, subHeading, roles }: UserPa
       {subHeading && (
         <Paragraph
           className={classes.subheading}
-          size='xs'
+          data-size='xs'
         >
           {subHeading}
         </Paragraph>

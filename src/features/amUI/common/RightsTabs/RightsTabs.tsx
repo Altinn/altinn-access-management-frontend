@@ -25,14 +25,14 @@ export const RightsTabs = ({
   return (
     <Tabs
       defaultValue='packages'
-      size='sm'
+      data-size='sm'
       value={chosenTab}
       onChange={setChosenTab}
     >
       <Tabs.List>
         <Tabs.Tab value='packages'>
           <Badge
-            size='sm'
+            data-size='sm'
             color={chosenTab === 'packages' ? 'accent' : 'neutral'}
             count={tabBadge?.accessPackages ?? 0}
             maxCount={99}
@@ -41,7 +41,7 @@ export const RightsTabs = ({
         </Tabs.Tab>
         <Tabs.Tab value='singleRights'>
           <Badge
-            size='sm'
+            data-size='sm'
             color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
             count={tabBadge?.services ?? 0}
             maxCount={99}
@@ -50,7 +50,7 @@ export const RightsTabs = ({
         </Tabs.Tab>
         <Tabs.Tab value='roleAssignments'>
           <Badge
-            size='sm'
+            data-size='sm'
             color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
             count={tabBadge?.roles ?? 0}
             maxCount={99}

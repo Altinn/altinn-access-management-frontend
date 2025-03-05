@@ -1,17 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
+
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetReporteeListForPartyQuery } from '@/rtk/features/userInfoApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { debounce } from '@/resources/utils';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { UserList } from '../common/UserList/UserList';
 
 import classes from './ReporteePage.module.css';
-import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
@@ -33,22 +34,26 @@ export const ReporteesPage = () => {
         <div className={classes.reporteeListHeading}>
           <Heading
             level={1}
-            size='md'
+            data-size='md'
           >
             {t('reportees_page.main_page_heading', { name: party?.name || '' })}
           </Heading>
         </div>
         <div className={classes.search}>
-          <Search
-            className={classes.searchBar}
-            placeholder={t('users_page.user_search_placeholder')}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onSearch(event.target.value)}
-            onClear={() => {
-              setSearchString('');
-            }}
-            hideLabel
-            label={t('users_page.user_search_placeholder')}
-          />
+          <Search className={classes.searchBar}>
+            <Search.Input
+              aria-label={t('users_page.user_search_placeholder')}
+              placeholder={t('users_page.user_search_placeholder')}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                onSearch(event.target.value)
+              }
+            />
+            <Search.Clear
+              onClick={() => {
+                setSearchString('');
+              }}
+            />
+          </Search>
         </div>
         <UserList
           userList={userList || []}

@@ -42,11 +42,11 @@ export const NavigationSection = ({
       >
         {t('common.proceed')}
       </Button>
-      <Popover.Context>
+      <Popover.TriggerContext>
         <Popover.Trigger
           variant='tertiary'
           color={cancelButtonProps.showWarning ? 'danger' : 'accent'}
-          size='md'
+          data-size='md'
           onClick={
             cancelButtonProps.showWarning
               ? () => setPopoverOpen(!popoverOpen)
@@ -78,7 +78,7 @@ export const NavigationSection = ({
             </Button>
           </div>
         </Popover>
-      </Popover.Context>
+      </Popover.TriggerContext>
     </div>
   );
 };

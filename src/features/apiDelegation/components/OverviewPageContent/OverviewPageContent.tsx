@@ -119,7 +119,7 @@ export const OverviewPageContent = ({
     } else if (loading) {
       return (
         <div className={classes.spinnerContainer}>
-          <Spinner title={t('common.loading')} />
+          <Spinner aria-label={t('common.loading')} />
         </div>
       );
     } else if (overviewOrgs && overviewOrgs.length < 1) {
@@ -174,7 +174,7 @@ export const OverviewPageContent = ({
             onClick={() =>
               navigate(`/${ApiDelegationPath.OfferedApiDelegations}/${ApiDelegationPath.ChooseApi}`)
             }
-            size='md'
+            data-size='md'
           >
             <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_api')}
           </Button>
@@ -182,11 +182,11 @@ export const OverviewPageContent = ({
       )}
       <Alert
         color='info'
-        size='md'
+        data-size='md'
       >
         <Heading
           level={2}
-          size='sm'
+          data-size='sm'
           className={classes.alertHeading}
         >
           {t('api_delegation.card_title')}
@@ -210,7 +210,7 @@ export const OverviewPageContent = ({
         >
           <Heading
             level={3}
-            size='sm'
+            data-size='sm'
           >
             {t('api_delegation.revoke_delegation_failed')}
           </Heading>
@@ -229,7 +229,7 @@ export const OverviewPageContent = ({
           <>
             <Heading
               level={3}
-              size={isSm ? 'sm' : 'md'}
+              data-size={isSm ? 'sm' : 'md'}
               className={classes.apiSubheading}
             >
               {delegationType === DelegationType.Offered
@@ -244,7 +244,7 @@ export const OverviewPageContent = ({
                   softRestoreAll();
                   setIsEditable(!isEditable);
                 }}
-                size='md'
+                data-size='md'
               >
                 {!isEditable ? (
                   <>

@@ -3,19 +3,19 @@ import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 
-import { useSnackbar } from '../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
-
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
+
+import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
+import { useSnackbar } from '../Snackbar';
 
 interface DelegateRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   roleId: string;
   roleName: string;
   toParty?: Party;
   fullText?: boolean;
-  icon: boolean;
+  icon?: boolean;
 }
 
 export const DelegateRoleButton = ({

@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { Button, Modal } from '@digdir/designsystemet-react';
+import { Button, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
+
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { SnackbarProvider } from '../Snackbar';
 
@@ -14,10 +18,6 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
-
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 export interface DelegationModalProps {
   toPartyUuid: string;
@@ -122,17 +122,17 @@ export const DelegationModalContent = ({
   }
 
   return (
-    <Modal.Context>
-      <Modal.Trigger
-        size='sm'
+    <Dialog.TriggerContext>
+      <Dialog.Trigger
+        data-size='sm'
         variant='primary'
         className={classes.triggerButton}
       >
         {triggerButtonText} <PlusIcon />
-      </Modal.Trigger>
-      <Modal
+      </Dialog.Trigger>
+      <Dialog
         className={classes.modalDialog}
-        backdropClose
+        closedby='any'
         closeButton={t('common.close')}
         onClose={reset}
         ref={modalRef}
@@ -154,7 +154,7 @@ export const DelegationModalContent = ({
             <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
           </>
         </SnackbarProvider>
-      </Modal>
-    </Modal.Context>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

@@ -23,9 +23,9 @@
   "dependencies": {
     "@altinn/altinn-components": "^0.18.3",
     "@cypress/react18": "^2.0.0",
-    "@digdir/designsystemet-css": "1.0.0-next.35",
-    "@digdir/designsystemet-react": "1.0.0-next.35",
-    "@digdir/designsystemet-theme": "1.0.0-next.35",
+    "@digdir/designsystemet-css": "1.0.1",
+    "@digdir/designsystemet-react": "1.0.1",
+    "@digdir/designsystemet-theme": "1.0.1",
     "@navikt/aksel-icons": "^7.12.2",
     "@reduxjs/toolkit": "^2.2.5",
     "@tanstack/react-query": "^5.0.0",

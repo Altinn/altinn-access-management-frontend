@@ -16,24 +16,24 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   let errorText;
 
   if (error && error.status === '404' && userType === 'person') {
-    errorText = <Paragraph size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
+    errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
   } else if (error && error.status === '400' && userType === 'org') {
-    errorText = <Paragraph size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
+    errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
   } else if (error && error.status === '429') {
-    errorText = <Paragraph size='sm'>{t('new_user_modal.too_many_requests_error')}</Paragraph>;
+    errorText = <Paragraph data-size='sm'>{t('new_user_modal.too_many_requests_error')}</Paragraph>;
   } else if (error) {
     errorText = (
       <TechnicalErrorParagraphs
         status={error.status}
         time={error.time}
-        size='sm'
+        data-size='sm'
       />
     );
   }
 
   return (
     <Alert
-      size='sm'
+      data-size='sm'
       color='danger'
     >
       {errorText}

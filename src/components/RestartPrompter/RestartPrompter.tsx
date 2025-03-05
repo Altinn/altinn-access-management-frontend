@@ -39,7 +39,7 @@ export const RestartPrompter = ({
       className={cn({ [classes.spacing]: spacingBottom })}
     >
       <Heading
-        size='sm'
+        data-size='sm'
         level={2}
         className={classes.title}
       >
@@ -51,7 +51,7 @@ export const RestartPrompter = ({
           <Button
             variant='primary'
             color='accent'
-            size='md'
+            data-size='md'
             onClick={() => {
               navigate(restartPath);
             }}

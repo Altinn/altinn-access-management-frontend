@@ -29,7 +29,7 @@ export const ChooseOrgInfoPanel = ({
         role='alert'
       >
         <Heading
-          size={'xs'}
+          data-size={'xs'}
           level={2}
           className={classes.alertHeading}
         >
@@ -42,16 +42,16 @@ export const ChooseOrgInfoPanel = ({
     return (
       <Alert
         color='danger'
-        size='lg'
+        data-size='lg'
       >
         <Heading
           level={2}
-          size='sm'
+          data-size='sm'
           className={classes.alertHeading}
         >
           {t('api_delegation.buisness_search_notfound_title')}
         </Heading>
-        <Paragraph size='sm'>
+        <Paragraph data-size='sm'>
           {t('api_delegation.buisness_search_notfound_content')}{' '}
           <Link
             className={classes.link}
@@ -68,16 +68,16 @@ export const ChooseOrgInfoPanel = ({
     return (
       <Alert
         color='info'
-        size='lg'
+        data-size='lg'
       >
         <Heading
           level={2}
-          size='sm'
+          data-size='sm'
           className={classes.alertHeading}
         >
           {String(t('api_delegation.buisness_search_info_title'))}
         </Heading>
-        <Paragraph size='sm'>{t('api_delegation.buisness_search_info_content')}</Paragraph>
+        <Paragraph data-size='sm'>{t('api_delegation.buisness_search_info_content')}</Paragraph>
       </Alert>
     );
   }
