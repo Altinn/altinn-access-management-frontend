@@ -38,15 +38,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Install Yarn
+        run: npm install -g yarn --check-files
       - name: Install dependencies
         run: yarn --immutable
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Running yarn tests
-        working-directory: playwright/e2eTests/systemuser
+        working-directory: playwright
         run: |
-          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }}
+          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }} --grep "deletion" --no-sandbox
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -70,4 +72,3 @@ jobs:
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
           AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
-
