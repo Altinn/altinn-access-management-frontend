@@ -3,18 +3,19 @@ import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 
+import { useSnackbar } from '../Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
+
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
 
-import { useSnackbar } from '../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
-
-interface DelegateRoleButtonProps extends ButtonProps {
+interface DelegateRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   roleId: string;
   roleName: string;
   toParty?: Party;
   fullText?: boolean;
+  icon: boolean;
 }
 
 export const DelegateRoleButton = ({
@@ -23,6 +24,7 @@ export const DelegateRoleButton = ({
   toParty,
   fullText = false,
   variant = 'text',
+  icon = true,
   ...props
 }: DelegateRoleButtonProps) => {
   const { t } = useTranslation();
@@ -70,7 +72,7 @@ export const DelegateRoleButton = ({
 
   return (
     <Button
-      icon={PlusCircleIcon}
+      icon={icon ? PlusCircleIcon : undefined}
       variant={variant}
       onClick={onClick}
       disabled={!canDelegate || props.disabled}

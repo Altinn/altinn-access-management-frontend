@@ -4,20 +4,20 @@ import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import {
-  useDelegationCheckQuery,
-  useGetRolesForUserQuery,
-  type Role,
-} from '@/rtk/features/roleApi';
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
 import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
 import { DelegationAction } from '../EditModal';
 
 import classes from './RoleInfo.module.css';
+
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
+import {
+  useDelegationCheckQuery,
+  useGetRolesForUserQuery,
+  type Role,
+} from '@/rtk/features/roleApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 export interface PackageInfoProps {
   role: Role;
@@ -121,7 +121,7 @@ export const RoleInfo = ({
           <RequestRoleButton
             variant='solid'
             size='md'
-            icon={undefined}
+            icon={false}
           />
         )}
         {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
@@ -133,7 +133,7 @@ export const RoleInfo = ({
             disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
             variant='solid'
             size='md'
-            icon={undefined}
+            icon={false}
           />
         )}
         {userHasRole && availableActions.includes(DelegationAction.REVOKE) && (
@@ -145,7 +145,7 @@ export const RoleInfo = ({
             disabled={isFetching || userHasInheritedRole}
             variant='solid'
             size='md'
-            icon={undefined}
+            icon={false}
           />
         )}
       </div>

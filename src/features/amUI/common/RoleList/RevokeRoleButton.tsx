@@ -10,11 +10,12 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useRevokeMutation } from '@/rtk/features/roleApi';
 
-interface RevokeRoleButtonProps extends ButtonProps {
+interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   assignmentId: string;
   roleName: string;
   toParty?: Party;
   fullText?: boolean;
+  icon?: boolean;
 }
 
 export const RevokeRoleButton = ({
@@ -24,6 +25,7 @@ export const RevokeRoleButton = ({
   fullText = false,
   disabled,
   variant = 'text',
+  icon = true,
   ...props
 }: RevokeRoleButtonProps) => {
   const { t } = useTranslation();
@@ -64,7 +66,7 @@ export const RevokeRoleButton = ({
       variant={variant}
       onClick={onClick}
       disabled={disabled || isLoading || !representingParty}
-      icon={MinusCircleIcon}
+      icon={icon ? MinusCircleIcon : undefined}
       {...props}
     >
       {fullText ? t('common.delete_poa') : t('common.delete_poa')}
