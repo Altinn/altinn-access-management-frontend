@@ -68,8 +68,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       as: (props) => (
         <Link
           to='https://info.altinn.no/skjemaoversikt'
-          target='__blank'
-          rel='noopener noreferrer'
           {...props}
         />
       ),
@@ -83,8 +81,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       as: (props) => (
         <Link
           to='https://info.altinn.no/hjelp/'
-          target='__blank'
-          rel='noopener noreferrer'
           {...props}
         />
       ),
