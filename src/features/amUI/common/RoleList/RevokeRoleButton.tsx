@@ -3,12 +3,12 @@ import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
+import { useSnackbar } from '../Snackbar';
+import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
+
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { useRevokeMutation } from '@/rtk/features/roleApi';
-
-import { useSnackbar } from '../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
 
 interface RevokeRoleButtonProps extends ButtonProps {
   assignmentId: string;
@@ -67,7 +67,7 @@ export const RevokeRoleButton = ({
       icon={MinusCircleIcon}
       {...props}
     >
-      {fullText ? t('common.delete_poa') : t('common.delete')}
+      {fullText ? t('common.delete_poa') : t('common.delete_poa')}
     </Button>
   );
 };
