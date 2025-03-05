@@ -14,9 +14,9 @@ export class loginWithUser {
         await this.page.click("'Autentiser'");
 
         //Verify you're actually logged in
-        await this.page
-          .getByRole('heading', { level: 1, name: 'Velg aktør' })
-          .waitFor({ timeout: 3000 });
+        await expect(
+          this.page.getByRole('heading', { level: 1, name: 'Velg aktør' }),
+        ).toBeVisible();
 
         return; // Exit function if login is successful
       } catch (error) {
