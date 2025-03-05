@@ -58,12 +58,22 @@ export const DelegationModalContent = ({
 
   const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
-  /* handle closing */
+  const onClosing = () => {
+    reset();
+  };
+
   useEffect(() => {
-    const handleClose = () => reset();
-    modalRef.current?.addEventListener('close', handleClose);
-    return () => modalRef.current?.removeEventListener('close', handleClose);
-  }, [reset]);
+    const handleClose = () => onClosing();
+
+    if (modalRef && 'current' in modalRef && modalRef.current) {
+      modalRef.current.addEventListener('close', handleClose);
+    }
+    return () => {
+      if (modalRef && 'current' in modalRef && modalRef.current) {
+        modalRef.current.removeEventListener('close', handleClose);
+      }
+    };
+  }, [onClosing, modalRef]);
 
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;

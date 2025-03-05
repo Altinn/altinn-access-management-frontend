@@ -46,7 +46,12 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
     },
     ref,
   ) => {
-    const { setActionError, actionError, reset } = useDelegationModalContext();
+    const { setActionError, reset } = useDelegationModalContext();
+
+    const onClosing = () => {
+      onClose?.();
+      reset();
+    };
 
     useEffect(() => {
       if (openWithError) {
@@ -56,10 +61,19 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
       }
     }, [openWithError, setActionError]);
 
-    const onClosing = () => {
-      onClose?.();
-      reset();
-    };
+    /* handle closing */
+    useEffect(() => {
+      const handleClose = () => onClosing?.();
+
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.addEventListener('close', handleClose);
+      }
+      return () => {
+        if (ref && 'current' in ref && ref.current) {
+          ref.current.removeEventListener('close', handleClose);
+        }
+      };
+    }, [onClosing, ref]);
 
     return (
       <Modal.Context>

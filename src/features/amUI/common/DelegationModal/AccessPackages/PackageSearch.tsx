@@ -3,6 +3,7 @@ import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
+import { DelegationAction } from '../EditModal';
 
 import classes from './PackageSearch.module.css';
 
@@ -11,6 +12,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
@@ -29,6 +31,10 @@ export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSe
     setDebouncedSearchString(searchString);
     setCurrentPage(1);
   }, 300);
+
+  const { data: currentUser } = useGetUserInfoQuery();
+
+  const isCurrentUser = currentUser?.uuid === toParty?.partyUuid;
 
   return (
     toParty && (
@@ -71,6 +77,10 @@ export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSe
               showAllPackages={true}
               onSelect={onSelection}
               searchString={debouncedSearchString}
+              availableActions={[
+                DelegationAction.REVOKE,
+                isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+              ]}
               onDelegateError={(accessPackage, errorInfo) => {
                 onActionError(accessPackage);
                 setActionError(errorInfo);
