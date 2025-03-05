@@ -13,6 +13,7 @@ import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+import type { DelegationAction } from './EditModal';
 
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -22,12 +23,14 @@ export interface DelegationModalProps {
   toPartyUuid: string;
   fromPartyUuid: string;
   delegationType: DelegationType;
+  availableActions?: DelegationAction[];
 }
 
 export const DelegationModalContent = ({
   toPartyUuid,
   fromPartyUuid,
   delegationType,
+  availableActions,
 }: DelegationModalProps) => {
   const { t } = useTranslation();
   const {
@@ -88,6 +91,7 @@ export const DelegationModalContent = ({
           onActionError={(accessPackage: AccessPackage) => {
             onPackageSelection(accessPackage, true);
           }}
+          availableActions={availableActions}
         />
       );
       infoViewContent = packageToView && (
@@ -95,6 +99,7 @@ export const DelegationModalContent = ({
           accessPackage={packageToView}
           toPartyUuid={toPartyUuid}
           fromPartyUuid={fromPartyUuid}
+          availableActions={availableActions}
         />
       );
       triggerButtonText = t('access_packages.give_new_button');
