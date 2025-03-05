@@ -55,8 +55,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       as: (props) => (
         <Link
           to={`/${amUIPath.Users}`}
-          target='__blank'
-          rel='noopener noreferrer'
           {...props}
         />
       ),
