@@ -38,8 +38,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      - name: Install Yarn
-        run: npm install -g yarn --check-files
       - name: Install dependencies
         run: yarn --immutable
 
@@ -48,7 +46,7 @@ jobs:
       - name: Running yarn tests
         working-directory: playwright
         run: |
-          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }} --grep "deletion" --no-sandbox
+          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
