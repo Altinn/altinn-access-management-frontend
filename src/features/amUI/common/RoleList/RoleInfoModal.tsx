@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 
-import type { Role } from '@/rtk/features/roleApi';
-
 import type { DelegationAction } from '../DelegationModal/EditModal';
 import { EditModal } from '../DelegationModal/EditModal';
+import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
+
+import type { Role } from '@/rtk/features/roleApi';
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -30,12 +31,14 @@ export const RoleInfoModal = ({
   }, [onClose, modalRef]);
 
   return (
-    <EditModal
-      ref={modalRef}
-      toPartyUuid={toPartyUuid}
-      fromPartyUuid={fromPartyUuid}
-      role={role}
-      availableActions={availableActions}
-    />
+    <DelegationModalProvider>
+      <EditModal
+        ref={modalRef}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
+        role={role}
+        availableActions={availableActions}
+      />
+    </DelegationModalProvider>
   );
 };

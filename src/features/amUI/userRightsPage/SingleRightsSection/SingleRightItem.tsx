@@ -10,10 +10,10 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { EditModal } from '../../common/DelegationModal/EditModal';
+import { DelegationModalProvider } from '../../common/DelegationModal/DelegationModalContext';
 
 import { DeleteResourceButton } from './DeleteResourceButton';
 import classes from './SingleRightsSection.module.css';
-import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
 
 interface SingleRightItemProps {
   resource: ServiceResource;
@@ -43,20 +43,22 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
             </div>
           }
         />
-        <div
+        {/* <div
           className={classes.action}
           onClick={(event) => {
             event.stopPropagation();
             event.preventDefault();
           }}
-        ></div>
+        ></div> */}
       </li>
-      <EditModal
-        ref={modalRef}
-        toPartyUuid={toParty.partyUuid}
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
-        resource={resource}
-      />
+      <DelegationModalProvider>
+        <EditModal
+          ref={modalRef}
+          toPartyUuid={toParty.partyUuid}
+          fromPartyUuid={getCookie('AltinnPartyUuid')}
+          resource={resource}
+        />
+      </DelegationModalProvider>
     </>
   );
 };

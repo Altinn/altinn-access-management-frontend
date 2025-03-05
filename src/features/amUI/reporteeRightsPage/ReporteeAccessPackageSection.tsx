@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
@@ -22,6 +23,7 @@ export const ReporteeAccessPackageSection = ({
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
+  const { error, setError } = useActionError();
 
   useEffect(() => {
     const handleClose = () => setModalItem(undefined);
@@ -48,6 +50,16 @@ export const ReporteeAccessPackageSection = ({
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
+        onDelegateError={(accessPackage, errorInfo) => {
+          setError(errorInfo);
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
+        onRevokeError={(accessPackage, errorInfo) => {
+          setError(errorInfo);
+          setModalItem(accessPackage);
+          modalRef.current?.showModal();
+        }}
       />
       {party && (
         <EditModal
@@ -56,6 +68,11 @@ export const ReporteeAccessPackageSection = ({
           fromPartyUuid={party.partyUuid}
           accessPackage={modalItem}
           availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+          onClose={() => {
+            setModalItem(undefined);
+            setError(null);
+          }}
+          openWithError={error ?? undefined}
         />
       )}
     </>

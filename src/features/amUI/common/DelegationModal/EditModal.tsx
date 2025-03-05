@@ -2,16 +2,18 @@ import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
 import { forwardRef, useEffect } from 'react';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Role } from '@/rtk/features/roleApi';
-
 import { SnackbarProvider } from '../Snackbar';
 
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
+import { useDelegationModalContext } from './DelegationModalContext';
+
+import type { Role } from '@/rtk/features/roleApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -26,10 +28,39 @@ export interface EditModalProps {
   toPartyUuid: string;
   fromPartyUuid: string;
   availableActions?: DelegationAction[];
+  openWithError?: ActionError | null;
+  onClose?: () => void;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toPartyUuid, fromPartyUuid, resource, accessPackage, role, availableActions }, ref) => {
+  (
+    {
+      toPartyUuid,
+      fromPartyUuid,
+      resource,
+      accessPackage,
+      role,
+      availableActions,
+      openWithError,
+      onClose,
+    },
+    ref,
+  ) => {
+    const { setActionError, actionError, reset } = useDelegationModalContext();
+
+    useEffect(() => {
+      if (openWithError) {
+        setActionError(openWithError);
+      } else {
+        setActionError(null);
+      }
+    }, [openWithError, setActionError]);
+
+    const onClosing = () => {
+      onClose?.();
+      reset();
+    };
+
     return (
       <Modal.Context>
         <Modal

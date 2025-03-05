@@ -9,15 +9,18 @@ import {
   PackageIcon,
 } from '@navikt/aksel-icons';
 
+import { DelegationAction } from '../EditModal';
+import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './AccessPackageInfo.module.css';
+
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-
-import { DelegationAction } from '../EditModal';
-import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
-
-import classes from './AccessPackageInfo.module.css';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -35,7 +38,12 @@ export const AccessPackageInfo = ({
   const { t } = useTranslation();
   const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
-  const { onDelegate } = useAccessPackageActions({ toUuid: toPartyUuid });
+  const { onDelegate, onRevoke } = useAccessPackageActions({
+    toUuid: toPartyUuid,
+    onDelegateError: (_, error: ActionError) => setActionError(error),
+    onRevokeError: (_, error: ActionError) => setActionError(error),
+  });
+  const { actionError, setActionError } = useDelegationModalContext();
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
     to: toPartyUuid,
@@ -68,23 +76,21 @@ export const AccessPackageInfo = ({
         </Heading>
       </div>
       {!!actionError && (
-        <>
-          <Alert
-            color='danger'
-            size='sm'
-          >
-            {userHasPackage ? (
-              <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
-            ) : (
-              <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
-            )}
-            <TechnicalErrorParagraphs
-              size='xs'
-              status={actionError.httpStatus}
-              time={actionError.timestamp}
-            />
-          </Alert>
-        </>
+        <Alert
+          color='danger'
+          size='sm'
+        >
+          {userHasPackage ? (
+            <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+          ) : (
+            <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
+          )}
+          <TechnicalErrorParagraphs
+            size='xs'
+            status={actionError.httpStatus}
+            time={actionError.timestamp}
+          />
+        </Alert>
       )}
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
       {accessPackage?.inherited && (

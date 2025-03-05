@@ -46,7 +46,7 @@ export const DelegationModalContent = ({
     setResourceToView(resource);
   };
 
-  const onPackageSelection = (accessPackage?: AccessPackage, error: boolean = false) => {
+  const onPackageSelection = (accessPackage?: AccessPackage, error = false) => {
     if (!error) {
       setActionError(null);
     }
@@ -55,17 +55,15 @@ export const DelegationModalContent = ({
   };
 
   const modalRef = useRef<HTMLDialogElement>(null);
-  const onClose = () => {
-    reset();
-  };
+
   const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
   /* handle closing */
   useEffect(() => {
-    const handleClose = () => onClose();
+    const handleClose = () => reset();
     modalRef.current?.addEventListener('close', handleClose);
     return () => modalRef.current?.removeEventListener('close', handleClose);
-  }, [onClose]);
+  }, [reset]);
 
   let searchViewContent: JSX.Element | undefined;
   let infoViewContent: JSX.Element | undefined;
@@ -121,7 +119,7 @@ export const DelegationModalContent = ({
         className={classes.modalDialog}
         backdropClose
         closeButton={t('common.close')}
-        onClose={onClose}
+        onClose={reset}
         ref={modalRef}
       >
         <SnackbarProvider>

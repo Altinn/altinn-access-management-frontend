@@ -2,26 +2,28 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './PackageSearch.module.css';
+
 import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './PackageSearch.module.css';
-
 export interface PackageSearchProps {
   onSelection: (pack: AccessPackage) => void;
+  onActionError: (accessPackage: AccessPackage) => void;
   toParty?: Party;
 }
 
-export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
+export const PackageSearch = ({ toParty, onSelection, onActionError }: PackageSearchProps) => {
   const { t } = useTranslation();
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
 
-  const { searchString, setSearchString, setCurrentPage } = useDelegationModalContext();
+  const { searchString, setSearchString, setCurrentPage, setActionError } =
+    useDelegationModalContext();
 
   const debouncedSearch = debounce((searchString: string) => {
     setDebouncedSearchString(searchString);
@@ -69,6 +71,14 @@ export const PackageSearch = ({ toParty, onSelection }: PackageSearchProps) => {
               showAllPackages={true}
               onSelect={onSelection}
               searchString={debouncedSearchString}
+              onDelegateError={(accessPackage, errorInfo) => {
+                onActionError(accessPackage);
+                setActionError(errorInfo);
+              }}
+              onRevokeError={(accessPackage, errorInfo) => {
+                onActionError(accessPackage);
+                setActionError(errorInfo);
+              }}
             />
           </div>
         </search>
