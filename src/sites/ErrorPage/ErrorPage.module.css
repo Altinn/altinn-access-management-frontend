@@ -26,6 +26,14 @@
   padding-bottom: 40px;
 }
 
+.errorContent {
+  padding-top: 1rem;
+}
+
+.header {
+  padding-bottom: 0.5rem;
+}
+
 @media only screen and (max-width: 576px) {
   .rightContainer {
     display: none;

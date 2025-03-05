@@ -222,20 +222,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 };
 
 const footerLinks = [
-  {
-    href: 'https://info.altinn.no/om-altinn/',
-    resourceId: 'footer.about_altinn',
-  },
+  { href: 'https://info.altinn.no/om-altinn/', resourceId: 'footer.about_altinn' },
   {
     href: 'https://info.altinn.no/om-altinn/driftsmeldinger/',
     resourceId: 'footer.service_messages',
   },
-  {
-    href: 'https://info.altinn.no/om-altinn/personvern/',
-    resourceId: 'footer.privacy_policy',
-  },
-  {
-    href: 'https://info.altinn.no/om-altinn/tilgjengelighet/',
-    resourceId: 'footer.accessibility',
-  },
+  { href: 'https://info.altinn.no/om-altinn/personvern/', resourceId: 'footer.privacy_policy' },
+  { href: 'https://info.altinn.no/om-altinn/tilgjengelighet/', resourceId: 'footer.accessibility' },
 ];
