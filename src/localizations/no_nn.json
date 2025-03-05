@@ -74,9 +74,16 @@
     "subunit": "Underenhet"
   },
   "header": {
+    "access_management" : "Tilgangsstyring",
+    "inbox": "Innboks",
     "menu-label": "Meny",
     "change-label": "Bytt",
-    "back-label": "Tilbake"
+    "account_you": "Deg selv",
+    "account_others": "Andre kontoer",
+    "back-label": "Tilbake",
+    "all_services": "Alle tjenester",
+    "chat": "Få hjelp på chat",
+    "log_out" : "Logg ut"
   },
   "footer": {
     "about_altinn": "Om Altinn",

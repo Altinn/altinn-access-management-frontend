@@ -1,9 +1,10 @@
-import { amUIPath, SystemUserPath } from '@/routes/paths';
 import React from 'react';
-import { MenuItemProps } from '@altinn/altinn-components';
+import type { MenuItemProps } from '@altinn/altinn-components';
 import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
 import { Link } from 'react-router';
+
+import { amUIPath, SystemUserPath } from '@/routes/paths';
 
 /**
  * Generates a list of sidebar items for the page layout.
@@ -29,7 +30,7 @@ export const SidebarItems = () => {
       size: 'md',
       title: t('sidebar.users'),
       icon: PersonGroupIcon,
-      as: (props: any) => (
+      as: (props) => (
         <Link
           to={`/${amUIPath.Users}`}
           {...props}
@@ -42,7 +43,7 @@ export const SidebarItems = () => {
       size: 'md',
       title: t('sidebar.reportees'),
       icon: InboxIcon,
-      as: (props: any) => (
+      as: (props) => (
         <Link
           to={`/${amUIPath.Reportees}`}
           {...props}
@@ -57,7 +58,7 @@ export const SidebarItems = () => {
     size: 'md',
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
-    as: (props: any) => (
+    as: (props) => (
       <Link
         to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
         {...props}
