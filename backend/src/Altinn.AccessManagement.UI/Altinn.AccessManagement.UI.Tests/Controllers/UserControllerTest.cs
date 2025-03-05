@@ -456,7 +456,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///   Test case: GetReporteeListForUser returns 400 Bad Request when user id is 0
+        ///   Test case: GetReporteeListForUser returns 500 Internal server error when error occurs
         ///   Expected: Returns 400 Bad Request
         /// </summary>
         [Fact]
