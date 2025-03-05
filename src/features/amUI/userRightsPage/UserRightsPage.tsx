@@ -70,7 +70,9 @@ export const UserRightsPage = () => {
                     <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
                   }
                   singleRightsPanel={<SingleRightsSection />}
-                  roleAssignmentsPanel={<RoleSection />}
+                  roleAssignmentsPanel={
+                    <RoleSection numberOfAccesses={allAccesses.accessPackages?.length} />
+                  }
                 />
               </>
             ) : (
