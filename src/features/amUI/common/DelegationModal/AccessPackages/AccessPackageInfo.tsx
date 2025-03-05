@@ -9,38 +9,46 @@ import {
   PackageIcon,
 } from '@navikt/aksel-icons';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-
-import { DeletePackageButton } from '../../AccessPackageSection/DeletePackageButton';
+import { DelegationAction } from '../EditModal';
+import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './AccessPackageInfo.module.css';
+
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-import { ActionError, useActionError } from '@/resources/hooks/useActionError';
-import { useDelegationModalContext } from '../DelegationModalContext';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
+import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
+  availableActions?: DelegationAction[];
 }
 
-export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) => {
+export const AccessPackageInfo = ({
+  accessPackage,
+  toPartyUuid,
+  fromPartyUuid,
+  availableActions = [],
+}: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { actionError, setActionError } = useDelegationModalContext();
+  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
   const { onDelegate, onRevoke } = useAccessPackageActions({
-    toUuid: toParty.partyUuid,
+    toUuid: toPartyUuid,
     onDelegateError: (_, error: ActionError) => setActionError(error),
     onRevokeError: (_, error: ActionError) => setActionError(error),
   });
+  const { actionError, setActionError } = useDelegationModalContext();
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
-    to: toParty.partyUuid,
-    from: getCookie('AltinnPartyUuid'),
+    to: toPartyUuid,
+    from: fromPartyUuid,
   });
+
   const userHasPackage = React.useMemo(() => {
     if (activeDelegations && !isFetching) {
       return Object.values(activeDelegations)
@@ -67,23 +75,21 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
         </Heading>
       </div>
       {!!actionError && (
-        <>
-          <Alert
-            color='danger'
-            size='sm'
-          >
-            {userHasPackage ? (
-              <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
-            ) : (
-              <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
-            )}
-            <TechnicalErrorParagraphs
-              size='xs'
-              status={actionError.httpStatus}
-              time={actionError.timestamp}
-            />
-          </Alert>
-        </>
+        <Alert
+          color='danger'
+          size='sm'
+        >
+          {userHasPackage ? (
+            <Heading size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+          ) : (
+            <Heading size='2xs'>{t('delegation_modal.general_error.delegate_heading')}</Heading>
+          )}
+          <TechnicalErrorParagraphs
+            size='xs'
+            status={actionError.httpStatus}
+            time={actionError.timestamp}
+          />
+        </Alert>
       )}
       <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
       {accessPackage?.inherited && (
@@ -95,7 +101,7 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
           <Paragraph size='xs'>
             <Trans
               i18nKey='delegation_modal.inherited_role_org_message'
-              values={{ user_name: toParty.name, org_name: accessPackage.inheritedFrom?.name }}
+              values={{ user_name: toParty?.name, org_name: accessPackage.inheritedFrom?.name }}
               components={{ b: <strong /> }}
             />
           </Paragraph>
@@ -120,16 +126,15 @@ export const AccessPackageInfo = ({ accessPackage, toParty }: PackageInfoProps) 
         </div>
       </div>
       <div className={classes.actions}>
-        {userHasPackage ? (
-          <DeletePackageButton
-            accessPackage={accessPackage}
-            toParty={toParty}
-            fullText
-            disabled={isFetching || accessPackage.inherited}
-            onClick={() => onRevoke(accessPackage)}
-          />
-        ) : (
+        {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
+          <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
+        )}
+        {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
           <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
+        )}
+        {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
+          // Todo: Implement request access package
+          <Button disabled>{t('common.request_poa')}</Button>
         )}
       </div>
     </div>

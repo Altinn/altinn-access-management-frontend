@@ -4,37 +4,47 @@ import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import type { Party } from '@/rtk/features/lookupApi';
+import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
+import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
+import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
+import { DelegationAction } from '../EditModal';
+
+import classes from './RoleInfo.module.css';
+
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import {
   useDelegationCheckQuery,
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
-
-import { RevokeRoleButton } from '../../RoleSection/RevokeRoleButton';
-import { DelegateRoleButton } from '../../RoleSection/DelegateRoleButton';
-
-import classes from './RoleInfo.module.css';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 export interface PackageInfoProps {
   role: Role;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   onDelegate?: () => void;
+  availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
+export const RoleInfo = ({
+  role,
+  toPartyUuid,
+  fromPartyUuid,
+  availableActions = [],
+}: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { data: reportee } = useGetReporteeQuery();
+
+  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
+  const { data: fromParty } = useGetPartyByUUIDQuery(fromPartyUuid);
 
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    rightOwnerUuid: reportee?.partyUuid ?? '',
-    rightHolderUuid: toParty.partyUuid ?? '',
+    from: fromPartyUuid ?? '',
+    to: toPartyUuid ?? '',
   });
 
   const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: reportee?.partyUuid ?? '',
+    rightownerUuid: fromPartyUuid ?? '',
     roleUuid: role.id,
   });
 
@@ -84,7 +94,7 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
                 values={{
                   you: t('common.you_uppercase'),
                   serviceowner: role.provider?.name,
-                  reporteeorg: reportee?.name,
+                  reporteeorg: fromParty?.name,
                 }}
               />
             )}
@@ -100,14 +110,21 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
           <Paragraph size='xs'>
             <Trans
               i18nKey='role.inherited_role_message'
-              values={{ user_name: toParty.name, role_name: inheritedFromRoleName }}
+              values={{ user_name: toParty?.name || '', role_name: inheritedFromRoleName }}
               components={{ b: <strong /> }}
             />
           </Paragraph>
         </div>
       )}
       <div className={classes.actions}>
-        {!userHasRole ? (
+        {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (
+          <RequestRoleButton
+            variant='solid'
+            size='md'
+            icon={false}
+          />
+        )}
+        {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
           <DelegateRoleButton
             roleId={role.id}
             roleName={role.name}
@@ -115,8 +132,11 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             fullText
             disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
             variant='solid'
+            size='md'
+            icon={false}
           />
-        ) : (
+        )}
+        {userHasRole && availableActions.includes(DelegationAction.REVOKE) && (
           <RevokeRoleButton
             assignmentId={assignment.id}
             roleName={role.name}
@@ -124,6 +144,8 @@ export const RoleInfo = ({ role, toParty }: PackageInfoProps) => {
             fullText
             disabled={isFetching || userHasInheritedRole}
             variant='solid'
+            size='md'
+            icon={false}
           />
         )}
       </div>

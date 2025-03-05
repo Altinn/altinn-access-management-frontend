@@ -1,19 +1,28 @@
 import { useEffect } from 'react';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import type { Role } from '@/rtk/features/roleApi';
-
+import type { DelegationAction } from '../DelegationModal/EditModal';
 import { EditModal } from '../DelegationModal/EditModal';
 import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
 
+import type { Role } from '@/rtk/features/roleApi';
+
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   role?: Role;
   onClose?: () => void;
+  availableActions?: DelegationAction[];
 }
 
-export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModalProps) => {
+export const RoleInfoModal = ({
+  modalRef,
+  toPartyUuid,
+  fromPartyUuid,
+  role,
+  onClose,
+  availableActions,
+}: RoleInfoModalProps) => {
   useEffect(() => {
     const handleClose = () => onClose?.();
 
@@ -25,8 +34,10 @@ export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModa
     <DelegationModalProvider>
       <EditModal
         ref={modalRef}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
         role={role}
+        availableActions={availableActions}
       />
     </DelegationModalProvider>
   );

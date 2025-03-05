@@ -5,9 +5,9 @@ import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { useSnackbar } from '../Snackbar';
-import { ActionError } from '@/resources/hooks/useActionError';
 
 interface useAccessPackageActionsProps {
   toUuid: string;

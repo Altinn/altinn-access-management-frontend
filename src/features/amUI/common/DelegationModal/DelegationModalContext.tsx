@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { ActionError, useActionError } from '@/resources/hooks/useActionError';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import { useActionError } from '@/resources/hooks/useActionError';
 export interface DelegationModalProps {
   children: React.ReactNode;
 }
@@ -30,7 +31,7 @@ interface DelegationModalContextProps {
 
 const DelegationModalContext = createContext<DelegationModalContextProps | undefined>(undefined);
 
-export const DelegationModalProvider: React.FC<DelegationModalProps> = ({ children }) => {
+export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
   const [filters, setFilters] = useState<string[]>([]);
   const [searchString, setSearchString] = useState('');
   const [currentPage, setCurrentPage] = useState(1);

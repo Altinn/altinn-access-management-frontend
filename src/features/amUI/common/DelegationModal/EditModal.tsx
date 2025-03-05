@@ -2,45 +2,64 @@ import * as React from 'react';
 import { Modal } from '@digdir/designsystemet-react';
 import { forwardRef, useEffect } from 'react';
 
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { Party } from '@/rtk/features/lookupApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Role } from '@/rtk/features/roleApi';
+import { SnackbarProvider } from '../Snackbar';
 
-import { ResourceInfo } from '../DelegationModal/SingleRights/ResourceInfo';
-import { SnackbarProvider } from '../../common/Snackbar';
-
+import { ResourceInfo } from './SingleRights/ResourceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
-import { ActionError } from '@/resources/hooks/useActionError';
 import { useDelegationModalContext } from './DelegationModalContext';
+
+import type { Role } from '@/rtk/features/roleApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
+
+export enum DelegationAction {
+  DELEGATE = 'DELEGATE',
+  REQUEST = 'REQUEST',
+  REVOKE = 'REVOKE',
+}
 
 export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
+  availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onClose?: () => void;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  ({ toParty, resource, accessPackage, role, openWithError, onClose }, ref) => {
-    const { setActionError, actionError, reset } = useDelegationModalContext();
-
-    useEffect(() => {
-      if (!!openWithError) {
-        setActionError(openWithError);
-      } else {
-        setActionError(null);
-      }
-    }, [openWithError]);
+  (
+    {
+      toPartyUuid,
+      fromPartyUuid,
+      resource,
+      accessPackage,
+      role,
+      availableActions,
+      openWithError,
+      onClose,
+    },
+    ref,
+  ) => {
+    const { setActionError, reset } = useDelegationModalContext();
 
     const onClosing = () => {
       onClose?.();
       reset();
     };
+
+    useEffect(() => {
+      if (openWithError) {
+        setActionError(openWithError);
+      } else {
+        setActionError(null);
+      }
+    }, [openWithError, setActionError]);
 
     /* handle closing */
     useEffect(() => {
@@ -68,7 +87,14 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         >
           <SnackbarProvider>
             <div className={classes.content}>
-              {renderModalContent(toParty, resource, accessPackage, role)}
+              {renderModalContent(
+                toPartyUuid,
+                fromPartyUuid,
+                resource,
+                accessPackage,
+                role,
+                availableActions,
+              )}
             </div>
           </SnackbarProvider>
         </Modal>
@@ -78,16 +104,19 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 );
 
 const renderModalContent = (
-  toParty: Party,
+  toPartyUuid: string,
+  fromPartyUuid: string,
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
+  availableActions?: DelegationAction[],
 ) => {
   if (resource) {
     return (
       <ResourceInfo
         resource={resource}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
       />
     );
   }
@@ -95,7 +124,9 @@ const renderModalContent = (
     return (
       <AccessPackageInfo
         accessPackage={accessPackage}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
+        availableActions={availableActions}
       />
     );
   }
@@ -103,7 +134,9 @@ const renderModalContent = (
     return (
       <RoleInfo
         role={role}
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
+        availableActions={availableActions}
       />
     );
   }

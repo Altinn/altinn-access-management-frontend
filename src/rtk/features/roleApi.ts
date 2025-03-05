@@ -54,8 +54,8 @@ export interface Assignment {
 }
 
 interface RoleApiRequest {
-  rightOwnerUuid: string;
-  rightHolderUuid: string;
+  from: string;
+  to: string;
 }
 
 interface DelegationCheckResponse {
@@ -85,8 +85,7 @@ export const roleApi = createApi({
       providesTags: ['roles'],
     }),
     getRolesForUser: builder.query<Assignment[], RoleApiRequest>({
-      query: ({ rightOwnerUuid, rightHolderUuid }) =>
-        `/assignments/${rightOwnerUuid}/${rightHolderUuid}`,
+      query: ({ from, to }) => `/assignments/${from}/${to}`,
     }),
     revoke: builder.mutation<void, { assignmentId: string }>({
       query({ assignmentId }) {

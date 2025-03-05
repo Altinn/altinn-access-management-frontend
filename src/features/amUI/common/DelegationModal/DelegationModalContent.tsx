@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
 
-import type { Party } from '@/rtk/features/lookupApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-
-import { SnackbarProvider } from '../../common/Snackbar';
+import { SnackbarProvider } from '../Snackbar';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -17,13 +13,25 @@ import { useDelegationModalContext } from './DelegationModalContext';
 import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
+import type { DelegationAction } from './EditModal';
+
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 export interface DelegationModalProps {
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   delegationType: DelegationType;
+  availableActions?: DelegationAction[];
 }
 
-export const DelegationModalContent = ({ toParty, delegationType }: DelegationModalProps) => {
+export const DelegationModalContent = ({
+  toPartyUuid,
+  fromPartyUuid,
+  delegationType,
+  availableActions,
+}: DelegationModalProps) => {
   const { t } = useTranslation();
   const {
     setInfoView,
@@ -41,7 +49,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
     setResourceToView(resource);
   };
 
-  const onPackageSelection = (accessPackage?: AccessPackage, error: boolean = false) => {
+  const onPackageSelection = (accessPackage?: AccessPackage, error = false) => {
     if (!error) {
       setActionError(null);
     }
@@ -51,20 +59,28 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const onClose = () => {
+  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
+
+  const onClosing = () => {
     reset();
   };
 
-  /* handle closing */
   useEffect(() => {
-    const handleClose = () => onClose?.();
-    modalRef.current?.addEventListener('close', handleClose);
-    return () => modalRef.current?.removeEventListener('close', handleClose);
-  }, [onClose]);
+    const handleClose = () => onClosing();
 
-  let searchViewContent;
-  let infoViewContent;
-  let triggerButtonText;
+    if (modalRef?.current) {
+      modalRef.current.addEventListener('close', handleClose);
+    }
+    return () => {
+      if (modalRef?.current) {
+        modalRef.current.removeEventListener('close', handleClose);
+      }
+    };
+  }, [onClosing, modalRef]);
+
+  let searchViewContent: JSX.Element | undefined;
+  let infoViewContent: JSX.Element | undefined;
+  let triggerButtonText: string | undefined;
 
   switch (delegationType) {
     case DelegationType.AccessPackage:
@@ -75,12 +91,15 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
           onActionError={(accessPackage: AccessPackage) => {
             onPackageSelection(accessPackage, true);
           }}
+          availableActions={availableActions}
         />
       );
       infoViewContent = packageToView && (
         <AccessPackageInfo
           accessPackage={packageToView}
-          toParty={toParty}
+          toPartyUuid={toPartyUuid}
+          fromPartyUuid={fromPartyUuid}
+          availableActions={availableActions}
         />
       );
       triggerButtonText = t('access_packages.give_new_button');
@@ -95,7 +114,8 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
       infoViewContent = resourceToView && (
         <ResourceInfo
           resource={resourceToView}
-          toParty={toParty}
+          toPartyUuid={toPartyUuid}
+          fromPartyUuid={fromPartyUuid}
         />
       );
       triggerButtonText = t('single_rights.give_new_single_right');
@@ -114,7 +134,7 @@ export const DelegationModalContent = ({ toParty, delegationType }: DelegationMo
         className={classes.modalDialog}
         backdropClose
         closeButton={t('common.close')}
-        onClose={onClose}
+        onClose={reset}
         ref={modalRef}
       >
         <SnackbarProvider>

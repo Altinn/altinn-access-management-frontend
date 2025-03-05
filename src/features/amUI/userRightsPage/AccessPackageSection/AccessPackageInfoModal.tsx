@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
+import { useParams } from 'react-router';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
+import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
-import { EditModal } from '../DelegationModal/EditModal';
-import { ActionError } from '@/resources/hooks/useActionError';
-import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
+import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { DelegationModalProvider } from '../../common/DelegationModal/DelegationModalContext';
 
 interface AccessPackageInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -22,14 +24,30 @@ export const AccessPackageInfoModal = ({
   onClose,
   openWithError,
 }: AccessPackageInfoModalProps) => {
+  useEffect(() => {
+    const handleClose = () => onClose?.();
+    modalRef.current?.addEventListener('close', handleClose);
+    return () => modalRef.current?.removeEventListener('close', handleClose);
+  }, [onClose, modalRef]);
+
+  const { data: reportee } = useGetReporteeQuery();
+  const { id: rightHolderUuid } = useParams();
+
+  const { data: currentUser } = useGetUserInfoQuery();
+  const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
+
   return (
     <DelegationModalProvider>
       <EditModal
         ref={modalRef}
-        toParty={toParty}
+        toPartyUuid={rightHolderUuid ?? ''}
+        fromPartyUuid={reportee?.partyUuid ?? ''}
         accessPackage={modalItem}
         openWithError={openWithError}
-        onClose={onClose}
+        availableActions={[
+          !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+          DelegationAction.REVOKE,
+        ]}
       />
     </DelegationModalProvider>
   );

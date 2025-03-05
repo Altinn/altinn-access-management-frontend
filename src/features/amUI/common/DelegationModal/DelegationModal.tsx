@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import type { Party } from '@/rtk/features/lookupApi';
-
 import { DelegationModalProvider } from './DelegationModalContext';
 import { DelegationModalContent } from './DelegationModalContent';
+import type { DelegationAction } from './EditModal';
 
 export enum DelegationType {
   SingleRights = 'SingleRights',
@@ -11,16 +10,25 @@ export enum DelegationType {
   Role = 'Role',
 }
 export interface DelegationModalProps {
-  toParty: Party;
+  toPartyUuid: string;
+  fromPartyUuid: string;
   delegationType: DelegationType;
+  availableActions?: DelegationAction[];
 }
 
-export const DelegationModal = ({ toParty, delegationType }: DelegationModalProps) => {
+export const DelegationModal = ({
+  toPartyUuid,
+  fromPartyUuid,
+  delegationType,
+  availableActions,
+}: DelegationModalProps) => {
   return (
     <DelegationModalProvider>
       <DelegationModalContent
-        toParty={toParty}
+        toPartyUuid={toPartyUuid}
+        fromPartyUuid={fromPartyUuid}
         delegationType={delegationType}
+        availableActions={availableActions}
       />
     </DelegationModalProvider>
   );
