@@ -20,6 +20,8 @@ import {
 import { amUIPath, SystemUserPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 
+import { SidebarItems } from './SidebarItems';
+
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
 }
@@ -81,52 +83,6 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       as: (props) => (
         <Link
           to='https://info.altinn.no/hjelp/'
-          {...props}
-        />
-      ),
-    },
-  ];
-
-  const sidebarLinks: MenuItemProps[] = [
-    {
-      groupId: 1,
-      icon: HandshakeIcon,
-      id: '1',
-      size: 'lg',
-      title: t('header.access_management'),
-    },
-    {
-      groupId: 3,
-      id: '3',
-      title: t('sidebar.users'),
-      icon: PersonGroupIcon,
-      as: (props) => (
-        <Link
-          to={`/${amUIPath.Users}`}
-          {...props}
-        />
-      ),
-    },
-    {
-      groupId: 4,
-      id: '4',
-      title: t('sidebar.reportees'),
-      icon: InboxIcon,
-      as: (props) => (
-        <Link
-          to={`/${amUIPath.Reportees}`}
-          {...props}
-        />
-      ),
-    },
-    {
-      groupId: 5,
-      id: '5',
-      title: t('sidebar.systemaccess'),
-      icon: TenancyIcon,
-      as: (props) => (
-        <Link
-          to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
           {...props}
         />
       ),
@@ -199,7 +155,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         sidebar={{
           menu: {
             groups: {},
-            items: sidebarLinks,
+            items: SidebarItems(),
           },
         }}
         content={{ color: 'neutral' }}
