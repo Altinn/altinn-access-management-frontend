@@ -68,11 +68,11 @@ export const DelegationModalContent = ({
   useEffect(() => {
     const handleClose = () => onClosing();
 
-    if (modalRef && 'current' in modalRef && modalRef.current) {
+    if (modalRef?.current) {
       modalRef.current.addEventListener('close', handleClose);
     }
     return () => {
-      if (modalRef && 'current' in modalRef && modalRef.current) {
+      if (modalRef?.current) {
         modalRef.current.removeEventListener('close', handleClose);
       }
     };
