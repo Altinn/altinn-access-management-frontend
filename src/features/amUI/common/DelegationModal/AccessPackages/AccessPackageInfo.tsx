@@ -10,7 +10,6 @@ import {
 } from '@navikt/aksel-icons';
 
 import { DelegationAction } from '../EditModal';
-import { DeletePackageButton } from '../../../userRightsPage/AccessPackageSection/DeletePackageButton';
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './AccessPackageInfo.module.css';
