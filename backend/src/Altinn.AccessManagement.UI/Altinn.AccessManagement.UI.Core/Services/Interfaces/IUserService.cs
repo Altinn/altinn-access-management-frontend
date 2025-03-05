@@ -19,6 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Get the reportees for the user 
         /// </summary>
+        /// <param name="userId">The user id</param>
         /// <returns></returns>
         Task<List<User>> GetReporteeList(Guid userId);
         
