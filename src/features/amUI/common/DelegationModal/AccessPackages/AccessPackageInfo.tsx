@@ -128,13 +128,7 @@ export const AccessPackageInfo = ({
       </div>
       <div className={classes.actions}>
         {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
-          <DeletePackageButton
-            accessPackage={accessPackage}
-            toParty={toParty}
-            fullText
-            disabled={isFetching || accessPackage.inherited}
-            onClick={() => onRevoke(accessPackage)}
-          />
+          <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
           <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
