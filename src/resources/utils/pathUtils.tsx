@@ -47,3 +47,23 @@ export const getAltinnStartPageUrl = () => {
       return 'https://info.altinn.no/';
   }
 };
+
+export const getHostUrl = () => {
+  const env = getEnv();
+  switch (env) {
+    case Environment.TT02:
+      return 'https://tt02.altinn.no/';
+    case Environment.AT21:
+      return 'https://at21.altinn.cloud/';
+    case Environment.AT22:
+      return 'https://at22.altinn.cloud/';
+    case Environment.AT23:
+      return 'https://at23.altinn.cloud/';
+    case Environment.AT24:
+      return 'https://at24.altinn.cloud/';
+    case Environment.PROD:
+      return 'https://altinn.no/';
+    default:
+      return 'https://altinn.no/';
+  }
+};

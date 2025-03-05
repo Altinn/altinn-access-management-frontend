@@ -10,9 +10,9 @@ export const PageNotFound = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className={classes.errorContent}>
       <Heading
-        size='xl'
+        size='lg'
         level={1}
         className={classes.header}
       >
