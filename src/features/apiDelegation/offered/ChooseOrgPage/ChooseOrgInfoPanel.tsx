@@ -25,7 +25,7 @@ export const ChooseOrgInfoPanel = ({
   if (reporteeData?.organizationNumber === searchString && searchString.length > 0) {
     return (
       <Alert
-        color='warning'
+        data-color='warning'
         role='alert'
       >
         <Heading
@@ -67,7 +67,7 @@ export const ChooseOrgInfoPanel = ({
   } else if (!searchLoading && promptOrgNumber) {
     return (
       <Alert
-        color='info'
+        data-color='info'
         data-size='lg'
       >
         <Heading

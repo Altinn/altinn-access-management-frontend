@@ -92,7 +92,7 @@ export const ApiActionBar = ({
         ) : (
           <Button
             variant={'tertiary'}
-            color='accent'
+            data-color='accent'
             onClick={onAddClick}
             aria-label={t('common.add') + ' ' + api.apiName}
             data-size='lg'

@@ -138,7 +138,7 @@ export const RightsActionBarContent = ({
 
   const alertContainer = hasUndelegableRights && (
     <div className={classes.alertContainer}>
-      <Alert color='warning'>
+      <Alert data-color='warning'>
         <Heading
           data-size={'xs'}
           level={4}

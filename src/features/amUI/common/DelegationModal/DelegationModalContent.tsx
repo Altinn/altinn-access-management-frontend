@@ -143,7 +143,7 @@ export const DelegationModalContent = ({
               <Button
                 className={classes.backButton}
                 variant='tertiary'
-                color='neutral'
+                data-color='neutral'
                 onClick={() => setInfoView(false)}
                 icon
               >

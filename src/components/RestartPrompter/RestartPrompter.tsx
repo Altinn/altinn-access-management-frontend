@@ -50,7 +50,7 @@ export const RestartPrompter = ({
         <div className={classes.restartButton}>
           <Button
             variant='primary'
-            color='accent'
+            data-color='accent'
             data-size='md'
             onClick={() => {
               navigate(restartPath);

@@ -307,7 +307,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
                   <Badge
                     label={t('common.has_poa')}
                     theme='base'
-                    color='success'
+                    data-color='success'
                   />
                 )}
               </div>
@@ -343,7 +343,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
               )}
               {missingAccessMessage && (
                 <Alert
-                  color='info'
+                  data-color='info'
                   data-size='sm'
                 >
                   {missingAccessMessage}

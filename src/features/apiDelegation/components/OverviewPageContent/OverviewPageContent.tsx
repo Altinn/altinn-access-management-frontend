@@ -181,7 +181,7 @@ export const OverviewPageContent = ({
         </div>
       )}
       <Alert
-        color='info'
+        data-color='info'
         data-size='md'
       >
         <Heading
@@ -267,7 +267,7 @@ export const OverviewPageContent = ({
           <Button
             disabled={loading || itemsToDelete.length === 0}
             onClick={confirmRevoke}
-            color='accent'
+            data-color='accent'
           >
             {t('api_delegation.save')}
           </Button>

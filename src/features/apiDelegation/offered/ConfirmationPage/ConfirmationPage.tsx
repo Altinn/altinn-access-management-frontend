@@ -97,7 +97,7 @@ export const ConfirmationPage = () => {
         </Paragraph>
         <div className={classes.navigationSection}>
           <Button
-            color='accent'
+            data-color='accent'
             variant='primary'
             onClick={navigateToOverview}
           >
@@ -136,7 +136,7 @@ export const ConfirmationPage = () => {
         </Paragraph>
         <div className={classes.navigationSection}>
           <Button
-            color='accent'
+            data-color='accent'
             variant='secondary'
             onClick={() =>
               navigate(
@@ -148,7 +148,7 @@ export const ConfirmationPage = () => {
           </Button>
           <Button
             onClick={handleConfirm}
-            color='accent'
+            data-color='accent'
           >
             {isLoading && <Spinner aria-label={t('common.loading')} />}
             {t('common.confirm')}

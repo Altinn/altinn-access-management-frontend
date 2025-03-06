@@ -137,7 +137,7 @@ export const Filter = ({
       </Heading>
       <Button
         variant='tertiary'
-        color='neutral'
+        data-color='neutral'
         onClick={handleOpenOrClose}
         aria-label={closeButtonAriaLabel ?? String(t('common.close')) + ' ' + label}
         data-size='md'

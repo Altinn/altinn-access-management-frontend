@@ -33,7 +33,7 @@ export const SkeletonRoleList = () => {
           <ListItem
             key={role.id}
             title={role.name}
-            color='neutral'
+            data-color='neutral'
             theme='subtle'
             loading
           />

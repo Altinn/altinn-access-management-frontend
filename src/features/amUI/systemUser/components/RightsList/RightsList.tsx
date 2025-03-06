@@ -111,7 +111,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
         {selectedAccessPackage && selectedResource && (
           <Button
             variant='tertiary'
-            color='neutral'
+            data-color='neutral'
             data-size='sm'
             className={classes.backButton}
             onClick={() => setSelectedResource(null)}

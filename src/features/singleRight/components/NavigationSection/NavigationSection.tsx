@@ -36,7 +36,7 @@ export const NavigationSection = ({
     >
       <Button
         variant='primary'
-        color='accent'
+        data-color='accent'
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
       >
