@@ -13,7 +13,7 @@ import { amUIPath, SystemUserPath } from '@/routes/paths';
  *                            and optionally a confetti package if the feature flag is enabled.
  */
 export const SidebarItems = () => {
-  const displayConfettiPackage = window.featureFlags?.confettiPackage;
+  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
 
   const heading: MenuItemProps = {
     groupId: 1,

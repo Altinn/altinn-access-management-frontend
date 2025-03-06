@@ -48,7 +48,8 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
       />
       <AccessPackageInfoModal
         modalRef={modalRef}
-        toParty={toParty}
+        toPartyUuid={toParty.partyUuid}
+        fromPartyUuid={getCookie('AltinnPartyUuid')}
         modalItem={modalItem}
         onClose={() => {
           setModalItem(undefined);

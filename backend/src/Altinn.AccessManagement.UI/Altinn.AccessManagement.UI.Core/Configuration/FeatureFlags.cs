@@ -14,6 +14,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <summary>
         /// Whether or not to display features related to the confetti package launch in the UI
         /// </summary>
-        public bool ConfettiPackage { get; set; }
+        public bool DisplayConfettiPackage { get; set; }
+
+        /// <summary>
+        /// Whether or not to only display the service/resource delegation feature in the UI
+        /// </summary>
+        public bool DisplayResourceDelegation { get; set; }
     }
 }
