@@ -3,8 +3,6 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@altinn/altinn-components';
 
-import { getButtonIconSize } from '@/resources/utils/iconUtils';
-
 import classes from './PageContainer.module.css';
 
 interface PageContainerProps {
