@@ -9,6 +9,7 @@ import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
+import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
@@ -62,12 +63,12 @@ export const ReporteeAccessPackageSection = ({
         }}
       />
       {party && (
-        <EditModal
-          ref={modalRef}
+        <AccessPackageInfoModal
+          modalRef={modalRef}
           toPartyUuid={getCookie('AltinnPartyUuid')}
-          fromPartyUuid={party.partyUuid}
-          accessPackage={modalItem}
-          availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+          fromPartyUuid={reporteeUuid ?? ''}
+          modalItem={modalItem}
+          modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
           onClose={() => {
             setModalItem(undefined);
             setError(null);
