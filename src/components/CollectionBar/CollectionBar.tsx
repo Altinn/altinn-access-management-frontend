@@ -48,6 +48,7 @@ export const CollectionBar = ({
     <>
       <ActionBar
         title={title}
+        size='medium'
         subtitle={
           compact && (
             <span role='status'>{collection.length.toString() + ' ' + t('common.added')}</span>
@@ -56,7 +57,7 @@ export const CollectionBar = ({
         additionalText={
           !compact && (
             <Paragraph
-              // role='status'
+              role='status'
               data-size='sm'
               className={cn(classes.counterText, classes[color])}
             >
@@ -81,7 +82,6 @@ export const CollectionBar = ({
             </Button>
           )
         }
-        size='large'
         color={color}
       >
         <div className={cn(classes.content, { [classes.compact]: compact })}>{collection}</div>

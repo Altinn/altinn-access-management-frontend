@@ -52,6 +52,7 @@ const exampleCollection = sampleList.map((item) => (
         data-size={'sm'}
         onClick={() => console.log('Remove')}
         icon
+        data-color='danger'
       >
         <MinusCircleIcon />
       </Button>
