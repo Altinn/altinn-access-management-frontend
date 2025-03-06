@@ -17,6 +17,7 @@ export const AmPagination = ({
   showPages = 5,
   currentPage,
   setCurrentPage,
+  onChange,
   hideLabels = false,
   className,
   size,
@@ -25,7 +26,7 @@ export const AmPagination = ({
   const { pages, prevButtonProps, nextButtonProps } = usePagination({
     currentPage,
     setCurrentPage,
-    onChange: () => {},
+    onChange,
     totalPages,
     showPages: showPages > totalPages ? totalPages : showPages,
   });
@@ -43,12 +44,14 @@ export const AmPagination = ({
         </Pagination.Item>
         {pages.map(({ page, itemKey, buttonProps }) => (
           <Pagination.Item key={itemKey}>
-            <Pagination.Button
-              {...buttonProps}
-              aria-label={`${t('common.page')} ${page}`}
-            >
-              {page}
-            </Pagination.Button>
+            {typeof page === 'number' && (
+              <Pagination.Button
+                {...buttonProps}
+                aria-label={`${t('common.page')} ${page}`}
+              >
+                {page}
+              </Pagination.Button>
+            )}
           </Pagination.Item>
         ))}
         <Pagination.Item>
