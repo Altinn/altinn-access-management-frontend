@@ -51,7 +51,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
         })}
       >
         {toggleOpen ? (
-          <Button
+          <button
             className={cn(classes.actionBarHeader, classes.clickable, classes[color])}
             onClick={toggleOpen}
             id={headerId}
@@ -80,7 +80,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 )}
               </div>
             </div>
-          </Button>
+          </button>
         ) : (
           <div className={cn(classes.actionBarHeader)}>
             <div className={classes.actionBarTexts}>
@@ -108,6 +108,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             })}
             onClick={toggleOpen}
             tabIndex={-1}
+            data-size='sm'
           >
             {additionalText}
           </button>

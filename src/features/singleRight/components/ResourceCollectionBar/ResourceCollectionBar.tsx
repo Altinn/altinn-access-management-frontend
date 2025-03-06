@@ -52,7 +52,7 @@ export const ResourceCollectionBar = ({
       actions={
         <Button
           variant='tertiary'
-          data-size={compact ? 'md' : 'sm'}
+          data-size={'sm'}
           onClick={() => {
             onRemove(resource.identifier);
           }}

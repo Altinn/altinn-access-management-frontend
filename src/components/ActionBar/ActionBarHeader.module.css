@@ -140,6 +140,7 @@
   color: inherit;
   line-height: 16px;
   word-break: break-word;
+  border: none;
 }
 
 .actionBarHeader.clickable {

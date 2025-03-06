@@ -3,14 +3,7 @@ import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/alt
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import {
-  HandshakeIcon,
-  PersonGroupIcon,
-  InboxIcon,
-  TenancyIcon,
-  MenuGridIcon,
-  PersonChatIcon,
-} from '@navikt/aksel-icons';
+import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
 
 import {
   useGetReporteeListForAuthorizedUserQuery,
@@ -158,7 +151,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             items: SidebarItems(),
           },
         }}
-        content={{ color: 'neutral' }}
+        content={{ color: 'company' }}
         footer={{
           address: 'Postboks 1382 Vika, 0114 Oslo.',
           address2: 'Org.nr. 991 825 827',

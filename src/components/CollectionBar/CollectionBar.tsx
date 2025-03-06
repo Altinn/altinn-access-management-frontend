@@ -48,7 +48,7 @@ export const CollectionBar = ({
     <>
       <ActionBar
         title={title}
-        size='medium'
+        size='large'
         subtitle={
           compact && (
             <span role='status'>{collection.length.toString() + ' ' + t('common.added')}</span>
