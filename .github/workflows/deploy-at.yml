@@ -28,7 +28,6 @@ jobs:
 
   playwright-e2e-tests:
     name: "Playwright E2E-tests"
-    secrets: inherit
     uses: "./.github/workflows/template-playwright.yml"
     needs: deploy-main
     strategy:
@@ -36,10 +35,12 @@ jobs:
       matrix:
         environment: [AT24]
         project: [e2e-tests]
-
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
+    secrets:
+        USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
+        PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
 
   playwright-accessibility-tests:
     name: "Playwright Accessibility-tests"
