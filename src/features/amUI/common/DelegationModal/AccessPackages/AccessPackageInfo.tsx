@@ -76,7 +76,7 @@ export const AccessPackageInfo = ({
       </div>
       {!!actionError && (
         <Alert
-          color='danger'
+          data-color='danger'
           data-size='sm'
         >
           {userHasPackage ? (

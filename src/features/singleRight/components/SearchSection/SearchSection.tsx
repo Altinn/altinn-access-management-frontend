@@ -115,7 +115,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <Alert
           role='alert'
           className={classes.searchError}
-          color='danger'
+          data-color='danger'
         >
           <Heading
             level={2}
@@ -212,7 +212,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
             {prioritizedErrorCodes?.length > 0 && (
               <Alert
                 role='alert'
-                color='danger'
+                data-color='danger'
                 className={classes.notDelegableAlert}
               >
                 <Heading data-size='xs'>{t('single_rights.cannot_delegate_alert_heading')}</Heading>

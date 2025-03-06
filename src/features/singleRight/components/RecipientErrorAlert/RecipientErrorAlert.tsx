@@ -12,7 +12,7 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
 
   if (!userUUID && !partyUUID) {
     return (
-      <Alert color='danger'>
+      <Alert data-color='danger'>
         <Heading
           level={3}
           data-size='sm'
@@ -26,7 +26,7 @@ export const RecipientErrorAlert = ({ userUUID, partyUUID }: RecipientErrorAlert
     return (
       <Alert
         role='alert'
-        color='danger'
+        data-color='danger'
       >
         <Heading
           level={3}

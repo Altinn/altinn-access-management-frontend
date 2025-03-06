@@ -187,7 +187,7 @@ export const ConfirmationPage = () => {
             {isError && (
               <Alert
                 title={t('common.general_error_title')}
-                color='danger'
+                data-color='danger'
               >
                 <Heading
                   level={2}

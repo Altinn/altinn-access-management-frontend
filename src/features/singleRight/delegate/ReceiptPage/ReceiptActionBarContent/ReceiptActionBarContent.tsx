@@ -49,7 +49,7 @@ export const ReceiptActionBarContent = ({
       <div className={classes.alertContainer}>
         {failedDelegations && failedDelegations?.length > 1 && (
           <Alert
-            color='danger'
+            data-color='danger'
             role='alert'
           >
             <Heading

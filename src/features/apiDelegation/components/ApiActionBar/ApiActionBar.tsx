@@ -171,7 +171,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph variant='long'>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
@@ -181,7 +181,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph variant='long'>
@@ -199,7 +199,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph>
@@ -212,7 +212,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>

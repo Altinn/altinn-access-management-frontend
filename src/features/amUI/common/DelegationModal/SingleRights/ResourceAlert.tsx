@@ -62,7 +62,7 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
     }
   }
   return (
-    <Alert color='danger'>
+    <Alert data-color='danger'>
       <Heading data-size='2xs'>{headingText}</Heading>
       {content}
     </Alert>

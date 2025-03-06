@@ -205,7 +205,7 @@ export const OverviewPageContent = ({
       {deletedItems && deletedItems?.failedDeleteions?.length > 0 && (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           title={t('api_delegation.revoke_delegation_failed')}
         >
           <Heading

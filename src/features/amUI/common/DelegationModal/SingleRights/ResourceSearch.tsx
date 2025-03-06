@@ -109,7 +109,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         <Alert
           role='alert'
           className={classes.searchError}
-          color='danger'
+          data-color='danger'
         >
           <Heading
             level={2}

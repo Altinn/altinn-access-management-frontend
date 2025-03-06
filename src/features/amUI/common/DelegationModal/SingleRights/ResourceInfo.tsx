@@ -327,7 +327,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
             <>
               {delegationErrorMessage && (
                 <Alert
-                  color='danger'
+                  data-color='danger'
                   data-size='sm'
                 >
                   <Heading

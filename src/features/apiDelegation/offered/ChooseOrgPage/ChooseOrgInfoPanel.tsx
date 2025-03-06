@@ -41,7 +41,7 @@ export const ChooseOrgInfoPanel = ({
   } else if (!searchLoading && searchOrgNotExist) {
     return (
       <Alert
-        color='danger'
+        data-color='danger'
         data-size='lg'
       >
         <Heading

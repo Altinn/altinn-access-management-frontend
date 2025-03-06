@@ -50,7 +50,7 @@ export const DeletableListItem = ({
       ) : (
         <Button
           variant='tertiary'
-          color='danger'
+          data-color='danger'
           icon={isSm}
           data-size='md'
           onClick={softDeleteCallback}

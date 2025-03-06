@@ -34,7 +34,7 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   return (
     <Alert
       data-size='sm'
-      color='danger'
+      data-color='danger'
     >
       {errorText}
     </Alert>
