@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, Dialog } from '@digdir/designsystemet-react';
+import { Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
+import { Button } from '@altinn/altinn-components';
 
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -142,12 +143,11 @@ export const DelegationModalContent = ({
             {infoView && (
               <Button
                 className={classes.backButton}
-                variant='tertiary'
+                variant='text'
                 data-color='neutral'
                 onClick={() => setInfoView(false)}
-                icon
+                icon={ArrowLeftIcon}
               >
-                <ArrowLeftIcon fontSize='1.5em' />
                 {t('common.back')}
               </Button>
             )}

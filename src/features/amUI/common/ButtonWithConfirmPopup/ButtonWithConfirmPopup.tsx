@@ -37,15 +37,17 @@ export const ButtonWithConfirmPopup = ({
   return (
     <Popover.TriggerContext>
       <Popover.Trigger
-        {...triggerButtonProps}
-        onClick={() => setOpen(!open)}
+        asChild={true}
+        onClick={() => setOpen(true)}
       >
-        {triggerButtonContent}
+        <Button {...triggerButtonProps}>{triggerButtonContent}</Button>
       </Popover.Trigger>
       <Popover
+        onClose={() => setOpen(false)}
         open={open}
         id={id.current}
         className={classes.popover}
+        data-color='neutral'
         {...popoverProps}
       >
         <Paragraph className={classes.confirmPopupMessage}>{message}</Paragraph>

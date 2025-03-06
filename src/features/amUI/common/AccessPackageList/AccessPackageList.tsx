@@ -127,6 +127,9 @@ export const AccessPackageList = ({
                                   size: 'sm',
                                   disabled: pkg.inherited,
                                 }}
+                                popoverProps={{
+                                  color: 'neutral',
+                                }}
                                 message={t('user_rights_page.delete_confirm_message', {
                                   name: pkg.name,
                                 })}
