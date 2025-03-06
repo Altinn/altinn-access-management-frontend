@@ -109,8 +109,14 @@ export const ResourceActionBar = ({
   );
 
   const loadingText = (
-    <Paragraph className={classes.loadingText}>
-      <Spinner aria-label={t('common.loading')} />
+    <Paragraph
+      className={classes.loadingText}
+      data-size='sm'
+    >
+      <Spinner
+        aria-label={t('common.loading')}
+        data-size='sm'
+      />
       {!compact && t('common.loading')}
     </Paragraph>
   );
