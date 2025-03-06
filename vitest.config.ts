@@ -12,7 +12,6 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    pool: 'vmThreads',
     setupFiles: './tests/setupTests.ts',
     exclude: [
       '**/node_modules/**',
