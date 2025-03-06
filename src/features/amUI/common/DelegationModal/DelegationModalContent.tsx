@@ -131,14 +131,14 @@ export const DelegationModalContent = ({
       >
         {triggerButtonText} <PlusIcon />
       </Dialog.Trigger>
-      <Dialog
-        className={classes.modalDialog}
-        closedby='any'
-        closeButton={t('common.close')}
-        onClose={reset}
-        ref={modalRef}
-      >
-        <SnackbarProvider>
+      <SnackbarProvider>
+        <Dialog
+          className={classes.modalDialog}
+          closedby='any'
+          closeButton={t('common.close')}
+          onClose={reset}
+          ref={modalRef}
+        >
           <>
             {infoView && (
               <Button
@@ -153,8 +153,8 @@ export const DelegationModalContent = ({
             )}
             <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
           </>
-        </SnackbarProvider>
-      </Dialog>
+        </Dialog>
+      </SnackbarProvider>
     </Dialog.TriggerContext>
   );
 };
