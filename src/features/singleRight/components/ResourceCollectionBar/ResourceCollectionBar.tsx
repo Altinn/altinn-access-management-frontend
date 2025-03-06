@@ -48,7 +48,7 @@ export const ResourceCollectionBar = ({
       title={resource.title}
       subtitle={resource.resourceOwnerName}
       size='small'
-      data-color='success'
+      color='success'
       actions={
         <Button
           variant='tertiary'

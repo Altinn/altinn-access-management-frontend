@@ -134,8 +134,8 @@
   --component-actionbar_header_title-color-background: none;
   padding: 0px 4px 0px 8px;
   text-align: left;
+  display: flex;
   flex: 1;
-  justify-content: flex-start;
   background-color: var(--component-actionbar_header_title-color-background);
   color: inherit;
   line-height: 16px;

@@ -40,7 +40,7 @@ export const RightsTabs = ({
         {displaySingleRights && (
           <Tabs.Tab value='singleRights'>
             <Badge
-              size='sm'
+              data-size='sm'
               color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
               count={tabBadge?.services ?? 0}
               maxCount={99}

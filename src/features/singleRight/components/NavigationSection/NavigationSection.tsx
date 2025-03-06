@@ -58,6 +58,7 @@ export const NavigationSection = ({
         <Popover
           placement='top'
           open={popoverOpen}
+          data-color='danger'
           onClose={() => setPopoverOpen(false)}
         >
           <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
