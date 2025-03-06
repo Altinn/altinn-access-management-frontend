@@ -4,52 +4,53 @@ run-name: 'AT environments: ${{ github.sha }}'
 
 on:
   push:
-    branches: ['main']
+    branches: ['*']
 
-jobs:
-  containerize:
-    name: 'Containerize'
-    uses: './.github/workflows/template-build-and-push-container.yml'
-    with:
-      tag: ${{ github.sha }}
 
-  deploy-main:
-    name: 'Environment'
-    needs: containerize
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [AT22, AT23, AT24]
-    uses: './.github/workflows/template-deploy-container.yml'
-    secrets: inherit
-    with:
-      environment: ${{ matrix.environment }}
-      tag: ${{ github.sha }}
+  # containerize:
+  #   name: 'Containerize'
+  #   uses: './.github/workflows/template-build-and-push-container.yml'
+  #   with:
+  #     tag: ${{ github.sha }}
 
-  playwright-e2e-tests:
-    name: "Playwright E2E-tests"
-    uses: "./.github/workflows/template-playwright.yml"
-    needs: deploy-main
-    secrets: inherit
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [AT24]
-        project: [e2e-tests]
-    with:
-      environment: ${{ matrix.environment }}
-      project: ${{ matrix.project }}
+  # deploy-main:
+  #   name: 'Environment'
+  #   needs: containerize
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       environment: [AT22, AT23, AT24]
+  #   uses: './.github/workflows/template-deploy-container.yml'
+  #   secrets: inherit
+  #   with:
+  #     environment: ${{ matrix.environment }}
+  #     tag: ${{ github.sha }}
 
-  playwright-accessibility-tests:
-    name: "Playwright Accessibility-tests"
-    secrets: inherit
-    uses: "./.github/workflows/template-playwright.yml"
-    needs: deploy-main
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [AT22]
-        project: [accessibility-tests]
-    with:
-      environment: ${{ matrix.environment }}
-      project: ${{ matrix.project }}
+   jobs:
+   playwright-e2e-tests:
+     name: "Playwright E2E-tests"
+     uses: "./.github/workflows/template-playwright.yml"
+     needs: deploy-main
+     secrets: inherit
+     strategy:
+       fail-fast: false
+       matrix:
+         environment: [AT24]
+         project: [e2e-tests]
+     with:
+       environment: ${{ matrix.environment }}
+       project: ${{ matrix.project }}
+
+   playwright-accessibility-tests:
+     name: "Playwright Accessibility-tests"
+     secrets: inherit
+     uses: "./.github/workflows/template-playwright.yml"
+     needs: deploy-main
+     strategy:
+       fail-fast: false
+       matrix:
+         environment: [AT22]
+         project: [accessibility-tests]
+     with:
+       environment: ${{ matrix.environment }}
+       project: ${{ matrix.project }}
