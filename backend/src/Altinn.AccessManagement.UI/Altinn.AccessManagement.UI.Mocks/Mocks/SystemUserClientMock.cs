@@ -68,6 +68,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(systemUsers);
         }
 
+        /// <inheritdoc />
+        public Task<SystemUser> GetClientSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        {
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/clientSystemUsers.json");
+            SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
+            return Task.FromResult(systemUser);
+        }
+        
+        /// <inheritdoc />
+        public Task<List<SystemUser>> GetClientSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        {
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/clientSystemUsers.json");
+            return Task.FromResult(systemUsers);
+        }
+
         internal static class TestErrors
         {
             private static readonly ProblemDescriptorFactory _factory

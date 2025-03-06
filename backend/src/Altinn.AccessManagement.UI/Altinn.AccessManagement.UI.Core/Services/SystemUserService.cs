@@ -76,6 +76,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<Result<List<SystemUserFE>>> GetClientSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
+        {
+            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
+            if (party is null)
+            {
+                return Problem.Reportee_Orgno_NotFound;
+            }
+            
+            List<SystemUser> lista = await _systemUserClient.GetClientSystemUsersForParty(partyId, cancellationToken);
+            List<SystemUser> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
+
+            return await MapToSystemUsersFE(sortedList, languageCode, false, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<SystemUserFE> GetClientSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
+        {
+            SystemUser systemUser = await _systemUserClient.GetClientSystemUser(partyId, id, cancellationToken);
+            
+            if (systemUser != null)
+            {
+                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
         public async Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);

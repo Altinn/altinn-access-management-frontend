@@ -10,7 +10,7 @@ import classes from './CustomerList.module.css';
 const filterCustomerList = (list: Customer[], searchString: string): Customer[] => {
   return list.filter((customer) => {
     const isOrgNoMatch = customer.orgNo.indexOf(searchString.replace(' ', '')) > -1;
-    const isNameMatch = customer.displayName.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
+    const isNameMatch = customer.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
     return isOrgNoMatch || isNameMatch;
   });
 };
@@ -23,7 +23,7 @@ interface CustomerListProps {
   assignedIds: string[];
   loadingIds: string[];
   onAddCustomer: (customerId: string) => void;
-  onRemoveCustomer: (customerId: string) => void;
+  onRemoveCustomer?: (customerId: string) => void;
   children?: React.ReactNode;
 }
 
@@ -83,11 +83,11 @@ export const CustomerList = ({
         defaultItemSize='sm'
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {
-            title: customer.displayName,
+            title: customer.name,
             id: customer.id,
             disabled: true,
             as: 'div',
-            avatar: { type: 'company', name: customer.displayName },
+            avatar: { type: 'company', name: customer.name },
             description: `Org. nr. ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
             controls: (
               <ListControls
@@ -144,7 +144,7 @@ interface ListControlsProps {
   customer: Customer;
   isAssigned: boolean;
   isLoading: boolean;
-  onRemoveCustomer: (customerId: string) => void;
+  onRemoveCustomer?: (customerId: string) => void;
   onAddCustomer: (customerId: string) => void;
 }
 const ListControls = ({
@@ -164,12 +164,12 @@ const ListControls = ({
           />
         </div>
       )}
-      {!isLoading && isAssigned && (
+      {!isLoading && isAssigned && onRemoveCustomer && (
         <Button
           variant='tertiary'
           data-size='sm'
           data-color='danger'
-          aria-label={`Fjern ${customer.displayName} fra systemtilgang`}
+          aria-label={`Fjern ${customer.name} fra systemtilgang`}
           onClick={() => onRemoveCustomer(customer.id)}
         >
           <MinusCircleIcon /> {'Fjern fra systemtilgang'}
@@ -179,10 +179,10 @@ const ListControls = ({
         <Button
           variant='tertiary'
           data-size='sm'
-          aria-label={`Legg til kunde ${customer.displayName}`}
+          aria-label={`Legg til ${customer.name} i systemtilgang`}
           onClick={() => onAddCustomer(customer.id)}
         >
-          <PlusCircleIcon /> {'Legg til kunde'}
+          <PlusCircleIcon /> {'Legg til i systemtilgang'}
         </Button>
       )}
     </>

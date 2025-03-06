@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Enums;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
 {
@@ -67,5 +68,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [JsonPropertyName("externalRef")]
         public string ExternalRef { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The system user type
+        /// </summary>
+        [JsonPropertyName("userType")]
+        public SystemUserType UserType { get; set; }
     }
 }

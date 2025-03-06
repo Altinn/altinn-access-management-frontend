@@ -31,6 +31,11 @@
         public string ApiRegisterEndpoint { get; set; }
 
         /// <summary>
+        /// Gets or sets the register api V2 endpoint.
+        /// </summary>
+        public string ApiRegisterV2Endpoint { get; set; }
+
+        /// <summary>
         /// Gets or sets the resource registry api endpoint.
         /// </summary>
         public string ApiResourceRegistryEndpoint { get; set; }

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "61844188-3789-4b84-9314-2be1fdbc6633",
+    "integrationTitle": "Unimicro klientdelegering REGN",
+    "systemId": "unimicro_demo_product",
+    "systemInternalId": "61844188-3789-4b84-9314-2be1fdbc6633",
+    "partyId": "51329012",
+    "reporteeOrgNo": "123456789",
+    "created": "2025-03-01T12:00:00Z",
+    "supplierOrgNo": "925141623",
+    "externalRef": ""
+  },
+  {
+    "id": "244c56a5-3737-44ac-8f3b-8697c5e281da",
+    "integrationTitle": "Luca Regnskap klientdelegering REVI",
+    "systemId": "lucalabs_demo_product",
+    "systemInternalId": "244c56a5-3737-44ac-8f3b-8697c5e281da",
+    "partyId": "51329012",
+    "reporteeOrgNo": "123456789",
+    "created": "2025-02-15T12:00:00Z",
+    "supplierOrgNo": "925141623",
+    "externalRef": ""
+  }
+]

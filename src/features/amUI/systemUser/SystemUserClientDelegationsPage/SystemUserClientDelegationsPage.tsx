@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Alert, Spinner, Paragraph, Heading, Button } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
-import { PlusIcon } from '@navikt/aksel-icons';
+import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 
 import {
   useAssignCustomerMutation,
   useGetAssignedCustomersQuery,
-  useGetCustomersQuery,
-  useGetSystemUserQuery,
+  useGetClientSystemUserQuery,
+  useGetRegnskapsforerCustomersQuery,
+  useGetRevisorCustomersQuery,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -24,18 +25,56 @@ import type { Customer, SystemUser } from '../types';
 import classes from './SystemUserClientDelegationsPage.module.css';
 import { CustomerList } from './CustomerList';
 
+const isRegnskapsforerSystemUser = (systemUser: SystemUser | undefined): boolean => {
+  return (
+    systemUser?.accessPackages.some(
+      (accessPackage) =>
+        accessPackage.urn === 'urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet' ||
+        accessPackage.urn === 'urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet' ||
+        accessPackage.urn === 'urn:altinn:accesspackage:regnskapsforer-lonn',
+    ) ?? false
+  );
+};
+
+const isRevisorSystemUser = (systemUser: SystemUser | undefined): boolean => {
+  return (
+    systemUser?.accessPackages.some(
+      (accessPackage) =>
+        accessPackage.urn === 'urn:altinn:accesspackage:ansvarlig-revisor' ||
+        accessPackage.urn === 'urn:altinn:accesspackage:revisormedarbeider',
+    ) ?? false
+  );
+};
+
 export const SystemUserClientDelegationsPage = (): React.ReactNode => {
   const { id } = useParams();
   const { t } = useTranslation();
   const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid');
 
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
 
   const {
-    data: customers,
-    isError: isLoadCustomersError,
-    isLoading: isLoadingCustomers,
-  } = useGetCustomersQuery(partyId);
+    data: systemUser,
+    isError: isLoadSystemUserError,
+    isLoading: isLoadingSystemUser,
+  } = useGetClientSystemUserQuery({ partyId, systemUserId: id || '' });
+
+  const {
+    data: regnskapsforerCustomers,
+    isError: isLoadRegnskapsforerCustomersError,
+    isLoading: isLoadingRegnskapsforerCustomers,
+  } = useGetRegnskapsforerCustomersQuery(partyUuid, {
+    skip: !isRegnskapsforerSystemUser(systemUser),
+  });
+
+  const {
+    data: revisorCustomers,
+    isError: isLoadRevisorCustomersError,
+    isLoading: isLoadingRevisorCustomers,
+  } = useGetRevisorCustomersQuery(partyUuid, {
+    skip: !isRevisorSystemUser(systemUser),
+  });
 
   const {
     data: assignedIds,
@@ -43,16 +82,15 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
     isLoading: isLoadingAssignedCustomers,
   } = useGetAssignedCustomersQuery({ partyId, systemUserId: id || '' });
 
-  const {
-    data: systemUser,
-    isError: isLoadSystemUserError,
-    isLoading: isLoadingSystemUser,
-  } = useGetSystemUserQuery({ partyId, systemUserId: id || '' });
+  const customers = regnskapsforerCustomers ?? revisorCustomers;
 
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        {(isLoadingSystemUser || isLoadingCustomers || isLoadingAssignedCustomers) && (
+        {(isLoadingSystemUser ||
+          isLoadingRegnskapsforerCustomers ||
+          isLoadingRevisorCustomers ||
+          isLoadingAssignedCustomers) && (
           <Spinner
             aria-label={t('systemuser_detailpage.loading_systemuser')}
             title={''}
@@ -61,7 +99,9 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
         {isLoadSystemUserError && (
           <Alert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</Alert>
         )}
-        {isLoadCustomersError && <Alert data-color='danger'>Kunne ikke laste kunder</Alert>}
+        {(isLoadRevisorCustomersError || isLoadRegnskapsforerCustomersError) && (
+          <Alert data-color='danger'>Kunne ikke laste kunder</Alert>
+        )}
         {isLoadAssignedCustomersError && (
           <Alert data-color='danger'>Kunne ikke laste tilknyttede kunder</Alert>
         )}
@@ -69,7 +109,7 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
           <SystemUserClientDelegationsPageContent
             systemUser={systemUser}
             customers={customers}
-            assignedIds={assignedIds}
+            initialAssignedIds={assignedIds}
           />
         )}
       </PageLayoutWrapper>
@@ -79,19 +119,19 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
 interface SystemUserClientDelegationsPageContentProps {
   systemUser: SystemUser;
   customers: Customer[];
-  assignedIds: string[];
+  initialAssignedIds: string[];
 }
 const SystemUserClientDelegationsPageContent = ({
   systemUser,
   customers,
-  assignedIds,
+  initialAssignedIds,
 }: SystemUserClientDelegationsPageContentProps): React.ReactNode => {
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
   const { id } = useParams();
 
   const [isAddCustomerMode, setIsAddCustomerMode] = useState<boolean>(false);
-  const [delegatedIds, setDelegatedIds] = useState<string[]>(assignedIds);
+  const [delegatedIds, setDelegatedIds] = useState<string[]>(initialAssignedIds);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
   const handleNavigateBack = (): void => {
@@ -102,6 +142,7 @@ const SystemUserClientDelegationsPageContent = ({
     }
   };
 
+  // TODO: legg på feilhåndtering dersom assign eller remove feiler
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
 
@@ -187,15 +228,14 @@ const SystemUserClientDelegationsPageContent = ({
                 assignedIds={delegatedIds}
                 loadingIds={loadingIds}
                 onAddCustomer={onAddCustomer}
-                onRemoveCustomer={onRemoveCustomer}
               >
                 <Button
                   variant='secondary'
                   size='sm'
                   onClick={enableAddCustomers}
                 >
-                  <PlusIcon />
-                  {'Legg til flere kunder'}
+                  <PencilIcon />
+                  {'Administrer kunder'}
                 </Button>
               </CustomerList>
             </>

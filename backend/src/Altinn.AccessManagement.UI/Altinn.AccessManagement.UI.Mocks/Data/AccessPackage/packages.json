@@ -4124,7 +4124,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:regnskapsforermedsigneringsrettighet"
+    "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"
   },
   {
     "provider": {
@@ -4235,7 +4235,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:ansvarligrevisor"
+    "urn": "urn:altinn:accesspackage:ansvarlig-revisor"
   },
   {
     "provider": {
