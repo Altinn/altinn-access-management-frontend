@@ -13,14 +13,17 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: install dependencies
-        working-directory: ./
-        run: yarn --immutable
-
       - name: install node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
+      - name: clear yarn cache
+        run: yarn cache clean
+
+      - name: install dependencies
+        working-directory: ./
+        run: yarn --immutable
 
       - name: run eslint
         working-directory: ./
