@@ -44,7 +44,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Running yarn tests
-        working-directory: playwright 
+        working-directory: playwright
         run: |
           yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }}
       - uses: actions/upload-artifact@v4
@@ -53,6 +53,9 @@ jobs:
           name: playwright-report-${{ inputs.environment }}
           path: playwright/playwright-report/${{ inputs.environment }}
           retention-days: 30
+        env: 
+          API_USER: ${{ secrets.USERNAME_TEST_API }}
+          API_PW: ${{ secrets.PASSWORD_TEST_API }}
 
       - name: Upload HTML report to Azure
         if: always()
@@ -67,4 +70,3 @@ jobs:
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
           AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
-
