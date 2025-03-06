@@ -54,8 +54,8 @@ jobs:
           path: playwright/playwright-report/${{ inputs.environment }}
           retention-days: 30
         env: 
-          API_USER: ${{ secrets.USERNAME_TEST_API }}
-          API_PW: ${{ secrets.PASSWORD_TEST_API }}
+          USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
+          PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
 
       - name: Upload HTML report to Azure
         if: always()
