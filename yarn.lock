@@ -940,10 +940,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-theme@npm:1.0.0-next.35":
-  version: 1.0.0-next.35
-  resolution: "@digdir/designsystemet-theme@npm:1.0.0-next.35"
-  checksum: 10/aef73c2e6c3dd0e87e9595479cac463da76992fd1da27c0cdf48b60a085071a03729725c28ff141838c50bc5afa0ab13cfa0d302065fba74d9e7469522e7abd6
+"@digdir/designsystemet-theme@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@digdir/designsystemet-theme@npm:1.0.0"
+  checksum: 10/b72e5179da66a90d1c4d086fdfb91f1cd94046ba3221dc0a1dc89ea6af4e39d6f19eb5c17a930f8e122242b3757b8c0ff311be400cc3ba58daeeb63ea37186e3
   languageName: node
   linkType: hard
 
@@ -3470,7 +3470,7 @@ __metadata:
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/designsystemet-css": "npm:1.0.0-next.35"
     "@digdir/designsystemet-react": "npm:1.0.0-next.35"
-    "@digdir/designsystemet-theme": "npm:1.0.0-next.35"
+    "@digdir/designsystemet-theme": "npm:1.0.0"
     "@navikt/aksel-icons": "npm:^7.12.2"
     "@playwright/test": "npm:^1.47.2"
     "@reduxjs/toolkit": "npm:^2.2.5"
