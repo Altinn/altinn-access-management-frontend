@@ -28,11 +28,6 @@ on:
         type: string
         required: true
         description: Environment
-    secrets:
-      USERNAME_TEST_API:
-        required: true
-      PASSWORD_TEST_API:
-        required: true
 
 jobs:
   e2e-tests:
