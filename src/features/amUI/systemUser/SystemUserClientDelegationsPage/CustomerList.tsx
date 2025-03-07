@@ -51,13 +51,9 @@ export const CustomerList = ({
     showPages: totalPages < showPages ? totalPages : showPages,
   });
 
-  const onSearchStringChanged = (newSearchString: string): void => {
-    setSearchValue(newSearchString);
-    setCurrentPage(1);
-  };
-
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    onSearchStringChanged(event.target.value);
+    setSearchValue(event.target.value);
+    setCurrentPage(1);
   };
 
   return (
