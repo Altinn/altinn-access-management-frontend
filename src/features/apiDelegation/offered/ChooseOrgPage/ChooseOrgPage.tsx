@@ -1,7 +1,7 @@
 import { Button, Spinner, Search, Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import cn from 'classnames';
 
@@ -24,7 +24,7 @@ import classes from './ChooseOrgPage.module.css';
 import { DelegableOrgItems } from './DelegableOrgItems';
 import { ChosenItems } from './ChosenItems';
 import { ChooseOrgInfoPanel } from './ChooseOrgInfoPanel';
-import { useOrgSearch } from './useOrgSearch';
+import { mapOverviewOrgToOrganization, useOrgSearch } from './useOrgSearch';
 
 export const ChooseOrgPage = () => {
   const partyId = getCookie('AltinnPartyId');
@@ -44,7 +44,13 @@ export const ChooseOrgPage = () => {
     partyId,
     delegationType: DelegationType.Offered,
   });
-  const { matches: displayOrgs, isFetching } = useOrgSearch(overviewOrgs || [], searchString);
+
+  const orgs = useMemo(
+    () => overviewOrgs?.map((o) => mapOverviewOrgToOrganization(o)) || [],
+    [overviewOrgs],
+  );
+
+  const { matches: displayOrgs, isFetching } = useOrgSearch(orgs, searchString);
 
   const searchOrgNotExist = searchString.length === 9 && displayOrgs.length === 0;
   const promptOrgNumber = searchString.length !== 9 && displayOrgs.length === 0;

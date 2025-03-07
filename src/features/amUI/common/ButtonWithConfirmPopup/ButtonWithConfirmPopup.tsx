@@ -1,5 +1,6 @@
 import type { PopoverProps } from '@digdir/designsystemet-react';
 import { Paragraph, Popover } from '@digdir/designsystemet-react';
+import type { JSX } from 'react';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';

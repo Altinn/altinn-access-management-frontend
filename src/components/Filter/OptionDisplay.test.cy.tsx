@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mount } from 'cypress/react18';
+import { mount } from 'cypress/react';
 // eslint-disable-next-line import/no-unresolved
 import 'cypress-real-events';
 
