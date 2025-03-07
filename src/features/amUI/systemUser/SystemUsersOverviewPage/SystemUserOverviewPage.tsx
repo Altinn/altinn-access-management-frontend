@@ -63,28 +63,44 @@ export const SystemUserOverviewPage = () => {
                 {t('systemuser_overviewpage.sub_title_text')}
               </Paragraph>
               <CreateSystemUserCheck>
-                <Button
-                  variant='secondary'
-                  className={classes.createSystemUserButton}
-                  asChild
-                >
-                  <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
-                    <PlusIcon
-                      fontSize={28}
-                      aria-hidden
-                    />
-                    {t('systemuser_overviewpage.new_system_user_button')}
-                  </Link>
-                </Button>
                 {isLoadingSystemUsers && isLoadingClientSystemUsers && (
                   <Spinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
                 )}
+                <div className={classes.listHeader}>
+                  <Heading
+                    level={2}
+                    data-size='xs'
+                    className={classes.systemUserHeader}
+                  >
+                    {t('systemuser_overviewpage.existing_system_users_title')}
+                  </Heading>
+                  <Button
+                    variant='secondary'
+                    className={classes.createSystemUserButton}
+                    asChild
+                  >
+                    <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
+                      <PlusIcon
+                        fontSize={28}
+                        aria-hidden
+                      />
+                      {t('systemuser_overviewpage.new_system_user_button')}
+                    </Link>
+                  </Button>
+                </div>
                 <SystemUserList systemUsers={systemUsers} />
                 {isLoadSystemUsersError && (
                   <Alert data-color='danger'>
                     {t('systemuser_overviewpage.systemusers_load_error')}
                   </Alert>
                 )}
+                <Heading
+                  level={2}
+                  data-size='xs'
+                  className={classes.systemUserHeader}
+                >
+                  {t('systemuser_overviewpage.client_delegation_systemusers_title')}
+                </Heading>
                 <SystemUserList
                   systemUsers={clientSystemUsers}
                   isClientList
@@ -115,38 +131,27 @@ const SystemUserList = ({ systemUsers, isClientList }: SystemUserListProps) => {
   const newlyCreatedId = routerLocation?.state?.createdId;
 
   return systemUsers && systemUsers.length > 0 ? (
-    <>
-      <Heading
-        level={2}
-        data-size='xs'
-        className={classes.systemUserHeader}
-      >
-        {isClientList
-          ? t('systemuser_overviewpage.client_delegation_systemusers_title')
-          : t('systemuser_overviewpage.existing_system_users_title')}
-      </Heading>
-      <List
-        defaultItemSize='lg'
-        items={systemUsers?.map((systemUser) => {
-          const isNew = newlyCreatedId === systemUser.id;
-          return {
-            title: systemUser.integrationTitle,
-            description: systemUser.system.systemVendorOrgName,
-            icon: TenancyIcon,
-            linkIcon: true,
-            badge: isNew
-              ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
-              : undefined,
-            onClick: () => {
-              const url = isClientList
-                ? `/systemuser/${systemUser.id}/clientdelegations`
-                : `/systemuser/${systemUser.id}`;
-              navigate(url);
-            },
-          };
-        })}
-      />
-    </>
+    <List
+      defaultItemSize='lg'
+      items={systemUsers?.map((systemUser) => {
+        const isNew = newlyCreatedId === systemUser.id;
+        return {
+          title: systemUser.integrationTitle,
+          description: systemUser.system.systemVendorOrgName,
+          icon: TenancyIcon,
+          linkIcon: true,
+          badge: isNew
+            ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
+            : undefined,
+          onClick: () => {
+            const url = isClientList
+              ? `/systemuser/${systemUser.id}/clientdelegations`
+              : `/systemuser/${systemUser.id}`;
+            navigate(url);
+          },
+        };
+      })}
+    />
   ) : (
     <></>
   );
