@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import * as React from 'react';
 import { PlusIcon, PencilIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useDispatch } from 'react-redux';
@@ -119,7 +119,7 @@ export const OverviewPageContent = ({
     } else if (loading) {
       return (
         <div className={classes.spinnerContainer}>
-          <Spinner title={t('common.loading')} />
+          <Spinner aria-label={t('common.loading')} />
         </div>
       );
     } else if (overviewOrgs && overviewOrgs.length < 1) {
@@ -174,19 +174,19 @@ export const OverviewPageContent = ({
             onClick={() =>
               navigate(`/${ApiDelegationPath.OfferedApiDelegations}/${ApiDelegationPath.ChooseApi}`)
             }
-            size='md'
+            data-size='md'
           >
             <PlusIcon fontSize={getButtonIconSize(true)} /> {t('api_delegation.delegate_new_api')}
           </Button>
         </div>
       )}
       <Alert
-        color='info'
-        size='md'
+        data-color='info'
+        data-size='md'
       >
         <Heading
           level={2}
-          size='sm'
+          data-size='sm'
           className={classes.alertHeading}
         >
           {t('api_delegation.card_title')}
@@ -205,12 +205,12 @@ export const OverviewPageContent = ({
       {deletedItems && deletedItems?.failedDeleteions?.length > 0 && (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           title={t('api_delegation.revoke_delegation_failed')}
         >
           <Heading
             level={3}
-            size='sm'
+            data-size='sm'
           >
             {t('api_delegation.revoke_delegation_failed')}
           </Heading>
@@ -229,7 +229,7 @@ export const OverviewPageContent = ({
           <>
             <Heading
               level={3}
-              size={isSm ? 'sm' : 'md'}
+              data-size={isSm ? 'sm' : 'md'}
               className={classes.apiSubheading}
             >
               {delegationType === DelegationType.Offered
@@ -244,7 +244,7 @@ export const OverviewPageContent = ({
                   softRestoreAll();
                   setIsEditable(!isEditable);
                 }}
-                size='md'
+                data-size='md'
               >
                 {!isEditable ? (
                   <>
@@ -267,7 +267,7 @@ export const OverviewPageContent = ({
           <Button
             disabled={loading || itemsToDelete.length === 0}
             onClick={confirmRevoke}
-            color='accent'
+            data-color='accent'
           >
             {t('api_delegation.save')}
           </Button>

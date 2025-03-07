@@ -54,7 +54,7 @@ export const FilterButton = forwardRef<HTMLButtonElement, FilterButtonProps>(
       <div className={cn(classes.filterButtonContainer, className)}>
         <Button
           {...restHTMLProps}
-          size='sm'
+          data-size='sm'
           ref={ref}
           id={id}
           className={classes.filterButton}

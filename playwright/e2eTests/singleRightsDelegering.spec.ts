@@ -1,7 +1,8 @@
 /* eslint-disable import/default */
 /* eslint-disable import/no-named-as-default-member */
 import { test } from './../fixture/pomFixture';
-test.describe('User with DAGL/HADM role without having resource access themselves debug', () => {
+
+test.describe('User with DAGL/HADM role without having resource access themselves', () => {
   test('User A who is DAGL/HADM for org delegates resources/Altinn 3 app/Altinn 2 services to User B', async ({
     login,
     delegate,

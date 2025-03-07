@@ -78,7 +78,7 @@ export const ResourceActionBar = ({
   const addButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'lg' : 'md'}
+      data-size={compact ? 'lg' : 'md'}
       onClick={() => {
         onAddClick?.();
       }}
@@ -96,7 +96,7 @@ export const ResourceActionBar = ({
   const undoButton = (
     <Button
       variant='tertiary'
-      size={compact ? 'lg' : 'md'}
+      data-size={compact ? 'lg' : 'md'}
       onClick={onRemoveClick}
       icon={compact}
     >
@@ -109,8 +109,14 @@ export const ResourceActionBar = ({
   );
 
   const loadingText = (
-    <Paragraph className={classes.loadingText}>
-      <Spinner title={t('common.loading')} />
+    <Paragraph
+      className={classes.loadingText}
+      data-size='sm'
+    >
+      <Spinner
+        aria-label={t('common.loading')}
+        data-size='sm'
+      />
       {!compact && t('common.loading')}
     </Paragraph>
   );

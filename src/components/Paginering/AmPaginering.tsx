@@ -9,6 +9,7 @@ export interface AmPaginationProps extends PaginationProps {
   setCurrentPage?: (page: number) => void;
   currentPage: number;
   hideLabels?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const AmPagination = ({
@@ -16,22 +17,23 @@ export const AmPagination = ({
   showPages = 5,
   currentPage,
   setCurrentPage,
+  onChange,
   hideLabels = false,
-  size = 'md',
   className,
+  size,
 }: AmPaginationProps) => {
   const { t } = useTranslation();
   const { pages, prevButtonProps, nextButtonProps } = usePagination({
     currentPage,
     setCurrentPage,
-    onChange: () => {},
+    onChange,
     totalPages,
     showPages: showPages > totalPages ? totalPages : showPages,
   });
 
   return (
     <Pagination
-      size={size}
+      data-size={size || 'md'}
       className={className}
     >
       <Pagination.List>
@@ -42,12 +44,14 @@ export const AmPagination = ({
         </Pagination.Item>
         {pages.map(({ page, itemKey, buttonProps }) => (
           <Pagination.Item key={itemKey}>
-            <Pagination.Button
-              {...buttonProps}
-              aria-label={`${t('common.page')} ${page}`}
-            >
-              {page}
-            </Pagination.Button>
+            {typeof page === 'number' && (
+              <Pagination.Button
+                {...buttonProps}
+                aria-label={`${t('common.page')} ${page}`}
+              >
+                {page}
+              </Pagination.Button>
+            )}
           </Pagination.Item>
         ))}
         <Pagination.Item>

@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Paragraph } from '@digdir/designsystemet-react';
-import { ValidationMessage } from '@digdir/designsystemet-react';
+import { Paragraph, ValidationMessage } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
@@ -82,7 +81,8 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
           return (
             <div className={classes.additionalTextContainer}>
               <ValidationMessage
-                error
+                //TODO check if this is the correct value for this component if its actually an Alert ?
+                data-color='danger'
                 className={classes.additionalText}
               >
                 {numFailedDelegations +
@@ -98,7 +98,7 @@ export const ActionBarSection = ({ recipientName }: ActionBarSectionProps) => {
           return (
             <div className={classes.additionalTextContainer}>
               <ValidationMessage
-                error
+                data-color='danger'
                 className={classes.additionalTextRejected}
               >
                 {t('common.failed')}

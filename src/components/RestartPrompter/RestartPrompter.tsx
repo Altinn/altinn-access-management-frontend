@@ -2,7 +2,7 @@ import type { AlertProps } from '@digdir/designsystemet-react';
 import { Alert, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import cn from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import classes from './RestartPrompter.module.css';
@@ -39,7 +39,7 @@ export const RestartPrompter = ({
       className={cn({ [classes.spacing]: spacingBottom })}
     >
       <Heading
-        size='sm'
+        data-size='sm'
         level={2}
         className={classes.title}
       >
@@ -50,8 +50,8 @@ export const RestartPrompter = ({
         <div className={classes.restartButton}>
           <Button
             variant='primary'
-            color='accent'
-            size='md'
+            data-color='accent'
+            data-size='md'
             onClick={() => {
               navigate(restartPath);
             }}

@@ -36,17 +36,17 @@ export const NavigationSection = ({
     >
       <Button
         variant='primary'
-        color='accent'
+        data-color='accent'
         disabled={nextButtonProps.disabled}
         onClick={nextButtonProps.onNext}
       >
         {t('common.proceed')}
       </Button>
-      <Popover.Context>
+      <Popover.TriggerContext>
         <Popover.Trigger
           variant='tertiary'
           color={cancelButtonProps.showWarning ? 'danger' : 'accent'}
-          size='md'
+          data-size='md'
           onClick={
             cancelButtonProps.showWarning
               ? () => setPopoverOpen(!popoverOpen)
@@ -58,6 +58,7 @@ export const NavigationSection = ({
         <Popover
           placement='top'
           open={popoverOpen}
+          data-color='danger'
           onClose={() => setPopoverOpen(false)}
         >
           <Paragraph>{t('single_rights.cancel_popover_text')}</Paragraph>
@@ -78,7 +79,7 @@ export const NavigationSection = ({
             </Button>
           </div>
         </Popover>
-      </Popover.Context>
+      </Popover.TriggerContext>
     </div>
   );
 };

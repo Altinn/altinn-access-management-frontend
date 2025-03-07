@@ -1,15 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { chromium, type Page, expect } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 
 export class loginWithUser {
   constructor(public page: Page) {}
 
   async loginWithUser(testUser: string) {
-    await this.page.goto(process.env.BASE_URL as string);
-    await this.page.click("'Logg inn/Min profil'");
-    await this.page.getByText('TestID Lag din egen').click();
-    await this.page.locator("input[name='pid']").fill(testUser);
-    await this.page.click("'Autentiser'");
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        await this.page.goto(process.env.BASE_URL as string);
+        await this.page.click("'Logg inn/Min profil'");
+        await this.page.getByText('TestID Lag din egen').click();
+        await this.page.locator("input[name='pid']").fill(testUser);
+        await this.page.click("'Autentiser'");
+
+        //Verify you're actually logged in
+        await expect(
+          this.page.getByRole('heading', { level: 1, name: 'Velg aktør' }),
+        ).toBeVisible();
+
+        return; // Exit function if login is successful
+      } catch (error) {
+        if (attempt === 3) {
+          throw new Error('Login failed after 3 retries');
+        }
+
+        await this.page.waitForTimeout(2000 * attempt);
+      }
+    }
   }
 
   async chooseReportee(reportee: string) {

@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "types": ["vite/client"],
+    "types": [
+      "vite/client",
+      "vitest/globals",
+      "@digdir/designsystemet-theme",
+      "@digdir/designsystemet-react/react-types"
+    ],
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
@@ -18,22 +23,20 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@mock/*": ["./.mock/*"]
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "typeRoots": ["./node_modules/@types", "./src"]
   },
-  "include": [    
-  "**/*.ts",
-  "**/*.tsx",
-  "**/*.js",
-  "**/.eslintrc.js"
-, ".mock/mockServiceWorker.js", ".mock/browser.js", ".mock/handlers.js"],
-"exclude": [
-  "node_modules",
-  "dist",
-  "eslint.config.cjs",
-  "vite.config.ts"
-],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/.eslintrc.js",
+    "test/vitest.setup.ts",
+    ".mock/mockServiceWorker.js"
+  ],
+  "exclude": ["node_modules", "dist", "eslint.config.cjs", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

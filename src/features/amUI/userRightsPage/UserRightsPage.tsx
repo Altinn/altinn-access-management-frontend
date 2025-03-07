@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@digdir/designsystemet-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -10,6 +10,7 @@ import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/use
 import { amUIPath } from '@/routes/paths';
 import { filterDigdirRole } from '@/resources/utils/roleUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
@@ -37,6 +38,8 @@ export const UserRightsPage = () => {
     from: getCookie('AltinnPartyUuid'),
     to: id ?? '',
   });
+
+  rerouteIfNotConfetti();
 
   return (
     <SnackbarProvider>
@@ -70,11 +73,14 @@ export const UserRightsPage = () => {
                     <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
                   }
                   singleRightsPanel={<SingleRightsSection />}
-                  roleAssignmentsPanel={<RoleSection />}
+                  roleAssignmentsPanel={
+                    <RoleSection numberOfAccesses={allAccesses.accessPackages?.length} />
+                  }
                 />
               </>
             ) : (
-              <Spinner title='loading' />
+              // TODO: Add proper aria-label for loading
+              <Spinner aria-label='loading' />
             )}
           </PageContainer>
         </PageLayoutWrapper>

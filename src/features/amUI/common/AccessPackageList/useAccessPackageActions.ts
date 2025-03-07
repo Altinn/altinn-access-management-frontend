@@ -5,15 +5,16 @@ import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { useSnackbar } from '../Snackbar';
 
 interface useAccessPackageActionsProps {
   toUuid: string;
   onDelegateSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onDelegateError?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onDelegateError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
   onRevokeSuccess?: (accessPackage: AccessPackage, toParty: Party) => void;
-  onRevokeError?: (accessPackage: AccessPackage, toParty: Party) => void;
+  onRevokeError?: (accessPackage: AccessPackage, errorInfo: ActionError) => void;
 }
 
 export const useAccessPackageActions = ({
@@ -42,8 +43,13 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const handleDelegateError = (accessPackage: AccessPackage, toParty: Party) => {
-    if (onDelegateError) onDelegateError(accessPackage, toParty);
+  const handleDelegateError = (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    httpStatus: string,
+    timestamp: string,
+  ) => {
+    if (onDelegateError) onDelegateError(accessPackage, { httpStatus, timestamp });
     else {
       openSnackbar({
         message: t('access_packages.package_delegation_error', {
@@ -66,8 +72,13 @@ export const useAccessPackageActions = ({
     }
   };
 
-  const handleRevokeError = (accessPackage: AccessPackage, toParty: Party) => {
-    if (onRevokeError) onRevokeError(accessPackage, toParty);
+  const handleRevokeError = (
+    accessPackage: AccessPackage,
+    toParty: Party,
+    httpStatus: string,
+    timestamp: string,
+  ) => {
+    if (onRevokeError) onRevokeError(accessPackage, { httpStatus, timestamp });
     else {
       openSnackbar({
         message: t('access_packages.package_deletion_error', {
@@ -88,8 +99,13 @@ export const useAccessPackageActions = ({
       () => {
         handleDelegateSuccess(accessPackage, toParty);
       },
-      () => {
-        handleDelegateError(accessPackage, toParty);
+      (httpStatus) => {
+        handleDelegateError(
+          accessPackage,
+          toParty,
+          httpStatus.toString(),
+          new Date().toISOString(),
+        );
       },
     );
   };
@@ -104,8 +120,8 @@ export const useAccessPackageActions = ({
       () => {
         handleRevokeSuccess(accessPackage, toParty);
       },
-      () => {
-        handleRevokeError(accessPackage, toParty);
+      (httpStatus) => {
+        handleRevokeError(accessPackage, toParty, httpStatus.toString(), new Date().toISOString());
       },
     );
   };

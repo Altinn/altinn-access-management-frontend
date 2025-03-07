@@ -1,9 +1,7 @@
 import React from 'react';
-import { Button } from '@digdir/designsystemet-react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-
-import { getButtonIconSize } from '@/resources/utils/iconUtils';
+import { Button } from '@altinn/altinn-components';
 
 import classes from './PageContainer.module.css';
 
@@ -27,12 +25,11 @@ export const PageContainer = ({
         <div className={classes.pageActions}>
           {onNavigateBack && (
             <Button
-              variant='tertiary'
-              color='neutral'
+              variant='text'
+              data-color='neutral'
               onClick={onNavigateBack}
-              icon
+              icon={ArrowLeftIcon}
             >
-              <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
               {t('common.back')}
             </Button>
           )}

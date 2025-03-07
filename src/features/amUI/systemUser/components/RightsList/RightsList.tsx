@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Heading, Modal } from '@digdir/designsystemet-react';
+import { Button, Heading, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { AccessPackageList, ResourceList } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
@@ -37,6 +37,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
     modalRef.current?.showModal();
   };
 
+  // Note! This function is not called on click outside modal. It is fixed in newer versions of designsystemet
   const closeModal = (): void => {
     setSelectedResource(null);
     setSelectedAccessPackage(null);
@@ -102,15 +103,15 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           />
         </div>
       )}
-      <Modal
+      <Dialog
         ref={modalRef}
         onClose={closeModal}
-        backdropClose
+        closedby='any'
       >
         {selectedAccessPackage && selectedResource && (
           <Button
             variant='tertiary'
-            color='neutral'
+            data-color='neutral'
             data-size='sm'
             className={classes.backButton}
             onClick={() => setSelectedResource(null)}
@@ -127,7 +128,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           />
         )}
         {selectedResource && <ResourceDetails resource={selectedResource} />}
-      </Modal>
+      </Dialog>
     </div>
   );
 };

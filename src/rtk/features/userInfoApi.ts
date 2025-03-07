@@ -19,6 +19,7 @@ export interface ReporteeInfo {
   organizationNumber?: string;
   type?: string;
   partyUuid: string;
+  partyId: string;
   authorizedRoles: string[];
 }
 
@@ -45,10 +46,12 @@ export interface UserAccesses {
   roles: string[];
 }
 
+const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/user`;
+
 export const userInfoApi = createApi({
   reducerPath: 'userInfoApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/accessmanagement/api/v1/user/',
+    baseUrl: baseUrl,
     prepareHeaders: (headers) => {
       headers.set('content-type', 'application/json; charset=utf-8');
       headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN'));
@@ -78,6 +81,12 @@ export const userInfoApi = createApi({
       },
       keepUnusedDataFor: 300,
     }),
+    getReporteeListForAuthorizedUser: builder.query<ReporteeInfo[], void>({
+      query: () => {
+        return '/actorlist';
+      },
+      keepUnusedDataFor: 300,
+    }),
     getUserAccesses: builder.query<UserAccesses, { from: string; to: string }>({
       query: ({ from, to }) => `from/${from}/to/${to}/accesses`,
       keepUnusedDataFor: 300,
@@ -104,6 +113,7 @@ export const {
   useGetUserAccessesQuery,
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
+  useGetReporteeListForAuthorizedUserQuery,
 } = userInfoApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = userInfoApi;

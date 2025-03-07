@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { Button, Paragraph, Popover } from '@digdir/designsystemet-react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useEffect, useState } from 'react';
 
 import {
@@ -202,10 +202,10 @@ export const ChooseRightsPage = () => {
   const navigationButtons = () => {
     return (
       <>
-        <Popover.Context>
+        <Popover.TriggerContext>
           <Popover.Trigger
             variant='primary'
-            color='accent'
+            data-color='accent'
             disabled={delegationCount < 1}
             onClick={() => setPopoverOpen(!popoverOpen)}
           >
@@ -214,7 +214,7 @@ export const ChooseRightsPage = () => {
           <Popover
             onClose={() => setPopoverOpen(false)}
             open={popoverOpen}
-            variant={'info'}
+            color={'info'}
             placement={'top'}
           >
             <Paragraph>
@@ -230,10 +230,10 @@ export const ChooseRightsPage = () => {
               </Button>
             </div>
           </Popover>
-        </Popover.Context>
+        </Popover.TriggerContext>
         <Button
           variant='secondary'
-          color='accent'
+          data-color='accent'
           onClick={() => {
             navigate(
               `/${SingleRightPath.DelegateSingleRights}/${SingleRightPath.ChooseService}?${urlParams}`,

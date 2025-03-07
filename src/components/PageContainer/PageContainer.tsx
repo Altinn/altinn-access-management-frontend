@@ -25,7 +25,7 @@ export const PageContainer = ({ children }: PageContainerProps) => {
             icon={true}
             title={t('common.close')}
             className={classes.closeButton}
-            size='sm'
+            data-size='sm'
             aria-label={String(t('common.cancel'))}
             asChild
           >

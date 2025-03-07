@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router';
 import { Alert, Spinner, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import {
@@ -100,10 +100,7 @@ export const SystemUserChangeRequestPage = () => {
         </Alert>
       )}
       {isLoadingChangeRequest && (
-        <Spinner
-          aria-label={t('systemuser_change_request.loading_systemuser_change_request')}
-          title={''}
-        />
+        <Spinner aria-label={t('systemuser_change_request.loading_systemuser_change_request')} />
       )}
       {changeRequest?.system && (
         <>

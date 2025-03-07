@@ -27,7 +27,7 @@ export default {
         <DialogContent>
           <Paragraph
             variant='long'
-            size='sm'
+            data-size='sm'
           >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus orci turpis, vehicula a
             dignissim eget, condimentum at diam. Etiam iaculis, purus vel venenatis condimentum,

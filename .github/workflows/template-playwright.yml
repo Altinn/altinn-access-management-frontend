@@ -28,6 +28,11 @@ on:
         type: string
         required: true
         description: Environment
+    secrets:
+      USERNAME_TEST_API:
+        required: true
+      PASSWORD_TEST_API:
+        required: true
 
 jobs:
   e2e-tests:
@@ -40,13 +45,15 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: yarn --immutable
-
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Running yarn tests
-        working-directory: playwright 
+        working-directory: playwright
+        env:
+          USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
+          PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
         run: |
-          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }}
+          yarn run env:${{ inputs.environment }} --retries=2 --project ${{ inputs.project }} --workers=5
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -67,4 +74,3 @@ jobs:
           AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
           AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
           AZCOPY_TENANT_ID: ${{ secrets.AZCOPY_TENANT_ID }}
-

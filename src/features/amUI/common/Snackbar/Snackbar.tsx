@@ -22,7 +22,7 @@ export const SnackbarContainer = (): JSX.Element | null => {
         <SnackbarItem
           key={item.id}
           as='div'
-          color={item.variant}
+          data-color={item.variant}
           message={item.message}
           icon={item.icon ?? (BellFillIcon as unknown as SVGElement)}
           dismissable={item.dismissable}

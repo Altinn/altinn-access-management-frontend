@@ -9,7 +9,7 @@ export interface TechnicalErrorParagraphsProps {
   /*** The http status of the error */
   time: string;
   /*** The size of the paragraph text */
-  size?: ParagraphProps['size'];
+  size?: ParagraphProps['data-size'];
 }
 
 export const TechnicalErrorParagraphs = ({
@@ -21,24 +21,20 @@ export const TechnicalErrorParagraphs = ({
   return (
     <>
       <Paragraph
-        size={size}
+        data-size={size}
         variant='long'
       >
         {t('common.technical_error')}
       </Paragraph>
-      <Paragraph size={size}>
+      <Paragraph data-size={size}>
         {t('common.time_of_error', {
           time: new Date(time).toLocaleDateString('nb-NO', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
           }),
-        })}
-      </Paragraph>
-      <Paragraph size={size}>
-        {t('common.error_status', {
-          status: status,
-        })}
+        })}{' '}
+        - {t('common.error_status', { status: status })}
       </Paragraph>
     </>
   );

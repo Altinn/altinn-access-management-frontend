@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Spinner } from '@digdir/designsystemet-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 import {
   useCreateSystemUserMutation,
@@ -59,12 +59,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const numberOfRights = (rights?.resources?.length || 0) + (rights?.accessPackages?.length || 0);
 
   if (isLoadingRights) {
-    return (
-      <Spinner
-        aria-label={t('systemuser_includedrightspage.loading_rights')}
-        title={''}
-      />
-    );
+    return <Spinner aria-label={t('systemuser_includedrightspage.loading_rights')} />;
   }
 
   return (

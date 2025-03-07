@@ -86,16 +86,16 @@ export const ApiActionBar = ({
       {variant === 'add' &&
         (isLoading === true ? (
           <Spinner
-            title={t('common.loading')}
-            size='md'
+            aria-label={t('common.loading')}
+            data-size='md'
           />
         ) : (
           <Button
             variant={'tertiary'}
-            color='accent'
+            data-color='accent'
             onClick={onAddClick}
             aria-label={t('common.add') + ' ' + api.apiName}
-            size='lg'
+            data-size='lg'
             icon
           >
             <PlusCircleIcon fontSize={getButtonIconSize(false)} />
@@ -107,7 +107,7 @@ export const ApiActionBar = ({
           color={'danger'}
           onClick={onRemove}
           aria-label={t('common.remove') + ' ' + api.apiName}
-          size='lg'
+          data-size='lg'
           className={classes.actionButton}
           icon
         >
@@ -123,7 +123,7 @@ export const ApiActionBar = ({
         {api.scopes?.length > 0 && (
           <div className={classes.scopeList}>
             <Heading
-              size='2xs'
+              data-size='2xs'
               level={5}
               className={classes.actionBarContentHeading}
             >
@@ -135,7 +135,7 @@ export const ApiActionBar = ({
         {api.rightDescription && (
           <>
             <Heading
-              size='2xs'
+              data-size='2xs'
               level={5}
               className={classes.actionBarContentHeading}
             >
@@ -150,7 +150,7 @@ export const ApiActionBar = ({
         {api.description && (
           <>
             <Heading
-              size='2xs'
+              data-size='2xs'
               level={5}
               className={classes.actionBarContentHeading}
             >
@@ -171,7 +171,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph variant='long'>{t(`${getErrorCodeTextKey(ErrorCode.HTTPError)}`)}</Paragraph>
@@ -181,7 +181,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph variant='long'>
@@ -199,7 +199,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph>
@@ -212,7 +212,7 @@ export const ApiActionBar = ({
       return (
         <Alert
           role='alert'
-          color='danger'
+          data-color='danger'
           className={classes.errorContent}
         >
           <Paragraph>{t(`${getErrorCodeTextKey('')}`)}</Paragraph>
