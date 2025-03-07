@@ -10,8 +10,8 @@ import { PageWrapper } from '@/components';
 import { useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
+import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 
 import classes from './SystemUserOverviewPage.module.css';
