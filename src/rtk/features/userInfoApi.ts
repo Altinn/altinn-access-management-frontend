@@ -24,10 +24,10 @@ export interface ReporteeInfo {
 }
 
 export enum PartyType {
-  None = 'None',
-  Person = 'Person',
-  Organization = 'Organization',
-  SelfIdentified = 'SelfIdentified',
+  None = 0,
+  Person = 1,
+  Organization = 2,
+  SelfIdentified = 3,
 }
 
 export interface User {
