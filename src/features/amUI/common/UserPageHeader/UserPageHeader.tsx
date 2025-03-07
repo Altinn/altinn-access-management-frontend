@@ -2,7 +2,7 @@ import { Avatar } from '@altinn/altinn-components';
 import type { ReactNode } from 'react';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
-import type { PartyType } from '@/rtk/features/userInfoApi';
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './UserPageHeader.module.css';
 
@@ -20,7 +20,7 @@ export const UserPageHeader = ({ userName, userType, subHeading, roles }: UserPa
         className={classes.avatar}
         name={userName || ''}
         size={'lg'}
-        type={userType === 'Organization' ? 'company' : 'person'}
+        type={userType === PartyType.Organization ? 'company' : 'person'}
       />
       <Heading
         level={1}
