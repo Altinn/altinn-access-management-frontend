@@ -14,7 +14,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { SystemUserPageLayoutWrapper } from '../SystemUserPageLayoutWrapper';
+import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 
 import classes from './SystemUserDetailsPage.module.css';
 
@@ -102,7 +102,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
 
   return (
     <PageWrapper>
-      <SystemUserPageLayoutWrapper>
+      <PageLayoutWrapper>
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={deletePopover}
@@ -142,7 +142,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             </div>
           )}
         </PageContainer>
-      </SystemUserPageLayoutWrapper>
+      </PageLayoutWrapper>
     </PageWrapper>
   );
 };
