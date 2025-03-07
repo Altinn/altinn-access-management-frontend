@@ -5,4 +5,5 @@ export enum SystemUserPath {
   Details = ':id',
   Request = 'request',
   ChangeRequest = 'changerequest',
+  ClientRequest = 'clientrequest',
 }

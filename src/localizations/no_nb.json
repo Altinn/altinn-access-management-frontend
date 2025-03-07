@@ -501,6 +501,11 @@
     "request_rejected": "Denne oppdaterings-forespørselen er allerede avvist",
     "request_expired": "Denne oppdaterings-forespørselen har utløpt"
   },
+  "systemuser_client_delegation_request": {
+    "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
+    "banner_title": "Lag en systemtilgang for kunderelasjoner",
+    "system_description": "Gjennom systemtilgangen får {{vendorName}} fullmakt til å løse oppgaver på vegne av {{companyName}} sine kunder. For å fullføre oppsettet må tilgangene til kundene tildeles i kunderelasjoner i Altinn."
+  },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
     "02_rights_failed_to_delegate": "Kunne ikke delegere tjenester til systembruker.",
