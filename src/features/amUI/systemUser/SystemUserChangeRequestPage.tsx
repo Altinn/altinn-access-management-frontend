@@ -100,10 +100,7 @@ export const SystemUserChangeRequestPage = () => {
         </Alert>
       )}
       {isLoadingChangeRequest && (
-        <Spinner
-          aria-label={t('systemuser_change_request.loading_systemuser_change_request')}
-          title={''}
-        />
+        <Spinner aria-label={t('systemuser_change_request.loading_systemuser_change_request')} />
       )}
       {changeRequest?.system && (
         <>

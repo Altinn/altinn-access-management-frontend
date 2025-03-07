@@ -9,7 +9,7 @@ const exampleListArgs = {
   heading: (
     <Heading
       level={1}
-      size='md'
+      data-size='md'
     >
       {' '}
       List heading{' '}

@@ -381,6 +381,8 @@ playwright/playwright-report
 playwright/test-results
 playwright/jsonReports
 *storybook.log
+playwright/config/.env
+accessibility-violation*
 
 # Storybook build files
 storybook-static/

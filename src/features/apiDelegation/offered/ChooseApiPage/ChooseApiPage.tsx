@@ -192,16 +192,20 @@ export const ChooseApiPage = () => {
             </h2>
             <search className={classes.semanticOnlyTag}>
               <div className={classes.searchFormTextInputSection}>
-                <Search
-                  label={t('api_delegation.search_for_api')}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    debouncedSearch(event.target.value);
-                  }}
-                  size='md'
-                  onClear={() => {
-                    setSearchString('');
-                  }}
-                />
+                <Search data-size='md'>
+                  <Search.Input
+                    aria-label={t('api_delegation.search_for_api')}
+                    placeholder={t('api_delegation.search_for_api')}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      debouncedSearch(event.target.value);
+                    }}
+                  />
+                  <Search.Clear
+                    onClick={() => {
+                      setSearchString('');
+                    }}
+                  />
+                </Search>
               </div>
               <div className={classes.searchFormFilterSection}>
                 <Filter

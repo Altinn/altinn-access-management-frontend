@@ -61,7 +61,7 @@ export const CompactDeletableListItem = ({
               <Button
                 variant={'tertiary'}
                 color={'danger'}
-                size='md'
+                data-size='md'
                 onClick={removeCallback}
                 icon={isSm}
                 aria-label={

@@ -3,13 +3,13 @@
 import * as React from 'react';
 import cn from 'classnames';
 import { forwardRef } from 'react';
-import { Button, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
 import { useActionBarContext } from './Context';
 import classes from './ActionBarHeader.module.css';
 import { ActionBarIcon } from './ActionBarIcon';
 import { ActionBarActions } from './ActionBarActions';
-import { type ActionBarProps } from './ActionBar';
+import type { ActionBarProps } from './ActionBar';
 
 export type ActionBarHeaderProps = Pick<
   ActionBarProps,
@@ -42,7 +42,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
     return (
       <Heading
         level={headingLevel}
-        size={headingSize}
+        data-size={headingSize}
         ref={ref}
         className={cn(classes.actionBar, classes[color], classes[size], {
           [classes.subtitle]: subtitle,
@@ -51,7 +51,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
         })}
       >
         {toggleOpen ? (
-          <Button
+          <button
             className={cn(classes.actionBarHeader, classes.clickable, classes[color])}
             onClick={toggleOpen}
             id={headerId}
@@ -66,13 +66,13 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
               <div className={classes.actionBarTexts}>
                 <Paragraph
                   className={classes.title}
-                  size={paragraphSize}
+                  data-size={paragraphSize}
                 >
                   {title}
                 </Paragraph>
                 {subtitle && (
                   <Paragraph
-                    size='xs'
+                    data-size='xs'
                     className={classes.subtitle}
                   >
                     {subtitle}
@@ -80,19 +80,19 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
                 )}
               </div>
             </div>
-          </Button>
+          </button>
         ) : (
           <div className={cn(classes.actionBarHeader)}>
             <div className={classes.actionBarTexts}>
               <Paragraph
-                size={paragraphSize}
+                data-size={paragraphSize}
                 className={classes.title}
               >
                 {title}
               </Paragraph>
               {subtitle && (
                 <Paragraph
-                  size='xs'
+                  data-size='xs'
                   className={classes.subtitle}
                 >
                   {subtitle}
@@ -108,6 +108,7 @@ export const ActionBarHeader = forwardRef<HTMLHeadingElement, ActionBarHeaderPro
             })}
             onClick={toggleOpen}
             tabIndex={-1}
+            data-size='sm'
           >
             {additionalText}
           </button>

@@ -44,7 +44,7 @@ export const ChosenItems = ({
                     setChosenItemsStatusMessage(`${t('common.removed')}: ${org.name}`);
                   }}
                   aria-label={t('common.remove') + ' ' + org.name}
-                  size='lg'
+                  data-size='lg'
                   className={classes.actionButton}
                   icon={true}
                 >

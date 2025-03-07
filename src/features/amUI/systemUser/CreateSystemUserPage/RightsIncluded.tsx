@@ -59,12 +59,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const numberOfRights = (rights?.resources?.length || 0) + (rights?.accessPackages?.length || 0);
 
   if (isLoadingRights) {
-    return (
-      <Spinner
-        aria-label={t('systemuser_includedrightspage.loading_rights')}
-        title={''}
-      />
-    );
+    return <Spinner aria-label={t('systemuser_includedrightspage.loading_rights')} />;
   }
 
   return (

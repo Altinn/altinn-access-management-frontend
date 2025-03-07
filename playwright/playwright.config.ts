@@ -2,7 +2,6 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 // eslint-disable-next-line import/default
 import dotenv from 'dotenv';
 
-// eslint-disable-next-line import/no-named-as-default-member
 dotenv.config({
   path: [
     `config/.env`,
@@ -15,8 +14,9 @@ dotenv.config({
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const config: PlaywrightTestConfig = {
+  fullyParallel: true,
   use: {
-    // screenshot: 'only-on-failure',
+    trace: 'on',
     screenshot: { mode: 'only-on-failure', fullPage: true },
     video: { mode: 'retain-on-failure', size: { width: 1600, height: 1300 } },
     launchOptions: {
@@ -36,6 +36,7 @@ const config: PlaywrightTestConfig = {
       'html',
       {
         open: 'on-failure',
+        trace: 'on',
         outputDir: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
         outputFolder: `playwright-report/${process.env.environment?.toUpperCase() ?? 'AT24'}`,
       },
@@ -45,7 +46,7 @@ const config: PlaywrightTestConfig = {
   projects: [
     {
       name: 'e2e-tests',
-      testMatch: 'playwright/e2eTests/*.spec.ts',
+      testMatch: 'playwright/e2eTests/**/*.spec.ts',
       timeout: 60 * 1000, //30 seconds default timeout
       use: {
         browserName: 'chromium',

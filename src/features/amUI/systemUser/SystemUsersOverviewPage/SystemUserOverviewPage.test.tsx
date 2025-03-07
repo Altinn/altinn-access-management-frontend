@@ -5,12 +5,12 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { http, HttpResponse } from 'msw';
+
 import { server } from '@mock/node';
 import { ACCESSMANAGEMENT_BASE_URL } from '@mock/handlers';
+import store from '@/rtk/app/store';
 
 import { SystemUserOverviewPage } from './SystemUserOverviewPage';
-
-import store from '@/rtk/app/store';
 
 const systemUsers = [
   {

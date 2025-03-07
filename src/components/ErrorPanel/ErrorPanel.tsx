@@ -25,36 +25,36 @@ export const ErrorPanel = ({ title, message, statusCode, ...props }: ErrorPanelP
     <Alert
       {...props}
       color={'danger'}
-      size='lg'
+      data-size='lg'
     >
       <Heading
         level={2}
-        size='sm'
+        data-size='sm'
       >
         {title}
       </Heading>
       <div>
         <Paragraph
-          size='sm'
+          data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.error_status_code')}: {statusCode}
         </Paragraph>
         <Paragraph
-          size='sm'
+          data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.error_message')}: {message}
         </Paragraph>
         <Paragraph
-          size='sm'
+          data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.date')}: {date}
         </Paragraph>
 
         <Paragraph
-          size='sm'
+          data-size='sm'
           className={classes.errorListItem}
         >
           {t('common.time')}: {time}

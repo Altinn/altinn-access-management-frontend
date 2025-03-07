@@ -48,6 +48,7 @@ export const CollectionBar = ({
     <>
       <ActionBar
         title={title}
+        size='large'
         subtitle={
           compact && (
             <span role='status'>{collection.length.toString() + ' ' + t('common.added')}</span>
@@ -57,7 +58,7 @@ export const CollectionBar = ({
           !compact && (
             <Paragraph
               role='status'
-              size='sm'
+              data-size='sm'
               className={cn(classes.counterText, classes[color])}
             >
               <FilesFillIcon
@@ -72,7 +73,7 @@ export const CollectionBar = ({
           !compact && (
             <Button
               variant='tertiary'
-              size='sm'
+              data-size='sm'
               className={cn(classes.buttonText, classes[color])}
               onClick={proceedClick}
               disabled={disabledProceedButton}
@@ -81,7 +82,6 @@ export const CollectionBar = ({
             </Button>
           )
         }
-        size='large'
         color={color}
       >
         <div className={cn(classes.content, { [classes.compact]: compact })}>{collection}</div>
@@ -90,7 +90,7 @@ export const CollectionBar = ({
         <Button
           className={classes.compactProceedButton}
           variant='tertiary'
-          size='sm'
+          data-size='sm'
           onClick={proceedClick}
           disabled={disabledProceedButton}
         >

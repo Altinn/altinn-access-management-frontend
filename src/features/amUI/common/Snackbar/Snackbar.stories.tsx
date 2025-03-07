@@ -52,7 +52,7 @@ export default {
             Trigger default
           </SnackbarTrigger>
           <SnackbarTrigger
-            color='neutral'
+            data-color='neutral'
             snackbarMessageProps={{
               message: 'Error message',
               variant: SnackbarMessageVariant.Accent,
@@ -63,7 +63,7 @@ export default {
             Trigger accent
           </SnackbarTrigger>
           <SnackbarTrigger
-            color='neutral'
+            data-color='neutral'
             snackbarMessageProps={{
               message: 'Error message',
               variant: SnackbarMessageVariant.Accent,

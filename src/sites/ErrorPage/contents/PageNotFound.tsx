@@ -10,9 +10,9 @@ export const PageNotFound = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className={classes.errorContent}>
       <Heading
-        size='xl'
+        data-size='lg'
         level={1}
         className={classes.header}
       >
@@ -21,7 +21,7 @@ export const PageNotFound = () => {
       <div className={classes.flexContainer}>
         <div className={classes.leftContainer}>
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >
@@ -29,7 +29,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >
@@ -37,7 +37,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >
@@ -45,7 +45,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >
@@ -55,7 +55,7 @@ export const PageNotFound = () => {
           </Paragraph>
 
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >

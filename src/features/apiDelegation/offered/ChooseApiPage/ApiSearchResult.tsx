@@ -49,7 +49,7 @@ export const ApiSearchResults = ({
     if (isFetching) {
       return (
         <div className={common.spinnerContainer}>
-          <Spinner title={t('common.loading')} />
+          <Spinner aria-label={t('common.loading')} />
         </div>
       );
     }

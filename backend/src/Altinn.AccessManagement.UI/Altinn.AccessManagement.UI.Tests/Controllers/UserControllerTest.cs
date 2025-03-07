@@ -388,7 +388,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///    Test case: Sending the wrong input in body triggers a babd request
+        ///    Test case: Sending the wrong input in body triggers a bad request
         ///    Expected: Returns a 400 - bad request
         /// </summary>
         [Fact]
@@ -409,6 +409,71 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///   Test case: GetReporteeListForUser returns a list of reportees for the user
+        ///   Expected: Returns a list of reportees
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeListForUser_ReturnsList()
+        {
+            // Arrange
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
+            List<AuthorizedParty> expectedResponse = Util.GetMockData<List<AuthorizedParty>>(path);
+            const int userId = 1234;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+            List<AuthorizedParty> actualResponse = await response.Content.ReadFromJsonAsync<List<AuthorizedParty>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///   Test case: GetReporteeListForUser returns 400 Bad Request when user id is 0
+        ///   Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeListForUser_Returns_400()
+        {
+            // Arrange
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
+
+            const int userId = 404;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        ///   Test case: GetReporteeListForUser returns 500 Internal server error when error occurs
+        ///   Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task GetReporteeListForUser_Returns_500()
+        {
+            // Arrange
+            string path = Path.Combine(_testDataFolder, "Data", "ExpectedResults", "ReporteeList", "GetReporteeListForUser", "reporteeList.json");
+
+            const int userId = 500;
+            var token = PrincipalUtil.GetToken(userId, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("accessmanagement/api/v1/user/actorlist");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
     }
 }

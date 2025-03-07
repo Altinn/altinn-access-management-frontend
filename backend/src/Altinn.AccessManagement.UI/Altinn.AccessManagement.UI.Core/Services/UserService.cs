@@ -56,6 +56,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return partyInfo;
         }
 
+        /// <inheritdoc/>        
+        public async Task<List<AuthorizedParty>> GetReporteeListForUser()
+        {
+            List<AuthorizedParty> parties = await _accessManagementClientV0.GetReporteeListForUser();
+            return parties;
+        }
+
         /// <inheritdoc/>
         public async Task<List<User>> GetReporteeRightHolders(int partyId)
         {

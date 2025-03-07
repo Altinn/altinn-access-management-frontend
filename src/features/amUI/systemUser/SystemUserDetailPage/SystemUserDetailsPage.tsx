@@ -54,7 +54,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
 
   const deletePopover = (
     <div className={classes.systemUserDeleteButtonContainer}>
-      <Popover.Context>
+      <Popover.TriggerContext>
         <Popover.Trigger
           variant='tertiary'
           data-color='danger'
@@ -96,7 +96,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
             </Button>
           </ButtonRow>
         </Popover>
-      </Popover.Context>
+      </Popover.TriggerContext>
     </div>
   );
 
@@ -108,10 +108,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           pageActions={deletePopover}
         >
           {isLoadingSystemUser && (
-            <Spinner
-              aria-label={t('systemuser_detailpage.loading_systemuser')}
-              title={''}
-            />
+            <Spinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
           )}
           {isLoadSystemUserError && (
             <Alert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</Alert>

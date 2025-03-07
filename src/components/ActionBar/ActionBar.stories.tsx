@@ -10,7 +10,8 @@ const ExampleActions = (
   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
     <Button
       variant='tertiary'
-      color='accent'
+      data-color='accent'
+      data-size='md'
       icon
       onClick={() => console.log('Edit')}
     >
@@ -18,7 +19,8 @@ const ExampleActions = (
     </Button>
     <Button
       variant='tertiary'
-      color='danger'
+      data-color='danger'
+      data-size='md'
       icon
       onClick={() => console.log('Delete')}
     >

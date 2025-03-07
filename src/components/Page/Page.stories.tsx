@@ -15,7 +15,7 @@ const exampleArgs = {
       <PageContent>
         <Heading
           level={2}
-          size='md'
+          data-size='md'
         >
           This is a page
         </Heading>

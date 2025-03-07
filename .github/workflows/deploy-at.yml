@@ -28,15 +28,14 @@ jobs:
 
   playwright-e2e-tests:
     name: "Playwright E2E-tests"
-    secrets: inherit
     uses: "./.github/workflows/template-playwright.yml"
     needs: deploy-main
+    secrets: inherit
     strategy:
       fail-fast: false
       matrix:
         environment: [AT24]
         project: [e2e-tests]
-
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
@@ -54,4 +53,3 @@ jobs:
     with:
       environment: ${{ matrix.environment }}
       project: ${{ matrix.project }}
-      

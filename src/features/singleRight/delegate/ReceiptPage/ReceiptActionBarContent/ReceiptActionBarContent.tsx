@@ -1,4 +1,4 @@
-import { Alert, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -49,11 +49,11 @@ export const ReceiptActionBarContent = ({
       <div className={classes.alertContainer}>
         {failedDelegations && failedDelegations?.length > 1 && (
           <Alert
-            color='danger'
+            data-color='danger'
             role='alert'
           >
             <Heading
-              size={'xs'}
+              data-size={'xs'}
               level={2}
               className={classes.headerSpacing}
             >
@@ -66,7 +66,7 @@ export const ReceiptActionBarContent = ({
               {t('single_rights.some_failed_technical_problem')}
             </Paragraph>
             <Heading
-              size={'2xs'}
+              data-size={'2xs'}
               level={3}
               className={classes.headerSpacing}
             >
@@ -94,7 +94,7 @@ export const ReceiptActionBarContent = ({
     return (
       <div className={classes.successfulChipsContainer}>
         <Heading
-          size={'2xs'}
+          data-size={'2xs'}
           level={3}
         >
           {t('single_rights.these_rights_were_delegated')}

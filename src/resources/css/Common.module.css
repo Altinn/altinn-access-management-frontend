@@ -36,6 +36,11 @@ body {
   --a2-color-neutral-surface-hover: #e9eaec;
   --a2-color-neutral-surface-active: #e9eaec;
   --a2-color-neutral-text-default: var(--a2-semantic-text-neutral-on_inverted);
+
+  /* Overide tokens from designSystem & altinn-components */
+  --ds-color-neutral-surface-default: #fff;
+  --ds-body-md-font-size: 1rem;
+  --ds-color-text-subtle: #10204a;
 }
 
 body {

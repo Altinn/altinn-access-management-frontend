@@ -101,7 +101,7 @@ export const OptionDisplay = ({
           onChange={() => {
             handleSelection(option.value);
           }}
-          size={compact ? 'sm' : 'md'}
+          data-size={compact ? 'sm' : 'md'}
           value={option.value}
           checked={isSelected}
           aria-label={option.label}
@@ -109,7 +109,7 @@ export const OptionDisplay = ({
         <Paragraph
           asChild
           className={classes.optionLabel}
-          size={compact ? 'sm' : 'md'}
+          data-size={compact ? 'sm' : 'md'}
         >
           <label>{option.label}</label>
         </Paragraph>
@@ -121,17 +121,20 @@ export const OptionDisplay = ({
     <div className={classes.optionDisplay}>
       {searchable && (
         <div className={classes.searchField}>
-          <Search
-            size='sm'
-            label={String(t('common.search'))}
-            hideLabel
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              handleSearch(event.target.value);
-            }}
-            onClear={() => {
-              handleSearch('');
-            }}
-          />
+          <Search data-size='sm'>
+            <Search.Input
+              aria-label={String(t('common.search'))}
+              placeholder={String(t('common.search'))}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                handleSearch(event.target.value);
+              }}
+            />
+            <Search.Clear
+              onClick={() => {
+                handleSearch('');
+              }}
+            />
+          </Search>
         </div>
       )}
       <div

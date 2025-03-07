@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from '@altinn/altinn-components';
-import { Heading, Modal, Tabs } from '@digdir/designsystemet-react';
+import { Heading, Dialog, Tabs } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
 
 import { NewPersonContent } from './NewPersonContent';
@@ -33,13 +33,13 @@ interface NewUserModalProps {
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
   return (
-    <Modal
+    <Dialog
       ref={modalRef}
-      backdropClose
+      closedby='any'
       aria-labelledby='newUserModal'
     >
       <Heading
-        size='xs'
+        data-size='xs'
         level={2}
         className={classes.modalHeading}
         id='newUserModal'
@@ -48,7 +48,7 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
       </Heading>
       <Tabs
         defaultValue='person'
-        size='sm'
+        data-size='sm'
       >
         <Tabs.List>
           <Tabs.Tab value='person'>{t('new_user_modal.person')}</Tabs.Tab>
@@ -61,7 +61,7 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
           <NewOrgContent />
         </Tabs.Panel>
       </Tabs>
-    </Modal>
+    </Dialog>
   );
 };
 

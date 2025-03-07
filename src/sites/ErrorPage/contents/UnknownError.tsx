@@ -10,9 +10,9 @@ export const UnknownError = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className={classes.errorContent}>
       <Heading
-        size='xl'
+        data-size='lg'
         className={classes.header}
       >
         {t('error_page.unknown_error_header')}
@@ -20,7 +20,7 @@ export const UnknownError = () => {
       <div className={classes.flexContainer}>
         <div className={classes.leftContainer}>
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >
@@ -28,7 +28,7 @@ export const UnknownError = () => {
           </Paragraph>
 
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >
@@ -36,7 +36,7 @@ export const UnknownError = () => {
           </Paragraph>
 
           <Paragraph
-            size='lg'
+            data-size='lg'
             variant='long'
             className={classes.contentText}
           >

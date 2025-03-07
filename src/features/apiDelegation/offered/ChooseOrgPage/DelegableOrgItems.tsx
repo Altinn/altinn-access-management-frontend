@@ -46,7 +46,7 @@ export const DelegableOrgItems = ({
                     setChosenItemsStatusMessage(`${t('common.added')}: ${org.orgNumber}`);
                   }}
                   aria-label={t('common.add') + ' ' + org.orgNumber}
-                  size='lg'
+                  data-size='lg'
                   icon={true}
                 >
                   <PlusCircleIcon fontSize={getButtonIconSize(false)} />

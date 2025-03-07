@@ -27,7 +27,7 @@ export const CreateSystemUserCheck = ({
 
   return (
     <>
-      {isLoadingReporteeData && <Spinner title={''} />}
+      {isLoadingReporteeData && <Spinner aria-label='' />}
       {reporteeData && !canCreateSystemUser(reporteeData) && (
         <Paragraph className={classes.noRightsParagraph}>
           <span className={classes.noRightsParagraphBold}>

@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Get the reportees for the user 
         /// </summary>
-        /// <param name="userId">The userId</param>
+        /// <param name="userId">The user id</param>
         /// <returns></returns>
         Task<List<User>> GetReporteeList(Guid userId);
         
@@ -29,6 +29,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <returns>Party that corresponds to partyId parameter if it's in the users reporteelist</returns>
         Task<AuthorizedParty> GetPartyFromReporteeListIfExists(int partyId);
+
+        /// <summary>
+        /// Endpoint for reportees the authenticated user can act on behalf of
+        /// </summary>
+        /// <returns>List of reportees</returns>
+        Task<List<AuthorizedParty>> GetReporteeListForUser();
 
         /// <summary>
         /// Gets the right holders of a given reportee

@@ -89,7 +89,7 @@ export const ChooseOrgPage = () => {
           <div className={classes.pageContentContainer}>
             <search className={classes.semanticOnlyTag}>
               <Heading
-                size='md'
+                data-size='md'
                 level={2}
                 className={classes.chooseOrgSecondHeader}
               >
@@ -97,27 +97,33 @@ export const ChooseOrgPage = () => {
               </Heading>
 
               <Search
-                label={t('api_delegation.search_for_buisness')}
-                hideLabel={false}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  handleSearch(event.target.value);
-                }}
-                value={searchString}
-                size='md'
-                onClear={() => {
-                  handleSearch('');
-                }}
-              />
+                data-size='md'
+                className={classes.searchContainer}
+              >
+                <Search.Input
+                  aria-label={t('api_delegation.search_for_buisness')}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    handleSearch(event.target.value);
+                  }}
+                  value={searchString}
+                />
+                <Search.Clear
+                  aria-label={t('common.clear')}
+                  onClick={() => {
+                    handleSearch('');
+                  }}
+                />
+              </Search>
               {viewLoading ? (
                 <div className={cn(common.spinnerContainer, classes.viewLoadingSection)}>
-                  <Spinner title={t('common.loading')} />
+                  <Spinner aria-label={t('common.loading')} />
                 </div>
               ) : (
                 <>
                   <div className={classes.searchResultsSection}>
                     {searchString === '' ? (
                       <Heading
-                        size='2xs'
+                        data-size='2xs'
                         level={4}
                         className={classes.actionBarContainerText}
                       >
@@ -125,7 +131,7 @@ export const ChooseOrgPage = () => {
                       </Heading>
                     ) : (
                       <Heading
-                        size='2xs'
+                        data-size='2xs'
                         level={4}
                         className={classes.actionBarContainerText}
                       >
@@ -146,7 +152,7 @@ export const ChooseOrgPage = () => {
 
                     {isFetching ? (
                       <div className={common.spinnerContainer}>
-                        <Spinner title={t('common.loading')} />
+                        <Spinner aria-label={t('common.loading')} />
                       </div>
                     ) : (
                       <DelegableOrgItems
@@ -163,7 +169,7 @@ export const ChooseOrgPage = () => {
                 <>
                   <Heading
                     level={4}
-                    size='2xs'
+                    data-size='2xs'
                     className={classes.chosenOrgsHeader}
                   >
                     {t('api_delegation.businesses_going_to_get_access')}

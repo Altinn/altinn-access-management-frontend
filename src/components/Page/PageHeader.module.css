@@ -26,7 +26,7 @@
 
 .pageHeader.dark {
   --component-page_header-background-color: var(--a2-semantic-surface-action-first-no_fill);
-  --component-page_header-color: var(--ds-color-accent-contrast-1);
+  --component-page_header-color: var(--ds-color-accent-contrast-default);
 }
 
 .pageHeader.light {
@@ -37,12 +37,12 @@
 
 .pageHeader.success {
   --component-page_header-background-color: var(--a2-semantic-surface-success-default);
-  --component-page_header-color: var(--ds-color-accent-contrast-1);
+  --component-page_header-color: var(--ds-color-accent-contrast-default);
 }
 
 .pageHeader.danger {
   --component-page_header-background-color: var(--a2-semantic-surface-danger-default);
-  --component-page_header-color: var(--ds-color-accent-contrast-1);
+  --component-page_header-color: var(--ds-color-accent-contrast-default);
 }
 
 .pageHeader.small {

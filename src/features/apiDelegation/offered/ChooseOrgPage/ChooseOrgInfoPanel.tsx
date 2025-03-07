@@ -25,11 +25,11 @@ export const ChooseOrgInfoPanel = ({
   if (reporteeData?.organizationNumber === searchString && searchString.length > 0) {
     return (
       <Alert
-        color='warning'
+        data-color='warning'
         role='alert'
       >
         <Heading
-          size={'xs'}
+          data-size={'xs'}
           level={2}
           className={classes.alertHeading}
         >
@@ -41,17 +41,17 @@ export const ChooseOrgInfoPanel = ({
   } else if (!searchLoading && searchOrgNotExist) {
     return (
       <Alert
-        color='danger'
-        size='lg'
+        data-color='danger'
+        data-size='lg'
       >
         <Heading
           level={2}
-          size='sm'
+          data-size='sm'
           className={classes.alertHeading}
         >
           {t('api_delegation.buisness_search_notfound_title')}
         </Heading>
-        <Paragraph size='sm'>
+        <Paragraph data-size='sm'>
           {t('api_delegation.buisness_search_notfound_content')}{' '}
           <Link
             className={classes.link}
@@ -67,17 +67,17 @@ export const ChooseOrgInfoPanel = ({
   } else if (!searchLoading && promptOrgNumber) {
     return (
       <Alert
-        color='info'
-        size='lg'
+        data-color='info'
+        data-size='lg'
       >
         <Heading
           level={2}
-          size='sm'
+          data-size='sm'
           className={classes.alertHeading}
         >
           {String(t('api_delegation.buisness_search_info_title'))}
         </Heading>
-        <Paragraph size='sm'>{t('api_delegation.buisness_search_info_content')}</Paragraph>
+        <Paragraph data-size='sm'>{t('api_delegation.buisness_search_info_content')}</Paragraph>
       </Alert>
     );
   }

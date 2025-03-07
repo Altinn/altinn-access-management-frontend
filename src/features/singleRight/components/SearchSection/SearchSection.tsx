@@ -87,7 +87,7 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     <div className={classes.filterChips}>
       {filters.map((filterValue: string) => (
         <Chip.Removable
-          size='sm'
+          data-size='sm'
           key={filterValue}
           aria-label={t('common.remove') + ' ' + String(getFilterLabel(filterValue))}
           onClick={() => {
@@ -105,8 +105,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
       return (
         <div className={classes.spinner}>
           <Spinner
-            title={t('common.loading')}
-            size='xl'
+            aria-label={t('common.loading')}
+            data-size='xl'
           />
         </div>
       );
@@ -115,11 +115,11 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <Alert
           role='alert'
           className={classes.searchError}
-          color='danger'
+          data-color='danger'
         >
           <Heading
             level={2}
-            size='xs'
+            data-size='xs'
             className={classes.searchErrorHeading}
           >
             {t('common.general_error_title')}
@@ -212,10 +212,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
             {prioritizedErrorCodes?.length > 0 && (
               <Alert
                 role='alert'
-                color='danger'
+                data-color='danger'
                 className={classes.notDelegableAlert}
               >
-                <Heading size='xs'>{t('single_rights.cannot_delegate_alert_heading')}</Heading>
+                <Heading data-size='xs'>{t('single_rights.cannot_delegate_alert_heading')}</Heading>
                 <Paragraph>
                   {t(`${getErrorCodeTextKey(prioritizedErrorCodes[0])}`, {
                     you: t('common.you_uppercase'),
@@ -225,8 +225,8 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
                 </Paragraph>
               </Alert>
             )}
-            <Paragraph size='sm'>{resource.description}</Paragraph>
-            <Paragraph size='sm'>{resource.rightDescription}</Paragraph>
+            <Paragraph data-size='sm'>{resource.description}</Paragraph>
+            <Paragraph data-size='sm'>{resource.rightDescription}</Paragraph>
           </div>
         </ResourceActionBar>
       </li>
@@ -242,18 +242,22 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
     <search className={classes.searchSection}>
       <div className={classes.searchInputs}>
         <div className={classes.searchField}>
-          <Search
-            label={t('single_rights.search_label')}
-            hideLabel={false}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              debouncedSearch(event.target.value);
-            }}
-            size='md'
-            onClear={() => {
-              setSearchString('');
-              setCurrentPage(1);
-            }}
-          />
+          <Search data-size='md'>
+            <Search.Input
+              aria-label={String(t('common.search'))}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                debouncedSearch(event.target.value);
+              }}
+              value={searchString}
+              placeholder={String(t('common.search'))}
+            />
+            <Search.Clear
+              onClick={() => {
+                setSearchString('');
+                setCurrentPage(1);
+              }}
+            />
+          </Search>
         </div>
         <Filter
           className={classes.filter}

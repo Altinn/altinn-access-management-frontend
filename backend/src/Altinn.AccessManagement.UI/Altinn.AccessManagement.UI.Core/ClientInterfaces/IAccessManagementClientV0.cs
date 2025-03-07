@@ -13,6 +13,12 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         public interface IAccessManagementClientV0
         {
                 /// <summary>
+                /// Gets a list of reportees a user can act on behalf of
+                /// </summary>
+                /// <returns>list of reportees</returns>
+                Task<List<AuthorizedParty>> GetReporteeListForUser();
+
+                /// <summary>
                 /// Retrieve party if party exists in the authenticated users reporteelist
                 /// </summary>
                 /// <param name="partyId">party id</param>

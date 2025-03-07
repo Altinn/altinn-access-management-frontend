@@ -1,0 +1,44 @@
+﻿[
+  {
+    "partyUuid": "1feb089d-6d08-d38a-a85d-6d4fe709ceb0",
+    "name": "Narnia Economics",
+    "organizationNumber": "644227165",
+    "personId": null,
+    "partyId": 81373770,
+    "type": "Organization",
+    "unitType": "LLC",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": ["REGN"],
+    "subunits": []
+  },
+  {
+    "partyUuid": "05bbad70-90db-4900-8f29-0a09cf6db1af",
+    "name": "Sein Dyktig Mår",
+    "organizationNumber": "312229854",
+    "personId": null,
+    "partyId": 51541420,
+    "type": "Organization",
+    "unitType": "OPMV",
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [],
+    "subunits": []
+  },
+  {
+    "partyUuid": "2efabf71-9f1f-b583-3d0e-9e091dc58476",
+    "name": "Vanessa Schmitt",
+    "organizationNumber": null,
+    "personId": "23088826000",
+    "partyId": 49721067,
+    "type": "Person",
+    "unitType": null,
+    "isDeleted": false,
+    "onlyHierarchyElementWithNoAccess": false,
+    "authorizedResources": [],
+    "authorizedRoles": [ "LEDE", "LOPER", "ADMAI", "REGNA", "SISKD", "UILUF", "UTINN", "UTOMR", "KLADM", "ATTST", "HVASK", "PAVAD", "SIGNE", "UIHTL", "KOMAB", "ECKEYROLE", "HADM", "PASIG", "A0278", "A0236", "A0212", "APIADM", "A0298" ],
+    "subunits": []
+  }
+]
