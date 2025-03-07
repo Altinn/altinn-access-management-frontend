@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Search, Pagination, usePagination, Spinner } from '@digdir/designsystemet-react';
+import { Button, Search, Spinner } from '@digdir/designsystemet-react';
 import { List } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import type { Customer } from '../types';
 
 import classes from './CustomerList.module.css';
+
+import { AmPagination } from '@/components/Paginering';
 
 const filterCustomerList = (list: Customer[], searchString: string): Customer[] => {
   return list.filter((customer) => {
@@ -46,13 +48,6 @@ export const CustomerList = ({
   const totalPages = Math.ceil(filteredSearchList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = currentPage * itemsPerPage;
-
-  const { pages, prevButtonProps, nextButtonProps, hasNext, hasPrev } = usePagination({
-    currentPage,
-    setCurrentPage,
-    totalPages: totalPages,
-    showPages: totalPages < showPages ? totalPages : showPages,
-  });
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
@@ -98,40 +93,13 @@ export const CustomerList = ({
           };
         })}
       />
-      <div className={classes.pagingContainer}>
-        <Pagination aria-label={t('systemuser_client_delegation.pagination_header')}>
-          <Pagination.List>
-            <Pagination.Item>
-              <Pagination.Button
-                {...prevButtonProps}
-                disabled={!hasPrev}
-              >
-                {t('common.previous')}
-              </Pagination.Button>
-            </Pagination.Item>
-            {pages.map(({ page, itemKey, buttonProps }) => (
-              <Pagination.Item key={itemKey}>
-                {typeof page === 'number' && (
-                  <Pagination.Button
-                    {...buttonProps}
-                    aria-label={`${t('common.page')} ${page}`}
-                  >
-                    {page}
-                  </Pagination.Button>
-                )}
-              </Pagination.Item>
-            ))}
-            <Pagination.Item>
-              <Pagination.Button
-                {...nextButtonProps}
-                disabled={!hasNext}
-              >
-                {t('common.next')}
-              </Pagination.Button>
-            </Pagination.Item>
-          </Pagination.List>
-        </Pagination>
-      </div>
+      <AmPagination
+        totalPages={totalPages}
+        showPages={showPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        className={classes.pagingContainer}
+      />
     </div>
   );
 };

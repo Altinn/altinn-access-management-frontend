@@ -520,7 +520,6 @@
     "add_customers": "Legg til kunder",
     "edit_customers": "Administrer kunder",
     "customer_search": "Søk i kunder",
-    "pagination_header": "Sidenavigering",
     "remove_from_system_user": "Fjern fra systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
