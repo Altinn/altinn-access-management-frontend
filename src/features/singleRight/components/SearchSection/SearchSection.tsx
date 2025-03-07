@@ -248,7 +248,6 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 debouncedSearch(event.target.value);
               }}
-              value={searchString}
               placeholder={String(t('common.search'))}
             />
             <Search.Clear
