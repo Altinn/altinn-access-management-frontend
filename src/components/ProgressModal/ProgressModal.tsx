@@ -64,7 +64,7 @@ export const ProgressModal = ({
               <div className={classes.loadingText}>
                 <Paragraph>{loadingText}</Paragraph>
               </div>
-              <Spinner title={t('common.loading')} />
+              <Spinner aria-label={t('common.loading')} />
             </div>
           )}
         </div>

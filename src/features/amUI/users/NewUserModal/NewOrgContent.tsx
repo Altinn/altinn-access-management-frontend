@@ -51,7 +51,7 @@ export const NewOrgContent = () => {
           <Paragraph>
             <strong>{orgData.name}</strong>
           </Paragraph>
-          <Paragraph size='sm'>
+          <Paragraph data-size='sm'>
             {t('common.org_nr')} {orgData.orgNumber}
             {orgData.unitType === 'AAFY' ||
               (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}

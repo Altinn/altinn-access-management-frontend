@@ -73,10 +73,7 @@ export const SystemUserOverviewPage = () => {
                   </Link>
                 </Button>
                 {isLoadingSystemUsers && (
-                  <Spinner
-                    aria-label={t('systemuser_overviewpage.loading_systemusers')}
-                    title={''}
-                  />
+                  <Spinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
                 )}
                 {isLoadSystemUsersError && (
                   <Alert data-color='danger'>

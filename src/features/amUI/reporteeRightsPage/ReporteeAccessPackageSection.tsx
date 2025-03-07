@@ -36,7 +36,7 @@ export const ReporteeAccessPackageSection = ({
     <>
       <Heading
         level={2}
-        size='xs'
+        data-size='xs'
         id='access_packages_title'
       >
         {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}

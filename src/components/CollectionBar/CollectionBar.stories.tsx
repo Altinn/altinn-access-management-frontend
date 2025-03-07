@@ -49,9 +49,10 @@ const exampleCollection = sampleList.map((item) => (
     actions={
       <Button
         variant='tertiary'
-        size={'sm'}
+        data-size={'sm'}
         onClick={() => console.log('Remove')}
         icon
+        data-color='danger'
       >
         <MinusCircleIcon />
       </Button>

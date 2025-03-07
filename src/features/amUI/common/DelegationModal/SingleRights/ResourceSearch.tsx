@@ -5,10 +5,6 @@ import { FilterIcon } from '@navikt/aksel-icons';
 import { useParams } from 'react-router';
 import { ResourceListItem } from '@altinn/altinn-components';
 
-import { useDelegationModalContext } from '../DelegationModalContext';
-
-import classes from './ResourceSearch.module.css';
-
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import {
   useGetPaginatedSearchQuery,
@@ -20,6 +16,10 @@ import { Filter, List } from '@/components';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import type { Party } from '@/rtk/features/lookupApi';
+
+import { useDelegationModalContext } from '../DelegationModalContext';
+
+import classes from './ResourceSearch.module.css';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
@@ -80,7 +80,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
     <div className={classes.filterChips}>
       {filters.map((filterValue: string) => (
         <Chip.Removable
-          size='sm'
+          data-size='sm'
           key={filterValue}
           aria-label={`${t('common.remove')} ${String(getFilterLabel(filterValue))}`}
           onClick={() => {
@@ -98,8 +98,8 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
       return (
         <div className={classes.spinner}>
           <Spinner
-            title={t('common.loading')}
-            size='md'
+            aria-label={t('common.loading')}
+            data-size='md'
           />
         </div>
       );
@@ -109,11 +109,11 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
         <Alert
           role='alert'
           className={classes.searchError}
-          color='danger'
+          data-color='danger'
         >
           <Heading
             level={2}
-            size='xs'
+            data-size='xs'
           >
             {t('common.general_error_title')}
           </Heading>
@@ -185,7 +185,7 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
     <>
       <Heading
         level={2}
-        size='sm'
+        data-size='sm'
       >
         <Trans
           i18nKey='delegation_modal.give_service_to_name'
@@ -196,21 +196,24 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
       <search className={classes.searchSection}>
         <div className={classes.searchInputs}>
           <div className={classes.searchField}>
-            <Search
-              label={t('single_rights.search_label')}
-              hideLabel={true}
-              value={searchString}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setSearchString(event.target.value);
-                debouncedSearch(event.target.value);
-              }}
-              size='sm'
-              onClear={() => {
-                setSearchString('');
-                setDebouncedSearchString('');
-                setCurrentPage(1);
-              }}
-            />
+            <Search aria-label={t('single_rights.search_label')}>
+              <Search.Input
+                aria-label={t('single_rights.search_label')}
+                placeholder={t('single_rights.search_label')}
+                value={searchString}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  debouncedSearch(event.target.value);
+                  setSearchString(event.target.value);
+                }}
+              />
+              <Search.Clear
+                onClick={() => {
+                  setDebouncedSearchString('');
+                  setSearchString('');
+                  setCurrentPage(1);
+                }}
+              />
+            </Search>
           </div>
           <Filter
             className={classes.filter}

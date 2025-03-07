@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { Modal } from '@digdir/designsystemet-react';
+import { Dialog } from '@digdir/designsystemet-react';
 import { forwardRef, useEffect } from 'react';
+
+import type { Role } from '@/rtk/features/roleApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { SnackbarProvider } from '../Snackbar';
 
@@ -9,11 +14,6 @@ import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
-
-import type { Role } from '@/rtk/features/roleApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -76,29 +76,27 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
     }, [onClosing, ref]);
 
     return (
-      <Modal.Context>
-        <Modal
-          ref={ref}
-          className={classes.modalDialog}
-          backdropClose
-          onClose={() => {
-            onClosing();
-          }}
-        >
-          <SnackbarProvider>
-            <div className={classes.content}>
-              {renderModalContent(
-                toPartyUuid,
-                fromPartyUuid,
-                resource,
-                accessPackage,
-                role,
-                availableActions,
-              )}
-            </div>
-          </SnackbarProvider>
-        </Modal>
-      </Modal.Context>
+      <Dialog
+        ref={ref}
+        className={classes.modalDialog}
+        closedby='any'
+        onClose={() => {
+          onClosing();
+        }}
+      >
+        <SnackbarProvider>
+          <div className={classes.content}>
+            {renderModalContent(
+              toPartyUuid,
+              fromPartyUuid,
+              resource,
+              accessPackage,
+              role,
+              availableActions,
+            )}
+          </div>
+        </SnackbarProvider>
+      </Dialog>
     );
   },
 );

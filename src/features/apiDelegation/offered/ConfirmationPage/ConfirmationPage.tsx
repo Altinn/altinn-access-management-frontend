@@ -63,7 +63,7 @@ export const ConfirmationPage = () => {
         {failedApiDelegations.length > 0 && (
           <>
             <Heading
-              size='md'
+              data-size='md'
               level={2}
               className={classes.alertHeading}
             >
@@ -78,7 +78,7 @@ export const ConfirmationPage = () => {
         {successfulApiDelegations.length > 0 && (
           <>
             <Heading
-              size='md'
+              data-size='md'
               level={2}
               className={classes.alertHeading}
             >
@@ -97,7 +97,7 @@ export const ConfirmationPage = () => {
         </Paragraph>
         <div className={classes.navigationSection}>
           <Button
-            color='accent'
+            data-color='accent'
             variant='primary'
             onClick={navigateToOverview}
           >
@@ -118,23 +118,25 @@ export const ConfirmationPage = () => {
     ) : (
       <>
         <Heading
-          size='sm'
+          data-size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_top_text')}
         </Heading>
         <DelegableApiList />
         <Heading
-          size='sm'
+          data-size='sm'
           level={2}
         >
           {t('api_delegation.confirmation_page_content_second_text')}
         </Heading>
         <DelegableOrgList />
-        <Paragraph size='lg'>{t('api_delegation.confirmation_page_content_bottom_text')}</Paragraph>
+        <Paragraph data-size='lg'>
+          {t('api_delegation.confirmation_page_content_bottom_text')}
+        </Paragraph>
         <div className={classes.navigationSection}>
           <Button
-            color='accent'
+            data-color='accent'
             variant='secondary'
             onClick={() =>
               navigate(
@@ -146,9 +148,9 @@ export const ConfirmationPage = () => {
           </Button>
           <Button
             onClick={handleConfirm}
-            color='accent'
+            data-color='accent'
           >
-            {isLoading && <Spinner title={t('common.loading')} />}
+            {isLoading && <Spinner aria-label={t('common.loading')} />}
             {t('common.confirm')}
           </Button>
         </div>
@@ -185,11 +187,11 @@ export const ConfirmationPage = () => {
             {isError && (
               <Alert
                 title={t('common.general_error_title')}
-                color='danger'
+                data-color='danger'
               >
                 <Heading
                   level={2}
-                  size='xs'
+                  data-size='xs'
                   className={classes.alertHeading}
                 >
                   {t('common.general_error_title')}

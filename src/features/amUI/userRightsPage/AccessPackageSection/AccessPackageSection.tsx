@@ -28,7 +28,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
       <div className={classes.accessPackageSectionContainer}>
         <Heading
           level={2}
-          size='xs'
+          data-size='xs'
           id='access_packages_title'
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}

@@ -243,7 +243,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
   const chips = () =>
     resource?.resourceType === 'AltinnApp' ? (
       <Chip.Checkbox
-        size='sm'
+        data-size='sm'
         checked={rights.some((r) => r.checked === true)}
         disabled={!rights.some((r) => r.delegable === true)}
         onClick={() => {
@@ -260,7 +260,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
         return (
           <div key={right.rightKey}>
             <Chip.Checkbox
-              size='sm'
+              data-size='sm'
               checked={right.checked}
               disabled={!right.delegable}
               onClick={() => {
@@ -299,7 +299,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
               <div className={classes.infoHeading}>
                 <Heading
                   level={3}
-                  size='sm'
+                  data-size='sm'
                 >
                   {resource.title}
                 </Heading>
@@ -307,7 +307,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
                   <Badge
                     label={t('common.has_poa')}
                     theme='base'
-                    color='success'
+                    data-color='success'
                   />
                 )}
               </div>
@@ -327,12 +327,12 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
             <>
               {delegationErrorMessage && (
                 <Alert
-                  color='danger'
-                  size='sm'
+                  data-color='danger'
+                  data-size='sm'
                 >
                   <Heading
                     level={3}
-                    size='xs'
+                    data-size='xs'
                   >
                     {t('delegation_modal.technical_error_message.heading')}
                   </Heading>
@@ -343,15 +343,15 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
               )}
               {missingAccessMessage && (
                 <Alert
-                  color='info'
-                  size='sm'
+                  data-color='info'
+                  data-size='sm'
                 >
                   {missingAccessMessage}
                 </Alert>
               )}
               <div className={classes.rightsSection}>
                 <Heading
-                  size='xs'
+                  data-size='xs'
                   level={4}
                 >
                   {hasAccess && !hasUnsavedChanges ? (
@@ -374,7 +374,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
           )}
           <div className={classes.editButtons}>
             <Button
-              size='sm'
+              data-size='sm'
               disabled={
                 displayResourceAlert ||
                 !rights.some((r) => r.checked === true) ||

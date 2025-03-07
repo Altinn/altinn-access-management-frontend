@@ -1,8 +1,13 @@
 import * as React from 'react';
-import { Button, Modal } from '@digdir/designsystemet-react';
+import { Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useEffect, useRef } from 'react';
+import { Button } from '@altinn/altinn-components';
+
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { SnackbarProvider } from '../Snackbar';
 
@@ -14,10 +19,6 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
-
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 export interface DelegationModalProps {
   toPartyUuid: string;
@@ -122,39 +123,38 @@ export const DelegationModalContent = ({
   }
 
   return (
-    <Modal.Context>
-      <Modal.Trigger
-        size='sm'
+    <Dialog.TriggerContext>
+      <Dialog.Trigger
+        data-size='sm'
         variant='primary'
         className={classes.triggerButton}
       >
         {triggerButtonText} <PlusIcon />
-      </Modal.Trigger>
-      <Modal
-        className={classes.modalDialog}
-        backdropClose
-        closeButton={t('common.close')}
-        onClose={reset}
-        ref={modalRef}
-      >
-        <SnackbarProvider>
+      </Dialog.Trigger>
+      <SnackbarProvider>
+        <Dialog
+          className={classes.modalDialog}
+          closedby='any'
+          closeButton={t('common.close')}
+          onClose={reset}
+          ref={modalRef}
+        >
           <>
             {infoView && (
               <Button
                 className={classes.backButton}
-                variant='tertiary'
-                color='neutral'
+                variant='text'
+                data-color='neutral'
                 onClick={() => setInfoView(false)}
-                icon
+                icon={ArrowLeftIcon}
               >
-                <ArrowLeftIcon fontSize='1.5em' />
                 {t('common.back')}
               </Button>
             )}
             <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
           </>
-        </SnackbarProvider>
-      </Modal>
-    </Modal.Context>
+        </Dialog>
+      </SnackbarProvider>
+    </Dialog.TriggerContext>
   );
 };

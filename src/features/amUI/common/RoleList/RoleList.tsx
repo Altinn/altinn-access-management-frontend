@@ -75,7 +75,7 @@ export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: Ro
         >
           <Heading
             level={3}
-            size='xs'
+            data-size='xs'
             id={roleArea.id}
           >
             {roleArea.name}

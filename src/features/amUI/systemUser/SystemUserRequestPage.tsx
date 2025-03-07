@@ -102,10 +102,7 @@ export const SystemUserRequestPage = () => {
         </Alert>
       )}
       {isLoadingRequest && (
-        <Spinner
-          aria-label={t('systemuser_request.loading_creation_request')}
-          title={''}
-        />
+        <Spinner aria-label={t('systemuser_request.loading_creation_request')} />
       )}
       {request?.system && (
         <>

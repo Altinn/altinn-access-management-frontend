@@ -39,7 +39,7 @@ export const Offered: StoryObj = {
         <PageHeader>
           <Heading
             level={1}
-            size='sm'
+            data-size='sm'
           >
             API
           </Heading>
