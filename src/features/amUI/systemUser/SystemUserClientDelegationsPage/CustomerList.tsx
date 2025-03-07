@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Search, Pagination, usePagination, Spinner } from '@digdir/designsystemet-react';
 import { List } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { useTranslation } from 'react-i18next';
 
 import type { Customer } from '../types';
 
@@ -35,6 +36,8 @@ export const CustomerList = ({
   onRemoveCustomer,
   children,
 }: CustomerListProps) => {
+  const { t } = useTranslation();
+
   const [searchValue, setSearchValue] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -64,10 +67,10 @@ export const CustomerList = ({
           data-size='sm'
         >
           <Search.Input
-            aria-label='Søk i kunder'
+            aria-label={t('systemuser_client_delegation.customer_search')}
             value={searchValue}
             onChange={onSearch}
-            placeholder='Søk i kunder'
+            placeholder={t('systemuser_client_delegation.customer_search')}
           />
           <Search.Clear />
         </Search>
@@ -82,7 +85,7 @@ export const CustomerList = ({
             disabled: true,
             as: 'div',
             avatar: { type: 'company', name: customer.name },
-            description: `Org. nr. ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
+            description: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
             controls: (
               <ListControls
                 customer={customer}
@@ -96,14 +99,14 @@ export const CustomerList = ({
         })}
       />
       <div className={classes.pagingContainer}>
-        <Pagination aria-label='Sidenavigering'>
+        <Pagination aria-label={t('systemuser_client_delegation.pagination_header')}>
           <Pagination.List>
             <Pagination.Item>
               <Pagination.Button
                 {...prevButtonProps}
                 disabled={!hasPrev}
               >
-                {'Forrige'}
+                {t('common.previous')}
               </Pagination.Button>
             </Pagination.Item>
             {pages.map(({ page, itemKey, buttonProps }) => (
@@ -111,7 +114,7 @@ export const CustomerList = ({
                 {typeof page === 'number' && (
                   <Pagination.Button
                     {...buttonProps}
-                    aria-label={`Side ${page}`}
+                    aria-label={`${t('common.page')} ${page}`}
                   >
                     {page}
                   </Pagination.Button>
@@ -123,7 +126,7 @@ export const CustomerList = ({
                 {...nextButtonProps}
                 disabled={!hasNext}
               >
-                {'Neste'}
+                {t('common.next')}
               </Pagination.Button>
             </Pagination.Item>
           </Pagination.List>
@@ -146,6 +149,8 @@ const ListControls = ({
   onRemoveCustomer,
   onAddCustomer,
 }: ListControlsProps): React.ReactNode => {
+  const { t } = useTranslation();
+
   return (
     <>
       {isLoading && (
@@ -161,20 +166,24 @@ const ListControls = ({
           variant='tertiary'
           data-size='sm'
           data-color='danger'
-          aria-label={`Fjern ${customer.name} fra systemtilgang`}
+          aria-label={t('systemuser_client_delegation.remove_from_system_user_aria', {
+            customerName: customer.name,
+          })}
           onClick={() => onRemoveCustomer(customer.id)}
         >
-          <MinusCircleIcon /> {'Fjern fra systemtilgang'}
+          <MinusCircleIcon /> {t('systemuser_client_delegation.remove_from_system_user')}
         </Button>
       )}
       {!isLoading && !isAssigned && (
         <Button
           variant='tertiary'
           data-size='sm'
-          aria-label={`Legg til ${customer.name} i systemtilgang`}
+          aria-label={t('systemuser_client_delegation.add_to_system_user_aria', {
+            customerName: customer.name,
+          })}
           onClick={() => onAddCustomer(customer.id)}
         >
-          <PlusCircleIcon /> {'Legg til i systemtilgang'}
+          <PlusCircleIcon /> {t('systemuser_client_delegation.add_to_system_user')}
         </Button>
       )}
     </>

@@ -89,7 +89,7 @@
     "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00"
   },
   "header": {
-    "access_management" : "Tilgangsstyring",
+    "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
     "menu-label": "Meny",
     "account_you": "Deg selv",
@@ -98,7 +98,7 @@
     "back-label": "Tilbake",
     "all_services": "Alle tjenester",
     "chat": "Få hjelp på chat",
-    "log_out" : "Logg ut"
+    "log_out": "Logg ut"
   },
   "footer": {
     "about_altinn": "Om Altinn",
@@ -503,14 +503,28 @@
     "request_rejected": "Denne oppdaterings-forespørselen er allerede avvist",
     "request_expired": "Denne oppdaterings-forespørselen har utløpt"
   },
-  "systemuser_client_delegation_overview": {
-    "page_title": "Systemtilgang - Altinn",
-    "banner_title": "Systemtilgang for {{integrationTitle}}"
-  },
   "systemuser_client_delegation_request": {
     "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
     "banner_title": "Lag en systemtilgang for kunderelasjoner",
     "system_description": "Gjennom systemtilgangen får {{vendorName}} fullmakt til å løse oppgaver på vegne av {{companyName}} sine kunder. For å fullføre oppsettet må tilgangene til kundene tildeles i kunderelasjoner i Altinn."
+  },
+  "systemuser_client_delegation": {
+    "page_title": "Systemtilgang for kunderelasjoner - Altinn",
+    "banner_title": "Systemtilgang for {{integrationTitle}}",
+    "load_customers_error": "Kunne ikke laste kunder",
+    "load_assigned_customers_error": "Kunne ikke laste tilknyttede kunder",
+    "my_customers_header": "Mine kunder i enhetsregisteret",
+    "assign_customers": "Legg til flere kunder til systemtilgangen {{integrationTitle}}",
+    "assigned_customers_header": "Kunder i systemtilgangen",
+    "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
+    "add_customers": "Legg til kunder",
+    "edit_customers": "Administrer kunder",
+    "customer_search": "Søk i kunder",
+    "pagination_header": "Sidenavigering",
+    "remove_from_system_user": "Fjern fra systemtilgang",
+    "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
+    "add_to_system_user": "Legg til i systemtilgang",
+    "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",
