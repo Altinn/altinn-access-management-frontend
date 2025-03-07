@@ -5,6 +5,8 @@ import cn from 'classnames';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
+import { PartyType } from '@/rtk/features/userInfoApi';
+
 import classes from './UserList.module.css';
 import { ListWrapper } from './ListWrapper';
 import type { ExtendedUser } from './useFilteredUsers';
@@ -30,13 +32,13 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
         size={size}
         title={user.name}
         description={
-          user.partyType === 'Organization'
+          user.partyType === PartyType.Organization
             ? user.unitType
             : user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')
         }
         avatar={{
           name: user.name,
-          type: user.partyType === 'Organization' ? 'company' : 'person',
+          type: user.partyType === PartyType.Organization ? 'company' : 'person',
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}

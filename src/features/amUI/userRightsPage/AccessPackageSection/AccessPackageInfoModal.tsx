@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -8,7 +6,7 @@ import { DelegationAction, EditModal } from '../../common/DelegationModal/EditMo
 import { DelegationModalProvider } from '../../common/DelegationModal/DelegationModalContext';
 
 interface AccessPackageInfoModalProps {
-  modalRef: React.RefObject<HTMLDialogElement>;
+  modalRef: React.RefObject<HTMLDialogElement | null>;
   toPartyUuid: string;
   fromPartyUuid: string;
   modalItem: AccessPackage | undefined;
