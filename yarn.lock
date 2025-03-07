@@ -19,18 +19,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:^0.19.6":
-  version: 0.19.6
-  resolution: "@altinn/altinn-components@npm:0.19.6"
+"@altinn/altinn-components@npm:^0.20.0":
+  version: 0.20.0
+  resolution: "@altinn/altinn-components@npm:0.20.0"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.9.2"
     classnames: "npm:^2.5.1"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
   peerDependencies:
-    react: ">=18.3.1"
-    react-dom: ">=18.3.1"
-  checksum: 10/9c89b7366be1bae92e1a36a2422aff7f97aaf1d1ae657b803c05826b1e70749a5e64a25f0684bf17cd743e132e0c2461a760bfaa612af5f6cf0ef13b27d6b026
+    react: ">=18.3.1 || ^19.0.0"
+    react-dom: ">=18.3.1 || ^19.0.0"
+  checksum: 10/89aa722cf4e8c421ed335f8d042bd8d8740ce32f967ad3655e4f0df61164c59bab2d0b579faf42ea0d4d81cef5e56b9744cb1ffa22c72c488ddd872cc793f64c
   languageName: node
   linkType: hard
 
@@ -1156,9 +1156,9 @@ __metadata:
   linkType: hard
 
 "@navikt/aksel-icons@npm:^7.0.0, @navikt/aksel-icons@npm:^7.12.2, @navikt/aksel-icons@npm:^7.9.2":
-  version: 7.17.0
-  resolution: "@navikt/aksel-icons@npm:7.17.0"
-  checksum: 10/8e64c55fbc0a84e35433d48157f1517c7b2190242e4ceaabf54d43beb3772a61c24ee7d2fe6381fbb93244902b8c5e686993833a6e690d526c08a83874439428
+  version: 7.17.1
+  resolution: "@navikt/aksel-icons@npm:7.17.1"
+  checksum: 10/f5dc21e293f0ae566e018cc8bbcb6fdb69e989ef35fa975b73f778c0ed6ceeef04255352c594fcc943b73c6ebbf990c5e221354f7f8c9a22bdb9ef21958269a1
   languageName: node
   linkType: hard
 
@@ -2120,21 +2120,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.67.1":
-  version: 5.67.1
-  resolution: "@tanstack/query-core@npm:5.67.1"
-  checksum: 10/4225d671db8e76e8f09c869c7218eabf66d640037cffe4fca240296e1e9352bd24bd689b9c2cde212ab27902b68173cf207d325854e6e3f4bb65f697d5a3d84e
+"@tanstack/query-core@npm:5.67.2":
+  version: 5.67.2
+  resolution: "@tanstack/query-core@npm:5.67.2"
+  checksum: 10/65d0d0a2fa40510f187a4b6b165c3e2bc1800c3df943e5dad1a7896147e4b0d180462a38cae5e86e01d59d5d6a63af881e15e400fa72b4fe6bcb39643830a40e
   languageName: node
   linkType: hard
 
 "@tanstack/react-query@npm:^5.0.0":
-  version: 5.67.1
-  resolution: "@tanstack/react-query@npm:5.67.1"
+  version: 5.67.2
+  resolution: "@tanstack/react-query@npm:5.67.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.67.1"
+    "@tanstack/query-core": "npm:5.67.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/6031a964e0a28acfaeb40441b6ee8fccccb868c11f394608949571bae95bb6bc97b4f4a060d66ca930081bbbdf101be0bec2031bd6000ba4bb253c8e1dc615bf
+  checksum: 10/96edcdaced1a3e02522a766a09d495547c4c446fb10c0127e08e6c240eae27bdb53c9751a62371a2f0144541688025dcca4a1f78c2000c27d68e6abd59240318
   languageName: node
   linkType: hard
 
@@ -2861,7 +2861,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:^0.19.6"
+    "@altinn/altinn-components": "npm:^0.20.0"
     "@axe-core/playwright": "npm:^4.10.1"
     "@digdir/designsystemet-css": "npm:1.0.1"
     "@digdir/designsystemet-react": "npm:1.0.1"
@@ -4797,13 +4797,13 @@ __metadata:
   linkType: hard
 
 "eslint-config-prettier@npm:^10.0.0":
-  version: 10.1.0
-  resolution: "eslint-config-prettier@npm:10.1.0"
+  version: 10.1.1
+  resolution: "eslint-config-prettier@npm:10.1.1"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 10/b0e643bcb5291dcc598479b801c9e10dc319a3fbb8a265cb839595e77de341a1b6c42f018e9641227e18c79c87952126fc51777fe6250d1d2e7849fdbbb7bd4b
+  checksum: 10/e78e195a4f19e0de9bf655648bb3433877d6a5368537f1b1049976b74180844a00dd7c1ba3144e3da6e8b6864f8dcdfcda6c7338a537883fcf5b212ef6dcd0e0
   languageName: node
   linkType: hard
 
@@ -7175,7 +7175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -7616,11 +7616,11 @@ __metadata:
   linkType: hard
 
 "nanoid@npm:^3.3.8":
-  version: 3.3.8
-  resolution: "nanoid@npm:3.3.8"
+  version: 3.3.9
+  resolution: "nanoid@npm:3.3.9"
   bin:
     nanoid: bin/nanoid.cjs
-  checksum: 10/2d1766606cf0d6f47b6f0fdab91761bb81609b2e3d367027aff45e6ee7006f660fb7e7781f4a34799fe6734f1268eeed2e37a5fdee809ade0c2d4eb11b0f9c40
+  checksum: 10/80ec0f2f7fe0f472f459fbeab6afd88f6739e3da94cf2c2307bc83ef0203ec3b72e6113a9e3196ac4be79540440184136ee96e77c10a965e37d8347f43b265fa
   languageName: node
   linkType: hard
 
@@ -8546,18 +8546,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.3.1":
-  version: 18.3.1
-  resolution: "react-dom@npm:18.3.1"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-    scheduler: "npm:^0.23.2"
-  peerDependencies:
-    react: ^18.3.1
-  checksum: 10/3f4b73a3aa083091173b29812b10394dd06f4ac06aff410b74702cfb3aa29d7b0ced208aab92d5272919b612e5cda21aeb1d54191848cf6e46e9e354f3541f81
-  languageName: node
-  linkType: hard
-
 "react-i18next@npm:^15.0.0":
   version: 15.4.1
   resolution: "react-i18next@npm:15.4.1"
@@ -8638,15 +8626,6 @@ __metadata:
   version: 19.0.0
   resolution: "react@npm:19.0.0"
   checksum: 10/2490969c503f644703c88990d20e4011fa6119ddeca451e9de48f6d7ab058d670d2852a5fcd3aa3cd90a923ab2815d532637bd4a814add402ae5c0d4f129ee71
-  languageName: node
-  linkType: hard
-
-"react@npm:^18.3.1":
-  version: 18.3.1
-  resolution: "react@npm:18.3.1"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-  checksum: 10/261137d3f3993eaa2368a83110466fc0e558bc2c7f7ae7ca52d94f03aac945f45146bd85e5f481044db1758a1dbb57879e2fcdd33924e2dde1bdc550ce73f7bf
   languageName: node
   linkType: hard
 
@@ -9127,15 +9106,6 @@ __metadata:
   dependencies:
     xmlchars: "npm:^2.2.0"
   checksum: 10/97b50daf6ca3a153e89842efa18a862e446248296622b7473c169c84c823ee8a16e4a43bac2f73f11fc8cb9168c73fbb0d73340f26552bac17970e9052367aa9
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.23.2":
-  version: 0.23.2
-  resolution: "scheduler@npm:0.23.2"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-  checksum: 10/e8d68b89d18d5b028223edf090092846868a765a591944760942b77ea1f69b17235f7e956696efbb62c8130ab90af7e0949bfb8eba7896335507317236966bc9
   languageName: node
   linkType: hard
 
