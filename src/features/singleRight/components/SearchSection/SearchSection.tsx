@@ -244,11 +244,10 @@ export const SearchSection = ({ onAdd, onUndo }: SearchSectionParams) => {
         <div className={classes.searchField}>
           <Search data-size='md'>
             <Search.Input
-              aria-label={String(t('common.search'))}
+              aria-label={String(t('single_rights.search_label'))}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 debouncedSearch(event.target.value);
               }}
-              placeholder={String(t('common.search'))}
             />
             <Search.Clear
               onClick={() => {
