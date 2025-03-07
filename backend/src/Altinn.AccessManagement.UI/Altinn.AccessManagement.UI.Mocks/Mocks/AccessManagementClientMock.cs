@@ -14,6 +14,7 @@ using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Delegation;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
+using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Common.PEP.Configuration;
@@ -249,6 +250,79 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             else
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.Created));
+            }
+        }
+
+        //// Roles
+
+        public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
+        {
+            List<Role> allRoles = Util.GetMockData<List<Role>>($"{dataFolder}/Roles/roles.json");
+            return searchString != null ? Task.FromResult(allRoles.Where(role => role.Name.ToLower().Contains(searchString.ToLower())).ToList()) : Task.FromResult(allRoles);
+        }
+
+        /// <inheritdoc />    
+        public Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
+        {
+            if (rightHolderUuid == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
+            try
+            {
+                List<RoleAssignment> allAssignments = Util.GetMockData<List<RoleAssignment>>($"{dataFolder}/Roles/GetRolesForUser/{rightHolderUuid}.json");
+                if (allAssignments == null)
+                {
+                    return Task.FromResult(new List<RoleAssignment>());
+                }
+                return Task.FromResult(allAssignments);
+            }
+            catch
+            {
+                return Task.FromResult(new List<RoleAssignment>());
+            }
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
+        {
+            if (to == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        /// <inheritdoc />
+        public Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
+        {
+            if (assignmentId == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        public Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
+        {
+            if (rightOwner == Guid.Empty)
+            {
+                throw new Exception("Right holder uuid is not valid");
+            }
+            try
+            {
+                DelegationCheckResponse res = Util.GetMockData<DelegationCheckResponse>($"{dataFolder}/Roles/DelegationCheck/{roleId}.json");
+                return Task.FromResult(res);
+            }
+            catch
+            {
+                return Task.FromResult(new DelegationCheckResponse()
+                {
+                    CanDelegate = false,
+                    DetailCode = DetailCode.Unknown
+                });
             }
         }
 
