@@ -68,10 +68,9 @@ export const CustomerList = ({
             value={searchValue}
             onChange={onSearch}
             placeholder='Søk i kunder'
-          ></Search.Input>
-          <Search.Clear></Search.Clear>
+          />
+          <Search.Clear />
         </Search>
-
         {children}
       </div>
       <List
@@ -102,7 +101,6 @@ export const CustomerList = ({
             <Pagination.Item>
               <Pagination.Button
                 {...prevButtonProps}
-                aria-label='Forrige side'
                 disabled={!hasPrev}
               >
                 {'Forrige'}
@@ -124,7 +122,6 @@ export const CustomerList = ({
               <Pagination.Button
                 {...nextButtonProps}
                 disabled={!hasNext}
-                aria-label='Neste side'
               >
                 {'Neste'}
               </Pagination.Button>
