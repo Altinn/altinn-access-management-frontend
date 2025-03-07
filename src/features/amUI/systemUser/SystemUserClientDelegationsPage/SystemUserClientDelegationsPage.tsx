@@ -4,6 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 
+import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
+import type { Customer, SystemUser } from '../types';
+
+import classes from './SystemUserClientDelegationsPage.module.css';
+import { CustomerList } from './CustomerList';
+
 import {
   useAssignCustomerMutation,
   useGetAssignedCustomersQuery,
@@ -18,12 +24,6 @@ import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
-
-import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import type { Customer, SystemUser } from '../types';
-
-import classes from './SystemUserClientDelegationsPage.module.css';
-import { CustomerList } from './CustomerList';
 
 const isRegnskapsforerSystemUser = (systemUser: SystemUser | undefined): boolean => {
   return (
@@ -91,10 +91,7 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
           isLoadingRegnskapsforerCustomers ||
           isLoadingRevisorCustomers ||
           isLoadingAssignedCustomers) && (
-          <Spinner
-            aria-label={t('systemuser_detailpage.loading_systemuser')}
-            title={''}
-          />
+          <Spinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
         )}
         {isLoadSystemUserError && (
           <Alert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</Alert>
@@ -231,7 +228,7 @@ const SystemUserClientDelegationsPageContent = ({
               >
                 <Button
                   variant='secondary'
-                  size='sm'
+                  data-size='sm'
                   onClick={enableAddCustomers}
                 >
                   <PencilIcon />

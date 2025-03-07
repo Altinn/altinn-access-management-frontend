@@ -60,23 +60,22 @@ export const CustomerList = ({
     onSearchStringChanged(event.target.value);
   };
 
-  const onClearSearch = (): void => {
-    onSearchStringChanged('');
-  };
-
   return (
     <div>
       <div className={classes.listHeader}>
         <Search
           className={classes.searchBar}
-          value={searchValue}
-          size='sm'
-          placeholder='Søk i kunder'
-          onChange={onSearch}
-          onClear={onClearSearch}
-          hideLabel
-          label='Søk i kunder'
-        />
+          data-size='sm'
+        >
+          <Search.Input
+            aria-label='Søk i kunder'
+            value={searchValue}
+            onChange={onSearch}
+            placeholder='Søk i kunder'
+          ></Search.Input>
+          <Search.Clear></Search.Clear>
+        </Search>
+
         {children}
       </div>
       <List
@@ -160,7 +159,7 @@ const ListControls = ({
         <div className={classes.loadingSpinner}>
           <Spinner
             data-size='sm'
-            title={''}
+            aria-hidden
           />
         </div>
       )}
