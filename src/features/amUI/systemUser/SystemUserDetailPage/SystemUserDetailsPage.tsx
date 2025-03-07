@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { PageWrapper } from '@/components';
 import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
@@ -14,7 +15,6 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import { ButtonRow } from '../components/ButtonRow/ButtonRow';
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 
 import classes from './SystemUserDetailsPage.module.css';
 

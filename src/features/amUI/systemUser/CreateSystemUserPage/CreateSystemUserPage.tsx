@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PageWrapper } from '@/components';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 
 import type { RegisteredSystem } from '../types';
 
