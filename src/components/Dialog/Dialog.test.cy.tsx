@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import { mount } from 'cypress/react18';
+import { mount } from 'cypress/react';
 import * as React from 'react';
 import { Button } from '@digdir/designsystemet-react';
 

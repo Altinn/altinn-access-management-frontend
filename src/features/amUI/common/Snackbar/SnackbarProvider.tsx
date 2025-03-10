@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 
 import { SnackbarContainer } from './Snackbar';
@@ -13,7 +14,7 @@ export interface SnackbarMessage {
   variant: SnackbarMessageVariant;
   duration: number;
   dismissable: boolean;
-  icon?: SVGElement;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
 interface SnackbarConfig {

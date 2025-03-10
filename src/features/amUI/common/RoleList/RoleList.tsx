@@ -80,57 +80,68 @@ export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: Ro
           >
             {roleArea.name}
           </Heading>
-          <ListBase>
-            {roleArea.activeRoles.map((role) => (
-              <RoleListItem
-                key={role.id}
-                role={role}
-                active
-                toParty={party}
-                onClick={() => {
-                  onSelect(role);
-                }}
-                controls={
-                  availableActions?.includes(DelegationAction.REVOKE) && (
-                    <RevokeRoleButton
-                      key={role.id}
-                      assignmentId={role?.assignmentId ?? ''}
-                      roleName={role.name}
-                      toParty={party}
-                      fullText={false}
-                      size='sm'
-                      disabled={role.inherited?.length > 0}
-                    />
-                  )
-                }
-              />
-            ))}
-          </ListBase>
-          <ListBase>
-            {roleArea.availableRoles.map((role) => (
-              <RoleListItem
-                key={role.id}
-                role={role}
-                toParty={party}
-                onClick={() => onSelect(role)}
-                controls={
-                  <>
-                    {availableActions?.includes(DelegationAction.DELEGATE) && (
-                      <DelegateRoleButton
-                        key={role.id}
-                        roleId={role.id}
-                        roleName={role.name}
-                        toParty={party}
-                        fullText={false}
-                        size='sm'
-                      />
-                    )}
-                    {availableActions?.includes(DelegationAction.REQUEST) && <RequestRoleButton />}
-                  </>
-                }
-              />
-            ))}
-          </ListBase>
+          <div
+            key={roleArea.id}
+            className={classes.roleLists}
+          >
+            {roleArea.activeRoles.length > 0 && (
+              <ListBase>
+                {roleArea.activeRoles.map((role) => (
+                  <RoleListItem
+                    key={role.id}
+                    role={role}
+                    active
+                    toParty={party}
+                    onClick={() => {
+                      onSelect(role);
+                    }}
+                    controls={
+                      availableActions?.includes(DelegationAction.REVOKE) && (
+                        <RevokeRoleButton
+                          key={role.id}
+                          assignmentId={role?.assignmentId ?? ''}
+                          roleName={role.name}
+                          toParty={party}
+                          fullText={false}
+                          size='sm'
+                          disabled={role.inherited?.length > 0}
+                        />
+                      )
+                    }
+                  />
+                ))}
+              </ListBase>
+            )}
+            {roleArea.availableRoles.length > 0 && (
+              <ListBase>
+                {roleArea.availableRoles.map((role) => (
+                  <RoleListItem
+                    key={role.id}
+                    role={role}
+                    toParty={party}
+                    onClick={() => onSelect(role)}
+                    controls={
+                      <>
+                        {availableActions?.includes(DelegationAction.DELEGATE) && (
+                          <DelegateRoleButton
+                            key={role.id}
+                            roleId={role.id}
+                            roleName={role.name}
+                            toParty={party}
+                            fullText={false}
+                            size='sm'
+                          />
+                        )}
+                        {availableActions?.includes(DelegationAction.REQUEST) && (
+                          <RequestRoleButton />
+                        )}
+                      </>
+                    }
+                  />
+                ))}
+              </ListBase>
+            )}
+          </div>
         </div>
       ))}
     </div>
