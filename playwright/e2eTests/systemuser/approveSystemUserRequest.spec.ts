@@ -2,6 +2,7 @@ import test, { expect } from '@playwright/test';
 
 import { TestdataApi } from 'playwright/util/TestdataApi';
 import { loginWithUser } from 'playwright/pages/loginPage';
+import { Util } from 'playwright/util/Util';
 
 import { ApiRequests } from '../../api-requests/ApiRequests';
 
@@ -18,11 +19,12 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
   });
 
   test('Avvis Systembrukerforespørsel', async ({ page }): Promise<void> => {
-    //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef);
 
-    await page.goto(response.confirmUrl);
+    const newUrl = Util.useAccessManagementUrlSystemUserRequest(response.confirmUrl);
+
+    await page.goto(newUrl);
     await page.getByRole('button', { name: 'Avvis' }).click();
 
     //Expect user to be logged out
@@ -39,7 +41,9 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef);
 
-    await page.goto(response.confirmUrl);
+    const newUrl = Util.useAccessManagementUrlSystemUserRequest(response.confirmUrl);
+
+    await page.goto(newUrl);
     await page.getByRole('button', { name: 'Godkjenn' }).click();
 
     //Expect user to be logged out
