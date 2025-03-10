@@ -203,7 +203,6 @@ export const Filter = ({
               <Button
                 data-size={fullScreenModal ? 'md' : 'sm'}
                 onClick={hasChanges ? handleOpenOrClose : undefined}
-                onKeyDown={hasChanges ? handleOpenOrClose : undefined}
                 aria-disabled={!hasChanges}
               >
                 {applyButtonLabel}

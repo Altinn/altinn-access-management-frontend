@@ -174,8 +174,8 @@ describe(
       cy.focused().realPress('Tab');
       cy.focused().realPress('Enter');
 
-      // cy.get('@onApplySpy').should('have.been.called');
-      // cy.get('@onApplySpy').should('have.been.calledWith', [filterOptions[1].value]);
+      cy.get('@onApplySpy').should('have.been.called');
+      cy.get('@onApplySpy').should('have.been.calledWith', [filterOptions[1].value]);
       cy.get('[role="dialog"]').should('not.exist');
     });
 
