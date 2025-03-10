@@ -163,7 +163,6 @@ describe(
       cy.focused().realPress('Enter');
       cy.get('[role="dialog"]').should('be.visible');
 
-      cy.focused().realPress('Tab');
       // Use Tab to navigate through the filter options
       for (let i = 0; i < filterOptions.length; i++) {
         if (i === 1) {
@@ -173,12 +172,11 @@ describe(
       }
 
       // Navigate past reset to apply-button and hit enter
-      // cy.focused().realPress('Tab');
-      // while (!cy.focused().contains('Apply')) {
-      //   cy.focused().realPress('Tab');
-      // }
-      // cy.focused().realPress('Enter');
-      cy.get('button').contains('Apply').click();
+
+      cy.focused().realPress('Tab');
+      cy.focused().realPress('Enter');
+
+      // cy.get('button').contains('Apply').click();
 
       cy.get('@onApplySpy').should('have.been.called');
       cy.get('@onApplySpy').should('have.been.calledWith', [filterOptions[1].value]);
