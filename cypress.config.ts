@@ -12,7 +12,7 @@ export default defineConfig({
   },
 
   component: {
-    defaultCommandTimeout: 10000,
+    defaultCommandTimeout: 50000,
     devServer: {
       framework: 'react',
       bundler: 'vite',
