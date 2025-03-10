@@ -163,11 +163,17 @@ describe(
       cy.focused().realPress('Enter');
       cy.get('[role="dialog"]').should('be.visible');
 
+      cy.focused().realPress('Tab');
+
       // Use Tab to navigate through the filter options
       for (let i = 0; i < filterOptions.length; i++) {
-        if (i === 1) {
-          cy.focused().realPress('Space');
-        }
+        cy.focused()
+          .invoke('attr', 'aria-label')
+          .then((label) => {
+            if (label === filterOptions[1].label) {
+              cy.focused().realPress('Space');
+            }
+          });
         cy.focused().realPress('Tab');
       }
 
