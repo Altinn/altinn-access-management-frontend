@@ -501,7 +501,7 @@
     "request_rejected": "Denne oppdaterings-forespørselen er allerede avvist",
     "request_expired": "Denne oppdaterings-forespørselen har utløpt"
   },
-  "systemuser_agent_delegation_request": {
+  "systemuser_agent_request": {
     "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
     "banner_title": "Lag en systemtilgang for kunderelasjoner",
     "system_description": "Gjennom systemtilgangen får {{vendorName}} fullmakt til å løse oppgaver på vegne av {{companyName}} sine kunder. For å fullføre oppsettet må tilgangene til kundene tildeles i kunderelasjoner i Altinn."

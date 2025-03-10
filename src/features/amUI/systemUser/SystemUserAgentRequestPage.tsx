@@ -23,7 +23,7 @@ import {
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  useDocumentTitle(t('systemuser_agent_delegation_request.page_title'));
+  useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
   const partyId = getCookie('AltinnPartyId');
@@ -88,7 +88,7 @@ export const SystemUserAgentRequestPage = () => {
   return (
     <RequestPageBase
       system={request?.system}
-      heading={t('systemuser_agent_delegation_request.banner_title')}
+      heading={t('systemuser_agent_request.banner_title')}
     >
       {!requestId && (
         <Alert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</Alert>
@@ -124,7 +124,7 @@ export const SystemUserAgentRequestPage = () => {
           </Heading>
           <Paragraph>
             <Trans
-              i18nKey={'systemuser_agent_delegation_request.system_description'}
+              i18nKey={'systemuser_agent_request.system_description'}
               values={{
                 vendorName: request.system.name,
                 companyName: reporteeData?.name,

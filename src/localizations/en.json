@@ -503,7 +503,7 @@
     "request_rejected": "This update system access request is already rejected",
     "request_expired": "This update system access request has expired"
   },
-  "systemuser_agent_delegation_request": {
+  "systemuser_agent_request": {
     "page_title": "Create system access for customer relations - Altinn",
     "banner_title": "Create system access for customer relations",
     "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."
