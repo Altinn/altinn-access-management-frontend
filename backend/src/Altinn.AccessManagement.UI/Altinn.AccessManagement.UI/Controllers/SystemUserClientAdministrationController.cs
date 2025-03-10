@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyId}/{systemUserGuid}/delegation")]
         public async Task<ActionResult> GetSystemUserClientDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<List<string>> result = await _systemUserClientAdministrationService.GetSystemUserClientDelegations(partyId, systemUserGuid, cancellationToken);
+            Result<List<ClientDelegationFE>> result = await _systemUserClientAdministrationService.GetSystemUserClientDelegations(partyId, systemUserGuid, cancellationToken);
             return Ok(result.Value);
         }
 

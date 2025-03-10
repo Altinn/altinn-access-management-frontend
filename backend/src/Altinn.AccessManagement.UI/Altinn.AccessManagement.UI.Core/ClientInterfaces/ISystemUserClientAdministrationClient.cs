@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -14,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="systemUserGuid">The system user UUID to retrieve delegated customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of delegated customers for system user</returns>
-        Task<List<string>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
+        Task<List<ClientDelegation>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add client to system user

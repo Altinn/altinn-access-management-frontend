@@ -4,6 +4,7 @@ using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.Authorization.ProblemDetails;
@@ -50,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<string>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<List<ClientDelegation>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             // TODO: vi vet ikke hva denne returnerer enda
             try
@@ -63,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<List<string>>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<List<ClientDelegation>>(responseContent, _serializerOptions);
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClientAdministrationClient // GetSystemUserClientDelegations // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);

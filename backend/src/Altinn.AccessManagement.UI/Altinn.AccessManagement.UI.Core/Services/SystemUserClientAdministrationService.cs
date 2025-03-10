@@ -1,6 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Register;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
@@ -34,10 +35,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<string>>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<Result<List<ClientDelegationFE>>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<string> delegations = await _systemUserClientAdministrationClient.GetSystemUserClientDelegations(partyId, systemUserGuid, cancellationToken);
-            return delegations;
+            List<ClientDelegation> delegations = await _systemUserClientAdministrationClient.GetSystemUserClientDelegations(partyId, systemUserGuid, cancellationToken);
+            return delegations.Select(x => new ClientDelegationFE()
+            {
+                PartyUuid = x.PartyUuid,
+            }).ToList();
         }
         
         /// <inheritdoc />

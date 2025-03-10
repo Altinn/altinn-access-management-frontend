@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -21,9 +23,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
         }
 
-        public Task<List<string>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public Task<List<ClientDelegation>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new List<string>());
+            string jsonFile = systemUserGuid == new Guid("61844188-3789-4b84-9314-2be1fdbc6633") ? "regnskapsforerClientDelegations.json" : "revisorClientDelegations.json";
+            List<ClientDelegation> delegations = Util.GetMockData<List<ClientDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
+
+            return Task.FromResult(delegations);
         }
 
         public Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, int customerPartyId, CancellationToken cancellationToken)

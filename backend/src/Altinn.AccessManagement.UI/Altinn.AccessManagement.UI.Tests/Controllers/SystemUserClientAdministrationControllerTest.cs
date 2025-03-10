@@ -95,5 +95,53 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+        /// <summary>
+        ///     Test case: GetRegnskapsforerClientDelegation checks that deletated regnskapsforer customers are returned
+        ///     Expected: GetRegnskapsforerClientDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task GetRegnskapsforerClientDelegation_ReturnsDelegations()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerClientDelegations.json");
+            List<ClientDelegationFE> expectedResponse = Util.GetMockData<List<ClientDelegationFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyId}/{systemUserId}/delegation");
+            string result = await httpResponse.Content.ReadAsStringAsync();
+            
+            List<ClientDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetRevisorClientDelegation checks that deletated revisor customers are returned
+        ///     Expected: GetRevisorClientDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task GetRevisorClientDelegation_ReturnsDelegations()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "244c56a5-3737-44ac-8f3b-8697c5e281da";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorClientDelegations.json");
+            List<ClientDelegationFE> expectedResponse = Util.GetMockData<List<ClientDelegationFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyId}/{systemUserId}/delegation");
+            List<ClientDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
     }
 }
