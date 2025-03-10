@@ -153,6 +153,7 @@ describe(
       mount(
         <Filter
           onApply={onApplySpy}
+          searchable={false}
           {...defaultProps}
         />,
       );
@@ -171,6 +172,7 @@ describe(
       }
 
       // Navigate past reset to apply-button and hit enter
+
       cy.focused().realPress('Tab');
       cy.focused().should('contain', 'Apply');
       cy.focused().realPress('Enter');
