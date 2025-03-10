@@ -54,7 +54,7 @@ export const OptionDisplay = ({
   // Update selected values when there are external changes
   const prevvalues = usePrevious(values);
   useEffect(() => {
-    if (!arraysEqual(values, prevvalues || [])) {
+    if (!arraysEqual(values, prevvalues ?? [])) {
       setSelectedValues(values ?? []);
     }
   }, [values]);
@@ -62,7 +62,7 @@ export const OptionDisplay = ({
   // Update sorted options when there are external changes
   const prevOptions = usePrevious(options);
   useEffect(() => {
-    if (!arraysEqual(options, prevOptions || [])) {
+    if (!arraysEqual(options, prevOptions ?? [])) {
       setSortedOptions(options);
     }
   }, [options]);
