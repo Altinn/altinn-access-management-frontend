@@ -3,10 +3,6 @@ import { Alert, Spinner } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
-import type { SystemUser } from '../types';
-
-import { SystemUserClientDelegationsPageContent } from './SystemUserClientDelegationsPageContent';
-
 import {
   useGetAssignedCustomersQuery,
   useGetClientSystemUserQuery,
@@ -17,6 +13,10 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
+
+import type { SystemUser } from '../types';
+
+import { SystemUserClientDelegationsPageContent } from './SystemUserClientDelegationsPageContent';
 
 const isRegnskapsforerSystemUser = (systemUser: SystemUser | undefined): boolean => {
   return (
@@ -103,7 +103,7 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
           <SystemUserClientDelegationsPageContent
             systemUser={systemUser}
             customers={customers}
-            initialAssignedIds={assignedIds}
+            initialAssignedIds={assignedIds.map((assigned) => assigned.partyId)}
           />
         )}
       </PageLayoutWrapper>

@@ -41,6 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return delegations.Select(x => new ClientDelegationFE()
             {
                 PartyUuid = x.PartyUuid,
+                PartyId = x.PartyId,
             }).ToList();
         }
         

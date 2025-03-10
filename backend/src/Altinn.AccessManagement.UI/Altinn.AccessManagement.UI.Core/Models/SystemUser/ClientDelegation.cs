@@ -9,5 +9,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// Delegated party uuid
         /// </summary>
         public required Guid PartyUuid { get; set; }
+
+        /// <summary>
+        /// Delegated party id
+        /// </summary>
+        public required int PartyId { get; set; }
     }
 }
