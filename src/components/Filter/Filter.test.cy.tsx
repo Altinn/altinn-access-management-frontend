@@ -163,6 +163,7 @@ describe(
       cy.focused().realPress('Enter');
       cy.get('[role="dialog"]').should('be.visible');
 
+      cy.focused().realPress('Tab');
       // Use Tab to navigate through the filter options
       for (let i = 0; i < filterOptions.length; i++) {
         if (i === 1) {
