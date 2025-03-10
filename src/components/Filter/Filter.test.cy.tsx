@@ -172,8 +172,11 @@ describe(
       }
 
       // Navigate past reset to apply-button and hit enter
-
       cy.focused().realPress('Tab');
+      while (!cy.focused().contains('Apply')) {
+        cy.focused().realPress('Tab');
+      }
+
       cy.focused().should('contain', 'Apply');
       cy.focused().realPress('Enter');
       // cy.get('button').contains('Apply').click();
