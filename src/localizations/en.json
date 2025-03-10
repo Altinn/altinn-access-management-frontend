@@ -76,8 +76,8 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators."
   },
-  "header": {    
-    "access_management" : "Access Management",
+  "header": {
+    "access_management": "Access Management",
     "inbox": "Inbox",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
@@ -86,7 +86,7 @@
     "back-label": "Back",
     "all_services": "All services",
     "chat": "Get help on chat",
-    "log_out" : "Log out"
+    "log_out": "Log out"
   },
   "footer": {
     "about_altinn": "About Altinn",
@@ -507,6 +507,23 @@
     "page_title": "Create system access for customer relations - Altinn",
     "banner_title": "Create system access for customer relations",
     "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."
+  },
+  "systemuser_client_delegation": {
+    "page_title": "System access for customer relations - Altinn",
+    "banner_title": "System access for {{integrationTitle}}",
+    "load_customers_error": "Could not load customers",
+    "load_assigned_customers_error": "Could not load customers for system access",
+    "my_customers_header": "My customers in Register of Legal Entities",
+    "assign_customers": "Add more customers to system access {{integrationTitle}}",
+    "assigned_customers_header": "Customers in system access",
+    "no_assigned_customers": "This system access has no customers",
+    "add_customers": "Add customers",
+    "edit_customers": "Manage customers",
+    "customer_search": "Search customers",
+    "remove_from_system_user": "Remove from system access",
+    "remove_from_system_user_aria": "Remove {{customerName}} from system access",
+    "add_to_system_user": "Add to system access",
+    "add_to_system_user_aria": "Add {{customerName}} to system access"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",
