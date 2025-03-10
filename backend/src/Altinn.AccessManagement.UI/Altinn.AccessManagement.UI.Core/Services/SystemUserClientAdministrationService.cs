@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -26,17 +27,10 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<ClientPartyFE>>> GetPartyRegnskapsforerCustomers(Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<List<ClientPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
         {
-            CustomerList regnskapsforerCustomers = await _registerClientV2.GetPartyRegnskapsforerCustomers(partyUuid, cancellationToken);
+            CustomerList regnskapsforerCustomers = await _registerClientV2.GetPartyCustomers(partyUuid, customerType, cancellationToken);
             return MapCustomerListToCustomerFE(regnskapsforerCustomers);
-        }
-
-        /// <inheritdoc />
-        public async Task<Result<List<ClientPartyFE>>> GetPartyRevisorCustomers(Guid partyUuid, CancellationToken cancellationToken)
-        {
-            CustomerList revisorCustomers = await _registerClientV2.GetPartyRevisorCustomers(partyUuid, cancellationToken);
-            return MapCustomerListToCustomerFE(revisorCustomers);
         }
 
         /// <inheritdoc />

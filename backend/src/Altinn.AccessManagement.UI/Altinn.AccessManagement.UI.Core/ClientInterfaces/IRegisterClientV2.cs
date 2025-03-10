@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
@@ -7,8 +8,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     /// </summary>
     public interface IRegisterClientV2
     {
-        Task<CustomerList> GetPartyRegnskapsforerCustomers(Guid partyUuid, CancellationToken cancellationToken);
-
-        Task<CustomerList> GetPartyRevisorCustomers(Guid partyUuid, CancellationToken cancellationToken);
+        /// <summary>
+        /// Return all customers of a specific type for party
+        /// </summary>
+        /// <param name="partyUuid">The party UUID of the party to retrieve customers from</param>
+        /// <param name="customerType">Customer type to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of all party customers</returns>
+        Task<CustomerList> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
     }
 }

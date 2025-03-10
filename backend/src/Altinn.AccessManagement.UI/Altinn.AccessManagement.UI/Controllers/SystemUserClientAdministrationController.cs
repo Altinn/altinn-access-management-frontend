@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/regnskapsforer")]
         public async Task<ActionResult> GetPartyRegnskapsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyRegnskapsforerCustomers(partyUuid, cancellationToken);
+            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Regnskapsforer, cancellationToken);
             return Ok(customers.Value);
         }
 
@@ -110,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/revisor")]
         public async Task<ActionResult> GetPartyRevisorCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyRevisorCustomers(partyUuid, cancellationToken);
+            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
             return Ok(customers.Value);
         }
     }

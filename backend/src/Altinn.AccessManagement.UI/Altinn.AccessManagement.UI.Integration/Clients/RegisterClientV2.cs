@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -52,12 +53,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<CustomerList> GetPartyRegnskapsforerCustomers(Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<CustomerList> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"internal/parties/{partyUuid}/customers/ccr/regnskapsforer";
+                string endpointUrl = customerType switch
+                {
+                    CustomerRoleType.Revisor => $"internal/parties/{partyUuid}/customers/ccr/revisor",
+                    CustomerRoleType.Regnskapsforer => $"internal/parties/{partyUuid}/customers/ccr/regnskapsforer",
+                    _ => throw new ArgumentException("Invalid customer type")
+                }; 
+                
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
@@ -68,38 +75,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<CustomerList>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // RegisterClientV2 // GetPartyRegnskapsforerCustomers // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // RegisterClientV2 // GetPartyCustomers // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // RegisterClientV2 // GetPartyRegnskapsforerCustomers // Exception");
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<CustomerList> GetPartyRevisorCustomers(Guid partyUuid, CancellationToken cancellationToken)
-        {
-            try
-            {
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"internal/parties/{partyUuid}/customers/ccr/revisor";
-
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonSerializer.Deserialize<CustomerList>(responseContent, _serializerOptions);
-                }
-
-                _logger.LogError("AccessManagement.UI // RegisterClientV2 // GetPartyRevisorCustomers // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // RegisterClientV2 // GetPartyRevisorCustomers // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClientV2 // GetPartyCustomers // Exception");
                 throw;
             }
         }
