@@ -1,17 +1,39 @@
-using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
-    /// Interface for client wrapper for integration with the platform register API
+    /// Interface for client wrapper for integration with the systemuser client delegation API
     /// </summary>
     public interface ISystemUserClientAdministrationClient
     {
+        /// <summary>
+        /// Return delegated customers for this system user
+        /// </summary>
+        /// <param name="partyId">The party UUID of the party owning system user to retrieve delegated customers from</param>
+        /// <param name="systemUserGuid">The system user UUID to retrieve delegated customers from</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of delegated customers for system user</returns>
         Task<List<string>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Add client to system user
+        /// </summary>
+        /// <param name="partyId">The party UUID of the party owning system user to add customer to</param>
+        /// <param name="systemUserGuid">The system user UUID to add customer to</param>
+        /// <param name="customerPartyId">The party id of the customer to add</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean result of add</returns>
         Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, int customerPartyId, CancellationToken cancellationToken);
 
+        /// <summary>
+        /// Remove client from system user
+        /// </summary>
+        /// <param name="partyId">The party UUID of the party owning system user to remove customer from</param>
+        /// <param name="systemUserGuid">The system user UUID to remove customer from</param>
+        /// <param name="customerPartyId">The party id of the customer to remove</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Boolean result of remove</returns>
         Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, int customerPartyId, CancellationToken cancellationToken);
     }
 }

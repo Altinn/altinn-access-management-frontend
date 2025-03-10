@@ -268,6 +268,35 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for SystemUserClientAdministrationController tests</param>
+        /// <returns>HttpClient</returns>
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserClientAdministrationController> customFactory)
+        {
+            WebApplicationFactory<SystemUserClientAdministrationController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<ISystemUserClientAdministrationClient, SystemUserClientAdministrationClientMock>();
+                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
+                    services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
+                    services.AddTransient<IRegisterClient, RegisterClientMock>();
+                    services.AddTransient<IRegisterClientV2, RegisterClientV2Mock>();
+                    services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
         ///     Adds an auth cookie to the request message
         /// </summary>
         /// <param name="requestMessage">the request message</param>

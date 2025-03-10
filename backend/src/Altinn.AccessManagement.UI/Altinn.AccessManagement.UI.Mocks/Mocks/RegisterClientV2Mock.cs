@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<CustomerList> GetPartyRegnskapsforerCustomers(Guid partyUuid, CancellationToken cancellationToken)
         {
             CustomerList systemUsers = Util.GetMockData<CustomerList>($"{dataFolder}/Register/Parties/regnskapsforerCustomers.json");
-            
+            /*
             for (int i = 0; i < 100; i++)
             {
                 systemUsers.Data.Add(new PartyRecord()
@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     PartyUuid = Guid.NewGuid()
                 });
             }
-            
+            */
             return Task.FromResult(systemUsers);
         }
 
