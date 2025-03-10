@@ -3,16 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { Alert, Spinner, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 
-import {
-  useGetClientSystemUserRequestQuery,
-  useApproveClientSystemUserRequestMutation,
-  useRejectClientSystemUserRequestMutation,
-} from '@/rtk/features/systemUserApi';
-import { SystemUserPath } from '@/routes/paths';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
-
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
 import type { ProblemDetail } from './types';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
@@ -20,10 +10,20 @@ import { DelegationCheckError } from './components/DelegationCheckError/Delegati
 import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
 import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
 
-export const SystemUserClientRequestPage = () => {
+import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { SystemUserPath } from '@/routes/paths';
+import {
+  useGetAgentSystemUserRequestQuery,
+  useApproveAgentSystemUserRequestMutation,
+  useRejectAgentSystemUserRequestMutation,
+} from '@/rtk/features/systemUserApi';
+
+export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  useDocumentTitle(t('systemuser_client_delegation_request.page_title'));
+  useDocumentTitle(t('systemuser_agent_request.page_title'));
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('id') ?? '';
   const partyId = getCookie('AltinnPartyId');
@@ -32,7 +32,7 @@ export const SystemUserClientRequestPage = () => {
     data: request,
     isLoading: isLoadingRequest,
     error: loadingRequestError,
-  } = useGetClientSystemUserRequestQuery(
+  } = useGetAgentSystemUserRequestQuery(
     { partyId, requestId },
     {
       skip: !requestId,
@@ -43,12 +43,12 @@ export const SystemUserClientRequestPage = () => {
   const [
     postAcceptCreationRequest,
     { error: acceptCreationRequestError, isLoading: isAcceptingSystemUser },
-  ] = useApproveClientSystemUserRequestMutation();
+  ] = useApproveAgentSystemUserRequestMutation();
 
   const [
     postRejectCreationRequest,
     { isError: isRejectCreationRequestError, isLoading: isRejectingSystemUser },
-  ] = useRejectClientSystemUserRequestMutation();
+  ] = useRejectAgentSystemUserRequestMutation();
 
   const isActionButtonDisabled =
     isAcceptingSystemUser || isRejectingSystemUser || request?.status !== 'New';
@@ -82,13 +82,13 @@ export const SystemUserClientRequestPage = () => {
   };
 
   const logoutAndRedirectToVendor = (): void => {
-    window.location.assign(`${getApiBaseUrl()}/clientrequest/${request?.id}/logout`);
+    window.location.assign(`${getApiBaseUrl()}/agentrequest/${request?.id}/logout`);
   };
 
   return (
     <RequestPageBase
       system={request?.system}
-      heading={t('systemuser_client_delegation_request.banner_title')}
+      heading={t('systemuser_agent_request.banner_title')}
     >
       {!requestId && (
         <Alert data-color='danger'>{t('systemuser_request.load_creation_request_no_id')}</Alert>
@@ -101,10 +101,7 @@ export const SystemUserClientRequestPage = () => {
         </Alert>
       )}
       {isLoadingRequest && (
-        <Spinner
-          aria-label={t('systemuser_request.loading_creation_request')}
-          title={''}
-        />
+        <Spinner aria-label={t('systemuser_request.loading_creation_request')} />
       )}
       {request?.system && (
         <>
@@ -127,7 +124,7 @@ export const SystemUserClientRequestPage = () => {
           </Heading>
           <Paragraph>
             <Trans
-              i18nKey={'systemuser_client_delegation_request.system_description'}
+              i18nKey={'systemuser_agent_request.system_description'}
               values={{
                 vendorName: request.system.name,
                 companyName: reporteeData?.name,
