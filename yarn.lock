@@ -20,8 +20,8 @@ __metadata:
   linkType: hard
 
 "@altinn/altinn-components@npm:^0.20.0":
-  version: 0.20.0
-  resolution: "@altinn/altinn-components@npm:0.20.0"
+  version: 0.20.1
+  resolution: "@altinn/altinn-components@npm:0.20.1"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.9.2"
     classnames: "npm:^2.5.1"
@@ -30,7 +30,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/89aa722cf4e8c421ed335f8d042bd8d8740ce32f967ad3655e4f0df61164c59bab2d0b579faf42ea0d4d81cef5e56b9744cb1ffa22c72c488ddd872cc793f64c
+  checksum: 10/7faabad06fa3fdf812414cff672554ea2944a12583f532f8710cc97bab49a4255651f24a9f194246ff91549a9296027adf46d799ff6ecc6196cd10460241284a
   languageName: node
   linkType: hard
 
@@ -2889,8 +2889,8 @@ __metadata:
     classnames: "npm:^2.5.1"
     cross-env: "npm:^7.0.3"
     cypress: "npm:^14.1.0"
-    cypress-real-events: "npm:^1.10.0"
-    cypress-recurse: "npm:^1.35.2"
+    cypress-real-events: "npm:^1.14.0"
+    cypress-recurse: "npm:^1.35.3"
     dotenv: "npm:^16.4.5"
     eslint: "npm:^9.0.0"
     eslint-config-prettier: "npm:^10.0.0"
@@ -3917,7 +3917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-real-events@npm:^1.10.0":
+"cypress-real-events@npm:^1.14.0":
   version: 1.14.0
   resolution: "cypress-real-events@npm:1.14.0"
   peerDependencies:
@@ -3926,7 +3926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-recurse@npm:^1.35.2":
+"cypress-recurse@npm:^1.35.3":
   version: 1.35.3
   resolution: "cypress-recurse@npm:1.35.3"
   dependencies:
