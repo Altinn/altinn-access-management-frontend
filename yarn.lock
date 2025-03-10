@@ -19,18 +19,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:^0.18.3":
-  version: 0.18.3
-  resolution: "@altinn/altinn-components@npm:0.18.3"
+"@altinn/altinn-components@npm:^0.20.0":
+  version: 0.20.2
+  resolution: "@altinn/altinn-components@npm:0.20.2"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.9.2"
     classnames: "npm:^2.5.1"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
   peerDependencies:
-    react: ">=18.3.1"
-    react-dom: ">=18.3.1"
-  checksum: 10/54ca81b66b0aa38aa0ec63d3e315133b0b09bca020f9777f2a82ab726669dfec2a6e7053263b5215c799b09f35760937659d424e7337c841e070a676d9334c46
+    react: ">=18.3.1 || ^19.0.0"
+    react-dom: ">=18.3.1 || ^19.0.0"
+  checksum: 10/73f0b34207dabaf6b2c23a800bd365f6609212c7a31c6c9a9d726da053b94cd71f7d7bae089c5c368cf551851ed6ef2216f67b7db919662d76502855f24966fe
   languageName: node
   linkType: hard
 
@@ -3295,7 +3295,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:^0.18.3"
+    "@altinn/altinn-components": "npm:^0.20.0"
     "@axe-core/playwright": "npm:^4.10.1"
     "@cypress/react18": "npm:^2.0.0"
     "@digdir/designsystemet-css": "npm:1.0.1"
@@ -9547,7 +9547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0":
+"react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0, react-dom@npm:^19.0.0":
   version: 19.0.0
   resolution: "react-dom@npm:19.0.0"
   dependencies:
@@ -9646,7 +9646,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0":
+"react@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0, react@npm:^19.0.0":
   version: 19.0.0
   resolution: "react@npm:19.0.0"
   checksum: 10/2490969c503f644703c88990d20e4011fa6119ddeca451e9de48f6d7ab058d670d2852a5fcd3aa3cd90a923ab2815d532637bd4a814add402ae5c0d4f129ee71
