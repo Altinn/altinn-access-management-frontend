@@ -7,7 +7,7 @@ using Altinn.AccessManagement.UI.Mocks.Utils;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IPartiesClient"></see> interface
+    /// Mock class for <see cref="IRegisterClientV2"></see> interface
     /// </summary>
     public class RegisterClientV2Mock : IRegisterClientV2
     {
@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterClientMock"/> class
+        /// Initializes a new instance of the <see cref="RegisterClientV2Mock"/> class
         /// </summary>
         public RegisterClientV2Mock()
         {

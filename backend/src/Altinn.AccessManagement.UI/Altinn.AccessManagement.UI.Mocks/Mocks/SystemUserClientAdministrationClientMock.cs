@@ -7,7 +7,7 @@ using Altinn.Authorization.ProblemDetails;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="IPartiesClient"></see> interface
+    /// Mock class for <see cref="ISystemUserClientAdministrationClient"></see> interface
     /// </summary>
     public class SystemUserClientAdministrationClientMock : ISystemUserClientAdministrationClient
     {
