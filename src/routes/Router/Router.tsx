@@ -20,8 +20,8 @@ import { SystemUserDetailsPage } from '@/features/amUI/systemUser/SystemUserDeta
 import { CreateSystemUserPage } from '@/features/amUI/systemUser/CreateSystemUserPage/CreateSystemUserPage';
 import { ReporteesPage } from '@/features/amUI/reportees/ReporteesPage';
 import { ReporteeRightsPage } from '@/features/amUI/reporteeRightsPage/ReporteeRightsPage';
-import { SystemUserClientRequestPage } from '@/features/amUI/systemUser/SystemUserClientRequestPage';
 import { SystemUserClientDelegationsPage } from '@/features/amUI/systemUser/SystemUserClientDelegationsPage/SystemUserClientDelegationsPage';
+import { SystemUserAgentRequestPage } from '@/features/amUI/systemUser/SystemUserAgentRequestPage';
 
 import {
   GeneralPath,
@@ -138,8 +138,8 @@ export const Router = createBrowserRouter(
           element={<SystemUserChangeRequestPage />}
         />
         <Route
-          path={SystemUserPath.ClientRequest}
-          element={<SystemUserClientRequestPage />}
+          path={SystemUserPath.AgentRequest}
+          element={<SystemUserAgentRequestPage />}
         />
       </Route>
     </Route>,

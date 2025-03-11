@@ -6,5 +6,5 @@ export enum SystemUserPath {
   ClientDelegation = ':id/clientdelegations',
   Request = 'request',
   ChangeRequest = 'changerequest',
-  ClientRequest = 'clientrequest',
+  AgentRequest = 'agentrequest',
 }

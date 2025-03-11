@@ -211,7 +211,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<ISystemUserService, SystemUserService>();
     services.AddSingleton<ISystemUserRequestService, SystemUserRequestService>();
     services.AddSingleton<ISystemUserChangeRequestService, SystemUserChangeRequestService>();
-    services.AddSingleton<ISystemUserClientRequestService, SystemUserClientRequestService>();
+    services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
     services.AddSingleton<ISystemUserClientAdministrationService, SystemUserClientAdministrationService>();
 
     services.AddSingleton<IRoleService, RoleService>();
@@ -374,13 +374,13 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
 
     if (mockSettings.SystemUserClientDelegation)
     {
-        services.AddSingleton<ISystemUserClientRequestClient, SystemUserClientRequestClientMock>();
+        services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClientMock>();
         services.AddSingleton<ISystemUserClientAdministrationClient, SystemUserClientAdministrationClientMock>();
         services.AddSingleton<IRegisterClientV2, RegisterClientV2Mock>();
     }
     else 
     {
-        services.AddSingleton<ISystemUserClientRequestClient, SystemUserClientRequestClient>();
+        services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClient>();
         services.AddSingleton<ISystemUserClientAdministrationClient, SystemUserClientAdministrationClient>();
         services.AddSingleton<IRegisterClientV2, RegisterClientV2>();
     }
