@@ -55,47 +55,44 @@ export const SystemUserOverviewPage = () => {
             {isLoadingSystemUsers && isLoadingClientSystemUsers && (
               <Spinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
             )}
-            <div className={classes.listHeader}>
-              <Heading
-                level={2}
-                data-size='xs'
-                className={classes.systemUserHeader}
-              >
-                {t('systemuser_overviewpage.existing_system_users_title')}
-              </Heading>
-              <Button
-                variant='secondary'
-                className={classes.createSystemUserButton}
-                asChild
-              >
-                <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
-                  <PlusIcon
-                    fontSize={28}
-                    aria-hidden
-                  />
-                  {t('systemuser_overviewpage.new_system_user_button')}
-                </Link>
-              </Button>
-            </div>
-            <SystemUserList systemUsers={systemUsers} />
+            {systemUsers && systemUsers.length > 0 && (
+              <>
+                <div className={classes.listHeader}>
+                  <Heading
+                    level={2}
+                    data-size='xs'
+                    className={classes.systemUserHeader}
+                  >
+                    {t('systemuser_overviewpage.existing_system_users_title')}
+                  </Heading>
+                  <CreateSystemUserButton />
+                </div>
+                <SystemUserList systemUsers={systemUsers} />
+              </>
+            )}
+            {systemUsers && systemUsers.length === 0 && <CreateSystemUserButton />}
             {isLoadSystemUsersError && (
               <Alert data-color='danger'>
                 {t('systemuser_overviewpage.systemusers_load_error')}
               </Alert>
             )}
-            <div className={classes.listHeader}>
-              <Heading
-                level={2}
-                data-size='xs'
-                className={classes.systemUserHeader}
-              >
-                {t('systemuser_overviewpage.client_delegation_systemusers_title')}
-              </Heading>
-            </div>
-            <SystemUserList
-              systemUsers={clientSystemUsers}
-              isClientList
-            />
+            {clientSystemUsers && clientSystemUsers.length > 0 && (
+              <>
+                <div className={classes.listHeader}>
+                  <Heading
+                    level={2}
+                    data-size='xs'
+                    className={classes.systemUserHeader}
+                  >
+                    {t('systemuser_overviewpage.client_delegation_systemusers_title')}
+                  </Heading>
+                </div>
+                <SystemUserList
+                  systemUsers={clientSystemUsers}
+                  isClientList
+                />
+              </>
+            )}
             {isLoadClientSystemUsersError && (
               <Alert data-color='danger'>
                 {t('systemuser_overviewpage.client_delegation_systemusers_load_error')}
@@ -108,7 +105,7 @@ export const SystemUserOverviewPage = () => {
   );
 };
 interface SystemUserListProps {
-  systemUsers: SystemUser[] | undefined;
+  systemUsers: SystemUser[];
   isClientList?: boolean;
 }
 
@@ -119,7 +116,7 @@ const SystemUserList = ({ systemUsers, isClientList }: SystemUserListProps) => {
 
   const newlyCreatedId = routerLocation?.state?.createdId;
 
-  return systemUsers && systemUsers.length > 0 ? (
+  return (
     <List
       defaultItemSize='lg'
       items={systemUsers?.map((systemUser) => {
@@ -141,7 +138,24 @@ const SystemUserList = ({ systemUsers, isClientList }: SystemUserListProps) => {
         };
       })}
     />
-  ) : (
-    <></>
+  );
+};
+
+const CreateSystemUserButton = (): React.ReactNode => {
+  const { t } = useTranslation();
+  return (
+    <Button
+      variant='secondary'
+      className={classes.createSystemUserButton}
+      asChild
+    >
+      <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
+        <PlusIcon
+          fontSize={28}
+          aria-hidden
+        />
+        {t('systemuser_overviewpage.new_system_user_button')}
+      </Link>
+    </Button>
   );
 };
