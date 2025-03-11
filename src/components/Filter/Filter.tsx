@@ -98,7 +98,7 @@ export const Filter = ({
   // Update selected values when there are external changes
   const prevvalues = usePrevious(values);
   useEffect(() => {
-    if (values !== undefined && !arraysEqual(values, prevvalues || [])) {
+    if (values !== undefined && !arraysEqual(values, prevvalues ?? [])) {
       setActiveFilters(values);
       setCheckedFilters(values);
     }
