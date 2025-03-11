@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Alert, Button, Heading, Paragraph, Spinner, Tabs } from '@digdir/designsystemet-react';
+import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { PlusIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { List } from '@altinn/altinn-components';
 
@@ -10,8 +10,8 @@ import { PageWrapper } from '@/components';
 import { useGetClientSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
+import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 
-import { PageLayoutWrapper } from '../../common/PageLayoutWrapper';
 import { CreateSystemUserCheck } from '../components/CanCreateSystemUser/CanCreateSystemUser';
 import type { SystemUser } from '../types';
 
@@ -38,84 +38,71 @@ export const SystemUserOverviewPage = () => {
   return (
     <PageWrapper>
       <PageLayoutWrapper>
-        <Tabs
-          defaultValue='systemtilganger'
-          className={classes.flexContainer}
-        >
-          <Tabs.List className={classes.systemUserTabs}>
-            <Tabs.Tab value='systemtilganger'>
-              {t('systemuser_overviewpage.systemuser_tab')}
-            </Tabs.Tab>
-            <Tabs.Tab value='apitilganger'>{t('systemuser_overviewpage.api_tab')}</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Panel value='systemtilganger'>
-            <div className={classes.flexContainer}>
+        <div className={classes.flexContainer}>
+          <Heading
+            level={1}
+            data-size='md'
+          >
+            {t('systemuser_overviewpage.banner_title')}
+          </Heading>
+          <Paragraph
+            data-size='sm'
+            className={classes.systemUserIngress}
+          >
+            {t('systemuser_overviewpage.sub_title_text')}
+          </Paragraph>
+          <CreateSystemUserCheck>
+            {isLoadingSystemUsers && isLoadingClientSystemUsers && (
+              <Spinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
+            )}
+            <div className={classes.listHeader}>
               <Heading
-                level={1}
-                data-size='md'
+                level={2}
+                data-size='xs'
+                className={classes.systemUserHeader}
               >
-                {t('systemuser_overviewpage.banner_title')}
+                {t('systemuser_overviewpage.existing_system_users_title')}
               </Heading>
-              <Paragraph
-                data-size='sm'
-                className={classes.systemUserIngress}
+              <Button
+                variant='secondary'
+                className={classes.createSystemUserButton}
+                asChild
               >
-                {t('systemuser_overviewpage.sub_title_text')}
-              </Paragraph>
-              <CreateSystemUserCheck>
-                {isLoadingSystemUsers && isLoadingClientSystemUsers && (
-                  <Spinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
-                )}
-                <div className={classes.listHeader}>
-                  <Heading
-                    level={2}
-                    data-size='xs'
-                    className={classes.systemUserHeader}
-                  >
-                    {t('systemuser_overviewpage.existing_system_users_title')}
-                  </Heading>
-                  <Button
-                    variant='secondary'
-                    className={classes.createSystemUserButton}
-                    asChild
-                  >
-                    <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
-                      <PlusIcon
-                        fontSize={28}
-                        aria-hidden
-                      />
-                      {t('systemuser_overviewpage.new_system_user_button')}
-                    </Link>
-                  </Button>
-                </div>
-                <SystemUserList systemUsers={systemUsers} />
-                {isLoadSystemUsersError && (
-                  <Alert data-color='danger'>
-                    {t('systemuser_overviewpage.systemusers_load_error')}
-                  </Alert>
-                )}
-                <div className={classes.listHeader}>
-                  <Heading
-                    level={2}
-                    data-size='xs'
-                    className={classes.systemUserHeader}
-                  >
-                    {t('systemuser_overviewpage.client_delegation_systemusers_title')}
-                  </Heading>
-                </div>
-                <SystemUserList
-                  systemUsers={clientSystemUsers}
-                  isClientList
-                />
-                {isLoadClientSystemUsersError && (
-                  <Alert data-color='danger'>
-                    {t('systemuser_overviewpage.client_delegation_systemusers_load_error')}
-                  </Alert>
-                )}
-              </CreateSystemUserCheck>
+                <Link to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Create}`}>
+                  <PlusIcon
+                    fontSize={28}
+                    aria-hidden
+                  />
+                  {t('systemuser_overviewpage.new_system_user_button')}
+                </Link>
+              </Button>
             </div>
-          </Tabs.Panel>
-        </Tabs>
+            <SystemUserList systemUsers={systemUsers} />
+            {isLoadSystemUsersError && (
+              <Alert data-color='danger'>
+                {t('systemuser_overviewpage.systemusers_load_error')}
+              </Alert>
+            )}
+            <div className={classes.listHeader}>
+              <Heading
+                level={2}
+                data-size='xs'
+                className={classes.systemUserHeader}
+              >
+                {t('systemuser_overviewpage.client_delegation_systemusers_title')}
+              </Heading>
+            </div>
+            <SystemUserList
+              systemUsers={clientSystemUsers}
+              isClientList
+            />
+            {isLoadClientSystemUsersError && (
+              <Alert data-color='danger'>
+                {t('systemuser_overviewpage.client_delegation_systemusers_load_error')}
+              </Alert>
+            )}
+          </CreateSystemUserCheck>
+        </div>
       </PageLayoutWrapper>
     </PageWrapper>
   );
