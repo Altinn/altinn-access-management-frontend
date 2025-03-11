@@ -4,8 +4,6 @@
     "types": [
       "vite/client",
       "vitest/globals",
-      "@digdir/designsystemet-theme",
-      "@digdir/designsystemet-react/react-types"
     ],
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -27,7 +25,13 @@
       "@mock/*": ["./.mock/*"]
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "typeRoots": ["./node_modules/@types", "./src"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@digdir",
+      "./node_modules/",
+      "./src",
+      "./.mock"
+    ]
   },
   "include": [
     "**/*.ts",

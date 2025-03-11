@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import React from 'react';
 import { SnackbarItem } from '@altinn/altinn-components';
 import { BellFillIcon } from '@navikt/aksel-icons';
@@ -24,7 +25,7 @@ export const SnackbarContainer = (): JSX.Element | null => {
           as='div'
           data-color={item.variant}
           message={item.message}
-          icon={item.icon ?? (BellFillIcon as unknown as SVGElement)}
+          icon={item.icon || BellFillIcon}
           dismissable={item.dismissable}
           onDismiss={() => closeSnackbarItem(item.id)}
         />

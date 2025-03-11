@@ -1,6 +1,6 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 import * as React from 'react';
-import { mount } from 'cypress/react18';
+import { mount } from 'cypress/react';
 // eslint-disable-next-line import/no-unresolved
 import 'cypress-real-events';
 
@@ -147,12 +147,13 @@ describe(
       ]);
     });
 
-    it('can be opened, navigated, applied with changes by using keybord', () => {
+    it('can be opened, navigated, applied with changes by using keyboard', () => {
       const onApply = () => cy.stub();
       const onApplySpy = cy.spy(onApply).as('onApplySpy');
       mount(
         <Filter
           onApply={onApplySpy}
+          searchable={false}
           {...defaultProps}
         />,
       );
@@ -162,16 +163,22 @@ describe(
       cy.focused().realPress('Enter');
       cy.get('[role="dialog"]').should('be.visible');
 
+      cy.focused().realPress('Tab');
+
       // Use Tab to navigate through the filter options
       for (let i = 0; i < filterOptions.length; i++) {
-        if (i === 1) {
-          cy.focused().realPress('Space');
-        }
+        cy.focused()
+          .invoke('attr', 'aria-label')
+          .then((label) => {
+            if (label === filterOptions[1].label) {
+              cy.focused().realPress('Space');
+            }
+          });
         cy.focused().realPress('Tab');
       }
 
       // Navigate past reset to apply-button and hit enter
-      cy.focused().realPress('Tab');
+      cy.get('button').contains('Apply').focus();
       cy.focused().realPress('Enter');
 
       cy.get('@onApplySpy').should('have.been.called');

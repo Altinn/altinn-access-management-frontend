@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { PlusIcon, ArrowLeftIcon } from '@navikt/aksel-icons';
+import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
 import { Button } from '@altinn/altinn-components';
 
