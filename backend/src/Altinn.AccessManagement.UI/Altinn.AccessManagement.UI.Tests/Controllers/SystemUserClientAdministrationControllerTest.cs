@@ -5,7 +5,6 @@ using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -29,30 +28,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-        /// <summary>
-        ///     Test case: GetSystemUserClientDelegations checks that deletated customers are returned
-        ///     Expected: GetSystemUserClientDelegations returns the delegated customers
-        /// </summary>
-        /*
-        [Fact]
-        public async Task GetSystemUserClientDelegations_ReturnsDelegatedCustomers()
-        {
-            // Arrange
-            int partyId = 51329012;
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
-            string clientRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
-            string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserClientAdministration.json");
-            SystemUserClientAdministrationFE expectedResponse = Util.GetMockData<SystemUserClientAdministrationFE>(path);
-
-            // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/delegat/{partyId}/{clientRequestId}");
-            SystemUserClientAdministrationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserClientAdministrationFE>();
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
-        }*/
 
         /// <summary>
         ///     Test case: GetRegnskapsforerCustomers checks that customers are returned
@@ -142,6 +117,52 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: PostRegnskapsforerClientDelegation checks that delegation is added
+        ///     Expected: PostRegnskapsforerClientDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task PostRegnskapsforerClientDelegation_ReturnsTrue()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string customerPartyId = "50067799";
+            bool expectedResponse = true;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyId}/{systemUserId}/delegation/{customerPartyId}", null);
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: PostRevisorClientDelegation checks that delegation is added
+        ///     Expected: PostRevisorClientDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task PostRevisorClientDelegation_ReturnsTrue()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "244c56a5-3737-44ac-8f3b-8697c5e281da";
+            string customerPartyId = "51329012";
+            bool expectedResponse = true;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyId}/{systemUserId}/delegation/{customerPartyId}", null);
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse);
         }
     }
 }
