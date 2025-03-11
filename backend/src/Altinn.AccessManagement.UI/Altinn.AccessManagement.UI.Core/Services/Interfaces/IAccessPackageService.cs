@@ -1,5 +1,7 @@
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -43,5 +45,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
                 /// <param name="languageCode">The code of the language on which texts are to be returned</param>
                 /// <returns></returns> 
                 Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode);
-        }
+
+                /// <summary>
+                ///    Checks if the user can delegate roles on behalf of the specified reportee
+                /// </summary>
+                /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>
+                /// <returns>The response containing whether or not the user can delegate the roles</returns>
+                Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> DelegationCheck(DelegationCheckRequest delegationCheckRequest);
+    }
 }

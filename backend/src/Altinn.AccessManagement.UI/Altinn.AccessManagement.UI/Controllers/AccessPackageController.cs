@@ -168,5 +168,35 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
         }
+
+        /// <summary>
+        ///     Check if a set of package can be delegated
+        /// </summary>
+        /// <returns>If the role can be delegated and the DetailCode for why</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("delegationcheck")]
+        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> RoleDelegationCheck([FromBody] DelegationCheckRequest delegationCheckRequest)
+        {
+            if (delegationCheckRequest.PackageIds == null || delegationCheckRequest.PackageIds.Length == 0)
+            {
+                return BadRequest("Role IDs cannot be null or empty.");
+            }
+
+            try
+            {
+                return await _accessPackageService.DelegationCheck(delegationCheckRequest);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
     }
 }

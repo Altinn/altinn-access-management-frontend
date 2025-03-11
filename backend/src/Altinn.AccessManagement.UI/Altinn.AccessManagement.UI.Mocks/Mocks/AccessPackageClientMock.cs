@@ -110,5 +110,24 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 });
             }
         }
+        
+        /// <inheritdoc />
+        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        {
+            try
+            {
+                var res = new List<AccessPackageDelegationCheckResponse>();
+                foreach (var packageId in delegationCheckRequest.PackageIds)
+                {
+                    var check = Util.GetMockData<AccessPackageDelegationCheckResponse>($"{dataFolder}/AccessPackage/DelegationCheck/{packageId}.json");
+                    res.Add(check);
+                }
+                return Task.FromResult(res);
+            }
+            catch
+            {
+                return Task.FromResult(new List<AccessPackageDelegationCheckResponse>());
+            }
+        }
     }
 }
