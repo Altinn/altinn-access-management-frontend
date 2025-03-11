@@ -5,6 +5,7 @@
 .listHeader {
   display: flex;
   justify-content: space-between;
+  margin-bottom: var(--ds-size-2);
 }
 
 .searchBar {
@@ -13,4 +14,5 @@
 
 .pagingContainer {
   justify-self: center;
+  margin-top: var(--ds-size-4);
 }

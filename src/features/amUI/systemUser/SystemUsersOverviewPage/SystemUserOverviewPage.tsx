@@ -94,13 +94,15 @@ export const SystemUserOverviewPage = () => {
                     {t('systemuser_overviewpage.systemusers_load_error')}
                   </Alert>
                 )}
-                <Heading
-                  level={2}
-                  data-size='xs'
-                  className={classes.systemUserHeader}
-                >
-                  {t('systemuser_overviewpage.client_delegation_systemusers_title')}
-                </Heading>
+                <div className={classes.listHeader}>
+                  <Heading
+                    level={2}
+                    data-size='xs'
+                    className={classes.systemUserHeader}
+                  >
+                    {t('systemuser_overviewpage.client_delegation_systemusers_title')}
+                  </Heading>
+                </div>
                 <SystemUserList
                   systemUsers={clientSystemUsers}
                   isClientList
