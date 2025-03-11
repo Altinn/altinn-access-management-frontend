@@ -107,22 +107,22 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
-    getClientSystemUserRequest: builder.query<
+    getAgentSystemUserRequest: builder.query<
       SystemUserRequest,
       { partyId: string; requestId: string }
     >({
-      query: ({ partyId, requestId }) => `systemuser/clientrequest/${partyId}/${requestId}`,
+      query: ({ partyId, requestId }) => `systemuser/agentrequest/${partyId}/${requestId}`,
     }),
-    approveClientSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+    approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
-        url: `systemuser/clientrequest/${partyId}/${requestId}/approve`,
+        url: `systemuser/agentrequest/${partyId}/${requestId}/approve`,
         method: 'POST',
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
-    rejectClientSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+    rejectAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => ({
-        url: `systemuser/clientrequest/${partyId}/${requestId}/reject`,
+        url: `systemuser/agentrequest/${partyId}/${requestId}/reject`,
         method: 'POST',
       }),
       invalidatesTags: [Tags.SystemUsers],
@@ -148,9 +148,9 @@ export const {
   useGetChangeRequestQuery,
   useApproveChangeRequestMutation,
   useRejectChangeRequestMutation,
-  useGetClientSystemUserRequestQuery,
-  useApproveClientSystemUserRequestMutation,
-  useRejectClientSystemUserRequestMutation,
+  useGetAgentSystemUserRequestQuery,
+  useApproveAgentSystemUserRequestMutation,
+  useRejectAgentSystemUserRequestMutation,
 } = apiWithTag;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;
