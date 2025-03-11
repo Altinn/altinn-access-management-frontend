@@ -104,11 +104,11 @@ export const SystemUserOverviewPage = () => {
     </PageWrapper>
   );
 };
+
 interface SystemUserListProps {
   systemUsers: SystemUser[];
   isClientList?: boolean;
 }
-
 const SystemUserList = ({ systemUsers, isClientList }: SystemUserListProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
