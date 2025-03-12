@@ -57,7 +57,6 @@ export const DeleteSystemUserPopover = ({
                   {t('systemuser_detailpage.delete_systemuser_error')}
                 </Alert>
               )}
-
               <ButtonRow>
                 <Button
                   data-color='danger'
