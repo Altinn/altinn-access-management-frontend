@@ -154,12 +154,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<SystemUser> GetClientSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public async Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/client/{partyId}/{id}";
+                string endpointUrl = $"systemuser/agent/{partyId}/{id}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -180,12 +180,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<SystemUser>> GetClientSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        public async Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/client/{partyId}";
+                string endpointUrl = $"systemuser/agent/{partyId}";
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);

@@ -75,12 +75,12 @@ export const systemUserApi = createApi({
     }),
 
     // client delegation systemuser
-    getClientSystemUsers: builder.query<SystemUser[], string>({
-      query: (partyId) => `systemuser/client/${partyId}`,
+    getAgentSystemUsers: builder.query<SystemUser[], string>({
+      query: (partyId) => `systemuser/agent/${partyId}`,
       providesTags: [Tags.SystemUsers],
     }),
-    getClientSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
-      query: ({ partyId, systemUserId }) => `systemuser/client/${partyId}/${systemUserId}`,
+    getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
+      query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
     }),
     getRegnskapsforerCustomers: builder.query<Customer[], string>({
       query: (partyUuid) => `systemuser/clientadministration/${partyUuid}/customers/regnskapsforer`,
@@ -196,8 +196,8 @@ export const {
   useGetAssignedCustomersQuery,
   useAssignCustomerMutation,
   useRemoveCustomerMutation,
-  useGetClientSystemUsersQuery,
-  useGetClientSystemUserQuery,
+  useGetAgentSystemUsersQuery,
+  useGetAgentSystemUserQuery,
   useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,
   useGetRegisteredSystemRightsQuery,

@@ -29,23 +29,23 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Return all client system users created for a given party
+        /// Return all agent system users created for a given party
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all system users for specified party</returns>
-        Task<Result<List<SystemUserFE>>> GetClientSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
         
         /// <summary>
-        /// Return a specific client system user
+        /// Return a specific agent system user
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="id">Id of system user to get</param>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Requested system user</returns>
-        Task<SystemUserFE> GetClientSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
+        Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new system user

@@ -7,7 +7,7 @@ import { List } from '@altinn/altinn-components';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
-import { useGetClientSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
+import { useGetAgentSystemUsersQuery, useGetSystemUsersQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
@@ -30,10 +30,10 @@ export const SystemUserOverviewPage = () => {
   } = useGetSystemUsersQuery(partyId);
 
   const {
-    data: clientSystemUsers,
-    isLoading: isLoadingClientSystemUsers,
-    isError: isLoadClientSystemUsersError,
-  } = useGetClientSystemUsersQuery(partyId);
+    data: agentSystemUsers,
+    isLoading: isLoadingAgentSystemUsers,
+    isError: isLoadAgentSystemUsersError,
+  } = useGetAgentSystemUsersQuery(partyId);
 
   return (
     <PageWrapper>
@@ -52,7 +52,7 @@ export const SystemUserOverviewPage = () => {
             {t('systemuser_overviewpage.sub_title_text')}
           </Paragraph>
           <CreateSystemUserCheck>
-            {isLoadingSystemUsers && isLoadingClientSystemUsers && (
+            {isLoadingSystemUsers && isLoadingAgentSystemUsers && (
               <Spinner aria-label={t('systemuser_overviewpage.loading_systemusers')} />
             )}
             {systemUsers && systemUsers.length > 0 && (
@@ -76,7 +76,7 @@ export const SystemUserOverviewPage = () => {
                 {t('systemuser_overviewpage.systemusers_load_error')}
               </Alert>
             )}
-            {clientSystemUsers && clientSystemUsers.length > 0 && (
+            {agentSystemUsers && agentSystemUsers.length > 0 && (
               <>
                 <div className={classes.listHeader}>
                   <Heading
@@ -88,12 +88,12 @@ export const SystemUserOverviewPage = () => {
                   </Heading>
                 </div>
                 <SystemUserList
-                  systemUsers={clientSystemUsers}
+                  systemUsers={agentSystemUsers}
                   isClientList
                 />
               </>
             )}
-            {isLoadClientSystemUsersError && (
+            {isLoadAgentSystemUsersError && (
               <Alert data-color='danger'>
                 {t('systemuser_overviewpage.client_delegation_systemusers_load_error')}
               </Alert>

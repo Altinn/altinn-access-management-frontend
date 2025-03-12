@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 
 import {
   useGetAssignedCustomersQuery,
-  useGetClientSystemUserQuery,
+  useGetAgentSystemUserQuery,
   useGetRegnskapsforerCustomersQuery,
   useGetRevisorCustomersQuery,
 } from '@/rtk/features/systemUserApi';
@@ -51,7 +51,7 @@ export const SystemUserClientDelegationsPage = (): React.ReactNode => {
     data: systemUser,
     isError: isLoadSystemUserError,
     isLoading: isLoadingSystemUser,
-  } = useGetClientSystemUserQuery({ partyId, systemUserId: id || '' });
+  } = useGetAgentSystemUserQuery({ partyId, systemUserId: id || '' });
 
   const {
     data: regnskapsforerCustomers,

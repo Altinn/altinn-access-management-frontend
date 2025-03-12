@@ -90,11 +90,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("client/{partyId}")]
-        public async Task<ActionResult> GetClientSystemUsersForParty([FromRoute] int partyId, CancellationToken cancellationToken)
+        [HttpGet("agent/{partyId}")]
+        public async Task<ActionResult> GetAgentSystemUsersForParty([FromRoute] int partyId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            Result<List<SystemUserFE>> list = await _systemUserService.GetClientSystemUsersForParty(partyId, languageCode, cancellationToken);
+            Result<List<SystemUserFE>> list = await _systemUserService.GetAgentSystemUsersForParty(partyId, languageCode, cancellationToken);
 
             if (list.IsProblem)
             {
@@ -112,11 +112,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("client/{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> GetClientSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        [HttpGet("agent/{partyId}/{systemUserGuid}")]
+        public async Task<ActionResult> GetAgentSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            SystemUserFE details = await _systemUserService.GetClientSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
+            SystemUserFE details = await _systemUserService.GetAgentSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
             
             if (details == null)
             {

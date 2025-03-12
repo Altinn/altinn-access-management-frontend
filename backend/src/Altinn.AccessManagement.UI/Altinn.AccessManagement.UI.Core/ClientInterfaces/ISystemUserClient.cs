@@ -44,20 +44,20 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<SystemUser>> GetSystemUsersForParty(int partyId, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Return a specific client system user
+        /// Return a specific agent system user
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="id">Id of system user to get</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Requested system user</returns>
-        Task<SystemUser> GetClientSystemUser(int partyId, Guid id, CancellationToken cancellationToken);
+        Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Return all system users created for a given party
+        /// Return all agent system users created for a given party
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all system users for specified party</returns>
-        Task<List<SystemUser>> GetClientSystemUsersForParty(int partyId, CancellationToken cancellationToken);
+        Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken);
     }
 }

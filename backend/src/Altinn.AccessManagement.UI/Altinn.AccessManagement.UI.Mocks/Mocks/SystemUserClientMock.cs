@@ -45,8 +45,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
-            List<SystemUser> clientSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/clientSystemUsers.json");
-            List<SystemUser> allSystemUsers = [.. systemUsers, .. clientSystemUsers];
+            List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
+            List<SystemUser> allSystemUsers = [.. systemUsers, .. agentSystemUsers];
             SystemUser systemUser = allSystemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             if (systemUser is null)
             {
@@ -71,17 +71,17 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<SystemUser> GetClientSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
         {
-            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/clientSystemUsers.json");
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             return Task.FromResult(systemUser);
         }
         
         /// <inheritdoc />
-        public Task<List<SystemUser>> GetClientSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        public Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
-            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/clientSystemUsers.json");
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             return Task.FromResult(systemUsers);
         }
 
