@@ -4,13 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 
-import { useAssignCustomerMutation, useRemoveCustomerMutation } from '@/rtk/features/systemUserApi';
+import {
+  useAssignCustomerMutation,
+  useDeleteSystemuserMutation,
+  useRemoveCustomerMutation,
+} from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { Customer, SystemUser } from '../types';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 
 import classes from './SystemUserClientDelegationsPage.module.css';
 import { CustomerList } from './CustomerList';
@@ -41,6 +46,15 @@ export const SystemUserClientDelegationsPageContent = ({
   const [assignedCustomers, setAssignedCustomers] = useState<Customer[]>(
     getAssignedCustomers(customers, initialAssignedIds),
   );
+
+  const [deleteSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
+    useDeleteSystemuserMutation();
+
+  const handleDeleteSystemUser = (): void => {
+    deleteSystemUser({ partyId, systemUserId: id || '' })
+      .unwrap()
+      .then(() => handleNavigateBack());
+  };
 
   const handleNavigateBack = (): void => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
@@ -92,7 +106,18 @@ export const SystemUserClientDelegationsPageContent = ({
   }, [customers, delegatedIds]);
 
   return (
-    <PageContainer onNavigateBack={handleNavigateBack}>
+    <PageContainer
+      onNavigateBack={handleNavigateBack}
+      pageActions={
+        <DeleteSystemUserPopover
+          integrationTitle={systemUser.integrationTitle}
+          isDeleteError={isDeleteError}
+          isDeletingSystemUser={isDeletingSystemUser}
+          handleDeleteSystemUser={handleDeleteSystemUser}
+          hasClientDelegations={assignedCustomers.length > 0}
+        />
+      }
+    >
       <Dialog
         ref={modalRef}
         style={{

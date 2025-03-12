@@ -45,7 +45,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
-            SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
+            List<SystemUser> clientSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/clientSystemUsers.json");
+            List<SystemUser> allSystemUsers = [.. systemUsers, .. clientSystemUsers];
+            SystemUser systemUser = allSystemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             if (systemUser is null)
             {
                 return Task.FromResult(false);
