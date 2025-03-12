@@ -89,14 +89,14 @@ export const accessPackageApi = createApi({
     }),
     delegationCheck: builder.query<DelegationCheckResponse[], { packageIds: string[] }>({
       query: ({ packageIds }) => {
-        const body = {
+        const delegationCheckRequest = {
           packageIds: packageIds,
-          reporteeUuid: getCookie('AltinnPartyId'),
+          reporteeUuid: getCookie('AltinnPartyUuid'),
         };
         return {
           url: `delegationcheck`,
           method: 'POST',
-          body,
+          body: JSON.stringify(delegationCheckRequest),
         };
       },
     }),

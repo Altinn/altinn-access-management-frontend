@@ -2,7 +2,8 @@ import { Paragraph } from '@digdir/designsystemet-react';
 import { Button, ListBase } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { use } from 'chai';
+
+import { useDelegationCheckQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -10,8 +11,6 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './AccessPackageList.module.css';
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
-
-import { useDelegationCheckQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -35,9 +34,10 @@ export const AreaItemContent = ({
   const { packages } = area;
   const { t } = useTranslation();
 
-  const { data: delegationChecks } = useDelegationCheckQuery({
-    packageIds: area.packages.available.map((p) => p.id),
-  });
+  const { delegationChecks, delegationCheckLoading } = useDelegationCheckPackages(
+    !!availableActions?.includes(DelegationAction.DELEGATE),
+    area.packages.available.map((p) => p.id),
+  );
 
   return (
     <div className={classes.accessAreaContent}>
@@ -91,7 +91,6 @@ export const AreaItemContent = ({
         <ListBase>
           {packages.available.map((pkg) => {
             const delegationCheck = delegationChecks?.find((dc) => dc.packageId === pkg.id);
-            console.log('🚀 ~ {packages.available.map ~ delegationCheck:', delegationCheck);
             return (
               <PackageItem
                 key={pkg.id}
@@ -104,6 +103,7 @@ export const AreaItemContent = ({
                         icon={PlusCircleIcon}
                         variant='text'
                         size='sm'
+                        disabled={delegationCheckLoading || !delegationCheck?.canDelegate}
                         onClick={() => onDelegate(pkg)}
                       >
                         {t('common.give_poa')}
@@ -129,4 +129,13 @@ export const AreaItemContent = ({
       )}
     </div>
   );
+};
+
+const useDelegationCheckPackages = (shouldCheckDelegation: boolean, packageIds: string[]) => {
+  const { data: delegationChecks, isLoading: delegationCheckLoading } = shouldCheckDelegation
+    ? useDelegationCheckQuery({
+        packageIds,
+      })
+    : { data: [], isLoading: false };
+  return { delegationChecks, delegationCheckLoading };
 };

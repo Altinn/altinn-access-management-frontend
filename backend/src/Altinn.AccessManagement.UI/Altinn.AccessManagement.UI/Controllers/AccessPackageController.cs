@@ -178,22 +178,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         [Route("delegationcheck")]
         public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> RoleDelegationCheck([FromBody] DelegationCheckRequest delegationCheckRequest)
         {
-            if (delegationCheckRequest.PackageIds == null || delegationCheckRequest.PackageIds.Length == 0)
+            if (!ModelState.IsValid || delegationCheckRequest.PackageIds == null || delegationCheckRequest.PackageIds.Length == 0)
             {
-                return BadRequest("Role IDs cannot be null or empty.");
+                return BadRequest(ModelState);
             }
-
+            
             try
             {
                 return await _accessPackageService.DelegationCheck(delegationCheckRequest);
             }
             catch (HttpStatusException ex)
             {
-                if (ex.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return NoContent();
-                }
-
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
