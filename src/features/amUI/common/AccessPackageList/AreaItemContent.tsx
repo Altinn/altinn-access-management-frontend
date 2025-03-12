@@ -3,7 +3,7 @@ import { Button, ListBase } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
-import { useDelegationCheckQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
+import { useDelegationCheckMutation, type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -34,9 +34,8 @@ export const AreaItemContent = ({
   const { packages } = area;
   const { t } = useTranslation();
 
-  const { delegationChecks, delegationCheckLoading } = useDelegationCheckPackages(
-    !!availableActions?.includes(DelegationAction.DELEGATE),
-    area.packages.available.map((p) => p.id),
+  const { canDelegatePackage: canDelegate } = useDelegationCheck(
+    packages.available.map((pkg) => pkg.id),
   );
 
   return (
@@ -90,7 +89,7 @@ export const AreaItemContent = ({
       {packages.available.length > 0 && (
         <ListBase>
           {packages.available.map((pkg) => {
-            const delegationCheck = delegationChecks?.find((dc) => dc.packageId === pkg.id);
+            const delegationCheck = canDelegate(pkg.id);
             return (
               <PackageItem
                 key={pkg.id}
@@ -103,7 +102,7 @@ export const AreaItemContent = ({
                         icon={PlusCircleIcon}
                         variant='text'
                         size='sm'
-                        disabled={delegationCheckLoading || !delegationCheck?.canDelegate}
+                        disabled={delegationCheck}
                         onClick={() => onDelegate(pkg)}
                       >
                         {t('common.give_poa')}
@@ -131,11 +130,15 @@ export const AreaItemContent = ({
   );
 };
 
-const useDelegationCheckPackages = (shouldCheckDelegation: boolean, packageIds: string[]) => {
-  const { data: delegationChecks, isLoading: delegationCheckLoading } = shouldCheckDelegation
-    ? useDelegationCheckQuery({
-        packageIds,
-      })
-    : { data: [], isLoading: false };
-  return { delegationChecks, delegationCheckLoading };
+const useDelegationCheck = (accessPackageIds: string[]) => {
+  const [delegationCheck, { isLoading, data: delegationChecks }] = useDelegationCheckMutation();
+
+  const canDelegatePackage = (packageId: string) => {
+    const check = delegationChecks?.find((c) => c.packageId === packageId);
+    return isLoading || !!check?.canDelegate;
+  };
+
+  delegationCheck({ packageIds: accessPackageIds });
+
+  return { canDelegatePackage, isLoading };
 };

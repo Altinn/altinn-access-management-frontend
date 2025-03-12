@@ -87,7 +87,7 @@ export const accessPackageApi = createApi({
         };
       },
     }),
-    delegationCheck: builder.query<DelegationCheckResponse[], { packageIds: string[] }>({
+    delegationCheck: builder.mutation<DelegationCheckResponse[], { packageIds: string[] }>({
       query: ({ packageIds }) => {
         const delegationCheckRequest = {
           packageIds: packageIds,
@@ -108,7 +108,7 @@ export const {
   useGetUserDelegationsQuery,
   useRevokeDelegationMutation,
   useDelegatePackageMutation,
-  useDelegationCheckQuery,
+  useDelegationCheckMutation,
 } = accessPackageApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = accessPackageApi;

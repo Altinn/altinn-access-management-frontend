@@ -9,13 +9,13 @@ import {
   MenuElipsisHorizontalIcon,
   PackageIcon,
 } from '@navikt/aksel-icons';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 import {
-  useDelegationCheckQuery,
+  useDelegationCheckMutation,
   useGetUserDelegationsQuery,
   type AccessPackage,
 } from '@/rtk/features/accessPackageApi';
@@ -64,9 +64,11 @@ export const AccessPackageInfo = ({
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
-  const { check, delegationCheckLoading } = useDelegationCheckPackage(
-    !!availableActions?.includes(DelegationAction.DELEGATE),
+  // const [delegationCheck, { isLoading, data: delegationChecks }] = useDelegationCheckMutation();
+
+  const { canDelegate, isLoading: delegationCheckLoading } = useDelegationCheck(
     accessPackage.id,
+    availableActions,
   );
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
@@ -122,7 +124,7 @@ export const AccessPackageInfo = ({
       )}
       {!delegationCheckLoading &&
         availableActions.includes(DelegationAction.DELEGATE) &&
-        !check?.canDelegate && (
+        !canDelegate && (
           <div className={classes.delegationCheckInfo}>
             <ExclamationmarkTriangleFillIcon
               fontSize='1.5rem'
@@ -157,7 +159,7 @@ export const AccessPackageInfo = ({
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
           <Button
-            disabled={delegationCheckLoading || !check?.canDelegate}
+            disabled={delegationCheckLoading || !canDelegate}
             onClick={() => onDelegate(accessPackage)}
           >
             {t('common.give_poa')}
@@ -201,17 +203,20 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
   return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };
 
-const useDelegationCheckPackage = (shouldCheckDelegation: boolean, packageId: string) => {
-  const { data: delegationCheck = [], isLoading: delegationCheckLoading } = shouldCheckDelegation
-    ? useDelegationCheckQuery({
-        packageIds: [packageId],
-      })
-    : { data: [], isLoading: false };
+const useDelegationCheck = (accessPackageId: string, availableActions: DelegationAction[]) => {
+  const [delegationCheck, { isLoading, data: delegationChecks }] = useDelegationCheckMutation();
+  const [canDelegate, setCanDelegate] = useState<boolean>(false);
 
-  const check = useMemo(
-    () => delegationCheck.find((check) => check.packageId === packageId),
-    [delegationCheck, packageId],
-  );
+  useEffect(() => {
+    const check = delegationChecks?.find((c) => c.packageId === accessPackageId);
+    setCanDelegate(isLoading || !!check?.canDelegate);
+  }, [delegationChecks, accessPackageId, isLoading]);
 
-  return { check, delegationCheckLoading };
+  useEffect(() => {
+    if (availableActions.includes(DelegationAction.DELEGATE)) {
+      delegationCheck({ packageIds: [accessPackageId] });
+    }
+  }, [accessPackageId, availableActions, delegationCheck]);
+
+  return { canDelegate, isLoading };
 };
