@@ -57,9 +57,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
-            List<SystemUser> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
 
-            return await MapToSystemUsersFE(sortedList, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -85,9 +84,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             List<SystemUser> lista = await _systemUserClient.GetAgentSystemUsersForParty(partyId, cancellationToken);
-            List<SystemUser> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
 
-            return await MapToSystemUsersFE(sortedList, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -150,8 +148,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     AccessPackages = enrichedRights.AccessPackages
                 });
             }
-
-            return lista;
+            
+            List<SystemUserFE> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
+            return sortedList;
         }
     }
 }
