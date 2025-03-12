@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -18,9 +18,12 @@ export const ReporteesPage = () => {
   const { t } = useTranslation();
   const [searchString, setSearchString] = useState<string>('');
 
-  const onSearch = debounce((newSearchString: string) => {
-    setSearchString(newSearchString);
-  }, 300);
+  const onSearch = useCallback(
+    debounce((newSearchString: string) => {
+      setSearchString(newSearchString);
+    }, 300),
+    [],
+  );
 
   useDocumentTitle(t('reportees_page.page_title'));
   const { data: userList, isLoading } = useGetReporteeListForPartyQuery();

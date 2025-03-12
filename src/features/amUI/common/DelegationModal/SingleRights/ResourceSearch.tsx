@@ -20,6 +20,7 @@ import type { Party } from '@/rtk/features/lookupApi';
 import { useDelegationModalContext } from '../DelegationModalContext';
 
 import classes from './ResourceSearch.module.css';
+import { useCallback } from 'react';
 
 export interface ResourceSearchProps {
   onSelection: (resource: ServiceResource) => void;
@@ -176,10 +177,13 @@ export const ResourceSearch = ({ onSelection, toParty }: ResourceSearchProps) =>
     );
   });
 
-  const debouncedSearch = debounce((searchString: string) => {
-    setDebouncedSearchString(searchString);
-    setCurrentPage(1);
-  }, 300);
+  const debouncedSearch = useCallback(
+    debounce((searchString: string) => {
+      setDebouncedSearchString(searchString);
+      setCurrentPage(1);
+    }, 300),
+    [],
+  );
 
   return (
     <>

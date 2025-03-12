@@ -60,8 +60,6 @@ export const AccessPackageList = ({
   });
   const { t } = useTranslation();
 
-  console.log('allPackageAreas', allPackageAreas);
-
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
   const toggleExpandedArea = (areaId: string) => {
     if (expandedAreas.some((id) => id === areaId)) {
@@ -91,8 +89,6 @@ export const AccessPackageList = ({
     a.name.localeCompare(b.name),
   );
 
-  console.log('sortedAreas', sortedAreas);
-
   return (
     <div className={classes.accessAreaList}>
       {loadingDelegations || loadingPackageAreas || isLoading ? (
@@ -101,7 +97,9 @@ export const AccessPackageList = ({
         <ListBase>
           {sortedAreas.map((area) => {
             const { packages } = area;
-            const expanded = expandedAreas.some((areaId) => areaId === area.id);
+            const expanded =
+              (searchString && searchString.length > 2) ||
+              expandedAreas.some((areaId) => areaId === area.id);
 
             return (
               <AreaItem
