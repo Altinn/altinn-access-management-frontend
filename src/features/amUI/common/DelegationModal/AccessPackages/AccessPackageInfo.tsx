@@ -4,15 +4,21 @@ import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 import {
+  ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
   MenuElipsisHorizontalIcon,
   PackageIcon,
 } from '@navikt/aksel-icons';
+import { useMemo } from 'react';
 
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
+import {
+  useDelegationCheckQuery,
+  useGetUserDelegationsQuery,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
@@ -57,6 +63,11 @@ export const AccessPackageInfo = ({
     }
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
+
+  const { check, delegationCheckLoading } = useDelegationCheckPackage(
+    !!availableActions?.includes(DelegationAction.DELEGATE),
+    accessPackage.id,
+  );
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
   return (
@@ -109,6 +120,19 @@ export const AccessPackageInfo = ({
           </Paragraph>
         </div>
       )}
+      {!delegationCheckLoading &&
+        availableActions.includes(DelegationAction.DELEGATE) &&
+        !check?.canDelegate && (
+          <div className={classes.delegationCheckInfo}>
+            <ExclamationmarkTriangleFillIcon
+              fontSize='1.5rem'
+              className={classes.delegationCheckInfoIcon}
+            />
+            <Paragraph data-size='xs'>
+              <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
+            </Paragraph>
+          </div>
+        )}
       <div className={classes.services}>
         <Heading
           data-size='xs'
@@ -132,7 +156,12 @@ export const AccessPackageInfo = ({
           <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
-          <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
+          <Button
+            disabled={delegationCheckLoading || !check?.canDelegate}
+            onClick={() => onDelegate(accessPackage)}
+          >
+            {t('common.give_poa')}
+          </Button>
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
           // Todo: Implement request access package
@@ -170,4 +199,19 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
     .map(mapResourceToListItem);
   return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
+};
+
+const useDelegationCheckPackage = (shouldCheckDelegation: boolean, packageId: string) => {
+  const { data: delegationCheck = [], isLoading: delegationCheckLoading } = shouldCheckDelegation
+    ? useDelegationCheckQuery({
+        packageIds: [packageId],
+      })
+    : { data: [], isLoading: false };
+
+  const check = useMemo(
+    () => delegationCheck.find((check) => check.packageId === packageId),
+    [delegationCheck, packageId],
+  );
+
+  return { check, delegationCheckLoading };
 };

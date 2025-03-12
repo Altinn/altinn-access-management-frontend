@@ -298,6 +298,7 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
+    "delegation_check_not_delegable": "Du har ikkje rett til å delegere denne pakka",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
