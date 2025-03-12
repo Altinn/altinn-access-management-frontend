@@ -4,7 +4,6 @@ import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
   RegisteredSystem,
   SystemUser,
-  SystemUserChangeRequest,
   SystemUserRequest,
   RegisteredSystemRights,
 } from '@/features/amUI/systemUser/types';
@@ -88,7 +87,7 @@ export const systemUserApi = createApi({
       invalidatesTags: [Tags.SystemUsers],
     }),
     getChangeRequest: builder.query<
-      SystemUserChangeRequest,
+      SystemUserRequest,
       { partyId: string; changeRequestId: string }
     >({
       query: ({ partyId, changeRequestId }) =>
@@ -104,6 +103,26 @@ export const systemUserApi = createApi({
     rejectChangeRequest: builder.mutation<void, { partyId: string; changeRequestId: string }>({
       query: ({ partyId, changeRequestId }) => ({
         url: `systemuser/changerequest/${partyId}/${changeRequestId}/reject`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.SystemUsers],
+    }),
+    getAgentSystemUserRequest: builder.query<
+      SystemUserRequest,
+      { partyId: string; requestId: string }
+    >({
+      query: ({ partyId, requestId }) => `systemuser/agentrequest/${partyId}/${requestId}`,
+    }),
+    approveAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+      query: ({ partyId, requestId }) => ({
+        url: `systemuser/agentrequest/${partyId}/${requestId}/approve`,
+        method: 'POST',
+      }),
+      invalidatesTags: [Tags.SystemUsers],
+    }),
+    rejectAgentSystemUserRequest: builder.mutation<void, { partyId: string; requestId: string }>({
+      query: ({ partyId, requestId }) => ({
+        url: `systemuser/agentrequest/${partyId}/${requestId}/reject`,
         method: 'POST',
       }),
       invalidatesTags: [Tags.SystemUsers],
@@ -129,6 +148,9 @@ export const {
   useGetChangeRequestQuery,
   useApproveChangeRequestMutation,
   useRejectChangeRequestMutation,
+  useGetAgentSystemUserRequestQuery,
+  useApproveAgentSystemUserRequestMutation,
+  useRejectAgentSystemUserRequestMutation,
 } = apiWithTag;
 
 export const { endpoints, reducerPath, reducer, middleware } = apiWithTag;

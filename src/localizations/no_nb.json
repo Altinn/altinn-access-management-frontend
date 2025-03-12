@@ -89,7 +89,7 @@
     "if_persistent_contact_service": "Dersom feilen vedvarer kan du gå til Altinn sin hjelpeside eller kontakte brukerstøtte på telefon 75 00 60 00"
   },
   "header": {
-    "access_management" : "Tilgangsstyring",
+    "access_management": "Tilgangsstyring",
     "inbox": "Innboks",
     "menu-label": "Meny",
     "account_you": "Deg selv",
@@ -98,7 +98,7 @@
     "back-label": "Tilbake",
     "all_services": "Alle tjenester",
     "chat": "Få hjelp på chat",
-    "log_out" : "Logg ut"
+    "log_out": "Logg ut"
   },
   "footer": {
     "about_altinn": "Om Altinn",
@@ -500,6 +500,11 @@
     "request_accepted": "Denne oppdaterings-forespørselen er allerede godkjent",
     "request_rejected": "Denne oppdaterings-forespørselen er allerede avvist",
     "request_expired": "Denne oppdaterings-forespørselen har utløpt"
+  },
+  "systemuser_agent_request": {
+    "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
+    "banner_title": "Lag en systemtilgang for kunderelasjoner",
+    "system_description": "Gjennom systemtilgangen får {{vendorName}} fullmakt til å løse oppgaver på vegne av {{companyName}} sine kunder. For å fullføre oppsettet må tilgangene til kundene tildeles i kunderelasjoner i Altinn."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",

@@ -511,7 +511,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
         }
         
-        public static void AssertEqual(SystemUserClientRequestFE expected, SystemUserClientRequestFE actual)
+        public static void AssertEqual(SystemUserAgentRequestFE expected, SystemUserAgentRequestFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

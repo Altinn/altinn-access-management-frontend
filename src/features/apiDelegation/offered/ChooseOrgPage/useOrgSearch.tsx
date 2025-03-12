@@ -1,10 +1,20 @@
 import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import * as React from 'react';
+// import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
 import type { Organization } from '@/rtk/features/lookupApi';
+import type { OverviewOrg } from '@/rtk/features/apiDelegation/overviewOrg/overviewOrgApi';
+
+export const mapOverviewOrgToOrganization = (org: OverviewOrg): Organization => {
+  return {
+    orgNumber: org.orgNumber,
+    name: org.name,
+    partyUuid: '',
+    unitType: '',
+  };
+};
 
 // This hook searches through a set of provided pool of orgs, returning the ones whose org number matches the provided search string.
 // If no match is found and the provided number is exactly 9 digits, it will attempt a lookup for the org in Altinns registry

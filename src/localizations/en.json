@@ -76,8 +76,8 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators."
   },
-  "header": {    
-    "access_management" : "Access Management",
+  "header": {
+    "access_management": "Access Management",
     "inbox": "Inbox",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
@@ -86,7 +86,7 @@
     "back-label": "Back",
     "all_services": "All services",
     "chat": "Get help on chat",
-    "log_out" : "Log out"
+    "log_out": "Log out"
   },
   "footer": {
     "about_altinn": "About Altinn",
@@ -502,6 +502,11 @@
     "request_accepted": "This update system access request is already approved",
     "request_rejected": "This update system access request is already rejected",
     "request_expired": "This update system access request has expired"
+  },
+  "systemuser_agent_request": {
+    "page_title": "Create system access for customer relations - Altinn",
+    "banner_title": "Create system access for customer relations",
+    "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",

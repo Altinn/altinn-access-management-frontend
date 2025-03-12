@@ -8,7 +8,7 @@ import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
-import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
+import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 
 interface ReporteeAccessPackageSectionProps {

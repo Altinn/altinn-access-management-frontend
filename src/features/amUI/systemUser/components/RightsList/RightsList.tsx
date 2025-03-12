@@ -26,18 +26,15 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
     React.useState<SystemUserAccessPackage | null>(null);
 
   const onSelectResource = (resource: ServiceResource): void => {
-    setSelectedAccessPackage(null);
     setSelectedResource(resource);
     modalRef.current?.showModal();
   };
 
   const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
-    setSelectedResource(null);
     setSelectedAccessPackage(accessPackage);
     modalRef.current?.showModal();
   };
 
-  // Note! This function is not called on click outside modal. It is fixed in newer versions of designsystemet
   const closeModal = (): void => {
     setSelectedResource(null);
     setSelectedAccessPackage(null);
@@ -115,7 +112,6 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
             data-size='sm'
             className={classes.backButton}
             onClick={() => setSelectedResource(null)}
-            icon
           >
             <ArrowLeftIcon fontSize={getButtonIconSize(true)} />
             {t('common.back')}
