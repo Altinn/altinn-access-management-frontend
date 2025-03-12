@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Search, Spinner } from '@digdir/designsystemet-react';
+import { Button, Search, Spinner, ValidationMessage } from '@digdir/designsystemet-react';
 import { List } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 
+import { AmPagination } from '@/components/Paginering';
+
 import type { Customer } from '../types';
 
 import classes from './CustomerList.module.css';
-
-import { AmPagination } from '@/components/Paginering';
 
 const filterCustomerList = (list: Customer[], searchString: string): Customer[] => {
   return list.filter((customer) => {
@@ -23,9 +23,10 @@ const showPages = 7;
 
 interface CustomerListProps {
   list: Customer[];
-  assignedIds: string[];
-  loadingIds: string[];
-  onAddCustomer: (customerId: string) => void;
+  assignedIds?: string[];
+  loadingIds?: string[];
+  errorIds?: string[];
+  onAddCustomer?: (customerId: string) => void;
   onRemoveCustomer?: (customerId: string) => void;
   children?: React.ReactNode;
 }
@@ -34,6 +35,7 @@ export const CustomerList = ({
   list,
   assignedIds,
   loadingIds,
+  errorIds,
   onAddCustomer,
   onRemoveCustomer,
   children,
@@ -84,8 +86,9 @@ export const CustomerList = ({
             controls: (
               <ListControls
                 customer={customer}
-                isAssigned={assignedIds.some((x) => x === customer.id)}
-                isLoading={loadingIds.some((x) => x === customer.id)}
+                isAssigned={assignedIds?.some((x) => x === customer.id)}
+                isLoading={loadingIds?.some((x) => x === customer.id)}
+                isError={errorIds?.some((x) => x === customer.id)}
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
               />
@@ -105,15 +108,17 @@ export const CustomerList = ({
 };
 interface ListControlsProps {
   customer: Customer;
-  isAssigned: boolean;
-  isLoading: boolean;
+  isAssigned?: boolean;
+  isLoading?: boolean;
+  isError?: boolean;
   onRemoveCustomer?: (customerId: string) => void;
-  onAddCustomer: (customerId: string) => void;
+  onAddCustomer?: (customerId: string) => void;
 }
 const ListControls = ({
   customer,
   isAssigned,
   isLoading,
+  isError,
   onRemoveCustomer,
   onAddCustomer,
 }: ListControlsProps): React.ReactNode => {
@@ -129,6 +134,12 @@ const ListControls = ({
           />
         </div>
       )}
+      {isError && isAssigned && (
+        <ValidationMessage data-size='sm'>Kunne ikke fjerne kunde</ValidationMessage>
+      )}
+      {isError && !isAssigned && (
+        <ValidationMessage data-size='sm'>Kunne ikke legge til kunde</ValidationMessage>
+      )}
       {!isLoading && isAssigned && onRemoveCustomer && (
         <Button
           variant='tertiary'
@@ -142,7 +153,7 @@ const ListControls = ({
           <MinusCircleIcon /> {t('systemuser_client_delegation.remove_from_system_user')}
         </Button>
       )}
-      {!isLoading && !isAssigned && (
+      {!isLoading && !isAssigned && onAddCustomer && (
         <Button
           variant='tertiary'
           data-size='sm'

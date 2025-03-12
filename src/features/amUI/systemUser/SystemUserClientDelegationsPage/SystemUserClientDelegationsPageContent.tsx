@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { Paragraph, Heading, Button } from '@digdir/designsystemet-react';
+import React, { useRef, useState } from 'react';
+import { Paragraph, Heading, Button, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
+
+import { useAssignCustomerMutation, useRemoveCustomerMutation } from '@/rtk/features/systemUserApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { SystemUserPath } from '@/routes/paths';
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { Customer, SystemUser } from '../types';
 
 import classes from './SystemUserClientDelegationsPage.module.css';
 import { CustomerList } from './CustomerList';
-
-import { useAssignCustomerMutation, useRemoveCustomerMutation } from '@/rtk/features/systemUserApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { SystemUserPath } from '@/routes/paths';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 
 interface SystemUserClientDelegationsPageContentProps {
   systemUser: SystemUser;
@@ -29,41 +29,45 @@ export const SystemUserClientDelegationsPageContent = ({
   const { t } = useTranslation();
   const partyId = getCookie('AltinnPartyId');
   const { id } = useParams();
+  const modalRef = useRef<HTMLDialogElement>(null);
 
-  const [isAddCustomerMode, setIsAddCustomerMode] = useState<boolean>(false);
   const [delegatedIds, setDelegatedIds] = useState<string[]>(initialAssignedIds);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
+  const [errorIds, setErrorIds] = useState<string[]>([]);
 
   const handleNavigateBack = (): void => {
-    if (isAddCustomerMode) {
-      setIsAddCustomerMode(false);
-    } else {
-      navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
-    }
+    navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
   };
 
-  // TODO: legg på feilhåndtering dersom assign eller remove feiler
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
 
   const onAddCustomer = (customerId: string): void => {
-    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customerId]);
-    assignCustomer({ partyId, systemUserId: id ?? '', customerId })
-      .unwrap()
-      .then(() => {
-        setDelegatedIds((oldDelegatedIds) => [...oldDelegatedIds, customerId]);
-      })
-      .finally(() => {
-        setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
-      });
+    const successCallback = () =>
+      setDelegatedIds((oldDelegatedIds) => [...oldDelegatedIds, customerId]);
+    mutateCustomer(assignCustomer, successCallback, customerId);
   };
 
   const onRemoveCustomer = (customerId: string): void => {
+    const successCallback = () =>
+      setDelegatedIds((oldDelegatedIds) => oldDelegatedIds.filter((id) => id !== customerId));
+    mutateCustomer(removeCustomer, successCallback, customerId);
+  };
+
+  const mutateCustomer = (
+    mutationPromise: typeof removeCustomer | typeof assignCustomer,
+    successCallback: () => void,
+    customerId: string,
+  ) => {
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customerId]);
-    removeCustomer({ partyId, systemUserId: id ?? '', customerId })
+    setErrorIds((oldErrorIds) => oldErrorIds.filter((id) => id !== customerId));
+    mutationPromise({ partyId, systemUserId: id ?? '', customerId })
       .unwrap()
       .then(() => {
-        setDelegatedIds((oldDelegatedIds) => oldDelegatedIds.filter((id) => id !== customerId));
+        successCallback();
+      })
+      .catch(() => {
+        setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
       })
       .finally(() => {
         setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
@@ -71,36 +75,39 @@ export const SystemUserClientDelegationsPageContent = ({
   };
 
   const enableAddCustomers = (): void => {
-    setIsAddCustomerMode(true);
+    modalRef.current?.showModal();
   };
 
   return (
     <PageContainer onNavigateBack={handleNavigateBack}>
-      {isAddCustomerMode && (
+      <Dialog
+        ref={modalRef}
+        style={{
+          maxWidth: 950,
+        }}
+      >
         <div className={classes.flexContainer}>
           <Heading
             level={1}
-            data-size='md'
+            data-size='sm'
           >
-            {t('systemuser_client_delegation.my_customers_header')}
-          </Heading>
-          <Paragraph>
             {t('systemuser_client_delegation.assign_customers', {
               integrationTitle: systemUser?.integrationTitle,
             })}
-          </Paragraph>
+          </Heading>
           <div>
             <CustomerList
               list={customers}
               assignedIds={delegatedIds}
               loadingIds={loadingIds}
+              errorIds={errorIds}
               onAddCustomer={onAddCustomer}
               onRemoveCustomer={onRemoveCustomer}
             />
           </div>
         </div>
-      )}
-      {systemUser && !isAddCustomerMode && (
+      </Dialog>
+      {systemUser && (
         <div className={classes.flexContainer}>
           <SystemUserHeader
             title={'systemuser_client_delegation.banner_title'}
@@ -128,13 +135,9 @@ export const SystemUserClientDelegationsPageContent = ({
           ) : (
             <CustomerList
               list={customers.filter((customer) => delegatedIds.indexOf(customer.id) > -1)}
-              assignedIds={delegatedIds}
-              loadingIds={loadingIds}
-              onAddCustomer={onAddCustomer}
             >
               <Button
                 variant='secondary'
-                data-size='sm'
                 onClick={enableAddCustomers}
               >
                 <PencilIcon />
