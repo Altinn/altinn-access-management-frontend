@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -33,12 +34,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, int customerPartyId, CancellationToken cancellationToken)
         {
+            if (customerPartyId == 50011111) 
+            {
+                return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+            }
             return Task.FromResult(new Result<bool>(true));
         }
 
         public Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, int customerPartyId, CancellationToken cancellationToken)
         {
+            if (customerPartyId == 52222222) 
+            {
+                return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+            }
             return Task.FromResult(new Result<bool>(true));
+        }
+
+                internal static class TestErrors
+        {
+            private static readonly ProblemDescriptorFactory _factory
+                = ProblemDescriptorFactory.New("AUTH");
+
+            public static ProblemDescriptor CustomerNotFound { get; }
+                = _factory.Create(10, HttpStatusCode.NotFound, "Customer not found");
         }
     }
 }

@@ -67,6 +67,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] int customerPartyId, CancellationToken cancellationToken)
         {
             Result<bool> result = await _systemUserClientAdministrationService.AddClient(partyId, systemUserGuid, customerPartyId, cancellationToken);
+            
+            if (result.IsProblem)
+            {
+                return result.Problem.ToActionResult();
+            }
+
             return Ok(result.Value);
         }
 
@@ -83,6 +89,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] int customerPartyId, CancellationToken cancellationToken)
         {
             Result<bool> result = await _systemUserClientAdministrationService.RemoveClient(partyId, systemUserGuid, customerPartyId, cancellationToken);
+
+            if (result.IsProblem)
+            {
+                return result.Problem.ToActionResult();
+            }
+
             return Ok(result.Value);
         }
 

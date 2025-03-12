@@ -17,6 +17,18 @@
       "partyId": 50067799,
       "displayName": "Digitaliseringsdirektoratet",
       "organizationIdentifier": "991825827"
+    },
+    {
+      "partyUuid": "82cc64c5-60ff-4184-8c07-964c3a1e6fc7",
+      "partyId": 50011111,
+      "displayName": "Kan ikke legges til",
+      "organizationIdentifier": "881825827"
+    },
+    {
+      "partyUuid": "56d8ef08-d1c3-4dac-8b62-461c18ce612b",
+      "partyId": 52222222,
+      "displayName": "Kan ikke fjernes",
+      "organizationIdentifier": "313131317"
     }
   ]
 }
