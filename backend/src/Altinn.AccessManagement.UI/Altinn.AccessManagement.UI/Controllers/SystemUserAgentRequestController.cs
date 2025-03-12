@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             };
 
             // store cookie value for redirect
-            HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"SystemuserAgentRequestId={agentRequestId}", cookieOptions);
+            HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"SystemuserRequestId={agentRequestId}", cookieOptions);
             
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);
