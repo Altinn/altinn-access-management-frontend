@@ -180,6 +180,18 @@ export const SystemUserClientDelegationsPageContent = ({
               </Button>
             </CustomerList>
           )}
+          <Paragraph
+            data-size='xs'
+            className={classes.createdBy}
+          >
+            {t('systemuser_detailpage.created_by', {
+              created: new Date(systemUser.created).toLocaleDateString('no-NB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              }),
+            })}
+          </Paragraph>
         </div>
       )}
     </PageContainer>
