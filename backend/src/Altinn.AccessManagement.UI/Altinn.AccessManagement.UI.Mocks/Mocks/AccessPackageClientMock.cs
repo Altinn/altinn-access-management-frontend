@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Microsoft.AspNetCore.Http;
@@ -32,12 +33,12 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString)
+        public Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {
 
-            List<AccessPackage> allPackages = Util.GetMockData<List<AccessPackage>>($"{dataFolder}/AccessPackage/packages.json");
+            IEnumerable<SearchObject<AccessPackage>> searchResults = Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>($"{dataFolder}/AccessPackage/packages.json");
 
-            return searchString != null ? Task.FromResult(allPackages.Where(package => package.Name.ToLower().Contains(searchString.ToLower())).ToList()) : Task.FromResult(allPackages);
+            return searchString != null ? Task.FromResult(searchResults.Where(sr => sr.Object.Name.ToLower().Contains(searchString.ToLower()))) : Task.FromResult(searchResults);
         }
     }
 }

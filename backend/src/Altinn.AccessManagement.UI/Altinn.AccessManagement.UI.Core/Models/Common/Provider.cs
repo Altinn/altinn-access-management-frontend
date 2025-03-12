@@ -1,18 +1,23 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Models.Common
 {
     /// <summary>
-    /// Generic type for containing an items name and id
+    /// Provider
     /// </summary>
-    public class IdNamePair
+    public class Provider
     {
         /// <summary>
         /// Id
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Refrence Identifier (e.g. OrgNo)
+        /// </summary>
+        public string RefId { get; set; }
     }
 }

@@ -1,49 +1,34 @@
-﻿namespace Altinn.AccessManagement.UI.Core.Enums
+﻿using NpgsqlTypes;
+
+namespace Altinn.AccessManagement.UI.Core.Enums
 {
     /// <summary>
-    /// Enum representation of the different types of resources supported by the resource registry. The specific values represents their binary value.
+    /// Enum representation of the different types of resources supported by the resource registry
     /// </summary>
-    [Flags]
     public enum ResourceType
     {
-        /// <summary>
-        /// Default
-        /// </summary>
+        [PgName("default")]
         Default = 0,
 
-        /// <summary>
-        /// SystemResource
-        /// </summary>
-        SystemResource = 1,
+        [PgName("systemresource")]
+        Systemresource = 1 << 0,
 
-        /// <summary>
-        /// MaskinportenSchema
-        /// </summary>
-        MaskinportenSchema = 2,
+        [PgName("maskinportenschema")]
+        MaskinportenSchema = 1 << 1,
 
-        /// <summary>
-        /// Altinn2Service
-        /// </summary>
-        Altinn2Service = 4,
+        [PgName("altinn2service")]
+        Altinn2Service = 1 << 2,
 
-        /// <summary>
-        /// AltinnApp
-        /// </summary>
-        AltinnApp = 8,
+        [PgName("altinnapp")]
+        AltinnApp = 1 << 3,
 
-        /// <summary>
-        /// GenericAccessResource
-        /// </summary>
-        GenericAccessResource = 16,
+        [PgName("genericaccessresource")]
+        GenericAccessResource = 1 << 4,
 
-        /// <summary>
-        /// BrokerService
-        /// </summary>
-        BrokerService = 32,
+        [PgName("brokerservice")]
+        BrokerService = 1 << 5,
 
-        /// <summary>
-        /// CorrespondenceService
-        /// </summary>
-        CorrespondenceService = 64
+        [PgName("correspondenceservice")]
+        CorrespondenceService = 1 << 6,
     }
 }

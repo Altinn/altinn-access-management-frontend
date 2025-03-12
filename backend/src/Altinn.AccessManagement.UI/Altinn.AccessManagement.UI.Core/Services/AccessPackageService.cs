@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -35,21 +36,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString)
         {
-            List<AccessPackage> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString);
+            IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString);
 
             List<AccessAreaFE> sortedAreas = new List<AccessAreaFE>();
 
-            foreach (AccessPackage searchMatch in searchMatches)
+            foreach (SearchObject<AccessPackage> searchMatch in searchMatches)
             {
-                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Area.Id);
+                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Object.Area.Id);
 
                 if (premadeAreaIndex < 0)
                 {
-                    sortedAreas.Add(new AccessAreaFE(searchMatch.Area, new List<AccessPackage> { searchMatch }));
+                    sortedAreas.Add(new AccessAreaFE(searchMatch.Object.Area, new List<AccessPackage> { searchMatch.Object }));
                 }
                 else
                 {
-                    sortedAreas[premadeAreaIndex].AccessPackages.Add(searchMatch);
+                    sortedAreas[premadeAreaIndex].AccessPackages.Add(searchMatch.Object);
                 }
             }
 
@@ -66,7 +67,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             foreach (AccessPackageAccess access in accessesFromAM)
             {
                 var isInherited = access.AccessDetails.DelegatedTo != rightHolderUuid; 
-                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id, access.AccessDetails, isInherited, null);
+                AccessPackageDelegation delegation = new AccessPackageDelegation(access.AccessPackage.Id.ToString(), access.AccessDetails, isInherited, null);
                 if (isInherited)
                 {
                     var inheritedFrom = await _lookupService.GetPartyByUUID(access.AccessDetails.DelegatedTo);

@@ -6,6 +6,7 @@ using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
@@ -53,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
         
         /// <inheritdoc />
-        public async Task<List<AccessPackage>> GetAccessPackageSearchMatches(string languageCode, string searchString)
+        public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {
             string endpointUrl = $"meta/info/accesspackages/search/{searchString}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -63,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<AccessPackage>>(responseContent, _serializerOptions);
+                return JsonSerializer.Deserialize<IEnumerable<SearchObject<AccessPackage>>>(responseContent, _serializerOptions);
             }
             else
             {

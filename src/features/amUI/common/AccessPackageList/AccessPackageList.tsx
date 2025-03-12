@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { Paragraph } from '@digdir/designsystemet-react';
+import { all } from 'cypress/types/bluebird';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
@@ -59,6 +60,8 @@ export const AccessPackageList = ({
   });
   const { t } = useTranslation();
 
+  console.log('allPackageAreas', allPackageAreas);
+
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
   const toggleExpandedArea = (areaId: string) => {
     if (expandedAreas.some((id) => id === areaId)) {
@@ -87,6 +90,8 @@ export const AccessPackageList = ({
   const sortedAreas = [...assignedAreas, ...availableAreas].sort((a, b) =>
     a.name.localeCompare(b.name),
   );
+
+  console.log('sortedAreas', sortedAreas);
 
   return (
     <div className={classes.accessAreaList}>

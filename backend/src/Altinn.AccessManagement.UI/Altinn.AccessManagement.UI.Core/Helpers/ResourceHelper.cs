@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
@@ -80,18 +81,20 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             if (accessPackageIds.Any())
             {
                 // GET access packages.
-                List<AccessPackage> accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
-                IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
+                IEnumerable<SearchObject<AccessPackage>> accessPackageMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                IEnumerable<SearchObject<AccessPackage>> usedMatches = accessPackageMatches.Where(match => accessPackageIds.Contains(match.Object.Urn));
                 
-                foreach (AccessPackage accessPackage in usedAccessPackages)
+                foreach (SearchObject<AccessPackage> usedMatch in usedMatches)
                 {
+                    AccessPackage accessPackage = usedMatch.Object;
+
                     accessPackagesFE.Add(new AccessPackageFE()
                     {
-                        Id = accessPackage.Id,
+                        Id = accessPackage.Id.ToString(),
                         Urn = accessPackage.Urn,
                         Description = accessPackage.Description,
                         Name = accessPackage.Name,
-                        Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id), languageCode)
+                        Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id.ToString()), languageCode)
                     });
                 }
             }
