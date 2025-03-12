@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Paragraph, Heading, Button, Dialog } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
@@ -14,6 +14,10 @@ import type { Customer, SystemUser } from '../types';
 
 import classes from './SystemUserClientDelegationsPage.module.css';
 import { CustomerList } from './CustomerList';
+
+const getAssignedCustomers = (customers: Customer[], assignedIds: string[]): Customer[] => {
+  return customers.filter((customer) => assignedIds.indexOf(customer.id) > -1);
+};
 
 interface SystemUserClientDelegationsPageContentProps {
   systemUser: SystemUser;
@@ -34,6 +38,9 @@ export const SystemUserClientDelegationsPageContent = ({
   const [delegatedIds, setDelegatedIds] = useState<string[]>(initialAssignedIds);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [errorIds, setErrorIds] = useState<string[]>([]);
+  const [assignedCustomers, setAssignedCustomers] = useState<Customer[]>(
+    getAssignedCustomers(customers, initialAssignedIds),
+  );
 
   const handleNavigateBack = (): void => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
@@ -78,6 +85,12 @@ export const SystemUserClientDelegationsPageContent = ({
     modalRef.current?.showModal();
   };
 
+  // need to use useCallback to get updated delegatedIds in onClose
+  const onCloseModal = useCallback(() => {
+    modalRef.current?.close();
+    setAssignedCustomers(getAssignedCustomers(customers, delegatedIds));
+  }, [customers, delegatedIds]);
+
   return (
     <PageContainer onNavigateBack={handleNavigateBack}>
       <Dialog
@@ -85,6 +98,7 @@ export const SystemUserClientDelegationsPageContent = ({
         style={{
           maxWidth: 950,
         }}
+        onClose={onCloseModal}
       >
         <div className={classes.flexContainer}>
           <Heading
@@ -95,16 +109,14 @@ export const SystemUserClientDelegationsPageContent = ({
               integrationTitle: systemUser?.integrationTitle,
             })}
           </Heading>
-          <div>
-            <CustomerList
-              list={customers}
-              assignedIds={delegatedIds}
-              loadingIds={loadingIds}
-              errorIds={errorIds}
-              onAddCustomer={onAddCustomer}
-              onRemoveCustomer={onRemoveCustomer}
-            />
-          </div>
+          <CustomerList
+            list={customers}
+            assignedIds={delegatedIds}
+            loadingIds={loadingIds}
+            errorIds={errorIds}
+            onAddCustomer={onAddCustomer}
+            onRemoveCustomer={onRemoveCustomer}
+          />
         </div>
       </Dialog>
       {systemUser && (
@@ -119,7 +131,7 @@ export const SystemUserClientDelegationsPageContent = ({
           >
             {t('systemuser_client_delegation.assigned_customers_header')}
           </Heading>
-          {delegatedIds.length === 0 ? (
+          {assignedCustomers.length === 0 ? (
             <>
               <Paragraph>{t('systemuser_client_delegation.no_assigned_customers')}</Paragraph>
               <div>
@@ -133,9 +145,7 @@ export const SystemUserClientDelegationsPageContent = ({
               </div>
             </>
           ) : (
-            <CustomerList
-              list={customers.filter((customer) => delegatedIds.indexOf(customer.id) > -1)}
-            >
+            <CustomerList list={assignedCustomers}>
               <Button
                 variant='secondary'
                 onClick={enableAddCustomers}
