@@ -34,7 +34,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:skattnaering"
+    "urn": "urn:altinn:accesspackage:skatt-naering"
   },
   {
     "provider": {
@@ -145,7 +145,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:motorvognavgifter"
+    "urn": "urn:altinn:accesspackage:motorvognavgift"
   },
   {
     "provider": {
@@ -182,7 +182,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:regnskapogokonomirapportering"
+    "urn": "urn:altinn:accesspackage:regnskap-okonomi-rapport"
   },
   {
     "provider": {
@@ -219,7 +219,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:kravbetalingerogutlegg"
+    "urn": "urn:altinn:accesspackage:krav-og-utlegg"
   },
   {
     "provider": {
@@ -330,7 +330,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:kredittogoppgjorsordninger"
+    "urn": "urn:altinn:accesspackage:kreditt-og-oppgjoer"
   },
   {
     "provider": {
@@ -478,7 +478,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:aordningen"
+    "urn": "urn:altinn:accesspackage:a-ordning"
   },
   {
     "provider": {
@@ -663,7 +663,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:miljoryddingmiljorensingoglignende"
+    "urn": "urn:altinn:accesspackage:miljorydding-miljorensing-og-lignende"
   },
   {
     "provider": {
@@ -757,7 +757,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:sikkerhetoginternkontroll"
+    "urn": "urn:altinn:accesspackage:sikkerhet-og-internkontroll"
   },
   {
     "provider": {
@@ -868,7 +868,7 @@
         "Name": "ikke_sensitiv_post"
       }
     ],
-    "urn": "urn:altinn:accesspackage:ordinaerposttilvirksomheten"
+    "urn": "urn:altinn:accesspackage:ordinaer-post-til-virksomheten"
   },
   {
     "provider": {
@@ -942,7 +942,7 @@
         "Name": "sensitiv_post"
       }
     ],
-    "urn": "urn:altinn:accesspackage:posttilvirksomhetenmedtaushetsbelagtinnhold"
+    "urn": "urn:altinn:accesspackage:post-til-virksomheten-med-taushetsbelagt-innhold"
   },
   {
     "provider": {
@@ -979,7 +979,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:generellehelfotjenester"
+    "urn": "urn:altinn:accesspackage:generelle-helfotjenester"
   },
   {
     "provider": {
@@ -1016,7 +1016,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:helfotjenestermedpersonopplysningeravsaerligkategori"
+    "urn": "urn:altinn:accesspackage:helfo-saerlig-kategori"
   },
   {
     "provider": {
@@ -1053,7 +1053,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:starteendreogavviklevirksomhet"
+    "urn": "urn:altinn:accesspackage:starte-drive-endre-avikle-virksomhet"
   },
   {
     "provider": {
@@ -1090,7 +1090,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:aksjerogeierforhold"
+    "urn": "urn:altinn:accesspackage:aksjer-og-eierforhold"
   },
   {
     "provider": {
@@ -1164,7 +1164,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:dokumentbaserttilsyn"
+    "urn": "urn:altinn:accesspackage:dokumentbasert-tilsyn"
   },
   {
     "provider": {
@@ -1238,7 +1238,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:patentvaremerkeogdesign"
+    "urn": "urn:altinn:accesspackage:patent-varemerke-design"
   },
   {
     "provider": {
@@ -1275,7 +1275,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:tilskuddstotteogerstatning"
+    "urn": "urn:altinn:accesspackage:tilskudd-stotte-erstatning"
   },
   {
     "provider": {
@@ -1312,7 +1312,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:minesiderhoskommunen"
+    "urn": "urn:altinn:accesspackage:mine-sider-kommune"
   },
   {
     "provider": {
@@ -1349,7 +1349,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:politiogdomstol"
+    "urn": "urn:altinn:accesspackage:politi-og-domstol"
   },
   {
     "provider": {
@@ -1386,7 +1386,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:rapporteringavstatistikk"
+    "urn": "urn:altinn:accesspackage:rapportering-statistikk"
   },
   {
     "provider": {
@@ -1460,7 +1460,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:eksplisitttjenestedelegering"
+    "urn": "urn:altinn:accesspackage:eksplisitt"
   },
   {
     "provider": {
@@ -1571,7 +1571,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:jaktogviltstell"
+    "urn": "urn:altinn:accesspackage:jakt-og-viltstell"
   },
   {
     "provider": {
@@ -1793,7 +1793,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:mottanaboogplanvarsel"
+    "urn": "urn:altinn:accesspackage:motta-nabo-og-planvarsel"
   },
   {
     "provider": {
@@ -1830,7 +1830,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:oppforingavbyggoganlegg"
+    "urn": "urn:altinn:accesspackage:oppforing-bygg-anlegg"
   },
   {
     "provider": {
@@ -1867,7 +1867,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:kjopogsalgaveiendom"
+    "urn": "urn:altinn:accesspackage:kjop-og-salg-eiendom"
   },
   {
     "provider": {
@@ -1904,7 +1904,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:utleieaveiendom"
+    "urn": "urn:altinn:accesspackage:utleie-eiendom"
   },
   {
     "provider": {
@@ -2015,7 +2015,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:transportiror"
+    "urn": "urn:altinn:accesspackage:transport-i-ror"
   },
   {
     "provider": {
@@ -2163,7 +2163,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:lagringogandretjenestertilknyttettransport"
+    "urn": "urn:altinn:accesspackage:lagring-og-andre-tjenester-tilknyttet-transport"
   },
   {
     "provider": {
@@ -2237,7 +2237,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:helsetjenestermedpersonopplysningeravsaerligkategori"
+    "urn": "urn:altinn:accesspackage:helsetjenester-personopplysinger-saerlig-kategori"
   },
   {
     "provider": {
@@ -2311,7 +2311,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:samleoppogbehandleavlopsvann"
+    "urn": "urn:altinn:accesspackage:samle-behandle-avlopsvann"
   },
   {
     "provider": {
@@ -2348,7 +2348,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:pleieogomsorgstjeneteriinstitusjon"
+    "urn": "urn:altinn:accesspackage:pleie-omsorgstjenester-i-institusjon"
   },
   {
     "provider": {
@@ -2385,7 +2385,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:sosialeomsorgstjenesterutenbotilbudogflyktningemottak"
+    "urn": "urn:altinn:accesspackage:sosiale-omsorgstjenester-uten-botilbud-og-flyktningemottak"
   },
   {
     "provider": {
@@ -2496,7 +2496,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:godkjenningavpersonell"
+    "urn": "urn:altinn:accesspackage:godkjenning-av-personell"
   },
   {
     "provider": {
@@ -2533,7 +2533,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:godkjenningavutdanningsvirksomhet"
+    "urn": "urn:altinn:accesspackage:godkjenning-av-utdanningsvirksomhet"
   },
   {
     "provider": {
@@ -2570,7 +2570,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:hoyereutdanningoghoyereyrkesfagligutdanning"
+    "urn": "urn:altinn:accesspackage:hoyere-utdanning-og-hoyere-yrkesfaglig-utdanning"
   },
   {
     "provider": {
@@ -2607,7 +2607,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:sfoleder"
+    "urn": "urn:altinn:accesspackage:sfo-leder"
   },
   {
     "provider": {
@@ -2644,7 +2644,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:pptleder"
+    "urn": "urn:altinn:accesspackage:ppt-leder"
   },
   {
     "provider": {
@@ -2792,7 +2792,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:statsforvalterskoleogopplaering"
+    "urn": "urn:altinn:accesspackage:statsforvalter-skole-og-opplearing"
   },
   {
     "provider": {
@@ -2829,7 +2829,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:statsforvalterbarnehage"
+    "urn": "urn:altinn:accesspackage:statsforvalter-barnehage"
   },
   {
     "provider": {
@@ -2977,7 +2977,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:elektrisitetprodusereoverforeogdistribuere"
+    "urn": "urn:altinn:accesspackage:elektrisitet-produsere-overfore-distrubere"
   },
   {
     "provider": {
@@ -3014,7 +3014,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:dampogvarmtvann"
+    "urn": "urn:altinn:accesspackage:damp-varmtvann"
   },
   {
     "provider": {
@@ -3051,7 +3051,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:vanntautfrakilderenseogdistribuere"
+    "urn": "urn:altinn:accesspackage:vann-kilde-rense-distrubere"
   },
   {
     "provider": {
@@ -3088,7 +3088,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:avfallsamleinnbehandlebrukeoggjenvinne"
+    "urn": "urn:altinn:accesspackage:avfall-behandle-gjenvinne"
   },
   {
     "provider": {
@@ -3125,7 +3125,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:miljoryddingrensingoglignendevirksomhet"
+    "urn": "urn:altinn:accesspackage:miljorydding-rensing"
   },
   {
     "provider": {
@@ -3162,7 +3162,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:utvinningavraoljenaturgassogkull"
+    "urn": "urn:altinn:accesspackage:utvinning-raaolje-naturgass-kull"
   },
   {
     "provider": {
@@ -3199,7 +3199,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:naeringsmidlerdrikkevarerogtobakk"
+    "urn": "urn:altinn:accesspackage:naeringsmidler-drikkevarer-og-tobakk"
   },
   {
     "provider": {
@@ -3236,7 +3236,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:tekstilerklaeroglaervarer"
+    "urn": "urn:altinn:accesspackage:tekstiler-klaer-laervarer"
   },
   {
     "provider": {
@@ -3273,7 +3273,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:trelasttrevarerogpapirvarer"
+    "urn": "urn:altinn:accesspackage:trelast-trevarer-papirvarer"
   },
   {
     "provider": {
@@ -3310,7 +3310,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:trykkerierogreproduksjonavinnspilteopptak"
+    "urn": "urn:altinn:accesspackage:trykkerier-reproduksjon-opptak"
   },
   {
     "provider": {
@@ -3347,7 +3347,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:oljeraffineringkjemiskogfarmasoytiskindustri"
+    "urn": "urn:altinn:accesspackage:oljeraffinering-kjemisk-farmasoytisk-industri"
   },
   {
     "provider": {
@@ -3384,7 +3384,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:gummiplastogikkemetallholdigemineralprodukter"
+    "urn": "urn:altinn:accesspackage:gummi-plast-og-ikkemetallholdige-mineralprodukter"
   },
   {
     "provider": {
@@ -3421,7 +3421,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:metallerogmineraler"
+    "urn": "urn:altinn:accesspackage:metaller-og-mineraler"
   },
   {
     "provider": {
@@ -3458,7 +3458,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:metallvarerelektriskutstyrogmaskiner"
+    "urn": "urn:altinn:accesspackage:metallvarer-elektrisk-utstyr-og-maskiner"
   },
   {
     "provider": {
@@ -3495,7 +3495,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:verftogandretransportmidler"
+    "urn": "urn:altinn:accesspackage:verft-og-andre-transportmidler"
   },
   {
     "provider": {
@@ -3532,7 +3532,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:moblerogannenindustri"
+    "urn": "urn:altinn:accesspackage:mobler-og-annen-industri"
   },
   {
     "provider": {
@@ -3569,7 +3569,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:reparasjonoginstallasjonavmaskinerogutstyr"
+    "urn": "urn:altinn:accesspackage:reparasjon-og-installasjon-av-maskiner-og-utstyr"
   },
   {
     "provider": {
@@ -3643,7 +3643,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:kunstogunderholdning"
+    "urn": "urn:altinn:accesspackage:kunst-og-underholdning"
   },
   {
     "provider": {
@@ -3680,7 +3680,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:bibliotekermuseerarkiverogannenkultur"
+    "urn": "urn:altinn:accesspackage:biblioteker-museer-arkiver-og-annen-kultur"
   },
   {
     "provider": {
@@ -3717,7 +3717,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:lotteriogspill"
+    "urn": "urn:altinn:accesspackage:lotteri-og-spill"
   },
   {
     "provider": {
@@ -3754,7 +3754,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:sportogfritid"
+    "urn": "urn:altinn:accesspackage:sport-og-fritid"
   },
   {
     "provider": {
@@ -3976,7 +3976,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:postogtelekommunikasjon"
+    "urn": "urn:altinn:accesspackage:post-og-telekommunikasjon"
   },
   {
     "provider": {
@@ -4013,7 +4013,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:informasjonogkommunikasjon"
+    "urn": "urn:altinn:accesspackage:informasjon-og-kommunikasjon"
   },
   {
     "provider": {
@@ -4050,7 +4050,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:finansieringogforsikring"
+    "urn": "urn:altinn:accesspackage:finansiering-og-forsikring"
   },
   {
     "provider": {
@@ -4087,7 +4087,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:annentjenesteyting"
+    "urn": "urn:altinn:accesspackage:annen-tjenesteyting"
   },
   {
     "provider": {
@@ -4124,7 +4124,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:regnskapsforermedsigneringsrettighet"
+    "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"
   },
   {
     "provider": {
@@ -4161,7 +4161,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:regnskapsforerutensigneringsrettighet"
+    "urn": "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet"
   },
   {
     "provider": {
@@ -4198,7 +4198,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:regnskapsforerlonn"
+    "urn": "urn:altinn:accesspackage:regnskapsforer-lonn"
   },
   {
     "provider": {
@@ -4235,7 +4235,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:ansvarligrevisor"
+    "urn": "urn:altinn:accesspackage:ansvarlig-revisor"
   },
   {
     "provider": {
@@ -4292,43 +4292,6 @@
       "IconUrl": "https://www.svgrepo.com/show/491561/arrow-trend-down.svg",
       "groupId": "554f0321-53b8-4d97-be12-6a585c507159"
     },
-    "id": "a784a0b3-2ca1-46c1-97dc-f5df0dd1ab53",
-    "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
-    "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
-    "areaId": "f3daddb7-6e21-455e-b6d2-65a281375b6b",
-    "name": "Konkursbo tilgangsstyring",
-    "description": "Denne fullmakten gir rettighet til å administrere konkursbo. Fullmakten er en engangsdelegering, og den gir ikke tilgang til noen tjenester.  ",
-    "isDelegable": true,
-    "Resources": [
-      {
-        "Id": "appid-402",
-        "Name": "Det magiske klesskapet"
-      },
-      {
-        "Id": "se_3225_1596",
-        "Name": "A2 skjema"
-      }
-    ],
-    "urn": "urn:altinn:accesspackage:konkursbotilgangsstyring"
-  },
-  {
-    "provider": {
-      "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
-      "name": "Digdir",
-      "refId": null
-    },
-    "entityType": {
-      "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
-      "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
-      "name": "Organisasjon"
-    },
-    "area": {
-      "id": "f3daddb7-6e21-455e-b6d2-65a281375b6b",
-      "name": "Fullmakter for konkursbo",
-      "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for konkursbo.",
-      "IconUrl": "https://www.svgrepo.com/show/491561/arrow-trend-down.svg",
-      "groupId": "554f0321-53b8-4d97-be12-6a585c507159"
-    },
     "id": "5ef836c7-69cc-4ea8-84d6-fb933cc4fc5c",
     "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
     "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
@@ -4346,7 +4309,7 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:konkursbolesetilgang"
+    "urn": "urn:altinn:accesspackage:konkursbo-lesetilgang"
   },
   {
     "provider": {
@@ -4383,6 +4346,6 @@
         "Name": "A2 skjema"
       }
     ],
-    "urn": "urn:altinn:accesspackage:konkursboskrivetilgang"
+    "urn": "urn:altinn:accesspackage:konkursbo-skrivetilgang"
   }
 ]
