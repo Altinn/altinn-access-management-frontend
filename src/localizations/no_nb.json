@@ -493,6 +493,7 @@
     "reject": "Avvis",
     "loading_change_request": "Laster oppdaterings-forespørsel",
     "load_change_request_error": "Kunne ikke laste oppdaterings-forespørsel",
+    "load_change_request_error_notfound": "Oppdaterings-forespørsel for valgt aktør finnes ikke. Er du sikker på at du har valgt riktig aktør?",
     "accept_error": "Kunne ikke godkjenne oppdatert systemtilgang",
     "reject_error": "Kunne ikke avvise oppdatert systemtilgang",
     "accept_loading": "Godkjenner oppdatert systemtilgang...",
