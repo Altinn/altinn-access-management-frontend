@@ -54,12 +54,14 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
         <PageContainer
           onNavigateBack={handleNavigateBack}
           pageActions={
-            <DeleteSystemUserPopover
-              integrationTitle={systemUser?.integrationTitle ?? ''}
-              isDeleteError={isDeleteError}
-              isDeletingSystemUser={isDeletingSystemUser}
-              handleDeleteSystemUser={handleDeleteSystemUser}
-            />
+            systemUser && (
+              <DeleteSystemUserPopover
+                integrationTitle={systemUser?.integrationTitle ?? ''}
+                isDeleteError={isDeleteError}
+                isDeletingSystemUser={isDeletingSystemUser}
+                handleDeleteSystemUser={handleDeleteSystemUser}
+              />
+            )
           }
         >
           {isLoadingSystemUser && (

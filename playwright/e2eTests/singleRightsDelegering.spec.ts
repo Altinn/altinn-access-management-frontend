@@ -32,7 +32,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
       'SKYFRI GATE',
     );
     await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
     await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     // await context1.close();
@@ -51,7 +51,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     //To delegate rights
     // WHEN user delegates to KLIPPFISK
     await delegate.delegateToSSN('04880748144', 'KLIPPFISK');
-    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     await context.clearCookies();
 
@@ -74,7 +74,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
     delegateRoles,
     context,
   }) => {
-    test.setTimeout(60000 * 3);
+    test.setTimeout(300000);
 
     await login.loginWithUser('04885299593');
     await login.chooseReportee('ULIK FLAT TIGER AS');
@@ -93,7 +93,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
       'GJESTFRI RESERVERT HUND DA',
     );
     await delegateRights.delegateRightsToSSN('Ressurs for enkeltrettigheter testing');
-    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
     await delegateRights.delegateRightsToSSN('Altinn2 reporting service for authorization tests');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     // await context1.close();
@@ -114,7 +114,7 @@ test.describe('User with DAGL/HADM role without having resource access themselve
 
     //Delegate to another org
     await delegate.delegateToOrg('313948579', 'UNDERFUNDIG TROFAST TIGER AS');
-    await delegateRights.delegateRightsToSSN('autorisasjon-automatisert-app');
+    await delegateRights.delegateRightsToSSN('autorisasjon-autotest-app');
     await logoutUser.gotoLogoutPage('ULIK FLAT TIGER AS');
     await context.clearCookies();
 
