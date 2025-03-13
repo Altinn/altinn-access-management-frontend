@@ -18,7 +18,7 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
     await login.chooseReportee('AKTVERDIG RETORISK APE');
   });
 
-  test('Avvis Systembruker endringsforespørsel --debug', async ({ page }): Promise<void> => {
+  test('Avvis Systembruker endringsforespørsel', async ({ page }): Promise<void> => {
     //Generate confirmUrl from API
     const externalRef = TestdataApi.generateExternalRef();
     const response = await api.postSystemuserRequest(externalRef);
