@@ -27,7 +27,7 @@ test.describe('Godkjenn og avvis Systembruker endringsforespørsel', () => {
 
     const confirmUrlChangeRequest = await api.postSystemuserChangeRequest(externalRef);
     const newUrl = Util.useAccessManagementUrlChangeRequest(confirmUrlChangeRequest);
-    console.log(newUrl);
+    await page.goto(newUrl);
     await page.getByRole('button', { name: 'Avvis' }).click();
 
     //Expect user to be logged out

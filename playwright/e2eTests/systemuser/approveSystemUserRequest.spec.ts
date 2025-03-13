@@ -23,8 +23,8 @@ test.describe('Godkjenn og avvis Systembrukerforespørsel', () => {
     const response = await api.postSystemuserRequest(externalRef);
 
     const newUrl = Util.useAccessManagementUrlSystemUserRequest(response.confirmUrl);
-
     await page.goto(newUrl);
+
     await page.getByRole('button', { name: 'Avvis' }).click();
 
     //Expect user to be logged out
