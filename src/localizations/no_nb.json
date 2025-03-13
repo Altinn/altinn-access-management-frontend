@@ -446,6 +446,7 @@
     "delete_systemuser_header": "Slette systemtilgang",
     "delete_systemuser_body": "Er du sikker på at du vil slette systemtilgangen \"{{title}}\"?",
     "delete_systemuser_error": "Kunne ikke slette systemtilgang",
+    "delete_has_customer_warning": "Systemtilgangen kan ikke slettes før alle kunder er fjernet fra systemtilgangen.",
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",

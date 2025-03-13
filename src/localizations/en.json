@@ -447,6 +447,7 @@
     "delete_systemuser_header": "Delete system access",
     "delete_systemuser_body": "Are you sure you want to delete the system access \"{{title}}\"?",
     "delete_systemuser_error": "Could not delete system access",
+    "delete_has_customer_warning": "The system access cannot be deleted until all customers are removed from the system access.",
     "update_systemuser_error": "Failed to update system access",
     "systemuser_deleted": "System access deleted",
     "save_systemuser": "Save changes",
