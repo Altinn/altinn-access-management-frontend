@@ -493,6 +493,7 @@
     "reject": "Avvis",
     "loading_change_request": "Laster oppdaterings-førespurnad",
     "load_change_request_error": "Kunne ikkje laste oppdaterings-førespurnad",
+    "load_change_request_error_notfound": "Oppdaterings-førespurnad for valgt aktør finnes ikkje. Er du sikker på at du har valgt rett aktør?",
     "accept_error": "Kunne ikkje godkjenne oppdatert systemtilgang",
     "reject_error": "Kunne ikkje avvise oppdatert systemtilgang",
     "accept_loading": "Godkjenner oppdatert systemtilgang...",
