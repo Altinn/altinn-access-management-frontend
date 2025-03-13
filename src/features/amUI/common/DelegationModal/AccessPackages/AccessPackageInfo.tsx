@@ -9,7 +9,7 @@ import {
   MenuElipsisHorizontalIcon,
   PackageIcon,
 } from '@navikt/aksel-icons';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
@@ -64,14 +64,11 @@ export const AccessPackageInfo = ({
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
-  // const [delegationCheck, { isLoading, data: delegationChecks }] = useDelegationCheckMutation();
-
-  const { canDelegate, isLoading: delegationCheckLoading } = useDelegationCheck(
-    accessPackage.id,
-    availableActions,
-  );
+  const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
+  const canDelegate = useDelegationCheck(accessPackage.id, shouldShowDelegationCheck);
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -122,19 +119,17 @@ export const AccessPackageInfo = ({
           </Paragraph>
         </div>
       )}
-      {!delegationCheckLoading &&
-        availableActions.includes(DelegationAction.DELEGATE) &&
-        !canDelegate && (
-          <div className={classes.delegationCheckInfo}>
-            <ExclamationmarkTriangleFillIcon
-              fontSize='1.5rem'
-              className={classes.delegationCheckInfoIcon}
-            />
-            <Paragraph data-size='xs'>
-              <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
-            </Paragraph>
-          </div>
-        )}
+      {shouldShowDelegationCheck && !canDelegate && (
+        <div className={classes.delegationCheckInfo}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={classes.delegationCheckInfoIcon}
+          />
+          <Paragraph data-size='xs'>
+            <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
+          </Paragraph>
+        </div>
+      )}
       <div className={classes.services}>
         <Heading
           data-size='xs'
@@ -159,7 +154,7 @@ export const AccessPackageInfo = ({
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
           <Button
-            disabled={delegationCheckLoading || !canDelegate}
+            disabled={!canDelegate}
             onClick={() => onDelegate(accessPackage)}
           >
             {t('common.give_poa')}
@@ -203,20 +198,19 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
   return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
 };
 
-const useDelegationCheck = (accessPackageId: string, availableActions: DelegationAction[]) => {
-  const [delegationCheck, { isLoading, data: delegationChecks }] = useDelegationCheckMutation();
-  const [canDelegate, setCanDelegate] = useState<boolean>(false);
+const useDelegationCheck = (accessPackageId: string, shouldShowDelegationCheck: boolean) => {
+  const [delegationCheck, { isLoading, data }] = useDelegationCheckMutation();
 
   useEffect(() => {
-    const check = delegationChecks?.find((c) => c.packageId === accessPackageId);
-    setCanDelegate(isLoading || !!check?.canDelegate);
-  }, [delegationChecks, accessPackageId, isLoading]);
-
-  useEffect(() => {
-    if (availableActions.includes(DelegationAction.DELEGATE)) {
+    if (accessPackageId && shouldShowDelegationCheck) {
       delegationCheck({ packageIds: [accessPackageId] });
     }
-  }, [accessPackageId, availableActions, delegationCheck]);
+  }, [accessPackageId]);
 
-  return { canDelegate, isLoading };
+  const canDelegate = React.useMemo(
+    () => !isLoading && data?.find((d) => d.packageId === accessPackageId)?.canDelegate,
+    [data, isLoading, accessPackageId],
+  );
+
+  return canDelegate;
 };

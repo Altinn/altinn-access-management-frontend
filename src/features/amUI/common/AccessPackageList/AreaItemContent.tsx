@@ -40,7 +40,8 @@ export const AreaItemContent = ({
     [packages.available],
   );
 
-  const canDelegate = useDelegationCheck(availablePackageIds);
+  const shouldShowDelegationCheck = !!availableActions?.includes(DelegationAction.DELEGATE);
+  const canDelegate = useDelegationCheck(availablePackageIds, shouldShowDelegationCheck);
 
   return (
     <div className={classes.accessAreaContent}>
@@ -102,7 +103,7 @@ export const AreaItemContent = ({
                       icon={PlusCircleIcon}
                       variant='text'
                       size='sm'
-                      disabled={canDelegate(pkg.id)}
+                      disabled={!canDelegate(pkg.id)}
                       onClick={() => onDelegate(pkg)}
                     >
                       {t('common.give_poa')}
@@ -129,11 +130,11 @@ export const AreaItemContent = ({
   );
 };
 
-const useDelegationCheck = (accessPackageIds: string[]) => {
+const useDelegationCheck = (accessPackageIds: string[], shouldShowDelegationCheck: boolean) => {
   const [delegationCheck, { isLoading, data }] = useDelegationCheckMutation();
 
   useEffect(() => {
-    if (accessPackageIds.length > 0) {
+    if (accessPackageIds.length > 0 && shouldShowDelegationCheck) {
       delegationCheck({ packageIds: accessPackageIds });
     }
   }, [accessPackageIds]);
