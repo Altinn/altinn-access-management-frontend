@@ -48,6 +48,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           <Heading
             data-size='2xs'
             level={2}
+            className={classes.rightHeading}
           >
             {accessPackages.length === 1
               ? t('systemuser_detailpage.right_accesspackage_singular')
@@ -78,6 +79,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           <Heading
             data-size='2xs'
             level={2}
+            className={classes.rightHeading}
           >
             {resources.length === 1
               ? t('systemuser_detailpage.right_resource_singular')
