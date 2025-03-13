@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -14,10 +15,10 @@ using Microsoft.Extensions.Options;
 namespace Altinn.AccessManagement.UI.Integration.Clients
 {
     /// <summary>
-    /// Client for handling system user client delegation requests.
+    /// Client for handling system user agent delegation requests.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class SystemUserClientRequestClient : ISystemUserClientRequestClient
+    public class SystemUserAgentRequestClient : ISystemUserAgentRequestClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
@@ -26,14 +27,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemUserClientRequestClient"/> class.
+        /// Initializes a new instance of the <see cref="SystemUserAgentRequestClient"/> class.
         /// </summary>
         /// <param name="logger">The logger instance.</param>
         /// <param name="httpClient">The HTTP client instance.</param>
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
-        public SystemUserClientRequestClient(
-            ILogger<SystemUserClientRequestClient> logger, 
+        public SystemUserAgentRequestClient(
+            ILogger<SystemUserAgentRequestClient> logger, 
             HttpClient httpClient, 
             IHttpContextAccessor httpContextAccessor, 
             IOptions<PlatformSettings> platformSettings) 
@@ -47,39 +48,45 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserClientRequest>> GetSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {        
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/clientRequest/{partyId}/{clientRequestId}";
+                string endpoint = $"systemuser/request/{partyId}/{agentRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
+                
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return Problem.RequestNotFound;
+                } 
+                
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
 
                 if (response.IsSuccessStatusCode) 
                 {
-                    return JsonSerializer.Deserialize<SystemUserClientRequest>(responseContent, _jsonSerializerOptions);
+                    return JsonSerializer.Deserialize<SystemUserAgentRequest>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientRequestClient // GetSystemUserClientRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // GetSystemUserAgentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientRequestClient // GetSystemUserClientRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // GetSystemUserAgentRequest // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> ApproveSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/clientRequest/{partyId}/{clientRequestId}/approve";
+                string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/approve";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
@@ -88,25 +95,25 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientRequestClient // ApproveSystemUserClientRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // ApproveSystemUserAgentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientRequestClient // ApproveSystemUserClientRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // ApproveSystemUserAgentRequest // Exception");
                 throw;
             }
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RejectSystemUserClientRequest(int partyId, Guid clientRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/clientRequest/{partyId}/{clientRequestId}/reject";
+                string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/reject";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
                 
@@ -115,14 +122,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return true;
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientRequestClient // RejectSystemUserClientRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentRequestClient // RejectSystemUserAgentRequest // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientRequestClient // RejectSystemUserClientRequest // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentRequestClient // RejectSystemUserAgentRequest // Exception");
                 throw;
             }
         }

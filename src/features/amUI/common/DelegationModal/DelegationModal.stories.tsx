@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 
-import { PartyType } from '@/rtk/features/userInfoApi';
 import store from '@/rtk/app/store';
 
 import { SnackbarProvider } from '../Snackbar';
 
-import { DelegationModal } from './DelegationModal';
-import { DelegationType } from './DelegationModal';
+import { DelegationModal, DelegationType } from './DelegationModal';
 
 type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
 
@@ -31,14 +29,7 @@ export default {
 
 export const Default: StoryObj<DelegationModalProps> = {
   args: {
-    toParty: {
-      partyId: 123,
-      partyUuid: '123',
-      orgNumber: '123123123',
-      unitType: 'unitType',
-      name: 'Ola Nordmann',
-      partyTypeName: PartyType.Person,
-    },
+    toPartyUuid: '123',
     delegationType: DelegationType.SingleRights,
   },
 };

@@ -2577,27 +2577,6 @@
     "iconUrl": "https://www.svgrepo.com/show/491561/arrow-trend-down.svg",
     "accessPackages": [
       {
-        "id": "a784a0b3-2ca1-46c1-97dc-f5df0dd1ab53",
-        "name": "Konkursbo tilgangsstyring",
-        "description": "Denne fullmakten gir rettighet til å administrere konkursbo. Fullmakten er en engangsdelegering, og den gir ikke tilgang til noen tjenester.  ",
-        "resources": [
-          {
-            "id": "appid-402",
-            "name": "Det magiske klesskapet"
-          },
-          {
-            "id": "se_3225_1596",
-            "name": "A2 skjema"
-          }
-        ],
-        "area": {
-          "id": "f3daddb7-6e21-455e-b6d2-65a281375b6b",
-          "name": "Fullmakter for konkursbo",
-          "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til fullmakter for konkursbo.",
-          "iconUrl": "https://www.svgrepo.com/show/491561/arrow-trend-down.svg"
-        }
-      },
-      {
         "id": "5ef836c7-69cc-4ea8-84d6-fb933cc4fc5c",
         "name": "Konkursbo lesetilgang",
         "description": "Denne fullmakten delegeres til kreditorer og andre som skal ha lesetilgang til det enkelte konkursbo.  ",

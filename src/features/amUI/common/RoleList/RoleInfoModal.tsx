@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 
+import type { Role } from '@/rtk/features/roleApi';
+
 import type { DelegationAction } from '../DelegationModal/EditModal';
 import { EditModal } from '../DelegationModal/EditModal';
 import { DelegationModalProvider } from '../DelegationModal/DelegationModalContext';
 
-import type { Role } from '@/rtk/features/roleApi';
-
 interface RoleInfoModalProps {
-  modalRef: React.RefObject<HTMLDialogElement>;
+  modalRef: React.RefObject<HTMLDialogElement | null>;
   toPartyUuid: string;
   fromPartyUuid: string;
   role?: Role;

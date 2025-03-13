@@ -76,8 +76,8 @@
     "unauthorized_for_party_title": "Missing delegation access",
     "unauthorized_for_party": "You cannot delegate services for the selected actor. If you meant to delegate on behalf of someone else, please go to the profile and select this actor from the list of delegators."
   },
-  "header": {    
-    "access_management" : "Access Management",
+  "header": {
+    "access_management": "Access Management",
     "inbox": "Inbox",
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
@@ -86,7 +86,7 @@
     "back-label": "Back",
     "all_services": "All services",
     "chat": "Get help on chat",
-    "log_out" : "Log out"
+    "log_out": "Log out"
   },
   "footer": {
     "about_altinn": "About Altinn",
@@ -447,6 +447,7 @@
     "delete_systemuser_header": "Delete system access",
     "delete_systemuser_body": "Are you sure you want to delete the system access \"{{title}}\"?",
     "delete_systemuser_error": "Could not delete system access",
+    "delete_has_customer_warning": "The system access cannot be deleted until all customers are removed from the system access.",
     "update_systemuser_error": "Failed to update system access",
     "systemuser_deleted": "System access deleted",
     "save_systemuser": "Save changes",
@@ -495,6 +496,7 @@
     "reject": "Reject",
     "loading_change_request": "Loading update system access request",
     "load_change_request_error": "Could not load update system access request",
+    "load_change_request_error_notfound": "Update system access request for chosen party does not exist. Are you certain that you have chosen correct party?",
     "accept_error": "Could not approve updated system access request",
     "reject_error": "Could not reject updated system access request",
     "accept_loading": "Approving updated system access...",
@@ -503,7 +505,7 @@
     "request_rejected": "This update system access request is already rejected",
     "request_expired": "This update system access request has expired"
   },
-  "systemuser_client_delegation_request": {
+  "systemuser_agent_request": {
     "page_title": "Create system access for customer relations - Altinn",
     "banner_title": "Create system access for customer relations",
     "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."

@@ -28,7 +28,7 @@ export const NewUserButton: React.FC = () => {
 };
 
 interface NewUserModalProps {
-  modalRef: React.RefObject<HTMLDialogElement>;
+  modalRef: React.RefObject<HTMLDialogElement | null>;
 }
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {

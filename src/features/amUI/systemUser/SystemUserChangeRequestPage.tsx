@@ -96,11 +96,13 @@ export const SystemUserChangeRequestPage = () => {
       )}
       {(loadingChangeRequestError || (changeRequest && !changeRequest.system)) && (
         <Alert data-color='danger'>
-          {t('systemuser_change_request.load_systemuser_change_request_error')}
+          {(loadingChangeRequestError as { data: ProblemDetail }).data.status === 404
+            ? t('systemuser_change_request.load_change_request_error_notfound')
+            : t('systemuser_change_request.load_change_request_error')}
         </Alert>
       )}
       {isLoadingChangeRequest && (
-        <Spinner aria-label={t('systemuser_change_request.loading_systemuser_change_request')} />
+        <Spinner aria-label={t('systemuser_change_request.loading_change_request')} />
       )}
       {changeRequest?.system && (
         <>
