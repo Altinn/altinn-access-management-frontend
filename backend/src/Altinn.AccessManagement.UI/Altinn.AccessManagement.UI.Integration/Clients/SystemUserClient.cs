@@ -152,5 +152,57 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc/>
+        public async Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{id}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<SystemUser>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserClient // GetAgentSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetAgentSystemUser // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}";
+
+                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<SystemUser>>(responseContent, _jsonSerializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserClient // GetAgentSystemUsersForParty // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return new List<SystemUser>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetAgentSystemUsersForParty // Exception");
+                throw;
+            }
+        }
     }
 }

@@ -10,7 +10,8 @@
       "systemVendorOrgName": "N/A",
       "name": "N/A"
     },
-    "resources": []
+    "resources": [],
+    "accesspackages": []
   },
   {
     "id": "9c9e995b-3d6c-40e0-99fb-bdb353d44ac6",
@@ -23,6 +24,7 @@
       "systemVendorOrgName": "LEPSØY OG TONSTAD",
       "name": "N/A"
     },
-    "resources": []
+    "resources": [],
+    "accesspackages": []
   }
 ]

@@ -57,9 +57,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
-            List<SystemUser> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
 
-            return await MapToSystemUsersFE(sortedList, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -70,6 +69,34 @@ namespace Altinn.AccessManagement.UI.Core.Services
             if (systemUser != null)
             {
                 return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
+        {
+            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
+            if (party is null)
+            {
+                return Problem.Reportee_Orgno_NotFound;
+            }
+            
+            List<SystemUser> lista = await _systemUserClient.GetAgentSystemUsersForParty(partyId, cancellationToken);
+
+            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
+        {
+            SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, id, cancellationToken);
+            
+            if (systemUser != null)
+            {
+                // TODO: do not map rights and access packages for agent system users yet. Need the access package metadata API
+                return (await MapToSystemUsersFE([systemUser], languageCode, false, cancellationToken))[0] ?? null;
             }
 
             return null;
@@ -122,8 +149,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     AccessPackages = enrichedRights.AccessPackages
                 });
             }
-
-            return lista;
+            
+            List<SystemUserFE> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
+            return sortedList;
         }
     }
 }
