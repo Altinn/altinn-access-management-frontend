@@ -9,16 +9,11 @@ import {
   MenuElipsisHorizontalIcon,
   PackageIcon,
 } from '@navikt/aksel-icons';
-import { useEffect } from 'react';
 
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import {
-  useDelegationCheckMutation,
-  useGetUserDelegationsQuery,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
+import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
@@ -26,6 +21,7 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
+import { useDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -65,7 +61,7 @@ export const AccessPackageInfo = ({
   }, [activeDelegations, isFetching, accessPackage.id]);
 
   const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
-  const canDelegate = useDelegationCheck(accessPackage.id, shouldShowDelegationCheck);
+  const canDelegate = useDelegationCheck([accessPackage.id], shouldShowDelegationCheck);
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
@@ -196,21 +192,4 @@ const useMinimizableResourceList = (list: IdNamePair[]) => {
     .slice(0, showAll ? list.length : MINIMIZED_LIST_SIZE)
     .map(mapResourceToListItem);
   return { listItems: showAll ? minimizedList : [...minimizedList, showMoreListItem] };
-};
-
-const useDelegationCheck = (accessPackageId: string, shouldShowDelegationCheck: boolean) => {
-  const [delegationCheck, { isLoading, data }] = useDelegationCheckMutation();
-
-  useEffect(() => {
-    if (accessPackageId && shouldShowDelegationCheck) {
-      delegationCheck({ packageIds: [accessPackageId] });
-    }
-  }, [accessPackageId]);
-
-  const canDelegate = React.useMemo(
-    () => !isLoading && data?.find((d) => d.packageId === accessPackageId)?.canDelegate,
-    [data, isLoading, accessPackageId],
-  );
-
-  return canDelegate;
 };

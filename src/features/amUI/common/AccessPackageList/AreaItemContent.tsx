@@ -2,9 +2,9 @@ import { Paragraph } from '@digdir/designsystemet-react';
 import { Button, ListBase } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { useDelegationCheckMutation, type AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -12,6 +12,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './AccessPackageList.module.css';
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
+import { useDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -128,19 +129,4 @@ export const AreaItemContent = ({
       )}
     </div>
   );
-};
-
-const useDelegationCheck = (accessPackageIds: string[], shouldShowDelegationCheck: boolean) => {
-  const [delegationCheck, { isLoading, data }] = useDelegationCheckMutation();
-
-  useEffect(() => {
-    if (accessPackageIds.length > 0 && shouldShowDelegationCheck) {
-      delegationCheck({ packageIds: accessPackageIds });
-    }
-  }, [accessPackageIds]);
-
-  const canDelegate = (id: string) =>
-    !isLoading && data?.find((d) => d.packageId === id)?.canDelegate;
-
-  return canDelegate;
 };
