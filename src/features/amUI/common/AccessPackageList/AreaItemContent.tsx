@@ -1,8 +1,8 @@
-import { Paragraph } from '@digdir/designsystemet-react';
-import { Button, ListBase } from '@altinn/altinn-components';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Button, Header, ListBase } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
@@ -13,6 +13,8 @@ import classes from './AccessPackageList.module.css';
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
 import { useDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -35,18 +37,38 @@ export const AreaItemContent = ({
 }: AreaItemContentProps) => {
   const { packages } = area;
   const { t } = useTranslation();
-
+  const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
   const availablePackageIds = useMemo(
     () => packages.available.map((pkg) => pkg.id),
     [packages.available],
   );
-
+  const handleDelegationCheckFailure = (error: ActionError) => {
+    setDelegationCheckError(error);
+  };
   const shouldShowDelegationCheck = !!availableActions?.includes(DelegationAction.DELEGATE);
-  const canDelegate = useDelegationCheck(availablePackageIds, shouldShowDelegationCheck);
+  const canDelegate = useDelegationCheck(
+    availablePackageIds,
+    shouldShowDelegationCheck,
+    handleDelegationCheckFailure,
+  );
 
   return (
     <div className={classes.accessAreaContent}>
       <Paragraph>{area.description}</Paragraph>
+      {delegationCheckError && (
+        <Alert data-color='danger'>
+          <Heading level={3}>
+            {t('access_packages.delegation_check.delegation_check_error_heading')}
+          </Heading>
+          <TechnicalErrorParagraphs
+            message={t('access_packages.delegation_check.delegation_check_error_message_plural', {
+              count: 2,
+            })}
+            status={delegationCheckError.httpStatus}
+            time={delegationCheckError.timestamp}
+          />
+        </Alert>
+      )}
       {packages.assigned.length > 0 && (
         <ListBase>
           {packages.assigned.map((pkg) => (

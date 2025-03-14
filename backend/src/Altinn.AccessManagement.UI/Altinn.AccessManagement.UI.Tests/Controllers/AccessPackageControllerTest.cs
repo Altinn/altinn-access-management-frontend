@@ -278,8 +278,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 "906aec0d-ad1f-496b-a0bb-40f81b3303cb",
                 "a03af7d5-74b9-4f18-aead-5d47edc36be5",
                 "cfe074fa-0a66-4a4b-974a-5d1db8eb94e6",
-                "f7e02568-90b6-477d-8abb-44984ddeb1f9",
-                "fa84bffc-ac17-40cd-af9c-61c89f92e44c"
+                "f7e02568-90b6-477d-8abb-44984ddeb1f9"
             };
             List<AccessPackageDelegationCheckResponse> expectedResult = Util.GetMockData<List<AccessPackageDelegationCheckResponse>>(_expectedDataPath + "/AccessPackage/PackageDelegationCheck_returns_list.json");
 
@@ -337,10 +336,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PackageDelegationCheck_UnexpectedError()
         {
             // Arrange
-            string reporteeUuid = "167536b5-f8ed-4c5a-8f48-0279507e53ae"; // valid reportee that will trigger an unexpected exception in mock client
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             var packageIds = new List<string>
             {
-                "0bb5963e-df17-4f35-b913-3ce10a34b866"
+                "fa84bffc-ac17-40cd-af9c-61c89f92e44c"  // valid package id that will trigger an unexpected exception in mock client
             };
             
             // Act

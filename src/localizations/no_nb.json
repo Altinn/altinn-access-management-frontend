@@ -253,7 +253,12 @@
     "package_deletion_success": "Fullmakten til {{accessPackage}} er fjernet fra {{name}}.",
     "package_deletion_error": "Det var ikke mulig å fjerne fullmakten til {{accessPackage}} fra {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
-    "package_number_of_resources": "{{count}} tjenester"
+    "package_number_of_resources": "{{count}} tjenester",
+    "delegation_check": {
+      "delegation_check_error_heading": "Teknisk feil",
+      "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer.",
+      "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til en eller flere tilgangspakker. Vennligst kontakt Altinn brukerservice hvis problemet vedvarer."
+    }
   },
   "role": {
     "current_roles_title": "Fullmakt til {{count}} rolle(r)",

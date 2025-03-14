@@ -22,6 +22,7 @@ import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
 import { useDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import { useState } from 'react';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -60,8 +61,25 @@ export const AccessPackageInfo = ({
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
+  const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
+
+  const handleDelegationCheckFailure = (error: ActionError) => {
+    setDelegationCheckError(error);
+  };
+
   const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
-  const canDelegate = useDelegationCheck([accessPackage.id], shouldShowDelegationCheck);
+
+  // memorize this to prevent unnecessary re-renders
+  const accessPackageIds = React.useMemo(
+    () => (accessPackage ? [accessPackage.id] : []),
+    [accessPackage],
+  );
+
+  const canDelegate = useDelegationCheck(
+    accessPackageIds,
+    shouldShowDelegationCheck,
+    handleDelegationCheckFailure,
+  );
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
@@ -80,6 +98,21 @@ export const AccessPackageInfo = ({
           {accessPackage?.name}
         </Heading>
       </div>
+      {!!delegationCheckError && (
+        <Alert
+          data-color='danger'
+          data-size='sm'
+        >
+          <Heading level={3}>
+            {t('access_packages.delegation_check.delegation_check_error_heading')}
+          </Heading>
+          <TechnicalErrorParagraphs
+            message={t('access_packages.delegation_check.delegation_check_error_message_singular')}
+            status={delegationCheckError.httpStatus}
+            time={delegationCheckError.timestamp}
+          />
+        </Alert>
+      )}
       {!!actionError && (
         <Alert
           data-color='danger'
@@ -150,7 +183,7 @@ export const AccessPackageInfo = ({
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
           <Button
-            disabled={!canDelegate}
+            disabled={!canDelegate(accessPackage.id)}
             onClick={() => onDelegate(accessPackage)}
           >
             {t('common.give_poa')}

@@ -114,14 +114,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
         {
-            if (delegationCheckRequest.ReporteeUuid.ToString() == "167536b5-f8ed-4c5a-8f48-0279507e53ae")
-            {
-                throw new Exception("Reportee uuid is not valid");
-            }
-
             var res = new List<AccessPackageDelegationCheckResponse>();
             foreach (var packageId in delegationCheckRequest.PackageIds)
-            {
+            {   
+                if(packageId.ToString() == "fa84bffc-ac17-40cd-af9c-61c89f92e44c")
+                {
+                    throw new Exception("Package id is not valid");
+                }
                 try {
                     var check = Util.GetMockData<AccessPackageDelegationCheckResponse>($"{dataFolder}/AccessPackage/DelegationCheck/{packageId}.json");
                     res.Add(check);

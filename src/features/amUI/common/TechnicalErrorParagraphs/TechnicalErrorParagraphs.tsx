@@ -10,12 +10,15 @@ export interface TechnicalErrorParagraphsProps {
   time: string;
   /*** The size of the paragraph text */
   size?: ParagraphProps['data-size'];
+  /*** Optional override of message to display */
+  message?: string;
 }
 
 export const TechnicalErrorParagraphs = ({
   status,
   time,
   size = 'sm',
+  message = undefined,
 }: TechnicalErrorParagraphsProps) => {
   const { t } = useTranslation();
   return (
@@ -24,7 +27,7 @@ export const TechnicalErrorParagraphs = ({
         data-size={size}
         variant='long'
       >
-        {t('common.technical_error')}
+        {message ? message : t('common.technical_error')}
       </Paragraph>
       <Paragraph data-size={size}>
         {t('common.time_of_error', {

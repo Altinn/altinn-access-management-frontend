@@ -41,12 +41,7 @@
   },
   {
     "packageId": "f7e02568-90b6-477d-8abb-44984ddeb1f9",
-    "canDelegate": false,
-    "detailCode": "MissingDelegationAccess"
-  },
-  {
-    "packageId": "fa84bffc-ac17-40cd-af9c-61c89f92e44c",
-    "canDelegate": false,
-    "detailCode": "AccessListValidationFail"
+    "canDelegate": true,
+    "detailCode": "DelegationAccess"
   }
 ]
