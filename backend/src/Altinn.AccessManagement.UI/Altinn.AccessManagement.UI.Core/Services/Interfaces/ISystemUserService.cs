@@ -34,9 +34,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of all system users for specified party</returns>
+        /// <returns>List of all agent system users for specified party</returns>
         Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Return a specific agent system user
         /// </summary>
@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">Id of system user to get</param>
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Requested system user</returns>
+        /// <returns>Requested agent system user</returns>
         Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>

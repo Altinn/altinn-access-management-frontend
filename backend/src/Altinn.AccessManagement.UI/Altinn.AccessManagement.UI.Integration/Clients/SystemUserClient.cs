@@ -169,12 +169,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<SystemUser>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClient // GetSpecificSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserClient // GetAgentSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetSpecificSystemUser // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetAgentSystemUser // Exception");
                 throw;
             }
         }
@@ -195,12 +195,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<List<SystemUser>>(responseContent, _jsonSerializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClient // GetSystemUsersForParty // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserClient // GetAgentSystemUsersForParty // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return new List<SystemUser>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetSystemUsersForParty // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetAgentSystemUsersForParty // Exception");
                 throw;
             }
         }

@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="id">Id of system user to get</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Requested system user</returns>
+        /// <returns>Requested agent system user</returns>
         Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken);
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of all system users for specified party</returns>
+        /// <returns>List of all agent system users for specified party</returns>
         Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken);
     }
 }

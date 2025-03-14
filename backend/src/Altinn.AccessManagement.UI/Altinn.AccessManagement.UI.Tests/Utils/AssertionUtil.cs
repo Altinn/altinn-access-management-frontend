@@ -438,8 +438,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            AssertCollections(expected.AccessPackages, actual.AccessPackages, AssertEqual);
         }
-        
 
         public static void AssertEqual(AccessPackage expected, AccessPackage actual)
         {
