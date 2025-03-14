@@ -124,7 +124,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<CustomerList> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
         {
             string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemRegisterClientMock).Assembly.Location).LocalPath), "Data");
-            string jsonFile = customerType == CustomerRoleType.Regnskapsforer ? "regnskapsforerCustomers.json" : "revisorCustomers.json";
+            string jsonFile = customerType switch
+                {
+                    CustomerRoleType.Revisor => "revisorCustomers.json",
+                    CustomerRoleType.Regnskapsforer => "regnskapsforerCustomers.json",
+                    CustomerRoleType.Forretningsforer => "forretningsforerCustomers.json",
+                    _ => throw new ArgumentException("Invalid customer type")
+                }; 
             CustomerList systemUsers = Util.GetMockData<CustomerList>($"{dataFolder}/Register/Parties/{jsonFile}");
             /*
             for (int i = 0; i < 100; i++)

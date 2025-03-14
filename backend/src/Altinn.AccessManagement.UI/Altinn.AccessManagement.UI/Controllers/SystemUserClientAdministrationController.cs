@@ -99,11 +99,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Used by the party
+        /// Get all regnskapsforer customers for the party
         /// </summary>
         /// <param name="partyUuid">Party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>List of customer party</returns>
         [Authorize]
         [HttpGet("{partyUuid}/customers/regnskapsforer")]
         public async Task<ActionResult> GetPartyRegnskapsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
@@ -113,16 +113,30 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Used by the party
+        /// Get all revisor customers for the party
         /// </summary>
         /// <param name="partyUuid">Party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
+        /// <returns>List of customer party</returns>
         [Authorize]
         [HttpGet("{partyUuid}/customers/revisor")]
         public async Task<ActionResult> GetPartyRevisorCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
             Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
+            return Ok(customers.Value);
+        }
+
+        /// <summary>
+        /// Get all forretningsforer customers for the party
+        /// </summary>
+        /// <param name="partyUuid">Party user represents</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of customer party</returns>
+        [Authorize]
+        [HttpGet("{partyUuid}/customers/forretningsforer")]
+        public async Task<ActionResult> GetPartyForretningsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
+        {
+            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Forretningsforer, cancellationToken);
             return Ok(customers.Value);
         }
     }

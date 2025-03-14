@@ -19,5 +19,10 @@ namespace Altinn.AccessManagement.UI.Core.Enums
         /// Revisor customer
         /// </summary>
         Revisor = 2,
+
+        /// <summary>
+        /// Forretningsfører customer
+        /// </summary>
+        Forretningsforer = 3,
     }
 }

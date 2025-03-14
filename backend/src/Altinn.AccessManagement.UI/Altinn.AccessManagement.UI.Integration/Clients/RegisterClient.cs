@@ -191,6 +191,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     CustomerRoleType.Revisor => $"internal/parties/{partyUuid}/customers/ccr/revisor",
                     CustomerRoleType.Regnskapsforer => $"internal/parties/{partyUuid}/customers/ccr/regnskapsforer",
+                    CustomerRoleType.Forretningsforer => $"internal/parties/{partyUuid}/customers/ccr/forretningsforer",
                     _ => throw new ArgumentException("Invalid customer type")
                 }; 
                 
