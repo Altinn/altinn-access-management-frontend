@@ -37,7 +37,7 @@
   {
     "packageId": "cfe074fa-0a66-4a4b-974a-5d1db8eb94e6",
     "canDelegate": false,
-    "detailCode": "AlreadyDelegated"
+    "detailCode": "AccessListValidationFail"
   },
   {
     "packageId": "f7e02568-90b6-477d-8abb-44984ddeb1f9",
