@@ -83,50 +83,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Used by the party
-        /// </summary>
-        /// <param name="partyId">Party user represents</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
-        [Authorize]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("agent/{partyId}")]
-        public async Task<ActionResult> GetAgentSystemUsersForParty([FromRoute] int partyId, CancellationToken cancellationToken)
-        {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            Result<List<SystemUserFE>> list = await _systemUserService.GetAgentSystemUsersForParty(partyId, languageCode, cancellationToken);
-
-            if (list.IsProblem)
-            {
-                return list.Problem.ToActionResult();
-            }
-
-            return Ok(list.Value);
-        }
-
-        /// <summary>
-        /// Used by the party
-        /// </summary>
-        /// <param name="partyId">Party user represents</param>
-        /// <param name="systemUserGuid">System user id to get</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpGet("agent/{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> GetAgentSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
-        {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            SystemUserFE details = await _systemUserService.GetAgentSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
-            
-            if (details == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(details);
-        }
-        
-        /// <summary>
         /// Get all agent system users for given party
         /// </summary>
         /// <param name="partyId">Party user represents</param>
