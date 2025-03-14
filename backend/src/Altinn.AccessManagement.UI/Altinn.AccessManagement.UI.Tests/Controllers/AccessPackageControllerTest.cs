@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -257,5 +258,102 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.False(response.IsSuccessStatusCode);
         }
 
-    }
+        /// <summary>
+        ///    Test case: Checks if the user can delegate a a list of Roles
+        ///    Expected: Returns a list of AccessPackageDelegationCheckResponse
+        ///    with the result of the delegation check
+        /// </summary>
+        [Fact]
+        public async Task PackageDelegationCheck_handles_list()
+        {
+            // Arrange
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var packageIds = new List<string>
+            {
+                "0bb5963e-df17-4f35-b913-3ce10a34b866",
+                "04c5a001-5249-4765-ae8e-58617c404223",
+                "5eb07bdc-5c3c-4c85-add3-5405b214b8a3",
+                "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb",
+                "78c21107-7d2d-4e85-af82-47ea0e47ceca",
+                "906aec0d-ad1f-496b-a0bb-40f81b3303cb",
+                "a03af7d5-74b9-4f18-aead-5d47edc36be5",
+                "cfe074fa-0a66-4a4b-974a-5d1db8eb94e6",
+                "f7e02568-90b6-477d-8abb-44984ddeb1f9"
+            };
+            List<AccessPackageDelegationCheckResponse> expectedResult = Util.GetMockData<List<AccessPackageDelegationCheckResponse>>(_expectedDataPath + "/AccessPackage/PackageDelegationCheck_returns_list.json");
+
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/accesspackage/delegationcheck", 
+                new StringContent(
+                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }), 
+                        System.Text.Encoding.UTF8, "application/json"
+                    )
+                );
+            
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(response.Content);
+
+            List<AccessPackageDelegationCheckResponse> actual = JsonSerializer.Deserialize<List<AccessPackageDelegationCheckResponse>>(await response.Content.ReadAsStringAsync(), options);
+            AssertionUtil.AssertCollections(actual, expectedResult, AssertionUtil.AssertEqual);  
+        }
+
+        /// <summary>
+        ///    Test case: Handles empty list of packageIds
+        ///    Expected: Returns a bad request status code
+        /// </summary>
+        [Fact]
+        public async Task PackageDelegationCheck_BadRequest()
+        {
+            // Arrange
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var packageIds = new List<string>();
+            
+            // Act
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/accesspackage/delegationcheck", 
+                new StringContent(
+                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }), 
+                        System.Text.Encoding.UTF8, "application/json"
+                    )
+                );
+            
+            var content = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+         /// <summary>
+        ///    Test case: Handles unexpected error
+        ///    Expected: Returns internal server error
+        /// </summary>
+        [Fact]
+        public async Task PackageDelegationCheck_UnexpectedError()
+        {
+            // Arrange
+            string reporteeUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            var packageIds = new List<string>
+            {
+                "fa84bffc-ac17-40cd-af9c-61c89f92e44c"  // valid package id that will trigger an unexpected exception in mock client
+            };
+            
+            // Act
+            HttpResponseMessage response = await _client.PostAsync(
+                $"accessmanagement/api/v1/accesspackage/delegationcheck", 
+                new StringContent(
+                        JsonSerializer.Serialize(new { packageIds, reporteeUuid }), 
+                        System.Text.Encoding.UTF8, "application/json"
+                    )
+                );
+            
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+    }   
 }

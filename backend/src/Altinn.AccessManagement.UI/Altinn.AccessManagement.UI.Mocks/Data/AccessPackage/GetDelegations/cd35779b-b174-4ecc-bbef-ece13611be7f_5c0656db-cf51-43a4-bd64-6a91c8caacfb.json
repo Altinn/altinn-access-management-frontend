@@ -69,5 +69,55 @@
       "DelegatedTo": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
       "LastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
     }
+  },
+  {
+    "AccessPackage": {
+      "provider": {
+        "id": "73dfe32a-8f21-465c-9242-40d82e61f320",
+        "name": "Digdir",
+        "refId": null
+      },
+      "entityType": {
+        "id": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+        "providerId": "323f9ff9-11ad-4af3-8ccb-0db7bdb71d75",
+        "name": "Organisasjon"
+      },
+     "area": {
+        "id": "6e152c10-0f63-4060-9b14-66808e7ac320",
+        "name": "Energi, vann,avløp og avfall",
+        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til energi, vann,avløp og avfall.",
+        "iconUrl": "https://www.svgrepo.com/show/358402/water-glass.svg"
+      },
+      "id": "fef4aac0-d227-4ef6-834b-cc2eb4b942ed",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "areaId": "a8834a7c-ed89-4c73-b5d5-19a2347f3b13",
+      "name": "Samle opp og behandle avløpsvann",
+      "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til samle opp og behandle avløpsvann. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
+      "isDelegable": true,
+      "Resources": [
+        {
+          "Id": "appid-402",
+          "Name": "Det magiske klesskapet"
+        },
+        {
+          "Id": "appid-513",
+          "Name": "Kaffemaskinen i 5. etasje"
+        }
+      ]
+    },
+    "To": {
+      "Name": "Intelligent Albatross",
+      "Uuid": "5c0656db-cf51-43a4-bd64-6a91c8caacfb"
+    },
+    "From": {
+      "Name": "DISKRET NÆR TIGER AS",
+      "Uuid": "cd35779b-b174-4ecc-bbef-ece13611be7f"
+    },
+    "AccessDetails": {
+      "DelegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "DelegatedTo": "5c0656db-cf51-43a4-bd64-6a91c8caacfb",
+      "LastChangedOn": "2024-11-22T14:57:39.2568955+01:00"
+    }
   }
 ]

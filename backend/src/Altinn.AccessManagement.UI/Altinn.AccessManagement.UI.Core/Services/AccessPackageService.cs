@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -96,6 +97,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<HttpResponseMessage> CreateDelegation(string party, Guid to, string packageId, string languageCode)
         {
             return await _accessManagementClient.CreateAccessPackageDelegation(party, to, packageId, languageCode);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ActionResult<List<AccessPackageDelegationCheckResponse>>> DelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        {
+            return await _accessPackageClient.AccessPackageDelegationCheck(delegationCheckRequest);
         }
     }
 }
