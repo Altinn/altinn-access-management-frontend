@@ -9,10 +9,10 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    ///     Test class for <see cref="SystemUserClientAdministrationControllerTest"></see>
+    ///     Test class for <see cref="SystemUserAgentDelegationControllerTest"></see>
     /// </summary>
-    [Collection("SystemUserClientAdministrationControllerTest")]
-    public class SystemUserClientAdministrationControllerTest : IClassFixture<CustomWebApplicationFactory<SystemUserClientAdministrationController>>
+    [Collection("SystemUserAgentDelegationControllerTest")]
+    public class SystemUserAgentDelegationControllerTest : IClassFixture<CustomWebApplicationFactory<SystemUserAgentDelegationController>>
     {
         private readonly HttpClient _client;
         private readonly string _expectedDataPath = "Data/ExpectedResults";
@@ -21,7 +21,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Constructor setting up factory, test client and dependencies
         /// </summary>
         /// <param name="factory">CustomWebApplicationFactory</param>
-        public SystemUserClientAdministrationControllerTest(CustomWebApplicationFactory<SystemUserClientAdministrationController> factory)
+        public SystemUserAgentDelegationControllerTest(CustomWebApplicationFactory<SystemUserAgentDelegationController> factory)
         {
             _client = SetupUtils.GetTestClient(factory);
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
@@ -72,24 +72,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetRegnskapsforerClientDelegation checks that deletated regnskapsforer customers are returned
-        ///     Expected: GetRegnskapsforerClientDelegation returns delegations
+        ///     Test case: GetRegnskapsforerAgentDelegation checks that deletated regnskapsforer customers are returned
+        ///     Expected: GetRegnskapsforerAgentDelegation returns delegations
         /// </summary>
         [Fact]
-        public async Task GetRegnskapsforerClientDelegation_ReturnsDelegations()
+        public async Task GetRegnskapsforerAgentDelegation_ReturnsDelegations()
         {
             // Arrange
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
-            string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerClientDelegations.json");
-            List<ClientDelegationFE> expectedResponse = Util.GetMockData<List<ClientDelegationFE>>(path);
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerAgentDelegations.json");
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyId}/{systemUserId}/delegation");
             string result = await httpResponse.Content.ReadAsStringAsync();
             
-            List<ClientDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
+            List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -97,22 +97,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetRevisorClientDelegation checks that deletated revisor customers are returned
-        ///     Expected: GetRevisorClientDelegation returns delegations
+        ///     Test case: GetRevisorAgentDelegation checks that deletated revisor customers are returned
+        ///     Expected: GetRevisorAgentDelegation returns delegations
         /// </summary>
         [Fact]
-        public async Task GetRevisorClientDelegation_ReturnsDelegations()
+        public async Task GetRevisorAgentDelegation_ReturnsDelegations()
         {
             // Arrange
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string partyId = "51329012";
             string systemUserId = "244c56a5-3737-44ac-8f3b-8697c5e281da";
-            string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorClientDelegations.json");
-            List<ClientDelegationFE> expectedResponse = Util.GetMockData<List<ClientDelegationFE>>(path);
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorAgentDelegations.json");
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyId}/{systemUserId}/delegation");
-            List<ClientDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientDelegationFE>>();
+            List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -120,11 +120,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: PostRegnskapsforerClientDelegation checks that delegation is added
-        ///     Expected: PostRegnskapsforerClientDelegation returns delegations
+        ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
+        ///     Expected: PostRegnskapsforerAgentDelegation returns delegations
         /// </summary>
         [Fact]
-        public async Task PostRegnskapsforerClientDelegation_ReturnsTrue()
+        public async Task PostRegnskapsforerAgentDelegation_ReturnsTrue()
         {
             // Arrange
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
@@ -143,11 +143,11 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: PostRevisorClientDelegation checks that delegation is added
-        ///     Expected: PostRevisorClientDelegation returns delegations
+        ///     Test case: PostRevisorAgentDelegation checks that delegation is added
+        ///     Expected: PostRevisorAgentDelegation returns delegations
         /// </summary>
         [Fact]
-        public async Task PostRevisorClientDelegation_ReturnsTrue()
+        public async Task PostRevisorAgentDelegation_ReturnsTrue()
         {
             // Arrange
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";

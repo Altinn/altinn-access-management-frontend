@@ -8,26 +8,26 @@ using Altinn.Authorization.ProblemDetails;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    /// Mock class for <see cref="ISystemUserClientAdministrationClient"></see> interface
+    /// Mock class for <see cref="ISystemUserAgentDelegationClient"></see> interface
     /// </summary>
-    public class SystemUserClientAdministrationClientMock : ISystemUserClientAdministrationClient
+    public class SystemUserAgentDelegationClientMock : ISystemUserAgentDelegationClient
     {
         private readonly string dataFolder;
    
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemUserClientAdministrationClientMock"/> class
+        /// Initializes a new instance of the <see cref="SystemUserAgentDelegationClientMock"/> class
         /// </summary>
-        public SystemUserClientAdministrationClientMock()
+        public SystemUserAgentDelegationClientMock()
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
         }
 
-        public Task<List<ClientDelegation>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            string jsonFile = systemUserGuid == new Guid("61844188-3789-4b84-9314-2be1fdbc6633") ? "regnskapsforerClientDelegations.json" : "revisorClientDelegations.json";
-            List<ClientDelegation> delegations = Util.GetMockData<List<ClientDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
+            string jsonFile = systemUserGuid == new Guid("61844188-3789-4b84-9314-2be1fdbc6633") ? "regnskapsforerAgentDelegations.json" : "revisorAgentDelegations.json";
+            List<AgentDelegation> delegations = Util.GetMockData<List<AgentDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
 
             return Task.FromResult(delegations);
         }

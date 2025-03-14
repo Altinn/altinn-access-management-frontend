@@ -3,7 +3,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
     /// <summary>
     /// A client delegation to a system user
     /// </summary>
-    public class ClientDelegationFE
+    public class AgentDelegationFE
     {
         /// <summary>
         /// Delegated party uuid

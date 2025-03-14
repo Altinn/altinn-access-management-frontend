@@ -18,7 +18,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
     /// client that integrates with the platform register api
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class SystemUserClientAdministrationClient : ISystemUserClientAdministrationClient
+    public class SystemUserAgentDelegationClient : ISystemUserAgentDelegationClient
     {
         private readonly ILogger _logger;
         private readonly HttpClient _client;
@@ -28,14 +28,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemUserClientAdministrationClient"/> class
+        /// Initializes a new instance of the <see cref="SystemUserAgentDelegationClient"/> class
         /// </summary>
         /// <param name="httpClient">http client</param>
         /// <param name="logger">the handler for logger service</param>
         /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
         /// <param name="platformSettings"> platform settings configuration</param>
         /// <param name="accessTokenProvider">the handler for access token generator</param>
-        public SystemUserClientAdministrationClient(
+        public SystemUserAgentDelegationClient(
             HttpClient httpClient,
             ILogger<RegisterClient> logger,
             IHttpContextAccessor httpContextAccessor,
@@ -51,28 +51,28 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<ClientDelegation>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             // TODO: vi vet ikke hva denne returnerer enda
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/client/{partyId}/{systemUserGuid}/delegation";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/delegation";
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<List<ClientDelegation>>(responseContent, _serializerOptions);
+                    return JsonSerializer.Deserialize<List<AgentDelegation>>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientAdministrationClient // GetSystemUserClientDelegations // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // GetSystemUserAgentDelegations // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientAdministrationClient // GetSystemUserClientDelegations // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // GetSystemUserAgentDelegations // Exception");
                 throw;
             }
         }
@@ -83,7 +83,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/client/{partyId}/{systemUserGuid}/delegation";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/delegation";
 
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -93,13 +93,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<bool>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientAdministrationClient // AddClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientAdministrationClient // AddClient // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Exception");
                 throw;
             }
         }
@@ -110,7 +110,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/client/{partyId}/{systemUserGuid}/delegation";
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/delegation";
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -120,13 +120,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                     return JsonSerializer.Deserialize<bool>(responseContent, _serializerOptions);
                 }
 
-                _logger.LogError("AccessManagement.UI // SystemUserClientAdministrationClient // RemoveClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
                 return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClientAdministrationClient // RemoveClient // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Exception");
                 throw;
             }
         }

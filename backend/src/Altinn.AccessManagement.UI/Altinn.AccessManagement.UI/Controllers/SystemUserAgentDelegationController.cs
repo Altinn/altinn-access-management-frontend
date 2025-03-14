@@ -22,20 +22,20 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// The System User could also denote Single Rights or Rights Packages delegated to it
     /// from the Party; for the purpose of integrating the Product with the Service.
     /// </summary>
-    [Route("accessmanagement/api/v1/systemuser/clientadministration")]
+    [Route("accessmanagement/api/v1/systemuser/agentdelegation")]
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
-    public class SystemUserClientAdministrationController : ControllerBase
+    public class SystemUserAgentDelegationController : ControllerBase
     {
-        private readonly ISystemUserClientAdministrationService _systemUserClientAdministrationService;
+        private readonly ISystemUserAgentDelegationService _systemUserAgentDelegationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
-        /// Constructor for <see cref="SystemUserClientAdministrationController"/>
+        /// Constructor for <see cref="SystemUserAgentDelegationController"/>
         /// </summary>
-        public SystemUserClientAdministrationController(ISystemUserClientAdministrationService systemUserClientAdministrationService, IHttpContextAccessor httpContextAccessor)
+        public SystemUserAgentDelegationController(ISystemUserAgentDelegationService systemUserAgentDelegationService, IHttpContextAccessor httpContextAccessor)
         {
-            _systemUserClientAdministrationService = systemUserClientAdministrationService;
+            _systemUserAgentDelegationService = systemUserAgentDelegationService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -48,9 +48,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{systemUserGuid}/delegation")]
-        public async Task<ActionResult> GetSystemUserClientDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSystemUserAgentDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientDelegationFE>> result = await _systemUserClientAdministrationService.GetSystemUserClientDelegations(partyId, systemUserGuid, cancellationToken);
+            Result<List<AgentDelegationFE>> result = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
             return Ok(result.Value);
         }
 
@@ -66,7 +66,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost("{partyId}/{systemUserGuid}/delegation/{customerPartyId}")]
         public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] int customerPartyId, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserClientAdministrationService.AddClient(partyId, systemUserGuid, customerPartyId, cancellationToken);
+            Result<bool> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, customerPartyId, cancellationToken);
             
             if (result.IsProblem)
             {
@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpDelete("{partyId}/{systemUserGuid}/delegation/{customerPartyId}")]
         public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] int customerPartyId, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserClientAdministrationService.RemoveClient(partyId, systemUserGuid, customerPartyId, cancellationToken);
+            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, systemUserGuid, customerPartyId, cancellationToken);
 
             if (result.IsProblem)
             {
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/regnskapsforer")]
         public async Task<ActionResult> GetPartyRegnskapsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Regnskapsforer, cancellationToken);
+            Result<List<ClientPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Regnskapsforer, cancellationToken);
             return Ok(customers.Value);
         }
 
@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/revisor")]
         public async Task<ActionResult> GetPartyRevisorCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
+            Result<List<ClientPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
             return Ok(customers.Value);
         }
 
@@ -136,7 +136,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/forretningsforer")]
         public async Task<ActionResult> GetPartyForretningsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserClientAdministrationService.GetPartyCustomers(partyUuid, CustomerRoleType.Forretningsforer, cancellationToken);
+            Result<List<ClientPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Forretningsforer, cancellationToken);
             return Ok(customers.Value);
         }
     }

@@ -526,7 +526,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.OrgNo, actual.OrgNo);
         }
 
-        public static void AssertEqual(ClientDelegationFE expected, ClientDelegationFE actual)
+        public static void AssertEqual(AgentDelegationFE expected, AgentDelegationFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

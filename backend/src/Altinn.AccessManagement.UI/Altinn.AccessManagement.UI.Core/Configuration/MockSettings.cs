@@ -51,9 +51,9 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool SystemUser { get; set; }
 
         /// <summary>
-        /// Set to run SystemUserClientDelegationClient locally during runtime
+        /// Set to run SystemUserAgentDelegationClient locally during runtime
         /// </summary>
-        public bool SystemUserClientDelegation { get; set; }
+        public bool SystemUserAgentDelegation { get; set; }
 
         /// <summary>
         /// Default constructor

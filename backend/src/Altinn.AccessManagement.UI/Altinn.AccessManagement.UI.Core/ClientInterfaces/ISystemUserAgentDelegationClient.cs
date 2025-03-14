@@ -6,7 +6,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
     /// <summary>
     /// Interface for client wrapper for integration with the systemuser client delegation API
     /// </summary>
-    public interface ISystemUserClientAdministrationClient
+    public interface ISystemUserAgentDelegationClient
     {
         /// <summary>
         /// Return delegated customers for this system user
@@ -15,7 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="systemUserGuid">The system user UUID to retrieve delegated customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of delegated customers for system user</returns>
-        Task<List<ClientDelegation>> GetSystemUserClientDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
+        Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add client to system user

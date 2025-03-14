@@ -270,15 +270,15 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for SystemUserClientAdministrationController tests</param>
+        /// <param name="customFactory">Web app factory to configure test services for SystemUserAgentDelegationController tests</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserClientAdministrationController> customFactory)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<SystemUserAgentDelegationController> customFactory)
         {
-            WebApplicationFactory<SystemUserClientAdministrationController> factory = customFactory.WithWebHostBuilder(builder =>
+            WebApplicationFactory<SystemUserAgentDelegationController> factory = customFactory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<ISystemUserClientAdministrationClient, SystemUserClientAdministrationClientMock>();
+                    services.AddTransient<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClientMock>();
                     services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
