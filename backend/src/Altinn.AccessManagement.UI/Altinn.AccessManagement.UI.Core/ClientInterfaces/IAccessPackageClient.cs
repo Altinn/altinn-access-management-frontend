@@ -55,10 +55,10 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId);
 
         /// <summary>
-        ///   Checks if the user can delegate roles on behalf of the specified reportee
+        ///   Checks if the user can delegate access packages on behalf of the specified reportee
         /// </summary>
         /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>
-        /// <returns>The response containing whether or not the user can delegate the roles</returns>
+        /// <returns>The response containing whether or not the user can delegate the packages</returns>
         Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest);
     }
 }
