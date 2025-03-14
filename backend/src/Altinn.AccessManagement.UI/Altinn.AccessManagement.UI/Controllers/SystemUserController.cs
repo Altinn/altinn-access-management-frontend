@@ -83,6 +83,50 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
         
         /// <summary>
+        /// Get all agent system users for given party
+        /// </summary>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>List of agent system users</returns>
+        [Authorize]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet("agent/{partyId}")]
+        public async Task<ActionResult> GetAgentSystemUsersForParty([FromRoute] int partyId, CancellationToken cancellationToken)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            Result<List<SystemUserFE>> list = await _systemUserService.GetAgentSystemUsersForParty(partyId, languageCode, cancellationToken);
+
+            if (list.IsProblem)
+            {
+                return list.Problem.ToActionResult();
+            }
+
+            return Ok(list.Value);
+        }
+
+        /// <summary>
+        /// Get a single agent system users for given party
+        /// </summary>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="systemUserGuid">Agent system user id to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A single agent system user</returns>
+        [Authorize]
+        [HttpGet("agent/{partyId}/{systemUserGuid}")]
+        public async Task<ActionResult> GetAgentSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            SystemUserFE details = await _systemUserService.GetAgentSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
+
+            if (details == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(details);
+        }
+
+        /// <summary>
         /// Endpoint for creating a new System User for the choosen reportee.The reportee is taken from the AltinnPartyId cookie 
         /// 
         /// Expects backend in Authenticaiton and in Access Management to perform authorization ch
