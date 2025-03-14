@@ -4,7 +4,7 @@ using Microsoft.Identity.Client;
 namespace Altinn.AccessManagement.UI.Core.Models
 {
     /// <summary>
-    /// The response of a delegation check
+    /// The input to a delegation check
     /// </summary>
     public class DelegationCheckRequest
     {
