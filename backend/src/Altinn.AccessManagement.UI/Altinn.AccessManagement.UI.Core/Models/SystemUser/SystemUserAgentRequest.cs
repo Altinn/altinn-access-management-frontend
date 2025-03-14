@@ -68,5 +68,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [JsonIgnore]
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// The set of Access Packages requested for this agent system user. Must be equal to or less than the set defined in the Registered System.
+        /// </summary>
+        [Required]
+        [JsonPropertyName("accessPackages")]
+        public List<RegisteredSystemAccessPackage> AccessPackages { get; set; } = [];
     }
 }
