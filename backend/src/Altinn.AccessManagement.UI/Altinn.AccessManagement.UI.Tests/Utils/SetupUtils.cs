@@ -282,7 +282,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
-                    services.AddTransient<IRegisterClientV2, RegisterClientV2Mock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();

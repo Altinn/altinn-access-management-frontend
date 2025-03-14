@@ -1,7 +1,10 @@
 ﻿using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
+using Altinn.AccessManagement.UI.Core.Models.Register;
+using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
@@ -116,6 +119,26 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             return Task.FromResult(new List<PartyName> { });
+        }
+
+        public Task<CustomerList> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
+        {
+            string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemRegisterClientMock).Assembly.Location).LocalPath), "Data");
+            string jsonFile = customerType == CustomerRoleType.Regnskapsforer ? "regnskapsforerCustomers.json" : "revisorCustomers.json";
+            CustomerList systemUsers = Util.GetMockData<CustomerList>($"{dataFolder}/Register/Parties/{jsonFile}");
+            /*
+            for (int i = 0; i < 100; i++)
+            {
+                systemUsers.Data.Add(new PartyRecord()
+                {
+                    DisplayName = string.Join("", Enumerable.Repeat(0, 15).Select(n => (char)new Random().Next(100,120))),
+                    PartyId= i,
+                    OrganizationIdentifier = "123456789",
+                    PartyUuid = Guid.NewGuid()
+                });
+            }
+            */
+            return Task.FromResult(systemUsers);
         }
     }
 }

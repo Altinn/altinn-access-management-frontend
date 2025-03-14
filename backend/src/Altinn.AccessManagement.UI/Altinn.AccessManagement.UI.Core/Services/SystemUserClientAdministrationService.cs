@@ -12,25 +12,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserClientAdministrationService : ISystemUserClientAdministrationService
     {
         private readonly ISystemUserClientAdministrationClient _systemUserClientAdministrationClient;
-        private readonly IRegisterClientV2 _registerClientV2;
+        private readonly IRegisterClient _registerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
         /// </summary>
         /// <param name="systemUserClientAdministrationClient">The system user client administration client.</param>
-        /// <param name="registerClientV2">The register client v2.</param>
+        /// <param name="registerClient">The register client</param>
         public SystemUserClientAdministrationService(
             ISystemUserClientAdministrationClient systemUserClientAdministrationClient,
-            IRegisterClientV2 registerClientV2)
+            IRegisterClient registerClient)
         {
             _systemUserClientAdministrationClient = systemUserClientAdministrationClient;
-            _registerClientV2 = registerClientV2;
+            _registerClient = registerClient;
         }
 
         /// <inheritdoc />
         public async Task<Result<List<ClientPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
         {
-            CustomerList regnskapsforerCustomers = await _registerClientV2.GetPartyCustomers(partyUuid, customerType, cancellationToken);
+            CustomerList regnskapsforerCustomers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
             return MapCustomerListToCustomerFE(regnskapsforerCustomers);
         }
 

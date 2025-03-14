@@ -376,12 +376,10 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     {
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClientMock>();
         services.AddSingleton<ISystemUserClientAdministrationClient, SystemUserClientAdministrationClientMock>();
-        services.AddSingleton<IRegisterClientV2, RegisterClientV2Mock>();
     }
     else 
     {
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClient>();
         services.AddSingleton<ISystemUserClientAdministrationClient, SystemUserClientAdministrationClient>();
-        services.AddSingleton<IRegisterClientV2, RegisterClientV2>();
     }
 }

@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterClientV2"/> class
+        /// Initializes a new instance of the <see cref="SystemUserClientAdministrationClient"/> class
         /// </summary>
         /// <param name="httpClient">http client</param>
         /// <param name="logger">the handler for logger service</param>
@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="accessTokenProvider">the handler for access token generator</param>
         public SystemUserClientAdministrationClient(
             HttpClient httpClient,
-            ILogger<RegisterClientV2> logger,
+            ILogger<RegisterClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings,
             IAccessTokenProvider accessTokenProvider)
