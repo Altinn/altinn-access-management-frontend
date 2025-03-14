@@ -170,9 +170,9 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        ///     Check if a set of package can be delegated
+        ///     Check if a set of packages can be delegated
         /// </summary>
-        /// <returns>If the role can be delegated and the DetailCode for why</returns>
+        /// <returns>If the packages can be delegated and the DetailCode for why</returns>
         [HttpPost]
         [Authorize]
         [Route("delegationcheck")]
