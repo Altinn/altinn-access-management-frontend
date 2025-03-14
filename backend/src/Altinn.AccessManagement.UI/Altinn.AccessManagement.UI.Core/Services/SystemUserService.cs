@@ -95,7 +95,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             if (systemUser != null)
             {
-                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
+                // TODO: do not map rights and access packages for agent system users yet. Need the access package metadata API
+                return (await MapToSystemUsersFE([systemUser], languageCode, false, cancellationToken))[0] ?? null;
             }
 
             return null;

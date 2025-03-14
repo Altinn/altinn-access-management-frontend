@@ -188,5 +188,67 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
             Assert.Equal(expectedResponse, actualResponse.ErrorCode.ToString());
         }
+
+        /// <summary>
+        ///     Test case: GetAgentSystemUsers checks that all agent systems users for given party are returned
+        ///     Expected: GetAgentSystemUsers returns the agent system users for given party
+        /// </summary>
+        [Fact]
+        public async Task GetAgentSystemUsers_ReturnsAllAgentSystemUsersNewestFirst()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "agentSystemUsers.json");
+            List<SystemUserFE> expectedResponse = Util.GetMockData<List<SystemUserFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}");
+            List<SystemUserFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SystemUserFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetAgentSystemUser checks that agent systems user with given id for given party is returned
+        ///     Expected: GetAgentSystemUser returns the agent system user with given id for given party
+        /// </summary>
+        [Fact]
+        public async Task GetAgentSystemUser_ReturnsAgentSystemUser()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "agentSystemUser.json");
+            SystemUserFE expectedResponse = Util.GetMockData<SystemUserFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+            SystemUserFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: GetAgentSystemUser checks that agent system user with given id for given party is not returned
+        ///     Expected: GetAgentSystemUser returns NotFound for the agent system user with given id for given party
+        /// </summary>
+        [Fact]
+        public async Task GetAgentSystemUser_ReturnsNotFound()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
     }
 }
