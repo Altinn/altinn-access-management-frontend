@@ -74,6 +74,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [Required]
         [JsonPropertyName("accessPackages")]
-        public List<RegisteredSystemAccessPackage> AccessPackages { get; set; }
+        public List<RegisteredSystemAccessPackage> AccessPackages { get; set; } = [];
     }
 }
