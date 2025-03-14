@@ -16,7 +16,7 @@ Run the below command to run Playwright tests with the environment in headless m
 #### Useful command line options
 
 ```
---timeout 10000: set general timeout for tests to override a long default if you want tests to fail quickly)
+--timeout 10000: set general timeout for tests to override a long default if you want tests to fail quickly
 --repeat-each 20 --workers=1: (make sure a test is not flaky in combination with 1 worker to avoid test data complexity)
 --debug: step by step mode
 --grep "test name": match test name to only run specific test(s)
