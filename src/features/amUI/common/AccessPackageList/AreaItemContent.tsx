@@ -1,5 +1,5 @@
 import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Button, Header, ListBase } from '@altinn/altinn-components';
+import { Button, ListBase } from '@altinn/altinn-components';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'react';

@@ -18,7 +18,7 @@ export const TechnicalErrorParagraphs = ({
   status,
   time,
   size = 'sm',
-  message = undefined,
+  message,
 }: TechnicalErrorParagraphsProps) => {
   const { t } = useTranslation();
   return (
@@ -27,7 +27,7 @@ export const TechnicalErrorParagraphs = ({
         data-size={size}
         variant='long'
       >
-        {message ? message : t('common.technical_error')}
+        {message ?? t('common.technical_error')}
       </Paragraph>
       <Paragraph data-size={size}>
         {t('common.time_of_error', {
