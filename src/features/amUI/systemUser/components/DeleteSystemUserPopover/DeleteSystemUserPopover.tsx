@@ -7,7 +7,7 @@ import { ButtonRow } from '../ButtonRow/ButtonRow';
 
 import classes from './DeleteSystemUserPopover.module.css';
 
-interface DeleteSystemUserWarningProps {
+interface DeleteSystemUserPopoverProps {
   integrationTitle: string;
   isDeleteError: boolean;
   isDeletingSystemUser: boolean;
@@ -21,7 +21,7 @@ export const DeleteSystemUserPopover = ({
   isDeletingSystemUser,
   handleDeleteSystemUser,
   hasAgentDelegation,
-}: DeleteSystemUserWarningProps): React.ReactNode => {
+}: DeleteSystemUserPopoverProps): React.ReactNode => {
   const { t } = useTranslation();
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
