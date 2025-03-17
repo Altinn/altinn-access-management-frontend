@@ -9,3 +9,7 @@
   font-style: italic;
   align-self: flex-end;
 }
+
+.delegationModal {
+  max-width: 60rem;
+}

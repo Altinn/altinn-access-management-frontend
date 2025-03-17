@@ -122,9 +122,7 @@ export const SystemUserAgentDelegationPageContent = ({
     >
       <Dialog
         ref={modalRef}
-        style={{
-          maxWidth: 950,
-        }}
+        className={classes.delegationModal}
         onClose={onCloseModal}
       >
         <div className={classes.flexContainer}>
