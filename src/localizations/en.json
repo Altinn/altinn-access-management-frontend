@@ -526,7 +526,9 @@
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",
-    "add_to_system_user_aria": "Add {{customerName}} to system access"
+    "add_to_system_user_aria": "Add {{customerName}} to system access",
+    "add_system_user_error": "Could not add customer",
+    "remove_system_user_error": "Could not remove customer"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",

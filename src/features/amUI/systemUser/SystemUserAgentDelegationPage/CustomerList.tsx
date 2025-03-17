@@ -141,10 +141,14 @@ const ListControls = ({
         </div>
       )}
       {isError && isAssigned && (
-        <ValidationMessage data-size='sm'>Kunne ikke fjerne kunde</ValidationMessage>
+        <ValidationMessage data-size='sm'>
+          {t('systemuser_agent_delegation.remove_system_user_error')}
+        </ValidationMessage>
       )}
       {isError && !isAssigned && (
-        <ValidationMessage data-size='sm'>Kunne ikke legge til kunde</ValidationMessage>
+        <ValidationMessage data-size='sm'>
+          {t('systemuser_agent_delegation.add_system_user_error')}
+        </ValidationMessage>
       )}
       {!isLoading && isAssigned && onRemoveCustomer && (
         <Button

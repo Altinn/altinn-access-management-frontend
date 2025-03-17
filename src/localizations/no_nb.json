@@ -524,7 +524,9 @@
     "remove_from_system_user": "Fjern fra systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",
-    "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang"
+    "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
+    "add_system_user_error": "Kunne ikke legge til kunde",
+    "remove_system_user_error": "Kunne ikke fjerne kunde"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "En eller flere tjenester eksisterer ikke, eller er ikke delegerbare.",

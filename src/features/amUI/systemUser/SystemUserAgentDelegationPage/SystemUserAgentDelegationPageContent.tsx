@@ -40,7 +40,7 @@ export const SystemUserAgentDelegationPageContent = ({
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const [delegatedIds, setDelegatedIds] = useState<string[]>(initialAssignedIds);
+  const [assignedIds, setAssignedIds] = useState<string[]>(initialAssignedIds);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [errorIds, setErrorIds] = useState<string[]>([]);
   const [assignedCustomers, setAssignedCustomers] = useState<Customer[]>(
@@ -65,13 +65,13 @@ export const SystemUserAgentDelegationPageContent = ({
 
   const onAddCustomer = (customerId: string): void => {
     const successCallback = () =>
-      setDelegatedIds((oldDelegatedIds) => [...oldDelegatedIds, customerId]);
+      setAssignedIds((oldAssignedIds) => [...oldAssignedIds, customerId]);
     mutateCustomer(assignCustomer, successCallback, customerId);
   };
 
   const onRemoveCustomer = (customerId: string): void => {
     const successCallback = () =>
-      setDelegatedIds((oldDelegatedIds) => oldDelegatedIds.filter((id) => id !== customerId));
+      setAssignedIds((oldAssignedIds) => oldAssignedIds.filter((id) => id !== customerId));
     mutateCustomer(removeCustomer, successCallback, customerId);
   };
 
@@ -99,23 +99,25 @@ export const SystemUserAgentDelegationPageContent = ({
     modalRef.current?.showModal();
   };
 
-  // need to use useCallback to get updated delegatedIds in onClose
+  // need to use useCallback to get updated assignedIds in onClose
   const onCloseModal = useCallback(() => {
     modalRef.current?.close();
-    setAssignedCustomers(getAssignedCustomers(customers, delegatedIds));
-  }, [customers, delegatedIds]);
+    setAssignedCustomers(getAssignedCustomers(customers, assignedIds));
+  }, [customers, assignedIds]);
 
   return (
     <PageContainer
       onNavigateBack={handleNavigateBack}
       pageActions={
-        <DeleteSystemUserPopover
-          integrationTitle={systemUser.integrationTitle}
-          isDeleteError={isDeleteError}
-          isDeletingSystemUser={isDeletingSystemUser}
-          handleDeleteSystemUser={handleDeleteSystemUser}
-          hasAgentDelegation={assignedCustomers.length > 0}
-        />
+        systemUser && (
+          <DeleteSystemUserPopover
+            integrationTitle={systemUser.integrationTitle}
+            isDeleteError={isDeleteError}
+            isDeletingSystemUser={isDeletingSystemUser}
+            handleDeleteSystemUser={handleDeleteSystemUser}
+            hasAgentDelegation={assignedCustomers.length > 0}
+          />
+        )
       }
     >
       <Dialog
@@ -136,7 +138,7 @@ export const SystemUserAgentDelegationPageContent = ({
           </Heading>
           <CustomerList
             list={customers}
-            assignedIds={delegatedIds}
+            assignedIds={assignedIds}
             loadingIds={loadingIds}
             errorIds={errorIds}
             onAddCustomer={onAddCustomer}
