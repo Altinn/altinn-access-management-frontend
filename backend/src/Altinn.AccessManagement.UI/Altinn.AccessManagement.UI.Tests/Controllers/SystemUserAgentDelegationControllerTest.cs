@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ClientPartyFE> expectedResponse = Util.GetMockData<List<ClientPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyUuid}/customers/regnskapsforer");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/customers/regnskapsforer");
             List<ClientPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientPartyFE>>();
 
             // Assert
@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ClientPartyFE> expectedResponse = Util.GetMockData<List<ClientPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyUuid}/customers/revisor");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/customers/revisor");
             List<ClientPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientPartyFE>>();
 
             // Assert
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<ClientPartyFE> expectedResponse = Util.GetMockData<List<ClientPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyUuid}/customers/forretningsforer");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/customers/forretningsforer");
             List<ClientPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientPartyFE>>();
 
             // Assert
