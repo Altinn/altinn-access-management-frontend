@@ -70,5 +70,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+        /// <summary>
+        ///     Test case: GetForretningsforerCustomers checks that customers are returned
+        ///     Expected: GetForretningsforerCustomers returns customers
+        /// </summary>
+        [Fact]
+        public async Task GetForretningsforerCustomers_ReturnsCustomers()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerCustomers.json");
+            List<ClientPartyFE> expectedResponse = Util.GetMockData<List<ClientPartyFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/clientadministration/{partyUuid}/customers/forretningsforer");
+            List<ClientPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ClientPartyFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
     }
 }
