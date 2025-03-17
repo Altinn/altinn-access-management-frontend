@@ -15,7 +15,7 @@ import { SystemUserPath } from '@/routes/paths';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { Customer, SystemUser } from '../types';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { DeleteSystemUserWarning } from '../components/DeleteSystemUserWarning/DeleteSystemUserWarning';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
@@ -110,7 +110,7 @@ export const SystemUserAgentDelegationPageContent = ({
       onNavigateBack={handleNavigateBack}
       pageActions={
         systemUser && (
-          <DeleteSystemUserPopover
+          <DeleteSystemUserWarning
             integrationTitle={systemUser.integrationTitle}
             isDeleteError={isDeleteError}
             isDeletingSystemUser={isDeletingSystemUser}
