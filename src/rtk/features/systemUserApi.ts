@@ -90,6 +90,10 @@ export const systemUserApi = createApi({
       query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/revisor`,
       keepUnusedDataFor: Infinity,
     }),
+    getForretningsforerCustomers: builder.query<Customer[], string>({
+      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/forretningsforer`,
+      keepUnusedDataFor: Infinity,
+    }),
     getAssignedCustomers: builder.query<
       { partyUuid: string; partyId: string }[],
       { partyId: string; systemUserId: string }
@@ -193,6 +197,7 @@ export const {
   useGetSystemUsersQuery,
   useGetRegnskapsforerCustomersQuery,
   useGetRevisorCustomersQuery,
+  useGetForretningsforerCustomersQuery,
   useGetAssignedCustomersQuery,
   useAssignCustomerMutation,
   useRemoveCustomerMutation,

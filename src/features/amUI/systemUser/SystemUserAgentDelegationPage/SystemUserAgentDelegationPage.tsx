@@ -8,6 +8,7 @@ import {
   useGetAgentSystemUserQuery,
   useGetRegnskapsforerCustomersQuery,
   useGetRevisorCustomersQuery,
+  useGetForretningsforerCustomersQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageWrapper } from '@/components';
@@ -18,25 +19,34 @@ import type { SystemUser } from '../types';
 
 import { SystemUserAgentDelegationPageContent } from './SystemUserAgentDelegationPageContent';
 
-const isRegnskapsforerSystemUser = (systemUser: SystemUser | undefined): boolean => {
-  return (
-    systemUser?.accessPackages.some(
-      (accessPackage) =>
-        accessPackage.urn === 'urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet' ||
-        accessPackage.urn === 'urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet' ||
-        accessPackage.urn === 'urn:altinn:accesspackage:regnskapsforer-lonn',
-    ) ?? false
-  );
-};
+const regnskapsforerUrns = [
+  'urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet',
+  'urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet',
+  'urn:altinn:accesspackage:regnskapsforer-lonn',
+];
+const revisorUrns = [
+  'urn:altinn:accesspackage:ansvarlig-revisor',
+  'urn:altinn:accesspackage:revisormedarbeider',
+];
+const forretningsforerUrns = ['urn:altinn:accesspackage:en-kul-tilgangspakke'];
 
-const isRevisorSystemUser = (systemUser: SystemUser | undefined): boolean => {
-  return (
-    systemUser?.accessPackages.some(
-      (accessPackage) =>
-        accessPackage.urn === 'urn:altinn:accesspackage:ansvarlig-revisor' ||
-        accessPackage.urn === 'urn:altinn:accesspackage:revisormedarbeider',
-    ) ?? false
-  );
+enum SystemUserCustomerType {
+  UNKNOWN = 'UNKNOWN',
+  REGNSKAPSFORER = 'REGNSKAPSFORER',
+  REVISOR = 'REVISOR',
+  FORRETNINGSFORER = 'FORRETNINGSFORER',
+}
+
+const getSystemUserCustomerType = (systemUser: SystemUser | undefined): SystemUserCustomerType => {
+  const accessPackageUrns = systemUser?.accessPackages.map((ap) => ap.urn) ?? [];
+  if (accessPackageUrns.some((urn) => regnskapsforerUrns.includes(urn))) {
+    return SystemUserCustomerType.REGNSKAPSFORER;
+  } else if (accessPackageUrns.some((urn) => revisorUrns.includes(urn))) {
+    return SystemUserCustomerType.REVISOR;
+  } else if (accessPackageUrns.some((urn) => forretningsforerUrns.includes(urn))) {
+    return SystemUserCustomerType.FORRETNINGSFORER;
+  }
+  return SystemUserCustomerType.UNKNOWN;
 };
 
 export const SystemUserAgentDelegationPage = (): React.ReactNode => {
@@ -58,7 +68,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     isError: isLoadRegnskapsforerCustomersError,
     isLoading: isLoadingRegnskapsforerCustomers,
   } = useGetRegnskapsforerCustomersQuery(partyUuid, {
-    skip: !isRegnskapsforerSystemUser(systemUser),
+    skip: getSystemUserCustomerType(systemUser) !== SystemUserCustomerType.REGNSKAPSFORER,
   });
 
   const {
@@ -66,7 +76,15 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     isError: isLoadRevisorCustomersError,
     isLoading: isLoadingRevisorCustomers,
   } = useGetRevisorCustomersQuery(partyUuid, {
-    skip: !isRevisorSystemUser(systemUser),
+    skip: getSystemUserCustomerType(systemUser) !== SystemUserCustomerType.REVISOR,
+  });
+
+  const {
+    data: forretningsforerCustomers,
+    isError: isLoadForretningsforerCustomersError,
+    isLoading: isLoadingForretningsforerCustomers,
+  } = useGetForretningsforerCustomersQuery(partyUuid, {
+    skip: getSystemUserCustomerType(systemUser) !== SystemUserCustomerType.FORRETNINGSFORER,
   });
 
   const {
@@ -75,7 +93,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     isLoading: isLoadingAssignedCustomers,
   } = useGetAssignedCustomersQuery({ partyId, systemUserId: id || '' });
 
-  const customers = regnskapsforerCustomers ?? revisorCustomers;
+  const customers = regnskapsforerCustomers || revisorCustomers || forretningsforerCustomers;
 
   return (
     <PageWrapper>
@@ -83,13 +101,16 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
         {(isLoadingSystemUser ||
           isLoadingRegnskapsforerCustomers ||
           isLoadingRevisorCustomers ||
+          isLoadingForretningsforerCustomers ||
           isLoadingAssignedCustomers) && (
           <Spinner aria-label={t('systemuser_detailpage.loading_systemuser')} />
         )}
         {isLoadSystemUserError && (
           <Alert data-color='danger'>{t('systemuser_detailpage.load_systemuser_error')}</Alert>
         )}
-        {(isLoadRevisorCustomersError || isLoadRegnskapsforerCustomersError) && (
+        {(isLoadRevisorCustomersError ||
+          isLoadRegnskapsforerCustomersError ||
+          isLoadForretningsforerCustomersError) && (
           <Alert data-color='danger'>{t('systemuser_agent_delegation.load_customers_error')}</Alert>
         )}
         {isLoadAssignedCustomersError && (
