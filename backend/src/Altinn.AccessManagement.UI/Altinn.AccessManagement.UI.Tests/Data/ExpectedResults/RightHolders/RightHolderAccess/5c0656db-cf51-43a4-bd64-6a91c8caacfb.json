@@ -1,4 +1,4 @@
 {
-  "accessPackages": [ "test_package" ],
+  "accessPackages": [ "test_package", "6e152c10-0f63-4060-9b14-66808e7ac320" ],
   "services": [ "appid-502", "a3-app2" ]
 }
