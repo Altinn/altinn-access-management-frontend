@@ -10,7 +10,7 @@ import { ActionError } from './useActionError';
  * @param {function} handleDelegationCheckFailure - Callback function to handle delegation check failure.
  * @returns {function} - Function to check if a specific package ID can be delegated.
  */
-export const useDelegationCheck = (
+export const useAccessPackageDelegationCheck = (
   accessPackageIds: string[],
   shouldShowDelegationCheck: boolean,
   handleDelegationCheckFailure: (error: ActionError) => void,
@@ -39,5 +39,5 @@ export const useDelegationCheck = (
   const canDelegate = (id: string) =>
     !isLoading && data?.find((d) => d.packageId === id)?.canDelegate;
 
-  return canDelegate;
+  return { canDelegate, isLoading };
 };

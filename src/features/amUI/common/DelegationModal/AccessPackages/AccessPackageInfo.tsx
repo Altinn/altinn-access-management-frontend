@@ -21,7 +21,7 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
-import { useDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import { useState } from 'react';
 
 export interface PackageInfoProps {
@@ -75,11 +75,16 @@ export const AccessPackageInfo = ({
     [accessPackage],
   );
 
-  const canDelegate = useDelegationCheck(
+  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
     accessPackageIds,
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
   );
+  const showMissingRightsMessage =
+    shouldShowDelegationCheck &&
+    !delegationCheckError &&
+    !canDelegate(accessPackage.id) &&
+    !isLoading;
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
@@ -148,7 +153,7 @@ export const AccessPackageInfo = ({
           </Paragraph>
         </div>
       )}
-      {shouldShowDelegationCheck && !canDelegate && (
+      {showMissingRightsMessage && (
         <div className={classes.delegationCheckInfo}>
           <ExclamationmarkTriangleFillIcon
             fontSize='1.5rem'

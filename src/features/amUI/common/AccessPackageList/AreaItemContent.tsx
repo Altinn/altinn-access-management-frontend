@@ -12,7 +12,7 @@ import { DelegationAction } from '../DelegationModal/EditModal';
 import classes from './AccessPackageList.module.css';
 import type { ExtendedAccessArea } from './useAreaPackageList';
 import { PackageItem } from './PackageItem';
-import { useDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 
@@ -46,7 +46,7 @@ export const AreaItemContent = ({
     setDelegationCheckError(error);
   };
   const shouldShowDelegationCheck = !!availableActions?.includes(DelegationAction.DELEGATE);
-  const canDelegate = useDelegationCheck(
+  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
     availablePackageIds,
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
@@ -126,7 +126,7 @@ export const AreaItemContent = ({
                       icon={PlusCircleIcon}
                       variant='text'
                       size='sm'
-                      disabled={!canDelegate(pkg.id)}
+                      disabled={!canDelegate(pkg.id) || isLoading}
                       onClick={() => onDelegate(pkg)}
                     >
                       {t('common.give_poa')}
