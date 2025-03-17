@@ -4,6 +4,7 @@ import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 import {
+  ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
   MenuElipsisHorizontalIcon,
   PackageIcon,
@@ -20,6 +21,8 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 
 import classes from './AccessPackageInfo.module.css';
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import { useState } from 'react';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -58,7 +61,33 @@ export const AccessPackageInfo = ({
     return false;
   }, [activeDelegations, isFetching, accessPackage.id]);
 
+  const [delegationCheckError, setDelegationCheckError] = useState<ActionError | null>(null);
+
+  const handleDelegationCheckFailure = (error: ActionError) => {
+    setDelegationCheckError(error);
+  };
+
+  const shouldShowDelegationCheck = availableActions.includes(DelegationAction.DELEGATE);
+
+  // memorize this to prevent unnecessary re-renders
+  const accessPackageIds = React.useMemo(
+    () => (accessPackage ? [accessPackage.id] : []),
+    [accessPackage],
+  );
+
+  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
+    accessPackageIds,
+    shouldShowDelegationCheck,
+    handleDelegationCheckFailure,
+  );
+  const showMissingRightsMessage =
+    shouldShowDelegationCheck &&
+    !delegationCheckError &&
+    !canDelegate(accessPackage.id) &&
+    !isLoading;
+
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -74,6 +103,21 @@ export const AccessPackageInfo = ({
           {accessPackage?.name}
         </Heading>
       </div>
+      {!!delegationCheckError && (
+        <Alert
+          data-color='danger'
+          data-size='sm'
+        >
+          <Heading level={3}>
+            {t('access_packages.delegation_check.delegation_check_error_heading')}
+          </Heading>
+          <TechnicalErrorParagraphs
+            message={t('access_packages.delegation_check.delegation_check_error_message_singular')}
+            status={delegationCheckError.httpStatus}
+            time={delegationCheckError.timestamp}
+          />
+        </Alert>
+      )}
       {!!actionError && (
         <Alert
           data-color='danger'
@@ -109,6 +153,17 @@ export const AccessPackageInfo = ({
           </Paragraph>
         </div>
       )}
+      {showMissingRightsMessage && (
+        <div className={classes.delegationCheckInfo}>
+          <ExclamationmarkTriangleFillIcon
+            fontSize='1.5rem'
+            className={classes.delegationCheckInfoIcon}
+          />
+          <Paragraph data-size='xs'>
+            <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
+          </Paragraph>
+        </div>
+      )}
       <div className={classes.services}>
         <Heading
           data-size='xs'
@@ -132,7 +187,12 @@ export const AccessPackageInfo = ({
           <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
-          <Button onClick={() => onDelegate(accessPackage)}>{t('common.give_poa')}</Button>
+          <Button
+            disabled={!canDelegate(accessPackage.id)}
+            onClick={() => onDelegate(accessPackage)}
+          >
+            {t('common.give_poa')}
+          </Button>
         )}
         {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
           // Todo: Implement request access package

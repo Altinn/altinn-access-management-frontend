@@ -51,3 +51,14 @@
   color: var(--ds-color-info-base-default);
   margin-right: 0.3rem;
 }
+
+.delegationCheckInfo {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.delegationCheckInfoIcon {
+  color: var(--ds-color-warning-base-default);
+  margin-right: 0.3rem;
+}

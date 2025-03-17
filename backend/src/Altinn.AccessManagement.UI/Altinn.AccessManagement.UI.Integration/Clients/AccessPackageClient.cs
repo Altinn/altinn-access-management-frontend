@@ -177,5 +177,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             // TODO: Implement this method when the API is ready
             throw new NotImplementedException();
         }
+
+        /// <inheritdoc />
+        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
