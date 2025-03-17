@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { User } from '@/rtk/features/userInfoApi';
 
 import classes from './CurrentUserPageHeader.module.css';
+import { CurrentUserSkeleton } from './CurrentUserSkeleton';
 
 interface CurrentUserPageHeaderProps {
   currentUser?: User;
@@ -15,17 +16,20 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
   const { t } = useTranslation();
   return (
     <div className={classes.currentUser}>
-      <ListItem
-        loading={loading}
-        size='xl'
-        title={currentUser?.name || 'xxxxxxxx xxxxxxxx'}
-        description={currentUser?.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
-        avatar={{
-          type: 'person',
-          name: currentUser?.name || 'xx',
-        }}
-        as={as}
-      />
+      {loading ? (
+        <CurrentUserSkeleton />
+      ) : (
+        <ListItem
+          size='xl'
+          title={currentUser?.name}
+          description={currentUser?.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
+          avatar={{
+            type: 'person',
+            name: currentUser?.name || '',
+          }}
+          as={as}
+        />
+      )}
     </div>
   );
 };

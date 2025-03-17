@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/request/{partyId}/{agentRequestId}";
+                string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
                 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
