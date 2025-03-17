@@ -13,7 +13,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { DeleteSystemUserWarning } from '../components/DeleteSystemUserWarning/DeleteSystemUserWarning';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 
 import classes from './SystemUserDetailsPage.module.css';
 
@@ -55,7 +55,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           onNavigateBack={handleNavigateBack}
           pageActions={
             systemUser && (
-              <DeleteSystemUserWarning
+              <DeleteSystemUserPopover
                 integrationTitle={systemUser?.integrationTitle ?? ''}
                 isDeleteError={isDeleteError}
                 isDeletingSystemUser={isDeletingSystemUser}
