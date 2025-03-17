@@ -525,7 +525,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.PackageId, actual.PackageId);
         }
 
-        public static void AssertEqual(ClientPartyFE expected, ClientPartyFE actual)
+        public static void AssertEqual(AgentDelegationPartyFE expected, AgentDelegationPartyFE actual)
         {
             Assert.NotNull(actual);
             Assert.NotNull(expected);

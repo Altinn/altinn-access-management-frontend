@@ -16,6 +16,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="customerType">Customer type to get</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all party customers</returns>
-        Task<Result<List<ClientPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
+        Task<Result<List<AgentDelegationPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
     }
 }

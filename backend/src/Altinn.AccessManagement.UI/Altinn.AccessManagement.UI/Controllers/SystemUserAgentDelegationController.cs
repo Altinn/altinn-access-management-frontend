@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/regnskapsforer")]
         public async Task<ActionResult> GetPartyRegnskapsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Regnskapsforer, cancellationToken);
+            Result<List<AgentDelegationPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Regnskapsforer, cancellationToken);
             return Ok(customers.Value);
         }
 
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/revisor")]
         public async Task<ActionResult> GetPartyRevisorCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
+            Result<List<AgentDelegationPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
             return Ok(customers.Value);
         }
 
@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyUuid}/customers/forretningsforer")]
         public async Task<ActionResult> GetPartyForretningsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<ClientPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Forretningsforer, cancellationToken);
+            Result<List<AgentDelegationPartyFE>> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Forretningsforer, cancellationToken);
             return Ok(customers.Value);
         }
     }

@@ -24,17 +24,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<ClientPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
+        public async Task<Result<List<AgentDelegationPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
         {
             CustomerList regnskapsforerCustomers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
             return MapCustomerListToCustomerFE(regnskapsforerCustomers);
         }
 
-        private static List<ClientPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
+        private static List<AgentDelegationPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
         {
             return customers.Data.Select(x => 
             {
-                return new ClientPartyFE()
+                return new AgentDelegationPartyFE()
                 {
                     Id = x.PartyId,
                     Uuid = x.PartyUuid,
