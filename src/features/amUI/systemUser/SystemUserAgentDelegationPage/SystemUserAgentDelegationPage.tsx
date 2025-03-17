@@ -28,7 +28,7 @@ const revisorUrns = [
   'urn:altinn:accesspackage:ansvarlig-revisor',
   'urn:altinn:accesspackage:revisormedarbeider',
 ];
-const forretningsforerUrns = ['urn:altinn:accesspackage:en-kul-tilgangspakke'];
+const forretningsforerUrns = ['urn:altinn:accesspackage:skattegrunnlag'];
 
 enum SystemUserCustomerType {
   UNKNOWN = 'UNKNOWN',
