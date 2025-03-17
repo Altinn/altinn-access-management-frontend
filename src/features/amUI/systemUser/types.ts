@@ -47,7 +47,7 @@ export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'
   resources: ServiceResource[];
 }
 
-export interface Customer {
+export interface AgentDelegationCustomer {
   id: string;
   uuid: string;
   name: string;

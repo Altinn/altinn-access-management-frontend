@@ -14,19 +14,22 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import { SystemUserPath } from '@/routes/paths';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import type { Customer, SystemUser } from '../types';
+import type { AgentDelegationCustomer, SystemUser } from '../types';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
 
-const getAssignedCustomers = (customers: Customer[], assignedIds: string[]): Customer[] => {
+const getAssignedCustomers = (
+  customers: AgentDelegationCustomer[],
+  assignedIds: string[],
+): AgentDelegationCustomer[] => {
   return customers.filter((customer) => assignedIds.indexOf(customer.id) > -1);
 };
 
 interface SystemUserAgentDelegationPageContentProps {
   systemUser: SystemUser;
-  customers: Customer[];
+  customers: AgentDelegationCustomer[];
   initialAssignedIds: string[];
 }
 export const SystemUserAgentDelegationPageContent = ({
@@ -43,7 +46,7 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignedIds, setAssignedIds] = useState<string[]>(initialAssignedIds);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [errorIds, setErrorIds] = useState<string[]>([]);
-  const [assignedCustomers, setAssignedCustomers] = useState<Customer[]>(
+  const [assignedCustomers, setAssignedCustomers] = useState<AgentDelegationCustomer[]>(
     getAssignedCustomers(customers, initialAssignedIds),
   );
 

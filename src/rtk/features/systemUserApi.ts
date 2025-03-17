@@ -6,7 +6,7 @@ import type {
   SystemUser,
   SystemUserRequest,
   RegisteredSystemRights,
-  Customer,
+  AgentDelegationCustomer,
 } from '@/features/amUI/systemUser/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
@@ -82,15 +82,15 @@ export const systemUserApi = createApi({
     getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
     }),
-    getRegnskapsforerCustomers: builder.query<Customer[], string>({
+    getRegnskapsforerCustomers: builder.query<AgentDelegationCustomer[], string>({
       query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/regnskapsforer`,
       keepUnusedDataFor: Infinity,
     }),
-    getRevisorCustomers: builder.query<Customer[], string>({
+    getRevisorCustomers: builder.query<AgentDelegationCustomer[], string>({
       query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/revisor`,
       keepUnusedDataFor: Infinity,
     }),
-    getForretningsforerCustomers: builder.query<Customer[], string>({
+    getForretningsforerCustomers: builder.query<AgentDelegationCustomer[], string>({
       query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/forretningsforer`,
       keepUnusedDataFor: Infinity,
     }),

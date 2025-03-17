@@ -6,11 +6,14 @@ import { useTranslation } from 'react-i18next';
 
 import { AmPagination } from '@/components/Paginering';
 
-import type { Customer } from '../types';
+import type { AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
 
-const filterCustomerList = (list: Customer[], searchString: string): Customer[] => {
+const filterCustomerList = (
+  list: AgentDelegationCustomer[],
+  searchString: string,
+): AgentDelegationCustomer[] => {
   return list.filter((customer) => {
     const isOrgNoMatch = customer.orgNo.indexOf(searchString.replace(' ', '')) > -1;
     const isNameMatch = customer.name.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
@@ -22,7 +25,7 @@ const itemsPerPage = 10;
 const showPages = 7;
 
 interface CustomerListProps {
-  list: Customer[];
+  list: AgentDelegationCustomer[];
   assignedIds?: string[];
   loadingIds?: string[];
   errorIds?: string[];
@@ -113,7 +116,7 @@ export const CustomerList = ({
   );
 };
 interface ListControlsProps {
-  customer: Customer;
+  customer: AgentDelegationCustomer;
   isAssigned?: boolean;
   isLoading?: boolean;
   isError?: boolean;
