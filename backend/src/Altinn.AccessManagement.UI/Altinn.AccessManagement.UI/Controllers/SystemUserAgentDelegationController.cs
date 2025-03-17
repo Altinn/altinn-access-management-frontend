@@ -17,15 +17,13 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class SystemUserAgentDelegationController : ControllerBase
     {
         private readonly ISystemUserAgentDelegationService _systemUserAgentDelegationService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Constructor for <see cref="SystemUserAgentDelegationController"/>
         /// </summary>
-        public SystemUserAgentDelegationController(ISystemUserAgentDelegationService systemUserAgentDelegationService, IHttpContextAccessor httpContextAccessor)
+        public SystemUserAgentDelegationController(ISystemUserAgentDelegationService systemUserAgentDelegationService)
         {
             _systemUserAgentDelegationService = systemUserAgentDelegationService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
