@@ -1,0 +1,11 @@
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-12);
+}
+
+.createdBy {
+  color: var(--ds-color-text-subtle);
+  font-style: italic;
+  align-self: flex-end;
+}

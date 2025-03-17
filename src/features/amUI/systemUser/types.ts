@@ -43,5 +43,13 @@ export interface SystemUserRequest {
 
 // TODO: temp? type for access package with enriched resources
 export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'> {
+  urn: string;
   resources: ServiceResource[];
+}
+
+export interface Customer {
+  id: string;
+  uuid: string;
+  name: string;
+  orgNo: string;
 }
