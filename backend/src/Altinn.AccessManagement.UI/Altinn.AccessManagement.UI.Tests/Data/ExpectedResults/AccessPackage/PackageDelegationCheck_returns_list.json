@@ -1,0 +1,47 @@
+[
+  {
+    "packageId": "0bb5963e-df17-4f35-b913-3ce10a34b866",
+    "canDelegate": false,
+    "detailCode": "Unknown"
+  },
+  {
+    "packageId": "04c5a001-5249-4765-ae8e-58617c404223",
+    "canDelegate": false,
+    "detailCode": "InsufficientAuthenticationLevel"
+  },
+  {
+    "packageId": "5eb07bdc-5c3c-4c85-add3-5405b214b8a3",
+    "canDelegate": false,
+    "detailCode": "MissingSrrRightAccess"
+  },
+  {
+    "packageId": "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb",
+    "canDelegate": true,
+    "detailCode": "DelegationAccess"
+  },
+  {
+    "packageId": "78c21107-7d2d-4e85-af82-47ea0e47ceca",
+    "canDelegate": true,
+    "detailCode": "SrrRightAccess"
+  },
+  {
+    "packageId": "906aec0d-ad1f-496b-a0bb-40f81b3303cb",
+    "canDelegate": false,
+    "detailCode": "MissingRoleAccess"
+  },
+  {
+    "packageId": "a03af7d5-74b9-4f18-aead-5d47edc36be5",
+    "canDelegate": true,
+    "detailCode": "AccessListValidationPass"
+  },
+  {
+    "packageId": "cfe074fa-0a66-4a4b-974a-5d1db8eb94e6",
+    "canDelegate": false,
+    "detailCode": "AccessListValidationFail"
+  },
+  {
+    "packageId": "f7e02568-90b6-477d-8abb-44984ddeb1f9",
+    "canDelegate": true,
+    "detailCode": "DelegationAccess"
+  }
+]

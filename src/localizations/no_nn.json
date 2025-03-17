@@ -250,7 +250,12 @@
     "package_deletion_success": "Fullmakta til {{accessPackage}} er fjerna frå {{name}}.",
     "package_deletion_error": "Det var ikkje mogleg å fjerne fullmakta til {{accessPackage}} frå {{name}}.",
     "delegated_packages_count_badge": "{{delegated}} av {{total}}",
-    "package_number_of_resources": "{{count}} tenester"
+    "package_number_of_resources": "{{count}} tenester",
+    "delegation_check": {
+      "delegation_check_error_heading": "Teknisk feil",
+      "delegation_check_error_message_singular": "En teknisk feil sperrer deg fra å gi fullmakt til tilgangspakken. Ver venleg å kontakte Altinn brukarteneste om problemet held fram.",
+      "delegation_check_error_message_plural": "En teknisk feil sperrer deg fra å gi fullmakt til ein eller fleire tilgangspakkar. Ver venleg å kontakte Altinn brukarteneste om problemet held fram."
+    }
   },
   "role": {
     "current_roles_title": "Fullmakt til {{count}} rolle(r)",
@@ -298,6 +303,7 @@
     "edit_success": "Fullmakt oppdatert",
     "package_services": "Gir tilgang til {{count}} tenester",
     "inherited_role_org_message": "<b>{{user_name}}</b> har tilgang til denne gjennom sin rolle i <b>{{org_name}}</b>. Den kan derfor ikke slettes.",
+    "delegation_check_not_delegable": "Du kan ikkje gi denne tilgangspakka fordi du manglar tilgang til den selv.",
     "specific_rights": {
       "missing_role_message": "Du får ikkje delegert heile tenesta, fordi du manglar nokre av rettane sjølv. Dagleg leiar eller hovudadministrator kan gi deg tilgang.",
       "missing_srr_right_message": "{{reportee}} har ikkje fått løyve frå {{resourceOwner}} til å delegere heile tenesta. Ta kontakt med dei dersom du ynskjer å endre dette."
