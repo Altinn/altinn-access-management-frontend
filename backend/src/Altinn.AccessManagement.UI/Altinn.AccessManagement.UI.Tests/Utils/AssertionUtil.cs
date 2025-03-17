@@ -514,5 +514,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
         }
+
+        public static void AssertEqual(ClientPartyFE expected, ClientPartyFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Uuid, actual.Uuid);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.OrgNo, actual.OrgNo);
+        }
     }
 }
