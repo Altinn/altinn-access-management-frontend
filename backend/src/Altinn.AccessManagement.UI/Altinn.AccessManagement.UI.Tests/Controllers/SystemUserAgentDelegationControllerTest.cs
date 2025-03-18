@@ -166,10 +166,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
-        ///     Expected: PostRegnskapsforerAgentDelegation returns delegations
+        ///     Expected: PostRegnskapsforerAgentDelegation returns assignments
         /// </summary>
         [Fact]
-        public async Task PostRegnskapsforerAgentDelegation_ReturnsTrue()
+        public async Task PostRegnskapsforerAgentDelegation_ReturnsAssignment()
         {
             // Arrange
             string partyId = "51329012";
@@ -201,10 +201,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: PostRevisorAgentDelegation checks that delegation is added
-        ///     Expected: PostRevisorAgentDelegation returns delegations
+        ///     Expected: PostRevisorAgentDelegation returns assignment
         /// </summary>
         [Fact]
-        public async Task PostRevisorAgentDelegation_ReturnsTrue()
+        public async Task PostRevisorAgentDelegation_ReturnsAssignment()
         {
             // Arrange
             string partyId = "51329012";
@@ -232,6 +232,35 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertEqual(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
+        ///     Expected: PostRegnskapsforerAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task PostRegnskapsforerAgentDelegation_ReturnsError()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string customerUuid = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
+            
+            AgentDelegationRequest dto = new AgentDelegationRequest
+            {
+                CustomerUuid = Guid.Parse(customerUuid),
+                FacilitatorUuid = Guid.Parse(systemUserId)
+            };
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
 
         // TODO: tester for DELETE/remove delegation
