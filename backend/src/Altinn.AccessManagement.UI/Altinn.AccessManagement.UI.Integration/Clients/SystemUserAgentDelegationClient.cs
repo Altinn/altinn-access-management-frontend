@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="platformSettings"> platform settings configuration</param>
         public SystemUserAgentDelegationClient(
             HttpClient httpClient,
-            ILogger<RegisterClient> logger,
+            ILogger<SystemUserAgentDelegationClient> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {

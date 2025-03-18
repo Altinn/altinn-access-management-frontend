@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Mocks.Utils;
@@ -13,8 +12,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     public class SystemUserAgentDelegationClientMock : ISystemUserAgentDelegationClient
     {
         private readonly string dataFolder;
-
-        private static readonly JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationClientMock"/> class
