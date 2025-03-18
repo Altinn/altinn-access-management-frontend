@@ -407,8 +407,10 @@
     "banner_title": "Systemtilgangar",
     "sub_title_text": "Ved å opprette ein systemtilgang gir du eit fagsystem tilgang til å løyse oppgåver i Altinn på vegne av bedrifta di.",
     "systemusers_load_error": "Kunne ikkje laste systemtilgangar",
+    "agent_delegation_systemusers_load_error": "Kunne ikkje laste systemtilganger for kunder",
     "new_system_user_button": "Lag ny systemtilgang",
     "existing_system_users_title": "Våre systemtilgangar",
+    "agent_delegation_systemusers_title": "Systemtilganger for kunder",
     "edit_system_user": "Rediger systemtilgang",
     "loading_systemusers": "Laster systemtilgangar",
     "no_key_role1": "Du manglar nødvendige fullmakter.",
@@ -509,9 +511,27 @@
     "request_expired": "Denne oppdaterings-førespurnaden har gått ut"
   },
   "systemuser_agent_request": {
-    "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
-    "banner_title": "Lag en systemtilgang for kunderelasjoner",
+    "page_title": "Lag en systemtilgang for kunderelasjonar - Altinn",
+    "banner_title": "Lag en systemtilgang for kunderelasjonar",
     "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løyse oppgåver på vegne av <strong>{{companyName}}</strong> sine kundar. For å fullføre oppsettet må tilgangane til kundane tildeles i kunderelasjonar i Altinn."
+  },
+  "systemuser_agent_delegation": {
+    "page_title": "Systemtilgang for kunderelasjonar - Altinn",
+    "banner_title": "Systemtilgang for {{integrationTitle}}",
+    "load_customers_error": "Kunne ikkje laste kunder",
+    "load_assigned_customers_error": "Kunne ikkje laste tilknytta kunder",
+    "assign_customers": "Hvilke kunder skal knyttes til systemtilgangen {{integrationTitle}}?",
+    "assigned_customers_header": "Kunder i systemtilgangen",
+    "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
+    "add_customers": "Legg til kunder",
+    "edit_customers": "Administrer kunder",
+    "customer_search": "Søk i kunder",
+    "remove_from_system_user": "Fjern fra systemtilgang",
+    "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
+    "add_to_system_user": "Legg til i systemtilgang",
+    "add_to_system_user_aria": "Legg til {{customerName}} i systemtilgang",
+    "add_system_user_error": "Kunne ikkje legge til kunde",
+    "remove_system_user_error": "Kunne ikkje fjerne kunde"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "Ei eller fleire tenester finst ikkje, eller kan ikkje delegerast.",
