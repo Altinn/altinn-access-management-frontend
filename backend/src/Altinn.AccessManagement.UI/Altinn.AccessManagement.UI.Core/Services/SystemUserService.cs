@@ -144,6 +144,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PartyId = systemUser.PartyId,
                     Created = systemUser.Created,
                     System = systemFE,
+                    SystemUserType = systemUser.SystemUserType,
                     Resources = enrichedRights.Resources,
                     AccessPackages = enrichedRights.AccessPackages
                 });
