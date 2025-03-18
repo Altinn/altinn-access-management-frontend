@@ -7,8 +7,6 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
-import { SnackbarProvider } from '../Snackbar';
-
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
@@ -70,11 +68,9 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           onClosing();
         }}
       >
-        <SnackbarProvider>
-          <div className={classes.content}>
-            {renderModalContent(resource, accessPackage, role, availableActions)}
-          </div>
-        </SnackbarProvider>
+        <div className={classes.content}>
+          {renderModalContent(resource, accessPackage, role, availableActions)}
+        </div>
       </Dialog>
     );
   },
