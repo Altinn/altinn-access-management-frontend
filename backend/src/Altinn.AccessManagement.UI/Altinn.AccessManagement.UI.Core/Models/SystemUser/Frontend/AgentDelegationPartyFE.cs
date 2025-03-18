@@ -11,11 +11,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         public required Guid Uuid { get; set; }
 
         /// <summary>
-        /// Party Id
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Party display name
         /// </summary>
         public string Name { get; set; } = string.Empty;

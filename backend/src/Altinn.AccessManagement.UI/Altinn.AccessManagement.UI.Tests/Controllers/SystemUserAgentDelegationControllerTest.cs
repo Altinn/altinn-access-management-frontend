@@ -1,7 +1,10 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -85,11 +88,139 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/customers/forretningsforer");
+            string res = await httpResponse.Content.ReadAsStringAsync();
             List<AgentDelegationPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationPartyFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
         }
+
+        /// <summary>
+        ///     Test case: GetRegnskapsforerAgentDelegation checks that deletated regnskapsforer customers are returned
+        ///     Expected: GetRegnskapsforerAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task GetRegnskapsforerAgentDelegation_ReturnsDelegations()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerAgentDelegations.json");
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
+            string result = await httpResponse.Content.ReadAsStringAsync();
+
+            List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetRevisorAgentDelegation checks that deletated revisor customers are returned
+        ///     Expected: GetRevisorAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task GetRevisorAgentDelegation_ReturnsDelegations()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "244c56a5-3737-44ac-8f3b-8697c5e281da";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorAgentDelegations.json");
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
+            List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetForretningsforerAgentDelegation checks that deletated forretningsforer customers are returned
+        ///     Expected: GetForretningsforerAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task GetForretningsforerAgentDelegation_ReturnsDelegations()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
+            string systemUserId = "095b06de-1a93-4320-b572-42d72949cf2c";
+            string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerAgentDelegations.json");
+            List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
+            List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
+        ///     Expected: PostRegnskapsforerAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task PostRegnskapsforerAgentDelegation_ReturnsTrue()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string customerUuid = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
+            bool expectedResponse = true;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/{systemUserId}/delegation/{customerUuid}", null);
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: PostRevisorAgentDelegation checks that delegation is added
+        ///     Expected: PostRevisorAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task PostRevisorAgentDelegation_ReturnsTrue()
+        {
+            // Arrange
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string customerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            bool expectedResponse = true;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/{systemUserId}/delegation/{customerUuid}", null);
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: PostForretningsforerAgentDelegation checks that delegation is added
+        ///     Expected: PostForretningsforerAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task PostForretningsforerAgentDelegation_ReturnsTrue()
+        {
+            
+        }
+
+        // TODO: tester for DELETE/remove delegation
     }
 }

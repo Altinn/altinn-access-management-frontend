@@ -1,39 +1,28 @@
-using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
-using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.Authorization.ProblemDetails;
 
-namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
+namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
     /// <summary>
-    /// The "middleware" between the BFF's SystemUserAPI and Altinn's real SystemUserAPI in the Authentication Component
+    /// Interface for client wrapper for integration with the systemuser client delegation API
     /// </summary>
-    public interface ISystemUserAgentDelegationService
+    public interface ISystemUserAgentDelegationClient
     {
-        /// <summary>
-        /// Return all customers of a specific type for party
-        /// </summary>
-        /// <param name="partyUuid">The party UUID of the party to retrieve customers from</param>
-        /// <param name="customerType">Customer type to get</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of all party customers</returns>
-        Task<Result<List<AgentDelegationPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
-
         /// <summary>
         /// Return delegated customers for this system user
         /// </summary>
-        /// <param name="partyId">The party UUID of the party owning system user to retrieve delegated customers from</param>
+        /// <param name="partyId">The party id of the party owning system user to retrieve delegated customers from</param>
         /// <param name="systemUserGuid">The system user UUID to retrieve delegated customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of delegated customers for system user</returns>
-        Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
+        Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add client to system user
         /// </summary>
         /// <param name="partyId">The party id of the party owning system user to add customer to</param>
         /// <param name="systemUserGuid">The system user UUID to add customer to</param>
-        /// <param name="delegationRequest">Payload to send to add client</param>
+        /// <param name="delegationRequest">The party uuid of the customer to add + partyUuid of system user owner party</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean result of add</returns>
         Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken);

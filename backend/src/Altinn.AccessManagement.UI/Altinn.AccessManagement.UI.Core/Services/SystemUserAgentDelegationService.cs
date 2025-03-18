@@ -11,15 +11,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class SystemUserAgentDelegationService : ISystemUserAgentDelegationService
     {
+        private readonly ISystemUserAgentDelegationClient _systemUserAgentDelegationClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemUserService"/> class.
+        /// Initializes a new instance of the <see cref="SystemUserAgentDelegationService"/> class.
         /// </summary>
+        /// <param name="systemUserAgentDelegationClient">The system user client administration client.</param>
         /// <param name="registerClient">The register client</param>
         public SystemUserAgentDelegationService(
+            ISystemUserAgentDelegationClient systemUserAgentDelegationClient,
             IRegisterClient registerClient)
         {
+            _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
             _registerClient = registerClient;
         }
 
@@ -30,13 +34,35 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return MapCustomerListToCustomerFE(regnskapsforerCustomers);
         }
 
+        /// <inheritdoc />
+        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        {
+            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
+            return delegations.Select(x => new AgentDelegationFE()
+            {
+                AssignmentId = x.Id,
+                CustomerUuid = x.From.Id,
+            }).ToList();
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        {
+            return await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid assignmentId, CancellationToken cancellationToken)
+        {
+            return await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, assignmentId, cancellationToken);
+        }
+
         private static List<AgentDelegationPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
         {
             return customers.Data.Select(x => 
             {
                 return new AgentDelegationPartyFE()
                 {
-                    Id = x.PartyId,
                     Uuid = x.PartyUuid,
                     Name = x.DisplayName,
                     OrgNo = x.OrganizationIdentifier
