@@ -26,6 +26,7 @@ export interface SystemUser {
   integrationTitle: string;
   created: string;
   system: RegisteredSystem;
+  systemUserType: string;
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
 }
