@@ -51,10 +51,12 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
           }}
         ></div> */}
       </li>
-      <EditModal
-        ref={modalRef}
-        resource={resource}
-      />
+      <DelegationModalProvider>
+        <EditModal
+          ref={modalRef}
+          resource={resource}
+        />
+      </DelegationModalProvider>
     </>
   );
 };

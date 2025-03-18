@@ -20,6 +20,8 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -42,48 +44,53 @@ export const ReporteeRightsPage = () => {
 
   return (
     <SnackbarProvider>
-      <PageWrapper>
-        <PageLayoutWrapper>
-          <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
-            <>
-              <UserPageHeader
-                userName={name}
-                userType={party?.partyTypeName}
-                subHeading={t('reportee_rights_page.heading_subtitle', { name: reportee?.name })}
-                roles={
-                  !!reportee?.partyUuid &&
-                  !!party?.partyUuid && (
-                    <UserRoles
-                      rightOwnerUuid={reportee.partyUuid}
-                      rightHolderUuid={party.partyUuid}
+      <PartyRepresentationProvider
+        fromPartyUuid={reporteeUuid ?? ''}
+        toPartyUuid={getCookie('AltinnPartyUuid')}
+      >
+        <PageWrapper>
+          <PageLayoutWrapper>
+            <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
+              <DelegationModalProvider>
+                <UserPageHeader
+                  userName={name}
+                  userType={party?.partyTypeName}
+                  subHeading={t('reportee_rights_page.heading_subtitle', { name: reportee?.name })}
+                  roles={
+                    !!reportee?.partyUuid &&
+                    !!party?.partyUuid && (
+                      <UserRoles
+                        rightOwnerUuid={reportee.partyUuid}
+                        rightHolderUuid={party.partyUuid}
+                      />
+                    )
+                  }
+                />
+                <RightsTabs
+                  tabBadge={{
+                    accessPackages: allAccesses?.accessPackages?.length ?? 0,
+                    services: allAccesses?.services?.length ?? 0,
+                    roles: filterDigdirRole(allAccesses?.roles).length ?? 0,
+                  }}
+                  packagesPanel={
+                    <ReporteeAccessPackageSection
+                      numberOfAccesses={allAccesses?.accessPackages?.length}
+                      reporteeUuid={reporteeUuid}
                     />
-                  )
-                }
-              />
-              <RightsTabs
-                tabBadge={{
-                  accessPackages: allAccesses?.accessPackages?.length ?? 0,
-                  services: allAccesses?.services?.length ?? 0,
-                  roles: filterDigdirRole(allAccesses?.roles).length ?? 0,
-                }}
-                packagesPanel={
-                  <ReporteeAccessPackageSection
-                    numberOfAccesses={allAccesses?.accessPackages?.length}
-                    reporteeUuid={reporteeUuid}
-                  />
-                }
-                singleRightsPanel={<div>SingleRightsSection</div>}
-                roleAssignmentsPanel={
-                  <ReporteeRoleSection
-                    numberOfAccesses={allAccesses?.roles?.length}
-                    reporteeUuid={reporteeUuid}
-                  />
-                }
-              />
-            </>
-          </PageContainer>
-        </PageLayoutWrapper>
-      </PageWrapper>
+                  }
+                  singleRightsPanel={<div>SingleRightsSection</div>}
+                  roleAssignmentsPanel={
+                    <ReporteeRoleSection
+                      numberOfAccesses={allAccesses?.roles?.length}
+                      reporteeUuid={reporteeUuid}
+                    />
+                  }
+                />
+              </DelegationModalProvider>
+            </PageContainer>
+          </PageLayoutWrapper>
+        </PageWrapper>
+      </PartyRepresentationProvider>
     </SnackbarProvider>
   );
 };
