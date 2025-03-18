@@ -73,14 +73,42 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// </summary>
         /// <param name="accessPackageIds">List of access package ids to map</param>
         /// <param name="languageCode">Language code</param>
-        public async Task<List<AccessPackageFE>> EnrichAccessPackages(IEnumerable<string> accessPackageIds, string languageCode)
+        /// <param name="isHardcodedAccessPackage">Whether to use the agent delegation access packages or not</param>
+        public async Task<List<AccessPackageFE>> EnrichAccessPackages(IEnumerable<string> accessPackageIds, string languageCode, bool isHardcodedAccessPackage)
         {
             List<AccessPackageFE> accessPackagesFE = [];
             
             if (accessPackageIds.Any())
             {
-                // GET access packages.
-                List<AccessPackage> accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                List<AccessPackage> accessPackages = [];
+                if (isHardcodedAccessPackage)
+                {
+                    List<string> agentDelegationMockAccessPackages = [
+                        "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet",
+                        "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet",
+                        "urn:altinn:accesspackage:regnskapsforer-lonn",
+                        "urn:altinn:accesspackage:ansvarlig-revisor",
+                        "urn:altinn:accesspackage:revisormedarbeider",
+                        "urn:altinn:accesspackage:skattegrunnlag"
+                    ];
+                    accessPackages = agentDelegationMockAccessPackages.Select(urn =>
+                    {
+                        return new AccessPackage()
+                        {
+                            Id = string.Empty,
+                            Urn = urn,
+                            Area = null,
+                            Description = string.Empty,
+                            Name = string.Empty,
+                            Resources = []
+                        };
+                    }).ToList();  
+                } 
+                else
+                {
+                    accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                }
+
                 IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
                 
                 foreach (AccessPackage accessPackage in usedAccessPackages)
@@ -105,7 +133,8 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="rights">List of rights</param>
         /// <param name="accessPackages">List of access packages</param>
         /// <param name="languageCode">Language code</param>
-        public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, IEnumerable<RegisteredSystemAccessPackage> accessPackages, string languageCode)
+        /// <param name="isHardcodedAccessPackage">Whether to use the agent delegation access packages or not</param>
+        public async Task<RegisteredSystemRightsFE> MapRightsToFrontendObjects(IEnumerable<Right> rights, IEnumerable<RegisteredSystemAccessPackage> accessPackages, string languageCode, bool isHardcodedAccessPackage)
         {
             List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
             List<string> accessPackageIds = ResourceUtils.GetAccessPackageIdsFromRights(accessPackages);
@@ -113,7 +142,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             return new()
             {
                 Resources = await EnrichResources(resourceIds, languageCode),
-                AccessPackages = await EnrichAccessPackages(accessPackageIds, languageCode),
+                AccessPackages = await EnrichAccessPackages(accessPackageIds, languageCode, isHardcodedAccessPackage),
             };
         }
     }
