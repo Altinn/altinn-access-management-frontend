@@ -175,13 +175,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostRegnskapsforerAgentDelegation_ReturnsTrue()
         {
             // Arrange
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
             string customerUuid = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
+            
+            AgentDelegationRequest dto = new AgentDelegationRequest
+            {
+                CustomerUuid = Guid.Parse(customerUuid),
+                FacilitatorUuid = Guid.Parse(systemUserId)
+            };
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/{systemUserId}/delegation/{customerUuid}", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -197,13 +206,22 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostRevisorAgentDelegation_ReturnsTrue()
         {
             // Arrange
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
             string customerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            
+            AgentDelegationRequest dto = new AgentDelegationRequest
+            {
+                CustomerUuid = Guid.Parse(customerUuid),
+                FacilitatorUuid = Guid.Parse(systemUserId)
+            };
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/{systemUserId}/delegation/{customerUuid}", null);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
