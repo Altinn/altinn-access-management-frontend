@@ -45,7 +45,7 @@ export const ReporteeRightsPage = () => {
     <SnackbarProvider>
       <PageWrapper>
         <PageLayoutWrapper>
-          <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
+          <PageContainer backUrl={`/${amUIPath.Reportees}`}>
             <DelegationModalProvider>
               <UserPageHeader
                 userName={name}

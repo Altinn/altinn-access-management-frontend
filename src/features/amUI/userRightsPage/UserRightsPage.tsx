@@ -47,7 +47,7 @@ export const UserRightsPage = () => {
       <PageWrapper>
         <PageLayoutWrapper>
           <DelegationModalProvider>
-            <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
+            <PageContainer backUrl={`/${amUIPath.Users}`}>
               {!isLoading && allAccesses ? (
                 <>
                   <UserPageHeader
