@@ -26,8 +26,7 @@ interface RoleListProps {
   onSelect: (role: ExtendedRole) => void;
   availableActions?: DelegationAction[];
   isLoading?: boolean;
-  onDelegateError: (role: Role, error: ActionError) => void;
-  onRevokeError: (role: Role, error: ActionError) => void;
+  onActionError: (role: Role, error: ActionError) => void;
 }
 
 export const RoleList = ({
@@ -36,8 +35,7 @@ export const RoleList = ({
   onSelect,
   availableActions,
   isLoading,
-  onDelegateError,
-  onRevokeError,
+  onActionError,
 }: RoleListProps) => {
   const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(to ?? '');
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
@@ -117,7 +115,7 @@ export const RoleList = ({
                           fullText={false}
                           size='sm'
                           disabled={role.inherited?.length > 0}
-                          onRevokeError={onRevokeError}
+                          onRevokeError={onActionError}
                         />
                       )
                     }
@@ -142,7 +140,7 @@ export const RoleList = ({
                             toParty={party}
                             fullText={false}
                             size='sm'
-                            onDelegateError={onDelegateError}
+                            onDelegateError={onActionError}
                           />
                         )}
                         {availableActions?.includes(DelegationAction.REQUEST) && (

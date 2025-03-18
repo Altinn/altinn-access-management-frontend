@@ -46,12 +46,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
             isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
             DelegationAction.REVOKE,
           ]}
-          onDelegateError={(role, error) => {
-            setModalItem(role);
-            setActionError(error);
-            modalRef.current?.showModal();
-          }}
-          onRevokeError={(role, error) => {
+          onActionError={(role, error) => {
             setModalItem(role);
             setActionError(error);
             modalRef.current?.showModal();
