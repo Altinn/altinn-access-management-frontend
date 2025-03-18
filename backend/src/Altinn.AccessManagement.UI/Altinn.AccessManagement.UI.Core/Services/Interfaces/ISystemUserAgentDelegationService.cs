@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="customerType">Customer type to get</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all party customers</returns>
-        Task<Result<List<AgentDelegationPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
+        Task<List<AgentDelegationPartyFE>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return delegated customers for this system user
@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="systemUserGuid">The system user UUID to retrieve delegated customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of delegated customers for system user</returns>
-        Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
+        Task<List<AgentDelegationFE>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add client to system user

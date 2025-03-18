@@ -28,14 +28,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<AgentDelegationPartyFE>>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
+        public async Task<List<AgentDelegationPartyFE>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
         {
             CustomerList regnskapsforerCustomers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
             return MapCustomerListToCustomerFE(regnskapsforerCustomers);
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<List<AgentDelegationFE>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
             List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
             return delegations.Select(x => new AgentDelegationFE()
@@ -49,6 +49,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
             Result<AgentDelegation> newAgentDelegation = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+            
+            if (newAgentDelegation.IsProblem)
+            {
+                return new Result<AgentDelegationFE>(newAgentDelegation.Problem);
+            }
+
             return new AgentDelegationFE()
             {
                 AssignmentId = newAgentDelegation.Value.Id,
@@ -59,7 +65,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid assignmentId, CancellationToken cancellationToken)
         {
-            return await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, assignmentId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, systemUserGuid, assignmentId, cancellationToken);
+            if (response.IsProblem)
+            {
+                return new Result<bool>(response.Problem);
+            }
+
+            return false;
         }
 
         private static List<AgentDelegationPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
