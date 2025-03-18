@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<Result<AgentDelegation>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
-            if (delegationRequest.CustomerUuid.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7"))) 
+            if (delegationRequest.CustomerId.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7"))) 
             {
                 return Task.FromResult(new Result<AgentDelegation>(TestErrors.CustomerNotFound));
             }
@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 Facilitator = new DelegationParty(),
                 From = new DelegationParty()
                 {
-                    Id = delegationRequest.CustomerUuid
+                    Id = delegationRequest.CustomerId
                 },
                 To = new DelegationParty()
             }));

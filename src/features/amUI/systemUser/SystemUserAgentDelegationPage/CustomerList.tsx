@@ -95,7 +95,7 @@ export const CustomerList = ({
             controls: (
               <ListControls
                 customer={customer}
-                delegation={delegations?.find((x) => x.customerUuid === customer.uuid)}
+                delegation={delegations?.find((x) => x.customerId === customer.uuid)}
                 isLoading={loadingIds?.some((x) => x === customer.uuid)}
                 isError={errorIds?.some((x) => x === customer.uuid)}
                 onRemoveCustomer={onRemoveCustomer}

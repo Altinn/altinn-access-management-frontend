@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return delegations.Select(x => new AgentDelegationFE()
             {
                 AssignmentId = x.Id,
-                CustomerUuid = x.From.Id,
+                CustomerId = x.From.Id,
             }).ToList();
         }
 
@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return new AgentDelegationFE()
             {
                 AssignmentId = newAgentDelegation.Value.Id,
-                CustomerUuid = newAgentDelegation.Value.From.Id,
+                CustomerId = newAgentDelegation.Value.From.Id,
             };
         }
 

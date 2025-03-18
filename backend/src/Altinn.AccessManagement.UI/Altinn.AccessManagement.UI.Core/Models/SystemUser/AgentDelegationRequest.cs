@@ -8,11 +8,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// <summary>
         /// The party uuid to add
         /// </summary>
-        public Guid CustomerUuid { get; set; }
+        public Guid CustomerId { get; set; }
 
         /// <summary>
         /// PartyUuid of party which owns the agent system user
         /// </summary>
-        public Guid FacilitatorUuid { get; set; }
+        public Guid FacilitatorId { get; set; }
     }
 }

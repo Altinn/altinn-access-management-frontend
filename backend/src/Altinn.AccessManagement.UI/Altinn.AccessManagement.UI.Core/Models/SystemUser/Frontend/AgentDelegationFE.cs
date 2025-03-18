@@ -13,6 +13,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// <summary>
         /// Delegated customer party uuid
         /// </summary>
-        public Guid CustomerUuid { get; set; }
+        public Guid CustomerId { get; set; }
     }
 }

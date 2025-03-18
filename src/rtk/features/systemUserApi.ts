@@ -104,14 +104,14 @@ export const systemUserApi = createApi({
     }),
     assignCustomer: builder.mutation<
       AgentDelegation,
-      { partyId: string; systemUserId: string; partyUuid: string; customerUuid: string }
+      { partyId: string; systemUserId: string; partyUuid: string; customerId: string }
     >({
-      query: ({ partyId, systemUserId, partyUuid, customerUuid }) => ({
+      query: ({ partyId, systemUserId, partyUuid, customerId }) => ({
         url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
         method: 'POST',
         body: {
-          customerUuid: customerUuid,
-          facilitatorUuid: partyUuid,
+          customerId: customerId,
+          facilitatorId: partyUuid,
         },
       }),
     }),

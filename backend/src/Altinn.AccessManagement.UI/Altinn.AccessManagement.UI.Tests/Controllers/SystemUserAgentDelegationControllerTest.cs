@@ -174,12 +174,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
-            string customerUuid = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
+            string customerId = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
             
             AgentDelegationRequest dto = new AgentDelegationRequest
             {
-                CustomerUuid = Guid.Parse(customerUuid),
-                FacilitatorUuid = Guid.Parse(systemUserId)
+                CustomerId = Guid.Parse(customerId),
+                FacilitatorId = Guid.Parse(systemUserId)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -187,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationFE expectedResponse = new AgentDelegationFE()
             {
                 AssignmentId = Guid.NewGuid(),
-                CustomerUuid = Guid.Parse(customerUuid)
+                CustomerId = Guid.Parse(customerId)
             };
 
             // Act
@@ -209,12 +209,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
-            string customerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string customerId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             
             AgentDelegationRequest dto = new AgentDelegationRequest
             {
-                CustomerUuid = Guid.Parse(customerUuid),
-                FacilitatorUuid = Guid.Parse(systemUserId)
+                CustomerId = Guid.Parse(customerId),
+                FacilitatorId = Guid.Parse(systemUserId)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -222,7 +222,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationFE expectedResponse = new AgentDelegationFE()
             {
                 AssignmentId = Guid.NewGuid(),
-                CustomerUuid = Guid.Parse(customerUuid)
+                CustomerId = Guid.Parse(customerId)
             };
 
             // Act
@@ -244,12 +244,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
-            string customerUuid = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
+            string customerId = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
             
             AgentDelegationRequest dto = new AgentDelegationRequest
             {
-                CustomerUuid = Guid.Parse(customerUuid),
-                FacilitatorUuid = Guid.Parse(systemUserId)
+                CustomerId = Guid.Parse(customerId),
+                FacilitatorId = Guid.Parse(systemUserId)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
