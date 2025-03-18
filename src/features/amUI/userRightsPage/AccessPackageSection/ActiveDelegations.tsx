@@ -9,11 +9,12 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
 export const ActiveDelegations = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const { error: actionError, setError: setActionError } = useActionError();
+  const { setActionError } = useDelegationModalContext();
   const { toParty, selfParty, isLoading } = usePartyRepresentation();
   const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
 

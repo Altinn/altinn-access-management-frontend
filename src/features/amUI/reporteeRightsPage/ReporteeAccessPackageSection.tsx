@@ -66,8 +66,6 @@ export const ReporteeAccessPackageSection = ({
       {party && (
         <AccessPackageInfoModal
           modalRef={modalRef}
-          toPartyUuid={getCookie('AltinnPartyUuid')}
-          fromPartyUuid={reporteeUuid ?? ''}
           modalItem={modalItem}
           modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
