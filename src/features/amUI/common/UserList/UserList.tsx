@@ -38,7 +38,6 @@ export const UserList = ({ userList, searchString, isLoading }: UserListProps) =
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>
           <Button
-            className={classes.showMoreButton}
             onClick={goNextPage}
             disabled={!hasNextPage}
             variant='outline'

@@ -29,11 +29,7 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
         {...props}
         size={size}
         title={user.name}
-        description={
-          user.partyType === 'Organization'
-            ? user.unitType
-            : user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')
-        }
+        description={user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')}
         avatar={{
           name: user.name,
           type: user.partyType === 'Organization' ? 'company' : 'person',
