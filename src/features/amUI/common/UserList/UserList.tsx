@@ -36,11 +36,14 @@ export const UserList = ({ userList, searchString, isLoading }: UserListProps) =
         isLoading={isLoading}
       />
       {hasNextPage && (
-        <div className={classes.showMoreButton}>
+        <div className={classes.showMoreButtonContainer}>
           <Button
+            className={classes.showMoreButton}
             onClick={goNextPage}
             disabled={!hasNextPage}
-            variant='text'
+            variant='outline'
+            size='md'
+            data-color='secondary'
           >
             {t('common.show_more')}
           </Button>
