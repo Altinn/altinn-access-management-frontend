@@ -93,8 +93,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             Dictionary<string, List<AccessPackageDelegation>> actualResult = JsonSerializer.Deserialize<Dictionary<string, List<AccessPackageDelegation>>>(await response.Content.ReadAsStringAsync(), options);
-            var responseJson = JsonSerializer.SerializeToElement(actualResult);
-
+            
             AssertionUtil.AssertCollections(expectedResult.Keys, actualResult.Keys, Assert.Equal);
             foreach (string key in actualResult.Keys)
             {
