@@ -46,9 +46,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
-            return await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+            Result<AgentDelegation> newAgentDelegation = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+            return new AgentDelegationFE()
+            {
+                AssignmentId = newAgentDelegation.Value.Id,
+                CustomerUuid = newAgentDelegation.Value.From.Id,
+            };
         }
 
         /// <inheritdoc />

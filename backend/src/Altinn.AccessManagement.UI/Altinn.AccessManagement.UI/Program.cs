@@ -375,7 +375,7 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
     if (mockSettings.SystemUserAgentDelegation)
     {
         services.AddSingleton<ISystemUserAgentRequestClient, SystemUserAgentRequestClientMock>();
-        services.AddSingleton<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClient>();
+        services.AddSingleton<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClientMock>();
     }
     else 
     {

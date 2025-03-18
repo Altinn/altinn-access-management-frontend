@@ -32,21 +32,30 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(delegations);
         }
 
-        public Task<Result<bool>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        public Task<Result<AgentDelegation>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
             if (delegationRequest.CustomerUuid.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7"))) 
             {
-                return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+                return Task.FromResult(new Result<AgentDelegation>(TestErrors.CustomerNotFound));
             }
-            return Task.FromResult(new Result<bool>(true));
+            return Task.FromResult(new Result<AgentDelegation>(new AgentDelegation()
+            {
+                Id = Guid.NewGuid(),
+                Facilitator = new DelegationParty(),
+                From = new DelegationParty()
+                {
+                    Id = delegationRequest.CustomerUuid
+                },
+                To = new DelegationParty()
+            }));
         }
 
         public Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid assignmentId, CancellationToken cancellationToken)
         {
-            //if (customerPartyId == 52222222) 
-            //{
-            //    return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
-            //}
+            if (assignmentId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
+            {
+                return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+            }
             return Task.FromResult(new Result<bool>(true));
         }
 

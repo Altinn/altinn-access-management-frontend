@@ -96,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost("{partyId}/{systemUserGuid}/delegation/")]
         public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromBody] AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+            Result<AgentDelegationFE> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
 
             if (result.IsProblem)
             {
