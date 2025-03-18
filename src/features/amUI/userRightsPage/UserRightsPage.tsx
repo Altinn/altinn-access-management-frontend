@@ -6,11 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import {
-  useGetReporteeQuery,
-  useGetUserAccessesQuery,
-  useGetUserInfoQuery,
-} from '@/rtk/features/userInfoApi';
+import { useGetReporteeQuery, useGetUserAccessesQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 import { filterDigdirRole } from '@/resources/utils/roleUtils';
 import { getCookie } from '@/resources/Cookie/CookieMethods';

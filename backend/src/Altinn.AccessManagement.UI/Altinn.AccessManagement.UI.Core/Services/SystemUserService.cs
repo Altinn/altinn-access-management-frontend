@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
 
-            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, false, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             if (systemUser != null)
             {
-                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
+                return (await MapToSystemUsersFE([systemUser], languageCode, true, false, cancellationToken))[0] ?? null;
             }
 
             return null;
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             List<SystemUser> lista = await _systemUserClient.GetAgentSystemUsersForParty(partyId, cancellationToken);
 
-            return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
+            return await MapToSystemUsersFE(lista, languageCode, false, true, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -95,8 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             if (systemUser != null)
             {
-                // TODO: do not map rights and access packages for agent system users yet. Need the access package metadata API
-                return (await MapToSystemUsersFE([systemUser], languageCode, false, cancellationToken))[0] ?? null;
+                return (await MapToSystemUsersFE([systemUser], languageCode, true, true, cancellationToken))[0] ?? null;
             }
 
             return null;
@@ -116,7 +115,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return createdSystemUser;
         }
 
-        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, bool includeRights, CancellationToken cancellationToken)
+        private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, bool includeRights, bool isAgentDelegation, CancellationToken cancellationToken)
         {
             List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
             List<SystemUserFE> lista = new List<SystemUserFE>();
@@ -127,7 +126,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     // TODO: get rights from systemuser when API to look up actual rights is implmented
                     RegisteredSystem system = await _systemRegisterClient.GetSystem(systemUser.SystemId, cancellationToken);
-                    enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(system.Rights, system.AccessPackages, languageCode);
+                    enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(system.Rights, systemUser.AccessPackages, languageCode, isAgentDelegation);
                 }
 
                 RegisteredSystemFE systemFE = new RegisteredSystemFE

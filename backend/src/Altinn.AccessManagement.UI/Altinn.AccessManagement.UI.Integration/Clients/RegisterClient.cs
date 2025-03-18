@@ -202,7 +202,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<CustomerList>(responseContent, _serializerOptions);
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        return new CustomerList();
+                    }
+                    else 
+                    {
+                        return JsonSerializer.Deserialize<CustomerList>(responseContent, _serializerOptions);
+                    }
                 }
 
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyCustomers // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);

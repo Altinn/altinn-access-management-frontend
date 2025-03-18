@@ -48,10 +48,10 @@ export const ReporteeRightsPage = () => {
         fromPartyUuid={reporteeUuid ?? ''}
         toPartyUuid={getCookie('AltinnPartyUuid')}
       >
-        <PageWrapper>
-          <PageLayoutWrapper>
-            <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
-              <DelegationModalProvider>
+        <DelegationModalProvider>
+          <PageWrapper>
+            <PageLayoutWrapper>
+              <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
                 <UserPageHeader
                   userName={name}
                   userType={party?.partyTypeName}
@@ -86,10 +86,10 @@ export const ReporteeRightsPage = () => {
                     />
                   }
                 />
-              </DelegationModalProvider>
-            </PageContainer>
-          </PageLayoutWrapper>
-        </PageWrapper>
+              </PageContainer>
+            </PageLayoutWrapper>
+          </PageWrapper>
+        </DelegationModalProvider>
       </PartyRepresentationProvider>
     </SnackbarProvider>
   );
