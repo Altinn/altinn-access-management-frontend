@@ -132,30 +132,28 @@ export const DelegationModalContent = ({
       >
         {triggerButtonText} <PlusIcon />
       </Dialog.Trigger>
-      <SnackbarProvider>
-        <Dialog
-          className={classes.modalDialog}
-          closedby='any'
-          closeButton={t('common.close')}
-          onClose={reset}
-          ref={modalRef}
-        >
-          <>
-            {infoView && (
-              <Button
-                className={classes.backButton}
-                variant='text'
-                data-color='neutral'
-                onClick={() => setInfoView(false)}
-                icon={ArrowLeftIcon}
-              >
-                {t('common.back')}
-              </Button>
-            )}
-            <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
-          </>
-        </Dialog>
-      </SnackbarProvider>
+      <Dialog
+        className={classes.modalDialog}
+        closedby='any'
+        closeButton={t('common.close')}
+        onClose={reset}
+        ref={modalRef}
+      >
+        <>
+          {infoView && (
+            <Button
+              className={classes.backButton}
+              variant='text'
+              data-color='neutral'
+              onClick={() => setInfoView(false)}
+              icon={ArrowLeftIcon}
+            >
+              {t('common.back')}
+            </Button>
+          )}
+          <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
+        </>
+      </Dialog>
     </Dialog.TriggerContext>
   );
 };

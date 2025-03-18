@@ -84,18 +84,16 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           onClosing();
         }}
       >
-        <SnackbarProvider>
-          <div className={classes.content}>
-            {renderModalContent(
-              toPartyUuid,
-              fromPartyUuid,
-              resource,
-              accessPackage,
-              role,
-              availableActions,
-            )}
-          </div>
-        </SnackbarProvider>
+        <div className={classes.content}>
+          {renderModalContent(
+            toPartyUuid,
+            fromPartyUuid,
+            resource,
+            accessPackage,
+            role,
+            availableActions,
+          )}
+        </div>
       </Dialog>
     );
   },
