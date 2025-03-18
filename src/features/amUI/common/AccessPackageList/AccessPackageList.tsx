@@ -85,9 +85,11 @@ export const AccessPackageList = ({
     onRevokeError,
   });
 
-  const sortedAreas = [...assignedAreas, ...availableAreas].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  );
+  const combinedAreas = [...assignedAreas, ...availableAreas];
+
+  const displayAreas = searchString
+    ? combinedAreas
+    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className={classes.accessAreaList}>
@@ -95,7 +97,7 @@ export const AccessPackageList = ({
         <SkeletonAccessPackageList />
       ) : (
         <ListBase>
-          {sortedAreas.map((area) => {
+          {displayAreas.map((area) => {
             const { packages } = area;
             const expanded =
               (searchString && searchString.length > 2) ||

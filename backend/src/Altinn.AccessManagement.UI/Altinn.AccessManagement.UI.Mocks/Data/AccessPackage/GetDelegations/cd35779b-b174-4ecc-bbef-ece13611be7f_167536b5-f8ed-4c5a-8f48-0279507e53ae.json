@@ -26,14 +26,6 @@
       "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til dyrehold. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "isDelegable": true,
       "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "se_3225_1596",
-          "Name": "A2 skjema"
-        }
       ]
     },
     "To": {
@@ -77,14 +69,6 @@
       "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til jordbruk. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
       "isDelegable": true,
       "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "se_3225_1596",
-          "Name": "A2 skjema"
-        }
       ]
     },
     "To": {
@@ -128,34 +112,6 @@
       "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til tiltak og rapportering på bærekraft. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "isDelegable": true,
       "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "appid-503",
-          "Name": "Snarveien"
-        },
-        {
-          "Id": "app_ttd_a3-app",
-          "Name": "A3 app"
-        },
-        {
-          "Id": "app_ttd_a3-app2",
-          "Name": "A3 app 2"
-        },
-        {
-          "Id": "appid-509",
-          "Name": "Kaffemaskinen i 4. etasje"
-        },
-        {
-          "Id": "appid-512",
-          "Name": "Lønningsoversikt"
-        },
-        {
-          "Id": "appid-513",
-          "Name": "Kaffemaskinen i 5. etasje"
-        }
       ]
     },
     "To": {
@@ -192,25 +148,13 @@
         "Name": "Post og arkiv",
         "Description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til post og arkiv.",
         "IconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzIzMjYyQSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMyA1LjI1YS43NS43NSAwIDAgMC0uNzUuNzV2MTNjMCAuNDE0LjMzNi43NS43NS43NWgxOGEuNzUuNzUgMCAwIDAgLjc1LS43NVY2YS43NS43NSAwIDAgMC0uNzUtLjc1SDNabS43NSAxMS45NCA1LjI3My01LjI3M0wzLjc1IDguNHY4Ljc4OFptNi41NDYtNC40MjVMNC44MSAxOC4yNWgxNC4zNzhsLTUuNDg1LTUuNDg1LTEuMjg4Ljg1OWEuNzUuNzUgMCAwIDEtLjgzMiAwbC0xLjI4OC0uODU5Wm00LjY4MS0uODQ4TDIwLjI1IDguNHY4Ljc4OGwtNS4yNzMtNS4yNzJabS0xMS01LjE2N0wxMiAxMi4wOTlsOC4wMjMtNS4zNDlIMy45NzdaIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=",
-        "Group": {
-          "Id": "",
-          "Name": "Bransje",
-          "Description": "....."
-        }
+        "groupId": "3757643a-316d-4d0e-a52b-4dc7cdebc0b4"
       },
       "Provider": {
         "Id": "181C5364-2988-4F48-925C-62844576B5B0",
         "Name": "Digdir"
       },
       "Resources": [
-        {
-          "Id": "appid-513",
-          "Name": "ordinær_post"
-        },
-        {
-          "Id": "appid-514",
-          "Name": "ikke_sensitiv_post"
-        }
       ]
     },
     "To": {

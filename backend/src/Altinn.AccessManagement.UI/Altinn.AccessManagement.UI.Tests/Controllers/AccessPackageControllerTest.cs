@@ -60,8 +60,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSearch_withSearchString()
         {
             // Arrange
-            string searchString = "sjøfart"; // Will return only one package
-            List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/Search/searchString_a.json");
+            string searchString = "skattegrunnlag"; // Will return only one package
+            List<AccessAreaFE> expectedResult = Util.GetMockData<List<AccessAreaFE>>(_expectedDataPath + "/AccessPackage/Search/searchString_skattegrunnlag.json");
 
             // Act
             HttpResponseMessage response = await _client.GetAsync($"accessmanagement/api/v1/accesspackage/search?&searchString={searchString}");

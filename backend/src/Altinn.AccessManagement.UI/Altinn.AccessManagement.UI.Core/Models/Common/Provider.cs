@@ -19,5 +19,10 @@
         /// Refrence Identifier (e.g. OrgNo)
         /// </summary>
         public string RefId { get; set; }
+
+        /// <summary>
+        /// ImgUrl for the provider's logo
+        /// </summary>
+        public string? LogoUrl { get; set; }
     }
 }
