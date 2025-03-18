@@ -10,7 +10,6 @@ import {
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
@@ -18,33 +17,25 @@ import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
 import { DelegationAction } from '../EditModal';
 
 import classes from './RoleInfo.module.css';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface PackageInfoProps {
   role: Role;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   onDelegate?: () => void;
   availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({
-  role,
-  toPartyUuid,
-  fromPartyUuid,
-  availableActions = [],
-}: PackageInfoProps) => {
+export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
 
-  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
-  const { data: fromParty } = useGetPartyByUUIDQuery(fromPartyUuid);
-
+  const { fromParty, toParty } = usePartyRepresentation();
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: fromPartyUuid ?? '',
-    to: toPartyUuid ?? '',
+    from: fromParty?.partyUuid ?? '',
+    to: toParty?.partyUuid ?? '',
   });
 
   const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: fromPartyUuid ?? '',
+    rightownerUuid: fromParty?.partyUuid ?? '',
     roleUuid: role.id,
   });
 

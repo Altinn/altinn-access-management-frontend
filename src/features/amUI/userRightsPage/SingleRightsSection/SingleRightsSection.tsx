@@ -41,11 +41,7 @@ export const SingleRightsSection = () => {
         >
           {t('single_rights.current_services_title', { count: singleRights?.length })}
         </Heading>
-        <DelegationModal
-          toPartyUuid={toParty.partyUuid ?? ''}
-          fromPartyUuid={fromPartyId}
-          delegationType={DelegationType.SingleRights}
-        />
+        <DelegationModal delegationType={DelegationType.SingleRights} />
         {isError && <div>{t('user_rights_page.error')}</div>}
         {isLoading && <div>{t('user_rights_page.loading')}</div>}
 

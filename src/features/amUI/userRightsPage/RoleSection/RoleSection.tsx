@@ -54,8 +54,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
         {party && (
           <RoleInfoModal
             modalRef={modalRef}
-            toPartyUuid={rightHolderUuid ?? ''}
-            fromPartyUuid={reportee?.partyUuid ?? ''}
             role={modalItem}
             onClose={() => setModalItem(undefined)}
             availableActions={[

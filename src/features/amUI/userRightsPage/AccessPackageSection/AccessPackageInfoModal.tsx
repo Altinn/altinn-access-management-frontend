@@ -28,25 +28,21 @@ export const AccessPackageInfoModal = ({
   const isCurrentUser = currentUser?.uuid === toPartyUuid;
 
   return (
-    <DelegationModalProvider>
-      <EditModal
-        ref={modalRef}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
-        accessPackage={modalItem}
-        openWithError={openWithError}
-        onClose={onClose}
-        availableActions={
-          Array.isArray(modalActions)
-            ? modalActions
-            : modalActions !== undefined
-              ? [modalActions]
-              : [
-                  !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
-                  DelegationAction.REVOKE,
-                ]
-        }
-      />
-    </DelegationModalProvider>
+    <EditModal
+      ref={modalRef}
+      accessPackage={modalItem}
+      openWithError={openWithError}
+      onClose={onClose}
+      availableActions={
+        Array.isArray(modalActions)
+          ? modalActions
+          : modalActions !== undefined
+            ? [modalActions]
+            : [
+                !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
+                DelegationAction.REVOKE,
+              ]
+      }
+    />
   );
 };

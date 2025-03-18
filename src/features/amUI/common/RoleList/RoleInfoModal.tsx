@@ -8,8 +8,6 @@ import { DelegationModalProvider } from '../DelegationModal/DelegationModalConte
 
 interface RoleInfoModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   role?: Role;
   onClose?: () => void;
   availableActions?: DelegationAction[];
@@ -17,8 +15,6 @@ interface RoleInfoModalProps {
 
 export const RoleInfoModal = ({
   modalRef,
-  toPartyUuid,
-  fromPartyUuid,
   role,
   onClose,
   availableActions,
@@ -34,8 +30,6 @@ export const RoleInfoModal = ({
     <DelegationModalProvider>
       <EditModal
         ref={modalRef}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
         role={role}
         availableActions={availableActions}
       />

@@ -25,27 +25,13 @@ export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onClose?: () => void;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  (
-    {
-      toPartyUuid,
-      fromPartyUuid,
-      resource,
-      accessPackage,
-      role,
-      availableActions,
-      openWithError,
-      onClose,
-    },
-    ref,
-  ) => {
+  ({ resource, accessPackage, role, availableActions, openWithError, onClose }, ref) => {
     const { setActionError, reset } = useDelegationModalContext();
 
     const onClosing = () => {
@@ -86,14 +72,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
       >
         <SnackbarProvider>
           <div className={classes.content}>
-            {renderModalContent(
-              toPartyUuid,
-              fromPartyUuid,
-              resource,
-              accessPackage,
-              role,
-              availableActions,
-            )}
+            {renderModalContent(resource, accessPackage, role, availableActions)}
           </div>
         </SnackbarProvider>
       </Dialog>
@@ -102,28 +81,18 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
 );
 
 const renderModalContent = (
-  toPartyUuid: string,
-  fromPartyUuid: string,
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
   availableActions?: DelegationAction[],
 ) => {
   if (resource) {
-    return (
-      <ResourceInfo
-        resource={resource}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
-      />
-    );
+    return <ResourceInfo resource={resource} />;
   }
   if (accessPackage) {
     return (
       <AccessPackageInfo
         accessPackage={accessPackage}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
         availableActions={availableActions}
       />
     );
@@ -132,8 +101,6 @@ const renderModalContent = (
     return (
       <RoleInfo
         role={role}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
         availableActions={availableActions}
       />
     );

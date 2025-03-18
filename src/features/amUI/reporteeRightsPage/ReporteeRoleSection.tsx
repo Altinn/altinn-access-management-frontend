@@ -46,8 +46,6 @@ export const ReporteeRoleSection = ({
       </div>
       <RoleInfoModal
         modalRef={modalRef}
-        toPartyUuid={toUuid}
-        fromPartyUuid={reporteeUuid ?? ''}
         role={modalItem}
         onClose={() => setModalItem(undefined)}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}

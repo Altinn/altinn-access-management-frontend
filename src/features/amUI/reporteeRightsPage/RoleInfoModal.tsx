@@ -29,8 +29,6 @@ export const RoleInfoModal = ({ modalRef, toParty, role, onClose }: RoleInfoModa
   return (
     <EditModal
       ref={modalRef}
-      toPartyUuid={getCookie('AltinnPartyUuid')}
-      fromPartyUuid={toParty.partyUuid}
       role={role}
       availableActions={[
         !isCurrentUser ? DelegationAction.DELEGATE : DelegationAction.REQUEST,
