@@ -22,6 +22,7 @@ import { RightsTabs } from '../common/RightsTabs/RightsTabs';
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -45,44 +46,46 @@ export const UserRightsPage = () => {
     <SnackbarProvider>
       <PageWrapper>
         <PageLayoutWrapper>
-          <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
-            {!isLoading && allAccesses ? (
-              <>
-                <UserPageHeader
-                  userName={party?.name}
-                  userType={party?.partyTypeName}
-                  subHeading={`for ${reportee?.name}`}
-                  roles={
-                    !!reportee?.partyUuid &&
-                    !!party?.partyUuid && (
-                      <UserRoles
-                        rightOwnerUuid={reportee.partyUuid}
-                        rightHolderUuid={party.partyUuid}
-                      />
-                    )
-                  }
-                />
+          <DelegationModalProvider>
+            <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Users}`)}>
+              {!isLoading && allAccesses ? (
+                <>
+                  <UserPageHeader
+                    userName={party?.name}
+                    userType={party?.partyTypeName}
+                    subHeading={`for ${reportee?.name}`}
+                    roles={
+                      !!reportee?.partyUuid &&
+                      !!party?.partyUuid && (
+                        <UserRoles
+                          rightOwnerUuid={reportee.partyUuid}
+                          rightHolderUuid={party.partyUuid}
+                        />
+                      )
+                    }
+                  />
 
-                <RightsTabs
-                  tabBadge={{
-                    accessPackages: allAccesses.accessPackages?.length ?? 0,
-                    services: allAccesses.services?.length ?? 0,
-                    roles: filterDigdirRole(allAccesses.roles).length ?? 0,
-                  }}
-                  packagesPanel={
-                    <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
-                  }
-                  singleRightsPanel={<SingleRightsSection />}
-                  roleAssignmentsPanel={
-                    <RoleSection numberOfAccesses={allAccesses.accessPackages?.length} />
-                  }
-                />
-              </>
-            ) : (
-              // TODO: Add proper aria-label for loading
-              <Spinner aria-label='loading' />
-            )}
-          </PageContainer>
+                  <RightsTabs
+                    tabBadge={{
+                      accessPackages: allAccesses.accessPackages?.length ?? 0,
+                      services: allAccesses.services?.length ?? 0,
+                      roles: filterDigdirRole(allAccesses.roles).length ?? 0,
+                    }}
+                    packagesPanel={
+                      <AccessPackageSection numberOfAccesses={allAccesses.accessPackages?.length} />
+                    }
+                    singleRightsPanel={<SingleRightsSection />}
+                    roleAssignmentsPanel={
+                      <RoleSection numberOfAccesses={allAccesses.accessPackages?.length} />
+                    }
+                  />
+                </>
+              ) : (
+                // TODO: Add proper aria-label for loading
+                <Spinner aria-label='loading' />
+              )}
+            </PageContainer>
+          </DelegationModalProvider>
         </PageLayoutWrapper>
       </PageWrapper>
     </SnackbarProvider>

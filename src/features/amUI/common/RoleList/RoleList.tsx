@@ -4,10 +4,11 @@ import { ListBase } from '@altinn/altinn-components';
 
 import {
   type ExtendedRole,
+  Role,
   useGetRolesForUserQuery,
   useGetRolesQuery,
 } from '@/rtk/features/roleApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { Party, useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 
@@ -17,6 +18,7 @@ import { SkeletonRoleList } from './SkeletonRoleList';
 import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
+import { ActionError } from '@/resources/hooks/useActionError';
 
 interface RoleListProps {
   from: string;
@@ -24,9 +26,17 @@ interface RoleListProps {
   onSelect: (role: ExtendedRole) => void;
   availableActions?: DelegationAction[];
   isLoading?: boolean;
+  onActionError: (role: Role, error: ActionError) => void;
 }
 
-export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: RoleListProps) => {
+export const RoleList = ({
+  from,
+  to,
+  onSelect,
+  availableActions,
+  isLoading,
+  onActionError,
+}: RoleListProps) => {
   const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(to ?? '');
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
   const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
@@ -100,11 +110,12 @@ export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: Ro
                         <RevokeRoleButton
                           key={role.id}
                           assignmentId={role?.assignmentId ?? ''}
-                          roleName={role.name}
+                          accessRole={role}
                           toParty={party}
                           fullText={false}
                           size='sm'
                           disabled={role.inherited?.length > 0}
+                          onRevokeError={onActionError}
                         />
                       )
                     }
@@ -124,12 +135,12 @@ export const RoleList = ({ from, to, onSelect, availableActions, isLoading }: Ro
                       <>
                         {availableActions?.includes(DelegationAction.DELEGATE) && (
                           <DelegateRoleButton
+                            accessRole={role}
                             key={role.id}
-                            roleId={role.id}
-                            roleName={role.name}
                             toParty={party}
                             fullText={false}
                             size='sm'
+                            onDelegateError={onActionError}
                           />
                         )}
                         {availableActions?.includes(DelegationAction.REQUEST) && (

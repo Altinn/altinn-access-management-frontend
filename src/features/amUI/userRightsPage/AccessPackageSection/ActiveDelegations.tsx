@@ -4,18 +4,18 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
-import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
+import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
 export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const { error: actionError, setError: setActionError } = useActionError();
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
+  const { setActionError } = useDelegationModalContext();
 
   const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
 
@@ -51,11 +51,6 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
         toPartyUuid={toParty.partyUuid}
         fromPartyUuid={getCookie('AltinnPartyUuid')}
         modalItem={modalItem}
-        onClose={() => {
-          setModalItem(undefined);
-          setActionError(null);
-        }}
-        openWithError={actionError}
       />
     </>
   );

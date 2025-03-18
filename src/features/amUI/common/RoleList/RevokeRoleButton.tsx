@@ -3,29 +3,34 @@ import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 
-import { useSnackbar } from '../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
-
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
+import type { Role } from '@/rtk/features/roleApi';
 import { useRevokeMutation } from '@/rtk/features/roleApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
+
+import { useSnackbar } from '../Snackbar';
 
 interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
+  accessRole: Role;
   assignmentId: string;
-  roleName: string;
   toParty?: Party;
   fullText?: boolean;
   icon?: boolean;
+  onRevokeSuccess?: (role: Role, toParty: Party) => void;
+  onRevokeError?: (role: Role, errorInfo: ActionError) => void;
 }
 
 export const RevokeRoleButton = ({
   assignmentId,
-  roleName,
+  accessRole,
   toParty,
   fullText = false,
   disabled,
   variant = 'text',
   icon = true,
+  onRevokeSuccess,
+  onRevokeError,
   ...props
 }: RevokeRoleButtonProps) => {
   const { t } = useTranslation();
@@ -33,30 +38,47 @@ export const RevokeRoleButton = ({
   const { data: representingParty } = useGetReporteePartyQuery();
   const [revoke, { isLoading }] = useRevokeMutation();
 
-  const onClick = () => {
-    const snackbar = (isSuccessful: boolean) => {
-      const snackbarData = {
-        message: t(isSuccessful ? 'role.role_deletion_success' : 'role.role_deletion_error', {
-          role: roleName,
-          name: toParty?.name,
+  const handleRevokeSuccess = (role: Role, toParty?: Party) => {
+    if (onRevokeSuccess && toParty) onRevokeSuccess(role, toParty);
+    else {
+      openSnackbar({
+        message: t('access_packages.package_deletion_success', {
+          name: toParty?.name ?? '',
+          accessPackage: role.name,
         }),
-        variant: SnackbarMessageVariant.Default,
-        duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
-      };
-      openSnackbar(snackbarData);
-    };
+      });
+    }
+  };
 
+  const handleRevokeError = (
+    role: Role,
+    toParty?: Party,
+    httpStatus?: string,
+    timestamp?: string,
+  ) => {
+    if (onRevokeError)
+      onRevokeError(role, { httpStatus: httpStatus ?? '', timestamp: timestamp ?? '' });
+    else {
+      openSnackbar({
+        message: t('access_packages.package_deletion_error', {
+          name: toParty?.name,
+          accessPackage: role.name,
+        }),
+      });
+    }
+  };
+
+  const onClick = () => {
     if (representingParty) {
       revoke({
         assignmentId: assignmentId,
       })
         .unwrap()
         .then(() => {
-          snackbar(true);
+          handleRevokeSuccess(accessRole, toParty);
         })
         .catch((error) => {
-          console.log(error);
-          snackbar(false);
+          handleRevokeError(accessRole, toParty, error.status, error.timestamp);
         });
     }
   };
