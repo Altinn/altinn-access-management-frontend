@@ -13,7 +13,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemuserPopover';
+import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 
 import classes from './SystemUserDetailsPage.module.css';
 

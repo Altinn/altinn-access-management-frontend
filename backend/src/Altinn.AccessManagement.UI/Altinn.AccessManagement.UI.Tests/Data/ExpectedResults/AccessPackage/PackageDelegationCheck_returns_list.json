@@ -11,8 +11,8 @@
   },
   {
     "packageId": "5eb07bdc-5c3c-4c85-add3-5405b214b8a3",
-    "canDelegate": false,
-    "detailCode": "MissingSrrRightAccess"
+    "canDelegate": true,
+    "detailCode": "DelegationAccess"
   },
   {
     "packageId": "9d2ec6e9-5148-4f47-9ae4-4536f6c9c1cb",

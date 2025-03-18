@@ -6,6 +6,8 @@ import type {
   SystemUser,
   SystemUserRequest,
   RegisteredSystemRights,
+  AgentDelegationCustomer,
+  AgentDelegation,
 } from '@/features/amUI/systemUser/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
@@ -32,6 +34,7 @@ export const systemUserApi = createApi({
   }),
   tagTypes: [Tags.SystemUsers],
   endpoints: (builder) => ({
+    // systemregister
     getRegisteredSystems: builder.query<RegisteredSystem[], void>({
       query: () => `/systemregister`,
       keepUnusedDataFor: Infinity,
@@ -39,6 +42,8 @@ export const systemUserApi = createApi({
     getRegisteredSystemRights: builder.query<RegisteredSystemRights, string>({
       query: (systemId) => `systemregister/rights/${systemId}`,
     }),
+
+    // systemuser
     getSystemUsers: builder.query<SystemUser[], string>({
       query: (partyId) => `systemuser/${partyId}`,
       providesTags: [Tags.SystemUsers],
@@ -69,6 +74,58 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
+
+    // agent delegation systemuser
+    getAgentSystemUsers: builder.query<SystemUser[], string>({
+      query: (partyId) => `systemuser/agent/${partyId}`,
+      providesTags: [Tags.SystemUsers],
+    }),
+    getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
+      query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
+    }),
+    getRegnskapsforerCustomers: builder.query<AgentDelegationCustomer[], string>({
+      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/regnskapsforer`,
+      keepUnusedDataFor: Infinity,
+    }),
+    getRevisorCustomers: builder.query<AgentDelegationCustomer[], string>({
+      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/revisor`,
+      keepUnusedDataFor: Infinity,
+    }),
+    getForretningsforerCustomers: builder.query<AgentDelegationCustomer[], string>({
+      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/forretningsforer`,
+      keepUnusedDataFor: Infinity,
+    }),
+    getAssignedCustomers: builder.query<
+      AgentDelegation[],
+      { partyId: string; systemUserId: string }
+    >({
+      query: ({ partyId, systemUserId }) =>
+        `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
+    }),
+    assignCustomer: builder.mutation<
+      AgentDelegation,
+      { partyId: string; systemUserId: string; partyUuid: string; customerUuid: string }
+    >({
+      query: ({ partyId, systemUserId, partyUuid, customerUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
+        method: 'POST',
+        body: {
+          customerUuid: customerUuid,
+          facilitatorUuid: partyUuid,
+        },
+      }),
+    }),
+    removeCustomer: builder.mutation<
+      void,
+      { partyId: string; systemUserId: string; assignmentId: string }
+    >({
+      query: ({ partyId, systemUserId, assignmentId }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${assignmentId}`,
+        method: 'DELETE',
+      }),
+    }),
+
+    // system user request
     getSystemUserRequest: builder.query<SystemUserRequest, { partyId: string; requestId: string }>({
       query: ({ partyId, requestId }) => `systemuser/request/${partyId}/${requestId}`,
     }),
@@ -86,6 +143,8 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
+
+    // change request
     getChangeRequest: builder.query<
       SystemUserRequest,
       { partyId: string; changeRequestId: string }
@@ -107,6 +166,8 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
+
+    // agent request
     getAgentSystemUserRequest: builder.query<
       SystemUserRequest,
       { partyId: string; requestId: string }
@@ -139,6 +200,14 @@ export const {
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
   useGetSystemUsersQuery,
+  useGetRegnskapsforerCustomersQuery,
+  useGetRevisorCustomersQuery,
+  useGetForretningsforerCustomersQuery,
+  useGetAssignedCustomersQuery,
+  useAssignCustomerMutation,
+  useRemoveCustomerMutation,
+  useGetAgentSystemUsersQuery,
+  useGetAgentSystemUserQuery,
   useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,
   useGetRegisteredSystemRightsQuery,

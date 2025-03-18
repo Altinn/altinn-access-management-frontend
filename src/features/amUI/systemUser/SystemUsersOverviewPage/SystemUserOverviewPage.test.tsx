@@ -12,6 +12,7 @@ import store from '@/rtk/app/store';
 
 import { SystemUserOverviewPage } from './SystemUserOverviewPage';
 
+const testPartyId = 51329012;
 const systemUsers = [
   {
     id: '93d4ac6b-8412-4600-8480-1a282359d2c8',
@@ -60,7 +61,7 @@ vi.mock('react-router', async () => {
 describe('SystemUserOverviewPage', () => {
   test('should show error message if loading system users fail', async () => {
     server.use(
-      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/*`, () => {
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/${testPartyId}`, () => {
         return new HttpResponse(null, {
           status: 500,
         });
@@ -74,7 +75,7 @@ describe('SystemUserOverviewPage', () => {
 
   test('should show "new" badge for created system user', async () => {
     server.use(
-      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/*`, () => {
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/${testPartyId}`, () => {
         return HttpResponse.json(systemUsers);
       }),
     );
@@ -88,7 +89,7 @@ describe('SystemUserOverviewPage', () => {
   test('should navigate to system user when system user is clicked', async () => {
     const user = userEvent.setup();
     server.use(
-      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/*`, () => {
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/${testPartyId}`, () => {
         return HttpResponse.json(systemUsers);
       }),
     );

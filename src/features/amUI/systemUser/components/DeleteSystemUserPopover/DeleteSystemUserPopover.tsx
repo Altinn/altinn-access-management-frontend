@@ -12,7 +12,7 @@ interface DeleteSystemUserPopoverProps {
   isDeleteError: boolean;
   isDeletingSystemUser: boolean;
   handleDeleteSystemUser: () => void;
-  hasClientDelegations?: boolean;
+  hasAgentDelegation?: boolean;
 }
 
 export const DeleteSystemUserPopover = ({
@@ -20,7 +20,7 @@ export const DeleteSystemUserPopover = ({
   isDeleteError,
   isDeletingSystemUser,
   handleDeleteSystemUser,
-  hasClientDelegations,
+  hasAgentDelegation,
 }: DeleteSystemUserPopoverProps): React.ReactNode => {
   const { t } = useTranslation();
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
@@ -42,7 +42,7 @@ export const DeleteSystemUserPopover = ({
           className={classes.deletePopover}
           onClose={() => setIsPopoverOpen(false)}
         >
-          {hasClientDelegations ? (
+          {hasAgentDelegation ? (
             <Paragraph>{t('systemuser_detailpage.delete_has_customer_warning')}</Paragraph>
           ) : (
             <>
