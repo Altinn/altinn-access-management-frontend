@@ -19,6 +19,11 @@ import { Router } from 'react-router';
 import { worker } from '../.mock/browser';
 worker.start();
 
+// Set altinn cookies when Storybook starts
+document.cookie = 'AltinnPartyUuid=mocked-party-uuid; path=/; SameSite=Lax';
+document.cookie = 'AltinnPartyId=mocked-party-id; path=/; SameSite=Lax';
+document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
+
 // Initialise i18next;
 i18n
   .use(LanguageDetector)

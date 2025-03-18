@@ -27,8 +27,6 @@ export const ActiveDelegations = () => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
-        toPartyUuid={toParty?.partyUuid ?? ''}
         useDeleteConfirm={isCurrentUser}
         availableActions={[
           DelegationAction.REVOKE,

@@ -7,6 +7,7 @@ import { SnackbarProvider } from '../Snackbar';
 
 import { DelegationModal, DelegationType } from './DelegationModal';
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { DelegationModalProvider } from './DelegationModalContext';
 
 type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
 
@@ -21,14 +22,18 @@ export default {
   },
   render: (props) => (
     <SnackbarProvider>
-      <PartyRepresentationProvider
-        fromPartyUuid='123'
-        toPartyUuid='123'
-      >
+      <DelegationModalProvider>
         <Provider store={store}>
-          <DelegationModal {...(props as DelegationModalProps)} />
+          <PartyRepresentationProvider
+            fromPartyUuid='123'
+            toPartyUuid='123'
+          >
+            <Provider store={store}>
+              <DelegationModal {...(props as DelegationModalProps)} />
+            </Provider>
+          </PartyRepresentationProvider>
         </Provider>
-      </PartyRepresentationProvider>
+      </DelegationModalProvider>
     </SnackbarProvider>
   ),
 } as Meta;
