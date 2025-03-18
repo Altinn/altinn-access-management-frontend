@@ -14,7 +14,7 @@ import { PageContainer } from '@/features/amUI/common/PageContainer/PageContaine
 import { SystemUserPath } from '@/routes/paths';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import type { AgentDelegationCustomer, SystemUser } from '../types';
+import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
@@ -22,32 +22,35 @@ import { CustomerList } from './CustomerList';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
-  assignedIds: string[],
+  existingAgentDelegations: AgentDelegation[],
 ): AgentDelegationCustomer[] => {
-  return customers.filter((customer) => assignedIds.indexOf(customer.id) > -1);
+  const assignedCustomerIds = existingAgentDelegations.map((x) => x.customerUuid);
+  return customers.filter((customer) => assignedCustomerIds.indexOf(customer.uuid) > -1);
 };
 
 interface SystemUserAgentDelegationPageContentProps {
   systemUser: SystemUser;
   customers: AgentDelegationCustomer[];
-  initialAssignedIds: string[];
+  existingAgentDelegations: AgentDelegation[];
 }
 export const SystemUserAgentDelegationPageContent = ({
   systemUser,
   customers,
-  initialAssignedIds,
+  existingAgentDelegations,
 }: SystemUserAgentDelegationPageContentProps): React.ReactNode => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid');
+
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const [assignedIds, setAssignedIds] = useState<string[]>(initialAssignedIds);
+  const [delegations, setDelegations] = useState<AgentDelegation[]>(existingAgentDelegations);
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
   const [errorIds, setErrorIds] = useState<string[]>([]);
   const [assignedCustomers, setAssignedCustomers] = useState<AgentDelegationCustomer[]>(
-    getAssignedCustomers(customers, initialAssignedIds),
+    getAssignedCustomers(customers, existingAgentDelegations),
   );
 
   const [deleteSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
@@ -67,34 +70,40 @@ export const SystemUserAgentDelegationPageContent = ({
   const [removeCustomer] = useRemoveCustomerMutation();
 
   const onAddCustomer = (customerId: string): void => {
-    const successCallback = () =>
-      setAssignedIds((oldAssignedIds) => [...oldAssignedIds, customerId]);
-    mutateCustomer(assignCustomer, successCallback, customerId);
-  };
-
-  const onRemoveCustomer = (customerId: string): void => {
-    const successCallback = () =>
-      setAssignedIds((oldAssignedIds) => oldAssignedIds.filter((id) => id !== customerId));
-    mutateCustomer(removeCustomer, successCallback, customerId);
-  };
-
-  const mutateCustomer = (
-    mutationPromise: typeof removeCustomer | typeof assignCustomer,
-    successCallback: () => void,
-    customerId: string,
-  ) => {
-    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customerId]);
-    setErrorIds((oldErrorIds) => oldErrorIds.filter((id) => id !== customerId));
-    mutationPromise({ partyId, systemUserId: id ?? '', customerId })
+    assignCustomer({ partyId, systemUserId: id ?? '', customerUuid: customerId, partyUuid })
       .unwrap()
-      .then(() => {
-        successCallback();
+      .then((delegation: AgentDelegation) => {
+        setDelegations((oldDelegations) => [...oldDelegations, delegation]);
       })
       .catch(() => {
         setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
       })
       .finally(() => {
         setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
+      });
+  };
+
+  const onRemoveCustomer = (delegationToRemove: AgentDelegation): void => {
+    removeCustomer({
+      partyId,
+      systemUserId: id ?? '',
+      assignmentId: delegationToRemove.assignmentId,
+    })
+      .unwrap()
+      .then(() => {
+        setDelegations((oldDelegations) =>
+          oldDelegations.filter(
+            (delegation) => delegation.assignmentId !== delegationToRemove.assignmentId,
+          ),
+        );
+      })
+      .catch(() => {
+        setErrorIds((oldErrorIds) => [...oldErrorIds, delegationToRemove.customerUuid]);
+      })
+      .finally(() => {
+        setLoadingIds((oldLoadingIds) =>
+          oldLoadingIds.filter((id) => id !== delegationToRemove.customerUuid),
+        );
       });
   };
 
@@ -105,8 +114,8 @@ export const SystemUserAgentDelegationPageContent = ({
   // need to use useCallback to get updated assignedIds in onClose
   const onCloseModal = useCallback(() => {
     modalRef.current?.close();
-    setAssignedCustomers(getAssignedCustomers(customers, assignedIds));
-  }, [customers, assignedIds]);
+    setAssignedCustomers(getAssignedCustomers(customers, delegations));
+  }, [customers, delegations]);
 
   return (
     <PageContainer
@@ -139,7 +148,7 @@ export const SystemUserAgentDelegationPageContent = ({
           </Heading>
           <CustomerList
             list={customers}
-            assignedIds={assignedIds}
+            delegations={delegations}
             loadingIds={loadingIds}
             errorIds={errorIds}
             onAddCustomer={onAddCustomer}

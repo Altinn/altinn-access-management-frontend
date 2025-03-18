@@ -88,7 +88,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   });
 
   const {
-    data: assignedIds,
+    data: agentDelegations,
     isError: isLoadAssignedCustomersError,
     isLoading: isLoadingAssignedCustomers,
   } = useGetAssignedCustomersQuery({ partyId, systemUserId: id || '' });
@@ -118,11 +118,11 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
             {t('systemuser_agent_delegation.load_assigned_customers_error')}
           </Alert>
         )}
-        {systemUser && customers && assignedIds && (
+        {systemUser && customers && agentDelegations && (
           <SystemUserAgentDelegationPageContent
             systemUser={systemUser}
             customers={customers}
-            initialAssignedIds={assignedIds.map((assigned) => assigned.partyId)}
+            existingAgentDelegations={agentDelegations}
           />
         )}
       </PageLayoutWrapper>

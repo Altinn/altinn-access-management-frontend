@@ -7,6 +7,7 @@ import type {
   SystemUserRequest,
   RegisteredSystemRights,
   AgentDelegationCustomer,
+  AgentDelegation,
 } from '@/features/amUI/systemUser/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
@@ -95,27 +96,31 @@ export const systemUserApi = createApi({
       keepUnusedDataFor: Infinity,
     }),
     getAssignedCustomers: builder.query<
-      { partyUuid: string; partyId: string }[],
+      AgentDelegation[],
       { partyId: string; systemUserId: string }
     >({
       query: ({ partyId, systemUserId }) =>
         `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
     }),
     assignCustomer: builder.mutation<
-      void,
-      { partyId: string; systemUserId: string; customerId: string }
+      AgentDelegation,
+      { partyId: string; systemUserId: string; partyUuid: string; customerUuid: string }
     >({
-      query: ({ partyId, systemUserId, customerId }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${customerId}`,
+      query: ({ partyId, systemUserId, partyUuid, customerUuid }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
         method: 'POST',
+        body: {
+          customerUuid: customerUuid,
+          facilitatorUuid: partyUuid,
+        },
       }),
     }),
     removeCustomer: builder.mutation<
       void,
-      { partyId: string; systemUserId: string; customerId: string }
+      { partyId: string; systemUserId: string; assignmentId: string }
     >({
-      query: ({ partyId, systemUserId, customerId }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${customerId}`,
+      query: ({ partyId, systemUserId, assignmentId }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${assignmentId}`,
         method: 'DELETE',
       }),
     }),

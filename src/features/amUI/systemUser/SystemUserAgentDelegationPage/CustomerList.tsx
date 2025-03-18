@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AmPagination } from '@/components/Paginering';
 
-import type { AgentDelegationCustomer } from '../types';
+import type { AgentDelegation, AgentDelegationCustomer } from '../types';
 
 import classes from './CustomerList.module.css';
 
@@ -26,17 +26,17 @@ const showPages = 7;
 
 interface CustomerListProps {
   list: AgentDelegationCustomer[];
-  assignedIds?: string[];
+  delegations?: AgentDelegation[];
   loadingIds?: string[];
   errorIds?: string[];
   onAddCustomer?: (customerId: string) => void;
-  onRemoveCustomer?: (customerId: string) => void;
+  onRemoveCustomer?: (delegationToRemove: AgentDelegation) => void;
   children?: React.ReactNode;
 }
 
 export const CustomerList = ({
   list,
-  assignedIds,
+  delegations,
   loadingIds,
   errorIds,
   onAddCustomer,
@@ -87,7 +87,7 @@ export const CustomerList = ({
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {
             title: customer.name,
-            id: customer.id,
+            id: customer.uuid,
             disabled: true,
             as: 'div',
             avatar: { type: 'company', name: customer.name },
@@ -95,9 +95,9 @@ export const CustomerList = ({
             controls: (
               <ListControls
                 customer={customer}
-                isAssigned={assignedIds?.some((x) => x === customer.id)}
-                isLoading={loadingIds?.some((x) => x === customer.id)}
-                isError={errorIds?.some((x) => x === customer.id)}
+                delegation={delegations?.find((x) => x.customerUuid === customer.uuid)}
+                isLoading={loadingIds?.some((x) => x === customer.uuid)}
+                isError={errorIds?.some((x) => x === customer.uuid)}
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
               />
@@ -117,15 +117,15 @@ export const CustomerList = ({
 };
 interface ListControlsProps {
   customer: AgentDelegationCustomer;
-  isAssigned?: boolean;
+  delegation?: AgentDelegation;
   isLoading?: boolean;
   isError?: boolean;
-  onRemoveCustomer?: (customerId: string) => void;
+  onRemoveCustomer?: (delegationToRemove: AgentDelegation) => void;
   onAddCustomer?: (customerId: string) => void;
 }
 const ListControls = ({
   customer,
-  isAssigned,
+  delegation,
   isLoading,
   isError,
   onRemoveCustomer,
@@ -143,17 +143,17 @@ const ListControls = ({
           />
         </div>
       )}
-      {isError && isAssigned && (
+      {isError && delegation && (
         <ValidationMessage data-size='sm'>
           {t('systemuser_agent_delegation.remove_system_user_error')}
         </ValidationMessage>
       )}
-      {isError && !isAssigned && (
+      {isError && !delegation && (
         <ValidationMessage data-size='sm'>
           {t('systemuser_agent_delegation.add_system_user_error')}
         </ValidationMessage>
       )}
-      {!isLoading && isAssigned && onRemoveCustomer && (
+      {!isLoading && delegation && onRemoveCustomer && (
         <Button
           variant='tertiary'
           data-size='sm'
@@ -161,19 +161,19 @@ const ListControls = ({
           aria-label={t('systemuser_agent_delegation.remove_from_system_user_aria', {
             customerName: customer.name,
           })}
-          onClick={() => onRemoveCustomer(customer.id)}
+          onClick={() => onRemoveCustomer(delegation)}
         >
           <MinusCircleIcon /> {t('systemuser_agent_delegation.remove_from_system_user')}
         </Button>
       )}
-      {!isLoading && !isAssigned && onAddCustomer && (
+      {!isLoading && !delegation && onAddCustomer && (
         <Button
           variant='tertiary'
           data-size='sm'
           aria-label={t('systemuser_agent_delegation.add_to_system_user_aria', {
             customerName: customer.name,
           })}
-          onClick={() => onAddCustomer(customer.id)}
+          onClick={() => onAddCustomer(customer.uuid)}
         >
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </Button>
