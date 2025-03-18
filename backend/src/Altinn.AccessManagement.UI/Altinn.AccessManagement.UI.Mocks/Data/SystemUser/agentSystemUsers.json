@@ -8,7 +8,12 @@
     "reporteeOrgNo": "123456789",
     "created": "2025-03-01T12:00:00Z",
     "supplierOrgNo": "925141623",
-    "externalRef": ""
+    "externalRef": "",
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"
+      }
+    ]
   },
   {
     "id": "244c56a5-3737-44ac-8f3b-8697c5e281da",
@@ -19,7 +24,12 @@
     "reporteeOrgNo": "123456789",
     "created": "2025-02-15T12:00:00Z",
     "supplierOrgNo": "925141623",
-    "externalRef": ""
+    "externalRef": "",
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:ansvarlig-revisor"
+      }
+    ]
   },
   {
     "id": "095b06de-1a93-4320-b572-42d72949cf2c",
@@ -30,6 +40,11 @@
     "reporteeOrgNo": "123456789",
     "created": "2025-01-20T12:00:00Z",
     "supplierOrgNo": "925141623",
-    "externalRef": ""
+    "externalRef": "",
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:skattegrunnlag"
+      }
+    ]
   }
 ]

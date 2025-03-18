@@ -67,5 +67,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         /// </summary>
         [JsonPropertyName("externalRef")]
         public string ExternalRef { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Access packages set on the system user
+        /// </summary>
+        [JsonPropertyName("accessPackages")]
+        public List<RegisteredSystemAccessPackage> AccessPackages { get; set; } = [];
     }
 }

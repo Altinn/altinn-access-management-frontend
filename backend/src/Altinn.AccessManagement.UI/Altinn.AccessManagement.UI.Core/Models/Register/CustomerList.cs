@@ -8,6 +8,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.Register
         /// <summary>
         /// List data wrapper
         /// </summary>
-        public List<PartyRecord> Data { get; set; }
+        public List<PartyRecord> Data { get; set; } = [];
     }
 }

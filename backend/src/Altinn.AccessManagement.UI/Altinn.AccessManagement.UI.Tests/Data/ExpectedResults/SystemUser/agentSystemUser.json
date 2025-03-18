@@ -10,5 +10,13 @@
     "name": "N/A"
   },
   "resources": [],
-  "accesspackages": []
+  "accesspackages": [
+    {
+      "id": "",
+      "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet",
+      "name": "",
+      "description": "",
+      "resources": []
+    }
+  ]
 }
