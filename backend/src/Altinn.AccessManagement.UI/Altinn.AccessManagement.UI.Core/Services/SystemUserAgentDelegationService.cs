@@ -71,7 +71,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new Result<bool>(response.Problem);
             }
 
-            return false;
+            return true;
         }
 
         private static List<AgentDelegationPartyFE> MapCustomerListToCustomerFE(CustomerList customers)

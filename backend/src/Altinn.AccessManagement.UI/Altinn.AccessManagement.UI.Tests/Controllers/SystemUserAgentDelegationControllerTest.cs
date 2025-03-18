@@ -236,7 +236,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
-        ///     Expected: PostRegnskapsforerAgentDelegation returns delegations
+        ///     Expected: PostRegnskapsforerAgentDelegation returns error
         /// </summary>
         [Fact]
         public async Task PostRegnskapsforerAgentDelegation_ReturnsError()
@@ -263,6 +263,48 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
 
-        // TODO: tester for DELETE/remove delegation
+        /// <summary>
+        ///     Test case: DeleteRegnskapsforerAgentDelegation checks that delegation is removed
+        ///     Expected: DeleteRegnskapsforerAgentDelegation returns true
+        /// </summary>
+        [Fact]
+        public async Task DeleteRegnskapsforerAgentDelegation_ReturnsTrue()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string assingmentId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
+            
+            bool expectedResponse = true;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{assingmentId}");
+            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(expectedResponse, actualResponse);
+        }
+
+        /// <summary>
+        ///     Test case: DeleteRegnskapsforerAgentDelegation checks that delegation is removed
+        ///     Expected: DeleteRegnskapsforerAgentDelegation returns error
+        /// </summary>
+        [Fact]
+        public async Task DeleteRegnskapsforerAgentDelegation_ReturnsError()
+        {
+            // Arrange
+            string partyId = "51329012";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string assingmentId = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
+            
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{assingmentId}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
     }
 }
