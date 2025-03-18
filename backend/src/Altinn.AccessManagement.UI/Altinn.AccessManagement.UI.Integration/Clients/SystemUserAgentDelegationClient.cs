@@ -50,7 +50,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc/>
         public async Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            // TODO: vi vet ikke hva denne returnerer enda
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

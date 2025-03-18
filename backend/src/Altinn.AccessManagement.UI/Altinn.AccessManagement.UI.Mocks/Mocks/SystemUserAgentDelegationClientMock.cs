@@ -26,7 +26,28 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         public Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            string jsonFile = systemUserGuid == new Guid("61844188-3789-4b84-9314-2be1fdbc6633") ? "regnskapsforerAgentDelegations.json" : "revisorAgentDelegations.json";
+            Guid regnskapsforerSystemUserId = Guid.Parse("61844188-3789-4b84-9314-2be1fdbc6633");
+            Guid revisorSystemUserId = Guid.Parse("244c56a5-3737-44ac-8f3b-8697c5e281da");
+            Guid forretningsforerSystemUserId = Guid.Parse("095b06de-1a93-4320-b572-42d72949cf2c");
+
+            string jsonFile;
+            if (systemUserGuid == regnskapsforerSystemUserId)
+            {
+                jsonFile = "regnskapsforerAgentDelegations.json";
+            }
+            else if (systemUserGuid == revisorSystemUserId)
+            {
+                jsonFile = "revisorAgentDelegations.json";
+            }
+            else if (systemUserGuid == forretningsforerSystemUserId)
+            {
+                jsonFile = "forretningsforerAgentDelegations.json";
+            }
+            else
+            {
+                throw new ArgumentException("Invalid customer type");
+            }
+
             List<AgentDelegation> delegations = Util.GetMockData<List<AgentDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
 
             return Task.FromResult(delegations);

@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Test case: GetRegnskapsforerAgentDelegation checks that deletated regnskapsforer customers are returned
         ///     Expected: GetRegnskapsforerAgentDelegation returns delegations
         /// </summary>
-        [Fact(Skip = "work in progress")]
+        [Fact]
         public async Task GetRegnskapsforerAgentDelegation_ReturnsDelegations()
         {
             // Arrange
@@ -124,7 +124,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Test case: GetRevisorAgentDelegation checks that deletated revisor customers are returned
         ///     Expected: GetRevisorAgentDelegation returns delegations
         /// </summary>
-        [Fact(Skip = "work in progress")]
+        [Fact]
         public async Task GetRevisorAgentDelegation_ReturnsDelegations()
         {
             // Arrange
@@ -146,7 +146,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Test case: GetForretningsforerAgentDelegation checks that deletated forretningsforer customers are returned
         ///     Expected: GetForretningsforerAgentDelegation returns delegations
         /// </summary>
-        [Fact(Skip = "work in progress")]
+        [Fact]
         public async Task GetForretningsforerAgentDelegation_ReturnsDelegations()
         {
             // Arrange
@@ -168,7 +168,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
         ///     Expected: PostRegnskapsforerAgentDelegation returns delegations
         /// </summary>
-        [Fact(Skip = "work in progress")]
+        [Fact]
         public async Task PostRegnskapsforerAgentDelegation_ReturnsTrue()
         {
             // Arrange
@@ -184,22 +184,26 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
-            bool expectedResponse = true;
+            AgentDelegationFE expectedResponse = new AgentDelegationFE()
+            {
+                AssignmentId = Guid.NewGuid(),
+                CustomerUuid = Guid.Parse(customerUuid)
+            };
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
-            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+            AgentDelegationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<AgentDelegationFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(expectedResponse, actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         /// <summary>
         ///     Test case: PostRevisorAgentDelegation checks that delegation is added
         ///     Expected: PostRevisorAgentDelegation returns delegations
         /// </summary>
-        [Fact(Skip = "work in progress")]
+        [Fact]
         public async Task PostRevisorAgentDelegation_ReturnsTrue()
         {
             // Arrange
@@ -215,15 +219,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
 
-            bool expectedResponse = true;
+            AgentDelegationFE expectedResponse = new AgentDelegationFE()
+            {
+                AssignmentId = Guid.NewGuid(),
+                CustomerUuid = Guid.Parse(customerUuid)
+            };
 
             // Act
             HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
-            bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
+            AgentDelegationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<AgentDelegationFE>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
-            Assert.Equal(expectedResponse, actualResponse);
+            AssertionUtil.AssertEqual(expectedResponse, actualResponse);
         }
 
         // TODO: tester for DELETE/remove delegation
