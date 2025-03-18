@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             Guid revisorSystemUserId = Guid.Parse("244c56a5-3737-44ac-8f3b-8697c5e281da");
             Guid forretningsforerSystemUserId = Guid.Parse("095b06de-1a93-4320-b572-42d72949cf2c");
 
-            string jsonFile;
+            string jsonFile = null;
             if (systemUserGuid == regnskapsforerSystemUserId)
             {
                 jsonFile = "regnskapsforerAgentDelegations.json";
@@ -40,14 +40,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 jsonFile = "forretningsforerAgentDelegations.json";
             }
-            else
+
+            if (jsonFile != null)
             {
-                throw new ArgumentException("Invalid customer type");
+                List<AgentDelegation> delegations = Util.GetMockData<List<AgentDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
+                return Task.FromResult(delegations);
             }
 
-            List<AgentDelegation> delegations = Util.GetMockData<List<AgentDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
-
-            return Task.FromResult(delegations);
+            return Task.FromResult(new List<AgentDelegation>());
         }
 
         public Task<Result<AgentDelegation>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
