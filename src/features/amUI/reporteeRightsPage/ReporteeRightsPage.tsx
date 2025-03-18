@@ -20,6 +20,7 @@ import { PageContainer } from '../common/PageContainer/PageContainer';
 
 import { ReporteeAccessPackageSection } from './ReporteeAccessPackageSection';
 import { ReporteeRoleSection } from './ReporteeRoleSection';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
 
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
@@ -45,7 +46,7 @@ export const ReporteeRightsPage = () => {
       <PageWrapper>
         <PageLayoutWrapper>
           <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
-            <>
+            <DelegationModalProvider>
               <UserPageHeader
                 userName={name}
                 userType={party?.partyTypeName}
@@ -80,7 +81,7 @@ export const ReporteeRightsPage = () => {
                   />
                 }
               />
-            </>
+            </DelegationModalProvider>
           </PageContainer>
         </PageLayoutWrapper>
       </PageWrapper>

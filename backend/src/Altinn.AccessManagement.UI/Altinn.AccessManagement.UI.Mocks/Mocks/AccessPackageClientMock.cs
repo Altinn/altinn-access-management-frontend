@@ -70,10 +70,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
         /// <inheritdoc />
         public Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
-        {
+        { 
             if (to == Guid.Empty)
             {
                 throw new Exception("Right holder uuid is not valid");
+            }
+            // Mocking delegate error - role "Kundeadministrator"
+            if (roleId.ToString() == "3abe9842-06a5-483f-b76d-a65dec152b2d")
+            {
+                throw new Exception("Assignment id is not valid");
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
@@ -85,6 +90,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (assignmentId == Guid.Empty)
             {
                 throw new Exception("Right holder uuid is not valid");
+            }
+            // Mocking revoke error - role "Kundeadministrator" for user "medaljong sitrongul"
+            if (assignmentId.ToString() == "5e9700d8-1d03-4665-8ce0-13a028741938") 
+            {
+                throw new Exception("Assignment id is not valid");
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));

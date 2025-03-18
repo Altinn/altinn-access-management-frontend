@@ -93,6 +93,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             Dictionary<string, List<AccessPackageDelegation>> actualResult = JsonSerializer.Deserialize<Dictionary<string, List<AccessPackageDelegation>>>(await response.Content.ReadAsStringAsync(), options);
+            var responseJson = JsonSerializer.SerializeToElement(actualResult);
+
+            // Log the response to a file in the workspace directory
+            string workspaceDir = "/Users/sondre/workspace/altinn-access-management-frontend";
+            string filePath = Path.Combine(workspaceDir, "response.json");
+            File.WriteAllText(filePath, responseJson.ToString());
+
             AssertionUtil.AssertCollections(expectedResult.Keys, actualResult.Keys, Assert.Equal);
             foreach (string key in actualResult.Keys)
             {
