@@ -254,7 +254,12 @@
     "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
-    "package_number_of_resources": "{{count}} services"
+    "package_number_of_resources": "{{count}} services",
+    "delegation_check": {
+      "delegation_check_error_heading": "Technical error",
+      "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
+      "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
+    }
   },
   "role": {
     "current_roles_title": "Power of attorney to {{count}} roles(s)",
@@ -302,6 +307,7 @@
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
     "inherited_role_org_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted.",
+    "delegation_check_not_delegable": "You cannot grant this access package because you  lack access yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."

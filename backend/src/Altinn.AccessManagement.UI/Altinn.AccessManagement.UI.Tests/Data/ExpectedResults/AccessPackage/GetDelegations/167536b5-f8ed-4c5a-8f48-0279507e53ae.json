@@ -58,18 +58,6 @@
         "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
       },
       "inherited": false,
-      "inheritedFrom": null
-    }
-  ],
-  "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B": [
-    {
-      "accessPackageId": "91cf61ae-69ab-49d5-b51a-80591c91f255",
-      "delegationDetails": {
-        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
-        "delegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
-        "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
-      },
-      "inherited": true,
       "inheritedFrom": {
         "partyId": 51398461,
         "partyUuid": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
@@ -99,6 +87,18 @@
         },
         "childParties": null
       }
+    }
+  ],
+  "6F938DE8-34F2-4BAB-A0C6-3A3EB64AAD3B": [
+    {
+      "accessPackageId": "91cf61ae-69ab-49d5-b51a-80591c91f255",
+      "delegationDetails": {
+        "delegatedFrom": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+        "delegatedTo": "87ebc0fe-3b79-49b5-81f8-d084c4e38c84",
+        "lastChangedOn": "2024-10-22T15:57:39.2568955+02:00"
+      },
+      "inherited": true,
+      "inheritedFrom": null
     }
   ]
 }
