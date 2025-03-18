@@ -24,7 +24,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PlatformSettings _platformSettings;
-        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
@@ -34,13 +33,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="logger">the handler for logger service</param>
         /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
         /// <param name="platformSettings"> platform settings configuration</param>
-        /// <param name="accessTokenProvider">the handler for access token generator</param>
         public SystemUserAgentDelegationClient(
             HttpClient httpClient,
             ILogger<RegisterClient> logger,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<PlatformSettings> platformSettings,
-            IAccessTokenProvider accessTokenProvider)
+            IOptions<PlatformSettings> platformSettings)
         {
             _logger = logger;        
             _httpContextAccessor = httpContextAccessor;
