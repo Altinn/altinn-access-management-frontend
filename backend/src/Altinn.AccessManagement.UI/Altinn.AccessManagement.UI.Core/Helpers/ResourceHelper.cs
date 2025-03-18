@@ -80,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             
             if (accessPackageIds.Any())
             {
-                List<AccessPackage> accessPackages = [];
+                List<AccessPackage> accessPackages;
                 if (isHardcodedAccessPackage)
                 {
                     List<string> agentDelegationMockAccessPackages = [
