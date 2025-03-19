@@ -278,6 +278,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
+                    services.AddTransient<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClientMock>();
                     services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();

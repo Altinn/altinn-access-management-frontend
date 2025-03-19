@@ -531,9 +531,16 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(expected);
 
             Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Uuid, actual.Uuid);
             Assert.Equal(expected.Name, actual.Name);
             Assert.Equal(expected.OrgNo, actual.OrgNo);
+        }
+
+        public static void AssertEqual(AgentDelegationFE expected, AgentDelegationFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.CustomerId, actual.CustomerId);
         }
     }
 }

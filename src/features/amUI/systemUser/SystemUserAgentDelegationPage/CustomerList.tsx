@@ -87,7 +87,7 @@ export const CustomerList = ({
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {
             title: customer.name,
-            id: customer.uuid,
+            id: customer.id,
             disabled: true,
             as: 'div',
             avatar: { type: 'company', name: customer.name },
@@ -95,9 +95,9 @@ export const CustomerList = ({
             controls: (
               <ListControls
                 customer={customer}
-                delegation={delegations?.find((x) => x.customerUuid === customer.uuid)}
-                isLoading={loadingIds?.some((x) => x === customer.uuid)}
-                isError={errorIds?.some((x) => x === customer.uuid)}
+                delegation={delegations?.find((x) => x.customerId === customer.id)}
+                isLoading={loadingIds?.some((x) => x === customer.id)}
+                isError={errorIds?.some((x) => x === customer.id)}
                 onRemoveCustomer={onRemoveCustomer}
                 onAddCustomer={onAddCustomer}
               />
@@ -173,7 +173,7 @@ const ListControls = ({
           aria-label={t('systemuser_agent_delegation.add_to_system_user_aria', {
             customerName: customer.name,
           })}
-          onClick={() => onAddCustomer(customer.uuid)}
+          onClick={() => onAddCustomer(customer.id)}
         >
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </Button>
