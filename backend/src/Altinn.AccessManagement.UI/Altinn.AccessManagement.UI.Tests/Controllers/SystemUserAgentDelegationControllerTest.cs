@@ -19,6 +19,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly HttpClient _client;
         private readonly string _expectedDataPath = "Data/ExpectedResults";
+        private string _regnskapsforerSystemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+        private string _revisorSystemUserId = "244c56a5-3737-44ac-8f3b-8697c5e281da";
+        private string _forretningsforerSystemUserId = "095b06de-1a93-4320-b572-42d72949cf2c";
 
         /// <summary>
         ///     Constructor setting up factory, test client and dependencies
@@ -104,7 +107,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string systemUserId = _regnskapsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerAgentDelegations.json");
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
@@ -126,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "244c56a5-3737-44ac-8f3b-8697c5e281da";
+            string systemUserId = _revisorSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorAgentDelegations.json");
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
@@ -148,7 +151,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "095b06de-1a93-4320-b572-42d72949cf2c";
+            string systemUserId = _forretningsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerAgentDelegations.json");
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
@@ -170,7 +173,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
             
             AgentDelegationRequest dto = new AgentDelegationRequest
@@ -205,7 +208,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string systemUserId = _revisorSystemUserId;
             string customerId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             
             AgentDelegationRequest dto = new AgentDelegationRequest
@@ -240,7 +243,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
             
             AgentDelegationRequest dto = new AgentDelegationRequest
@@ -269,7 +272,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string systemUserId = _regnskapsforerSystemUserId;
             string assignmentId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
             
             bool expectedResponse = true;
@@ -292,7 +295,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string partyId = "51329012";
-            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string systemUserId = _regnskapsforerSystemUserId;
             string assignmentId = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
             
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
