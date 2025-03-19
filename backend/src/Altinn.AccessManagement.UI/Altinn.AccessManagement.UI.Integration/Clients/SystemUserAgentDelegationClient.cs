@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // GetSystemUserAgentDelegations // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return null;
+                return [];
             }
             catch (Exception ex)
             {
