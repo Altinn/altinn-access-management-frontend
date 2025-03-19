@@ -1,0 +1,27 @@
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+  tools:
+    ast-grep:
+      rule_dirs: []
+      util_dirs: []
+      essential_rules: true
+      packages: []
+    markdownlint:
+      enabled: true
+    github-checks:
+      enabled: true
+    languagetool:
+      enabled: true
+      level: default
+chat:
+  auto_reply: true

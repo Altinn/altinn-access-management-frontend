@@ -1,7 +1,6 @@
 import { createContext, JSX, useContext, useState } from 'react';
 
 import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
-import { P } from 'vitest/dist/chunks/environment.d8YfPkTm';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 
 interface PartyRepresentationProviderProps {
