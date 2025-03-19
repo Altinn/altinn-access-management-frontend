@@ -447,8 +447,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
+            AssertCollections(expected.AccessPackages, actual.AccessPackages, AssertEqual);
         }
-        
 
         public static void AssertEqual(AccessPackage expected, AccessPackage actual)
         {
@@ -522,6 +522,27 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.System.SystemId, actual.System.SystemId);
             Assert.Equal(expected.System.SystemVendorOrgName, actual.System.SystemVendorOrgName);
             Assert.Equal(expected.System.SystemVendorOrgNumber, actual.System.SystemVendorOrgNumber);
+        }        
+        
+        public static void AssertEqual(AccessPackageDelegationCheckResponse expected, AccessPackageDelegationCheckResponse actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.CanDelegate , actual.CanDelegate);
+            Assert.Equal(expected.DetailCode, actual.DetailCode);
+            Assert.Equal(expected.PackageId, actual.PackageId);
+        }
+
+        public static void AssertEqual(AgentDelegationPartyFE expected, AgentDelegationPartyFE actual)
+        {
+            Assert.NotNull(actual);
+            Assert.NotNull(expected);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Uuid, actual.Uuid);
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.OrgNo, actual.OrgNo);
         }
     }
 }

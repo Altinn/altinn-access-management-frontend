@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { DelegationModalProvider } from './DelegationModalContext';
 import { DelegationModalContent } from './DelegationModalContent';
 import type { DelegationAction } from './EditModal';
 
@@ -10,26 +9,15 @@ export enum DelegationType {
   Role = 'Role',
 }
 export interface DelegationModalProps {
-  toPartyUuid: string;
-  fromPartyUuid: string;
   delegationType: DelegationType;
   availableActions?: DelegationAction[];
 }
 
-export const DelegationModal = ({
-  toPartyUuid,
-  fromPartyUuid,
-  delegationType,
-  availableActions,
-}: DelegationModalProps) => {
+export const DelegationModal = ({ delegationType, availableActions }: DelegationModalProps) => {
   return (
-    <DelegationModalProvider>
-      <DelegationModalContent
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
-        delegationType={delegationType}
-        availableActions={availableActions}
-      />
-    </DelegationModalProvider>
+    <DelegationModalContent
+      delegationType={delegationType}
+      availableActions={availableActions}
+    />
   );
 };

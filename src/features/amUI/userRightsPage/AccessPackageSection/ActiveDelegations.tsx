@@ -1,35 +1,32 @@
 import React, { useRef, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Party } from '@/rtk/features/lookupApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { AccessPackageInfoModal } from './AccessPackageInfoModal';
+import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
-export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
+export const ActiveDelegations = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
-  const { error: actionError, setError: setActionError } = useActionError();
-  const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
-
-  const isCurrentUser = currentUser?.uuid === toParty.partyUuid;
+  const { setActionError } = useDelegationModalContext();
+  const { toParty, selfParty, isLoading } = usePartyRepresentation();
+  const isCurrentUser = selfParty?.partyUuid === toParty?.partyUuid;
 
   return (
     <>
       <AccessPackageList
-        isLoading={currentUserLoading}
+        isLoading={isLoading}
         showAllPackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
         }}
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
-        toPartyUuid={toParty.partyUuid}
         useDeleteConfirm={isCurrentUser}
         availableActions={[
           DelegationAction.REVOKE,
@@ -48,14 +45,7 @@ export const ActiveDelegations = ({ toParty }: { toParty: Party }) => {
       />
       <AccessPackageInfoModal
         modalRef={modalRef}
-        toPartyUuid={toParty.partyUuid}
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
         modalItem={modalItem}
-        onClose={() => {
-          setModalItem(undefined);
-          setActionError(null);
-        }}
-        openWithError={actionError}
       />
     </>
   );

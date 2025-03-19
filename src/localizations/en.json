@@ -254,7 +254,12 @@
     "package_deletion_success": "Power of attorney over {{accessPackage}} has been successfully revoked for {{name}}.",
     "package_deletion_error": "Failed to revoke {{name}}'s power of attorney over {{accessPackage}}.",
     "delegated_packages_count_badge": "{{delegated}} of {{total}}",
-    "package_number_of_resources": "{{count}} services"
+    "package_number_of_resources": "{{count}} services",
+    "delegation_check": {
+      "delegation_check_error_heading": "Technical error",
+      "delegation_check_error_message_singular": "A technical error prevents you from giving the user the access package. Please contact Altinn user service if the problem persists.",
+      "delegation_check_error_message_plural": "A technical error prevents you from giving the user one or more access packages. Please contact Altinn user service if the problem persists."
+    }
   },
   "role": {
     "current_roles_title": "Power of attorney to {{count}} roles(s)",
@@ -302,6 +307,7 @@
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
     "inherited_role_org_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted.",
+    "delegation_check_not_delegable": "You cannot grant this access package because you  lack access yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -405,8 +411,10 @@
     "banner_title": "System access",
     "sub_title_text": "By creating a system access, you give a vendor system access to solve tasks in Altinn on behalf of your company.",
     "systemusers_load_error": "Failed to load system accesses",
+    "agent_delegation_systemusers_load_error": "Failed to load system accesses for customers",
     "new_system_user_button": "Create new system access",
     "existing_system_users_title": "Our system accesses",
+    "agent_delegation_systemusers_title": "System accesses for customers",
     "edit_system_user": "Edit system access",
     "loading_systemusers": "Loading system accesses",
     "no_key_role1": "You do not have sufficient rights.",
@@ -447,6 +455,7 @@
     "delete_systemuser_header": "Delete system access",
     "delete_systemuser_body": "Are you sure you want to delete the system access \"{{title}}\"?",
     "delete_systemuser_error": "Could not delete system access",
+    "delete_has_customer_warning": "The system access cannot be deleted until all customers are removed from the system access.",
     "update_systemuser_error": "Failed to update system access",
     "systemuser_deleted": "System access deleted",
     "save_systemuser": "Save changes",
@@ -495,6 +504,7 @@
     "reject": "Reject",
     "loading_change_request": "Loading update system access request",
     "load_change_request_error": "Could not load update system access request",
+    "load_change_request_error_notfound": "Update system access request for chosen party does not exist. Are you certain that you have chosen correct party?",
     "accept_error": "Could not approve updated system access request",
     "reject_error": "Could not reject updated system access request",
     "accept_loading": "Approving updated system access...",
@@ -507,6 +517,24 @@
     "page_title": "Create system access for customer relations - Altinn",
     "banner_title": "Create system access for customer relations",
     "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."
+  },
+  "systemuser_agent_delegation": {
+    "page_title": "System access for customer relations - Altinn",
+    "banner_title": "System access for {{integrationTitle}}",
+    "load_customers_error": "Could not load customers",
+    "load_assigned_customers_error": "Could not load customers for system access",
+    "assign_customers": "Which customers should be assigned to the system access {{integrationTitle}}?",
+    "assigned_customers_header": "Customers in system access",
+    "no_assigned_customers": "This system access has no customers",
+    "add_customers": "Add customers",
+    "edit_customers": "Manage customers",
+    "customer_search": "Search customers",
+    "remove_from_system_user": "Remove from system access",
+    "remove_from_system_user_aria": "Remove {{customerName}} from system access",
+    "add_to_system_user": "Add to system access",
+    "add_to_system_user_aria": "Add {{customerName}} to system access",
+    "add_system_user_error": "Could not add customer",
+    "remove_system_user_error": "Could not remove customer"
   },
   "systemuser_delegation_errors": {
     "01_rights_not_found_or_not_delegable": "One or more services do not exist, or cannot be delegated.",

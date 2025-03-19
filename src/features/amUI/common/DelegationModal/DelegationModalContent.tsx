@@ -6,11 +6,8 @@ import type { JSX } from 'react';
 import { useEffect, useRef } from 'react';
 import { Button } from '@altinn/altinn-components';
 
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-
-import { SnackbarProvider } from '../Snackbar';
 
 import classes from './DelegationModal.module.css';
 import { ResourceSearch } from './SingleRights/ResourceSearch';
@@ -20,17 +17,14 @@ import { DelegationType } from './DelegationModal';
 import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface DelegationModalProps {
-  toPartyUuid: string;
-  fromPartyUuid: string;
   delegationType: DelegationType;
   availableActions?: DelegationAction[];
 }
 
 export const DelegationModalContent = ({
-  toPartyUuid,
-  fromPartyUuid,
   delegationType,
   availableActions,
 }: DelegationModalProps) => {
@@ -45,6 +39,7 @@ export const DelegationModalContent = ({
     reset,
     setActionError,
   } = useDelegationModalContext();
+  const { toParty } = usePartyRepresentation();
 
   const onResourceSelection = (resource?: ServiceResource) => {
     setInfoView(true);
@@ -60,8 +55,6 @@ export const DelegationModalContent = ({
   };
 
   const modalRef = useRef<HTMLDialogElement>(null);
-
-  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
   const onClosing = () => {
     reset();
@@ -99,8 +92,6 @@ export const DelegationModalContent = ({
       infoViewContent = packageToView && (
         <AccessPackageInfo
           accessPackage={packageToView}
-          toPartyUuid={toPartyUuid}
-          fromPartyUuid={fromPartyUuid}
           availableActions={availableActions}
         />
       );
@@ -113,13 +104,7 @@ export const DelegationModalContent = ({
           toParty={toParty}
         />
       );
-      infoViewContent = resourceToView && (
-        <ResourceInfo
-          resource={resourceToView}
-          toPartyUuid={toPartyUuid}
-          fromPartyUuid={fromPartyUuid}
-        />
-      );
+      infoViewContent = resourceToView && <ResourceInfo resource={resourceToView} />;
       triggerButtonText = t('single_rights.give_new_single_right');
   }
 
@@ -132,30 +117,28 @@ export const DelegationModalContent = ({
       >
         {triggerButtonText} <PlusIcon />
       </Dialog.Trigger>
-      <SnackbarProvider>
-        <Dialog
-          className={classes.modalDialog}
-          closedby='any'
-          closeButton={t('common.close')}
-          onClose={reset}
-          ref={modalRef}
-        >
-          <>
-            {infoView && (
-              <Button
-                className={classes.backButton}
-                variant='text'
-                data-color='neutral'
-                onClick={() => setInfoView(false)}
-                icon={ArrowLeftIcon}
-              >
-                {t('common.back')}
-              </Button>
-            )}
-            <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
-          </>
-        </Dialog>
-      </SnackbarProvider>
+      <Dialog
+        className={classes.modalDialog}
+        closedby='any'
+        closeButton={t('common.close')}
+        onClose={reset}
+        ref={modalRef}
+      >
+        <>
+          {infoView && (
+            <Button
+              className={classes.backButton}
+              variant='text'
+              data-color='neutral'
+              onClick={() => setInfoView(false)}
+              icon={ArrowLeftIcon}
+            >
+              {t('common.back')}
+            </Button>
+          )}
+          <div className={classes.content}>{infoView ? infoViewContent : searchViewContent}</div>
+        </>
+      </Dialog>
     </Dialog.TriggerContext>
   );
 };

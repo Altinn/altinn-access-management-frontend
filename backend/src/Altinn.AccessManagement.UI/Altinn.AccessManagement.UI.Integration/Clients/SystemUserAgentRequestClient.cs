@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -52,8 +53,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpoint = $"systemuser/request/{partyId}/{agentRequestId}";
+                string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint);
+                
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return Problem.RequestNotFound;
+                } 
+                
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
 
                 if (response.IsSuccessStatusCode) 

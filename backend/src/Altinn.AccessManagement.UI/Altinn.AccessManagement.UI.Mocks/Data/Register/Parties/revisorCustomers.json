@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "partyUuid": "87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "partyId": 51473841,
+      "displayName": "STA TOM TIGER AS",
+      "organizationIdentifier": "313160300"
+    },
+    {
+      "partyUuid": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "partyId": 51329012,
+      "displayName": "DISKRET NÆR TIGER AS",
+      "organizationIdentifier": "310202398"
+    }
+  ]
+}

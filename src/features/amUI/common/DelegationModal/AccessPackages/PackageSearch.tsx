@@ -77,8 +77,6 @@ export const PackageSearch = ({
           </div>
           <div className={classes.searchResults}>
             <AccessPackageList
-              fromPartyUuid={getCookie('AltinnPartyUuid')}
-              toPartyUuid={toParty.partyUuid}
               showAllAreas={true}
               showAllPackages={true}
               onSelect={onSelection}

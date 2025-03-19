@@ -26,6 +26,7 @@ export interface SystemUser {
   integrationTitle: string;
   created: string;
   system: RegisteredSystem;
+  systemUserType: string;
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
 }
@@ -43,5 +44,17 @@ export interface SystemUserRequest {
 
 // TODO: temp? type for access package with enriched resources
 export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'> {
+  urn: string;
   resources: ServiceResource[];
+}
+
+export interface AgentDelegationCustomer {
+  uuid: string;
+  name: string;
+  orgNo: string;
+}
+
+export interface AgentDelegation {
+  assignmentId: string;
+  customerUuid: string;
 }

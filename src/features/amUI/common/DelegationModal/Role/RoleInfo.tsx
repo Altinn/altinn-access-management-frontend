@@ -1,4 +1,4 @@
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Avatar } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
@@ -10,7 +10,6 @@ import {
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
@@ -18,33 +17,28 @@ import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
 import { DelegationAction } from '../EditModal';
 
 import classes from './RoleInfo.module.css';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { ActionError } from '@/resources/hooks/useActionError';
+import { useDelegationModalContext } from '../DelegationModalContext';
+import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 
 export interface PackageInfoProps {
   role: Role;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   onDelegate?: () => void;
   availableActions?: DelegationAction[];
 }
 
-export const RoleInfo = ({
-  role,
-  toPartyUuid,
-  fromPartyUuid,
-  availableActions = [],
-}: PackageInfoProps) => {
+export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
 
-  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
-  const { data: fromParty } = useGetPartyByUUIDQuery(fromPartyUuid);
-
+  const { fromParty, toParty } = usePartyRepresentation();
   const { data: activeDelegations, isFetching } = useGetRolesForUserQuery({
-    from: fromPartyUuid ?? '',
-    to: toPartyUuid ?? '',
+    from: fromParty?.partyUuid ?? '',
+    to: toParty?.partyUuid ?? '',
   });
-
+  const { setActionError, actionError } = useDelegationModalContext();
   const { data: delegationCheckResult } = useDelegationCheckQuery({
-    rightownerUuid: fromPartyUuid ?? '',
+    rightownerUuid: fromParty?.partyUuid ?? '',
     roleUuid: role.id,
   });
 
@@ -77,6 +71,26 @@ export const RoleInfo = ({
           {role?.name}
         </Heading>
       </div>
+
+      {!!actionError && (
+        <Alert
+          data-color='danger'
+          data-size='sm'
+        >
+          {userHasRole ? (
+            <Heading data-size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+          ) : (
+            <Heading data-size='2xs'>
+              {t('delegation_modal.general_error.delegate_heading')}
+            </Heading>
+          )}
+          <TechnicalErrorParagraphs
+            size='xs'
+            status={actionError.httpStatus}
+            time={actionError.timestamp}
+          />
+        </Alert>
+      )}
       <Paragraph>{role?.description}</Paragraph>
       {!userHasRole && !delegationCheckResult?.canDelegate && (
         <div className={classes.inherited}>
@@ -126,26 +140,31 @@ export const RoleInfo = ({
         )}
         {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
           <DelegateRoleButton
-            roleId={role.id}
-            roleName={role.name}
+            accessRole={role}
             toParty={toParty}
             fullText
             disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
             variant='solid'
             size='md'
             icon={false}
+            onDelegateError={(_role: Role, error: ActionError) => {
+              setActionError(error);
+            }}
           />
         )}
-        {userHasRole && availableActions.includes(DelegationAction.REVOKE) && (
+        {userHasRole && role && availableActions.includes(DelegationAction.REVOKE) && (
           <RevokeRoleButton
             assignmentId={assignment.id}
-            roleName={role.name}
+            accessRole={role}
             toParty={toParty}
             fullText
             disabled={isFetching || userHasInheritedRole}
             variant='solid'
             size='md'
             icon={false}
+            onRevokeError={function (_role: Role, errorInfo: ActionError): void {
+              setActionError(errorInfo);
+            }}
           />
         )}
       </div>

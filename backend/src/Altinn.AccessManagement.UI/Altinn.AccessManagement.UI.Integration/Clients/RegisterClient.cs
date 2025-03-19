@@ -5,8 +5,10 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
@@ -175,6 +177,47 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyNames // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<CustomerList> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = customerType switch
+                {
+                    CustomerRoleType.Revisor => $"internal/parties/{partyUuid}/customers/ccr/revisor",
+                    CustomerRoleType.Regnskapsforer => $"internal/parties/{partyUuid}/customers/ccr/regnskapsforer",
+                    CustomerRoleType.Forretningsforer => $"internal/parties/{partyUuid}/customers/ccr/forretningsforer",
+                    _ => throw new ArgumentException("Invalid customer type")
+                }; 
+
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        return new CustomerList();
+                    }
+                    else 
+                    {
+                        return JsonSerializer.Deserialize<CustomerList>(responseContent, _serializerOptions);
+                    }
+                }
+
+                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyCustomers // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyCustomers // Exception");
                 throw;
             }
         }

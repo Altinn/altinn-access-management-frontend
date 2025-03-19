@@ -260,8 +260,14 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             return response;
         }
 
+        /// <inheritdoc />
+        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        {
+            throw new NotImplementedException();
+        }
+
         //// Roles
-        
+
         /// <inheritdoc />
         public async Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
         {

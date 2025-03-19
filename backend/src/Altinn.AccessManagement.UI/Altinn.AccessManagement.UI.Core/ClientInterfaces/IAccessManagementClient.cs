@@ -124,6 +124,13 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">The code of the language on which texts are to be returned</param>
         Task<HttpResponseMessage> CreateAccessPackageDelegation(string party, Guid to, string packageId, string languageCode);
 
+        /// <summary>
+        ///   Checks if the user can delegate access packages on behalf of the specified reportee
+        /// </summary>
+        /// <param name="delegationCheckRequest">The request containing the packages to check and the reportee to check on behalf of</param>
+        /// <returns>The response containing whether or not the user can delegate the packages</returns>
+        Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest);
+
         //// Roles 
 
         /// <summary>

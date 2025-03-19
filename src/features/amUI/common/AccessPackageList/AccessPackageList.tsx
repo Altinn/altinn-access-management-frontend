@@ -1,29 +1,23 @@
-import { ListBase, Button } from '@altinn/altinn-components';
+import { ListBase } from '@altinn/altinn-components';
 import { useState } from 'react';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { useTranslation } from 'react-i18next';
-import { Paragraph } from '@digdir/designsystemet-react';
-import { all } from 'cypress/types/bluebird';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
-import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
-import { DelegationAction } from '../DelegationModal/EditModal';
+import type { DelegationAction } from '../DelegationModal/EditModal';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
 import { AreaItem } from './AreaItem';
-import { PackageItem } from './PackageItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
+import { AreaItemContent } from './AreaItemContent';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
-  fromPartyUuid: string;
-  toPartyUuid: string;
   showAllAreas?: boolean;
   isLoading?: boolean;
   availableActions?: DelegationAction[];
@@ -48,19 +42,18 @@ export const AccessPackageList = ({
   onRevokeSuccess,
   onRevokeError,
   searchString,
-  fromPartyUuid,
-  toPartyUuid,
 }: AccessPackageListProps) => {
   const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
     searchString ?? '',
   );
+  const { fromParty, toParty } = usePartyRepresentation();
   const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery({
-    from: fromPartyUuid,
-    to: toPartyUuid,
+    from: fromParty?.partyUuid ?? '',
+    to: toParty?.partyUuid ?? '',
   });
-  const { t } = useTranslation();
 
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
+
   const toggleExpandedArea = (areaId: string) => {
     if (expandedAreas.some((id) => id === areaId)) {
       const newExpandedState = expandedAreas.filter((id) => id !== areaId);
@@ -78,7 +71,7 @@ export const AccessPackageList = ({
   });
 
   const { onDelegate, onRevoke, onRequest } = useAccessPackageActions({
-    toUuid: toPartyUuid,
+    toUuid: toParty?.partyUuid || '',
     onDelegateSuccess,
     onDelegateError,
     onRevokeSuccess,
@@ -98,7 +91,6 @@ export const AccessPackageList = ({
       ) : (
         <ListBase>
           {displayAreas.map((area) => {
-            const { packages } = area;
             const expanded =
               (searchString && searchString.length > 2) ||
               expandedAreas.some((areaId) => areaId === area.id);
@@ -111,89 +103,15 @@ export const AccessPackageList = ({
                 toggleExpandedArea={toggleExpandedArea}
                 showBadge={showAllPackages}
               >
-                <div className={classes.accessAreaContent}>
-                  <Paragraph>{area.description}</Paragraph>
-                  {packages.assigned.length > 0 && (
-                    <ListBase>
-                      {packages.assigned.map((pkg) => (
-                        <PackageItem
-                          key={pkg.id}
-                          pkg={pkg}
-                          onSelect={onSelect}
-                          hasAccess
-                          controls={
-                            availableActions?.includes(DelegationAction.REVOKE) &&
-                            useDeleteConfirm ? (
-                              <ButtonWithConfirmPopup
-                                triggerButtonContent={t('common.delete_poa')}
-                                triggerButtonProps={{
-                                  icon: MinusCircleIcon,
-                                  variant: 'text',
-                                  size: 'sm',
-                                  disabled: pkg.inherited,
-                                }}
-                                popoverProps={{
-                                  color: 'neutral',
-                                }}
-                                message={t('user_rights_page.delete_confirm_message', {
-                                  name: pkg.name,
-                                })}
-                                data-size='sm'
-                                onConfirm={() => onRevoke(pkg)}
-                              />
-                            ) : (
-                              <Button
-                                icon={MinusCircleIcon}
-                                variant='text'
-                                size='sm'
-                                disabled={pkg.inherited}
-                                onClick={() => onRevoke(pkg)}
-                              >
-                                {t('common.delete_poa')}
-                              </Button>
-                            )
-                          }
-                        />
-                      ))}
-                    </ListBase>
-                  )}
-                  {packages.available.length > 0 && (
-                    <ListBase>
-                      {packages.available.map((pkg) => (
-                        <PackageItem
-                          key={pkg.id}
-                          pkg={pkg}
-                          onSelect={onSelect}
-                          controls={
-                            <>
-                              {availableActions?.includes(DelegationAction.DELEGATE) && (
-                                <Button
-                                  icon={PlusCircleIcon}
-                                  variant='text'
-                                  size='sm'
-                                  onClick={() => onDelegate(pkg)}
-                                >
-                                  {t('common.give_poa')}
-                                </Button>
-                              )}
-                              {availableActions?.includes(DelegationAction.REQUEST) && (
-                                <Button
-                                  icon={PlusCircleIcon}
-                                  variant='text'
-                                  size='sm'
-                                  disabled
-                                  onClick={() => onRequest(pkg)}
-                                >
-                                  {t('common.request_poa')}
-                                </Button>
-                              )}
-                            </>
-                          }
-                        />
-                      ))}
-                    </ListBase>
-                  )}
-                </div>
+                <AreaItemContent
+                  area={area}
+                  availableActions={availableActions}
+                  onSelect={onSelect}
+                  onDelegate={onDelegate}
+                  onRevoke={onRevoke}
+                  onRequest={onRequest}
+                  useDeleteConfirm={useDeleteConfirm}
+                />
               </AreaItem>
             );
           })}

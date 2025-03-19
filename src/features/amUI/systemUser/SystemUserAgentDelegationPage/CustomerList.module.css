@@ -1,0 +1,18 @@
+.loadingSpinner {
+  padding: 2px;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--ds-size-2);
+}
+
+.searchBar {
+  max-width: 20rem;
+}
+
+.pagingContainer {
+  justify-self: center;
+  margin-top: var(--ds-size-4);
+}

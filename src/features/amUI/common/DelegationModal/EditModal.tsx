@@ -7,8 +7,6 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
-import { SnackbarProvider } from '../Snackbar';
-
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
@@ -25,27 +23,13 @@ export interface EditModalProps {
   resource?: ServiceResource;
   accessPackage?: AccessPackage;
   role?: Role;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   availableActions?: DelegationAction[];
   openWithError?: ActionError | null;
   onClose?: () => void;
 }
 
 export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  (
-    {
-      toPartyUuid,
-      fromPartyUuid,
-      resource,
-      accessPackage,
-      role,
-      availableActions,
-      openWithError,
-      onClose,
-    },
-    ref,
-  ) => {
+  ({ resource, accessPackage, role, availableActions, openWithError, onClose }, ref) => {
     const { setActionError, reset } = useDelegationModalContext();
 
     const onClosing = () => {
@@ -84,46 +68,27 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
           onClosing();
         }}
       >
-        <SnackbarProvider>
-          <div className={classes.content}>
-            {renderModalContent(
-              toPartyUuid,
-              fromPartyUuid,
-              resource,
-              accessPackage,
-              role,
-              availableActions,
-            )}
-          </div>
-        </SnackbarProvider>
+        <div className={classes.content}>
+          {renderModalContent(resource, accessPackage, role, availableActions)}
+        </div>
       </Dialog>
     );
   },
 );
 
 const renderModalContent = (
-  toPartyUuid: string,
-  fromPartyUuid: string,
   resource?: ServiceResource,
   accessPackage?: AccessPackage,
   role?: Role,
   availableActions?: DelegationAction[],
 ) => {
   if (resource) {
-    return (
-      <ResourceInfo
-        resource={resource}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
-      />
-    );
+    return <ResourceInfo resource={resource} />;
   }
   if (accessPackage) {
     return (
       <AccessPackageInfo
         accessPackage={accessPackage}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
         availableActions={availableActions}
       />
     );
@@ -132,8 +97,6 @@ const renderModalContent = (
     return (
       <RoleInfo
         role={role}
-        toPartyUuid={toPartyUuid}
-        fromPartyUuid={fromPartyUuid}
         availableActions={availableActions}
       />
     );

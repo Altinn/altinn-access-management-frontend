@@ -253,6 +253,34 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
+        /// <inheritdoc />
+        public Task<List<AccessPackageDelegationCheckResponse>> AccessPackageDelegationCheck(DelegationCheckRequest delegationCheckRequest)
+        {
+            var res = new List<AccessPackageDelegationCheckResponse>();
+            foreach (var packageId in delegationCheckRequest.PackageIds)
+            {
+                if (packageId.ToString() == "fa84bffc-ac17-40cd-af9c-61c89f92e44c")
+                {
+                    throw new Exception("Package id is not valid");
+                }
+                try
+                {
+                    var check = Util.GetMockData<AccessPackageDelegationCheckResponse>($"{dataFolder}/AccessPackage/DelegationCheck/{packageId}.json");
+                    res.Add(check);
+                }
+                catch
+                {
+                    res.Add(new AccessPackageDelegationCheckResponse()
+                    {
+                        CanDelegate = true,
+                        DetailCode = DetailCode.DelegationAccess,
+                        PackageId = packageId
+                    });
+                }
+            }
+            return Task.FromResult(res);
+        }
+
         //// Roles
 
         public Task<List<Role>> GetRoleSearchMatches(string languageCode, string searchString)
@@ -290,6 +318,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 throw new Exception("Right holder uuid is not valid");
             }
+            // Mocking delegate error - role "Kundeadministrator"
+            if (roleId.ToString() == "3abe9842-06a5-483f-b76d-a65dec152b2d")
+            {
+                throw new Exception("Assignment id is not valid");
+            }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
         }
@@ -300,6 +333,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (assignmentId == Guid.Empty)
             {
                 throw new Exception("Right holder uuid is not valid");
+            }
+            // Mocking revoke error - role "Kundeadministrator" for user "medaljong sitrongul"
+            if (assignmentId.ToString() == "5e9700d8-1d03-4665-8ce0-13a028741938")
+            {
+                throw new Exception("Assignment id is not valid");
             }
 
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));

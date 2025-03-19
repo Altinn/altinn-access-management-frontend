@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             _httpContextAccessor = httpContextAccessor;
             _accessTokenProvider = accessTokenProvider;
         }
-        
+
         /// <inheritdoc />
         public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString)
         {

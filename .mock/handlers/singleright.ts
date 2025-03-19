@@ -509,4 +509,24 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       ]);
     },
   ),
+  http.get(
+    `${ACCESSMANAGEMENT_BASE_URL}/singleright/:partyuuid/delegationcheck/:resourceid`,
+    ({ params }) => {
+      const { resourceid } = params;
+      return HttpResponse.json([
+        {
+          rightKey: resourceid + '/read',
+          action: 'read',
+          status: 'Delegable',
+          reasonCodes: ['DelegationAccess'],
+        },
+        {
+          rightKey: resourceid + '/write',
+          action: 'write',
+          status: 'Delegable',
+          reasonCodes: ['DelegationAccess'],
+        },
+      ]);
+    },
+  ),
 ];

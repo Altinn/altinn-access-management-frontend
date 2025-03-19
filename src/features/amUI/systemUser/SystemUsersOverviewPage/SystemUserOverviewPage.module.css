@@ -19,3 +19,9 @@
 .systemUserTabs {
   align-self: flex-start;
 }
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--ds-size-2);
+}

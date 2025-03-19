@@ -77,5 +77,22 @@
         "urn": "brreg:role:lede"
       }
     ]
+  },
+  {
+    "role": {
+      "isDelegable": true,
+      "id": "3abe9842-06a5-483f-b76d-a65dec152b2d",
+      "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+      "providerId": "73dfe32a-8f21-465c-9242-40d82e61f320",
+      "name": "Kundeadministrator",
+      "code": "HA",
+      "description": "Denne tilgangspakken gir bruker mulighet til å administrere tilganger man har mottatt for sine kunder til ansatte i egen virksomheten.",
+      "urn": "digdir:role:kua"
+    },
+    "id": "5e9700d8-1d03-4665-8ce0-13a028741938",
+    "roleId": "3abe9842-06a5-483f-b76d-a65dec152b2d",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "inherited": null
   }
 ]

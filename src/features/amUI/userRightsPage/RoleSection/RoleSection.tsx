@@ -12,6 +12,7 @@ import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import classes from './roleSection.module.css';
+import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
 interface RoleSectionProps {
   numberOfAccesses?: number;
@@ -21,7 +22,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
-
+  const { setActionError } = useDelegationModalContext();
   const { data: reportee } = useGetReporteeQuery();
   const { id: rightHolderUuid } = useParams();
   const { data: party } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
@@ -45,6 +46,11 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
             isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
             DelegationAction.REVOKE,
           ]}
+          onActionError={(role, error) => {
+            setModalItem(role);
+            setActionError(error);
+            modalRef.current?.showModal();
+          }}
           onSelect={(role) => {
             setModalItem(role);
             modalRef.current?.showModal();
@@ -54,8 +60,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
         {party && (
           <RoleInfoModal
             modalRef={modalRef}
-            toPartyUuid={rightHolderUuid ?? ''}
-            fromPartyUuid={reportee?.partyUuid ?? ''}
             role={modalItem}
             onClose={() => setModalItem(undefined)}
             availableActions={[

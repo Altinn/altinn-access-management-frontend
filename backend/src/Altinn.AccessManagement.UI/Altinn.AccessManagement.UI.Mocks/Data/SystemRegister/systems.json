@@ -23,6 +23,14 @@
         ]
       }
     ],
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:sjofart"
+      },
+      {
+        "urn": "urn:altinn:accesspackage:baerekraft"
+      }
+    ],
     "isVisible": true
   },
   {
@@ -47,14 +55,6 @@
             "value": "ske-innrapportering-boligsameie"
           }
         ]
-      }
-    ],
-    "accessPackages": [
-      {
-        "urn": "urn:altinn:accesspackage:sjofart"
-      },
-      {
-        "urn": "urn:altinn:accesspackage:baerekraft"
       }
     ],
     "isVisible": true
@@ -114,5 +114,49 @@
       }
     ],
     "isVisible": true
+  },
+  {
+    "systemId": "unimicro_demo_product",
+    "systemVendorOrgNumber": "925141623",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Unimicro klientdelegering REGN",
+      "nb": "Unimicro klientdelegering REGN",
+      "nn": "Unimicro klientdelegering REGN"
+    },
+    "description": {
+      "en": "Unimicro klientdelegering REGN",
+      "nb": "Unimicro klientdelegering REGN",
+      "nn": "Unimicro klientdelegering REGN"
+    },
+    "rights": [],
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet"
+      }
+    ],
+    "isVisible": false
+  },
+  {
+    "systemId": "lucalabs_demo_product",
+    "systemVendorOrgNumber": "918098372",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Luca Regnskap klientdelegering REVI",
+      "nb": "Luca Regnskap klientdelegering REVI",
+      "nn": "Luca Regnskap klientdelegering REVI"
+    },
+    "description": {
+      "en": "Luca Regnskap klientdelegering REVI",
+      "nb": "Luca Regnskap klientdelegering REVI",
+      "nn": "Luca Regnskap klientdelegering REVI"
+    },
+    "rights": [],
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:ansvarlig-revisor"
+      }
+    ],
+    "isVisible": false
   }
 ]

@@ -24,7 +24,6 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-import { useGetPartyByUUIDQuery, useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 
 import { useSnackbar } from '../../Snackbar';
 import { SnackbarDuration, SnackbarMessageVariant } from '../../Snackbar/SnackbarProvider';
@@ -32,6 +31,7 @@ import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSectio
 
 import classes from './ResourceInfo.module.css';
 import { ResourceAlert } from './ResourceAlert';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export type ChipRight = {
   action: string;
@@ -43,12 +43,10 @@ export type ChipRight = {
 
 export interface ResourceInfoProps {
   resource: ServiceResource;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   onDelegate?: () => void;
 }
 
-export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfoProps) => {
+export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
   const { t } = useTranslation();
   const [hasAccess, setHasAccess] = useState(false);
   const delegateRights = useDelegateRights();
@@ -57,7 +55,8 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
   const [rights, setRights] = useState<ChipRight[]>([]);
   const { openSnackbar } = useSnackbar();
   const { id } = useParams();
-  const { data: representingParty } = useGetReporteePartyQuery();
+
+  const { toParty, fromParty } = usePartyRepresentation();
   const hasUnsavedChanges = !arraysEqualUnordered(
     rights.filter((r) => r.checked).map((r) => r.rightKey),
     currentRights,
@@ -66,7 +65,6 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
 
   const [delegationErrorMessage, setDelegationErrorMessage] = useState<string | null>(null);
   const [missingAccessMessage, setMissingAccessMessage] = useState<string | null>(null);
-  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
 
   const {
     data: delegationCheckedRights,
@@ -174,12 +172,12 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
 
   const saveEditedRights = () => {
     const newRights = rights.filter((r) => r.checked).map((r) => r.rightKey);
-    if (representingParty) {
+    if (fromParty && toParty) {
       setDelegationErrorMessage(null);
       editResource(
         resource.identifier,
-        representingParty.partyUuid,
-        toPartyUuid,
+        fromParty?.partyUuid,
+        toParty?.partyUuid,
         currentRights,
         newRights,
         () => {
@@ -205,7 +203,7 @@ export const ResourceInfo = ({ resource, toPartyUuid, onDelegate }: ResourceInfo
 
     delegateRights(
       rightsToDelegate,
-      toPartyUuid,
+      toParty?.partyUuid ?? '',
       resource,
       (response: DelegationResult) => {
         setDelegationErrorMessage(null);

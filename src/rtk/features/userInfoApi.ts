@@ -1,17 +1,17 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
+import { Party } from './lookupApi';
 
 interface UserInfoApiResponse {
-  party: {
-    name: string;
-  };
+  party: Party;
   userUuid: string;
 }
 
 interface UserInfo {
   name: string;
   uuid: string;
+  party: Party;
 }
 
 export interface ReporteeInfo {
@@ -63,7 +63,7 @@ export const userInfoApi = createApi({
       query: () => 'profile',
       keepUnusedDataFor: 300,
       transformResponse: (response: UserInfoApiResponse) => {
-        return { name: response.party.name, uuid: response.userUuid };
+        return { name: response.party.name, uuid: response.userUuid, party: response.party };
       },
     }),
     getReportee: builder.query<ReporteeInfo, void>({
