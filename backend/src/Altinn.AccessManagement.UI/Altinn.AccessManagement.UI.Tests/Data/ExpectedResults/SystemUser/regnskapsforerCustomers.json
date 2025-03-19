@@ -1,31 +1,26 @@
 [
   {
-    "uuid": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf",
-    "id": 50067798,
+    "id": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf",
     "name": "VIKESÅ OG ÅLVUNDFJORD",
     "orgNo": "910510789"
   },
   {
-    "uuid": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
-    "id": 51317934,
+    "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
     "name": "RAKRYGGET UNG TIGER AS",
     "orgNo": "313523497"
   },
   {
-    "uuid": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
-    "id": 50067799,
+    "id": "6b0574ae-f569-4c0d-a8d4-8ad56f427890",
     "name": "Digitaliseringsdirektoratet",
     "orgNo": "991825827"
   },
   {
-    "uuid": "82cc64c5-60ff-4184-8c07-964c3a1e6fc7",
-    "id": 50011111,
+    "id": "82cc64c5-60ff-4184-8c07-964c3a1e6fc7",
     "name": "Kan ikke legges til",
     "orgNo": "881825827"
   },
   {
-    "uuid": "56d8ef08-d1c3-4dac-8b62-461c18ce612b",
-    "id": 52222222,
+    "id": "56d8ef08-d1c3-4dac-8b62-461c18ce612b",
     "name": "Kan ikke fjernes",
     "orgNo": "313131317"
   }

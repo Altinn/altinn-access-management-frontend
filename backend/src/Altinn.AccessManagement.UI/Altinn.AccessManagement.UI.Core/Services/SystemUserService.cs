@@ -117,7 +117,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<SystemUserFE>> MapToSystemUsersFE(List<SystemUser> systemUsers, string languageCode, bool includeRights, bool isAgentDelegation, CancellationToken cancellationToken)
         {
-            List<PartyName> partyNames = []; //await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
+            List<PartyName> partyNames = await _registerClient.GetPartyNames(systemUsers.Select(x => x.SupplierOrgNo), cancellationToken);
             List<SystemUserFE> lista = new List<SystemUserFE>();
             foreach (SystemUser systemUser in systemUsers)
             {
