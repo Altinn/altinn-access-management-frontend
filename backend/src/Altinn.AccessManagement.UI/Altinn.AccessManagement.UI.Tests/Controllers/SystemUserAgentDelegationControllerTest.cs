@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetRevisorAgentDelegation checks that deletated revisor customers are returned
+        ///     Test case: GetRevisorAgentDelegation checks that delegated revisor customers are returned
         ///     Expected: GetRevisorAgentDelegation returns delegations
         /// </summary>
         [Fact]
@@ -140,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetForretningsforerAgentDelegation checks that deletated forretningsforer customers are returned
+        ///     Test case: GetForretningsforerAgentDelegation checks that delegated forretningsforer customers are returned
         ///     Expected: GetForretningsforerAgentDelegation returns delegations
         /// </summary>
         [Fact]
