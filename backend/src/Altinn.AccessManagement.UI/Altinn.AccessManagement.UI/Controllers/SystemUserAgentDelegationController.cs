@@ -80,8 +80,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpGet("{partyId}/{systemUserGuid}/delegation")]
         public async Task<ActionResult> GetSystemUserAgentDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegationFE> result = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
-            return Ok(result);
+            List<AgentDelegationFE> delegations = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
+            return Ok(delegations);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party id user represents</param>
         /// <param name="systemUserGuid">System user id to get</param>
-        /// <param name="delegationRequest">Delegation request which contains partyUuid of party owning systemuser + customerUuid to add </param>
+        /// <param name="delegationRequest">Delegation request which contains partyUuid of party owning systemuser + customerId to add </param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]

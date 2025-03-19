@@ -88,7 +88,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyUuid}/customers/forretningsforer");
-            string res = await httpResponse.Content.ReadAsStringAsync();
             List<AgentDelegationPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationPartyFE>>();
 
             // Assert
@@ -97,7 +96,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: GetRegnskapsforerAgentDelegation checks that deletated regnskapsforer customers are returned
+        ///     Test case: GetRegnskapsforerAgentDelegation checks that delegated regnskapsforer customers are returned
         ///     Expected: GetRegnskapsforerAgentDelegation returns delegations
         /// </summary>
         [Fact]
@@ -235,8 +234,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: PostRegnskapsforerAgentDelegation checks that delegation is added
-        ///     Expected: PostRegnskapsforerAgentDelegation returns error
+        ///     Test case: PostRegnskapsforerAgentDelegation checks error handling for invalid delegations
+        ///     Expected: PostRegnskapsforerAgentDelegation returns NotFound error
         /// </summary>
         [Fact]
         public async Task PostRegnskapsforerAgentDelegation_ReturnsError()
@@ -273,12 +272,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Arrange
             string partyId = "51329012";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
-            string assingmentId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
+            string assignmentId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
             
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{assingmentId}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{assignmentId}");
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -287,8 +286,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: DeleteRegnskapsforerAgentDelegation checks that delegation is removed
-        ///     Expected: DeleteRegnskapsforerAgentDelegation returns error
+        ///     Test case: DeleteRegnskapsforerAgentDelegation checks error handling for non-existent delegations
+        ///     Expected: DeleteRegnskapsforerAgentDelegation returns NotFound error
         /// </summary>
         [Fact]
         public async Task DeleteRegnskapsforerAgentDelegation_ReturnsError()
