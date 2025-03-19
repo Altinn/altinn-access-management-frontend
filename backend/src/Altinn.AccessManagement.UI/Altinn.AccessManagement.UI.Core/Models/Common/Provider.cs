@@ -23,6 +23,6 @@
         /// <summary>
         /// ImgUrl for the provider's logo
         /// </summary>
-        public string? LogoUrl { get; set; }
+        public string LogoUrl { get; set; }
     }
 }
