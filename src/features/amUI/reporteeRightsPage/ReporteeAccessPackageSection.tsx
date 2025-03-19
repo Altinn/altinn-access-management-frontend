@@ -43,8 +43,6 @@ export const ReporteeAccessPackageSection = ({
         {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
       </Heading>
       <AccessPackageList
-        fromPartyUuid={reporteeUuid ?? ''}
-        toPartyUuid={getCookie('AltinnPartyUuid')}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm
         showAllPackages
@@ -66,8 +64,6 @@ export const ReporteeAccessPackageSection = ({
       {party && (
         <AccessPackageInfoModal
           modalRef={modalRef}
-          toPartyUuid={getCookie('AltinnPartyUuid')}
-          fromPartyUuid={reporteeUuid ?? ''}
           modalItem={modalItem}
           modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
