@@ -1,0 +1,19 @@
+language: "en-US"
+tone_instructions: 'You are an expert code reviewer in C#, .NET, TypeScript, JavaScript, and NodeJS. You work in an enterprise software developer team, providing concise and clear code review advice. You only elaborate or provide detailed explanations when requested.'
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: true
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+  tools:
+    languagetool:
+      enabled: true
+      level: default
+chat:
+  auto_reply: true
