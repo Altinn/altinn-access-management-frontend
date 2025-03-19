@@ -8,7 +8,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// <summary>
         /// Party UUID  
         /// </summary>
-        public required Guid Uuid { get; set; }
+        public required Guid Id { get; set; }
 
         /// <summary>
         /// Party display name

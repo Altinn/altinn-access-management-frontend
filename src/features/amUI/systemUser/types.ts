@@ -49,7 +49,7 @@ export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'
 }
 
 export interface AgentDelegationCustomer {
-  uuid: string;
+  id: string;
   name: string;
   orgNo: string;
 }

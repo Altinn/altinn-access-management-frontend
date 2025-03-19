@@ -25,7 +25,7 @@ const getAssignedCustomers = (
   existingAgentDelegations: AgentDelegation[],
 ): AgentDelegationCustomer[] => {
   const assignedCustomerIds = existingAgentDelegations.map((x) => x.customerId);
-  return customers.filter((customer) => assignedCustomerIds.indexOf(customer.uuid) > -1);
+  return customers.filter((customer) => assignedCustomerIds.includes(customer.id));
 };
 
 interface SystemUserAgentDelegationPageContentProps {

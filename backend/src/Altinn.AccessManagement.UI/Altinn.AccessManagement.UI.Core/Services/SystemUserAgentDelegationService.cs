@@ -80,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 return new AgentDelegationPartyFE()
                 {
-                    Uuid = x.PartyUuid,
+                    Id = x.PartyUuid,
                     Name = x.DisplayName,
                     OrgNo = x.OrganizationIdentifier
                 };
