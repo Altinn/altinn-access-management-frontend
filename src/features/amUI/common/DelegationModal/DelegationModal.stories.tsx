@@ -28,7 +28,7 @@ export default {
             fromPartyUuid='123'
             toPartyUuid='123'
           >
-              <DelegationModal {...(props as DelegationModalProps)} />
+            <DelegationModal {...(props as DelegationModalProps)} />
           </PartyRepresentationProvider>
         </Provider>
       </DelegationModalProvider>
