@@ -11,15 +11,6 @@ reviews:
     enabled: true
     drafts: false
   tools:
-    ast-grep:
-      rule_dirs: []
-      util_dirs: []
-      essential_rules: true
-      packages: []
-    markdownlint:
-      enabled: true
-    github-checks:
-      enabled: true
     languagetool:
       enabled: true
       level: default
