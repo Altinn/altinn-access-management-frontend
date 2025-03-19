@@ -69,42 +69,42 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignCustomer] = useAssignCustomerMutation();
   const [removeCustomer] = useRemoveCustomerMutation();
 
-  const onAddCustomer = (customerId: string): void => {
-    assignCustomer({ partyId, systemUserId: id ?? '', customerId: customerId, partyUuid })
-      .unwrap()
-      .then((delegation: AgentDelegation) => {
-        setDelegations((oldDelegations) => [...oldDelegations, delegation]);
-      })
-      .catch(() => {
-        setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
-      })
-      .finally(() => {
-        setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
-      });
+  const resetLoadingId = (customerId: string): void => {
+    setLoadingIds((oldLoadingIds) => oldLoadingIds.filter((id) => id !== customerId));
   };
 
-  const onRemoveCustomer = (delegationToRemove: AgentDelegation): void => {
+  const setErrorId = (customerId: string): void => {
+    setErrorIds((oldErrorIds) => [...oldErrorIds, customerId]);
+  };
+
+  const onAddCustomer = (customerId: string): void => {
+    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, customerId]);
+    const onAddSuccess = (delegation: AgentDelegation) => {
+      setDelegations((oldDelegations) => [...oldDelegations, delegation]);
+    };
+    assignCustomer({ partyId, systemUserId: id ?? '', customerId: customerId, partyUuid })
+      .unwrap()
+      .then(onAddSuccess)
+      .catch(() => setErrorId(customerId))
+      .finally(() => resetLoadingId(customerId));
+  };
+
+  const onRemoveCustomer = (toRemove: AgentDelegation): void => {
+    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, toRemove.customerId]);
+    const onRemoveSuccess = () => {
+      setDelegations((oldDelegations) =>
+        oldDelegations.filter((delegation) => delegation.assignmentId !== toRemove.assignmentId),
+      );
+    };
     removeCustomer({
       partyId,
       systemUserId: id ?? '',
-      assignmentId: delegationToRemove.assignmentId,
+      assignmentId: toRemove.assignmentId,
     })
       .unwrap()
-      .then(() => {
-        setDelegations((oldDelegations) =>
-          oldDelegations.filter(
-            (delegation) => delegation.assignmentId !== delegationToRemove.assignmentId,
-          ),
-        );
-      })
-      .catch(() => {
-        setErrorIds((oldErrorIds) => [...oldErrorIds, delegationToRemove.customerId]);
-      })
-      .finally(() => {
-        setLoadingIds((oldLoadingIds) =>
-          oldLoadingIds.filter((id) => id !== delegationToRemove.customerId),
-        );
-      });
+      .then(onRemoveSuccess)
+      .catch(() => setErrorId(toRemove.customerId))
+      .finally(() => resetLoadingId(toRemove.customerId));
   };
 
   const enableAddCustomers = (): void => {
