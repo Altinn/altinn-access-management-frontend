@@ -33,7 +33,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
 
   const headerLinks: MenuItemProps[] = [
     {
-      groupId: '1',
+      groupId: 1,
       id: 'messagebox',
       title: t('header.inbox'),
       size: 'lg',
@@ -46,7 +46,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
     },
     {
-      groupId: '1',
+      groupId: 1,
       icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
@@ -62,7 +62,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     ...(isSm ? SidebarItems(true) : []),
     {
       id: 'all-services',
-      groupId: '10',
+      groupId: 10,
       icon: MenuGridIcon,
       title: t('header.all_services'),
       size: 'lg',
@@ -75,7 +75,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     {
       id: 'chat',
-      groupId: '10',
+      groupId: 10,
       icon: PersonChatIcon,
       title: t('header.chat'),
       size: 'lg',

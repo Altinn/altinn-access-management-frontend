@@ -1,7 +1,6 @@
 import React from 'react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@altinn/altinn-components';
 import { Link as DsLink } from '@digdir/designsystemet-react';
 import classes from './PageContainer.module.css';
 import { Link } from 'react-router';
