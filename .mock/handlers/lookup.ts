@@ -7,6 +7,39 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
       name: 'Digitaliseringsdirektoratet',
     });
   }),
+  http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party/:id`, ({ params }) => {
+    const { id } = params;
+
+    return HttpResponse.json({
+      partyId: 51329012,
+      partyUuid: id,
+      partyTypeName: 2,
+      orgNumber: '310202398',
+      unitType: 'AS',
+      name: 'DISKRET NÆR TIGER AS',
+      isDeleted: false,
+      onlyHierarchyElementWithNoAccess: false,
+      person: null,
+      organization: {
+        orgNumber: '310202398',
+        name: 'DISKRET NÆR TIGER AS',
+        unitType: 'AS',
+        telephoneNumber: null,
+        mobileNumber: null,
+        faxNumber: null,
+        eMailAddress: '',
+        internetAddress: null,
+        mailingAddress: null,
+        mailingPostalCode: null,
+        mailingPostalCity: null,
+        businessAddress: null,
+        businessPostalCode: null,
+        businessPostalCity: null,
+        unitStatus: 'N',
+      },
+      childParties: null,
+    });
+  }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party`, () => {
     return HttpResponse.json({
       partyId: 51329012,

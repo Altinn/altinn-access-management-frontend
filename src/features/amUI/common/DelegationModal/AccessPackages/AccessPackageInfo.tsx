@@ -23,33 +23,27 @@ import { DelegationAction } from '../EditModal';
 import classes from './AccessPackageInfo.module.css';
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import { useState } from 'react';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
-  toPartyUuid: string;
-  fromPartyUuid: string;
   availableActions?: DelegationAction[];
 }
 
-export const AccessPackageInfo = ({
-  accessPackage,
-  toPartyUuid,
-  fromPartyUuid,
-  availableActions = [],
-}: PackageInfoProps) => {
+export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { data: toParty } = useGetPartyByUUIDQuery(toPartyUuid);
+  const { fromParty, toParty, selfParty } = usePartyRepresentation();
 
   const { onDelegate, onRevoke } = useAccessPackageActions({
-    toUuid: toPartyUuid,
+    toUuid: toParty?.partyUuid || '',
     onDelegateError: (_, error: ActionError) => setActionError(error),
     onRevokeError: (_, error: ActionError) => setActionError(error),
   });
   const { actionError, setActionError } = useDelegationModalContext();
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
-    to: toPartyUuid,
-    from: fromPartyUuid,
+    to: toParty?.partyUuid ?? '',
+    from: fromParty?.partyUuid ?? '',
   });
 
   const userHasPackage = React.useMemo(() => {

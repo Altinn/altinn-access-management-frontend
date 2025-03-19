@@ -14,11 +14,10 @@ import { AreaItem } from './AreaItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItemContent } from './AreaItemContent';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
-  fromPartyUuid: string;
-  toPartyUuid: string;
   showAllAreas?: boolean;
   isLoading?: boolean;
   availableActions?: DelegationAction[];
@@ -43,15 +42,14 @@ export const AccessPackageList = ({
   onRevokeSuccess,
   onRevokeError,
   searchString,
-  fromPartyUuid,
-  toPartyUuid,
 }: AccessPackageListProps) => {
   const { data: allPackageAreas, isLoading: loadingPackageAreas } = useSearchQuery(
     searchString ?? '',
   );
+  const { fromParty, toParty } = usePartyRepresentation();
   const { data: activeDelegations, isLoading: loadingDelegations } = useGetUserDelegationsQuery({
-    from: fromPartyUuid,
-    to: toPartyUuid,
+    from: fromParty?.partyUuid ?? '',
+    to: toParty?.partyUuid ?? '',
   });
 
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
@@ -73,7 +71,7 @@ export const AccessPackageList = ({
   });
 
   const { onDelegate, onRevoke, onRequest } = useAccessPackageActions({
-    toUuid: toPartyUuid,
+    toUuid: toParty?.partyUuid || '',
     onDelegateSuccess,
     onDelegateError,
     onRevokeSuccess,

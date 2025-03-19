@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import store from '@/rtk/app/store';
 
 import { AccessPackageList } from './AccessPackageList';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 type AreaListPropsAndCustomArgs = React.ComponentProps<typeof AccessPackageList>;
 
@@ -12,18 +13,16 @@ export default {
   component: AccessPackageList,
   render: (args) => (
     <Provider store={store}>
-      <AccessPackageList
-        fromPartyUuid={''}
-        toPartyUuid={''}
-        {...args}
-      />
+      <PartyRepresentationProvider
+        fromPartyUuid='123'
+        toPartyUuid='456'
+      >
+        <AccessPackageList {...args} />
+      </PartyRepresentationProvider>
     </Provider>
   ),
 } as Meta;
 
 export const Default: StoryObj<AreaListPropsAndCustomArgs> = {
-  args: {
-    fromPartyUuid: '123',
-    toPartyUuid: '456',
-  },
+  args: {},
 };

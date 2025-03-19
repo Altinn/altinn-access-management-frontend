@@ -30,13 +30,13 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
         size={size}
         title={user.name}
         description={
-          user.partyType === 'Organization'
+          user.partyType.toString() === 'Organization'
             ? user.unitType
             : user.registryRoles.map((role) => t(`user_role.${role}`)).join(', ')
         }
         avatar={{
           name: user.name,
-          type: user.partyType === 'Organization' ? 'company' : 'person',
+          type: user.partyType.toString() === 'Organization' ? 'company' : 'person',
         }}
         expanded={isExpanded}
         collapsible={hasInheritingUsers}

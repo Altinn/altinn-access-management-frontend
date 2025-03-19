@@ -45,8 +45,6 @@ const SingleRightItem: FC<SingleRightItemProps> = ({ resource, toParty }) => {
       </li>
       <EditModal
         ref={modalRef}
-        toPartyUuid={toParty.partyUuid}
-        fromPartyUuid={getCookie('AltinnPartyUuid')}
         resource={resource}
       />
     </>
