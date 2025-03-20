@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             // GET resources & access packages
-            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(request.Value.Rights, request.Value.AccessPackages, languageCode, false);
+            RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(request.Value.Rights, request.Value.AccessPackages, languageCode);
             
             // GET system
             RegisteredSystem system = await _systemRegisterClient.GetSystem(request.Value.SystemId, cancellationToken);
