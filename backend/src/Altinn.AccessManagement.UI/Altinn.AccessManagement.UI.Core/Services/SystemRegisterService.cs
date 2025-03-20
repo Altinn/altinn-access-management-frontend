@@ -47,7 +47,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<RegisteredSystemRightsFE> GetSystemRights(string languageCode, string systemId, CancellationToken cancellationToken)
         {
             RegisteredSystem system = await _systemRegisterClient.GetSystem(systemId, cancellationToken);
-            return await _resourceHelper.MapRightsToFrontendObjects(system.Rights, system.AccessPackages, languageCode, false);
+            return await _resourceHelper.MapRightsToFrontendObjects(system.Rights, system.AccessPackages, languageCode);
         }
     }
 }
