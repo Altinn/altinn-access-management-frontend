@@ -2,6 +2,7 @@ import { AccessAreaListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -19,6 +20,12 @@ export const AreaItem = ({
   showBadge,
 }: AreaItemProps) => {
   const { t } = useTranslation();
+  const isSm = useIsMobileOrSmaller();
+  const badgeText = t('access_packages.delegated_packages_count_badge', {
+    delegated: area.packages.assigned.length,
+    total: area.packages.assigned.length + area.packages.available.length,
+  });
+
   return (
     <AccessAreaListItem
       key={area.id}
@@ -26,14 +33,7 @@ export const AreaItem = ({
       name={area.name}
       colorTheme='company'
       iconUrl={area.iconUrl}
-      badgeText={
-        showBadge
-          ? t('access_packages.delegated_packages_count_badge', {
-              delegated: area.packages.assigned.length,
-              total: area.packages.assigned.length + area.packages.available.length,
-            })
-          : undefined
-      }
+      badgeText={!isSm && showBadge ? badgeText : undefined}
       expanded={expanded}
       onClick={() => toggleExpandedArea(area.id)}
     >
