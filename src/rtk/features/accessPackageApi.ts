@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
 
 import type { Party } from './lookupApi';
 
@@ -13,11 +12,24 @@ export interface AccessArea {
   accessPackages: AccessPackage[];
 }
 
+export interface PackageResource {
+  id: string;
+  name: string;
+  description: string;
+  provider: ResourceProvider;
+}
+
+export interface ResourceProvider {
+  id: string;
+  name: string;
+  logoUrl: string;
+}
+
 export interface AccessPackage {
   id: string;
   name: string;
   description: string;
-  resources: IdNamePair[];
+  resources: PackageResource[];
   area: AccessArea;
   inherited?: boolean;
   inheritedFrom?: Party;

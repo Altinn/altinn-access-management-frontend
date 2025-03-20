@@ -12,8 +12,11 @@ import {
 
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
-import type { IdNamePair } from '@/dataObjects/dtos/IdNamePair';
-import { useGetUserDelegationsQuery, type AccessPackage } from '@/rtk/features/accessPackageApi';
+import {
+  useGetUserDelegationsQuery,
+  type PackageResource,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
@@ -199,14 +202,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
 const MINIMIZED_LIST_SIZE = 5;
 
-const mapResourceToListItem = (resource: IdNamePair): ListItemProps => ({
+const mapResourceToListItem = (resource: PackageResource): ListItemProps => ({
   title: resource.name,
-  avatar: { type: 'company', name: resource.name },
+  description: resource.provider.name,
+  icon: { iconUrl: resource.provider.logoUrl },
   as: 'div' as React.ElementType,
   size: 'xs',
 });
 
-const useMinimizableResourceList = (list: IdNamePair[]) => {
+const useMinimizableResourceList = (list: PackageResource[]) => {
   const { t } = useTranslation();
   const [showAll, setShowAll] = React.useState(false);
   if (list.length <= MINIMIZED_LIST_SIZE) {

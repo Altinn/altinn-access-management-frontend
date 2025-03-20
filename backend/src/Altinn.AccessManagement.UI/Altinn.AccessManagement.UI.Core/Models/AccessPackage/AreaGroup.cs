@@ -1,14 +1,14 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage
 {
     /// <summary>
-    /// An area for grouping similar types of access packages
+    /// For grouping of Areas
     /// </summary>
-    public class AccessArea
+    public class AreaGroup
     {
         /// <summary>
-        /// Identifier of the AccessArea
+        /// Id
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Name
@@ -21,23 +21,13 @@
         public string Description { get; set; }
 
         /// <summary>
-        /// An url that provides the Icon associated with this area and it's access packages
+        /// EntityTypeId
         /// </summary>
-        public string IconUrl { get; set; }
-
-        /// <summary>
-        /// GroupId
-        /// </summary>
-        public Guid GroupId { get; set; }
+        public Guid EntityTypeId { get; set; }
 
         /// <summary>
         /// Urn
         /// </summary>
         public string Urn { get; set; }
-
-        /// <summary>
-        /// EntityGroup
-        /// </summary>
-        public AreaGroup Group { get; set; }
     }
 }

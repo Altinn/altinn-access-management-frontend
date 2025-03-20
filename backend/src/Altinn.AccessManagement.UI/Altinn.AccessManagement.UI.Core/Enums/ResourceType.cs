@@ -1,49 +1,48 @@
 ﻿namespace Altinn.AccessManagement.UI.Core.Enums
 {
     /// <summary>
-    /// Enum representation of the different types of resources supported by the resource registry. The specific values represents their binary value.
+    /// Enum representation of the different types of resources supported by the resource registry
     /// </summary>
-    [Flags]
     public enum ResourceType
     {
         /// <summary>
-        /// Default
+        /// Default resource type
         /// </summary>
         Default = 0,
 
         /// <summary>
-        /// SystemResource
+        /// System resource type
         /// </summary>
-        SystemResource = 1,
+        Systemresource = 1 << 0,
 
         /// <summary>
-        /// MaskinportenSchema
+        /// Maskinporten schema resource type
         /// </summary>
-        MaskinportenSchema = 2,
+        MaskinportenSchema = 1 << 1,
 
         /// <summary>
-        /// Altinn2Service
+        /// Altinn 2 service resource type
         /// </summary>
-        Altinn2Service = 4,
+        Altinn2Service = 1 << 2,
 
         /// <summary>
-        /// AltinnApp
+        /// Altinn app resource type
         /// </summary>
-        AltinnApp = 8,
+        AltinnApp = 1 << 3,
 
         /// <summary>
-        /// GenericAccessResource
+        /// Generic access resource type
         /// </summary>
-        GenericAccessResource = 16,
+        GenericAccessResource = 1 << 4,
 
         /// <summary>
-        /// BrokerService
+        /// Broker service resource type
         /// </summary>
-        BrokerService = 32,
+        BrokerService = 1 << 5,
 
         /// <summary>
-        /// CorrespondenceService
+        /// Correspondence service resource type
         /// </summary>
-        CorrespondenceService = 64
+        CorrespondenceService = 1 << 6,
     }
 }

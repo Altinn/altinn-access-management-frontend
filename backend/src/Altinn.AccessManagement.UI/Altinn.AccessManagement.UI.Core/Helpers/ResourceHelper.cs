@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
@@ -43,9 +44,9 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             {
                 // GET resources
                 IEnumerable<Task<ServiceResource>> resourceTasks = resourceIds.Select(resourceId => _resourceRegistryClient.GetResource(resourceId));
-                
+
                 List<ServiceResource> resources = [];
-                try 
+                try
                 {
                     await Task.WhenAll(resourceTasks.Select(async task =>
                     {
@@ -55,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                             resources.Add(task.Result);
                         }
                     }));
-                } 
+                }
                 catch
                 {
                     // if loading a resource fails, the exception is caught and logged in _resourceRegistryClient.GetResource(resourceId)
@@ -64,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
                 resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
             }
-           
+
             return resourcesFE;
         }
 
@@ -77,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         public async Task<List<AccessPackageFE>> EnrichAccessPackages(IEnumerable<string> accessPackageIds, string languageCode, bool isHardcodedAccessPackage)
         {
             List<AccessPackageFE> accessPackagesFE = [];
-            
+
             if (accessPackageIds.Any())
             {
                 List<AccessPackage> accessPackages;
@@ -95,31 +96,32 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                     {
                         return new AccessPackage()
                         {
-                            Id = string.Empty,
+                            Id = new Guid("b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1"),
                             Urn = urn,
                             Area = null,
                             Description = string.Empty,
                             Name = string.Empty,
                             Resources = []
                         };
-                    }).ToList();  
-                } 
+                    }).ToList();
+                }
                 else
                 {
-                    accessPackages = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                    var accessPackageSearchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty);
+                    accessPackages = accessPackageSearchMatches.Select(x => x.Object).ToList();
                 }
 
-                IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
-                
+                List<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn)).ToList();
+
                 foreach (AccessPackage accessPackage in usedAccessPackages)
                 {
                     accessPackagesFE.Add(new AccessPackageFE()
                     {
-                        Id = accessPackage.Id,
+                        Id = accessPackage.Id.ToString(),
                         Urn = accessPackage.Urn,
                         Description = accessPackage.Description,
                         Name = accessPackage.Name,
-                        Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id), languageCode)
+                        Resources = await EnrichResources(accessPackage.Resources.Select(x => x.Id.ToString()), languageCode)
                     });
                 }
             }
@@ -138,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         {
             List<string> resourceIds = ResourceUtils.GetResourceIdsFromRights(rights);
             List<string> accessPackageIds = ResourceUtils.GetAccessPackageIdsFromRights(accessPackages);
-            
+
             return new()
             {
                 Resources = await EnrichResources(resourceIds, languageCode),

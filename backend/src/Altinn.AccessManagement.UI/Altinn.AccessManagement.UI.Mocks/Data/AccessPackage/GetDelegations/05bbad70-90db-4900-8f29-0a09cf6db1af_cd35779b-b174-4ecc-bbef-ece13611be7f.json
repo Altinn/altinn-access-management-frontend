@@ -77,14 +77,6 @@
       "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til jordbruk. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
       "isDelegable": true,
       "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "se_3225_1596",
-          "Name": "A2 skjema"
-        }
       ]
     },
     "To": {
@@ -128,34 +120,6 @@
       "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til tiltak og rapportering på bærekraft. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "isDelegable": true,
       "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "appid-503",
-          "Name": "Snarveien"
-        },
-        {
-          "Id": "app_ttd_a3-app",
-          "Name": "A3 app"
-        },
-        {
-          "Id": "app_ttd_a3-app2",
-          "Name": "A3 app 2"
-        },
-        {
-          "Id": "appid-509",
-          "Name": "Kaffemaskinen i 4. etasje"
-        },
-        {
-          "Id": "appid-512",
-          "Name": "Lønningsoversikt"
-        },
-        {
-          "Id": "appid-513",
-          "Name": "Kaffemaskinen i 5. etasje"
-        }
       ]
     },
     "To": {

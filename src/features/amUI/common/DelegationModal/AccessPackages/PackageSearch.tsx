@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { Heading, Search } from '@digdir/designsystemet-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
@@ -27,15 +27,17 @@ export const PackageSearch = ({
   availableActions,
 }: PackageSearchProps) => {
   const { t } = useTranslation();
-  const [debouncedSearchString, setDebouncedSearchString] = useState('');
-
   const { searchString, setSearchString, setCurrentPage, setActionError } =
     useDelegationModalContext();
+  const [debouncedSearchString, setDebouncedSearchString] = useState(searchString ?? '');
 
-  const debouncedSearch = debounce((searchString: string) => {
-    setDebouncedSearchString(searchString);
-    setCurrentPage(1);
-  }, 300);
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchString(value);
+      setCurrentPage(1);
+    }, 300),
+    [],
+  );
 
   return (
     toParty && (
