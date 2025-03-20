@@ -47,11 +47,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 customerType = CustomerRoleType.Regnskapsforer;
             } 
-            else if (accessPackageUrns.Any(x => regnskapsforerPackages.Contains(x))) 
+            else if (accessPackageUrns.Any(x => revisorPackages.Contains(x))) 
             {
                 customerType = CustomerRoleType.Revisor;
             } 
-            else if (accessPackageUrns.Any(x => regnskapsforerPackages.Contains(x))) 
+            else if (accessPackageUrns.Any(x => forretningsforerPackages.Contains(x))) 
             {
                 customerType = CustomerRoleType.Forretningsforer;
             } 
