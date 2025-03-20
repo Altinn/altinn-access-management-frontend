@@ -83,16 +83,12 @@ export const systemUserApi = createApi({
     getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
     }),
-    getRegnskapsforerCustomers: builder.query<AgentDelegationCustomer[], string>({
-      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/regnskapsforer`,
-      keepUnusedDataFor: Infinity,
-    }),
-    getRevisorCustomers: builder.query<AgentDelegationCustomer[], string>({
-      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/revisor`,
-      keepUnusedDataFor: Infinity,
-    }),
-    getForretningsforerCustomers: builder.query<AgentDelegationCustomer[], string>({
-      query: (partyUuid) => `systemuser/agentdelegation/${partyUuid}/customers/forretningsforer`,
+    getCustomers: builder.query<
+      AgentDelegationCustomer[],
+      { partyId: string; partyUuid: string; systemUserId: string }
+    >({
+      query: ({ partyId, partyUuid, systemUserId }) =>
+        `systemuser/agentdelegation/${partyId}/${partyUuid}/${systemUserId}/customers`,
       keepUnusedDataFor: Infinity,
     }),
     getAssignedCustomers: builder.query<
@@ -200,9 +196,7 @@ export const {
   useDeleteSystemuserMutation,
   useGetSystemUserQuery,
   useGetSystemUsersQuery,
-  useGetRegnskapsforerCustomersQuery,
-  useGetRevisorCustomersQuery,
-  useGetForretningsforerCustomersQuery,
+  useGetCustomersQuery,
   useGetAssignedCustomersQuery,
   useAssignCustomerMutation,
   useRemoveCustomerMutation,

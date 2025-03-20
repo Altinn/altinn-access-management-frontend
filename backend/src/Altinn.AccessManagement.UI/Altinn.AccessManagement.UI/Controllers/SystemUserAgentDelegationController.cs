@@ -28,44 +28,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Get all regnskapsforer customers for the party
+        /// Get all customers for the party
         /// </summary>
-        /// <param name="partyUuid">Party user represents</param>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="partyUuid">Party uuid user represents</param>
+        /// <param name="systemUserGuid">System user to get customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of customer party</returns>
         [Authorize]
-        [HttpGet("{partyUuid}/customers/regnskapsforer")]
-        public async Task<ActionResult> GetPartyRegnskapsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
+        [HttpGet("{partyId}/{partyUuid}/{systemUserGuid}/customers")]
+        public async Task<ActionResult> GetSystemUserCustomers([FromRoute] int partyId, [FromRoute] Guid partyUuid, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegationPartyFE> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Regnskapsforer, cancellationToken);
-            return Ok(customers);
-        }
-
-        /// <summary>
-        /// Get all revisor customers for the party
-        /// </summary>
-        /// <param name="partyUuid">Party user represents</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of customer party</returns>
-        [Authorize]
-        [HttpGet("{partyUuid}/customers/revisor")]
-        public async Task<ActionResult> GetPartyRevisorCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
-        {
-            List<AgentDelegationPartyFE> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Revisor, cancellationToken);
-            return Ok(customers);
-        }
-
-        /// <summary>
-        /// Get all forretningsforer customers for the party
-        /// </summary>
-        /// <param name="partyUuid">Party user represents</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of customer party</returns>
-        [Authorize]
-        [HttpGet("{partyUuid}/customers/forretningsforer")]
-        public async Task<ActionResult> GetPartyForretningsforerCustomers([FromRoute] Guid partyUuid, CancellationToken cancellationToken)
-        {
-            List<AgentDelegationPartyFE> customers = await _systemUserAgentDelegationService.GetPartyCustomers(partyUuid, CustomerRoleType.Forretningsforer, cancellationToken);
+            List<AgentDelegationPartyFE> customers = await _systemUserAgentDelegationService.GetSystemUserCustomers(partyId, partyUuid, systemUserGuid, cancellationToken);
             return Ok(customers);
         }
 
