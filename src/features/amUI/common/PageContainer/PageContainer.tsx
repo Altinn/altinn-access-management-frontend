@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Link as DsLink } from '@digdir/designsystemet-react';
+import { Link as DSLink } from '@digdir/designsystemet-react';
 import classes from './PageContainer.module.css';
 import { Link } from 'react-router';
 
@@ -23,7 +23,7 @@ export const PageContainer = ({
     <div className={classes.container}>
       <div className={classes.topActions}>
         <div className={classes.pageActions}>
-          <DsLink
+          <DSLink
             asChild={true}
             data-size='md'
           >
@@ -34,7 +34,7 @@ export const PageContainer = ({
               />
               {t('common.back')}
             </Link>
-          </DsLink>
+          </DSLink>
           {pageActions}
         </div>
         <div className={classes.contentActions}>{contentActions}</div>
