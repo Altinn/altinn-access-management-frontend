@@ -89,7 +89,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetForretningsforerCustomers_ReturnsCustomers()
         {
             // Arrange
-             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string partyId = "51329012";
             string systemUserId = _forretningsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerCustomers.json");
