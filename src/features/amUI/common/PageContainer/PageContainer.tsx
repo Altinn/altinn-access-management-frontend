@@ -10,6 +10,7 @@ interface PageContainerProps {
   pageActions?: React.ReactNode | React.ReactNode[];
   contentActions?: React.ReactNode | React.ReactNode[];
   backUrl?: string;
+  onNavigateBack?: () => void;
 }
 
 export const PageContainer = ({
@@ -17,6 +18,7 @@ export const PageContainer = ({
   pageActions,
   contentActions,
   backUrl,
+  onNavigateBack,
 }: PageContainerProps) => {
   const { t } = useTranslation();
   return (
@@ -27,7 +29,10 @@ export const PageContainer = ({
             asChild={true}
             data-size='md'
           >
-            <Link to={backUrl ?? '..'}>
+            <Link
+              to={backUrl ?? '..'}
+              onClick={onNavigateBack}
+            >
               <ArrowLeftIcon
                 aria-hidden={true}
                 fontSize='1.3rem'
