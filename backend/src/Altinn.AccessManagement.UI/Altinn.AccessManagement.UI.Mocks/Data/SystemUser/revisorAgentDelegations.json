@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d0c329bf-399d-46db-8cf2-eed47b66887b",
+    "from": {
+      "id": "87ee6b0e-5d14-4365-82df-d1ee436b51a8",
+      "name": "Kan ikke fjernes"
+    },
+    "to": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "STA TOM TIGER AS"
+    },
+    "facilitator": {
+      "id": "244c56a5-3737-44ac-8f3b-8697c5e281da",
+      "name": "Luca Regnskap klientdelegering REVI"
+    }
+  }
+]

@@ -7,6 +7,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import type { DelegationAction } from '../DelegationModal/EditModal';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './AccessPackageList.module.css';
 import { useAreaPackageList } from './useAreaPackageList';
@@ -14,7 +15,6 @@ import { AreaItem } from './AreaItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItemContent } from './AreaItemContent';
-import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -78,9 +78,11 @@ export const AccessPackageList = ({
     onRevokeError,
   });
 
-  const sortedAreas = [...assignedAreas, ...availableAreas].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  );
+  const combinedAreas = [...assignedAreas, ...availableAreas];
+
+  const displayAreas = searchString
+    ? combinedAreas
+    : combinedAreas.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className={classes.accessAreaList}>
@@ -88,8 +90,10 @@ export const AccessPackageList = ({
         <SkeletonAccessPackageList />
       ) : (
         <ListBase>
-          {sortedAreas.map((area) => {
-            const expanded = expandedAreas.some((areaId) => areaId === area.id);
+          {displayAreas.map((area) => {
+            const expanded =
+              (searchString && searchString.length > 2) ||
+              expandedAreas.some((areaId) => areaId === area.id);
 
             return (
               <AreaItem

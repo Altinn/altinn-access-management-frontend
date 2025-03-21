@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Heading, Search } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -47,9 +47,12 @@ export const UsersList = () => {
     return remainingAfterExtraction;
   }, [rightHolders, currentUser]);
 
-  const onSearch = debounce((newSearchString: string) => {
-    setSearchString(newSearchString);
-  }, 300);
+  const onSearch = useCallback(
+    debounce((newSearchString: string) => {
+      setSearchString(newSearchString);
+    }, 300),
+    [],
+  );
 
   return (
     <div className={classes.usersList}>

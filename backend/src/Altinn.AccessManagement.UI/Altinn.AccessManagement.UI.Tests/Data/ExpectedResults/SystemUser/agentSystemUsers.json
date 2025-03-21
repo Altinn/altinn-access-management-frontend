@@ -26,5 +26,19 @@
     },
     "resources": [],
     "accesspackages": []
+  },
+  {
+    "id": "095b06de-1a93-4320-b572-42d72949cf2c",
+    "integrationTitle": "Forretningsforer system",
+    "partyId": "51329012",
+    "created": "2025-01-20T12:00:00Z",
+    "system": {
+      "systemId": "ff_system",
+      "systemVendorOrgNumber": "925141623",
+      "systemVendorOrgName": "N/A",
+      "name": "N/A"
+    },
+    "resources": [],
+    "accesspackages": []
   }
 ]

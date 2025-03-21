@@ -1,0 +1,47 @@
+[
+  {
+    "id": "7da509f3-cff5-4253-946e-0336ae0bc48f",
+    "from": {
+      "id": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf",
+      "name": "VIKESÅ OG ÅLVUNDFJORD"
+    },
+    "to": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS"
+    },
+    "facilitator": {
+      "id": "61844188-3789-4b84-9314-2be1fdbc6633",
+      "name": "Unimicro klientdelegering REGN"
+    }
+  },
+  {
+    "id": "f842ab82-b424-47bb-af21-c35ba58ab2e1",
+    "from": {
+      "id": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199",
+      "name": "RAKRYGGET UNG TIGER AS"
+    },
+    "to": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS"
+    },
+    "facilitator": {
+      "id": "61844188-3789-4b84-9314-2be1fdbc6633",
+      "name": "Unimicro klientdelegering REGN"
+    }
+  },
+  {
+    "id": "60f1ade9-ed48-4083-a369-178d45d6ffd1",
+    "from": {
+      "id": "56d8ef08-d1c3-4dac-8b62-461c18ce612b",
+      "name": "Kan ikke fjernes"
+    },
+    "to": {
+      "id": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+      "name": "DISKRET NÆR TIGER AS"
+    },
+    "facilitator": {
+      "id": "61844188-3789-4b84-9314-2be1fdbc6633",
+      "name": "Unimicro klientdelegering REGN"
+    }
+  }
+]

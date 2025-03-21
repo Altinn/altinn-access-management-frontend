@@ -24,5 +24,20 @@
         /// An url that provides the Icon associated with this area and it's access packages
         /// </summary>
         public string IconUrl { get; set; }
+
+        /// <summary>
+        /// GroupId
+        /// </summary>
+        public Guid GroupId { get; set; }
+
+        /// <summary>
+        /// Urn
+        /// </summary>
+        public string Urn { get; set; }
+
+        /// <summary>
+        /// EntityGroup
+        /// </summary>
+        public AreaGroup Group { get; set; }
     }
 }

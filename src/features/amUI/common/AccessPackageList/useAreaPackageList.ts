@@ -27,7 +27,7 @@ export const useAreaPackageList = ({
   showAllPackages,
 }: useAreaPackagesProps) => {
   const accessAreas = useMemo(() => {
-    if (!allPackageAreas || !activeDelegations) {
+    if (!allPackageAreas) {
       return {
         assignedAreas: [],
         availableAreas: [],

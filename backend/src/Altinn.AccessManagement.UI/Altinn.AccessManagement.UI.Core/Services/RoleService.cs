@@ -34,25 +34,25 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<RoleAssignment>> GetRolesForUser(string languageCode, Guid rightOwnerUuid, Guid rightHolderUuid)
         {
-            return await _accessPackageClient.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
+            return await _accessManagementClient.GetRolesForUser(languageCode, rightOwnerUuid, rightHolderUuid);
         }
 
         /// <inheritdoc />
         public async Task<HttpResponseMessage> CreateRoleDelegation(Guid from, Guid to, Guid roleId)
         {
-            return await _accessPackageClient.CreateRoleDelegation(from, to, roleId);
+            return await _accessManagementClient.CreateRoleDelegation(from, to, roleId);
         }
 
         /// <inheritdoc />
         public async Task<HttpResponseMessage> DeleteRoleDelegation(Guid assignmentId)
         {
-            return await _accessPackageClient.DeleteRoleDelegation(assignmentId);
+            return await _accessManagementClient.DeleteRoleDelegation(assignmentId);
         }
 
         /// <inheritdoc />
         public async Task<List<RoleAreaFE>> GetSearch(string languageCode, string searchString)
         {
-            var searchMatches = await _accessPackageClient.GetRoleSearchMatches(languageCode, searchString);
+            var searchMatches = await _accessManagementClient.GetRoleSearchMatches(languageCode, searchString);
 
             var sortedAreas = new List<RoleAreaFE>();
 
@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<DelegationCheckResponse> RoleDelegationCheck(Guid rightOwner, Guid roleId)
         {
-            return await _accessPackageClient.RoleDelegationCheck(rightOwner, roleId);
+            return await _accessManagementClient.RoleDelegationCheck(rightOwner, roleId);
         }
     }
 }

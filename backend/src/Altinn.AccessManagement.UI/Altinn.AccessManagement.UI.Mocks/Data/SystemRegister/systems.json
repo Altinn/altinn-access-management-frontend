@@ -158,5 +158,27 @@
       }
     ],
     "isVisible": false
+  },
+  {
+    "systemId": "ff_system",
+    "systemVendorOrgNumber": "918098372",
+    "systemVendorOrgName": "",
+    "name": {
+      "en": "Forretningsfører-system",
+      "nb": "Forretningsfører-system",
+      "nn": "Forretningsfører-system"
+    },
+    "description": {
+      "en": "Forretningsfører-system",
+      "nb": "Forretningsfører-system",
+      "nn": "Forretningsfører-system"
+    },
+    "rights": [],
+    "accessPackages": [
+      {
+        "urn": "urn:altinn:accesspackage:skattegrunnlag"
+      }
+    ],
+    "isVisible": false
   }
 ]

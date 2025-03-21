@@ -12,10 +12,10 @@
   "resources": [],
   "accesspackages": [
     {
-      "id": "",
+      "id": "955d5779-3e2b-4098-b11d-0431dc41ddbe",
       "urn": "urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet",
-      "name": "",
-      "description": "",
+      "name": "Regnskapsfører med signeringsrettighet",
+      "description": "Denne fullmakten gir tilgang til regnskapfører å kunne signere på vegne av kunden for alle tjenester som krever signeringsrett. Dette er tjenester som man har vurdert det som naturlig at en regnskapsfører utfører på vegne av sin kunde. Fullmakten gis kun til autoriserte regnskapsførere. Fullmakt hos regnskapfører oppstår når kunden registrerer regnskapsfører i Enhetsregisteret. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "resources": []
     }
   ]
