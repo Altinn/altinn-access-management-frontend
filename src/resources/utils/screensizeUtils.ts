@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@digdir/designsystemet-react';
+import { useMediaQuery } from '@/resources/hooks';
 
 const mobileBreakpoint = 768;
 const tabletBreakpoint = 1024;
