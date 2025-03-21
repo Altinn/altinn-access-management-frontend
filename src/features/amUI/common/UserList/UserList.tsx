@@ -42,7 +42,6 @@ export const UserList = ({ userList, searchString, isLoading }: UserListProps) =
             disabled={!hasNextPage}
             variant='outline'
             size='md'
-            data-color='secondary'
           >
             {t('common.show_more')}
           </Button>

@@ -21,10 +21,13 @@ export const AreaItem = ({
 }: AreaItemProps) => {
   const { t } = useTranslation();
   const isSm = useIsMobileOrSmaller();
-  const badgeText = t('access_packages.delegated_packages_count_badge', {
-    delegated: area.packages.assigned.length,
-    total: area.packages.assigned.length + area.packages.available.length,
-  });
+  const badgeText =
+    !isSm && showBadge
+      ? t('access_packages.delegated_packages_count_badge', {
+          delegated: area.packages.assigned.length,
+          total: area.packages.assigned.length + area.packages.available.length,
+        })
+      : undefined;
 
   return (
     <AccessAreaListItem
@@ -33,7 +36,7 @@ export const AreaItem = ({
       name={area.name}
       colorTheme='company'
       iconUrl={area.iconUrl}
-      badgeText={!isSm && showBadge ? badgeText : undefined}
+      badgeText={badgeText}
       expanded={expanded}
       onClick={() => toggleExpandedArea(area.id)}
     >
