@@ -12,26 +12,56 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserAgentDelegationService : ISystemUserAgentDelegationService
     {
         private readonly ISystemUserAgentDelegationClient _systemUserAgentDelegationClient;
+        private readonly ISystemUserClient _systemUserClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemUserAgentDelegationService"/> class.
         /// </summary>
         /// <param name="systemUserAgentDelegationClient">The system user client administration client.</param>
+        /// <param name="systemUserClient">The system user client</param>
         /// <param name="registerClient">The register client</param>
         public SystemUserAgentDelegationService(
             ISystemUserAgentDelegationClient systemUserAgentDelegationClient,
+            ISystemUserClient systemUserClient,
             IRegisterClient registerClient)
         {
             _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
+            _systemUserClient = systemUserClient;
             _registerClient = registerClient;
         }
-
-        /// <inheritdoc />
-        public async Task<List<AgentDelegationPartyFE>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken)
+        
+        /// <inheritdoc /> 
+        public async Task<List<AgentDelegationPartyFE>> GetSystemUserCustomers(int partyId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            CustomerList regnskapsforerCustomers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
-            return MapCustomerListToCustomerFE(regnskapsforerCustomers);
+            // get access packages from systemuser
+            SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
+            IEnumerable<string> accessPackageUrns = systemUser.AccessPackages.Select(x => x.Urn);
+            CustomerRoleType customerType;
+
+            List<string> regnskapsforerPackages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-lonn"];
+            List<string> revisorPackages = ["urn:altinn:accesspackage:ansvarlig-revisor", "urn:altinn:accesspackage:revisormedarbeider"];
+            List<string> forretningsforerPackages = ["urn:altinn:accesspackage:skattegrunnlag"];
+            
+            if (accessPackageUrns.Any(x => regnskapsforerPackages.Contains(x))) 
+            {
+                customerType = CustomerRoleType.Regnskapsforer;
+            } 
+            else if (accessPackageUrns.Any(x => revisorPackages.Contains(x))) 
+            {
+                customerType = CustomerRoleType.Revisor;
+            } 
+            else if (accessPackageUrns.Any(x => forretningsforerPackages.Contains(x))) 
+            {
+                customerType = CustomerRoleType.Forretningsforer;
+            } 
+            else 
+            {
+                customerType = CustomerRoleType.None;
+            }
+
+            CustomerList customers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
+            return MapCustomerListToCustomerFE(customers);
         }
 
         /// <inheritdoc />

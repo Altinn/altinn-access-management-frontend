@@ -11,13 +11,14 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
     public interface ISystemUserAgentDelegationService
     {
         /// <summary>
-        /// Return all customers of a specific type for party
+        /// Return all customers for given system user
         /// </summary>
-        /// <param name="partyUuid">The party UUID of the party to retrieve customers from</param>
-        /// <param name="customerType">Customer type to get</param>
+        /// <param name="partyId">The party id of the party owning system user</param>
+        /// <param name="partyUuid">The party uuid of the party owning system user</param>
+        /// <param name="systemUserGuid">The system user UUID to get customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>List of all party customers</returns>
-        Task<List<AgentDelegationPartyFE>> GetPartyCustomers(Guid partyUuid, CustomerRoleType customerType, CancellationToken cancellationToken);
+        /// <returns>List of all systemuser customers</returns>
+        Task<List<AgentDelegationPartyFE>> GetSystemUserCustomers(int partyId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return delegated customers for this system user
