@@ -46,8 +46,6 @@ body {
 /* Overide ds tokens for mobile screens */
 @media screen and (max-width: 768px) {
   :root {
-    --ds-size-base: 25;
-
     --ds-heading-2xl-font-size: 3.25rem;
     --ds-heading-xl-font-size: 2.75rem;
     --ds-heading-lg-font-size: 2rem;
