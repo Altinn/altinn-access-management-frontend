@@ -15,9 +15,8 @@ import { PackageItem } from './PackageItem';
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
-import { mobileBreakpoint } from '@/resources/utils/screensizeUtils';
 import cn from 'classnames';
-import { useMediaQuery } from '@/resources/hooks';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -54,7 +53,7 @@ export const AreaItemContent = ({
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
   );
-  const isSm = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`);
+  const isSm = useIsMobileOrSmaller();
   return (
     <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
       <Paragraph>{area.description}</Paragraph>

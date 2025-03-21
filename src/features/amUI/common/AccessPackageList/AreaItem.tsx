@@ -2,8 +2,7 @@ import { AccessAreaListItem } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import type { ExtendedAccessArea } from './useAreaPackageList';
-import { mobileBreakpoint } from '@/resources/utils/screensizeUtils';
-import { useMediaQuery } from '@/resources/hooks';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface AreaItemProps {
   area: ExtendedAccessArea;
@@ -21,7 +20,7 @@ export const AreaItem = ({
   showBadge,
 }: AreaItemProps) => {
   const { t } = useTranslation();
-  const isSm = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`);
+  const isSm = useIsMobileOrSmaller();
   const badgeText =
     !isSm && showBadge
       ? t('access_packages.delegated_packages_count_badge', {

@@ -8,7 +8,7 @@ import {
   useGetRolesForUserQuery,
   useGetRolesQuery,
 } from '@/rtk/features/roleApi';
-import { Party, useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 
@@ -19,7 +19,7 @@ import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
 import { ActionError } from '@/resources/hooks/useActionError';
-import { mobileBreakpoint } from '@/resources/utils/screensizeUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface RoleListProps {
   from: string;
@@ -44,7 +44,7 @@ export const RoleList = ({
     from,
     to,
   });
-  const isSm = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`);
+  const isSm = useIsMobileOrSmaller();
   const groupedRoles = useMemo(
     () =>
       roleAreas?.map((roleArea) => {

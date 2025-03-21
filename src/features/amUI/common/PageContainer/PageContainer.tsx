@@ -15,8 +15,8 @@ import { Button } from '@altinn/altinn-components';
  * @param {React.ReactNode} children - The main content of the page.
  * @param {React.ReactNode | React.ReactNode[]} [pageActions] - Actions or elements to display in the page actions area.
  * @param {React.ReactNode | React.ReactNode[]} [contentActions] - Actions or elements to display in the content actions area.
- * @param {string} [backUrl] - URL to navigate back to when the back button is clicked.
- * @param {() => void} [onNavigateBack] - Callback function to handle custom back navigation logic.
+ * @param {string} [backUrl] - URL to navigate back to when the back button is clicked. (the preferred way to handle back navigation)
+ * @param {() => void} [onNavigateBack] - Callback function to handle custom back navigation logic. (this will only be called if `backUrl` is not provided)
  *
  * @example
  * <PageContainer

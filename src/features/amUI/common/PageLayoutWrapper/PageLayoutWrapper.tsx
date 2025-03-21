@@ -15,7 +15,7 @@ import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 
 import { SidebarItems } from './SidebarItems';
 import { useMediaQuery } from '@/resources/hooks';
-import { mobileBreakpoint } from '@/resources/utils/screensizeUtils';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -30,7 +30,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
 
-  const isSm = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`);
+  const isSm = useIsMobileOrSmaller();
 
   const headerLinks: MenuItemProps[] = [
     {
