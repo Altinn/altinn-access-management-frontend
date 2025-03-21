@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, useMediaQuery } from '@digdir/designsystemet-react';
 import { ListBase } from '@altinn/altinn-components';
 
 import {
@@ -19,7 +19,7 @@ import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
 import { ActionError } from '@/resources/hooks/useActionError';
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { mobileBreakpoint } from '@/resources/utils/screensizeUtils';
 
 interface RoleListProps {
   from: string;
@@ -44,7 +44,7 @@ export const RoleList = ({
     from,
     to,
   });
-  const isSm = useIsMobileOrSmaller();
+  const isSm = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`);
   const groupedRoles = useMemo(
     () =>
       roleAreas?.map((roleArea) => {
