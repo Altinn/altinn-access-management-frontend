@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
 {
@@ -35,5 +37,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
         /// </summary>
         [JsonPropertyName("system")]
         public RegisteredSystemFE System { get; set; }
+
+        /// <summary>
+        /// List of access package information (with resources)
+        /// </summary>
+        [JsonPropertyName("accessPackages")]
+        public List<AccessPackageFE> AccessPackages { get; set; } = new List<AccessPackageFE>();
     }
 }
