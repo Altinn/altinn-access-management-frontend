@@ -53,6 +53,7 @@ export const PageContainer = ({
             <DSLink
               asChild={true}
               data-size='md'
+              data-color='neutral'
             >
               <Link to={backUrl}>
                 <ArrowLeftIcon
@@ -66,8 +67,8 @@ export const PageContainer = ({
             <Button
               onClick={onNavigateBack}
               variant='text'
-              size='sm'
               icon={ArrowLeftIcon}
+              data-color='neutral'
             >
               {t('common.back')}
             </Button>
