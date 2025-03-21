@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link as DSLink } from '@digdir/designsystemet-react';
 import classes from './PageContainer.module.css';
 import { Link } from 'react-router';
+import { Button } from '@altinn/altinn-components';
 
 interface PageContainerProps {
   children: React.ReactNode;
@@ -21,25 +22,34 @@ export const PageContainer = ({
   onNavigateBack,
 }: PageContainerProps) => {
   const { t } = useTranslation();
+
   return (
     <div className={classes.container}>
       <div className={classes.topActions}>
         <div className={classes.pageActions}>
-          <DSLink
-            asChild={true}
-            data-size='md'
-          >
-            <Link
-              to={backUrl ?? '..'}
+          {onNavigateBack ? (
+            <Button
               onClick={onNavigateBack}
+              variant='text'
+              size='sm'
+              icon={ArrowLeftIcon}
             >
-              <ArrowLeftIcon
-                aria-hidden={true}
-                fontSize='1.3rem'
-              />
               {t('common.back')}
-            </Link>
-          </DSLink>
+            </Button>
+          ) : (
+            <DSLink
+              asChild={true}
+              data-size='md'
+            >
+              <Link to={backUrl ?? '..'}>
+                <ArrowLeftIcon
+                  aria-hidden={true}
+                  fontSize='1.3rem'
+                />
+                {t('common.back')}
+              </Link>
+            </DSLink>
+          )}
           {pageActions}
         </div>
         <div className={classes.contentActions}>{contentActions}</div>
