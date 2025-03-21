@@ -12,7 +12,8 @@ import { amUIPath, SystemUserPath } from '@/routes/paths';
  * @returns {MenuItemProps[]} A list of sidebar items, including a heading,
  *                            and optionally a confetti package if the feature flag is enabled.
  */
-export const SidebarItems = () => {
+
+export const SidebarItems = (isSmall: boolean = false) => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
 
   const heading: MenuItemProps = {
@@ -67,8 +68,13 @@ export const SidebarItems = () => {
   };
 
   if (displayConfettiPackage) {
+    if (isSmall) {
+      return [...confettiPackage, systemUser];
+    }
     return [heading, ...confettiPackage, systemUser];
   }
-
+  if (isSmall) {
+    return [systemUser];
+  }
   return [heading, systemUser];
 };

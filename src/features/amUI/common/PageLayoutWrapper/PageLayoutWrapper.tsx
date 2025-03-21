@@ -14,6 +14,8 @@ import { amUIPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 
 import { SidebarItems } from './SidebarItems';
+import { useMediaQuery } from '@/resources/hooks';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -28,8 +30,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
 
+  const isSm = useIsMobileOrSmaller();
+
   const headerLinks: MenuItemProps[] = [
     {
+      groupId: 1,
       id: 'messagebox',
       title: t('header.inbox'),
       size: 'lg',
@@ -42,6 +47,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
     },
     {
+      groupId: 1,
       icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
@@ -54,9 +60,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
+    ...(isSm ? SidebarItems(true) : []),
     {
       id: 'all-services',
-      groupId: 'global',
+      groupId: 10,
       icon: MenuGridIcon,
       title: t('header.all_services'),
       size: 'lg',
@@ -69,7 +76,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     {
       id: 'chat',
-      groupId: 'global',
+      groupId: 10,
       icon: PersonChatIcon,
       title: t('header.chat'),
       size: 'lg',

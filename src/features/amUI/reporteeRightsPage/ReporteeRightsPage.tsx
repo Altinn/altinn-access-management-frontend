@@ -51,7 +51,7 @@ export const ReporteeRightsPage = () => {
         <DelegationModalProvider>
           <PageWrapper>
             <PageLayoutWrapper>
-              <PageContainer onNavigateBack={() => navigate(`/${amUIPath.Reportees}`)}>
+              <PageContainer backUrl={`/${amUIPath.Reportees}`}>
                 <UserPageHeader
                   userName={name}
                   userType={party?.partyTypeName}

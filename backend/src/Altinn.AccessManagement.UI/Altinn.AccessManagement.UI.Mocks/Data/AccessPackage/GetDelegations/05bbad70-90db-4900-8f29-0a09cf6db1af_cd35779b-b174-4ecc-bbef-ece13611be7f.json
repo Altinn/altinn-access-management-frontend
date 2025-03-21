@@ -25,16 +25,7 @@
       "name": "Dyrehold",
       "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til dyrehold. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.",
       "isDelegable": true,
-      "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "se_3225_1596",
-          "Name": "A2 skjema"
-        }
-      ]
+      "Resources": []
     },
     "To": {
      "Name": "DISKRET NÆR TIGER AS",
@@ -76,8 +67,7 @@
       "name": "Jordbruk",
       "description": "Denne tilgangspakken gir tilgang til tjenester knyttet til jordbruk. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
       "isDelegable": true,
-      "Resources": [
-      ]
+      "Resources": []
     },
     "To": {
      "Name": "DISKRET NÆR TIGER AS",

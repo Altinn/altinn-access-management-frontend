@@ -15,6 +15,8 @@ import { PackageItem } from './PackageItem';
 import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
+import cn from 'classnames';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -51,9 +53,9 @@ export const AreaItemContent = ({
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
   );
-
+  const isSm = useIsMobileOrSmaller();
   return (
-    <div className={classes.accessAreaContent}>
+    <div className={cn(classes.accessAreaContent, !isSm && classes.accessAreaContentMargin)}>
       <Paragraph>{area.description}</Paragraph>
       {delegationCheckError && (
         <Alert data-color='danger'>
@@ -78,7 +80,8 @@ export const AreaItemContent = ({
               onSelect={onSelect}
               hasAccess
               controls={
-                availableActions?.includes(DelegationAction.REVOKE) && useDeleteConfirm ? (
+                !isSm &&
+                (availableActions?.includes(DelegationAction.REVOKE) && useDeleteConfirm ? (
                   <ButtonWithConfirmPopup
                     triggerButtonContent={t('common.delete_poa')}
                     triggerButtonProps={{
@@ -106,7 +109,7 @@ export const AreaItemContent = ({
                   >
                     {t('common.delete_poa')}
                   </Button>
-                )
+                ))
               }
             />
           ))}
@@ -120,30 +123,32 @@ export const AreaItemContent = ({
               pkg={pkg}
               onSelect={onSelect}
               controls={
-                <>
-                  {availableActions?.includes(DelegationAction.DELEGATE) && (
-                    <Button
-                      icon={PlusCircleIcon}
-                      variant='text'
-                      size='sm'
-                      disabled={!canDelegate(pkg.id) || isLoading}
-                      onClick={() => onDelegate(pkg)}
-                    >
-                      {t('common.give_poa')}
-                    </Button>
-                  )}
-                  {availableActions?.includes(DelegationAction.REQUEST) && (
-                    <Button
-                      icon={PlusCircleIcon}
-                      variant='text'
-                      size='sm'
-                      disabled
-                      onClick={() => onRequest(pkg)}
-                    >
-                      {t('common.request_poa')}
-                    </Button>
-                  )}
-                </>
+                !isSm && (
+                  <>
+                    {availableActions?.includes(DelegationAction.DELEGATE) && (
+                      <Button
+                        icon={PlusCircleIcon}
+                        variant='text'
+                        size='sm'
+                        disabled={!canDelegate(pkg.id) || isLoading}
+                        onClick={() => onDelegate(pkg)}
+                      >
+                        {t('common.give_poa')}
+                      </Button>
+                    )}
+                    {availableActions?.includes(DelegationAction.REQUEST) && (
+                      <Button
+                        icon={PlusCircleIcon}
+                        variant='text'
+                        size='sm'
+                        disabled
+                        onClick={() => onRequest(pkg)}
+                      >
+                        {t('common.request_poa')}
+                      </Button>
+                    )}
+                  </>
+                )
               }
             />
           ))}
