@@ -113,10 +113,10 @@ export const systemUserApi = createApi({
     }),
     removeCustomer: builder.mutation<
       void,
-      { partyId: string; systemUserId: string; assignmentId: string }
+      { partyId: string; systemUserId: string; delegationId: string }
     >({
-      query: ({ partyId, systemUserId, assignmentId }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${assignmentId}`,
+      query: ({ partyId, systemUserId, delegationId }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${delegationId}`,
         method: 'DELETE',
       }),
     }),

@@ -1,14 +1,14 @@
 [
   {
-    "assignmentId": "7da509f3-cff5-4253-946e-0336ae0bc48f",
-    "customerId": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf"
+    "delegationId": "7da509f3-cff5-4253-946e-0336ae0bc48f",
+    "clientUuid": "b4c3ba12-7e87-4ae1-84f8-426b1decfacf"
   },
   {
-    "assignmentId": "f842ab82-b424-47bb-af21-c35ba58ab2e1",
-    "customerId": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199"
+    "delegationId": "f842ab82-b424-47bb-af21-c35ba58ab2e1",
+    "clientUuid": "60fb3d5b-99c2-4df0-aa77-f3fca3bc5199"
   },
   {
-    "assignmentId": "60f1ade9-ed48-4083-a369-178d45d6ffd1",
-    "customerId": "56d8ef08-d1c3-4dac-8b62-461c18ce612b"
+    "delegationId": "60f1ade9-ed48-4083-a369-178d45d6ffd1",
+    "clientUuid": "56d8ef08-d1c3-4dac-8b62-461c18ce612b"
   }
 ]
