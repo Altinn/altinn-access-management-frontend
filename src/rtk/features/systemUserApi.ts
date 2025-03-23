@@ -93,10 +93,10 @@ export const systemUserApi = createApi({
     }),
     getAssignedCustomers: builder.query<
       AgentDelegation[],
-      { partyId: string; systemUserId: string }
+      { partyId: string; facilitatorId: string; systemUserId: string }
     >({
-      query: ({ partyId, systemUserId }) =>
-        `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
+      query: ({ partyId, facilitatorId, systemUserId }) =>
+        `systemuser/agentdelegation/${partyId}/${facilitatorId}/${systemUserId}/delegation`,
     }),
     assignCustomer: builder.mutation<
       AgentDelegation,

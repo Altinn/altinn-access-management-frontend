@@ -6,39 +6,18 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
     public class AgentDelegation
     {
         /// <summary>
-        /// Assignment id
+        /// Agent system user uuid
         /// </summary>
-        public Guid Id { get; init; }
+        public Guid AgentSystemUserId { get; set; }
 
         /// <summary>
-        /// From party
+        /// Delegation uuid
         /// </summary>
-        public DelegationParty From { get; init; }
+        public Guid DelegationId { get; set; }
 
         /// <summary>
-        /// To party
+        /// Client uuid
         /// </summary>
-        public DelegationParty To { get; init; }
-
-        /// <summary>
-        /// Facilitator - the agent system user
-        /// </summary>
-        public DelegationParty Facilitator { get; init; }
-    }
-
-    /// <summary>
-    /// Delegation Party for AgentDelegation
-    /// </summary>
-    public class DelegationParty
-    {
-        /// <summary>
-        /// Party id
-        /// </summary>
-        public Guid Id { get; init; }
-
-        /// <summary>
-        /// Party name
-        /// </summary>
-        public string Name { get; init; }
+        public Guid ClientUuid { get; set; }
     }
 }

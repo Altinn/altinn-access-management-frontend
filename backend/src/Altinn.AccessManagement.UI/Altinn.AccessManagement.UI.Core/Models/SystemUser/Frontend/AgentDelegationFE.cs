@@ -6,13 +6,18 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
     public class AgentDelegationFE
     {
         /// <summary>
-        /// Assignment uuid
+        /// Agent system user uuid
         /// </summary>
-        public Guid AssignmentId { get; set; }
+        public Guid AgentSystemUserId { get; set; }
 
         /// <summary>
-        /// Delegated customer party uuid
+        /// Delegation uuid
         /// </summary>
-        public Guid CustomerId { get; set; }
+        public Guid DelegationId { get; set; }
+
+        /// <summary>
+        /// Client uuid
+        /// </summary>
+        public Guid ClientUuid { get; set; }
     }
 }

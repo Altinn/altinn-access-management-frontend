@@ -47,14 +47,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Get agent delegations for this system user
         /// </summary>
         /// <param name="partyId">Party user represents</param>
+        /// <param name="facilitatorId">Facilitator uuid, uuid of partyId</param>
         /// <param name="systemUserGuid">System user id to get</param> 
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("{partyId}/{systemUserGuid}/delegation")]
-        public async Task<ActionResult> GetSystemUserAgentDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        [HttpGet("{partyId}/{facilitatorId}/{systemUserGuid}/delegation")]
+        public async Task<ActionResult> GetSystemUserAgentDelegations([FromRoute] int partyId, [FromRoute] Guid facilitatorId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegationFE> delegations = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
+            List<AgentDelegationFE> delegations = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, facilitatorId, systemUserGuid, cancellationToken);
             return Ok(delegations);
         }
 

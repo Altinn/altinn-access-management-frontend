@@ -55,6 +55,6 @@ export interface AgentDelegationCustomer {
 }
 
 export interface AgentDelegation {
-  assignmentId: string;
-  customerId: string;
+  delegationId: string;
+  clientUuid: string;
 }

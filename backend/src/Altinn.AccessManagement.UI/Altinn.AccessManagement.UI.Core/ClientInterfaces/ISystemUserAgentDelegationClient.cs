@@ -12,10 +12,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Return delegated customers for this system user
         /// </summary>
         /// <param name="partyId">The party id of the party owning system user to retrieve delegated customers from</param>
+        /// <param name="facilitatorId">Facilitator uuid, uuid of partyId</param>
         /// <param name="systemUserGuid">The system user UUID to retrieve delegated customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of delegated customers for system user</returns>
-        Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken);
+        Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Add client to system user
