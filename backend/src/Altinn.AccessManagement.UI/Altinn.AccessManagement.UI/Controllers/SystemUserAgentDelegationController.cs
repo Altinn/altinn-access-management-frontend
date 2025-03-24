@@ -31,15 +31,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Get all customers for the party
         /// </summary>
         /// <param name="partyId">Party user represents</param>
-        /// <param name="partyUuid">Party uuid user represents</param>
+        /// <param name="facilitatorId">Party uuid user represents</param>
         /// <param name="systemUserGuid">System user to get customers from</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of customer party</returns>
         [Authorize]
-        [HttpGet("{partyId}/{partyUuid}/{systemUserGuid}/customers")]
-        public async Task<ActionResult> GetSystemUserCustomers([FromRoute] int partyId, [FromRoute] Guid partyUuid, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        [HttpGet("{partyId}/{facilitatorId}/{systemUserGuid}/customers")]
+        public async Task<ActionResult> GetSystemUserCustomers([FromRoute] int partyId, [FromRoute] Guid facilitatorId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegationPartyFE> customers = await _systemUserAgentDelegationService.GetSystemUserCustomers(partyId, partyUuid, systemUserGuid, cancellationToken);
+            List<AgentDelegationPartyFE> customers = await _systemUserAgentDelegationService.GetSystemUserCustomers(partyId, facilitatorId, systemUserGuid, cancellationToken);
             return Ok(customers);
         }
 
@@ -63,13 +63,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Add a customer as a new agent delegation to this systemuser
         /// </summary>
         /// <param name="partyId">Party id user represents</param>
+        /// <param name="facilitatorId">Facilitator uuid, uuid of partyId</param>
         /// <param name="systemUserGuid">System user id to get</param>
         /// <param name="delegationRequest">Delegation request which contains partyUuid of party owning systemuser + customerId to add </param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("{partyId}/{systemUserGuid}/delegation/")]
-        public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromBody] AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        [HttpPost("{partyId}/{facilitatorId}/{systemUserGuid}/delegation/")]
+        public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid facilitatorId, [FromRoute] Guid systemUserGuid, [FromBody] AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
             Result<AgentDelegationFE> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
 
@@ -85,15 +86,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Remove an agent delegation from this systemuser
         /// </summary>
         /// <param name="partyId">Party user represents</param>
+        /// <param name="facilitatorId">Facilitator uuid, uuid of partyId</param>
         /// <param name="systemUserGuid">System user id to get</param>
-        /// <param name="assignmentId">Assignment id to remove from system user</param>
+        /// <param name="delegationId">Delegation id to remove from system user</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpDelete("{partyId}/{systemUserGuid}/delegation/{assignmentId}")]
-        public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid assignmentId, CancellationToken cancellationToken)
+        [HttpDelete("{partyId}/{facilitatorId}/{systemUserGuid}/delegation/{delegationId}")]
+        public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid facilitatorId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid delegationId, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, systemUserGuid, assignmentId, cancellationToken);
+            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(facilitatorId, delegationId, cancellationToken);
 
             if (result.IsProblem)
             {

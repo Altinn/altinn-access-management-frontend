@@ -103,7 +103,7 @@ export const systemUserApi = createApi({
       { partyId: string; systemUserId: string; partyUuid: string; customerId: string }
     >({
       query: ({ partyId, systemUserId, partyUuid, customerId }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation`,
+        url: `systemuser/agentdelegation/${partyId}/${partyUuid}/${systemUserId}/delegation`,
         method: 'POST',
         body: {
           customerId: customerId,
@@ -113,10 +113,10 @@ export const systemUserApi = createApi({
     }),
     removeCustomer: builder.mutation<
       void,
-      { partyId: string; systemUserId: string; delegationId: string }
+      { partyId: string; systemUserId: string; partyUuid: string; delegationId: string }
     >({
-      query: ({ partyId, systemUserId, delegationId }) => ({
-        url: `systemuser/agentdelegation/${partyId}/${systemUserId}/delegation/${delegationId}`,
+      query: ({ partyId, systemUserId, partyUuid, delegationId }) => ({
+        url: `systemuser/agentdelegation/${partyId}/${partyUuid}/${systemUserId}/delegation/${delegationId}`,
         method: 'DELETE',
       }),
     }),
