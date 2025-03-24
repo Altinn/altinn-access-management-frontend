@@ -12,13 +12,13 @@ import { amUIPath, SystemUserPath } from '@/routes/paths';
  * @returns {MenuItemProps[]} A list of sidebar items, including a heading,
  *                            and optionally a confetti package if the feature flag is enabled.
  */
-export const SidebarItems = () => {
-  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
 
+export const SidebarItems = (isSmall: boolean = false, pathname: string = '') => {
+  const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const heading: MenuItemProps = {
-    groupId: 1,
-    icon: HandshakeIcon,
     id: '1',
+    groupId: 1,
+    icon: { svgElement: HandshakeIcon, theme: 'base' },
     size: 'lg',
     title: t('sidebar.access_management'),
   };
@@ -29,6 +29,7 @@ export const SidebarItems = () => {
       id: '2',
       size: 'md',
       title: t('sidebar.users'),
+      selected: pathname?.includes(`/${amUIPath.Users}`),
       icon: PersonGroupIcon,
       as: (props) => (
         <Link
@@ -42,6 +43,7 @@ export const SidebarItems = () => {
       id: '3',
       size: 'md',
       title: t('sidebar.reportees'),
+      selected: pathname?.includes(`/${amUIPath.Reportees}`),
       icon: InboxIcon,
       as: (props) => (
         <Link
@@ -52,23 +54,30 @@ export const SidebarItems = () => {
     },
   ];
 
+  const systemUserPath = `/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`;
   const systemUser: MenuItemProps = {
     groupId: 4,
     id: '4',
     size: 'md',
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
+    selected: pathname?.includes(systemUserPath),
     as: (props) => (
       <Link
-        to={`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`}
+        to={systemUserPath}
         {...props}
       />
     ),
   };
 
   if (displayConfettiPackage) {
+    if (isSmall) {
+      return [...confettiPackage, systemUser];
+    }
     return [heading, ...confettiPackage, systemUser];
   }
-
+  if (isSmall) {
+    return [systemUser];
+  }
   return [heading, systemUser];
 };

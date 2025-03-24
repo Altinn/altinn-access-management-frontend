@@ -2,7 +2,7 @@ import React from 'react';
 import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { HandshakeIcon, InboxIcon, MenuGridIcon, PersonChatIcon } from '@navikt/aksel-icons';
 
 import {
@@ -14,6 +14,7 @@ import { amUIPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
 
 import { SidebarItems } from './SidebarItems';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -27,9 +28,13 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { t } = useTranslation();
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
+  const { pathname } = useLocation();
+
+  const isSm = useIsTabletOrSmaller();
 
   const headerLinks: MenuItemProps[] = [
     {
+      groupId: 1,
       id: 'messagebox',
       title: t('header.inbox'),
       size: 'lg',
@@ -42,11 +47,11 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
       ),
     },
     {
+      groupId: 1,
       icon: HandshakeIcon,
       id: 'access_management',
       size: 'lg',
       title: t('header.access_management'),
-      selected: true,
       as: (props) => (
         <Link
           to={`/${amUIPath.Users}`}
@@ -54,9 +59,10 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         />
       ),
     },
+    ...(isSm ? SidebarItems(true, pathname) : []),
     {
       id: 'all-services',
-      groupId: 'global',
+      groupId: 10,
       icon: MenuGridIcon,
       title: t('header.all_services'),
       size: 'lg',
@@ -69,7 +75,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
     },
     {
       id: 'chat',
-      groupId: 'global',
+      groupId: 10,
       icon: PersonChatIcon,
       title: t('header.chat'),
       size: 'lg',
@@ -148,7 +154,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
         sidebar={{
           menu: {
             groups: {},
-            items: SidebarItems(),
+            items: SidebarItems(false, pathname),
           },
         }}
         content={{ color: 'company' }}

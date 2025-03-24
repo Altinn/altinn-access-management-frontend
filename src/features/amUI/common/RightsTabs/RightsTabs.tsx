@@ -2,7 +2,7 @@ import { Badge, Tabs } from '@digdir/designsystemet-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
+import classes from './RightsTabs.module.css';
 interface RightsTabsProps {
   tabBadge?: { accessPackages: number; services: number; roles: number };
   packagesPanel: ReactNode;
@@ -58,9 +58,26 @@ export const RightsTabs = ({
           {t('user_rights_page.roles_title')}
         </Tabs.Tab>
       </Tabs.List>
-      <Tabs.Panel value='packages'>{packagesPanel}</Tabs.Panel>
-      {displaySingleRights && <Tabs.Panel value='singleRights'>{singleRightsPanel}</Tabs.Panel>}
-      <Tabs.Panel value='roleAssignments'>{roleAssignmentsPanel}</Tabs.Panel>
+      <Tabs.Panel
+        className={classes.tabContent}
+        value='packages'
+      >
+        {packagesPanel}
+      </Tabs.Panel>
+      {displaySingleRights && (
+        <Tabs.Panel
+          className={classes.tabContent}
+          value='singleRights'
+        >
+          {singleRightsPanel}
+        </Tabs.Panel>
+      )}
+      <Tabs.Panel
+        className={classes.tabContent}
+        value='roleAssignments'
+      >
+        {roleAssignmentsPanel}
+      </Tabs.Panel>
     </Tabs>
   );
 };

@@ -68,14 +68,6 @@
       "description": "Denne tilgangspakken gir fullmakter til tjenester knyttet til samle opp og behandle avløpsvann. Ved regelverksendringer eller innføring av nye digitale tjenester kan det bli endringer i tilganger som fullmakten gir.  ",
       "isDelegable": true,
       "Resources": [
-        {
-          "Id": "appid-402",
-          "Name": "Det magiske klesskapet"
-        },
-        {
-          "Id": "appid-513",
-          "Name": "Kaffemaskinen i 5. etasje"
-        }
       ]
     },
     "To": {

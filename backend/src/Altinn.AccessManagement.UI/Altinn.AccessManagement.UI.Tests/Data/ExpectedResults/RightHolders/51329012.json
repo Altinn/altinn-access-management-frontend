@@ -381,7 +381,7 @@
     "partyUuid": "8c4f7b43-6016-18f0-4042-3252f0921b5a",
     "partyType": "Organization",
     "name": "Brown, Little and Stiedemann",
-    "registryRoles": [],
+    "registryRoles": ["REGN"],
     "personId": null,
     "organizationNumber": "803894122",
     "unitType": "Inc",
@@ -391,7 +391,8 @@
         "partyType": "Person",
         "name": "Santa Claus",
         "registryRoles": [
-          "REGN"
+          "REGN", 
+          "LEDE"
         ],
         "personId": "24120098626",
         "organizationNumber": null,

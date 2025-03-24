@@ -25,3 +25,11 @@
 .pageContent {
   padding: 1rem;
 }
+
+@media (max-width: 768px) {
+  .pageContent {
+    padding: 1rem 0;
+  }
+}
+
+/* --dsc-tabs-tab-padding */

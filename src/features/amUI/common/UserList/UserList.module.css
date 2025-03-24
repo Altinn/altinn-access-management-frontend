@@ -3,3 +3,14 @@
   margin-left: 1rem;
   margin-bottom: 0.5rem;
 }
+
+.showMoreButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.showMoreButton {
+  width: 100%;
+}

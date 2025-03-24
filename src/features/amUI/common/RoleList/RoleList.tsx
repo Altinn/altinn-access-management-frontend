@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, useMediaQuery } from '@digdir/designsystemet-react';
 import { ListBase } from '@altinn/altinn-components';
 
 import {
@@ -8,7 +8,7 @@ import {
   useGetRolesForUserQuery,
   useGetRolesQuery,
 } from '@/rtk/features/roleApi';
-import { Party, useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 
@@ -19,6 +19,7 @@ import { RevokeRoleButton } from './RevokeRoleButton';
 import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
 import { ActionError } from '@/resources/hooks/useActionError';
+import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface RoleListProps {
   from: string;
@@ -43,7 +44,7 @@ export const RoleList = ({
     from,
     to,
   });
-
+  const isSm = useIsMobileOrSmaller();
   const groupedRoles = useMemo(
     () =>
       roleAreas?.map((roleArea) => {
@@ -106,6 +107,7 @@ export const RoleList = ({
                       onSelect(role);
                     }}
                     controls={
+                      !isSm &&
                       availableActions?.includes(DelegationAction.REVOKE) && (
                         <RevokeRoleButton
                           key={role.id}
@@ -132,21 +134,23 @@ export const RoleList = ({
                     toParty={party}
                     onClick={() => onSelect(role)}
                     controls={
-                      <>
-                        {availableActions?.includes(DelegationAction.DELEGATE) && (
-                          <DelegateRoleButton
-                            accessRole={role}
-                            key={role.id}
-                            toParty={party}
-                            fullText={false}
-                            size='sm'
-                            onDelegateError={onActionError}
-                          />
-                        )}
-                        {availableActions?.includes(DelegationAction.REQUEST) && (
-                          <RequestRoleButton />
-                        )}
-                      </>
+                      !isSm && (
+                        <>
+                          {availableActions?.includes(DelegationAction.DELEGATE) && (
+                            <DelegateRoleButton
+                              accessRole={role}
+                              key={role.id}
+                              toParty={party}
+                              fullText={false}
+                              size='sm'
+                              onDelegateError={onActionError}
+                            />
+                          )}
+                          {availableActions?.includes(DelegationAction.REQUEST) && (
+                            <RequestRoleButton />
+                          )}
+                        </>
+                      )
                     }
                   />
                 ))}
