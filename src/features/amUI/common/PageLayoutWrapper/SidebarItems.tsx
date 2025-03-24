@@ -2,7 +2,7 @@ import React from 'react';
 import type { MenuItemProps } from '@altinn/altinn-components';
 import { HandshakeIcon, InboxIcon, PersonGroupIcon, TenancyIcon } from '@navikt/aksel-icons';
 import { t } from 'i18next';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 
 import { amUIPath, SystemUserPath } from '@/routes/paths';
 
@@ -13,12 +13,12 @@ import { amUIPath, SystemUserPath } from '@/routes/paths';
  *                            and optionally a confetti package if the feature flag is enabled.
  */
 
-export const SidebarItems = (isSmall: boolean = false, pathname: string) => {
+export const SidebarItems = (isSmall: boolean = false, pathname: string = '') => {
   const displayConfettiPackage = window.featureFlags?.displayConfettiPackage;
   const heading: MenuItemProps = {
     id: '1',
     groupId: 1,
-    icon: HandshakeIcon,
+    icon: { svgElement: HandshakeIcon, theme: 'base' },
     size: 'lg',
     title: t('sidebar.access_management'),
   };
@@ -29,7 +29,7 @@ export const SidebarItems = (isSmall: boolean = false, pathname: string) => {
       id: '2',
       size: 'md',
       title: t('sidebar.users'),
-      selected: pathname.includes(`/${amUIPath.Users}`),
+      selected: pathname?.includes(`/${amUIPath.Users}`),
       icon: PersonGroupIcon,
       as: (props) => (
         <Link
@@ -43,7 +43,7 @@ export const SidebarItems = (isSmall: boolean = false, pathname: string) => {
       id: '3',
       size: 'md',
       title: t('sidebar.reportees'),
-      selected: pathname.includes(`/${amUIPath.Reportees}`),
+      selected: pathname?.includes(`/${amUIPath.Reportees}`),
       icon: InboxIcon,
       as: (props) => (
         <Link
@@ -61,7 +61,7 @@ export const SidebarItems = (isSmall: boolean = false, pathname: string) => {
     size: 'md',
     title: t('sidebar.systemaccess'),
     icon: TenancyIcon,
-    selected: pathname.includes(systemUserPath),
+    selected: pathname?.includes(systemUserPath),
     as: (props) => (
       <Link
         to={systemUserPath}
