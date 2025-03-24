@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/agent/{partyId}/{facilitatorId}/{systemUserGuid}/delegation";
+                string endpointUrl = $"systemuser/agent/{partyId}/{facilitatorId}/{systemUserGuid}/delegations";
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
