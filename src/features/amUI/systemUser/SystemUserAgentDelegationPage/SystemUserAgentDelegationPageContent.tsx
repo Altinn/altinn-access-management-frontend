@@ -98,6 +98,7 @@ export const SystemUserAgentDelegationPageContent = ({
     };
     removeCustomer({
       partyId,
+      partyUuid,
       systemUserId: id ?? '',
       delegationId: toRemove.delegationId,
     })
