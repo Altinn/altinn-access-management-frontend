@@ -21,7 +21,7 @@
     "vitest:ci": "vitest --coverage"
   },
   "dependencies": {
-    "@altinn/altinn-components": "^0.20.0",
+    "@altinn/altinn-components": "^0.22.0",
     "@digdir/designsystemet-css": "1.0.2",
     "@digdir/designsystemet-react": "1.0.2",
     "@digdir/designsystemet-theme": "1.0.2",
