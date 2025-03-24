@@ -261,7 +261,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationRequest dto = new AgentDelegationRequest
             {
                 CustomerId = Guid.Parse(customerId),
-                FacilitatorId = Guid.Parse(systemUserId)
+                FacilitatorId = Guid.Parse(partyUuid)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
