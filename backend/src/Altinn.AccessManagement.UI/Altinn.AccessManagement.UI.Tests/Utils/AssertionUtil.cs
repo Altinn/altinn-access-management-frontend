@@ -551,7 +551,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.NotNull(actual);
             Assert.NotNull(expected);
 
-            Assert.Equal(expected.ClientUuid, actual.ClientUuid);
+            Assert.Equal(expected.CustomerId, actual.CustomerId);
         }
     }
 }

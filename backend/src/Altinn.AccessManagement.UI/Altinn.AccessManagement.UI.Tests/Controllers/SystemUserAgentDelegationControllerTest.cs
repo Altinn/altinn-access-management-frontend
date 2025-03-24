@@ -196,7 +196,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationFE expectedResponse = new AgentDelegationFE()
             {
                 DelegationId = Guid.NewGuid(),
-                ClientUuid = Guid.Parse(customerId),
+                CustomerId = Guid.Parse(customerId),
             };
 
             // Act
@@ -231,7 +231,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             AgentDelegationFE expectedResponse = new AgentDelegationFE()
             {
                 DelegationId = Guid.NewGuid(),
-                ClientUuid = Guid.Parse(customerId)
+                CustomerId = Guid.Parse(customerId)
             };
 
             // Act

@@ -24,7 +24,7 @@ const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
   existingAgentDelegations: AgentDelegation[],
 ): AgentDelegationCustomer[] => {
-  const assignedCustomerIds = existingAgentDelegations.map((x) => x.clientUuid);
+  const assignedCustomerIds = existingAgentDelegations.map((x) => x.customerId);
   return customers.filter((customer) => assignedCustomerIds.includes(customer.id));
 };
 
@@ -90,7 +90,7 @@ export const SystemUserAgentDelegationPageContent = ({
   };
 
   const onRemoveCustomer = (toRemove: AgentDelegation): void => {
-    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, toRemove.clientUuid]);
+    setLoadingIds((oldLoadingIds) => [...oldLoadingIds, toRemove.customerId]);
     const onRemoveSuccess = () => {
       setDelegations((oldDelegations) =>
         oldDelegations.filter((delegation) => delegation.delegationId !== toRemove.delegationId),
@@ -103,8 +103,8 @@ export const SystemUserAgentDelegationPageContent = ({
     })
       .unwrap()
       .then(onRemoveSuccess)
-      .catch(() => setErrorId(toRemove.clientUuid))
-      .finally(() => resetLoadingId(toRemove.clientUuid));
+      .catch(() => setErrorId(toRemove.customerId))
+      .finally(() => resetLoadingId(toRemove.customerId));
   };
 
   const enableAddCustomers = (): void => {

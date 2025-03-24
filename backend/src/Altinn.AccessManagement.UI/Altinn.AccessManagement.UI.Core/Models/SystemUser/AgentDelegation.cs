@@ -16,8 +16,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public Guid DelegationId { get; set; }
 
         /// <summary>
-        /// Client uuid
+        /// Customer uuid
         /// </summary>
-        public Guid ClientUuid { get; set; }
+        public Guid CustomerId { get; set; }
     }
 }

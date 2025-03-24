@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             {
                 DelegationId = Guid.NewGuid(),
                 AgentSystemUserId = systemUserGuid,
-                ClientUuid = delegationRequest.CustomerId
+                CustomerId = delegationRequest.CustomerId
             }));
         }
 

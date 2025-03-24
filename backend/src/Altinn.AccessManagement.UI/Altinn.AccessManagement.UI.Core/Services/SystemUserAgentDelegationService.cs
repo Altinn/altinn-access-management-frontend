@@ -74,7 +74,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return new AgentDelegationFE()
                 {
                     AgentSystemUserId = delegation.AgentSystemUserId,
-                    ClientUuid = delegation.ClientUuid,
+                    CustomerId = delegation.CustomerId,
                     DelegationId = delegation.DelegationId,
                 };
             }).ToList();
@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return new AgentDelegationFE()
             {
                 AgentSystemUserId = newAgentDelegation.Value.AgentSystemUserId,
-                ClientUuid = newAgentDelegation.Value.ClientUuid,
+                CustomerId = newAgentDelegation.Value.CustomerId,
                 DelegationId = newAgentDelegation.Value.DelegationId,
             };
         }
