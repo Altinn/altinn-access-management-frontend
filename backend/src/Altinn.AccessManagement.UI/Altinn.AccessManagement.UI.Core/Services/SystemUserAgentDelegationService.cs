@@ -65,13 +65,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<AgentDelegationFE>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<List<AgentDelegationFE>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
-            return delegations.Select(x => new AgentDelegationFE()
+            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, facilitatorId, systemUserGuid, cancellationToken);
+
+            return delegations.Select(delegation => 
             {
-                AssignmentId = x.Id,
-                CustomerId = x.From.Id,
+                return new AgentDelegationFE()
+                {
+                    AgentSystemUserId = delegation.AgentSystemUserId,
+                    CustomerId = delegation.CustomerId,
+                    DelegationId = delegation.DelegationId,
+                };
             }).ToList();
         }
 
@@ -87,8 +92,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return new AgentDelegationFE()
             {
-                AssignmentId = newAgentDelegation.Value.Id,
-                CustomerId = newAgentDelegation.Value.From.Id,
+                AgentSystemUserId = newAgentDelegation.Value.AgentSystemUserId,
+                CustomerId = newAgentDelegation.Value.CustomerId,
+                DelegationId = newAgentDelegation.Value.DelegationId,
             };
         }
 

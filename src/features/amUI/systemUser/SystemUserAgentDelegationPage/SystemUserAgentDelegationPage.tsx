@@ -39,7 +39,11 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     data: agentDelegations,
     isError: isLoadAssignedCustomersError,
     isLoading: isLoadingAssignedCustomers,
-  } = useGetAssignedCustomersQuery({ partyId, systemUserId: id || '' });
+  } = useGetAssignedCustomersQuery({
+    partyId: partyId,
+    facilitatorId: partyUuid,
+    systemUserId: id || '',
+  });
 
   return (
     <PageWrapper>

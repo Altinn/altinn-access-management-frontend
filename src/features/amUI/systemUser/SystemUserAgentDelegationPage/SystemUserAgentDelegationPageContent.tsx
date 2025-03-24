@@ -93,13 +93,13 @@ export const SystemUserAgentDelegationPageContent = ({
     setLoadingIds((oldLoadingIds) => [...oldLoadingIds, toRemove.customerId]);
     const onRemoveSuccess = () => {
       setDelegations((oldDelegations) =>
-        oldDelegations.filter((delegation) => delegation.assignmentId !== toRemove.assignmentId),
+        oldDelegations.filter((delegation) => delegation.delegationId !== toRemove.delegationId),
       );
     };
     removeCustomer({
       partyId,
       systemUserId: id ?? '',
-      assignmentId: toRemove.assignmentId,
+      delegationId: toRemove.delegationId,
     })
       .unwrap()
       .then(onRemoveSuccess)
