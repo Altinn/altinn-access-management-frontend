@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpDelete("{partyId}/{facilitatorId}/{systemUserGuid}/delegation/{delegationId}")]
         public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid facilitatorId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid delegationId, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(facilitatorId, delegationId, cancellationToken);
+            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, facilitatorId, delegationId, cancellationToken);
 
             if (result.IsProblem)
             {
