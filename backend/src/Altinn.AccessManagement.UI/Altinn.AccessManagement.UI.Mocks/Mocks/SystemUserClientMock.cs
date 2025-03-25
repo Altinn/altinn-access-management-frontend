@@ -45,9 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
-            List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
-            List<SystemUser> allSystemUsers = [.. systemUsers, .. agentSystemUsers];
-            SystemUser systemUser = allSystemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
+            SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             if (systemUser is null)
             {
                 return Task.FromResult(false);
@@ -83,6 +81,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             return Task.FromResult(systemUsers);
+        }
+
+        /// <inheritdoc />
+        public Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
+        {
+            List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
+            SystemUser systemUser = agentSystemUsers.Find(s => s.Id == systemUserId.ToString() && s.PartyId == partyId.ToString());
+            if (systemUser is null)
+            {
+                return Task.FromResult(false);
+            }
+            return Task.FromResult(true);
         }
 
         internal static class TestErrors

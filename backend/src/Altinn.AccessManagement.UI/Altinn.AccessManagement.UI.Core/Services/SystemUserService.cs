@@ -102,6 +102,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public async Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
+        {
+            return await _systemUserClient.DeleteAgentSystemUser(partyId, systemUserId, facilitatorId, cancellationToken);
+        }
+
+        /// <inheritdoc />
         public async Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);

@@ -83,6 +83,16 @@ export const systemUserApi = createApi({
     getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
     }),
+    deleteAgentSystemuser: builder.mutation<
+      void,
+      { partyId: string; facilitatorId: string; systemUserId: string }
+    >({
+      query: ({ partyId, facilitatorId, systemUserId }) => ({
+        url: `systemuser/agent/${partyId}/${systemUserId}?facilitatorId=${facilitatorId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [Tags.SystemUsers],
+    }),
     getCustomers: builder.query<
       AgentDelegationCustomer[],
       { partyId: string; partyUuid: string; systemUserId: string }
@@ -202,6 +212,7 @@ export const {
   useRemoveCustomerMutation,
   useGetAgentSystemUsersQuery,
   useGetAgentSystemUserQuery,
+  useDeleteAgentSystemuserMutation,
   useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,
   useGetRegisteredSystemRightsQuery,

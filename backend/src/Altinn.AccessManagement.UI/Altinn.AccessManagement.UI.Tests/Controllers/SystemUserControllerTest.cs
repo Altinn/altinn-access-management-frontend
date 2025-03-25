@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: DeleteSystemUser deletes the system user with given id for given party
         /// </summary>
         [Fact]
-        public async Task DeleteSystemUser_ReturnsNoContent()
+        public async Task DeleteSystemUser_ReturnsNotFound()
         {
             // Arrange
             int partyId = 51329012;
@@ -246,6 +246,46 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: DeleteAgentSystemUser checks that agent system user with given id for given party is deleted
+        ///     Expected: DeleteAgentSystemUser deletes the agent system user with given id for given party
+        /// </summary>
+        [Fact]
+        public async Task DeleteAgentSystemUser_ReturnsAccepted()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string facilitatorId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?facilitatorId={facilitatorId}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: DeleteSystemUser checks that agent system user with given id for given party is not deleted when it is not found
+        ///     Expected: DeleteSystemUser returns not found
+        /// </summary>
+        [Fact]
+        public async Task DeleteAgentSystemUser_ReturnsNotFound()
+        {
+            // Arrange
+            int partyId = 51329012;
+            string facilitatorId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
+            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?facilitatorId={facilitatorId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
