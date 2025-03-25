@@ -7,7 +7,7 @@ import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   useAssignCustomerMutation,
-  useDeleteSystemuserMutation,
+  useDeleteAgentSystemuserMutation,
   useRemoveCustomerMutation,
 } from '@/rtk/features/systemUserApi';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
@@ -53,11 +53,11 @@ export const SystemUserAgentDelegationPageContent = ({
     getAssignedCustomers(customers, existingAgentDelegations),
   );
 
-  const [deleteSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
-    useDeleteSystemuserMutation();
+  const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
+    useDeleteAgentSystemuserMutation();
 
   const handleDeleteSystemUser = (): void => {
-    deleteSystemUser({ partyId, systemUserId: id || '' })
+    deleteAgentSystemUser({ partyId, facilitatorId: partyUuid, systemUserId: id || '' })
       .unwrap()
       .then(() => handleNavigateBack());
   };

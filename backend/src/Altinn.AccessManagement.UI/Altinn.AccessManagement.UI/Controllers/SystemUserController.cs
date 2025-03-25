@@ -127,6 +127,28 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Endpoint for delete agent system user
+        /// </summary>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="systemUserGuid">System user id to delete</param>
+        /// <param name="facilitatorId">Party owning the system user</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpDelete("agent/{partyId}/{systemUserGuid}")]
+        public async Task<ActionResult> DeleteAgentSystemUser([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid facilitatorId, CancellationToken cancellationToken)
+        {
+            bool result = await _systemUserService.DeleteAgentSystemUser(partyId, systemUserGuid, facilitatorId, cancellationToken);
+            if (result)
+            {
+                return Accepted();
+            }
+
+            return NotFound();
+        }
+
+        /// <summary>
         /// Endpoint for creating a new System User for the choosen reportee.The reportee is taken from the AltinnPartyId cookie 
         /// 
         /// Expects backend in Authenticaiton and in Access Management to perform authorization ch
