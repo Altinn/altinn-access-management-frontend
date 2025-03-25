@@ -50,18 +50,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new List<AgentDelegation>());
         }
 
-        public Task<Result<AgentDelegation>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        public Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
             if (delegationRequest.CustomerId.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7"))) 
             {
-                return Task.FromResult(new Result<AgentDelegation>(TestErrors.CustomerNotFound));
+                return Task.FromResult(new Result<List<AgentDelegation>>(TestErrors.CustomerNotFound));
             }
-            return Task.FromResult(new Result<AgentDelegation>(new AgentDelegation()
+            return Task.FromResult(new Result<List<AgentDelegation>>([new AgentDelegation()
             {
                 DelegationId = Guid.NewGuid(),
                 AgentSystemUserId = systemUserGuid,
                 CustomerId = delegationRequest.CustomerId
-            }));
+            }]));
         }
 
         public Task<Result<bool>> RemoveClient(Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)

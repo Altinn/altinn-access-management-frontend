@@ -88,5 +88,11 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ProblemDescriptor DelegationRightInsufficientAuthenticationLevel { get; }
             = _factory.Create(20, HttpStatusCode.Forbidden, "DelegationCheck failed with error: The service requires explicit authentication level and the reportee is missing this.");
+
+        /// <summary>
+        /// Gets a <see cref="ProblemDescriptor"/>.
+        /// </summary>
+        public static ProblemDescriptor CustomerIdNotFound { get; }
+            = _factory.Create(28, HttpStatusCode.BadRequest, "The customer id was not provided or did not validate.");
     }
 }

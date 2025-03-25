@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models.Register;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -83,18 +84,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
         {
-            Result<AgentDelegation> newAgentDelegation = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
+            Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
             
-            if (newAgentDelegation.IsProblem)
+            if (newAgentDelegations.IsProblem)
             {
-                return new Result<AgentDelegationFE>(newAgentDelegation.Problem);
+                return new Result<AgentDelegationFE>(newAgentDelegations.Problem);
+            }
+
+            AgentDelegation addedDelegation = newAgentDelegations.Value.Find(delegation => delegation.CustomerId == delegationRequest.CustomerId);
+            if (addedDelegation == null)
+            {
+                return Problem.CustomerIdNotFound;
             }
 
             return new AgentDelegationFE()
             {
-                AgentSystemUserId = newAgentDelegation.Value.AgentSystemUserId,
-                CustomerId = newAgentDelegation.Value.CustomerId,
-                DelegationId = newAgentDelegation.Value.DelegationId,
+                AgentSystemUserId = addedDelegation.AgentSystemUserId,
+                CustomerId = addedDelegation.CustomerId,
+                DelegationId = addedDelegation.DelegationId,
             };
         }
 
