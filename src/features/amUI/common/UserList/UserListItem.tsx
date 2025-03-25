@@ -31,7 +31,6 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
   const { t } = useTranslation();
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
-
   useEffect(
     () => setExpanded((user.matchInInheritingUsers && hasInheritingUsers) ?? false),
     [user.matchInInheritingUsers, hasInheritingUsers],
@@ -64,6 +63,7 @@ export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListI
                 />
               )
         }
+        titleAs={titleAs}
       />
       {hasInheritingUsers && isExpanded && (
         <ListWrapper

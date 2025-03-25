@@ -24,7 +24,6 @@ export const CurrentUserPageHeader = ({ currentUser, as, loading }: CurrentUserP
           variant='solid'
           theme='default'
           shadow='xs'
-          size='xl'
         >
           <ListItemHeader
             size='xl'
