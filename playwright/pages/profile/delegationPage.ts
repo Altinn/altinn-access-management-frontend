@@ -266,7 +266,7 @@ export class instantiateResource {
         }
 
         // Close form if the button is available
-        await this.page.getByLabel('Lukk skjema').click();
+        await this.page.getByRole('link', { name: 'Tilbake til innboks' }).click();
         await this.page.goto(process.env.BASE_URL + '/ui/profile');
       }
     } catch (error) {
