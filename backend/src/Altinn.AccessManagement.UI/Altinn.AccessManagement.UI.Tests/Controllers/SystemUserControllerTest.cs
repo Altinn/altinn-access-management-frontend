@@ -272,8 +272,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///     Test case: DeleteSystemUser checks that agent system user with given id for given party is not deleted when it is not found
-        ///     Expected: DeleteSystemUser returns not found
+        ///     Test case: DeleteAgentSystemUser checks that agent system user with given id for given party is not deleted when it is not found
+        ///     Expected: DeleteAgentSystemUser returns not found
         /// </summary>
         [Fact]
         public async Task DeleteAgentSystemUser_ReturnsNotFound()
