@@ -1,11 +1,10 @@
 import type { ListItemProps } from '@altinn/altinn-components';
 import { ListItem } from '@altinn/altinn-components';
-import { useEffect, useState } from 'react';
+import { ElementType, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-import classes from './UserList.module.css';
 import { ListWrapper } from './ListWrapper';
 import type { ExtendedUser } from './useFilteredUsers';
 
@@ -13,7 +12,22 @@ interface UserListItemProps extends ListItemProps {
   user: ExtendedUser;
 }
 
-export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps) => {
+const userHeadingLevelForMapper = (level?: ElementType) => {
+  switch (level) {
+    case 'h2':
+      return 'h3';
+    case 'h3':
+      return 'h4';
+    case 'h4':
+      return 'h5';
+    case 'h5':
+      return 'h6';
+    default:
+      return 'h6';
+  }
+};
+
+export const UserListItem = ({ user, size = 'lg', titleAs, ...props }: UserListItemProps) => {
   const { t } = useTranslation();
   const hasInheritingUsers = user.inheritingUsers?.length > 0;
   const [isExpanded, setExpanded] = useState(false);
@@ -24,7 +38,7 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
   );
 
   return (
-    <li className={cn(classes.UserList, classes.spacing_md)}>
+    <>
       <ListItem
         {...props}
         size={size}
@@ -57,8 +71,9 @@ export const UserListItem = ({ user, size = 'lg', ...props }: UserListItemProps)
           size='sm'
           spacing={1}
           indent
+          listItemTitleAs={userHeadingLevelForMapper(titleAs)}
         />
       )}
-    </li>
+    </>
   );
 };
