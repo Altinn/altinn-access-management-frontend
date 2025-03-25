@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }]));
         }
 
-        public Task<Result<bool>> RemoveClient(Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
         {
             if (delegationId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1"))) 
             {
