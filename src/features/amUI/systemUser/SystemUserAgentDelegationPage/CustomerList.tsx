@@ -90,6 +90,7 @@ export const CustomerList = ({
             title: customer.name,
             interactive: false,
             id: customer.id,
+            titleAs: 'h3',
             as: 'div',
             avatar: { type: 'company', name: customer.name },
             description: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,

@@ -123,6 +123,7 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
         return {
           title: systemUser.integrationTitle,
           description: systemUser.system.systemVendorOrgName,
+          titleAs: 'h3',
           as: (props) => (
             <Link
               to={

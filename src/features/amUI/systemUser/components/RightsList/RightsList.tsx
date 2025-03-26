@@ -67,6 +67,7 @@ export const RightsList = ({
             items={accessPackages.map((accessPackage) => {
               return {
                 as: 'button',
+                titleAs: 'h3',
                 size: 'md',
                 id: accessPackage.id,
                 title: accessPackage.name,
@@ -103,6 +104,7 @@ export const RightsList = ({
               return {
                 id: resource.identifier,
                 as: 'button',
+                titleAs: 'h3',
                 ownerLogoUrl: resource.resourceOwnerLogoUrl,
                 ownerLogoUrlAlt: resource.resourceOwnerName,
                 ownerName: resource.resourceOwnerName,
