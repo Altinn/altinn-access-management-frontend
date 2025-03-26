@@ -121,7 +121,6 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
       items={systemUsers?.map((systemUser) => {
         const isNew = newlyCreatedId === systemUser.id;
         return {
-          as: 'button',
           title: systemUser.integrationTitle,
           description: systemUser.system.systemVendorOrgName,
           as: (props) => (
