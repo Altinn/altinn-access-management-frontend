@@ -59,6 +59,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
           <AccessPackageList
             items={accessPackages.map((accessPackage) => {
               return {
+                as: 'button',
                 size: 'md',
                 id: accessPackage.id,
                 title: accessPackage.name,
@@ -92,6 +93,7 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
             items={resources.map((resource) => {
               return {
                 id: resource.identifier,
+                as: 'button',
                 ownerLogoUrl: resource.resourceOwnerLogoUrl,
                 ownerLogoUrlAlt: resource.resourceOwnerName,
                 ownerName: resource.resourceOwnerName,

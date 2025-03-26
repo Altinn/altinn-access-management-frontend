@@ -97,6 +97,7 @@ export const UsersList = () => {
         userList={userList || []}
         searchString={searchString}
         isLoading={isLoading}
+        listItemTitleAs='h3'
       />
     </div>
   );
