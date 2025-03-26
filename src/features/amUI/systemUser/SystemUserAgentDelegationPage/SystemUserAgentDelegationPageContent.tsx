@@ -171,7 +171,7 @@ export const SystemUserAgentDelegationPageContent = ({
             {systemUser.accessPackages.length == 1
               ? t('systemuser_agent_delegation.access_package_single')
               : t('systemuser_agent_delegation.access_package_plural', {
-                  accessPackageCount: systemUser.accessPackages,
+                  accessPackageCount: systemUser.accessPackages.length,
                 })}
           </Heading>
           <RightsList
