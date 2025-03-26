@@ -30,7 +30,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
   const isCurrentUser = currentUser?.uuid === rightHolderUuid;
 
   return (
-    <>
+    <div className={classes.roleSection}>
       <Heading
         level={2}
         data-size='xs'
@@ -38,37 +38,36 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
-      <div className={classes.roleSection}>
-        <RoleList
-          from={reportee?.partyUuid ?? ''}
-          to={rightHolderUuid ?? ''}
+
+      <RoleList
+        from={reportee?.partyUuid ?? ''}
+        to={rightHolderUuid ?? ''}
+        availableActions={[
+          isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
+          DelegationAction.REVOKE,
+        ]}
+        onActionError={(role, error) => {
+          setModalItem(role);
+          setActionError(error);
+          modalRef.current?.showModal();
+        }}
+        onSelect={(role) => {
+          setModalItem(role);
+          modalRef.current?.showModal();
+        }}
+        isLoading={currentUserIsLoading}
+      />
+      {party && (
+        <RoleInfoModal
+          modalRef={modalRef}
+          role={modalItem}
+          onClose={() => setModalItem(undefined)}
           availableActions={[
             isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
             DelegationAction.REVOKE,
           ]}
-          onActionError={(role, error) => {
-            setModalItem(role);
-            setActionError(error);
-            modalRef.current?.showModal();
-          }}
-          onSelect={(role) => {
-            setModalItem(role);
-            modalRef.current?.showModal();
-          }}
-          isLoading={currentUserIsLoading}
         />
-        {party && (
-          <RoleInfoModal
-            modalRef={modalRef}
-            role={modalItem}
-            onClose={() => setModalItem(undefined)}
-            availableActions={[
-              isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
-              DelegationAction.REVOKE,
-            ]}
-          />
-        )}
-      </div>
-    </>
+      )}
+    </div>
   );
 };

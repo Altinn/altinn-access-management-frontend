@@ -11,6 +11,7 @@ import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import classes from './ReporteeRightsPage.module.css';
 
 interface ReporteeAccessPackageSectionProps {
   reporteeUuid?: string;
@@ -34,7 +35,7 @@ export const ReporteeAccessPackageSection = ({
   }, []);
 
   return (
-    <>
+    <div className={classes.tabContentContainer}>
       <Heading
         level={2}
         data-size='xs'
@@ -68,6 +69,6 @@ export const ReporteeAccessPackageSection = ({
           modalActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         />
       )}
-    </>
+    </div>
   );
 };

@@ -9,7 +9,7 @@ import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import { ActionError } from '@/resources/hooks/useActionError';
+import classes from './ReporteeRightsPage.module.css';
 
 interface ReporteeRoleSectionProps {
   reporteeUuid?: string;
@@ -27,7 +27,7 @@ export const ReporteeRoleSection = ({
   const toUuid = getCookie('AltinnPartyUuid');
 
   return (
-    <>
+    <div className={classes.tabContentContainer}>
       <Heading
         level={2}
         data-size='xs'
@@ -35,28 +35,26 @@ export const ReporteeRoleSection = ({
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
-      <div>
-        <RoleList
-          to={toUuid}
-          from={reporteeUuid ?? ''}
-          onSelect={(role) => {
-            setModalItem(role);
-            modalRef.current?.showModal();
-          }}
-          availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
-          onActionError={(role, error) => {
-            setModalItem(role);
-            modalRef.current?.showModal();
-            setActionError(error);
-          }}
-        />
-      </div>
+      <RoleList
+        to={toUuid}
+        from={reporteeUuid ?? ''}
+        onSelect={(role) => {
+          setModalItem(role);
+          modalRef.current?.showModal();
+        }}
+        availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
+        onActionError={(role, error) => {
+          setModalItem(role);
+          modalRef.current?.showModal();
+          setActionError(error);
+        }}
+      />
       <RoleInfoModal
         modalRef={modalRef}
         role={modalItem}
         onClose={() => setModalItem(undefined)}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
       />
-    </>
+    </div>
   );
 };
