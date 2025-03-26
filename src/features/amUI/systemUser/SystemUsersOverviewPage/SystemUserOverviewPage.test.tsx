@@ -149,8 +149,8 @@ describe('SystemUserOverviewPage', () => {
     );
     renderSystemUserOverviewPage();
 
-    const systemUserActionBar = await screen.findByText('Tripletex');
-    await user.click(systemUserActionBar);
+    const systemUserActionBar = await screen.findAllByText('Tripletex');
+    await user.click(systemUserActionBar[0]);
 
     const mockedContent = await screen.findByText(mockedAgentDetailsPageContent);
 
