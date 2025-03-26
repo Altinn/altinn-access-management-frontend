@@ -16,9 +16,14 @@ import { ResourceDetails } from './ResourceDetails';
 interface RightsListProps {
   resources: ServiceResource[];
   accessPackages: SystemUserAccessPackage[];
+  hideHeadings?: boolean;
 }
 
-export const RightsList = ({ resources, accessPackages }: RightsListProps): React.ReactNode => {
+export const RightsList = ({
+  resources,
+  accessPackages,
+  hideHeadings,
+}: RightsListProps): React.ReactNode => {
   const { t } = useTranslation();
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
@@ -45,17 +50,19 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
     <div className={classes.rightsList}>
       {accessPackages.length > 0 && (
         <div>
-          <Heading
-            data-size='2xs'
-            level={2}
-            className={classes.rightHeading}
-          >
-            {accessPackages.length === 1
-              ? t('systemuser_detailpage.right_accesspackage_singular')
-              : t('systemuser_detailpage.right_accesspackage_plural', {
-                  accessPackageCount: accessPackages.length,
-                })}
-          </Heading>
+          {!hideHeadings && (
+            <Heading
+              data-size='2xs'
+              level={2}
+              className={classes.rightHeading}
+            >
+              {accessPackages.length === 1
+                ? t('systemuser_detailpage.right_accesspackage_singular')
+                : t('systemuser_detailpage.right_accesspackage_plural', {
+                    accessPackageCount: accessPackages.length,
+                  })}
+            </Heading>
+          )}
           <AccessPackageList
             items={accessPackages.map((accessPackage) => {
               return {
@@ -76,17 +83,19 @@ export const RightsList = ({ resources, accessPackages }: RightsListProps): Reac
       )}
       {resources.length > 0 && (
         <div>
-          <Heading
-            data-size='2xs'
-            level={2}
-            className={classes.rightHeading}
-          >
-            {resources.length === 1
-              ? t('systemuser_detailpage.right_resource_singular')
-              : t('systemuser_detailpage.right_resource_plural', {
-                  resourcesCount: resources.length,
-                })}
-          </Heading>
+          {!hideHeadings && (
+            <Heading
+              data-size='2xs'
+              level={2}
+              className={classes.rightHeading}
+            >
+              {resources.length === 1
+                ? t('systemuser_detailpage.right_resource_singular')
+                : t('systemuser_detailpage.right_resource_plural', {
+                    resourcesCount: resources.length,
+                  })}
+            </Heading>
+          )}
           <ResourceList
             defaultItemSize='md'
             items={resources.map((resource) => {

@@ -524,6 +524,8 @@
     "assign_customers": "Hvilke kunder skal knyttes til systemtilgangen {{integrationTitle}}?",
     "assigned_customers_header": "Kunder tilknyttet systemtilgangen",
     "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
+    "access_package_single": "Fullmakt til 1 tilgangspakke",
+    "access_package_plural": "Fullmakt til {{accessPackageCount}} tilgangspakker`",
     "add_customers": "Legg til kunder",
     "edit_customers": "Legg til eller fjern kunder",
     "customer_search": "Søk etter kunde",

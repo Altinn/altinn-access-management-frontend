@@ -16,6 +16,7 @@ import { SystemUserPath } from '@/routes/paths';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
@@ -165,7 +166,23 @@ export const SystemUserAgentDelegationPageContent = ({
           />
           <Heading
             level={2}
-            data-size='sm'
+            data-size='xs'
+          >
+            {systemUser.accessPackages.length == 1
+              ? t('systemuser_agent_delegation.access_package_single')
+              : t('systemuser_agent_delegation.access_package_plural', {
+                  accessPackageCount: systemUser.accessPackages,
+                })}
+          </Heading>
+          <RightsList
+            resources={[]}
+            accessPackages={systemUser.accessPackages}
+            hideHeadings
+          />
+          <Heading
+            level={2}
+            data-size='xs'
+            className={classes.customerHeading}
           >
             {t('systemuser_agent_delegation.assigned_customers_header')}
           </Heading>
