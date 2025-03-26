@@ -84,11 +84,12 @@ export const CustomerList = ({
       </div>
       <List
         defaultItemSize='sm'
+        className={classes.customerList}
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {
             title: customer.name,
+            interactive: false,
             id: customer.id,
-            disabled: true,
             as: 'div',
             avatar: { type: 'company', name: customer.name },
             description: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
