@@ -2,16 +2,19 @@ import React from 'react';
 import { describe, expect, test, vi } from 'vitest';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { http, HttpResponse } from 'msw';
 
+import { systemUserApi } from '@/rtk/features/systemUserApi';
 import { server } from '@mock/node';
 import { ACCESSMANAGEMENT_BASE_URL } from '@mock/handlers';
 import store from '@/rtk/app/store';
 
 import { SystemUserOverviewPage } from './SystemUserOverviewPage';
 
+const mockedDetailsPageContent = 'systemuser';
+const mockedAgentDetailsPageContent = 'systemuser agent';
 const testPartyId = 51329012;
 const systemUsers = [
   {
@@ -43,13 +46,27 @@ const systemUsers = [
     accessPackages: [],
   },
 ];
+const agentSystemUsers = [
+  {
+    id: 'be16ce1b-e1fa-4369-896c-8562858a64d5',
+    integrationTitle: 'Tripletex',
+    partyId: '51329012',
+    created: '2025-02-21T12:25:41.26221Z',
+    system: {
+      systemId: '991825827_tripletex',
+      systemVendorOrgNumber: '991825827',
+      systemVendorOrgName: 'DIGITALISERINGSDIREKTORATET',
+      name: 'N/A',
+    },
+    resources: [],
+    accessPackages: [],
+  },
+];
 
-const mockedUseNavigate = vi.fn();
 vi.mock('react-router', async () => {
   const mod = await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...mod,
-    useNavigate: () => mockedUseNavigate,
     useLocation: () => {
       return {
         state: { createdId: '93d4ac6b-8412-4600-8480-1a282359d2c8' },
@@ -59,6 +76,10 @@ vi.mock('react-router', async () => {
 });
 
 describe('SystemUserOverviewPage', () => {
+  beforeEach(() => {
+    store.dispatch(systemUserApi.util.resetApiState());
+  });
+
   test('should show error message if loading system users fail', async () => {
     server.use(
       http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/${testPartyId}`, () => {
@@ -98,7 +119,42 @@ describe('SystemUserOverviewPage', () => {
     const systemUserActionBar = await screen.findByText('SmartCloud');
     await user.click(systemUserActionBar);
 
-    expect(mockedUseNavigate).toHaveBeenCalled();
+    const mockedContent = await screen.findByText(mockedDetailsPageContent);
+
+    expect(mockedContent).toBeInTheDocument();
+  });
+
+  test('should show error message if loading agent system users fail', async () => {
+    server.use(
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/agent/${testPartyId}`, () => {
+        return new HttpResponse(null, {
+          status: 500,
+        });
+      }),
+    );
+    renderSystemUserOverviewPage();
+
+    const heading = await screen.findByText(
+      'systemuser_overviewpage.agent_delegation_systemusers_load_error',
+    );
+    expect(heading).toBeInTheDocument();
+  });
+
+  test('should navigate to agent system user when agent system user is clicked', async () => {
+    const user = userEvent.setup();
+    server.use(
+      http.get(`${ACCESSMANAGEMENT_BASE_URL}/systemuser/agent/${testPartyId}`, () => {
+        return HttpResponse.json(agentSystemUsers);
+      }),
+    );
+    renderSystemUserOverviewPage();
+
+    const systemUserActionBar = await screen.findByText('Tripletex');
+    await user.click(systemUserActionBar);
+
+    const mockedContent = await screen.findByText(mockedAgentDetailsPageContent);
+
+    expect(mockedContent).toBeInTheDocument();
   });
 });
 
@@ -106,7 +162,20 @@ const renderSystemUserOverviewPage = () => {
   render(
     <Provider store={store}>
       <MemoryRouter>
-        <SystemUserOverviewPage />
+        <Routes>
+          <Route
+            path='/'
+            element={<SystemUserOverviewPage />}
+          />
+          <Route
+            path={'systemuser/:id'}
+            element={<div>{mockedDetailsPageContent}</div>}
+          />
+          <Route
+            path={'systemuser/:id/agentdelegation'}
+            element={<div>{mockedAgentDetailsPageContent}</div>}
+          />
+        </Routes>
       </MemoryRouter>
     </Provider>,
   );
