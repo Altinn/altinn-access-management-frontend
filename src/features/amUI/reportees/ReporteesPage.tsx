@@ -62,6 +62,7 @@ export const ReporteesPage = () => {
           userList={userList || []}
           searchString={searchString}
           isLoading={isLoading}
+          listItemTitleAs='h2'
         />
       </PageLayoutWrapper>
     </PageWrapper>

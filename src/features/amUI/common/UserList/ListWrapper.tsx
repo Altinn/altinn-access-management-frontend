@@ -14,6 +14,7 @@ export interface UserListProps {
   size?: ListItemSize;
   indent?: boolean;
   isLoading?: boolean;
+  listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 export const ListWrapper = ({
@@ -22,6 +23,7 @@ export const ListWrapper = ({
   spacing,
   isLoading,
   indent,
+  listItemTitleAs,
 }: UserListProps) => {
   return (
     <div className={cn(indent ? classes.indent : '')}>
@@ -34,6 +36,7 @@ export const ListWrapper = ({
               size={size}
               key={user.partyUuid}
               user={user}
+              titleAs={listItemTitleAs}
             />
           ))
         )}

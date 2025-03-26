@@ -11,9 +11,10 @@ export interface UserListProps {
   userList: User[];
   searchString: string;
   isLoading?: boolean;
+  listItemTitleAs?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
-export const UserList = ({ userList, searchString, isLoading }: UserListProps) => {
+export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }: UserListProps) => {
   const { t } = useTranslation();
   const { users, hasNextPage, goNextPage } = useFilteredUsers({
     users: userList,
@@ -33,6 +34,7 @@ export const UserList = ({ userList, searchString, isLoading }: UserListProps) =
         spacing={2}
         size='md'
         isLoading={isLoading}
+        listItemTitleAs={listItemTitleAs}
       />
       {hasNextPage && (
         <div className={classes.showMoreButtonContainer}>

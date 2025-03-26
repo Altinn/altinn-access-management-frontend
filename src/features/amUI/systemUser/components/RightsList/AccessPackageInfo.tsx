@@ -47,6 +47,7 @@ export const AccessPackageInfo = ({
         items={accessPackage.resources.map((resource) => {
           return {
             id: resource.identifier,
+            as: 'button',
             ownerLogoUrl: resource.resourceOwnerLogoUrl,
             ownerLogoUrlAlt: resource.resourceOwnerName,
             ownerName: resource.resourceOwnerName,
