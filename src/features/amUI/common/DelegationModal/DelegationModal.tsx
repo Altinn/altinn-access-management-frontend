@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { DelegationModalContent } from './DelegationModalContent';
 import type { DelegationAction } from './EditModal';
+import { AreaExpandedStateProvider } from '../AccessPackageList/AccessPackageExpandedContext';
 
 export enum DelegationType {
   SingleRights = 'SingleRights',
@@ -15,9 +16,11 @@ export interface DelegationModalProps {
 
 export const DelegationModal = ({ delegationType, availableActions }: DelegationModalProps) => {
   return (
-    <DelegationModalContent
-      delegationType={delegationType}
-      availableActions={availableActions}
-    />
+    <AreaExpandedStateProvider>
+      <DelegationModalContent
+        delegationType={delegationType}
+        availableActions={availableActions}
+      />
+    </AreaExpandedStateProvider>
   );
 };
