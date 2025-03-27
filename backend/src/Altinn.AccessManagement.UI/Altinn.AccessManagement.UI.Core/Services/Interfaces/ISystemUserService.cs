@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="systemUserId">Id of system user to delete</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
-        Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, CancellationToken cancellationToken);
+        Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new system user

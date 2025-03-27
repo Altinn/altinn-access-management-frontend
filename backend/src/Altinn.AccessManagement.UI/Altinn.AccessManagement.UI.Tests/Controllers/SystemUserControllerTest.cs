@@ -291,15 +291,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: DeleteAgentSystemUser checks that agent system user with given id for given party is not deleted when it is not found
-        ///     Expected: DeleteAgentSystemUser returns not found
+        ///     Expected: DeleteAgentSystemUser returns bad requst
         /// </summary>
         [Fact]
-        public async Task DeleteAgentSystemUser_WrongPartyId_ReturnsNotFound()
+        public async Task DeleteAgentSystemUser_WrongPartyId_ReturnsBadRequest()
         {
             // Arrange
             int partyId = 411111111;
             string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
-            HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");

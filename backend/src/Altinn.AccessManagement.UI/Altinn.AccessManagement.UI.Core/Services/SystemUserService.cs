@@ -102,12 +102,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, CancellationToken cancellationToken)
         {
             Party party = await _registerClient.GetPartyByPartyId(partyId);
             if (party == null || party.PartyUuid == null)
             {
-                return false;
+                return Problem.Reportee_Orgno_NotFound;
             }
 
             return await _systemUserClient.DeleteAgentSystemUser(partyId, systemUserId, (Guid)party.PartyUuid, cancellationToken);
