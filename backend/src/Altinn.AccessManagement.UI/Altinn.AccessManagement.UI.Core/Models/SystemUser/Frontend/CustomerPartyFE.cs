@@ -3,7 +3,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend
     /// <summary>
     /// Specific SystemUser frontend model of PartyRecord
     /// </summary>
-    public class AgentDelegationPartyFE
+    public class CustomerPartyFE
     {
         /// <summary>
         /// Party UUID  

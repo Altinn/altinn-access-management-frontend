@@ -19,6 +19,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
                 Task<Party> GetPartyForOrganization(string organizationNumber);
 
                 /// <summary>
+                /// Looks up party information for an organization based on the partyId
+                /// </summary>
+                /// <param name="partyId">The partyId</param>
+                /// <returns>
+                /// Party information
+                /// </returns>
+                Task<Party> GetPartyByPartyId(int partyId);
+
+                /// <summary>
                 /// Looks up party information for a person based on the ssn
                 /// </summary>
                 /// <param name="ssn">The persons ssn</param>

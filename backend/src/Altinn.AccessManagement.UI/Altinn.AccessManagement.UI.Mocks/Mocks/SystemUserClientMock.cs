@@ -84,15 +84,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
+        public Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
         {
             List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             SystemUser systemUser = agentSystemUsers.Find(s => s.Id == systemUserId.ToString() && s.PartyId == partyId.ToString());
             if (systemUser is null)
             {
-                return Task.FromResult(false);
+                return Task.FromResult(new Result<bool>(TestErrors.SystemNotFound));
             }
-            return Task.FromResult(true);
+            return Task.FromResult(new Result<bool>(true));
         }
 
         internal static class TestErrors
