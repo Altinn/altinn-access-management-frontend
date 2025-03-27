@@ -102,6 +102,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetForretningsforerCustomers checks that customers are returned
+        ///     Expected: GetForretningsforerCustomers returns customers
+        /// </summary>
+        [Fact]
+        public async Task GetForretningsforerCustomers_WrongPartyId_ReturnsCustomers()
+        {
+            // Arrange
+            string partyId = "411111111";
+            string systemUserId = _forretningsforerSystemUserId;
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: GetRegnskapsforerAgentDelegation checks that delegated regnskapsforer customers are returned
         ///     Expected: GetRegnskapsforerAgentDelegation returns delegations
         /// </summary>
@@ -165,6 +184,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
             AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: GetForretningsforerAgentDelegation checks that delegated forretningsforer customers are returned
+        ///     Expected: GetForretningsforerAgentDelegation returns delegations
+        /// </summary>
+        [Fact]
+        public async Task GetForretningsforerAgentDelegation_WrongPartyId_ReturnsBadRequest()
+        {
+            // Arrange
+            string partyId = "411111111";
+            string systemUserId = _forretningsforerSystemUserId;
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
         }
 
         /// <summary>
@@ -264,6 +302,34 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: PostRegnskapsforerAgentDelegation checks error handling for invalid delegations
+        ///     Expected: PostRegnskapsforerAgentDelegation returns NotFound error
+        /// </summary>
+        [Fact]
+        public async Task PostRegnskapsforerAgentDelegation_WrongPartyId_ReturnBadRequest()
+        {
+            // Arrange
+            string partyId = "411111111";
+            string systemUserId = _regnskapsforerSystemUserId;
+            string customerId = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
+            
+            AgentDelegationRequestFE dto = new AgentDelegationRequestFE
+            {
+                CustomerId = Guid.Parse(customerId),
+            };
+            string jsonDto = JsonSerializer.Serialize(dto);
+            HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
+
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: DeleteRegnskapsforerAgentDelegation checks that delegation is removed
         ///     Expected: DeleteRegnskapsforerAgentDelegation returns true
         /// </summary>
@@ -299,6 +365,27 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string delegationId = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
             
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}");
+
+            // Assert
+            Assert.Equal(expectedResponse, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: DeleteRegnskapsforerAgentDelegation checks error handling for non-existent delegations
+        ///     Expected: DeleteRegnskapsforerAgentDelegation returns NotFound error
+        /// </summary>
+        [Fact]
+        public async Task DeleteRegnskapsforerAgentDelegation_WrongPartyId_ReturnsBadRequest()
+        {
+            // Arrange
+            string partyId = "41111111";
+            string systemUserId = _regnskapsforerSystemUserId;
+            string delegationId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
+            
+            HttpStatusCode expectedResponse = HttpStatusCode.BadRequest;
 
             // Act
             HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}");
