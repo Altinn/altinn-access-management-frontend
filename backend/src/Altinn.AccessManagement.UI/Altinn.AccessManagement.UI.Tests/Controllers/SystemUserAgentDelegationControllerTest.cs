@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: GetForretningsforerCustomers returns customers
         /// </summary>
         [Fact]
-        public async Task GetForretningsforerCustomers_WrongPartyId_ReturnsCustomers()
+        public async Task GetForretningsforerCustomers_WrongPartyId_ReturnsBadRequest()
         {
             // Arrange
             string partyId = "411111111";
@@ -303,7 +303,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: PostRegnskapsforerAgentDelegation checks error handling for invalid delegations
-        ///     Expected: PostRegnskapsforerAgentDelegation returns NotFound error
+        ///     Expected: PostRegnskapsforerAgentDelegation returns BadRequest error
         /// </summary>
         [Fact]
         public async Task PostRegnskapsforerAgentDelegation_WrongPartyId_ReturnBadRequest()
@@ -375,7 +375,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         /// <summary>
         ///     Test case: DeleteRegnskapsforerAgentDelegation checks error handling for non-existent delegations
-        ///     Expected: DeleteRegnskapsforerAgentDelegation returns NotFound error
+        ///     Expected: DeleteRegnskapsforerAgentDelegation returns BadRequest error
         /// </summary>
         [Fact]
         public async Task DeleteRegnskapsforerAgentDelegation_WrongPartyId_ReturnsBadRequest()
