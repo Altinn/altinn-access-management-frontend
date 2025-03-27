@@ -33,10 +33,10 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// </summary>
         /// <param name="partyId">The party id of the party owning system user to add customer to</param>
         /// <param name="systemUserGuid">The system user UUID to add customer to</param>
-        /// <param name="customerId">Customer to add to client</param>
+        /// <param name="delegationRequest">Payload to send to add client</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>AgentDelegationFE with assignment id and customer id</returns>
-        Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, Guid customerId, CancellationToken cancellationToken);
+        Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequestFE delegationRequest, CancellationToken cancellationToken);
 
         /// <summary>
         /// Remove client from system user

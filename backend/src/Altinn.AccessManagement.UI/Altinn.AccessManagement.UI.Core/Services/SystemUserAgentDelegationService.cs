@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, Guid customerId, CancellationToken cancellationToken)
+        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
         {
             Party party = await _registerClient.GetPartyByPartyId(partyId);
             if (party == null || party.PartyUuid == null)
@@ -105,7 +105,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             AgentDelegationRequest delegationRequest = new()
             {
-                CustomerId = customerId,
+                CustomerId = delegationRequestFe.CustomerId,
                 FacilitatorId = (Guid)party.PartyUuid
             };
 

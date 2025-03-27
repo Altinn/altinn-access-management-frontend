@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
@@ -70,14 +71,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party id user represents</param>
         /// <param name="systemUserGuid">System user id to get</param>
-        /// <param name="customerId">CustomerId to add to systemuser</param>
+        /// <param name="delegationRequest">Payload to send to add client</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("{partyId}/{systemUserGuid}/delegation/{customerId}")]
-        public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid customerId, CancellationToken cancellationToken)
+        [HttpPost("{partyId}/{systemUserGuid}/delegation")]
+        public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromBody] AgentDelegationRequestFE delegationRequest, CancellationToken cancellationToken)
         {
-            Result<AgentDelegationFE> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, customerId, cancellationToken);
+            Result<AgentDelegationFE> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
 
             if (result.IsProblem)
             {
