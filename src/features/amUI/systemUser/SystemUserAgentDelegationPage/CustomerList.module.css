@@ -21,3 +21,9 @@
   justify-self: center;
   margin-top: var(--ds-size-4);
 }
+
+.listControls {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-size-2);
+}

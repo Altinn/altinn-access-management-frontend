@@ -136,7 +136,7 @@ const ListControls = ({
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className={classes.listControls}>
       {isLoading && (
         <div className={classes.loadingSpinner}>
           <Spinner
@@ -180,6 +180,6 @@ const ListControls = ({
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </Button>
       )}
-    </>
+    </div>
   );
 };
