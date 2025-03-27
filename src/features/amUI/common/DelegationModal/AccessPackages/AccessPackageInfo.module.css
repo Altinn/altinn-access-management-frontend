@@ -52,7 +52,7 @@
   margin-right: 0.3rem;
 }
 
-.delegationCheckInfo {
+.infoLine {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -61,4 +61,20 @@
 .delegationCheckInfoIcon {
   color: var(--ds-color-warning-base-default);
   margin-right: 0.3rem;
+}
+
+.hasPackageInfoIcon {
+  color: var(--ds-color-success-base-default);
+  margin-right: 0.3rem;
+}
+
+.centralizedAnimation {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.largeSpinner {
+  margin: 2rem 0;
 }

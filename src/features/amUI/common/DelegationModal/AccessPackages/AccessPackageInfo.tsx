@@ -1,17 +1,21 @@
 import * as React from 'react';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Paragraph, Spinner, Tag } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
 import { List, Button, Icon } from '@altinn/altinn-components';
 import { Trans, useTranslation } from 'react-i18next';
 import {
+  CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
   InformationSquareFillIcon,
   MenuElipsisHorizontalIcon,
   PackageIcon,
 } from '@navikt/aksel-icons';
+import { useState } from 'react';
+import Lottie from 'lottie-react';
+import { set } from 'cypress/types/lodash';
 
+import checkMarkAnimation from '@/assets/testCheckmark.json';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import {
   useGetUserDelegationsQuery,
   type PackageResource,
@@ -19,14 +23,13 @@ import {
 } from '@/rtk/features/accessPackageApi';
 import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
 import type { ActionError } from '@/resources/hooks/useActionError';
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 import classes from './AccessPackageInfo.module.css';
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
-import { useState } from 'react';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -35,14 +38,21 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty, selfParty } = usePartyRepresentation();
+  const { fromParty, toParty } = usePartyRepresentation();
+  const [tempHasPackage, setTempHasPackage] = useState(false);
 
-  const { onDelegate, onRevoke } = useAccessPackageActions({
+  const { onDelegate, onRevoke, isDelegationLoading } = useAccessPackageActions({
     toUuid: toParty?.partyUuid || '',
+    onDelegateSuccess: () => {
+      setDelegationSuccess(true);
+      setTimeout(() => setDelegationSuccess(false), 2000);
+      setTempHasPackage(true);
+    },
     onDelegateError: (_, error: ActionError) => setActionError(error),
     onRevokeError: (_, error: ActionError) => setActionError(error),
   });
-  const { actionError, setActionError } = useDelegationModalContext();
+  const { actionError, setActionError, delegationSuccess, setDelegationSuccess } =
+    useDelegationModalContext();
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
     to: toParty?.partyUuid ?? '',
@@ -100,102 +110,153 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           {accessPackage?.name}
         </Heading>
       </div>
-      {!!delegationCheckError && (
-        <Alert
-          data-color='danger'
-          data-size='sm'
-        >
-          <Heading level={3}>
-            {t('access_packages.delegation_check.delegation_check_error_heading')}
-          </Heading>
-          <TechnicalErrorParagraphs
-            message={t('access_packages.delegation_check.delegation_check_error_message_singular')}
-            status={delegationCheckError.httpStatus}
-            time={delegationCheckError.timestamp}
-          />
-        </Alert>
-      )}
-      {!!actionError && (
-        <Alert
-          data-color='danger'
-          data-size='sm'
-        >
-          {userHasPackage ? (
-            <Heading data-size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
-          ) : (
-            <Heading data-size='2xs'>
-              {t('delegation_modal.general_error.delegate_heading')}
-            </Heading>
-          )}
-          <TechnicalErrorParagraphs
-            size='xs'
-            status={actionError.httpStatus}
-            time={actionError.timestamp}
-          />
-        </Alert>
-      )}
-      <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
-      {accessPackage?.inherited && (
-        <div className={classes.inherited}>
-          <InformationSquareFillIcon
-            fontSize='1.5rem'
-            className={classes.inheritedInfoIcon}
-          />
-          <Paragraph data-size='xs'>
-            <Trans
-              i18nKey='delegation_modal.inherited_role_org_message'
-              values={{ user_name: toParty?.name, org_name: accessPackage.inheritedFrom?.name }}
-              components={{ b: <strong /> }}
-            />
-          </Paragraph>
-        </div>
-      )}
-      {showMissingRightsMessage && (
-        <div className={classes.delegationCheckInfo}>
-          <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
-            className={classes.delegationCheckInfoIcon}
-          />
-          <Paragraph data-size='xs'>
-            <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
-          </Paragraph>
-        </div>
-      )}
-      <div className={classes.services}>
-        <Heading
-          data-size='xs'
-          level={2}
-        >
-          {t('delegation_modal.package_services', {
-            count: accessPackage.resources.length,
-            name: accessPackage?.name,
-          })}
-        </Heading>
-        <div className={classes.service_list}>
-          <List
-            items={listItems}
-            spacing='xs'
-            defaultItemSize='xs'
+
+      {isDelegationLoading ? (
+        <div className={classes.centralizedAnimation}>
+          <Spinner
+            data-size='lg'
+            aria-label='Laster'
+            className={classes.largeSpinner}
           />
         </div>
-      </div>
-      <div className={classes.actions}>
-        {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
-          <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
-        )}
-        {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
-          <Button
-            disabled={!canDelegate(accessPackage.id)}
-            onClick={() => onDelegate(accessPackage)}
+      ) : delegationSuccess ? (
+        <div className={classes.centralizedAnimation}>
+          <Lottie
+            animationData={checkMarkAnimation}
+            loop={false}
+            style={{ width: '100px', height: '100px' }}
+            className={classes.centralizedAnimation}
+          />
+        </div>
+      ) : (
+        <>
+          {/* delegationSuccess && (
+          <Alert
+            data-color='success'
+            data-size='sm'
           >
-            {t('common.give_poa')}
-          </Button>
-        )}
-        {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
-          // Todo: Implement request access package
-          <Button disabled>{t('common.request_poa')}</Button>
-        )}
-      </div>
+            <Paragraph data-size='sm'>
+              Fullmakt gitt til {toParty?.name} for {fromParty?.name}
+            </Paragraph>
+          </Alert>
+        )*/}
+          {!!delegationCheckError && (
+            <Alert
+              data-color='danger'
+              data-size='sm'
+            >
+              <Heading level={3}>
+                {t('access_packages.delegation_check.delegation_check_error_heading')}
+              </Heading>
+              <TechnicalErrorParagraphs
+                message={t(
+                  'access_packages.delegation_check.delegation_check_error_message_singular',
+                )}
+                status={delegationCheckError.httpStatus}
+                time={delegationCheckError.timestamp}
+              />
+            </Alert>
+          )}
+          {!!actionError && (
+            <Alert
+              data-color='danger'
+              data-size='sm'
+            >
+              {userHasPackage ? (
+                <Heading data-size='2xs'>
+                  {t('delegation_modal.general_error.revoke_heading')}
+                </Heading>
+              ) : (
+                <Heading data-size='2xs'>
+                  {t('delegation_modal.general_error.delegate_heading')}
+                </Heading>
+              )}
+              <TechnicalErrorParagraphs
+                size='xs'
+                status={actionError.httpStatus}
+                time={actionError.timestamp}
+              />
+            </Alert>
+          )}
+
+          {userHasPackage ||
+            (tempHasPackage && (
+              <div className={classes.infoLine}>
+                <CheckmarkCircleFillIcon
+                  fontSize='1.5rem'
+                  className={classes.hasPackageInfoIcon}
+                />
+                <Paragraph data-size='xs'>{toParty?.name} har denne fullmakten</Paragraph>
+              </div>
+            ))}
+          {accessPackage?.inherited && (
+            <div className={classes.inherited}>
+              <InformationSquareFillIcon
+                fontSize='1.5rem'
+                className={classes.inheritedInfoIcon}
+              />
+              <Paragraph data-size='xs'>
+                <Trans
+                  i18nKey='delegation_modal.inherited_role_org_message'
+                  values={{
+                    user_name: toParty?.name,
+                    org_name: accessPackage.inheritedFrom?.name ?? fromParty?.name,
+                  }}
+                  components={{ b: <strong /> }}
+                />
+              </Paragraph>
+            </div>
+          )}
+          {showMissingRightsMessage && (
+            <div className={classes.infoLine}>
+              <ExclamationmarkTriangleFillIcon
+                fontSize='1.5rem'
+                className={classes.delegationCheckInfoIcon}
+              />
+              <Paragraph data-size='xs'>
+                <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
+              </Paragraph>
+            </div>
+          )}
+
+          <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
+          <div className={classes.services}>
+            <Heading
+              data-size='xs'
+              level={2}
+            >
+              {t('delegation_modal.package_services', {
+                count: accessPackage.resources.length,
+                name: accessPackage?.name,
+              })}
+            </Heading>
+            <div className={classes.service_list}>
+              <List
+                items={listItems}
+                spacing='xs'
+                defaultItemSize='xs'
+              />
+            </div>
+          </div>
+          <div className={classes.actions}>
+            {userHasPackage && availableActions.includes(DelegationAction.REVOKE) && (
+              <Button onClick={() => onRevoke(accessPackage)}>{t('common.delete_poa')}</Button>
+            )}
+            {!userHasPackage && availableActions.includes(DelegationAction.DELEGATE) && (
+              <Button
+                disabled={!canDelegate(accessPackage.id)}
+                onClick={() => onDelegate(accessPackage)}
+              >
+                {t('common.give_poa')}
+              </Button>
+            )}
+            {!userHasPackage && availableActions.includes(DelegationAction.REQUEST) && (
+              // Todo: Implement request access package
+              <Button disabled>{t('common.request_poa')}</Button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

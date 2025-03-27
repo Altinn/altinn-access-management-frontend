@@ -26,6 +26,8 @@ interface DelegationModalContextProps {
   toggleExpanded: (value: boolean, id: string) => void;
   actionError: ActionError | null;
   setActionError: (error: ActionError | null) => void;
+  delegationSuccess: boolean;
+  setDelegationSuccess: (value: boolean) => void;
   reset: () => void;
 }
 
@@ -39,6 +41,7 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
   const [packageToView, setPackageToView] = useState<AccessPackage | undefined>(undefined);
   const [infoView, setInfoView] = useState(false);
   const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
+  const [delegationSuccess, setDelegationSuccess] = useState(false);
   const { error: actionError, setError: setActionError } = useActionError();
 
   const toggleExpanded = (value: boolean, id: string) => {
@@ -61,6 +64,7 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
 
   const reset = () => {
     setActionError(null);
+    setDelegationSuccess(false);
     setCurrentPage(1);
     setResourceToView(undefined);
     setPackageToView(undefined);
@@ -90,6 +94,8 @@ export const DelegationModalProvider = ({ children }: DelegationModalProps) => {
         toggleExpanded,
         actionError,
         setActionError,
+        delegationSuccess,
+        setDelegationSuccess,
         reset,
       }}
     >
