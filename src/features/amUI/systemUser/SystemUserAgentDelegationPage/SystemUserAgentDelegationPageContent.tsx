@@ -138,6 +138,7 @@ export const SystemUserAgentDelegationPageContent = ({
         ref={modalRef}
         className={classes.delegationModal}
         onClose={onCloseModal}
+        closedby='any'
       >
         <div className={classes.flexContainer}>
           <Heading
