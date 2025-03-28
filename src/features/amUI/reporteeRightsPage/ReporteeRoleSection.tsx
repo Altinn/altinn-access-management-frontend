@@ -2,7 +2,6 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { Role } from '@/rtk/features/roleApi';
 
 import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
@@ -12,19 +11,14 @@ import { useDelegationModalContext } from '../common/DelegationModal/DelegationM
 import classes from './ReporteeRightsPage.module.css';
 
 interface ReporteeRoleSectionProps {
-  reporteeUuid?: string;
   numberOfAccesses?: number;
 }
 
-export const ReporteeRoleSection = ({
-  numberOfAccesses,
-  reporteeUuid,
-}: ReporteeRoleSectionProps) => {
+export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionProps) => {
   const { t } = useTranslation();
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
-  const toUuid = getCookie('AltinnPartyUuid');
 
   return (
     <div className={classes.tabContentContainer}>
@@ -36,8 +30,6 @@ export const ReporteeRoleSection = ({
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
       <RoleList
-        to={toUuid}
-        from={reporteeUuid ?? ''}
         onSelect={(role) => {
           setModalItem(role);
           modalRef.current?.showModal();

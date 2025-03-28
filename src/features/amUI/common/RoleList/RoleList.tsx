@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { Heading, useMediaQuery } from '@digdir/designsystemet-react';
 import { ListBase } from '@altinn/altinn-components';
 
 import {
@@ -20,10 +19,9 @@ import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface RoleListProps {
-  from: string;
-  to: string;
   onSelect: (role: ExtendedRole) => void;
   availableActions?: DelegationAction[];
   isLoading?: boolean;
@@ -31,18 +29,16 @@ interface RoleListProps {
 }
 
 export const RoleList = ({
-  from,
-  to,
   onSelect,
   availableActions,
   isLoading,
   onActionError,
 }: RoleListProps) => {
-  const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(to ?? '');
+  const { fromParty, toParty, isLoading: partyIsLoading } = usePartyRepresentation();
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
   const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
-    from,
-    to,
+    from: fromParty?.partyUuid ?? '',
+    to: toParty?.partyUuid ?? '',
   });
 
   const isSm = useIsMobileOrSmaller();
@@ -84,7 +80,6 @@ export const RoleList = ({
                 key={role.id}
                 role={role}
                 active
-                toParty={party}
                 onClick={() => {
                   onSelect(role);
                 }}
@@ -112,7 +107,6 @@ export const RoleList = ({
               <RoleListItem
                 key={role.id}
                 role={role}
-                toParty={party}
                 onClick={() => onSelect(role)}
                 controls={
                   !isSm && (

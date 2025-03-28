@@ -23,7 +23,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<Role | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
-  const { data: reportee } = useGetReporteeQuery();
   const { id: rightHolderUuid } = useParams();
   const { data: party } = useGetPartyByUUIDQuery(rightHolderUuid ?? '');
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetUserInfoQuery();
@@ -40,8 +39,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
       </Heading>
 
       <RoleList
-        from={reportee?.partyUuid ?? ''}
-        to={rightHolderUuid ?? ''}
         availableActions={[
           isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,
           DelegationAction.REVOKE,

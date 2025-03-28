@@ -27,8 +27,6 @@ export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
 
-  const navigate = useNavigate();
-
   const { data: reportee } = useGetReporteeQuery();
   const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
 
@@ -80,10 +78,7 @@ export const ReporteeRightsPage = () => {
                   }
                   singleRightsPanel={<div>SingleRightsSection</div>}
                   roleAssignmentsPanel={
-                    <ReporteeRoleSection
-                      numberOfAccesses={allAccesses?.roles?.length}
-                      reporteeUuid={reporteeUuid}
-                    />
+                    <ReporteeRoleSection numberOfAccesses={allAccesses?.roles?.length} />
                   }
                 />
               </PageContainer>
