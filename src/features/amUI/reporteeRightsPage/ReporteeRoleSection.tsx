@@ -8,7 +8,6 @@ import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
-import classes from './ReporteeRightsPage.module.css';
 
 interface ReporteeRoleSectionProps {
   numberOfAccesses?: number;
@@ -21,7 +20,7 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
   const { setActionError } = useDelegationModalContext();
 
   return (
-    <div className={classes.tabContentContainer}>
+    <>
       <Heading
         level={2}
         data-size='xs'
@@ -47,6 +46,6 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
         onClose={() => setModalItem(undefined)}
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
       />
-    </div>
+    </>
   );
 };

@@ -4,14 +4,13 @@ import { Heading } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
 import type { Role } from '@/rtk/features/roleApi';
-import { useGetReporteeQuery, useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
+import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { RoleList } from '../../common/RoleList/RoleList';
 import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
-import classes from './roleSection.module.css';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 
 interface RoleSectionProps {
@@ -29,7 +28,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
   const isCurrentUser = currentUser?.uuid === rightHolderUuid;
 
   return (
-    <div className={classes.roleSection}>
+    <>
       <Heading
         level={2}
         data-size='xs'
@@ -65,6 +64,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
           ]}
         />
       )}
-    </div>
+    </>
   );
 };
