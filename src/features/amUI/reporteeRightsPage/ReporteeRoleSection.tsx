@@ -23,7 +23,7 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
     <>
       <Heading
         level={2}
-        data-size='xs'
+        data-size='2xs'
         id='access_packages_title'
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}

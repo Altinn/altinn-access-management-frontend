@@ -23,7 +23,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
       <>
         <Heading
           level={2}
-          data-size='xs'
+          data-size='2xs'
           id='access_packages_title'
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
