@@ -1,5 +1,4 @@
 import { ListBase } from '@altinn/altinn-components';
-import { useState } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
