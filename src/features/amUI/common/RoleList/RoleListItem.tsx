@@ -30,7 +30,7 @@ export const RoleListItem = ({
       theme='subtle'
       loading={loading}
       controls={controls}
-      titleAs={'h4'}
+      titleAs={'h3'}
     />
   );
 };
