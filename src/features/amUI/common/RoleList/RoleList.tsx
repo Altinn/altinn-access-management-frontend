@@ -71,66 +71,62 @@ export const RoleList = ({
     return <SkeletonRoleList />;
   }
   return (
-    <div className={classes.areas}>
-      <div className={classes.roleLists}>
-        {groupedRoles && groupedRoles.activeRoles.length > 0 && (
-          <ListBase>
-            {groupedRoles.activeRoles.map((role) => (
-              <RoleListItem
-                key={role.id}
-                role={role}
-                active
-                onClick={() => {
-                  onSelect(role);
-                }}
-                controls={
-                  !isSm &&
-                  availableActions?.includes(DelegationAction.REVOKE) && (
-                    <RevokeRoleButton
-                      key={role.id}
-                      assignmentId={role?.assignmentId ?? ''}
-                      accessRole={role}
-                      fullText={false}
-                      size='sm'
-                      disabled={role.inherited?.length > 0}
-                      onRevokeError={onActionError}
-                    />
-                  )
-                }
-              />
-            ))}
-          </ListBase>
-        )}
-        {groupedRoles && groupedRoles.availableRoles.length > 0 && (
-          <ListBase>
-            {groupedRoles.availableRoles.map((role) => (
-              <RoleListItem
-                key={role.id}
-                role={role}
-                onClick={() => onSelect(role)}
-                controls={
-                  !isSm && (
-                    <>
-                      {availableActions?.includes(DelegationAction.DELEGATE) && (
-                        <DelegateRoleButton
-                          accessRole={role}
-                          key={role.id}
-                          fullText={false}
-                          size='sm'
-                          onDelegateError={onActionError}
-                        />
-                      )}
-                      {availableActions?.includes(DelegationAction.REQUEST) && (
-                        <RequestRoleButton />
-                      )}
-                    </>
-                  )
-                }
-              />
-            ))}
-          </ListBase>
-        )}
-      </div>
+    <div className={classes.roleLists}>
+      {groupedRoles && groupedRoles.activeRoles.length > 0 && (
+        <ListBase>
+          {groupedRoles.activeRoles.map((role) => (
+            <RoleListItem
+              key={role.id}
+              role={role}
+              active
+              onClick={() => {
+                onSelect(role);
+              }}
+              controls={
+                !isSm &&
+                availableActions?.includes(DelegationAction.REVOKE) && (
+                  <RevokeRoleButton
+                    key={role.id}
+                    assignmentId={role?.assignmentId ?? ''}
+                    accessRole={role}
+                    fullText={false}
+                    size='sm'
+                    disabled={role.inherited?.length > 0}
+                    onRevokeError={onActionError}
+                  />
+                )
+              }
+            />
+          ))}
+        </ListBase>
+      )}
+      {groupedRoles && groupedRoles.availableRoles.length > 0 && (
+        <ListBase>
+          {groupedRoles.availableRoles.map((role) => (
+            <RoleListItem
+              key={role.id}
+              role={role}
+              onClick={() => onSelect(role)}
+              controls={
+                !isSm && (
+                  <>
+                    {availableActions?.includes(DelegationAction.DELEGATE) && (
+                      <DelegateRoleButton
+                        accessRole={role}
+                        key={role.id}
+                        fullText={false}
+                        size='sm'
+                        onDelegateError={onActionError}
+                      />
+                    )}
+                    {availableActions?.includes(DelegationAction.REQUEST) && <RequestRoleButton />}
+                  </>
+                )
+              }
+            />
+          ))}
+        </ListBase>
+      )}
     </div>
   );
 };
