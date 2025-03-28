@@ -10,11 +10,11 @@ import { useRevokeMutation } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import { useSnackbar } from '../Snackbar';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   accessRole: Role;
   assignmentId: string;
-  toParty?: Party;
   fullText?: boolean;
   icon?: boolean;
   onRevokeSuccess?: (role: Role, toParty: Party) => void;
@@ -24,7 +24,6 @@ interface RevokeRoleButtonProps extends Omit<ButtonProps, 'icon'> {
 export const RevokeRoleButton = ({
   assignmentId,
   accessRole,
-  toParty,
   fullText = false,
   disabled,
   variant = 'text',
@@ -37,7 +36,7 @@ export const RevokeRoleButton = ({
   const { openSnackbar } = useSnackbar();
   const { data: representingParty } = useGetReporteePartyQuery();
   const [revoke, { isLoading }] = useRevokeMutation();
-
+  const { toParty } = usePartyRepresentation();
   const handleRevokeSuccess = (role: Role, toParty?: Party) => {
     if (onRevokeSuccess && toParty) onRevokeSuccess(role, toParty);
     else {

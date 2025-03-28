@@ -35,7 +35,7 @@ export interface PackageInfoProps {
 
 export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: PackageInfoProps) => {
   const { t } = useTranslation();
-  const { fromParty, toParty, selfParty } = usePartyRepresentation();
+  const { fromParty, toParty } = usePartyRepresentation();
 
   const { onDelegate, onRevoke } = useAccessPackageActions({
     toUuid: toParty?.partyUuid || '',

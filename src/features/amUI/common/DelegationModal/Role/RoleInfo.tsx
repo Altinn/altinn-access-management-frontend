@@ -141,7 +141,6 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
         {!userHasRole && availableActions.includes(DelegationAction.DELEGATE) && (
           <DelegateRoleButton
             accessRole={role}
-            toParty={toParty}
             fullText
             disabled={isFetching || !role.isDelegable || !delegationCheckResult?.canDelegate}
             variant='solid'
@@ -156,7 +155,6 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
           <RevokeRoleButton
             assignmentId={assignment.id}
             accessRole={role}
-            toParty={toParty}
             fullText
             disabled={isFetching || userHasInheritedRole}
             variant='solid'

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -26,8 +26,6 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 export const ReporteeRightsPage = () => {
   const { t } = useTranslation();
   const { id: reporteeUuid } = useParams();
-
-  const navigate = useNavigate();
 
   const { data: reportee } = useGetReporteeQuery();
   const { data: party } = useGetPartyByUUIDQuery(reporteeUuid ?? '');
@@ -75,15 +73,11 @@ export const ReporteeRightsPage = () => {
                   packagesPanel={
                     <ReporteeAccessPackageSection
                       numberOfAccesses={allAccesses?.accessPackages?.length}
-                      reporteeUuid={reporteeUuid}
                     />
                   }
                   singleRightsPanel={<div>SingleRightsSection</div>}
                   roleAssignmentsPanel={
-                    <ReporteeRoleSection
-                      numberOfAccesses={allAccesses?.roles?.length}
-                      reporteeUuid={reporteeUuid}
-                    />
+                    <ReporteeRoleSection numberOfAccesses={allAccesses?.roles?.length} />
                   }
                 />
               </PageContainer>
