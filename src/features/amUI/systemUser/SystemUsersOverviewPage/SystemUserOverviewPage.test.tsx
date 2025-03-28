@@ -95,8 +95,8 @@ describe('SystemUserOverviewPage', () => {
     );
     renderSystemUserOverviewPage();
 
-    const systemUserActionBar = await screen.findByText('SmartCloud');
-    await user.click(systemUserActionBar);
+    const systemUserActionBar = await screen.findAllByText('SmartCloud');
+    await user.click(systemUserActionBar[0]);
 
     expect(mockedUseNavigate).toHaveBeenCalled();
   });

@@ -38,6 +38,7 @@ export const AreaItem = ({
       iconUrl={area.iconUrl}
       badgeText={badgeText}
       expanded={expanded}
+      titleAs='h3'
       onClick={() => toggleExpandedArea(area.id)}
     >
       {children}

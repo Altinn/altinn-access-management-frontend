@@ -127,6 +127,7 @@ export const ResourceActionBar = ({
       onClick={() => {
         setOpen(!open);
       }}
+      data-size='md'
     >
       {!compact && errorText}
       <ExclamationmarkTriangleIcon
