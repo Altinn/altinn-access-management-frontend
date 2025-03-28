@@ -10,10 +10,10 @@ import { Role, useDelegateMutation, useDelegationCheckQuery } from '@/rtk/featur
 import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
 import { useSnackbar } from '../Snackbar';
 import { ActionError } from '@/resources/hooks/useActionError';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface DelegateRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   accessRole: Role;
-  toParty?: Party;
   fullText?: boolean;
   icon?: boolean;
   onDelegateError?: (role: Role, error: ActionError) => void;
@@ -21,7 +21,6 @@ interface DelegateRoleButtonProps extends Omit<ButtonProps, 'icon'> {
 
 export const DelegateRoleButton = ({
   accessRole,
-  toParty,
   fullText = false,
   variant = 'text',
   icon = true,
@@ -30,12 +29,12 @@ export const DelegateRoleButton = ({
 }: DelegateRoleButtonProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
-  const { data: representingParty } = useGetReporteePartyQuery();
+  const { fromParty, toParty } = usePartyRepresentation();
   const [delegateRole, { isLoading: delegateRoleLoading }] = useDelegateMutation();
 
   const { data: delegationCheckResult, isLoading: delegationCheckLoading } =
     useDelegationCheckQuery({
-      rightownerUuid: representingParty?.partyUuid || '',
+      rightownerUuid: fromParty?.partyUuid || '',
       roleUuid: accessRole.id,
     });
 
@@ -55,7 +54,7 @@ export const DelegateRoleButton = ({
       openSnackbar(snackbarData);
     };
 
-    if (representingParty) {
+    if (fromParty) {
       delegateRole({
         to: toParty?.partyUuid || '',
         roleId: accessRole.id,

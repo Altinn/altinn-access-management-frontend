@@ -258,7 +258,7 @@
     }
   },
   "role": {
-    "current_roles_title": "Fullmakt til {{count}} rolle(r)",
+    "current_roles_title": "{{count}} administratortilganger",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",

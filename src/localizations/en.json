@@ -262,7 +262,7 @@
     }
   },
   "role": {
-    "current_roles_title": "Power of attorney to {{count}} roles(s)",
+    "current_roles_title": "{{count}} administrator accesses",
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
     "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
