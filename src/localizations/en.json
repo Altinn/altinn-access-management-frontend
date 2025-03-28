@@ -246,7 +246,7 @@
     "delete_singleRight_error_message": "Failed to delete access to "
   },
   "access_packages": {
-    "current_access_packages_title": "Power of attorney to {{count}} access packages",
+    "current_access_packages_title": "{{count}} access packages",
     "give_new_button": "Give power of attorney to new access package",
     "other_packages_in_area_title": "Other available packages in this area:",
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
