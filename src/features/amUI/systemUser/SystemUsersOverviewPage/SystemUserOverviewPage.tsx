@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, Link, useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Alert, Button, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { PlusIcon, TenancyIcon } from '@navikt/aksel-icons';
@@ -111,7 +111,6 @@ interface SystemUserListProps {
 }
 const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const routerLocation = useLocation();
 
   const newlyCreatedId = routerLocation?.state?.createdId;
@@ -122,20 +121,24 @@ const SystemUserList = ({ systemUsers, isAgentList }: SystemUserListProps) => {
       items={systemUsers?.map((systemUser) => {
         const isNew = newlyCreatedId === systemUser.id;
         return {
-          as: 'button',
           title: systemUser.integrationTitle,
           description: systemUser.system.systemVendorOrgName,
+          titleAs: 'h3',
+          as: (props) => (
+            <Link
+              to={
+                isAgentList
+                  ? `/systemuser/${systemUser.id}/agentdelegation`
+                  : `/systemuser/${systemUser.id}`
+              }
+              {...props}
+            />
+          ),
           icon: TenancyIcon,
           linkIcon: true,
           badge: isNew
             ? { label: t('systemuser_overviewpage.new_system_user'), color: 'info' }
             : undefined,
-          onClick: () => {
-            const url = isAgentList
-              ? `/systemuser/${systemUser.id}/agentdelegation`
-              : `/systemuser/${systemUser.id}`;
-            navigate(url);
-          },
         };
       })}
     />

@@ -84,11 +84,13 @@ export const CustomerList = ({
       </div>
       <List
         defaultItemSize='sm'
+        className={classes.customerList}
         items={filteredSearchList.slice(startIndex, endIndex)?.map((customer) => {
           return {
             title: customer.name,
+            interactive: false,
             id: customer.id,
-            disabled: true,
+            titleAs: 'h3',
             as: 'div',
             avatar: { type: 'company', name: customer.name },
             description: `${t('common.org_nr')} ${customer.orgNo.match(/.{1,3}/g)?.join(' ')}`,
@@ -134,7 +136,7 @@ const ListControls = ({
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className={classes.listControls}>
       {isLoading && (
         <div className={classes.loadingSpinner}>
           <Spinner
@@ -178,6 +180,6 @@ const ListControls = ({
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </Button>
       )}
-    </>
+    </div>
   );
 };
