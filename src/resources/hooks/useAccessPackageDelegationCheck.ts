@@ -39,5 +39,5 @@ export const useAccessPackageDelegationCheck = (
   const canDelegate = (id: string) =>
     !isLoading && data?.find((d) => d.packageId === id)?.canDelegate;
 
-  return { canDelegate, isLoading: isLoading || isUninitialized };
+  return { canDelegate, isLoading, isUninitialized };
 };

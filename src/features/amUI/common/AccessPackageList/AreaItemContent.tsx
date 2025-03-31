@@ -48,7 +48,7 @@ export const AreaItemContent = ({
     setDelegationCheckError(error);
   };
   const shouldShowDelegationCheck = !!availableActions?.includes(DelegationAction.DELEGATE);
-  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
+  const { canDelegate, isLoading, isUninitialized } = useAccessPackageDelegationCheck(
     availablePackageIds,
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
@@ -103,7 +103,7 @@ export const AreaItemContent = ({
               controls={
                 !isSm && (
                   <DelegateAccessPackageActionControl
-                    isLoading={isLoading}
+                    isLoading={isLoading || isUninitialized}
                     availableActions={availableActions}
                     canDelegate={!!canDelegate(pkg.id)}
                     onDelegate={() => onDelegate(pkg)}

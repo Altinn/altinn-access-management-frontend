@@ -72,7 +72,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     return accessPackage ? [accessPackage.id] : [];
   }, [accessPackage]);
 
-  const { canDelegate, isLoading } = useAccessPackageDelegationCheck(
+  const { canDelegate, isLoading, isUninitialized } = useAccessPackageDelegationCheck(
     accessPackageIds,
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
@@ -82,7 +82,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     shouldShowDelegationCheck &&
     !delegationCheckError &&
     !canDelegate(accessPackage.id) &&
-    !isLoading;
+    !isLoading &&
+    !isUninitialized;
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
