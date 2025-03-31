@@ -1,12 +1,10 @@
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Button, ListBase } from '@altinn/altinn-components';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { Alert, Heading, Paragraph, Spinner } from '@digdir/designsystemet-react';
+import { ListBase } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
-import { ButtonWithConfirmPopup } from '../ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './AccessPackageList.module.css';
@@ -17,6 +15,8 @@ import { ActionError } from '@/resources/hooks/useActionError';
 import { TechnicalErrorParagraphs } from '../TechnicalErrorParagraphs';
 import cn from 'classnames';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { RevokeAccessPackageActionControl } from './RevokeAccessPackageActionControl';
+import { DelegateAccessPackageActionControl } from './DelegateAccessPackageActionControl';
 
 interface AreaItemContentProps {
   area: ExtendedAccessArea;
@@ -80,36 +80,14 @@ export const AreaItemContent = ({
               onSelect={onSelect}
               hasAccess
               controls={
-                !isSm &&
-                (availableActions?.includes(DelegationAction.REVOKE) && useDeleteConfirm ? (
-                  <ButtonWithConfirmPopup
-                    triggerButtonContent={t('common.delete_poa')}
-                    triggerButtonProps={{
-                      icon: MinusCircleIcon,
-                      variant: 'text',
-                      size: 'sm',
-                      disabled: pkg.inherited,
-                    }}
-                    popoverProps={{
-                      color: 'neutral',
-                    }}
-                    message={t('user_rights_page.delete_confirm_message', {
-                      name: pkg.name,
-                    })}
-                    data-size='sm'
-                    onConfirm={() => onRevoke(pkg)}
+                !isSm && (
+                  <RevokeAccessPackageActionControl
+                    availableActions={availableActions}
+                    onRevoke={() => onRevoke(pkg)}
+                    pkg={pkg}
+                    useDeleteConfirm={useDeleteConfirm}
                   />
-                ) : (
-                  <Button
-                    icon={MinusCircleIcon}
-                    variant='text'
-                    size='sm'
-                    disabled={pkg.inherited}
-                    onClick={() => onRevoke(pkg)}
-                  >
-                    {t('common.delete_poa')}
-                  </Button>
-                ))
+                )
               }
             />
           ))}
@@ -124,30 +102,14 @@ export const AreaItemContent = ({
               onSelect={onSelect}
               controls={
                 !isSm && (
-                  <>
-                    {availableActions?.includes(DelegationAction.DELEGATE) && (
-                      <Button
-                        icon={PlusCircleIcon}
-                        variant='text'
-                        size='sm'
-                        disabled={!canDelegate(pkg.id) || isLoading}
-                        onClick={() => onDelegate(pkg)}
-                      >
-                        {t('common.give_poa')}
-                      </Button>
-                    )}
-                    {availableActions?.includes(DelegationAction.REQUEST) && (
-                      <Button
-                        icon={PlusCircleIcon}
-                        variant='text'
-                        size='sm'
-                        disabled
-                        onClick={() => onRequest(pkg)}
-                      >
-                        {t('common.request_poa')}
-                      </Button>
-                    )}
-                  </>
+                  <DelegateAccessPackageActionControl
+                    isLoading={isLoading}
+                    availableActions={availableActions}
+                    canDelegate={!!canDelegate(pkg.id)}
+                    onDelegate={() => onDelegate(pkg)}
+                    onRequest={() => onRequest(pkg)}
+                    onSelect={() => onSelect?.(pkg)}
+                  />
                 )
               }
             />

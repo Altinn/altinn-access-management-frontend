@@ -77,11 +77,14 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
     shouldShowDelegationCheck,
     handleDelegationCheckFailure,
   );
+
+  const delegationCheckResult = React.useMemo(() => {
+    setDelegationCheckError(null);
+    return canDelegate(accessPackage.id);
+  }, [accessPackageIds]);
+
   const showMissingRightsMessage =
-    shouldShowDelegationCheck &&
-    !delegationCheckError &&
-    !canDelegate(accessPackage.id) &&
-    !isLoading;
+    shouldShowDelegationCheck && !delegationCheckError && !delegationCheckResult && !isLoading;
 
   const { listItems } = useMinimizableResourceList(accessPackage.resources);
 
