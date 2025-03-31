@@ -1,7 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -14,7 +13,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class SystemUserService : ISystemUserService
     {
         private readonly ISystemUserClient _systemUserClient;
-        private readonly IAccessManagementClientV0 _accessManagementClientV0;
         private readonly ISystemRegisterClient _systemRegisterClient;
         private readonly IRegisterClient _registerClient;
         private readonly ResourceHelper _resourceHelper;
@@ -23,19 +21,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// Initializes a new instance of the <see cref="SystemUserService"/> class.
         /// </summary>
         /// <param name="systemUserClient">The system user client.</param>
-        /// <param name="accessManagementClient">The access management client.</param>
         /// <param name="systemRegisterClient">The system register client.</param>
         /// <param name="registerClient">The register client.</param>
         /// <param name="resourceHelper">Resources helper to enrich resources</param>
         public SystemUserService(
             ISystemUserClient systemUserClient,
-            IAccessManagementClientV0 accessManagementClient,
             ISystemRegisterClient systemRegisterClient,
             IRegisterClient registerClient,
             ResourceHelper resourceHelper)
         {
             _systemUserClient = systemUserClient;
-            _accessManagementClientV0 = accessManagementClient;
             _systemRegisterClient = systemRegisterClient;
             _registerClient = registerClient;
             _resourceHelper = resourceHelper;
@@ -50,12 +45,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
         {
-            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
-            if (party is null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-            
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
 
             return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
@@ -77,12 +66,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
         {
-            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
-            if (party is null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-            
             List<SystemUser> lista = await _systemUserClient.GetAgentSystemUsersForParty(partyId, cancellationToken);
 
             return await MapToSystemUsersFE(lista, languageCode, false, cancellationToken);
@@ -116,12 +99,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
-            AuthorizedParty party = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyId);
-            if (party is null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-
             Result<SystemUser> createdSystemUser = await _systemUserClient.CreateNewSystemUser(partyId, newSystemUser, cancellationToken);
 
             return createdSystemUser;
