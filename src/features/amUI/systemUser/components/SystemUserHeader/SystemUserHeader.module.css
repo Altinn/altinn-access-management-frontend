@@ -4,3 +4,7 @@
   align-items: center;
   max-width: 42rem;
 }
+
+.headingContainer {
+  flex: 1;
+}

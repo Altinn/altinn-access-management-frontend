@@ -13,14 +13,14 @@ export const SystemUserHeader = ({ title, subTitle }: SystemUserHeaderProps): Re
   return (
     <div className={classes.systemUserDetailsHeader}>
       <TenancyIcon fontSize={60} />
-      <div>
+      <div className={classes.headingContainer}>
         <Heading
           level={1}
           data-size='sm'
         >
           {title}
         </Heading>
-        {subTitle && <Paragraph>{subTitle}</Paragraph>}
+        {subTitle && <Paragraph data-size='xs'>{subTitle}</Paragraph>}
       </div>
     </div>
   );
