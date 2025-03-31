@@ -513,7 +513,7 @@
   "systemuser_agent_request": {
     "page_title": "Lag en systemtilgang for kunderelasjonar - Altinn",
     "banner_title": "Lag en systemtilgang for kunderelasjonar",
-    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løyse oppgåver på vegne av <strong>{{companyName}}</strong> sine kundar. For å fullføre oppsettet må tilgangane til kundane tildeles i kunderelasjonar i Altinn."
+    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løyse oppgåver på vegne av <strong>{{companyName}}</strong> sine kundar. For å fullføre oppsettet må du legge til kundene i Altinn."
   },
   "systemuser_agent_delegation": {
     "page_title": "Systemtilgang for kunderelasjonar - Altinn",

@@ -516,7 +516,7 @@
   "systemuser_agent_request": {
     "page_title": "Create system access for customer relations - Altinn",
     "banner_title": "Create system access for customer relations",
-    "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."
+    "system_description": "Through a system access <strong>{{vendorName}}</strong> will be granted power of attorney to complete tasks on behalf of <strong>{{companyName}}</strong> customers. To complete the setup, customers must be added in Altinn."
   },
   "systemuser_agent_delegation": {
     "page_title": "System access for customer relations - Altinn",

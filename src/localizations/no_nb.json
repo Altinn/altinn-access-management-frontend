@@ -514,7 +514,7 @@
   "systemuser_agent_request": {
     "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
     "banner_title": "Lag en systemtilgang for kunderelasjoner",
-    "system_description": "Gjennom systemtilgangen får {{vendorName}} fullmakt til å løse oppgaver på vegne av {{companyName}} sine kunder. For å fullføre oppsettet må tilgangene til kundene tildeles i kunderelasjoner i Altinn."
+    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løse oppgaver på vegne av <strong>{{companyName}}</strong> sine kunder. For å fullføre oppsettet må du legge til kundene i Altinn."
   },
   "systemuser_agent_delegation": {
     "page_title": "Systemtilgang for kunderelasjoner - Altinn",
