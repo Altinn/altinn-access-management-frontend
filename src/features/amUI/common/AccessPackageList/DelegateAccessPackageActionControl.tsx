@@ -26,7 +26,7 @@ export const DelegateAccessPackageActionControl = ({
   if (isLoading) {
     return (
       <Spinner
-        data-size='sm'
+        data-size='xs'
         aria-hidden='true'
       />
     );
