@@ -33,7 +33,7 @@ export const DelegateAccessPackageActionControl = ({
   }
 
   if (availableActions?.includes(DelegationAction.DELEGATE)) {
-    if (!isLoading && canDelegate === false) {
+    if (canDelegate === false) {
       return (
         <Button
           data-size='xs'
@@ -73,4 +73,5 @@ export const DelegateAccessPackageActionControl = ({
       </Button>
     );
   }
+  return null;
 };

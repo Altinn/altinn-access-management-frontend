@@ -68,8 +68,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
   // memorize this to prevent unnecessary re-renders
   const accessPackageIds = React.useMemo(() => {
-    setDelegationCheckError(null);
     return accessPackage ? [accessPackage.id] : [];
+  }, [accessPackage]);
+
+  React.useEffect(() => {
+    setDelegationCheckError(null);
   }, [accessPackage]);
 
   const { canDelegate, isLoading, isUninitialized } = useAccessPackageDelegationCheck(

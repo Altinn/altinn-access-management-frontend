@@ -57,4 +57,5 @@ export const RevokeAccessPackageActionControl = ({
       </Button>
     );
   }
+  return null;
 };
