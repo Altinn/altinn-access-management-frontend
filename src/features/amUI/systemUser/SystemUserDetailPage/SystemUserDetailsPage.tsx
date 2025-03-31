@@ -45,9 +45,6 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
   };
 
-  const numberOfRights =
-    (systemUser?.resources?.length || 0) + (systemUser?.accessPackages?.length || 0);
-
   return (
     <PageWrapper>
       <PageLayoutWrapper>
@@ -73,12 +70,8 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           {systemUser && (
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
-                title={
-                  numberOfRights === 1
-                    ? 'systemuser_detailpage.header_single'
-                    : 'systemuser_detailpage.header'
-                }
-                integrationTitle={systemUser.integrationTitle}
+                title={systemUser.integrationTitle}
+                subTitle={systemUser.system.systemVendorOrgName}
               />
               <RightsList
                 resources={systemUser.resources}

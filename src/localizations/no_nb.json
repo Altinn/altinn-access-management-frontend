@@ -443,8 +443,6 @@
     "creating_systemuser": "Oppretter systemtilgang..."
   },
   "systemuser_detailpage": {
-    "header": "Systemtilgangen {{integrationTitle}} har disse fullmaktene for {{companyName}}",
-    "header_single": "Systemtilgangen {{integrationTitle}} har denne fullmakten for {{companyName}}",
     "edit_systemuser": "Rediger systemtilgang",
     "load_systemuser_error": "Kunne ikke laste systemtilgang",
     "loading_systemuser": "laster systemtilgang",

@@ -444,8 +444,6 @@
     "creating_systemuser": "Creating system access..."
   },
   "systemuser_detailpage": {
-    "header": "The system access {{integrationTitle}} has these power of attorney for {{companyName}}",
-    "header_single": "The system access {{integrationTitle}} has this power of attorney for {{companyName}}",
     "edit_systemuser": "Edit system access",
     "load_systemuser_error": "Could not load system access",
     "loading_systemuser": "loading system access",

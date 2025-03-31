@@ -162,8 +162,8 @@ export const SystemUserAgentDelegationPageContent = ({
       {systemUser && (
         <div className={classes.flexContainer}>
           <SystemUserHeader
-            title={'systemuser_agent_delegation.banner_title'}
-            integrationTitle={systemUser.integrationTitle}
+            title={systemUser.integrationTitle}
+            subTitle={systemUser.system.systemVendorOrgName}
           />
           <Heading
             level={2}
