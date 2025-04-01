@@ -206,7 +206,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
         {
             try
             {
@@ -222,7 +222,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemUserClient // DeleteAgentSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return false;
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {

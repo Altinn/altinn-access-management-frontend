@@ -88,6 +88,33 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
+        public async Task<Party> GetPartyByPartyId(int partyId)
+        {
+            try
+            {
+                string endpointUrl = $"parties/{partyId}";
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                var accessToken = await _accessTokenProvider.GetAccessToken();
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return JsonSerializer.Deserialize<Party>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyByPartyId // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyByPartyId // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<Party> GetPartyForPerson(string ssn)
         {
             string endpointUrl = $"parties/lookup";
