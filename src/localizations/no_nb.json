@@ -424,7 +424,6 @@
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
-    "banner_title": "Lag ny systemtilgang",
     "sub_title": "Velg fagsystem",
     "content_text1": "Er du usikker på hvilket fagsystem du skal velge, anbefaler vi at du kontakter leverandøren av fagsystemet. Altinn har ikke gjort noen vurdering av kvalitet og sikkerhet på fagsystemene i listen.",
     "pull_down_menu_label": "Velg fagsystem",

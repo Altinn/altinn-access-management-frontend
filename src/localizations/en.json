@@ -425,7 +425,6 @@
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
-    "banner_title": "Create new system access",
     "sub_title": "Select vendor system",
     "content_text1": "If you are unsure about which vendor system to choose, we recommend that you contact the provider of the vendor system. Altinn has not made any assessment of the quality and safety of the vendor systems in the list.",
     "pull_down_menu_label": "Choose vendor system",

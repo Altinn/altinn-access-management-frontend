@@ -421,7 +421,6 @@
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
-    "banner_title": "Opprett ny systemtilgang",
     "sub_title": "Knyt systemtilgang til systemleverandør",
     "content_text1": "Er du usikker på kva fagsystem du skal velje, anbefaler vi at du kontaktar leverandøren av fagsystemet. Altinn har ikkje gjort noka vurdering av kvalitet og tryggleik på fagsystema i lista.",
     "pull_down_menu_label": "Vel systemleverandør og system",
