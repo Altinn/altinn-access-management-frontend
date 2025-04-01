@@ -12,9 +12,9 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
 import { getAltinnStartPageUrl, getHostUrl } from '@/resources/utils/pathUtils';
+import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 import { SidebarItems } from './SidebarItems';
-import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 
 interface PageLayoutWrapperProps {
   children?: React.ReactNode;
@@ -135,9 +135,20 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             changeLabel: t('header.change-label'),
             accountGroups,
             accounts,
+            accountSearch: {
+              placeholder: t('header.search-label'),
+              name: 'search-account',
+              hidden: false,
+              getResultsLabel: (hits: number) => {
+                return `${hits} ${t('header.search-hits')}`;
+              },
+            },
             onSelectAccount: (accountId) => {
+              const redirectUrl = window.location.pathname.includes('systemuser')
+                ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
+                : window.location.href;
               (window as Window).open(
-                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${window.location.href}`,
+                `${getHostUrl()}ui/Reportee/ChangeReporteeAndRedirect/?R=${accountId}&goTo=${redirectUrl}`,
                 '_self',
               );
             },
