@@ -3,13 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router';
 import { Alert, Spinner, Button, Heading, Paragraph } from '@digdir/designsystemet-react';
 
-import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
-import type { ProblemDetail } from './types';
-import { ButtonRow } from './components/ButtonRow/ButtonRow';
-import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
-import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
-import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
@@ -19,6 +12,14 @@ import {
   useApproveAgentSystemUserRequestMutation,
   useRejectAgentSystemUserRequestMutation,
 } from '@/rtk/features/systemUserApi';
+
+import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
+import type { ProblemDetail } from './types';
+import { ButtonRow } from './components/ButtonRow/ButtonRow';
+import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
+import { getApiBaseUrl, getLogoutUrl } from './urlUtils';
+import { CreateSystemUserCheck } from './components/CanCreateSystemUser/CanCreateSystemUser';
+import { RightsList } from './components/RightsList/RightsList';
 
 export const SystemUserAgentRequestPage = () => {
   const { t } = useTranslation();
@@ -131,6 +132,19 @@ export const SystemUserAgentRequestPage = () => {
               }}
             ></Trans>
           </Paragraph>
+          <Heading
+            level={3}
+            data-size='xs'
+          >
+            {request.accessPackages.length === 1
+              ? t('systemuser_request.rights_list_header_single')
+              : t('systemuser_request.rights_list_header')}
+          </Heading>
+          <RightsList
+            resources={[]}
+            accessPackages={request.accessPackages}
+            hideHeadings
+          />
           <div>
             {acceptCreationRequestError && (
               <DelegationCheckError

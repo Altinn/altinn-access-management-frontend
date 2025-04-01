@@ -95,6 +95,8 @@
     "account_you": "Deg selv",
     "account_others": "Andre kontoer",
     "change-label": "Bytt",
+    "search-label": "Finn bruker",
+    "search-hits": "treff",
     "back-label": "Tilbake",
     "all_services": "Alle tjenester",
     "chat": "Få hjelp på chat",
@@ -424,7 +426,6 @@
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
-    "banner_title": "Lag ny systemtilgang",
     "sub_title": "Velg fagsystem",
     "content_text1": "Er du usikker på hvilket fagsystem du skal velge, anbefaler vi at du kontakter leverandøren av fagsystemet. Altinn har ikke gjort noen vurdering av kvalitet og sikkerhet på fagsystemene i listen.",
     "pull_down_menu_label": "Velg fagsystem",
@@ -443,8 +444,6 @@
     "creating_systemuser": "Oppretter systemtilgang..."
   },
   "systemuser_detailpage": {
-    "header": "Systemtilgangen {{integrationTitle}} har disse fullmaktene for {{companyName}}",
-    "header_single": "Systemtilgangen {{integrationTitle}} har denne fullmakten for {{companyName}}",
     "edit_systemuser": "Rediger systemtilgang",
     "load_systemuser_error": "Kunne ikke laste systemtilgang",
     "loading_systemuser": "laster systemtilgang",
@@ -514,7 +513,7 @@
   "systemuser_agent_request": {
     "page_title": "Lag en systemtilgang for kunderelasjoner - Altinn",
     "banner_title": "Lag en systemtilgang for kunderelasjoner",
-    "system_description": "Gjennom systemtilgangen får {{vendorName}} fullmakt til å løse oppgaver på vegne av {{companyName}} sine kunder. For å fullføre oppsettet må tilgangene til kundene tildeles i kunderelasjoner i Altinn."
+    "system_description": "Gjennom systemtilgangen får <strong>{{vendorName}}</strong> fullmakt til å løse oppgaver på vegne av <strong>{{companyName}}</strong> sine kunder. For å fullføre oppsettet må du legge til kundene i Altinn."
   },
   "systemuser_agent_delegation": {
     "page_title": "Systemtilgang for kunderelasjoner - Altinn",
@@ -522,11 +521,14 @@
     "load_customers_error": "Kunne ikke laste kunder",
     "load_assigned_customers_error": "Kunne ikke laste tilknyttede kunder",
     "assign_customers": "Hvilke kunder skal knyttes til systemtilgangen {{integrationTitle}}?",
-    "assigned_customers_header": "Kunder i systemtilgangen",
+    "confirm_close": "Bekreft og lukk",
+    "assigned_customers_header": "Kunder tilknyttet systemtilgangen",
     "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
+    "access_package_single": "Fullmakt til 1 tilgangspakke",
+    "access_package_plural": "Fullmakt til {{accessPackageCount}} tilgangspakker`",
     "add_customers": "Legg til kunder",
-    "edit_customers": "Administrer kunder",
-    "customer_search": "Søk i kunder",
+    "edit_customers": "Legg til eller fjern kunder",
+    "customer_search": "Søk etter kunde",
     "remove_from_system_user": "Fjern fra systemtilgang",
     "remove_from_system_user_aria": "Fjern {{customerName}} fra systemtilgang",
     "add_to_system_user": "Legg til i systemtilgang",

@@ -16,7 +16,9 @@ export class SystemUserPage {
   public readonly NEW_SYSTEMUSER_LABEL: Locator;
 
   constructor(public page: Page) {
-    this.SELECT_VENDOR_LABEL = this.page.getByLabel(noNb.systemuser_creationpage.banner_title);
+    this.SELECT_VENDOR_LABEL = this.page.getByLabel(
+      noNb.systemuser_overviewpage.new_system_user_button,
+    );
 
     this.NEW_SYSTEMUSER_LABEL = page.locator('span', {
       hasText: noNb.systemuser_overviewpage.new_system_user,

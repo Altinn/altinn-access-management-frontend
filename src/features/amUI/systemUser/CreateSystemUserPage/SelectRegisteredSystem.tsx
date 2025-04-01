@@ -48,18 +48,11 @@ export const SelectRegisteredSystem = ({
       <div className={classes.creationPageContainer}>
         <Heading
           level={1}
-          data-size='xs'
-          className={classes.creationPageHeader}
+          data-size='sm'
         >
-          {t('systemuser_creationpage.banner_title')}
+          {t('systemuser_creationpage.sub_title')}
         </Heading>
         <CreateSystemUserCheck>
-          <Heading
-            level={2}
-            data-size='sm'
-          >
-            {t('systemuser_creationpage.sub_title')}
-          </Heading>
           <Paragraph
             data-size='sm'
             className={classes.systemDescription}
