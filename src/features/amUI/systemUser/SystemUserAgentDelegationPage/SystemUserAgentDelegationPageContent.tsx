@@ -12,6 +12,7 @@ import {
 } from '@/rtk/features/systemUserApi';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
@@ -53,6 +54,8 @@ export const SystemUserAgentDelegationPageContent = ({
   const [assignedCustomers, setAssignedCustomers] = useState<AgentDelegationCustomer[]>(
     getAssignedCustomers(customers, existingAgentDelegations),
   );
+
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
     useDeleteAgentSystemuserMutation();
@@ -163,7 +166,7 @@ export const SystemUserAgentDelegationPageContent = ({
         <div className={classes.flexContainer}>
           <SystemUserHeader
             title={systemUser.integrationTitle}
-            subTitle={systemUser.system.systemVendorOrgName}
+            subTitle={reporteeData?.name}
           />
           <Heading
             level={2}

@@ -20,7 +20,7 @@ export const SystemUserHeader = ({ title, subTitle }: SystemUserHeaderProps): Re
         >
           {title}
         </Heading>
-        {subTitle && <Paragraph data-size='xs'>{subTitle}</Paragraph>}
+        {subTitle && <Paragraph data-size='xs'>for {subTitle}</Paragraph>}
       </div>
     </div>
   );
