@@ -160,6 +160,9 @@ export const SystemUserAgentDelegationPageContent = ({
             onAddCustomer={onAddCustomer}
             onRemoveCustomer={onRemoveCustomer}
           />
+          <div>
+            <Button onClick={onCloseModal}>{t('systemuser_agent_delegation.confirm_close')}</Button>
+          </div>
         </div>
       </Dialog>
       {systemUser && (
