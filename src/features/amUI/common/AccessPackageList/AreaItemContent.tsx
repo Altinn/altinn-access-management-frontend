@@ -103,7 +103,7 @@ export const AreaItemContent = ({
               controls={
                 !isSm && (
                   <DelegateAccessPackageActionControl
-                    isLoading={isLoading || isUninitialized}
+                    isLoading={(isLoading || isUninitialized) && shouldShowDelegationCheck}
                     availableActions={availableActions}
                     canDelegate={!!canDelegate(pkg.id)}
                     onDelegate={() => onDelegate(pkg)}
