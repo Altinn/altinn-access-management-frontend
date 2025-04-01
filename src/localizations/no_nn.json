@@ -261,6 +261,7 @@
   },
   "role": {
     "current_roles_title": "{{count}} administratortilganger",
+    "roles_description": "Dette fullmaktsområdet omfattar fullmakter til å administrere tilgangar for verksemda. Det er ikkje knytt nokre ressursar eller tenester til desse tilgangane.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",

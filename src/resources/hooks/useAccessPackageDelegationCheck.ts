@@ -15,7 +15,7 @@ export const useAccessPackageDelegationCheck = (
   shouldShowDelegationCheck: boolean,
   handleDelegationCheckFailure: (error: ActionError) => void,
 ) => {
-  const [delegationCheck, { isLoading, data }] = useDelegationCheckMutation();
+  const [delegationCheck, { isLoading, data, isUninitialized }] = useDelegationCheckMutation();
 
   useEffect(() => {
     if (accessPackageIds.length > 0 && shouldShowDelegationCheck) {
@@ -39,5 +39,5 @@ export const useAccessPackageDelegationCheck = (
   const canDelegate = (id: string) =>
     !isLoading && data?.find((d) => d.packageId === id)?.canDelegate;
 
-  return { canDelegate, isLoading };
+  return { canDelegate, isLoading, isUninitialized };
 };

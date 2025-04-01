@@ -265,6 +265,7 @@
   },
   "role": {
     "current_roles_title": "{{count}} administrator accesses",
+    "roles_description": "This access area includes the powers to manage access for your business. No resources or services are linked to this access.",
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
     "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
@@ -309,7 +310,7 @@
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
     "inherited_role_org_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted.",
-    "delegation_check_not_delegable": "You cannot grant this access package because you  lack access yourself.",
+    "delegation_check_not_delegable": "You cannot grant this access package because you lack access yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."

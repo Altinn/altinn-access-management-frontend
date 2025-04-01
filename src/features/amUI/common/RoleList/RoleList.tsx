@@ -7,7 +7,6 @@ import {
   useGetRolesForUserQuery,
   useGetRolesQuery,
 } from '@/rtk/features/roleApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 
@@ -117,6 +116,11 @@ export const RoleList = ({
                         fullText={false}
                         size='sm'
                         onDelegateError={onActionError}
+                        onSelect={() => {
+                          onSelect(role);
+                        }}
+                        showSpinner={true}
+                        showWarning={true}
                       />
                     )}
                     {availableActions?.includes(DelegationAction.REQUEST) && <RequestRoleButton />}

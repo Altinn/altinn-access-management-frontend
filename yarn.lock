@@ -19,18 +19,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.22.8":
-  version: 0.22.8
-  resolution: "@altinn/altinn-components@npm:0.22.8"
+"@altinn/altinn-components@npm:0.23.3":
+  version: 0.23.3
+  resolution: "@altinn/altinn-components@npm:0.23.3"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.9.2"
+    "@tanstack/react-virtual": "npm:^3.13.4"
     classnames: "npm:^2.5.1"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/a7f37ffa909b8d9a69dfb8b9caa9debad59c11574517aeb347552d4411f9a7c97ab5f1359d3bd6596f6069db93251ffaca2b648d3e071fde89aa71e11f252a34
+  checksum: 10/93b8706c6a2afa3d1271af68f1d77a7c06346ffb52db92a0c16ba69c86b6e0ffb043634518a5d7e2c8f34de07ebb303f407b80594eaccd6a13a43ee0e0770118
   languageName: node
   linkType: hard
 
@@ -2206,10 +2207,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-virtual@npm:^3.13.4":
+  version: 3.13.6
+  resolution: "@tanstack/react-virtual@npm:3.13.6"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.13.6"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/4500088f7719a5a6241f4fcf24074a2fa8cb54d9c5c50786e909e87aee98af2ac0c1513139984c388e97e8ddb65d108390d39083b0b793fbfd343976f13447c4
+  languageName: node
+  linkType: hard
+
 "@tanstack/virtual-core@npm:3.13.2":
   version: 3.13.2
   resolution: "@tanstack/virtual-core@npm:3.13.2"
   checksum: 10/b051409c613530514be5d841a2c0d10cb31326c728a90fd79b0bb489d61e2114234fcb6452ac331d5d1b624b0663693fd7c5d9b6fa3bf5035aadf66007f0c1e5
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.13.6":
+  version: 3.13.6
+  resolution: "@tanstack/virtual-core@npm:3.13.6"
+  checksum: 10/f6fc9e902077e68fcfc2fe936fcd90c89b128b1fca206d7e1d71bea0cf351994c11685a2aedeb9c9305596a1bc77ac9ef27eb889a2b348fcfbfa80dd608bb73c
   languageName: node
   linkType: hard
 
@@ -3065,7 +3085,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.22.8"
+    "@altinn/altinn-components": "npm:0.23.3"
     "@axe-core/playwright": "npm:^4.10.1"
     "@digdir/designsystemet-css": "npm:1.0.2"
     "@digdir/designsystemet-react": "npm:1.0.2"
