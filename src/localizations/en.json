@@ -263,6 +263,7 @@
   },
   "role": {
     "current_roles_title": "{{count}} administrator accesses",
+    "roles_description": "This access area includes the powers to manage access for the business. No resources or services are linked to this access.",
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
     "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",

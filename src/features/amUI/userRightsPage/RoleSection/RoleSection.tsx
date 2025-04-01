@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import { useRef, useState } from 'react';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
 import type { Role } from '@/rtk/features/roleApi';
@@ -36,7 +36,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
-
+      <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
       <RoleList
         availableActions={[
           isCurrentUser ? DelegationAction.REQUEST : DelegationAction.DELEGATE,

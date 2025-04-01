@@ -1,4 +1,4 @@
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 
@@ -28,6 +28,7 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
+      <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
       <RoleList
         onSelect={(role) => {
           setModalItem(role);
