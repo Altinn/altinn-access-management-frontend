@@ -19,6 +19,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   const { id } = useParams();
   const { t } = useTranslation();
   const partyId = getCookie('AltinnPartyId');
+  const partyUuid = getCookie('AltinnPartyUuid');
 
   useDocumentTitle(t('systemuser_agent_delegation.page_title'));
 
@@ -32,7 +33,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     data: customers,
     isError: isLoadCustomersError,
     isLoading: isLoadingCustomers,
-  } = useGetCustomersQuery({ partyId, systemUserId: id ?? '' });
+  } = useGetCustomersQuery({ partyId, systemUserId: id ?? '', partyUuid });
 
   const {
     data: agentDelegations,
@@ -41,6 +42,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
   } = useGetAssignedCustomersQuery({
     partyId: partyId,
     systemUserId: id || '',
+    partyUuid,
   });
 
   return (

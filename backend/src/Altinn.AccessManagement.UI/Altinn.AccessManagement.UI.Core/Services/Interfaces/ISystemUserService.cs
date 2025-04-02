@@ -50,11 +50,12 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <summary>
         /// Deletes agent system user
         /// </summary>
-        /// <param name="partyId">The party Id of the party to retrieve</param>
+        /// <param name="partyId">The party Id of the party</param>
         /// <param name="systemUserId">Id of system user to delete</param>
+        /// <param name="partyUuid">The party uuid of the party</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
-        Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, CancellationToken cancellationToken);
+        Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid partyUuid, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new system user
