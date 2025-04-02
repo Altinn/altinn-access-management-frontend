@@ -21,7 +21,7 @@ const filterCustomerList = (
   });
 };
 
-const itemsPerPage = 10;
+const itemsPerPage = 5;
 const showPages = 7;
 
 interface CustomerListProps {

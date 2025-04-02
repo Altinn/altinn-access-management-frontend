@@ -131,14 +131,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user id to delete</param>
+        /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpDelete("agent/{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> DeleteAgentSystemUser([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteAgentSystemUser([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserService.DeleteAgentSystemUser(partyId, systemUserGuid, cancellationToken);
+            Result<bool> result = await _systemUserService.DeleteAgentSystemUser(partyId, systemUserGuid, partyUuid, cancellationToken);
             if (result.IsProblem)
             {
                 return result.Problem.ToActionResult(); 

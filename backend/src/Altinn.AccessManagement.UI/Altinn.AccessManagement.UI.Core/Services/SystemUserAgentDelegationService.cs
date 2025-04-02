@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Authorization.ProblemDetails;
-using Altinn.Platform.Register.Models;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -34,15 +33,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
         
         /// <inheritdoc /> 
-        public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            // get access packages from systemuser
-            Party party = await _registerClient.GetPartyByPartyId(partyId);
-            if (party == null || party.PartyUuid == null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
             IEnumerable<string> accessPackageUrns = systemUser.AccessPackages.Select(x => x.Urn);
             CustomerRoleType customerType;
@@ -68,20 +60,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 customerType = CustomerRoleType.None;
             }
 
-            CustomerList customers = await _registerClient.GetPartyCustomers((Guid)party.PartyUuid, customerType, cancellationToken);
+            CustomerList customers = await _registerClient.GetPartyCustomers(partyUuid, customerType, cancellationToken);
             return MapCustomerListToCustomerFE(customers);
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            Party party = await _registerClient.GetPartyByPartyId(partyId);
-            if (party == null || party.PartyUuid == null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-
-            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, (Guid)party.PartyUuid, systemUserGuid, cancellationToken);
+            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, partyUuid, systemUserGuid, cancellationToken);
 
             return delegations.Select(delegation => 
             {
@@ -95,18 +81,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
+        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, Guid partyUuid, AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
         {
-            Party party = await _registerClient.GetPartyByPartyId(partyId);
-            if (party == null || party.PartyUuid == null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-
             AgentDelegationRequest delegationRequest = new()
             {
                 CustomerId = delegationRequestFe.CustomerId,
-                FacilitatorId = (Guid)party.PartyUuid
+                FacilitatorId = partyUuid
             };
 
             Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
@@ -131,15 +111,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, CancellationToken cancellationToken)
         {
-            Party party = await _registerClient.GetPartyByPartyId(partyId);
-            if (party == null || party.PartyUuid == null)
-            {
-                return Problem.Reportee_Orgno_NotFound;
-            }
-
-            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, (Guid)party.PartyUuid, delegationId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);

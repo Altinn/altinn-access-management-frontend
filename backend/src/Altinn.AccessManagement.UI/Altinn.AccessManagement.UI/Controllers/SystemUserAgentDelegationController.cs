@@ -31,13 +31,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user to get customers from</param>
+        /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of customer party</returns>
         [Authorize]
         [HttpGet("{partyId}/{systemUserGuid}/customers")]
-        public async Task<ActionResult> GetSystemUserCustomers([FromRoute] int partyId,  [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSystemUserCustomers([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<CustomerPartyFE>> result = await _systemUserAgentDelegationService.GetSystemUserCustomers(partyId, systemUserGuid, cancellationToken);
+            Result<List<CustomerPartyFE>> result = await _systemUserAgentDelegationService.GetSystemUserCustomers(partyId, systemUserGuid, partyUuid, cancellationToken);
             if (result.IsProblem)
             {
                 return result.Problem.ToActionResult();
@@ -51,13 +52,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user id to get</param> 
+        /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{systemUserGuid}/delegation")]
-        public async Task<ActionResult> GetSystemUserAgentDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetSystemUserAgentDelegations([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<List<AgentDelegationFE>> result = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, systemUserGuid, cancellationToken);
+            Result<List<AgentDelegationFE>> result = await _systemUserAgentDelegationService.GetSystemUserAgentDelegations(partyId, systemUserGuid, partyUuid, cancellationToken);
             if (result.IsProblem)
             {
                 return result.Problem.ToActionResult();
@@ -71,14 +73,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyId">Party id user represents</param>
         /// <param name="systemUserGuid">System user id to get</param>
+        /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="delegationRequestFe">Payload to send to add client</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{systemUserGuid}/delegation")]
-        public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromBody] AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
+        public async Task<ActionResult> AddClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromQuery] Guid partyUuid, [FromBody] AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
         {
-            Result<AgentDelegationFE> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, delegationRequestFe, cancellationToken);
+            Result<AgentDelegationFE> result = await _systemUserAgentDelegationService.AddClient(partyId, systemUserGuid, partyUuid, delegationRequestFe, cancellationToken);
 
             if (result.IsProblem)
             {
@@ -94,13 +97,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user id to get</param>
         /// <param name="delegationId">Delegation id to remove from system user</param>
+        /// <param name="partyUuid">Party uuid of party user represents</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         [Authorize]
         [HttpDelete("{partyId}/{systemUserGuid}/delegation/{delegationId}")]
-        public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid delegationId, CancellationToken cancellationToken)
+        public async Task<ActionResult> RemoveClient([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromRoute] Guid delegationId, [FromQuery] Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, delegationId, cancellationToken);
+            Result<bool> result = await _systemUserAgentDelegationService.RemoveClient(partyId, delegationId, partyUuid, cancellationToken);
 
             if (result.IsProblem)
             {
