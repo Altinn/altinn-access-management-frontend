@@ -27,19 +27,19 @@ jobs:
       contents: read
       packages: read
     steps:
-    - uses: docker/login-action@v3
+    - uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
       name: GitHub CR Login
       with:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - uses: azure/login@v2
+    - uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2
       name: Azure Login
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    - uses: azure/CLI@v2
+    - uses: azure/CLI@089eac9d8cc39f5d003e94f8b65efc51076c9cbd # v2
       name: Update Container App
       with:
         inlineScript: |
