@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             List<string> regnskapsforerPackages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-lonn"];
             List<string> revisorPackages = ["urn:altinn:accesspackage:ansvarlig-revisor", "urn:altinn:accesspackage:revisormedarbeider"];
-            List<string> forretningsforerPackages = ["urn:altinn:accesspackage:skattegrunnlag"];
+            List<string> forretningsforerPackages = ["urn:altinn:accesspackage:forretningsforer-eiendom"];
             
             if (accessPackageUrns.Any(x => regnskapsforerPackages.Contains(x))) 
             {
