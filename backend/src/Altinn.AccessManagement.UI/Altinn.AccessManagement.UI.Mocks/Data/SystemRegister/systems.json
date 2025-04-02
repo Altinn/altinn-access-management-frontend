@@ -184,7 +184,7 @@
     "rights": [],
     "accessPackages": [
       {
-        "urn": "urn:altinn:accesspackage:skattegrunnlag"
+        "urn": "urn:altinn:accesspackage:forretningsforer-eiendom"
       }
     ],
     "isVisible": false
