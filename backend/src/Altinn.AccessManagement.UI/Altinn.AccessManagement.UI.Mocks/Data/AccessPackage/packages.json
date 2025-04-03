@@ -57,6 +57,34 @@
   },
   {
     "object": {
+      "id": "7beaa598-22f7-49e8-9d49-0a6b39e0f4be",
+      "name": "Forretningsfører eiendom",
+      "urn": "urn:altinn:accesspackage:forretningsforer-eiendom",
+      "description": "Denne tilgangspakken gir fullmakter til forretningsfører",
+      "isDelegable": true,
+      "isAssignable": false,
+      "area": {
+        "group": {
+          "id": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
+          "name": "Allment",
+          "description": "Standard gruppe",
+          "entityTypeId": "8c216e2f-afdd-4234-9ba2-691c727bb33d",
+          "urn": null
+        },
+        "id": "7d32591d-34b7-4afc-8afa-013722f8c05d",
+        "name": "Skatt, avgift, regnskap og toll",
+        "description": "Dette fullmaktsområdet omfatter tilgangspakker knyttet til skatt, avgift, regnskap og toll.",
+        "iconUrl": "Money_SackKroner",
+        "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
+        "urn": "accesspackage:area:skatt_avgift_regnskap_og_toll"
+      },
+      "resources": []
+    },
+    "score": 0,
+    "fields": []
+  },
+  {
+    "object": {
       "id": "9a61b136-7810-4939-ab6d-84938e9a12c6",
       "name": "Merverdiavgift",
       "urn": "urn:altinn:accesspackage:merverdiavgift",
@@ -526,100 +554,100 @@
         "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
         "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet"
       },
-        "resources": [
-          {
-            "id": "b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1",
-            "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
-            "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
-            "name": "HMS-dokumentasjon",
-            "description": "Dokumentasjon relatert til helse, miljø og sikkerhet.",
-            "refId": "HMS-DOC-001",
-            "provider": {
-              "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
-              "name": "Digitaliseringsdirektoratet",
-              "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
-            }
-          },
-          {
-            "id": "b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2",
-            "providerId": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
-            "typeId": "d6d6d6d6-d6d6-d6d6-d6d6-d6d6d6d6d6d6",
-            "name": "Risikovurdering",
-            "description": "Verktøy for gjennomføring og dokumentasjon av risikovurderinger.",
-            "refId": "RISK-TOOL-001",
-            "provider": {
-              "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
-              "name": "Direktoratet for samfunnssikkerhet og beredskap",
-              "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
-            }
-          },
-          {
-            "id": "b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3",
-            "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
-            "typeId": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7",
-            "name": "Internkontroll-system",
-            "description": "System for dokumentasjon og gjennomføring av internkontroll.",
-            "refId": "INT-SYS-002",
-            "provider": {
-              "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
-              "name": "Arbeidstilsynet",
-              "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
-            }
-          },
-          {
-            "id": "b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4",
-            "providerId": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
-            "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
-            "name": "Beredskapsplan",
-            "description": "Dokumentasjon av beredskapsplan for krisesituasjoner.",
-            "refId": "EMG-PLAN-003",
-            "provider": {
-              "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
-              "name": "Næringslivets sikkerhetsråd",
-              "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
-            }
-          },
-          {
-            "id": "b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5",
-            "providerId": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
-            "typeId": "d6d6d6d6-d6d6-d6d6-d6d6-d6d6d6d6d6d6",
-            "name": "Avviksrapportering",
-            "description": "System for rapportering og håndtering av avvik.",
-            "refId": "DEV-REP-001",
-            "provider": {
-              "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
-              "name": "Direktoratet for samfunnssikkerhet og beredskap",
-              "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
-            }
-          },
-          {
-            "id": "b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6",
-            "providerId": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
-            "typeId": "d8d8d8d8-d8d8-d8d8-d8d8-d8d8d8d8d8d8",
-            "name": "GDPR-samsvar",
-            "description": "Verktøy for å sikre etterlevelse av personvernforordningen.",
-            "refId": "GDPR-COMP-001",
-            "provider": {
-              "id": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
-              "name": "Datatilsynet",
-              "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
-            }
-          },
-          {
-            "id": "b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7",
-            "providerId": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
-            "typeId": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7",
-            "name": "Sikkerhetsstyring",
-            "description": "System for håndtering av sikkerhetstiltak og sikkerhetsrevisjon.",
-            "refId": "SEC-MGT-002",
-            "provider": {
-              "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
-              "name": "Næringslivets sikkerhetsråd",
-              "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
-            }
+      "resources": [
+        {
+          "id": "b1b1b1b1-b1b1-b1b1-b1b1-b1b1b1b1b1b1",
+          "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+          "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
+          "name": "HMS-dokumentasjon",
+          "description": "Dokumentasjon relatert til helse, miljø og sikkerhet.",
+          "refId": "HMS-DOC-001",
+          "provider": {
+            "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+            "name": "Digitaliseringsdirektoratet",
+            "logoUrl": "https://profilveileder.digdir.no/sites/leikanger/files/styles/xxxs/public/2022-04/Ikon_Emblem-blaasvart.png?itok=QU5K_ApH"
           }
-        ]
-      },
+        },
+        {
+          "id": "b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2",
+          "providerId": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+          "typeId": "d6d6d6d6-d6d6-d6d6-d6d6-d6d6d6d6d6d6",
+          "name": "Risikovurdering",
+          "description": "Verktøy for gjennomføring og dokumentasjon av risikovurderinger.",
+          "refId": "RISK-TOOL-001",
+          "provider": {
+            "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+            "name": "Direktoratet for samfunnssikkerhet og beredskap",
+            "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+          }
+        },
+        {
+          "id": "b3b3b3b3-b3b3-b3b3-b3b3-b3b3b3b3b3b3",
+          "providerId": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+          "typeId": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7",
+          "name": "Internkontroll-system",
+          "description": "System for dokumentasjon og gjennomføring av internkontroll.",
+          "refId": "INT-SYS-002",
+          "provider": {
+            "id": "c4c4c4c4-c4c4-c4c4-c4c4-c4c4c4c4c4c4",
+            "name": "Arbeidstilsynet",
+            "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg/1200px-Emblem_of_the_Norwegian_Labour_Inspection_Authority.svg.png"
+          }
+        },
+        {
+          "id": "b4b4b4b4-b4b4-b4b4-b4b4-b4b4b4b4b4b4",
+          "providerId": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+          "typeId": "d5d5d5d5-d5d5-d5d5-d5d5-d5d5d5d5d5d5",
+          "name": "Beredskapsplan",
+          "description": "Dokumentasjon av beredskapsplan for krisesituasjoner.",
+          "refId": "EMG-PLAN-003",
+          "provider": {
+            "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+            "name": "Næringslivets sikkerhetsråd",
+            "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+          }
+        },
+        {
+          "id": "b5b5b5b5-b5b5-b5b5-b5b5-b5b5b5b5b5b5",
+          "providerId": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+          "typeId": "d6d6d6d6-d6d6-d6d6-d6d6-d6d6d6d6d6d6",
+          "name": "Avviksrapportering",
+          "description": "System for rapportering og håndtering av avvik.",
+          "refId": "DEV-REP-001",
+          "provider": {
+            "id": "c5c5c5c5-c5c5-c5c5-c5c5-c5c5c5c5c5c5",
+            "name": "Direktoratet for samfunnssikkerhet og beredskap",
+            "logoUrl": "https://elvirksomhetsregisteret.dsb.no/assets/dsb_logo.png"
+          }
+        },
+        {
+          "id": "b6b6b6b6-b6b6-b6b6-b6b6-b6b6b6b6b6b6",
+          "providerId": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
+          "typeId": "d8d8d8d8-d8d8-d8d8-d8d8-d8d8d8d8d8d8",
+          "name": "GDPR-samsvar",
+          "description": "Verktøy for å sikre etterlevelse av personvernforordningen.",
+          "refId": "GDPR-COMP-001",
+          "provider": {
+            "id": "c7c7c7c7-c7c7-c7c7-c7c7-c7c7c7c7c7c7",
+            "name": "Datatilsynet",
+            "logoUrl": "https://www.datatilsynet.no/globalassets/global/bilder/logoer/pvo_logo?width=756&height=710&quality=80&h=4c22bcfb2f8f388c55db321994144cb6d8fcba42"
+          }
+        },
+        {
+          "id": "b7b7b7b7-b7b7-b7b7-b7b7-b7b7b7b7b7b7",
+          "providerId": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+          "typeId": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7",
+          "name": "Sikkerhetsstyring",
+          "description": "System for håndtering av sikkerhetstiltak og sikkerhetsrevisjon.",
+          "refId": "SEC-MGT-002",
+          "provider": {
+            "id": "c6c6c6c6-c6c6-c6c6-c6c6-c6c6c6c6c6c6",
+            "name": "Næringslivets sikkerhetsråd",
+            "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN0P4ygJ_NZXANCOzMyKonqsKRP4zCPDSp866h4tyh7-9kLWOs09wEeKygX2WsaMVpLQI&usqp=CAU"
+          }
+        }
+      ]
+    },
     "score": 0,
     "fields": []
   },
@@ -646,8 +674,7 @@
         "groupId": "7e2a3af8-08cb-43a9-bdd7-7d5c7e377145",
         "urn": "accesspackage:area:miljo_ulykke_og_sikkerhet"
       },
-      "resources": [
-      ]
+      "resources": []
     },
     "score": 0,
     "fields": []

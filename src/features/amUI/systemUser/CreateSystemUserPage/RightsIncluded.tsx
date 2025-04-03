@@ -10,6 +10,7 @@ import {
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { SystemUserPath } from '@/routes/paths';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import type { ProblemDetail, RegisteredSystem } from '../types';
 import { RightsList } from '../components/RightsList/RightsList';
@@ -28,6 +29,7 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
   const { t } = useTranslation();
   const navigate = useNavigate();
   const partyId = getCookie('AltinnPartyId');
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const {
     data: rights,
@@ -67,12 +69,15 @@ export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsInclude
       <div className={classes.creationPageContainer}>
         <div className={classes.creationPageHeader}>
           <SystemUserHeader
-            title={
+            title={t(
               numberOfRights === 1
                 ? 'systemuser_includedrightspage.header_single'
-                : 'systemuser_includedrightspage.header'
-            }
-            integrationTitle={selectedSystem.name}
+                : 'systemuser_includedrightspage.header',
+              {
+                integrationTitle: selectedSystem.name,
+                companyName: reporteeData?.name,
+              },
+            )}
           />
         </div>
         <div>

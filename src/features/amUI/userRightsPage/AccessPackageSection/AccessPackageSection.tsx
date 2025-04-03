@@ -8,7 +8,6 @@ import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
-import classes from './AccessPackageSection.module.css';
 import { ActiveDelegations } from './ActiveDelegations';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 
@@ -21,10 +20,10 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
 
   return (
     party && (
-      <div className={classes.accessPackageSectionContainer}>
+      <>
         <Heading
           level={2}
-          data-size='xs'
+          data-size='2xs'
           id='access_packages_title'
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
@@ -37,7 +36,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
           ]}
         />
         <ActiveDelegations />
-      </div>
+      </>
     )
   );
 };

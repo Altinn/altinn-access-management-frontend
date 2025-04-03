@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { Heading, useMediaQuery } from '@digdir/designsystemet-react';
 import { ListBase } from '@altinn/altinn-components';
 
 import {
@@ -8,7 +7,6 @@ import {
   useGetRolesForUserQuery,
   useGetRolesQuery,
 } from '@/rtk/features/roleApi';
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 import { DelegationAction } from '../DelegationModal/EditModal';
 
@@ -20,10 +18,9 @@ import { DelegateRoleButton } from './DelegateRoleButton';
 import { RequestRoleButton } from './RequestRoleButton';
 import { ActionError } from '@/resources/hooks/useActionError';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 interface RoleListProps {
-  from: string;
-  to: string;
   onSelect: (role: ExtendedRole) => void;
   availableActions?: DelegationAction[];
   isLoading?: boolean;
@@ -31,134 +28,109 @@ interface RoleListProps {
 }
 
 export const RoleList = ({
-  from,
-  to,
   onSelect,
   availableActions,
   isLoading,
   onActionError,
 }: RoleListProps) => {
-  const { data: party, isLoading: partyIsLoading } = useGetPartyByUUIDQuery(to ?? '');
+  const { fromParty, toParty, isLoading: partyIsLoading } = usePartyRepresentation();
   const { data: roleAreas, isLoading: roleAreasIsLoading } = useGetRolesQuery();
   const { data: userRoles, isLoading: userRolesIsLoading } = useGetRolesForUserQuery({
-    from,
-    to,
+    from: fromParty?.partyUuid ?? '',
+    to: toParty?.partyUuid ?? '',
   });
+
   const isSm = useIsMobileOrSmaller();
-  const groupedRoles = useMemo(
-    () =>
-      roleAreas?.map((roleArea) => {
-        const { activeRoles, availableRoles } = roleArea.roles.reduce(
-          (res, role) => {
-            const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
-            if (roleAssignment)
-              res.activeRoles.push({
-                ...role,
-                inherited: roleAssignment.inherited,
-                assignmentId: roleAssignment.id,
-              });
-            else res.availableRoles.push({ ...role, inherited: [] });
-            return res;
-          },
-          {
-            activeRoles: [] as ExtendedRole[],
-            availableRoles: [] as ExtendedRole[],
-          },
-        );
-        return {
-          ...roleArea,
-          activeRoles,
-          availableRoles,
-        };
-      }),
-    [roleAreas, userRoles],
-  );
+
+  const groupedRoles = useMemo(() => {
+    return roleAreas?.reduce(
+      (res, roleArea) => {
+        roleArea.roles.forEach((role) => {
+          const roleAssignment = userRoles?.find((userRole) => userRole.role.id === role.id);
+          if (roleAssignment) {
+            res.activeRoles.push({
+              ...role,
+              inherited: roleAssignment.inherited,
+              assignmentId: roleAssignment.id,
+            });
+          } else {
+            res.availableRoles.push({ ...role, inherited: [] });
+          }
+        });
+        return res;
+      },
+      {
+        activeRoles: [] as ExtendedRole[],
+        availableRoles: [] as ExtendedRole[],
+      },
+    );
+  }, [roleAreas, userRoles]);
 
   if (partyIsLoading || roleAreasIsLoading || userRolesIsLoading || isLoading) {
     return <SkeletonRoleList />;
   }
   return (
-    <div className={classes.areas}>
-      {groupedRoles?.map((roleArea) => (
-        <div
-          key={roleArea.id}
-          className={classes.roleArea}
-        >
-          <Heading
-            level={3}
-            data-size='xs'
-            id={roleArea.id}
-          >
-            {roleArea.name}
-          </Heading>
-          <div
-            key={roleArea.id}
-            className={classes.roleLists}
-          >
-            {roleArea.activeRoles.length > 0 && (
-              <ListBase>
-                {roleArea.activeRoles.map((role) => (
-                  <RoleListItem
+    <div className={classes.roleLists}>
+      {groupedRoles && groupedRoles.activeRoles.length > 0 && (
+        <ListBase>
+          {groupedRoles.activeRoles.map((role) => (
+            <RoleListItem
+              key={role.id}
+              role={role}
+              active
+              onClick={() => {
+                onSelect(role);
+              }}
+              controls={
+                !isSm &&
+                availableActions?.includes(DelegationAction.REVOKE) && (
+                  <RevokeRoleButton
                     key={role.id}
-                    role={role}
-                    active
-                    toParty={party}
-                    onClick={() => {
-                      onSelect(role);
-                    }}
-                    controls={
-                      !isSm &&
-                      availableActions?.includes(DelegationAction.REVOKE) && (
-                        <RevokeRoleButton
-                          key={role.id}
-                          assignmentId={role?.assignmentId ?? ''}
-                          accessRole={role}
-                          toParty={party}
-                          fullText={false}
-                          size='sm'
-                          disabled={role.inherited?.length > 0}
-                          onRevokeError={onActionError}
-                        />
-                      )
-                    }
+                    assignmentId={role?.assignmentId ?? ''}
+                    accessRole={role}
+                    fullText={false}
+                    size='sm'
+                    disabled={role.inherited?.length > 0}
+                    onRevokeError={onActionError}
                   />
-                ))}
-              </ListBase>
-            )}
-            {roleArea.availableRoles.length > 0 && (
-              <ListBase>
-                {roleArea.availableRoles.map((role) => (
-                  <RoleListItem
-                    key={role.id}
-                    role={role}
-                    toParty={party}
-                    onClick={() => onSelect(role)}
-                    controls={
-                      !isSm && (
-                        <>
-                          {availableActions?.includes(DelegationAction.DELEGATE) && (
-                            <DelegateRoleButton
-                              accessRole={role}
-                              key={role.id}
-                              toParty={party}
-                              fullText={false}
-                              size='sm'
-                              onDelegateError={onActionError}
-                            />
-                          )}
-                          {availableActions?.includes(DelegationAction.REQUEST) && (
-                            <RequestRoleButton />
-                          )}
-                        </>
-                      )
-                    }
-                  />
-                ))}
-              </ListBase>
-            )}
-          </div>
-        </div>
-      ))}
+                )
+              }
+            />
+          ))}
+        </ListBase>
+      )}
+      {groupedRoles && groupedRoles.availableRoles.length > 0 && (
+        <ListBase>
+          {groupedRoles.availableRoles.map((role) => (
+            <RoleListItem
+              key={role.id}
+              role={role}
+              onClick={() => onSelect(role)}
+              controls={
+                !isSm && (
+                  <>
+                    {availableActions?.includes(DelegationAction.DELEGATE) && (
+                      <DelegateRoleButton
+                        accessRole={role}
+                        key={role.id}
+                        fullText={false}
+                        size='sm'
+                        onDelegateError={onActionError}
+                        onSelect={() => {
+                          onSelect(role);
+                        }}
+                        showSpinner={true}
+                        showWarning={true}
+                      />
+                    )}
+                    {availableActions?.includes(DelegationAction.REQUEST) && <RequestRoleButton />}
+                  </>
+                )
+              }
+            />
+          ))}
+        </ListBase>
+      )}
     </div>
   );
 };

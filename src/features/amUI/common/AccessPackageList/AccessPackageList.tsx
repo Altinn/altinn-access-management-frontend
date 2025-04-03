@@ -1,5 +1,4 @@
 import { ListBase } from '@altinn/altinn-components';
-import { useState } from 'react';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetUserDelegationsQuery, useSearchQuery } from '@/rtk/features/accessPackageApi';
@@ -15,6 +14,7 @@ import { AreaItem } from './AreaItem';
 import { useAccessPackageActions } from './useAccessPackageActions';
 import { SkeletonAccessPackageList } from './SkeletonAccessPackageList';
 import { AreaItemContent } from './AreaItemContent';
+import { useAreaExpandedContextOrLocal } from './AccessPackageExpandedContext';
 
 interface AccessPackageListProps {
   showAllPackages?: boolean;
@@ -52,16 +52,7 @@ export const AccessPackageList = ({
     to: toParty?.partyUuid ?? '',
   });
 
-  const [expandedAreas, setExpandedAreas] = useState<string[]>([]);
-
-  const toggleExpandedArea = (areaId: string) => {
-    if (expandedAreas.some((id) => id === areaId)) {
-      const newExpandedState = expandedAreas.filter((id) => id !== areaId);
-      setExpandedAreas(newExpandedState);
-    } else {
-      setExpandedAreas([...expandedAreas, areaId]);
-    }
-  };
+  const { toggleExpandedArea, isExpanded } = useAreaExpandedContextOrLocal();
 
   const { assignedAreas, availableAreas } = useAreaPackageList({
     allPackageAreas,
@@ -91,9 +82,7 @@ export const AccessPackageList = ({
       ) : (
         <ListBase>
           {displayAreas.map((area) => {
-            const expanded =
-              (searchString && searchString.length > 2) ||
-              expandedAreas.some((areaId) => areaId === area.id);
+            const expanded = (searchString && searchString.length > 2) || isExpanded(area.id);
 
             return (
               <AreaItem

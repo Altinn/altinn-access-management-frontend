@@ -33,16 +33,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
         
         /// <inheritdoc /> 
-        public async Task<List<AgentDelegationPartyFE>> GetSystemUserCustomers(int partyId, Guid partyUuid, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            // get access packages from systemuser
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
             IEnumerable<string> accessPackageUrns = systemUser.AccessPackages.Select(x => x.Urn);
             CustomerRoleType customerType;
 
             List<string> regnskapsforerPackages = ["urn:altinn:accesspackage:regnskapsforer-med-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-uten-signeringsrettighet", "urn:altinn:accesspackage:regnskapsforer-lonn"];
             List<string> revisorPackages = ["urn:altinn:accesspackage:ansvarlig-revisor", "urn:altinn:accesspackage:revisormedarbeider"];
-            List<string> forretningsforerPackages = ["urn:altinn:accesspackage:skattegrunnlag"];
+            List<string> forretningsforerPackages = ["urn:altinn:accesspackage:forretningsforer-eiendom"];
             
             if (accessPackageUrns.Any(x => regnskapsforerPackages.Contains(x))) 
             {
@@ -66,9 +65,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<AgentDelegationFE>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
+        public async Task<Result<List<AgentDelegationFE>>> GetSystemUserAgentDelegations(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, facilitatorId, systemUserGuid, cancellationToken);
+            List<AgentDelegation> delegations = await _systemUserAgentDelegationClient.GetSystemUserAgentDelegations(partyId, partyUuid, systemUserGuid, cancellationToken);
 
             return delegations.Select(delegation => 
             {
@@ -82,8 +81,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        public async Task<Result<AgentDelegationFE>> AddClient(int partyId, Guid systemUserGuid, Guid partyUuid, AgentDelegationRequestFE delegationRequestFe, CancellationToken cancellationToken)
         {
+            AgentDelegationRequest delegationRequest = new()
+            {
+                CustomerId = delegationRequestFe.CustomerId,
+                FacilitatorId = partyUuid
+            };
+
             Result<List<AgentDelegation>> newAgentDelegations = await _systemUserAgentDelegationClient.AddClient(partyId, systemUserGuid, delegationRequest, cancellationToken);
             
             if (newAgentDelegations.IsProblem)
@@ -106,9 +111,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RemoveClient(int partyId, Guid facilitatorId, Guid delegationId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid delegationId, Guid partyUuid, CancellationToken cancellationToken)
         {
-            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, facilitatorId, delegationId, cancellationToken);
+            Result<bool> response = await _systemUserAgentDelegationClient.RemoveClient(partyId, partyUuid, delegationId, cancellationToken);
             if (response.IsProblem)
             {
                 return new Result<bool>(response.Problem);
@@ -117,11 +122,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return response.Value;
         }
 
-        private static List<AgentDelegationPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
+        private static List<CustomerPartyFE> MapCustomerListToCustomerFE(CustomerList customers)
         {
             return customers.Data.Select(x => 
             {
-                return new AgentDelegationPartyFE()
+                return new CustomerPartyFE()
                 {
                     Id = x.PartyUuid,
                     Name = x.DisplayName,

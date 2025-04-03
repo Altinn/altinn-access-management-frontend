@@ -68,6 +68,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="facilitatorId">Id of facilitator owning systemuser</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
-        Task<bool> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken);
+        Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken);
     }
 }

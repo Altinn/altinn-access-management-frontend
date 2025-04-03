@@ -33,7 +33,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     data: customers,
     isError: isLoadCustomersError,
     isLoading: isLoadingCustomers,
-  } = useGetCustomersQuery({ partyId, partyUuid, systemUserId: id ?? '' });
+  } = useGetCustomersQuery({ partyId, systemUserId: id ?? '', partyUuid });
 
   const {
     data: agentDelegations,
@@ -41,8 +41,8 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     isLoading: isLoadingAssignedCustomers,
   } = useGetAssignedCustomersQuery({
     partyId: partyId,
-    facilitatorId: partyUuid,
     systemUserId: id || '',
+    partyUuid,
   });
 
   return (

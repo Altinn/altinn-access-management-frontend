@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { ButtonProps } from '@altinn/altinn-components';
 import { Button } from '@altinn/altinn-components';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
@@ -10,34 +10,43 @@ import { Role, useDelegateMutation, useDelegationCheckQuery } from '@/rtk/featur
 import { SnackbarDuration, SnackbarMessageVariant } from '../Snackbar/SnackbarProvider';
 import { useSnackbar } from '../Snackbar';
 import { ActionError } from '@/resources/hooks/useActionError';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { Spinner } from '@digdir/designsystemet-react';
 
 interface DelegateRoleButtonProps extends Omit<ButtonProps, 'icon'> {
   accessRole: Role;
-  toParty?: Party;
   fullText?: boolean;
   icon?: boolean;
   onDelegateError?: (role: Role, error: ActionError) => void;
+  onSelect?: () => void;
+  showSpinner?: boolean;
+  showWarning?: boolean;
 }
 
 export const DelegateRoleButton = ({
   accessRole,
-  toParty,
   fullText = false,
   variant = 'text',
   icon = true,
   onDelegateError,
+  onSelect,
+  showSpinner = false,
+  showWarning = false,
   ...props
 }: DelegateRoleButtonProps) => {
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbar();
-  const { data: representingParty } = useGetReporteePartyQuery();
+  const { fromParty, toParty } = usePartyRepresentation();
   const [delegateRole, { isLoading: delegateRoleLoading }] = useDelegateMutation();
 
-  const { data: delegationCheckResult, isLoading: delegationCheckLoading } =
-    useDelegationCheckQuery({
-      rightownerUuid: representingParty?.partyUuid || '',
-      roleUuid: accessRole.id,
-    });
+  const {
+    data: delegationCheckResult,
+    isLoading: delegationCheckLoading,
+    isUninitialized: delegationCheckUninitialized,
+  } = useDelegationCheckQuery({
+    rightownerUuid: fromParty?.partyUuid || '',
+    roleUuid: accessRole.id,
+  });
 
   const canDelegate =
     delegationCheckResult?.canDelegate && !delegateRoleLoading && !delegationCheckLoading;
@@ -55,7 +64,7 @@ export const DelegateRoleButton = ({
       openSnackbar(snackbarData);
     };
 
-    if (representingParty) {
+    if (fromParty) {
       delegateRole({
         to: toParty?.partyUuid || '',
         roleId: accessRole.id,
@@ -74,7 +83,31 @@ export const DelegateRoleButton = ({
         });
     }
   };
+  if (showSpinner && (delegationCheckUninitialized || delegationCheckLoading)) {
+    return (
+      <Spinner
+        data-size='xs'
+        aria-hidden='true'
+      />
+    );
+  }
 
+  if (showWarning && !canDelegate && !delegationCheckUninitialized && !delegationCheckLoading) {
+    return (
+      <Button
+        data-size='xs'
+        onClick={onSelect}
+        variant='text'
+        aria-label={t('delegation_modal.delegation_check_not_delegable')}
+        size='sm'
+      >
+        <ExclamationmarkTriangleIcon
+          aria-hidden='true'
+          fontSize={'1.2rem'}
+        />
+      </Button>
+    );
+  }
   return (
     <Button
       icon={icon ? PlusCircleIcon : undefined}

@@ -260,12 +260,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             int partyId = 51329012;
-            string facilitatorId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?facilitatorId={facilitatorId}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?partyuuid={partyUuid}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -280,12 +280,12 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             int partyId = 51329012;
-            string facilitatorId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?facilitatorId={facilitatorId}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}?partyuuid={partyUuid}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);

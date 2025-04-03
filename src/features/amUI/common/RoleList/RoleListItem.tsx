@@ -6,7 +6,6 @@ import type { Party } from '@/rtk/features/lookupApi';
 interface RoleLIstItemProps {
   role: ExtendedRole;
   onClick: () => void;
-  toParty?: Party;
   active?: boolean;
   controls: React.ReactNode;
   loading?: boolean;
@@ -30,6 +29,7 @@ export const RoleListItem = ({
       theme='subtle'
       loading={loading}
       controls={controls}
+      titleAs={'h3'}
     />
   );
 };

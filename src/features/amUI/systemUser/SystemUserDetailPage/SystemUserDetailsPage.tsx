@@ -10,6 +10,7 @@ import { PageWrapper } from '@/components';
 import { SystemUserPath } from '@/routes/paths';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
@@ -23,6 +24,8 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
   const partyId = getCookie('AltinnPartyId');
+
+  const { data: reporteeData } = useGetReporteeQuery();
 
   const {
     data: systemUser,
@@ -44,9 +47,6 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const handleNavigateBack = (): void => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
   };
-
-  const numberOfRights =
-    (systemUser?.resources?.length || 0) + (systemUser?.accessPackages?.length || 0);
 
   return (
     <PageWrapper>
@@ -73,12 +73,8 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           {systemUser && (
             <div className={classes.systemUserDetails}>
               <SystemUserHeader
-                title={
-                  numberOfRights === 1
-                    ? 'systemuser_detailpage.header_single'
-                    : 'systemuser_detailpage.header'
-                }
-                integrationTitle={systemUser.integrationTitle}
+                title={systemUser.integrationTitle}
+                subTitle={reporteeData?.name}
               />
               <RightsList
                 resources={systemUser.resources}

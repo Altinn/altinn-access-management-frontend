@@ -10,10 +10,3 @@
   flex-direction: column;
   gap: 1rem;
 }
-
-.areas {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 0 0.5rem 0;
-}

@@ -18,6 +18,7 @@ import { PackageSearch } from './AccessPackages/PackageSearch';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import type { DelegationAction } from './EditModal';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { useAreaExpandedContextOrLocal } from '../AccessPackageList/AccessPackageExpandedContext';
 
 export interface DelegationModalProps {
   delegationType: DelegationType;
@@ -40,7 +41,7 @@ export const DelegationModalContent = ({
     setActionError,
   } = useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
-
+  const { closeAllAreas } = useAreaExpandedContextOrLocal();
   const onResourceSelection = (resource?: ServiceResource) => {
     setInfoView(true);
     setResourceToView(resource);
@@ -58,6 +59,7 @@ export const DelegationModalContent = ({
 
   const onClosing = () => {
     reset();
+    closeAllAreas();
   };
 
   useEffect(() => {

@@ -43,15 +43,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRegnskapsforerCustomers_ReturnsCustomers()
         {
             // Arrange
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _regnskapsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerCustomers.json");
-            List<AgentDelegationPartyFE> expectedResponse = Util.GetMockData<List<AgentDelegationPartyFE>>(path);
+            List<CustomerPartyFE> expectedResponse = Util.GetMockData<List<CustomerPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/customers");
-            List<AgentDelegationPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationPartyFE>>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+            List<CustomerPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<CustomerPartyFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -66,15 +66,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRevisorCustomers_ReturnsCustomers()
         {
             // Arrange
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _revisorSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorCustomers.json");
-            List<AgentDelegationPartyFE> expectedResponse = Util.GetMockData<List<AgentDelegationPartyFE>>(path);
+            List<CustomerPartyFE> expectedResponse = Util.GetMockData<List<CustomerPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/customers");
-            List<AgentDelegationPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationPartyFE>>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+            List<CustomerPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<CustomerPartyFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -89,15 +89,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetForretningsforerCustomers_ReturnsCustomers()
         {
             // Arrange
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string partyId = "51329012";
+            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string systemUserId = _forretningsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerCustomers.json");
-            List<AgentDelegationPartyFE> expectedResponse = Util.GetMockData<List<AgentDelegationPartyFE>>(path);
+            List<CustomerPartyFE> expectedResponse = Util.GetMockData<List<CustomerPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/customers");
-            List<AgentDelegationPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationPartyFE>>();
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+            List<CustomerPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<CustomerPartyFE>>();
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
@@ -119,7 +119,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}");
             List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
@@ -142,7 +142,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}");
             List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
@@ -165,7 +165,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}");
             List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
@@ -186,10 +186,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
             
-            AgentDelegationRequest dto = new AgentDelegationRequest
+            AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
-                CustomerId = Guid.Parse(customerId),
-                FacilitatorId = Guid.Parse(partyUuid)
+                CustomerId = Guid.Parse(customerId)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -201,7 +200,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}", content);
             AgentDelegationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<AgentDelegationFE>();
 
             // Assert
@@ -222,10 +221,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string systemUserId = _revisorSystemUserId;
             string customerId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             
-            AgentDelegationRequest dto = new AgentDelegationRequest
+            AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
-                CustomerId = Guid.Parse(customerId),
-                FacilitatorId = Guid.Parse(partyUuid)
+                CustomerId = Guid.Parse(customerId)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -237,7 +235,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}", content);
             AgentDelegationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<AgentDelegationFE>();
 
             // Assert
@@ -258,10 +256,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
             
-            AgentDelegationRequest dto = new AgentDelegationRequest
+            AgentDelegationRequestFE dto = new AgentDelegationRequestFE
             {
                 CustomerId = Guid.Parse(customerId),
-                FacilitatorId = Guid.Parse(partyUuid)
             };
             string jsonDto = JsonSerializer.Serialize(dto);
             HttpContent content = new StringContent(jsonDto, Encoding.UTF8, "application/json");
@@ -269,7 +266,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}", content);
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -291,7 +288,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation/{delegationId}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -315,7 +312,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{partyUuid}/{systemUserId}/delegation/{delegationId}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);

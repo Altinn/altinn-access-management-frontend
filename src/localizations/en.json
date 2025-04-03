@@ -83,6 +83,8 @@
     "account_others": "Andre kontoer",
     "menu-label": "Menu",
     "change-label": "Change",
+    "search-label": "Find user",
+    "search-hits": "hits",
     "back-label": "Back",
     "all_services": "All services",
     "chat": "Get help on chat",
@@ -246,7 +248,7 @@
     "delete_singleRight_error_message": "Failed to delete access to "
   },
   "access_packages": {
-    "current_access_packages_title": "Power of attorney to {{count}} access package(s)",
+    "current_access_packages_title": "{{count}} access packages",
     "give_new_button": "Give power of attorney to new access package",
     "other_packages_in_area_title": "Other available packages in this area:",
     "package_delegation_success": "{{name}} has been successfully granted power of attorney over {{accessPackage}}.",
@@ -262,7 +264,8 @@
     }
   },
   "role": {
-    "current_roles_title": "Power of attorney to {{count}} roles(s)",
+    "current_roles_title": "{{count}} administrator accesses",
+    "roles_description": "This access area includes the powers to manage access for your business. No resources or services are linked to this access.",
     "role_delegation_success": "{{name}} has been successfully granted power of attorney over {{role}}.",
     "role_delegation_error": "Failed to grant power of attorney over {{role}} to {{name}}.",
     "role_deletion_success": "Power of attorney over {{role}} has been successfully revoked for {{name}}.",
@@ -307,7 +310,7 @@
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
     "inherited_role_org_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted.",
-    "delegation_check_not_delegable": "You cannot grant this access package because you  lack access yourself.",
+    "delegation_check_not_delegable": "You cannot grant this access package because you lack access yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
@@ -425,7 +428,6 @@
   },
   "systemuser_creationpage": {
     "page_title": "Create new system access - Altinn",
-    "banner_title": "Create new system access",
     "sub_title": "Select vendor system",
     "content_text1": "If you are unsure about which vendor system to choose, we recommend that you contact the provider of the vendor system. Altinn has not made any assessment of the quality and safety of the vendor systems in the list.",
     "pull_down_menu_label": "Choose vendor system",
@@ -444,8 +446,6 @@
     "creating_systemuser": "Creating system access..."
   },
   "systemuser_detailpage": {
-    "header": "The system access {{integrationTitle}} has these power of attorney for {{companyName}}",
-    "header_single": "The system access {{integrationTitle}} has this power of attorney for {{companyName}}",
     "edit_systemuser": "Edit system access",
     "load_systemuser_error": "Could not load system access",
     "loading_systemuser": "loading system access",
@@ -516,7 +516,7 @@
   "systemuser_agent_request": {
     "page_title": "Create system access for customer relations - Altinn",
     "banner_title": "Create system access for customer relations",
-    "system_description": "Through a system access {{vendorName}} will be granted power of attorney to complete tasks on behalf of {{companyName}} customers. To complete the setup, the customers must be added as customer relations in Altinn."
+    "system_description": "Through a system access <strong>{{vendorName}}</strong> will be granted power of attorney to complete tasks on behalf of <strong>{{companyName}}</strong> customers. To complete the setup, customers must be added in Altinn."
   },
   "systemuser_agent_delegation": {
     "page_title": "System access for customer relations - Altinn",
@@ -524,11 +524,14 @@
     "load_customers_error": "Could not load customers",
     "load_assigned_customers_error": "Could not load customers for system access",
     "assign_customers": "Which customers should be assigned to the system access {{integrationTitle}}?",
-    "assigned_customers_header": "Customers in system access",
+    "confirm_close": "Bekreft og lukk",
+    "assigned_customers_header": "Customers connected to system access",
     "no_assigned_customers": "This system access has no customers",
+    "access_package_single": "Power of attorney for 1 access package",
+    "access_package_plural": "Power of attorney for {{accessPackageCount}} access packages`",
     "add_customers": "Add customers",
-    "edit_customers": "Manage customers",
-    "customer_search": "Search customers",
+    "edit_customers": "Add or remove customers",
+    "customer_search": "Search for customer",
     "remove_from_system_user": "Remove from system access",
     "remove_from_system_user_aria": "Remove {{customerName}} from system access",
     "add_to_system_user": "Add to system access",

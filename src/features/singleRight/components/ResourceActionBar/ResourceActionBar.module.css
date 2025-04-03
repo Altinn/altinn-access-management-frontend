@@ -19,6 +19,10 @@
   color: var(--ds-color-danger-text-default);
 }
 
+.notDelegableContainer::before {
+  display: none;
+}
+
 .loadingText {
   display: flex;
   gap: 12px;
