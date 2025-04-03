@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
+import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 
 interface RoleSectionProps {
   numberOfAccesses?: number;
@@ -36,6 +37,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
+      <OldRolesAlert />
       <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
       <RoleList
         availableActions={[

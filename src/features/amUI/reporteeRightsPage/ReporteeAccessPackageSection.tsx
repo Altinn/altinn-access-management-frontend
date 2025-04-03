@@ -9,6 +9,7 @@ import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { AccessPackageInfoModal } from '../userRightsPage/AccessPackageSection/AccessPackageInfoModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 
 interface ReporteeAccessPackageSectionProps {
   numberOfAccesses?: number;
@@ -37,6 +38,7 @@ export const ReporteeAccessPackageSection = ({
       >
         {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
       </Heading>
+      <OldRolesAlert />
       <AccessPackageList
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm
