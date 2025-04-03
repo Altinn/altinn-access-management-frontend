@@ -12,9 +12,8 @@ import {
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import Lottie from 'lottie-react';
-import { set } from 'cypress/types/lodash';
 
-import checkMarkAnimation from '@/assets/testCheckmark.json';
+import checkMarkAnimation from '@/assets/AltinnCheckmarkAnimation.json';
 import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 import {
   useGetUserDelegationsQuery,
