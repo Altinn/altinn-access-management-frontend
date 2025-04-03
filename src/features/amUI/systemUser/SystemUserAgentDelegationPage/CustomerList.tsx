@@ -29,8 +29,8 @@ interface CustomerListProps {
   delegations?: AgentDelegation[];
   loadingIds?: string[];
   errorIds?: string[];
-  onAddCustomer?: (customerId: string) => void;
-  onRemoveCustomer?: (delegationToRemove: AgentDelegation) => void;
+  onAddCustomer?: (customerId: string, customerName: string) => void;
+  onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
   children?: React.ReactNode;
 }
 
@@ -122,8 +122,8 @@ interface ListControlsProps {
   delegation?: AgentDelegation;
   isLoading?: boolean;
   isError?: boolean;
-  onRemoveCustomer?: (delegationToRemove: AgentDelegation) => void;
-  onAddCustomer?: (customerId: string) => void;
+  onRemoveCustomer?: (delegationToRemove: AgentDelegation, customerName: string) => void;
+  onAddCustomer?: (customerId: string, customerName: string) => void;
 }
 const ListControls = ({
   customer,
@@ -163,7 +163,7 @@ const ListControls = ({
           aria-label={t('systemuser_agent_delegation.remove_from_system_user_aria', {
             customerName: customer.name,
           })}
-          onClick={() => onRemoveCustomer(delegation)}
+          onClick={() => onRemoveCustomer(delegation, customer.name)}
         >
           <MinusCircleIcon /> {t('systemuser_agent_delegation.remove_from_system_user')}
         </Button>
@@ -175,7 +175,7 @@ const ListControls = ({
           aria-label={t('systemuser_agent_delegation.add_to_system_user_aria', {
             customerName: customer.name,
           })}
-          onClick={() => onAddCustomer(customer.id)}
+          onClick={() => onAddCustomer(customer.id, customer.name)}
         >
           <PlusCircleIcon /> {t('systemuser_agent_delegation.add_to_system_user')}
         </Button>

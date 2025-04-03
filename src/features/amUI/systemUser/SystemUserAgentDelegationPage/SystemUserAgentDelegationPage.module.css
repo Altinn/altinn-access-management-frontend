@@ -17,3 +17,8 @@
 .customerHeading {
   margin-top: var(--ds-size-12);
 }
+
+.customerListSnackbar {
+  align-self: flex-end;
+  max-width: 20rem;
+}

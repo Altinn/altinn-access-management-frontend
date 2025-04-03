@@ -525,6 +525,8 @@
     "load_assigned_customers_error": "Could not load customers for system access",
     "assign_customers": "Which customers should be assigned to the system access {{integrationTitle}}?",
     "confirm_close": "Bekreft og lukk",
+    "customer_added": "{{customerName}} is added to the system access",
+    "customer_removed": "{{customerName}} is removed from the system access",
     "assigned_customers_header": "Customers connected to system access",
     "no_assigned_customers": "This system access has no customers",
     "access_package_single": "Power of attorney for 1 access package",
