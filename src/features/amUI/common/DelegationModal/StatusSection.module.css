@@ -1,0 +1,24 @@
+.inherited {
+  display: flex;
+}
+
+.inheritedInfoIcon {
+  color: var(--ds-color-info-base-default);
+  margin-right: 0.3rem;
+}
+
+.infoLine {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.delegationCheckInfoIcon {
+  color: var(--ds-color-warning-base-default);
+  margin-right: 0.3rem;
+}
+
+.hasPackageInfoIcon {
+  color: var(--ds-color-success-base-default);
+  margin-right: 0.3rem;
+}

@@ -20,9 +20,9 @@ import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
+import { StatusSection } from '../StatusSection';
 
 import classes from './AccessPackageInfo.module.css';
-import { StatusSection } from './StatusSection';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -154,9 +154,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           )}
 
           <StatusSection
-            accessPackage={accessPackage}
-            userHasPackage={userHasPackage}
+            userHasAccess={userHasPackage}
             showMissingRightsMessage={showMissingRightsMessage}
+            inheritedFrom={accessPackage.inherited ? accessPackage.inheritedFrom?.name : undefined}
           />
 
           <Paragraph variant='long'>{accessPackage?.description}</Paragraph>

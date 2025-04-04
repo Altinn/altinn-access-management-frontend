@@ -5,31 +5,28 @@ import {
   InformationSquareFillIcon,
 } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-
-import classes from './AccessPackageInfo.module.css';
+import classes from './StatusSection.module.css';
 
 export const StatusSection = ({
-  accessPackage,
-  userHasPackage,
+  userHasAccess,
   showMissingRightsMessage,
+  inheritedFrom,
+  delegationCheckText,
 }: {
-  accessPackage: AccessPackage;
-  userHasPackage: boolean;
+  userHasAccess: boolean;
   showMissingRightsMessage: boolean;
+  inheritedFrom?: string;
+  delegationCheckText?: string;
 }) => {
   const { fromParty, toParty } = usePartyRepresentation();
 
-  if (!accessPackage) {
-    return null;
-  }
-
   return (
     <>
-      {userHasPackage && (
+      {userHasAccess && (
         <div className={classes.infoLine}>
           <CheckmarkCircleFillIcon
             fontSize='1.5rem'
@@ -45,7 +42,7 @@ export const StatusSection = ({
           </Paragraph>
         </div>
       )}
-      {accessPackage?.inherited && (
+      {inheritedFrom !== undefined && inheritedFrom.length > 0 && (
         <div className={classes.inherited}>
           <InformationSquareFillIcon
             fontSize='1.5rem'
@@ -56,7 +53,7 @@ export const StatusSection = ({
               i18nKey='delegation_modal.inherited_role_org_message'
               values={{
                 user_name: toParty?.name,
-                org_name: accessPackage.inheritedFrom?.name ?? fromParty?.name,
+                org_name: inheritedFrom ?? fromParty?.name,
               }}
             />
           </Paragraph>
@@ -69,7 +66,14 @@ export const StatusSection = ({
             className={classes.delegationCheckInfoIcon}
           />
           <Paragraph data-size='xs'>
-            <Trans i18nKey='delegation_modal.delegation_check_not_delegable' />
+            <Trans
+              i18nKey={delegationCheckText ?? 'delegation_modal.delegation_check_not_delegable'}
+              components={{ b: <strong /> }}
+              values={{
+                you: t('common.you_uppercase'),
+                reporteeorg: fromParty?.name,
+              }}
+            />
           </Paragraph>
         </div>
       )}

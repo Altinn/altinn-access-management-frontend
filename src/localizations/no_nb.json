@@ -311,7 +311,7 @@
     "package_services": "Gir tilgang til {{count}} tjenester",
     "has_package_message": "{{user_name}} har denne fullmakten.",
     "inherited_role_org_message": "{{user_name}} har tilgang til denne gjennom sin rolle i {{org_name}}. Den kan derfor ikke slettes.",
-    "delegation_check_not_delegable": "Du kan ikke gi denne tilgangspakken fordi du mangler tilgang til den selv.",
+    "delegation_check_not_delegable": "Du kan ikke gi denne fullmakten fordi du mangler den selv.",
     "technical_error_message": {
       "heading": "Oi! Noe gikk galt",
       "message": "Pga en teknisk feil ble ikke tjenesten delegert. Vennligst prøv på nytt eller kontakt Altinn brukerservice hvis feilen fortsetter.",
