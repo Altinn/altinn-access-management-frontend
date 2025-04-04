@@ -6,7 +6,6 @@ import { debounce } from '@/resources/utils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { AccessPackageList } from '@/features/amUI/common/AccessPackageList/AccessPackageList';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import type { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
