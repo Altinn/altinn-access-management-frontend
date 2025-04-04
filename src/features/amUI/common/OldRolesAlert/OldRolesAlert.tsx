@@ -23,9 +23,12 @@ export const OldRolesAlert = () => {
 
         <Paragraph>{t('a2Alerts.launchAlertContent')}</Paragraph>
         <DsLink asChild>
-          <Link to={`${getHostUrl()}ui/profile/`}>
+          <Link
+            to={`${getHostUrl()}ui/profile/`}
+            className={styles.link}
+          >
             {t('a2Alerts.launchAlertLinkText')}
-            {/* <ExternalLinkIcon title='external link' /> */}
+            <ExternalLinkIcon aria-hidden />
           </Link>
         </DsLink>
       </div>

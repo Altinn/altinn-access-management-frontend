@@ -6,6 +6,6 @@ export default {
   component: OldRolesAlert,
 } as Meta;
 
-export const Default: StoryObj<{}> = {
+export const Default: StoryObj = {
   args: {},
 };
