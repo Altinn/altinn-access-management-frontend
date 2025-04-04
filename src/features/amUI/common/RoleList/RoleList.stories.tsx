@@ -3,15 +3,15 @@ import { Provider } from 'react-redux';
 
 import store from '@/rtk/app/store';
 
-import { AccessPackageList } from './AccessPackageList';
+import { RoleList } from './RoleList';
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SnackbarProvider } from '../Snackbar/SnackbarProvider';
 
-type AreaListPropsAndCustomArgs = React.ComponentProps<typeof AccessPackageList>;
+type RoleListPropsAndCustomArgs = React.ComponentProps<typeof RoleList>;
 
 export default {
-  title: 'Features/AMUI/AreaList',
-  component: AccessPackageList,
+  title: 'Features/AMUI/RoleList',
+  component: RoleList,
   render: (args) => (
     <Provider store={store}>
       <SnackbarProvider>
@@ -19,13 +19,17 @@ export default {
           fromPartyUuid='123'
           toPartyUuid='456'
         >
-          <AccessPackageList {...args} />
+          <RoleList
+            {...args}
+            onActionError={(error) => console.log(`onActionError`, error)}
+            onSelect={(id) => console.log(`onselect: ${id}`)}
+          />
         </PartyRepresentationProvider>
       </SnackbarProvider>
     </Provider>
   ),
 } as Meta;
 
-export const Default: StoryObj<AreaListPropsAndCustomArgs> = {
+export const Default: StoryObj<RoleListPropsAndCustomArgs> = {
   args: {},
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@digdir/designsystemet-react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -28,8 +28,6 @@ import { PartyRepresentationProvider } from '../common/PartyRepresentationContex
 export const UserRightsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-
-  const navigate = useNavigate();
 
   const { data: reportee } = useGetReporteeQuery();
   const { data: party } = useGetPartyByUUIDQuery(id ?? '');
@@ -69,7 +67,6 @@ export const UserRightsPage = () => {
                         )
                       }
                     />
-
                     <RightsTabs
                       tabBadge={{
                         accessPackages: allAccesses.accessPackages?.length ?? 0,

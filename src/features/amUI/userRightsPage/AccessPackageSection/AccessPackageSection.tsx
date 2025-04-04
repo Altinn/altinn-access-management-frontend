@@ -10,6 +10,7 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { ActiveDelegations } from './ActiveDelegations';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
+import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 
 export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: number }) => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
         </Heading>
+        <OldRolesAlert />
         <DelegationModal
           delegationType={DelegationType.AccessPackage}
           availableActions={[

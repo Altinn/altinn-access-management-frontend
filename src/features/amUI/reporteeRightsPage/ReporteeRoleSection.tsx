@@ -8,6 +8,7 @@ import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
+import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
 
 interface ReporteeRoleSectionProps {
   numberOfAccesses?: number;
@@ -28,6 +29,7 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
+      <OldRolesAlert />
       <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
       <RoleList
         onSelect={(role) => {

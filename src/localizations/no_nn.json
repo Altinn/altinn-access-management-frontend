@@ -261,7 +261,7 @@
   },
   "role": {
     "current_roles_title": "{{count}} administratortilganger",
-    "roles_description": "Dette fullmaktsområdet omfattar fullmakter til å administrere tilgangar for verksemda. Det er ikkje knytt nokre ressursar eller tenester til desse tilgangane.",
+    "roles_description": "Her finner du fullmakter for å administrere tilganger for virksomheten. Det er ikke knyttet noen ressurser eller tjenester til disse tilgangene.",
     "role_delegation_success": "{{name}} har nå fått fullmakt til {{role}}.",
     "role_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{role}}.",
     "role_deletion_success": "Fullmakten til {{role}} er fjernet fra {{name}}.",
@@ -287,7 +287,6 @@
     "access_packages_title": "Tilgangspakker",
     "single_rights_title": "Tjenester",
     "roles_title": "Administratortilganger",
-    "roles_description": "Administratortilganger gir tilgang til å gi fullmakter til andre brukarar. Det er ikkje knytt nokon spesifikke tenester til desse fullmaktene.",
     "resource_type_text": "Enkelttjeneste",
     "delete_confirm_message": "Er du sikker på at du vil slette denne?"
   },
@@ -341,6 +340,11 @@
     "modal_title": "Legg til ny person eller virksemnd",
     "trigger_button": "Legg til brukar",
     "add_button": "Legg til brukar"
+  },
+  "a2Alerts": {
+    "launchAlertHeading": "Vi fornyer Altinn",
+    "launchAlertContent": "Denne brukeren kan også ha fullmakter fra gamle Altinn.",
+    "launchAlertLinkText": "Se fullmakter fra gamle Altinn"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",
