@@ -523,6 +523,8 @@
     "load_assigned_customers_error": "Kunne ikke laste tilknyttede kunder",
     "assign_customers": "Hvilke kunder skal knyttes til systemtilgangen {{integrationTitle}}?",
     "confirm_close": "Bekreft og lukk",
+    "customer_added": "{{customerName}} er lagt til systemtilgangen",
+    "customer_removed": "{{customerName}} er fjernet fra systemtilgangen",
     "assigned_customers_header": "Kunder tilknyttet systemtilgangen",
     "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
     "access_package_single": "Fullmakt til 1 tilgangspakke",
