@@ -3,7 +3,7 @@ import { useDelegatePackageMutation } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 
 export const useDelegateAccessPackage = () => {
-  const [delegate] = useDelegatePackageMutation();
+  const [delegate, { isLoading }] = useDelegatePackageMutation();
 
   const delegatePackage = (
     toParty: Party,
@@ -21,5 +21,5 @@ export const useDelegateAccessPackage = () => {
       });
   };
 
-  return delegatePackage;
+  return { delegatePackage, isLoading };
 };

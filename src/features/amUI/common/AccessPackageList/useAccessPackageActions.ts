@@ -24,7 +24,7 @@ export const useAccessPackageActions = ({
   onRevokeSuccess,
   onRevokeError,
 }: useAccessPackageActionsProps) => {
-  const delegatePackage = useDelegateAccessPackage();
+  const { delegatePackage, isLoading: isDelegationLoading } = useDelegateAccessPackage();
   const revokePackage = useRevokeAccessPackage();
 
   const { t } = useTranslation();
@@ -129,5 +129,5 @@ export const useAccessPackageActions = ({
   const onRequest = (accessPackage: AccessPackage) =>
     console.error('requestPackage is not implemented');
 
-  return { onDelegate, onRevoke, onRequest };
+  return { onDelegate, onRevoke, onRequest, isDelegationLoading };
 };
