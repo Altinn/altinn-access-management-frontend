@@ -3,6 +3,7 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
+    "open": "Åpne",
     "back": "Tilbake",
     "changes_made_msg": "Endringer gjort. Klikk på lagre for å gjøre dem gjeldende",
     "status_code": "Statuskode",
@@ -247,6 +248,9 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
+    "given_packages_title": "Mottatte tilgangspakker",
+    "available_packages_title": "Tilgjengelige tilgangspakker",
+    "other_available": "Andre tilgjengelige",
     "current_access_packages_title": "{{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
