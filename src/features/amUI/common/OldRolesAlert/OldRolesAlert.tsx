@@ -13,7 +13,7 @@ export const OldRolesAlert = () => {
       <div className={styles.container}>
         <Heading
           data-size='xs'
-          level={2}
+          level={3}
           style={{
             marginBottom: 'var(--ds-size-2)',
           }}
