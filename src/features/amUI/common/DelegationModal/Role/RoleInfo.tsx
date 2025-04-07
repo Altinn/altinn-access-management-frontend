@@ -1,26 +1,26 @@
 import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Avatar } from '@altinn/altinn-components';
 import { useMemo } from 'react';
-import { ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from '@navikt/aksel-icons';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 import {
   useDelegationCheckQuery,
   useGetRolesForUserQuery,
   type Role,
 } from '@/rtk/features/roleApi';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import { ErrorCode, getErrorCodeTextKey } from '@/resources/utils/errorCodeUtils';
 
 import { RevokeRoleButton } from '../../RoleList/RevokeRoleButton';
 import { DelegateRoleButton } from '../../RoleList/DelegateRoleButton';
 import { RequestRoleButton } from '../../RoleList/RequestRoleButton';
 import { DelegationAction } from '../EditModal';
-
-import classes from './RoleInfo.module.css';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
-import { ActionError } from '@/resources/hooks/useActionError';
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
+import { StatusSection } from '../StatusSection';
+
+import classes from './RoleInfo.module.css';
 
 export interface PackageInfoProps {
   role: Role;
@@ -51,7 +51,7 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
 
   const userHasRole = !!assignment;
   const userHasInheritedRole = assignment?.inherited && assignment.inherited.length > 0;
-  const inheritedFromRoleName = (userHasInheritedRole && assignment?.inherited[0]?.name) ?? null;
+  const inheritedFromRoleName = userHasInheritedRole ? assignment?.inherited[0]?.name : undefined;
 
   return (
     <div className={classes.container}>
@@ -91,45 +91,20 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
           />
         </Alert>
       )}
+
+      <StatusSection
+        userHasAccess={userHasRole}
+        showMissingRightsMessage={!userHasRole && !delegationCheckResult?.canDelegate}
+        inheritedFrom={inheritedFromRoleName}
+        delegationCheckText={
+          delegationCheckResult?.detailCode !== ErrorCode.Unknown
+            ? getErrorCodeTextKey(delegationCheckResult?.detailCode)
+            : 'role.cant_delegate_generic'
+        }
+      />
+
       <Paragraph>{role?.description}</Paragraph>
-      {!userHasRole && !delegationCheckResult?.canDelegate && (
-        <div className={classes.inherited}>
-          <ExclamationmarkTriangleFillIcon
-            fontSize='1.5rem'
-            className={classes.nonDelegableIcon}
-          />
-          <Paragraph data-size='xs'>
-            {delegationCheckResult?.detailCode === ErrorCode.Unknown ? (
-              <Trans i18nKey='role.cant_delegate_generic' />
-            ) : (
-              <Trans
-                i18nKey={getErrorCodeTextKey(delegationCheckResult?.detailCode)}
-                components={{ b: <strong /> }}
-                values={{
-                  you: t('common.you_uppercase'),
-                  serviceowner: role.provider?.name,
-                  reporteeorg: fromParty?.name,
-                }}
-              />
-            )}
-          </Paragraph>
-        </div>
-      )}
-      {userHasInheritedRole && (
-        <div className={classes.inherited}>
-          <InformationSquareFillIcon
-            fontSize='1.5rem'
-            className={classes.inheritedInfoIcon}
-          />
-          <Paragraph data-size='xs'>
-            <Trans
-              i18nKey='role.inherited_role_message'
-              values={{ user_name: toParty?.name || '', role_name: inheritedFromRoleName }}
-              components={{ b: <strong /> }}
-            />
-          </Paragraph>
-        </div>
-      )}
+
       <div className={classes.actions}>
         {!userHasRole && availableActions.includes(DelegationAction.REQUEST) && (
           <RequestRoleButton

@@ -11,6 +11,7 @@
     "broennoeysund_register": "The Brønnøysund Register Center",
     "error_message": "Error message",
     "loading": "Loading",
+    "success": "Success",
     "error_status_code": "Error status code",
     "error_time_stamp": "Time stamp",
     "date": "Date",
@@ -313,8 +314,9 @@
     "error_message": "Failed to give power of attorney to {{name}}",
     "edit_success": "The power of attorney was updated",
     "package_services": "Grants access to {{count}} services",
-    "inherited_role_org_message": "<b>{{user_name}}</b> has access to this through their role in <b>{{org_name}}</b>. Therefore, it cannot be deleted.",
-    "delegation_check_not_delegable": "You cannot grant this access package because you lack access yourself.",
+    "has_package_message": "{{user_name}} has this power of attorney.",
+    "inherited_role_org_message": "{{user_name}} has access to this through their role in {{org_name}}. Therefore, it cannot be deleted.",
+    "delegation_check_not_delegable": "You cannot grant this access because you lack it yourself.",
     "specific_rights": {
       "missing_role_message": "You cannot delegate the entire service because you lack some of the rights yourself. The general manager or chief administrator can grant you access.",
       "missing_srr_right_message": "{{reportee}} is not given permission from {{resourceOwner}} to delegate the whole service. Contact them if you want to change this."
