@@ -1,15 +1,13 @@
 import React, { useRef, useState } from 'react';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { useActionError } from '@/resources/hooks/useActionError';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
-
-import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
+
+import { AccessPackageInfoModal } from './AccessPackageInfoModal';
 
 export const ActiveDelegations = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -23,6 +21,7 @@ export const ActiveDelegations = () => {
       <AccessPackageList
         isLoading={isLoading}
         showAllPackages
+        minimizeAvailablePackages
         onSelect={(accessPackage) => {
           setModalItem(accessPackage);
           modalRef.current?.showModal();
