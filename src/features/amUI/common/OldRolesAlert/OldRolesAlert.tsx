@@ -1,13 +1,20 @@
-import { getHostUrl } from '@/resources/utils/pathUtils';
 import { useTranslation } from 'react-i18next';
 
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
 import { Alert, Heading, Paragraph, Link as DsLink } from '@digdir/designsystemet-react';
 import styles from './OldRolesAlert.module.css';
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+import { getRedirectToSevicesAvailableForUserUrl } from '@/resources/utils';
+import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
 
 export const OldRolesAlert = () => {
   const { t } = useTranslation();
+  const { toParty, fromParty, selfParty } = usePartyRepresentation();
+
+  const { userID, partyID } = useFetchRecipientInfo(toParty?.partyUuid ?? '', null);
+
+  const url = getRedirectToSevicesAvailableForUserUrl(userID, partyID);
   return (
     <Alert data-color='info'>
       <div className={styles.container}>
@@ -24,7 +31,7 @@ export const OldRolesAlert = () => {
         <Paragraph>{t('a2Alerts.launchAlertContent')}</Paragraph>
         <DsLink asChild>
           <Link
-            to={`${getHostUrl()}ui/profile/`}
+            to={url}
             className={styles.link}
           >
             {t('a2Alerts.launchAlertLinkText')}
