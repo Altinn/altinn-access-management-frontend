@@ -31,6 +31,7 @@ export const ReporteeAccessPackageSection = ({
 
   return (
     <>
+      <OldRolesAlert />
       <Heading
         level={2}
         data-size='2xs'
@@ -38,7 +39,6 @@ export const ReporteeAccessPackageSection = ({
       >
         {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
       </Heading>
-      <OldRolesAlert />
       <AccessPackageList
         availableActions={[DelegationAction.REVOKE, DelegationAction.REQUEST]}
         useDeleteConfirm

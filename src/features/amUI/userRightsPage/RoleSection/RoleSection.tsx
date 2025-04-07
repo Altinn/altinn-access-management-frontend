@@ -30,6 +30,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
 
   return (
     <>
+      <OldRolesAlert />
       <Heading
         level={2}
         data-size='2xs'
@@ -37,7 +38,6 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
       </Heading>
-      <OldRolesAlert />
       <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
       <RoleList
         availableActions={[

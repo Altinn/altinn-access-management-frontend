@@ -10,17 +10,16 @@ import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
 
 export const OldRolesAlert = () => {
   const { t } = useTranslation();
-  const { toParty, fromParty, selfParty } = usePartyRepresentation();
-
+  const { toParty } = usePartyRepresentation();
   const { userID, partyID } = useFetchRecipientInfo(toParty?.partyUuid ?? '', null);
-
   const url = getRedirectToSevicesAvailableForUserUrl(userID, partyID);
+
   return (
     <Alert data-color='info'>
       <div className={styles.container}>
         <Heading
           data-size='xs'
-          level={3}
+          level={2}
           style={{
             marginBottom: 'var(--ds-size-2)',
           }}

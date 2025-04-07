@@ -22,6 +22,7 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
   return (
     party && (
       <>
+        <OldRolesAlert />
         <Heading
           level={2}
           data-size='2xs'
@@ -29,7 +30,6 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
         </Heading>
-        <OldRolesAlert />
         <DelegationModal
           delegationType={DelegationType.AccessPackage}
           availableActions={[
