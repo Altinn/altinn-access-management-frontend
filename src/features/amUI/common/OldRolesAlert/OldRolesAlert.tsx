@@ -36,8 +36,6 @@ export const OldRolesAlert = () => {
           <Link
             to={url}
             className={styles.link}
-            target='_blank'
-            rel='noopener noreferrer'
           >
             {t('a2Alerts.launchAlertLinkText')}
             <ExternalLinkIcon aria-hidden />
