@@ -343,8 +343,8 @@
   },
   "a2Alerts": {
     "launchAlertHeading": "Vi fornyer Altinn",
-    "launchAlertContent": "Denne brukeren kan også ha fullmakter fra gamle Altinn.",
-    "launchAlertLinkText": "Se fullmakter fra gamle Altinn"
+    "launchAlertContent": "Denne brukeren kan også ha fullmakter fra tidligere Altinn.",
+    "launchAlertLinkText": "Se fullmakter fra tidligere Altinn"
   },
   "user_role": {
     "SREVA": "Revisor registrert i revisorregisteret",

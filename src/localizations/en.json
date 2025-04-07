@@ -347,8 +347,8 @@
   },
   "a2Alerts": {
     "launchAlertHeading": "We are renewing Altinn",
-    "launchAlertContent": "This user may also have authorizations from the old Altinn.",
-    "launchAlertLinkText": "View authorizations from the old Altinn"
+    "launchAlertContent": "This user may also have authorizations from the previous Altinn.",
+    "launchAlertLinkText": "View authorizations from the previous Altinn"
   },
   "user_role": {
     "SREVA": "Auditor registered in the registry of auditors",
