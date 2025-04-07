@@ -24,9 +24,7 @@ export const OldRolesAlert = () => {
         <Heading
           data-size='xs'
           level={2}
-          style={{
-            marginBottom: 'var(--ds-size-2)',
-          }}
+          className={styles.heading}
         >
           {t('a2Alerts.launchAlertHeading')}
         </Heading>

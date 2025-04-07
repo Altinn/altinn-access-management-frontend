@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.4rem;
 }
 
 .link {
@@ -9,4 +9,8 @@
   flex-direction: row;
   align-items: center;
   gap: 0.2rem;
+}
+
+.heading {
+  margin-bottom: var(--ds-size-2);
 }
