@@ -1,3 +1,9 @@
+.statusSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .inherited {
   display: flex;
 }

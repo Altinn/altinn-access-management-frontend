@@ -24,8 +24,15 @@ export const StatusSection = ({
 }) => {
   const { fromParty, toParty } = usePartyRepresentation();
 
+  if (!userHasAccess && !showMissingRightsMessage && !inheritedFrom) {
+    return null;
+  }
+
   return (
-    <>
+    <div
+      className={classes.statusSection}
+      aria-live='polite'
+    >
       {userHasAccess && (
         <div className={classes.infoLine}>
           <CheckmarkCircleFillIcon
@@ -77,6 +84,6 @@ export const StatusSection = ({
           </Paragraph>
         </div>
       )}
-    </>
+    </div>
   );
 };

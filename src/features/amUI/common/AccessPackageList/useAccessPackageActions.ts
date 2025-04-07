@@ -25,7 +25,8 @@ export const useAccessPackageActions = ({
   onRevokeError,
 }: useAccessPackageActionsProps) => {
   const { delegatePackage, isLoading: isDelegationLoading } = useDelegateAccessPackage();
-  const revokePackage = useRevokeAccessPackage();
+  const { revokePackage, isLoading: isRevokeLoading } = useRevokeAccessPackage();
+  const isLoading = isDelegationLoading || isRevokeLoading;
 
   const { t } = useTranslation();
   const { data: toParty } = useGetPartyByUUIDQuery(toUuid ?? '');
@@ -126,8 +127,7 @@ export const useAccessPackageActions = ({
     );
   };
 
-  const onRequest = (accessPackage: AccessPackage) =>
-    console.error('requestPackage is not implemented');
+  const onRequest = () => console.error('requestPackage is not implemented');
 
-  return { onDelegate, onRevoke, onRequest, isDelegationLoading };
+  return { onDelegate, onRevoke, onRequest, isDelegationLoading, isRevokeLoading, isLoading };
 };

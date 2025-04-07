@@ -33,16 +33,24 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
   const { t } = useTranslation();
   const { fromParty, toParty } = usePartyRepresentation();
 
-  const { onDelegate, onRevoke, isDelegationLoading } = useAccessPackageActions({
+  const {
+    onDelegate,
+    onRevoke,
+    isLoading: isActionLoading,
+  } = useAccessPackageActions({
     toUuid: toParty?.partyUuid || '',
     onDelegateSuccess: () => {
-      setDelegationSuccess(true);
-      setTimeout(() => setDelegationSuccess(false), 2000);
+      setActionSuccess(true);
+      setTimeout(() => setActionSuccess(false), 2000);
+    },
+    onRevokeSuccess: () => {
+      setActionSuccess(true);
+      setTimeout(() => setActionSuccess(false), 2000);
     },
     onDelegateError: (_, error: ActionError) => setActionError(error),
     onRevokeError: (_, error: ActionError) => setActionError(error),
   });
-  const { actionError, setActionError, delegationSuccess, setDelegationSuccess } =
+  const { actionError, setActionError, actionSuccess, setActionSuccess } =
     useDelegationModalContext();
 
   const { data: activeDelegations, isFetching } = useGetUserDelegationsQuery({
@@ -107,10 +115,10 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
         </Heading>
       </div>
 
-      {isDelegationLoading || delegationSuccess ? (
+      {isActionLoading || actionSuccess ? (
         <LoadingAnimation
-          isLoading={isDelegationLoading}
-          displaySuccess={delegationSuccess}
+          isLoading={isActionLoading}
+          displaySuccess={actionSuccess}
         />
       ) : (
         <>
