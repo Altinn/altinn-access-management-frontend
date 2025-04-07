@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import { RoleInfoModal } from '../../common/RoleList/RoleInfoModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
 
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
+import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
 
 interface RoleSectionProps {
   numberOfAccesses?: number;
@@ -29,6 +30,7 @@ export const RoleSection = ({ numberOfAccesses }: RoleSectionProps) => {
 
   return (
     <>
+      <OldRolesAlert />
       <Heading
         level={2}
         data-size='2xs'
