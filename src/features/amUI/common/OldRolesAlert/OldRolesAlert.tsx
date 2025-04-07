@@ -5,14 +5,18 @@ import { Link } from 'react-router';
 import { Alert, Heading, Paragraph, Link as DsLink } from '@digdir/designsystemet-react';
 import styles from './OldRolesAlert.module.css';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { getRedirectToSevicesAvailableForUserUrl } from '@/resources/utils';
+import { getRedirectToServicesAvailableForUserUrl } from '@/resources/utils';
 import { useFetchRecipientInfo } from '@/resources/hooks/useFetchRecipientInfo';
+import { getHostUrl } from '@/resources/utils/pathUtils';
 
 export const OldRolesAlert = () => {
   const { t } = useTranslation();
   const { toParty } = usePartyRepresentation();
   const { userID, partyID } = useFetchRecipientInfo(toParty?.partyUuid ?? '', null);
-  const url = getRedirectToSevicesAvailableForUserUrl(userID, partyID);
+  const url =
+    userID && partyID
+      ? getRedirectToServicesAvailableForUserUrl(userID, partyID)
+      : `${getHostUrl()}ui/profile/`;
 
   return (
     <Alert data-color='info'>
