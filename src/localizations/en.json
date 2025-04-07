@@ -3,6 +3,7 @@
     "error": "Error",
     "restart": "Restart",
     "close": "Close",
+    "open": "Open",
     "back": "Back",
     "changes_made_msg": "Changes made. Click the save button to apply",
     "status_code": "Status code",
@@ -249,6 +250,9 @@
     "delete_singleRight_error_message": "Failed to delete access to "
   },
   "access_packages": {
+    "given_packages_title": "Currently held access packages",
+    "available_packages_title": "Available access packages",
+    "other_available": "Other available",
     "current_access_packages_title": "{{count}} access packages",
     "give_new_button": "Give power of attorney to new access package",
     "other_packages_in_area_title": "Other available packages in this area:",
@@ -526,7 +530,9 @@
     "load_customers_error": "Could not load customers",
     "load_assigned_customers_error": "Could not load customers for system access",
     "assign_customers": "Which customers should be assigned to the system access {{integrationTitle}}?",
-    "confirm_close": "Bekreft og lukk",
+    "confirm_close": "Confirm and close",
+    "customer_added": "{{customerName}} is added to the system access",
+    "customer_removed": "{{customerName}} is removed from the system access",
     "assigned_customers_header": "Customers connected to system access",
     "no_assigned_customers": "This system access has no customers",
     "access_package_single": "Power of attorney for 1 access package",

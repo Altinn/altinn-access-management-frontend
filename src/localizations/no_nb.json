@@ -3,6 +3,7 @@
     "error": "Feil",
     "restart": "Start på nytt",
     "close": "Lukk",
+    "open": "Åpne",
     "back": "Tilbake",
     "changes_made_msg": "Endringer gjort. Klikk på lagre for å gjøre dem gjeldende",
     "status_code": "Statuskode",
@@ -248,6 +249,9 @@
     "delete_singleRight_error_message": "Kunne ikke slette tilgang til "
   },
   "access_packages": {
+    "given_packages_title": "Mottatte tilgangspakker",
+    "available_packages_title": "Tilgjengelige tilgangspakker",
+    "other_available": "Andre tilgjengelige",
     "current_access_packages_title": "{{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt til ny tilgangspakke",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
@@ -525,6 +529,8 @@
     "load_assigned_customers_error": "Kunne ikke laste tilknyttede kunder",
     "assign_customers": "Hvilke kunder skal knyttes til systemtilgangen {{integrationTitle}}?",
     "confirm_close": "Bekreft og lukk",
+    "customer_added": "{{customerName}} er lagt til systemtilgangen",
+    "customer_removed": "{{customerName}} er fjernet fra systemtilgangen",
     "assigned_customers_header": "Kunder tilknyttet systemtilgangen",
     "no_assigned_customers": "Denne systemtilgangen har ingen kunder",
     "access_package_single": "Fullmakt til 1 tilgangspakke",
