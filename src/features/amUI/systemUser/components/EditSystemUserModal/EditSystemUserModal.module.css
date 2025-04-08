@@ -1,0 +1,18 @@
+.editSystemUserButton {
+  margin-left: auto;
+}
+
+.maxWidth {
+  max-width: 23rem;
+}
+
+.editSystemUserNameField {
+  margin-top: var(--ds-size-12);
+}
+
+.editSystemUserButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-size-2);
+}

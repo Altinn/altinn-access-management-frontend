@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 
 import {
   useGetAssignedCustomersQuery,
-  useGetAgentSystemUserQuery,
+  useGetSystemUserQuery,
   useGetCustomersQuery,
 } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
@@ -27,7 +27,8 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
     data: systemUser,
     isError: isLoadSystemUserError,
     isLoading: isLoadingSystemUser,
-  } = useGetAgentSystemUserQuery({ partyId, systemUserId: id || '' });
+    refetch: refetchSystemUser,
+  } = useGetSystemUserQuery({ partyId, systemUserId: id || '' });
 
   const {
     data: customers,
@@ -67,6 +68,7 @@ export const SystemUserAgentDelegationPage = (): React.ReactNode => {
             systemUser={systemUser}
             customers={customers}
             existingAgentDelegations={agentDelegations}
+            refetchSystemUser={refetchSystemUser}
           />
         )}
       </PageLayoutWrapper>

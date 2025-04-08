@@ -8,11 +8,6 @@
   margin-bottom: var(--ds-size-2);
 }
 
-/* TODO: bug in altinn-components, non-interactive listItem should not show outline on hover */
-.customerList li {
-  outline: none !important;
-}
-
 .searchBar {
   max-width: 20rem;
 }

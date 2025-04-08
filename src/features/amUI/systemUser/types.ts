@@ -31,6 +31,10 @@ export interface SystemUser {
   accessPackages: SystemUserAccessPackage[];
 }
 
+export interface SystemUserUpdate {
+  integrationTitle: string;
+}
+
 type RequestStatus = 'New' | 'Accepted' | 'Rejected' | 'Denied' | 'Timedout';
 
 export interface SystemUserRequest {
