@@ -3,7 +3,7 @@ import { Alert, Spinner, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
 
-import { useDeleteSystemuserMutation, useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
+import { useGetSystemUserQuery } from '@/rtk/features/systemUserApi';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { PageLayoutWrapper } from '@/features/amUI/common/PageLayoutWrapper';
 import { PageWrapper } from '@/components';
@@ -14,7 +14,7 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { RightsList } from '../components/RightsList/RightsList';
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
+import { EditSystemUserModal } from '../components/EditSystemUserModal/EditSystemUserModal';
 
 import classes from './SystemUserDetailsPage.module.css';
 
@@ -31,21 +31,15 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
     data: systemUser,
     isError: isLoadSystemUserError,
     isLoading: isLoadingSystemUser,
+    refetch: refetchSystemUser,
   } = useGetSystemUserQuery({ partyId, systemUserId: id || '' });
-
-  const [deleteSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
-    useDeleteSystemuserMutation();
-
-  const handleDeleteSystemUser = (): void => {
-    deleteSystemUser({ partyId, systemUserId: id || '' })
-      .unwrap()
-      .then(() => {
-        handleNavigateBack();
-      });
-  };
 
   const handleNavigateBack = (): void => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
+  };
+
+  const onSystemUserUpdated = (): void => {
+    refetchSystemUser();
   };
 
   return (
@@ -55,11 +49,9 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
           onNavigateBack={handleNavigateBack}
           pageActions={
             systemUser && (
-              <DeleteSystemUserPopover
-                integrationTitle={systemUser?.integrationTitle ?? ''}
-                isDeleteError={isDeleteError}
-                isDeletingSystemUser={isDeletingSystemUser}
-                handleDeleteSystemUser={handleDeleteSystemUser}
+              <EditSystemUserModal
+                systemUser={systemUser}
+                onSystemUserUpdated={onSystemUserUpdated}
               />
             )
           }

@@ -1,9 +1,0 @@
-.systemUserDeleteButtonContainer {
-  display: flex;
-  justify-content: flex-end;
-  flex: 1;
-}
-
-.deletePopover {
-  max-width: 23rem;
-}

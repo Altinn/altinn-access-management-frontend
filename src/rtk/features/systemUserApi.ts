@@ -8,6 +8,7 @@ import type {
   RegisteredSystemRights,
   AgentDelegationCustomer,
   AgentDelegation,
+  SystemUserUpdate,
 } from '@/features/amUI/systemUser/types';
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/`;
@@ -59,11 +60,14 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
-    updateSystemuser: builder.mutation<SystemUser, SystemUser & { partyId: string }>({
-      query: ({ partyId, ...systemUser }) => ({
-        url: `systemuser/${partyId}/${systemUser.id}`,
-        method: 'PUT',
-        body: systemUser,
+    updateSystemuser: builder.mutation<
+      void,
+      { partyId: string; systemUserId: string; systemUserUpdate: SystemUserUpdate }
+    >({
+      query: ({ partyId, systemUserId, systemUserUpdate }) => ({
+        url: `systemuser/${partyId}/${systemUserId}`,
+        method: 'PATCH',
+        body: systemUserUpdate,
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
@@ -79,9 +83,6 @@ export const systemUserApi = createApi({
     getAgentSystemUsers: builder.query<SystemUser[], string>({
       query: (partyId) => `systemuser/agent/${partyId}`,
       providesTags: [Tags.SystemUsers],
-    }),
-    getAgentSystemUser: builder.query<SystemUser, { partyId: string; systemUserId: string }>({
-      query: ({ partyId, systemUserId }) => `systemuser/agent/${partyId}/${systemUserId}`,
     }),
     deleteAgentSystemuser: builder.mutation<
       void,
@@ -210,7 +211,6 @@ export const {
   useAssignCustomerMutation,
   useRemoveCustomerMutation,
   useGetAgentSystemUsersQuery,
-  useGetAgentSystemUserQuery,
   useDeleteAgentSystemuserMutation,
   useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,

@@ -468,6 +468,8 @@
     "update_systemuser_error": "Kunne ikke oppdatere systemtilgang",
     "systemuser_deleted": "Systemtilgang slettet",
     "save_systemuser": "Lagre endringer",
+    "edit_systemuser_name_empty_error": "Navn kan ikke være tomt",
+    "name_too_long": "Navn på systemtilgang kan ikke være lenger enn 255 tegn.",
     "created_by": "Systemtilgang opprettet {{created}}",
     "accesspackage_resources_list_singular": "1 tjeneste",
     "accesspackage_resources_list_plural": "{{resourcesCount}} tjenester",

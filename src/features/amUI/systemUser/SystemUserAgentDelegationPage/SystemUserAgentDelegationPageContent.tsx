@@ -6,19 +6,15 @@ import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Snackbar, useSnackbar } from '@altinn/altinn-components';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import {
-  useAssignCustomerMutation,
-  useDeleteAgentSystemuserMutation,
-  useRemoveCustomerMutation,
-} from '@/rtk/features/systemUserApi';
+import { useAssignCustomerMutation, useRemoveCustomerMutation } from '@/rtk/features/systemUserApi';
 import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
 import { SystemUserPath } from '@/routes/paths';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
-import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
 import { RightsList } from '../components/RightsList/RightsList';
+import { EditSystemUserModal } from '../components/EditSystemUserModal/EditSystemUserModal';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
@@ -35,11 +31,13 @@ interface SystemUserAgentDelegationPageContentProps {
   systemUser: SystemUser;
   customers: AgentDelegationCustomer[];
   existingAgentDelegations: AgentDelegation[];
+  refetchSystemUser: () => void;
 }
 export const SystemUserAgentDelegationPageContent = ({
   systemUser,
   customers,
   existingAgentDelegations,
+  refetchSystemUser,
 }: SystemUserAgentDelegationPageContentProps): React.ReactNode => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -58,15 +56,6 @@ export const SystemUserAgentDelegationPageContent = ({
   const { openSnackbar, dismissSnackbar } = useSnackbar();
 
   const { data: reporteeData } = useGetReporteeQuery();
-
-  const [deleteAgentSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
-    useDeleteAgentSystemuserMutation();
-
-  const handleDeleteSystemUser = (): void => {
-    deleteAgentSystemUser({ partyId, systemUserId: id || '', partyUuid })
-      .unwrap()
-      .then(() => handleNavigateBack());
-  };
 
   const handleNavigateBack = (): void => {
     navigate(`/${SystemUserPath.SystemUser}/${SystemUserPath.Overview}`);
@@ -151,12 +140,11 @@ export const SystemUserAgentDelegationPageContent = ({
       onNavigateBack={handleNavigateBack}
       pageActions={
         systemUser && (
-          <DeleteSystemUserPopover
-            integrationTitle={systemUser.integrationTitle}
-            isDeleteError={isDeleteError}
-            isDeletingSystemUser={isDeletingSystemUser}
-            handleDeleteSystemUser={handleDeleteSystemUser}
-            hasAgentDelegation={assignedCustomers.length > 0}
+          <EditSystemUserModal
+            systemUser={systemUser}
+            hasAgentDelegations={assignedCustomers.length > 0}
+            isAgentSystemUser
+            onSystemUserUpdated={refetchSystemUser}
           />
         )
       }
