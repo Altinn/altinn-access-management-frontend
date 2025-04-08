@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import type { AccountMenuItem, MenuGroupProps, MenuItemProps } from '@altinn/altinn-components';
 import { Layout, RootProvider } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
   const { data: reportee } = useGetReporteeQuery();
   const { data: userinfo } = useGetUserInfoQuery();
   const { pathname } = useLocation();
-
+  const [searchString, setSearchString] = useState<string>('');
   const isSm = useIsTabletOrSmaller();
 
   const headerLinks: MenuItemProps[] = [
@@ -136,13 +136,18 @@ export const PageLayoutWrapper = ({ children }: PageLayoutWrapperProps): React.R
             accountGroups,
             accounts,
             accountSearch: {
+              name: 'account-search',
+              value: searchString,
+              onChange: (event: ChangeEvent<HTMLInputElement>) => {
+                setSearchString(event.target.value);
+              },
               placeholder: t('header.search-label'),
-              name: 'search-account',
               hidden: false,
               getResultsLabel: (hits: number) => {
                 return `${hits} ${t('header.search-hits')}`;
               },
             },
+            isVirtualized: accounts.length > 20,
             onSelectAccount: (accountId) => {
               const redirectUrl = window.location.pathname.includes('systemuser')
                 ? `${window.location.origin}/accessmanagement/ui/systemuser/overview`
