@@ -154,32 +154,6 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
-        {
-            try
-            {
-                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
-                string endpointUrl = $"systemuser/{partyId}/{id}";
-
-                HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonSerializer.Deserialize<SystemUser>(responseContent, _jsonSerializerOptions);
-                }
-
-                _logger.LogError("AccessManagement.UI // SystemUserClient // GetAgentSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // GetAgentSystemUser // Exception");
-                throw;
-            }
-        }
-
-        /// <inheritdoc/>
         public async Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
             try
@@ -228,6 +202,35 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // DeleteAgentSystemUser // Exception");
+                throw;
+            }
+        }
+        
+        /// <inheritdoc/>
+        public async Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/{partyId}/{systemUserGuid}";
+
+                var content = JsonContent.Create(systemUserData);
+                HttpResponseMessage response = await _httpClient.PatchAsync(token, endpointUrl, content);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            
+                if (response.IsSuccessStatusCode) 
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserClient // UpdateSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                
+                AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // UpdateSystemUser // Exception");
                 throw;
             }
         }

@@ -1,5 +1,4 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
-using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
@@ -72,19 +71,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
-        {
-            SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, id, cancellationToken);
-            
-            if (systemUser != null)
-            {
-                return (await MapToSystemUsersFE([systemUser], languageCode, true, cancellationToken))[0] ?? null;
-            }
-
-            return null;
-        }
-
-        /// <inheritdoc />
         public async Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid partyUuid, CancellationToken cancellationToken)
         {
             return await _systemUserClient.DeleteAgentSystemUser(partyId, systemUserId, partyUuid, cancellationToken);
@@ -135,6 +121,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
             
             List<SystemUserFE> sortedList = [.. lista.OrderByDescending(systemUser => systemUser.Created)];
             return sortedList;
+        }
+
+        /// <inheritdoc />
+        public async Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
+        {
+            SystemUser systemUser = await _systemUserClient.GetSpecificSystemUser(partyId, systemUserGuid, cancellationToken);
+            
+            if (systemUser != null)
+            {
+                return await _systemUserClient.UpdateSystemUser(partyId, systemUserGuid, systemUserData, cancellationToken);
+            }
+
+            return false;
         }
     }
 }

@@ -44,15 +44,6 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<List<SystemUser>> GetSystemUsersForParty(int partyId, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Return a specific agent system user
-        /// </summary>
-        /// <param name="partyId">The party Id of the party to retrieve</param>
-        /// <param name="id">Id of system user to get</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Requested agent system user</returns>
-        Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken);
-
-        /// <summary>
         /// Return all agent system users created for a given party
         /// </summary>
         /// <param name="partyId">The party Id of the party to retrieve</param>
@@ -69,5 +60,15 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
         Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Update system user fields
+        /// </summary>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="systemUserGuid">System user id to update</param>
+        /// <param name="systemUserData">System user data to update</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken);
     }
 }

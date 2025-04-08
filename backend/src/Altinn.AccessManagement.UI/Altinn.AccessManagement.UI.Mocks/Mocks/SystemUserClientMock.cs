@@ -56,8 +56,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// <inheritdoc />
         public Task<SystemUser> GetSpecificSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
         {
+            List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
-            SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
+            List<SystemUser> combinedSystemUsers = systemUsers.Concat(agentSystemUsers).ToList();
+            SystemUser systemUser = combinedSystemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             return Task.FromResult(systemUser);
         }
         
@@ -66,14 +68,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
             return Task.FromResult(systemUsers);
-        }
-
-        /// <inheritdoc />
-        public Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
-        {
-            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
-            SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
-            return Task.FromResult(systemUser);
         }
         
         /// <inheritdoc />
@@ -93,6 +87,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return Task.FromResult(new Result<bool>(TestErrors.SystemNotFound));
             }
             return Task.FromResult(new Result<bool>(true));
+        }
+
+        public Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
+        {
+            List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
+            List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
+            
+            bool isExistingSystemUser = systemUsers.Concat(agentSystemUsers).Any(s => s.Id == systemUserGuid.ToString() && s.PartyId == partyId.ToString());
+            if (!isExistingSystemUser)
+            {
+                return Task.FromResult(false);
+            }
+            return Task.FromResult(true);
         }
 
         internal static class TestErrors

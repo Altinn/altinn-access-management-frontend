@@ -105,28 +105,6 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Get a single agent system users for given party
-        /// </summary>
-        /// <param name="partyId">Party user represents</param>
-        /// <param name="systemUserGuid">Agent system user id to get</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A single agent system user</returns>
-        [Authorize]
-        [HttpGet("agent/{partyId}/{systemUserGuid}")]
-        public async Task<ActionResult> GetAgentSystemUserDetailsById([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
-        {
-            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-            SystemUserFE details = await _systemUserService.GetAgentSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
-
-            if (details == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(details);
-        }
-
-        /// <summary>
         /// Endpoint for delete agent system user
         /// </summary>
         /// <param name="partyId">Party user represents</param>
@@ -177,9 +155,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
-        /// Endpoint for creating a new System User for the choosen reportee.The reportee is taken from the AltinnPartyId cookie 
-        /// 
-        /// Expects backend in Authenticaiton and in Access Management to perform authorization ch
+        /// Endpoint for delete agent system user
         /// </summary>
         /// <param name="partyId">Party user represents</param>
         /// <param name="systemUserGuid">System user id to delete</param>
@@ -191,6 +167,28 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult> Delete([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, CancellationToken cancellationToken)
         {
             bool result = await _systemUserService.DeleteSystemUser(partyId, systemUserGuid, cancellationToken);
+            if (result)
+            {
+                return Accepted();
+            }
+
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Endpoint for update system user
+        /// </summary>
+        /// <param name="partyId">Party user represents</param>
+        /// <param name="systemUserGuid">System user id to update</param>
+        /// <param name="systemUserData">System user data to update</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpPatch("{partyId}/{systemUserGuid}")]
+        public async Task<ActionResult> UpdateSystemUser([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromBody] SystemUserUpdate systemUserData, CancellationToken cancellationToken)
+        {
+            bool result = await _systemUserService.UpdateSystemUser(partyId, systemUserGuid, systemUserData, cancellationToken);
             if (result)
             {
                 return Accepted();
