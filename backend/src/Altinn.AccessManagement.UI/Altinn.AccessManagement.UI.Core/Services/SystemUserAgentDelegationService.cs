@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc /> 
         public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
-            SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
+            SystemUser systemUser = await _systemUserClient.GetSpecificSystemUser(partyId, systemUserGuid, cancellationToken);
             IEnumerable<string> accessPackageUrns = systemUser.AccessPackages.Select(x => x.Urn);
             CustomerRoleType customerType;
 
