@@ -154,7 +154,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
+        public async Task<Result<bool>> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // SystemUserClient // UpdateSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 
                 AltinnProblemDetails problemDetails = await response.Content.ReadFromJsonAsync<AltinnProblemDetails>(cancellationToken);
-                return false;
+                return ProblemMapper.MapToAuthUiError(problemDetails?.ErrorCode.ToString());
             }
             catch (Exception ex)
             {

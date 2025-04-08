@@ -188,13 +188,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPatch("{partyId}/{systemUserGuid}")]
         public async Task<ActionResult> UpdateSystemUser([FromRoute] int partyId, [FromRoute] Guid systemUserGuid, [FromBody] SystemUserUpdate systemUserData, CancellationToken cancellationToken)
         {
-            bool result = await _systemUserService.UpdateSystemUser(partyId, systemUserGuid, systemUserData, cancellationToken);
-            if (result)
+            Result<bool> updateResult = await _systemUserService.UpdateSystemUser(partyId, systemUserGuid, systemUserData, cancellationToken);
+            if (updateResult.IsProblem)
             {
-                return Accepted();
+                return updateResult.Problem.ToActionResult(); 
             }
 
-            return NotFound();
+            return Accepted();
         }
     }
 }

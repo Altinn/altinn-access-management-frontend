@@ -89,7 +89,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }
 
-        public Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
+        public Task<Result<bool>> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
             List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
@@ -97,9 +97,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             bool isExistingSystemUser = systemUsers.Concat(agentSystemUsers).Any(s => s.Id == systemUserGuid.ToString() && s.PartyId == partyId.ToString());
             if (!isExistingSystemUser)
             {
-                return Task.FromResult(false);
+                return Task.FromResult(new Result<bool>(TestErrors.SystemNotFound));
             }
-            return Task.FromResult(true);
+            return Task.FromResult(new Result<bool>(true));
         }
 
         internal static class TestErrors

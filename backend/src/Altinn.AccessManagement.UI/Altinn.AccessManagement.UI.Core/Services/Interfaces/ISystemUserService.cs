@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="systemUserGuid">System user id to update</param>
         /// <param name="systemUserData">System user data to update</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns></returns>
-        Task<bool> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken);
+        /// <returns>Boolean value if the update was successful or not</returns>
+        Task<Result<bool>> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken);
     }
 }
