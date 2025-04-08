@@ -106,6 +106,9 @@ export const EditSystemUserModal = ({
     setIsModalOpen(false);
   };
 
+  const isTitleEmpty = integrationTitle.length === 0;
+  const isTitleTooLong = integrationTitle.length > 255;
+
   return (
     <Dialog.TriggerContext>
       <Dialog.Trigger
@@ -130,12 +133,12 @@ export const EditSystemUserModal = ({
             value={integrationTitle}
             onChange={(e) => setIntegrationTitle(e.target.value)}
           />
-          {integrationTitle.length === 0 && (
+          {isTitleEmpty && (
             <ValidationMessage>
               {t('systemuser_detailpage.edit_systemuser_name_empty_error')}
             </ValidationMessage>
           )}
-          {integrationTitle.length > 255 && (
+          {isTitleTooLong && (
             <ValidationMessage>{t('systemuser_detailpage.name_too_long')}</ValidationMessage>
           )}
         </Field>
@@ -143,8 +146,8 @@ export const EditSystemUserModal = ({
           <ButtonRow>
             <Button
               disabled={
-                integrationTitle.length === 0 ||
-                integrationTitle.length > 255 ||
+                isTitleEmpty ||
+                isTitleTooLong ||
                 isUpdatingSystemUser ||
                 isDeletingSystemUser ||
                 isDeletingAgentSystemUser
