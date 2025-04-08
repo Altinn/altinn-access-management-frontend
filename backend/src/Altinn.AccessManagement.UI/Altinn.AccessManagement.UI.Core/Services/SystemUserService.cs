@@ -126,14 +126,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<Result<bool>> UpdateSystemUser(int partyId, Guid systemUserGuid, SystemUserUpdate systemUserData, CancellationToken cancellationToken)
         {
-            SystemUser systemUser = await _systemUserClient.GetSpecificSystemUser(partyId, systemUserGuid, cancellationToken);
-            
-            if (systemUser != null)
-            {
-                return await _systemUserClient.UpdateSystemUser(partyId, systemUserGuid, systemUserData, cancellationToken);
-            }
-
-            return false;
+            return await _systemUserClient.UpdateSystemUser(partyId, systemUserGuid, systemUserData, cancellationToken);
         }
     }
 }
