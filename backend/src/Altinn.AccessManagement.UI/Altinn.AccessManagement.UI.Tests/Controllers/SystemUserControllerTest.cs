@@ -224,7 +224,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SystemUserFE expectedResponse = Util.GetMockData<SystemUserFE>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
             SystemUserFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<SystemUserFE>();
 
             // Assert
@@ -245,7 +245,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agent/{partyId}/{systemUserId}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/{partyId}/{systemUserId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
