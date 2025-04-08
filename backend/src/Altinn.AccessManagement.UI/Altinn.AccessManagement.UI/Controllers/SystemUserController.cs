@@ -194,7 +194,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return updateResult.Problem.ToActionResult(); 
             }
 
-            return Accepted();
+            return NoContent();
         }
     }
 }
