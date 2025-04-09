@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         ///     Gets a HttpClient for unittests testing
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
-        /// /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
+        /// <param name="flags">Override featureFlags in the client. Defaults to true if not set</param>
         /// <returns>HttpClient</returns>
         public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory, FeatureFlags flags)
         {
