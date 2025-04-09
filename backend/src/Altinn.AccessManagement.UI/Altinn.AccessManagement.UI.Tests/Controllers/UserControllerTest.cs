@@ -5,9 +5,9 @@ using System.Text;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
-using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Models;
 using Altinn.AccessManagement.UI.Tests.Utils;
@@ -15,7 +15,6 @@ using Altinn.Platform.Profile.Enums;
 using Altinn.Platform.Profile.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using User = Altinn.AccessManagement.UI.Core.Models.User.User;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
@@ -28,6 +27,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     {
         private readonly CustomWebApplicationFactory<UserController> _factory;
         private readonly HttpClient _client;
+        private readonly HttpClient _client_feature_off;
+
         private readonly IProfileClient _profileClient;
         private string _testDataFolder;
 
@@ -39,7 +40,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             _factory = factory;
             _profileClient = Mock.Of<IProfileClient>();
-            _client = SetupUtils.GetTestClient(factory);
+            _client = SetupUtils.GetTestClient(factory, null);
+            _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayLimitedPreviewLaunch = false });
             _testDataFolder = Path.GetDirectoryName(new Uri(typeof(UserControllerTest).Assembly.Location).LocalPath);
 
         }
@@ -409,6 +411,32 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Feature is toggled off
+        ///    Expected: Returns a 404 - not found
+        /// </summary>
+        [Fact]
+        public async Task ValidatePerson_Feature_Toggle_Off ()
+        {
+            // Arrange
+            var partyId = 51329012; 
+            var ssn = "20838198385"; // valid input
+            var lastname = "Medaljong";
+
+        
+            HttpClient client = _client_feature_off;
+        
+            ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
+            string jsonRights = JsonSerializer.Serialize(input);
+            HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound , httpResponse.StatusCode);
         }
 
         /// <summary>

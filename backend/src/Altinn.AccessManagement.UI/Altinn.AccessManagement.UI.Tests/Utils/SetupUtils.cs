@@ -1,5 +1,6 @@
 ﻿using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Mocks.Mocks;
 using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return client;
         }
 
+
         /// <summary>
         ///     Gets a HttpClient for unittests testing
         /// </summary>
@@ -76,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<UserController> customFactory, FeatureFlags flags)
         {
             WebApplicationFactory<UserController> factory = customFactory.WithWebHostBuilder(builder =>
             {
@@ -86,6 +88,13 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.Configure<FeatureFlags>(options =>
+                    {
+                        options.DisplayPopularSingleRightsServices = flags?.DisplayConfettiPackage ?? true;
+                        options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
+                        options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
+                        options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
+                    });
                 });
             });
             factory.Server.AllowSynchronousIO = true;
@@ -97,18 +106,25 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for UserController tests</param>
         /// <returns>HttpClient</returns>
-        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory)
+        public static HttpClient GetTestClient(CustomWebApplicationFactory<RoleController> customFactory, FeatureFlags flags)
         {
-             WebApplicationFactory<RoleController> factory = customFactory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
-                    services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                });
-            });
+            WebApplicationFactory<RoleController> factory = customFactory.WithWebHostBuilder(builder =>
+           {
+               builder.ConfigureTestServices(services =>
+               {
+                   services.AddTransient<IAccessPackageClient, AccessPackageClientMock>();
+                   services.AddTransient<IProfileClient, ProfileClientMock>();
+                   services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                   services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                   services.Configure<FeatureFlags>(options =>
+                   {
+                       options.DisplayPopularSingleRightsServices = flags?.DisplayConfettiPackage ?? true;
+                       options.DisplayResourceDelegation = flags?.DisplayResourceDelegation ?? true;
+                       options.DisplayConfettiPackage = flags?.DisplayConfettiPackage ?? true;
+                       options.DisplayLimitedPreviewLaunch = flags?.DisplayLimitedPreviewLaunch ?? true;
+                   });
+               });
+           });
             factory.Server.AllowSynchronousIO = true;
             return factory.CreateClient();
         }

@@ -19,7 +19,7 @@ export const RightsTabs = ({
   const { t } = useTranslation();
   const [chosenTab, setChosenTab] = useState('packages');
 
-  const displaySingleRights = window.featureFlags?.displayResourceDelegation === true;
+  const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
     <Tabs
       defaultValue='packages'
@@ -37,26 +37,28 @@ export const RightsTabs = ({
           />
           {t('user_rights_page.access_packages_title')}
         </Tabs.Tab>
-        {displaySingleRights && (
-          <Tabs.Tab value='singleRights'>
-            <Badge
-              data-size='sm'
-              color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
-              count={tabBadge?.services ?? 0}
-              maxCount={99}
-            />
-            {t('user_rights_page.single_rights_title')}
-          </Tabs.Tab>
+        {displayLimitedPreviewLaunch && (
+          <>
+            <Tabs.Tab value='singleRights'>
+              <Badge
+                data-size='sm'
+                color={chosenTab === 'singleRights' ? 'accent' : 'neutral'}
+                count={tabBadge?.services ?? 0}
+                maxCount={99}
+              />
+              {t('user_rights_page.single_rights_title')}
+            </Tabs.Tab>
+            <Tabs.Tab value='roleAssignments'>
+              <Badge
+                data-size='sm'
+                color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
+                count={tabBadge?.roles ?? 0}
+                maxCount={99}
+              />
+              {t('user_rights_page.roles_title')}
+            </Tabs.Tab>
+          </>
         )}
-        <Tabs.Tab value='roleAssignments'>
-          <Badge
-            data-size='sm'
-            color={chosenTab === 'roleAssignments' ? 'accent' : 'neutral'}
-            count={tabBadge?.roles ?? 0}
-            maxCount={99}
-          />
-          {t('user_rights_page.roles_title')}
-        </Tabs.Tab>
       </Tabs.List>
       <Tabs.Panel
         className={classes.tabContent}
@@ -64,20 +66,22 @@ export const RightsTabs = ({
       >
         {packagesPanel}
       </Tabs.Panel>
-      {displaySingleRights && (
-        <Tabs.Panel
-          className={classes.tabContent}
-          value='singleRights'
-        >
-          {singleRightsPanel}
-        </Tabs.Panel>
+      {displayLimitedPreviewLaunch && (
+        <>
+          <Tabs.Panel
+            className={classes.tabContent}
+            value='singleRights'
+          >
+            {singleRightsPanel}
+          </Tabs.Panel>
+          <Tabs.Panel
+            className={classes.tabContent}
+            value='roleAssignments'
+          >
+            {roleAssignmentsPanel}
+          </Tabs.Panel>
+        </>
       )}
-      <Tabs.Panel
-        className={classes.tabContent}
-        value='roleAssignments'
-      >
-        {roleAssignmentsPanel}
-      </Tabs.Panel>
     </Tabs>
   );
 };

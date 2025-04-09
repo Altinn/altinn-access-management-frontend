@@ -31,7 +31,7 @@ const extractFromList = (
 
 export const UsersList = () => {
   const { t } = useTranslation();
-
+  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
   const { data: rightHolders, isLoading } = useGetRightHoldersQuery();
   const { data: currentUser, isLoading: currentUserLoading } = useGetUserInfoQuery();
 
@@ -56,28 +56,32 @@ export const UsersList = () => {
 
   return (
     <div className={classes.usersList}>
-      <CurrentUserPageHeader
-        currentUser={currentUserAsRightHolder}
-        loading={currentUserLoading}
-        as={(props) =>
-          currentUserAsRightHolder ? (
-            <Link
-              {...props}
-              to={`${currentUserAsRightHolder?.partyUuid}`}
-            />
-          ) : (
-            <div {...props} />
-          )
-        }
-      />
-      <Heading
-        level={2}
-        data-size='sm'
-        id='user_list_heading_id'
-        className={classes.usersListHeading}
-      >
-        {t('users_page.user_list_heading')}
-      </Heading>
+      {displayLimitedPreviewLaunch && (
+        <>
+          <CurrentUserPageHeader
+            currentUser={currentUserAsRightHolder}
+            loading={currentUserLoading}
+            as={(props) =>
+              currentUserAsRightHolder ? (
+                <Link
+                  {...props}
+                  to={`${currentUserAsRightHolder?.partyUuid}`}
+                />
+              ) : (
+                <div {...props} />
+              )
+            }
+          />
+          <Heading
+            level={2}
+            data-size='sm'
+            id='user_list_heading_id'
+            className={classes.usersListHeading}
+          >
+            {t('users_page.user_list_heading')}
+          </Heading>
+        </>
+      )}
       <div className={classes.searchAndAddUser}>
         <Search className={classes.searchBar}>
           <Search.Input
@@ -97,7 +101,7 @@ export const UsersList = () => {
         userList={userList || []}
         searchString={searchString}
         isLoading={isLoading}
-        listItemTitleAs='h3'
+        listItemTitleAs='h2'
       />
     </div>
   );
