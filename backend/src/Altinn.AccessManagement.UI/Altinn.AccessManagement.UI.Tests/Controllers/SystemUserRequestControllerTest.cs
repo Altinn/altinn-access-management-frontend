@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///     Expected: RejectSystemUserRequest returns true
         /// </summary>
         [Fact]
-        public async Task RejectSystemUserRequest_ApproveOk()
+        public async Task RejectSystemUserRequest_RejectOk()
         {
             // Arrange
             Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");

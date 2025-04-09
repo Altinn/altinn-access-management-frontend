@@ -62,7 +62,7 @@ export const SystemUserAgentDelegationPageContent = ({
     useDeleteAgentSystemuserMutation();
 
   const handleDeleteSystemUser = (): void => {
-    deleteAgentSystemUser({ partyId, systemUserId: id || '' })
+    deleteAgentSystemUser({ partyId, systemUserId: id ?? '' })
       .unwrap()
       .then(() => handleNavigateBack());
   };

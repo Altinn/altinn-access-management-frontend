@@ -31,13 +31,13 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
     data: systemUser,
     isError: isLoadSystemUserError,
     isLoading: isLoadingSystemUser,
-  } = useGetSystemUserQuery({ partyId, systemUserId: id || '' });
+  } = useGetSystemUserQuery({ partyId, systemUserId: id ?? '' });
 
   const [deleteSystemUser, { isError: isDeleteError, isLoading: isDeletingSystemUser }] =
     useDeleteSystemuserMutation();
 
   const handleDeleteSystemUser = (): void => {
-    deleteSystemUser({ partyId, systemUserId: id || '' })
+    deleteSystemUser({ partyId, systemUserId: id ?? '' })
       .unwrap()
       .then(() => {
         handleNavigateBack();

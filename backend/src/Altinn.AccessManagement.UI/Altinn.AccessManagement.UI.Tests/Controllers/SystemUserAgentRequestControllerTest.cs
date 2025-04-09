@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task ApproveSystemUserAgentRequest_ApproveOk()
         {
             // Arrange
-           Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string agentRequestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
