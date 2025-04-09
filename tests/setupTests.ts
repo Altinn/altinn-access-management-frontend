@@ -38,8 +38,8 @@ Object.defineProperty(window, 'matchMedia', {
 
 beforeAll(() => server.listen());
 beforeEach(() => {
-  document.cookie = `AltinnPartyId=${TEST_PARTY_ID}`;
-  document.cookie = `AltinnPartyUuid=${TEST_PARTY_UUID}`;
+  document.cookie = `AltinnPartyId=${TEST_PARTY_ID}; secure; httpOnly`;
+  document.cookie = `AltinnPartyUuid=${TEST_PARTY_UUID}; secure; httpOnly`;
 });
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
