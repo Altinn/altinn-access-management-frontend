@@ -28,7 +28,7 @@ interface RightsIncludedProps {
 export const RightsIncluded = ({ selectedSystem, onNavigateBack }: RightsIncludedProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const partyId = getCookie('AltinnPartyId');
+  const partyId = getCookie('AltinnPartyUuid');
   const { data: reporteeData } = useGetReporteeQuery();
 
   const {

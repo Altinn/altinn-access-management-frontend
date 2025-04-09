@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
-        Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<SystemUserAgentRequestFE>> GetSystemUserAgentRequest(Guid partyId, Guid agentRequestId, string languageCode, CancellationToken cancellationToken);
         
         /// <summary>
         /// Approve an agent delegation user request to create a new system user
@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="agentRequestId">The id of the system user agent request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the create system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> ApproveSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
+        Task<Result<bool>> ApproveSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Reject an agent delegation system user request
@@ -34,6 +34,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="agentRequestId">The id of the system user agent request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
+        Task<Result<bool>> RejectSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken);
     }
 }

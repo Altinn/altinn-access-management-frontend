@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public Task<Result<SystemUserAgentRequest>> GetSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             SystemUserAgentRequest SystemUserAgentRequest = Util.GetMockData<SystemUserAgentRequest>($"{dataFolder}/SystemUser/systemUserAgentRequest.json");
             if (agentRequestId != SystemUserAgentRequest.Id)
@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Result<bool>> ApproveSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> ApproveSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             SystemUserAgentRequest SystemUserAgentRequest = Util.GetMockData<SystemUserAgentRequest>($"{dataFolder}/SystemUser/systemUserAgentRequest.json");
             if (agentRequestId != SystemUserAgentRequest.Id)
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
                 /// <inheritdoc />
-        public Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RejectSystemUserAgentRequest(Guid partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {
             SystemUserAgentRequest SystemUserAgentRequest = Util.GetMockData<SystemUserAgentRequest>($"{dataFolder}/SystemUser/systemUserAgentRequest.json");
             if (agentRequestId != SystemUserAgentRequest.Id)

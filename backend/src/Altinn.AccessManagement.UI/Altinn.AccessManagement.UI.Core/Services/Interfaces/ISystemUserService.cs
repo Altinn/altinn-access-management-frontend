@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all system users for specified party</returns>
-        Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(Guid partyId, string languageCode, CancellationToken cancellationToken);
         
         /// <summary>
         /// Return a specific system user
@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Requested system user</returns>
-        Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
+        Task<SystemUserFE> GetSpecificSystemUser(Guid partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return all agent system users created for a given party
@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all agent system users for specified party</returns>
-        Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(Guid partyId, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Return a specific agent system user
@@ -45,17 +45,16 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Requested agent system user</returns>
-        Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken);
+        Task<SystemUserFE> GetAgentSystemUser(Guid partyId, Guid id, string languageCode, CancellationToken cancellationToken);
 
         /// <summary>
         /// Deletes agent system user
         /// </summary>
         /// <param name="partyId">The party Id of the party</param>
         /// <param name="systemUserId">Id of system user to delete</param>
-        /// <param name="partyUuid">The party uuid of the party</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
-        Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid partyUuid, CancellationToken cancellationToken);
+        Task<Result<bool>> DeleteAgentSystemUser(Guid partyId, Guid systemUserId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create a new system user
@@ -64,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="newSystemUser">Object with IntegrationTitle and SystemId for new system user</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Created system user, or specific error if creation fails</returns>
-        Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken);
+        Task<Result<SystemUser>> CreateSystemUser(Guid partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken);
 
         /// <summary>
         /// Deletes system user
@@ -73,6 +72,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="id">Id of system user to delete</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean whether delete was successful or not</returns>
-        Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken);
+        Task<bool> DeleteSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken);
     }
 }

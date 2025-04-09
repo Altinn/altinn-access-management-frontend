@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<SystemUserRequest>> GetSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserRequest>> GetSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {        
             try
             {
@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             try
             {

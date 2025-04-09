@@ -23,7 +23,7 @@ export const SystemUserDetailsPage = (): React.ReactNode => {
   const { id } = useParams();
   const navigate = useNavigate();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
-  const partyId = getCookie('AltinnPartyId');
+  const partyId = getCookie('AltinnPartyUuid');
 
   const { data: reporteeData } = useGetReporteeQuery();
 

@@ -37,13 +37,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             return await _systemUserClient.DeleteSystemUser(partyId, id, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserFE>>> GetAllSystemUsersForParty(Guid partyId, string languageCode, CancellationToken cancellationToken)
         {
             List<SystemUser> lista = await _systemUserClient.GetSystemUsersForParty(partyId, cancellationToken);
 
@@ -51,7 +51,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<SystemUserFE> GetSpecificSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
+        public async Task<SystemUserFE> GetSpecificSystemUser(Guid partyId, Guid id, string languageCode, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetSpecificSystemUser(partyId, id, cancellationToken);
             
@@ -64,7 +64,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(int partyId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<List<SystemUserFE>>> GetAgentSystemUsersForParty(Guid partyId, string languageCode, CancellationToken cancellationToken)
         {
             List<SystemUser> lista = await _systemUserClient.GetAgentSystemUsersForParty(partyId, cancellationToken);
 
@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<SystemUserFE> GetAgentSystemUser(int partyId, Guid id, string languageCode, CancellationToken cancellationToken)
+        public async Task<SystemUserFE> GetAgentSystemUser(Guid partyId, Guid id, string languageCode, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, id, cancellationToken);
             
@@ -85,13 +85,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid partyUuid, CancellationToken cancellationToken)
+        public async Task<Result<bool>> DeleteAgentSystemUser(Guid partyId, Guid systemUserId, CancellationToken cancellationToken)
         {
-            return await _systemUserClient.DeleteAgentSystemUser(partyId, systemUserId, partyUuid, cancellationToken);
+            return await _systemUserClient.DeleteAgentSystemUser(partyId, systemUserId, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUser>> CreateSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
+        public async Task<Result<SystemUser>> CreateSystemUser(Guid partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             Result<SystemUser> createdSystemUser = await _systemUserClient.CreateNewSystemUser(partyId, newSystemUser, cancellationToken);
 

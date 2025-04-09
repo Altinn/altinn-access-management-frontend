@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpGet("{partyId}/{changeRequestId}")]
-        public async Task<ActionResult> GetChangeRequestByPartyIdAndRequestId([FromRoute] int partyId, [FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetChangeRequestByPartyIdAndRequestId([FromRoute] Guid partyId, [FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<SystemUserChangeRequestFE> req = await _systemUserChangeRequestService.GetSystemUserChangeRequest(partyId, changeRequestId, languageCode, cancellationToken);
@@ -48,7 +48,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{changeRequestId}/approve")]
-        public async Task<ActionResult> ApproveSystemUserChangeRequest([FromRoute] int partyId, [FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> ApproveSystemUserChangeRequest([FromRoute] Guid partyId, [FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
         {
             Result<bool> req = await _systemUserChangeRequestService.ApproveSystemUserChangeRequest(partyId, changeRequestId, cancellationToken);
             if (req.IsProblem)
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns></returns>
         [Authorize]
         [HttpPost("{partyId}/{changeRequestId}/reject")]
-        public async Task<ActionResult> RejectSystemUserChangeRequest([FromRoute] int partyId, [FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<ActionResult> RejectSystemUserChangeRequest([FromRoute] Guid partyId, [FromRoute] Guid changeRequestId, CancellationToken cancellationToken)
         {
             Result<bool> req = await _systemUserChangeRequestService.RejectSystemUserChangeRequest(partyId, changeRequestId, cancellationToken);
             if (req.IsProblem)

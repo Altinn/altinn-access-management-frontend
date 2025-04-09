@@ -43,8 +43,7 @@ export const SystemUserAgentDelegationPageContent = ({
 }: SystemUserAgentDelegationPageContentProps): React.ReactNode => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const partyId = getCookie('AltinnPartyId');
-  const partyUuid = getCookie('AltinnPartyUuid');
+  const partyId = getCookie('AltinnPartyUuid');
 
   const { id } = useParams();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -63,7 +62,7 @@ export const SystemUserAgentDelegationPageContent = ({
     useDeleteAgentSystemuserMutation();
 
   const handleDeleteSystemUser = (): void => {
-    deleteAgentSystemUser({ partyId, systemUserId: id || '', partyUuid })
+    deleteAgentSystemUser({ partyId, systemUserId: id || '' })
       .unwrap()
       .then(() => handleNavigateBack());
   };
@@ -104,7 +103,7 @@ export const SystemUserAgentDelegationPageContent = ({
         'success',
       );
     };
-    assignCustomer({ partyId, systemUserId: id ?? '', customerId: customerId, partyUuid })
+    assignCustomer({ partyId, systemUserId: id ?? '', customerId: customerId })
       .unwrap()
       .then(onAddSuccess)
       .catch(() => setErrorId(customerId))
@@ -128,7 +127,6 @@ export const SystemUserAgentDelegationPageContent = ({
       partyId,
       systemUserId: id ?? '',
       delegationId: toRemove.delegationId,
-      partyUuid,
     })
       .unwrap()
       .then(onRemoveSuccess)

@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUserRequest>> GetSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<SystemUserRequest>> GetSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
             if (requestId != systemUserRequest.Id)
@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> ApproveSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
             if (requestId != systemUserRequest.Id)
@@ -45,7 +45,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
                 /// <inheritdoc />
-        public Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public Task<Result<bool>> RejectSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             SystemUserRequest systemUserRequest = Util.GetMockData<SystemUserRequest>($"{dataFolder}/SystemUser/systemUserRequest.json");
             if (requestId != systemUserRequest.Id)

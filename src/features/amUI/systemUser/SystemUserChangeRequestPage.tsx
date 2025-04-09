@@ -27,7 +27,7 @@ export const SystemUserChangeRequestPage = () => {
   useDocumentTitle(t('systemuser_change_request.page_title'));
   const [searchParams] = useSearchParams();
   const changeRequestId = searchParams.get('id') ?? '';
-  const partyId = getCookie('AltinnPartyId');
+  const partyId = getCookie('AltinnPartyUuid');
 
   const {
     data: changeRequest,

@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<Result<SystemUser>> CreateNewSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
+        public Task<Result<SystemUser>> CreateNewSystemUser(Guid partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
             List<RegisteredSystem> systems = Util.GetMockData<List<RegisteredSystem>>($"{dataFolder}/SystemRegister/systems.json");
             RegisteredSystem system = systems.Find(s => s.SystemId == newSystemUser.SystemId);
@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<bool> DeleteSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public Task<bool> DeleteSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
             SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<SystemUser> GetSpecificSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public Task<SystemUser> GetSpecificSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
             SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
@@ -62,14 +62,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<List<SystemUser>> GetSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        public Task<List<SystemUser>> GetSystemUsersForParty(Guid partyId, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/systemUsers.json");
             return Task.FromResult(systemUsers);
         }
 
         /// <inheritdoc />
-        public Task<SystemUser> GetAgentSystemUser(int partyId, Guid id, CancellationToken cancellationToken)
+        public Task<SystemUser> GetAgentSystemUser(Guid partyId, Guid id, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
@@ -77,14 +77,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
         
         /// <inheritdoc />
-        public Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
+        public Task<List<SystemUser>> GetAgentSystemUsersForParty(Guid partyId, CancellationToken cancellationToken)
         {
             List<SystemUser> systemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             return Task.FromResult(systemUsers);
         }
 
         /// <inheritdoc />
-        public Task<Result<bool>> DeleteAgentSystemUser(int partyId, Guid systemUserId, Guid facilitatorId, CancellationToken cancellationToken)
+        public Task<Result<bool>> DeleteAgentSystemUser(Guid partyId, Guid systemUserId, CancellationToken cancellationToken)
         {
             List<SystemUser> agentSystemUsers = Util.GetMockData<List<SystemUser>>($"{dataFolder}/SystemUser/agentSystemUsers.json");
             SystemUser systemUser = agentSystemUsers.Find(s => s.Id == systemUserId.ToString() && s.PartyId == partyId.ToString());

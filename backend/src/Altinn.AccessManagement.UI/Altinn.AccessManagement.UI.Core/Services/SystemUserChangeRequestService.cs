@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(int partyId, Guid changeRequestId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(Guid partyId, Guid changeRequestId, string languageCode, CancellationToken cancellationToken)
         {
             Result<SystemUserChangeRequest> changeRequest = await _systemUserChangeRequestClient.GetSystemUserChangeRequest(partyId, changeRequestId, cancellationToken);
             
@@ -63,13 +63,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> ApproveSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             return await _systemUserChangeRequestClient.ApproveSystemUserChangeRequest(partyId, changeRequestId, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             return await _systemUserChangeRequestClient.RejectSystemUserChangeRequest(partyId, changeRequestId, cancellationToken);
         }
