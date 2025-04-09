@@ -414,7 +414,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        ///    Test case: Feature is toggled off
+        ///    Test case: ValidatePerson when feature is toggled off
         ///    Expected: Returns a 404 - not found
         /// </summary>
         [Fact]
