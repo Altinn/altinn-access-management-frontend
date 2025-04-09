@@ -15,7 +15,7 @@ import { SystemUserOverviewPage } from './SystemUserOverviewPage';
 
 const mockedDetailsPageContent = 'systemuser';
 const mockedAgentDetailsPageContent = 'systemuser agent';
-const testPartyId = 51329012;
+const testPartyId = 'cd35779b-b174-4ecc-bbef-ece13611be7f';
 const systemUsers = [
   {
     id: '93d4ac6b-8412-4600-8480-1a282359d2c8',

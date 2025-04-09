@@ -4,7 +4,7 @@ import * as matchers from '@testing-library/jest-dom/matchers';
 
 import { server } from '@mock/node';
 
-import { TEST_BASE_URL, TEST_PARTY_ID } from './consts';
+import { TEST_BASE_URL, TEST_PARTY_ID, TEST_PARTY_UUID } from './consts';
 
 expect.extend(matchers);
 
@@ -37,6 +37,9 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 beforeAll(() => server.listen());
-beforeEach(() => (document.cookie = `AltinnPartyId=${TEST_PARTY_ID}`));
+beforeEach(() => {
+  document.cookie = `AltinnPartyId=${TEST_PARTY_ID}`;
+  document.cookie = `AltinnPartyUuid=${TEST_PARTY_UUID}`;
+});
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
