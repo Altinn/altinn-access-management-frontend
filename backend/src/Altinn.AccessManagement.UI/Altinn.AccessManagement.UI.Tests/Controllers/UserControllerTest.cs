@@ -427,7 +427,10 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         
             HttpClient client = _client_feature_off;
-        
+            
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
             ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
             string jsonRights = JsonSerializer.Serialize(input);
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
