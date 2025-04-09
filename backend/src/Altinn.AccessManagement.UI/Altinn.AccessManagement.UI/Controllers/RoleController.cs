@@ -184,7 +184,12 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
+            if (!_featureFlags.DisplayLimitedPreviewLaunch)
+            {
+                return StatusCode(404, "Feature not available");
+            }
+            
             try
             {
                 var response = await _roleService.DeleteRoleDelegation(assignmentId);
