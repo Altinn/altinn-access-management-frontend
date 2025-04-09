@@ -418,19 +418,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         ///    Expected: Returns a 404 - not found
         /// </summary>
         [Fact]
-        public async Task ValidatePerson_Feature_Toggle_Off ()
+        public async Task ValidatePerson_Feature_Toggle_Off()
         {
             // Arrange
-            var partyId = 51329012; 
+            var partyId = 51329012;
             var ssn = "20838198385"; // valid input
             var lastname = "Medaljong";
 
-        
             HttpClient client = _client_feature_off;
-            
+
             var token = PrincipalUtil.GetToken(1234, 1234, 2);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            
+
             ValidatePersonInput input = new ValidatePersonInput { Ssn = ssn, LastName = lastname };
             string jsonRights = JsonSerializer.Serialize(input);
             HttpContent content = new StringContent(jsonRights, Encoding.UTF8, "application/json");
@@ -439,7 +438,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpResponseMessage httpResponse = await client.PostAsync($"accessmanagement/api/v1/user/reportee/{partyId}/rightholder/validateperson", content);
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound , httpResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
         }
 
         /// <summary>
