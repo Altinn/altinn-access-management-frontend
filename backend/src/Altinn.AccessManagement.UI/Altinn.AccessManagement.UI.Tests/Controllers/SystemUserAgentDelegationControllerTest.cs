@@ -43,14 +43,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRegnskapsforerCustomers_ReturnsCustomers()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _regnskapsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerCustomers.json");
             List<CustomerPartyFE> expectedResponse = Util.GetMockData<List<CustomerPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers");
             List<CustomerPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<CustomerPartyFE>>();
 
             // Assert
@@ -66,14 +65,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRevisorCustomers_ReturnsCustomers()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _revisorSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorCustomers.json");
             List<CustomerPartyFE> expectedResponse = Util.GetMockData<List<CustomerPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers");
             List<CustomerPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<CustomerPartyFE>>();
 
             // Assert
@@ -89,14 +87,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetForretningsforerCustomers_ReturnsCustomers()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _forretningsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerCustomers.json");
             List<CustomerPartyFE> expectedResponse = Util.GetMockData<List<CustomerPartyFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/customers");
             List<CustomerPartyFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<CustomerPartyFE>>();
 
             // Assert
@@ -112,14 +109,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRegnskapsforerAgentDelegation_ReturnsDelegations()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _regnskapsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "regnskapsforerAgentDelegations.json");
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
             List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
@@ -135,14 +131,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetRevisorAgentDelegation_ReturnsDelegations()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _revisorSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "revisorAgentDelegations.json");
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
             List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
@@ -158,14 +153,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetForretningsforerAgentDelegation_ReturnsDelegations()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _forretningsforerSystemUserId;
             string path = Path.Combine(_expectedDataPath, "SystemUser", "forretningsforerAgentDelegations.json");
             List<AgentDelegationFE> expectedResponse = Util.GetMockData<List<AgentDelegationFE>>(path);
 
             // Act
-            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation");
             List<AgentDelegationFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<AgentDelegationFE>>();
 
             // Assert
@@ -181,8 +175,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostRegnskapsforerAgentDelegation_ReturnsAssignment()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "6b0574ae-f569-4c0d-a8d4-8ad56f427890";
             
@@ -200,7 +193,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
             AgentDelegationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<AgentDelegationFE>();
 
             // Assert
@@ -216,8 +209,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostRevisorAgentDelegation_ReturnsAssignment()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _revisorSystemUserId;
             string customerId = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             
@@ -235,7 +227,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             };
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
             AgentDelegationFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<AgentDelegationFE>();
 
             // Assert
@@ -251,8 +243,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostRegnskapsforerAgentDelegation_ReturnsError()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _regnskapsforerSystemUserId;
             string customerId = "82cc64c5-60ff-4184-8c07-964c3a1e6fc7";
             
@@ -266,7 +257,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation?partyuuid={partyUuid}", content);
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation", content);
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
@@ -280,15 +271,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteRegnskapsforerAgentDelegation_ReturnsTrue()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _regnskapsforerSystemUserId;
             string delegationId = "7da509f3-cff5-4253-946e-0336ae0bc48f";
             
             bool expectedResponse = true;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}");
             bool actualResponse = await httpResponse.Content.ReadFromJsonAsync<bool>();
 
             // Assert
@@ -304,15 +294,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteRegnskapsforerAgentDelegation_ReturnsError()
         {
             // Arrange
-            string partyId = "51329012";
-            string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = _regnskapsforerSystemUserId;
             string delegationId = "60f1ade9-ed48-4083-a369-178d45d6ffd1";
             
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
             // Act
-            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}?partyuuid={partyUuid}");
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/systemuser/agentdelegation/{partyId}/{systemUserId}/delegation/{delegationId}");
 
             // Assert
             Assert.Equal(expectedResponse, httpResponse.StatusCode);

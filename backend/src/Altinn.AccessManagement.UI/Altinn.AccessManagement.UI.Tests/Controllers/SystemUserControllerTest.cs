@@ -41,7 +41,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUsers_ReturnsAllSystemUsersNewestFirst()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUsers.json");
             List<SystemUserFE> expectedResponse = Util.GetMockData<List<SystemUserFE>>(path);
 
@@ -62,7 +62,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUser_ReturnsSpecificSystemUser()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "123e4567-e89b-12d3-a456-426614174000";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUser.json");
             SystemUserFE expectedResponse = Util.GetMockData<SystemUserFE>(path);
@@ -84,7 +84,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUser_ReturnsNotFound()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
@@ -103,7 +103,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteSystemUser_ReturnsAccepted()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "123e4567-e89b-12d3-a456-426614174000";
             HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
 
@@ -122,7 +122,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteSystemUser_ReturnsNotFound()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
@@ -141,7 +141,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostSystemUser_ReturnsNewSystemUserId()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string expectedResponse = "eb9c9edf-a32f-424c-b475-6d47a0e7621f";
             NewSystemUserRequest dto = new NewSystemUserRequest
             {
@@ -169,7 +169,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task PostSystemUser_ReturnsSystemNotFound()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string expectedResponse = "AMUI-00011";
             NewSystemUserRequest dto = new NewSystemUserRequest
             {
@@ -197,7 +197,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetAgentSystemUsers_ReturnsAllAgentSystemUsersNewestFirst()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string path = Path.Combine(_expectedDataPath, "SystemUser", "agentSystemUsers.json");
             List<SystemUserFE> expectedResponse = Util.GetMockData<List<SystemUserFE>>(path);
 
@@ -218,7 +218,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetAgentSystemUser_ReturnsAgentSystemUser()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "agentSystemUser.json");
             SystemUserFE expectedResponse = Util.GetMockData<SystemUserFE>(path);
@@ -240,7 +240,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetAgentSystemUser_ReturnsNotFound()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;
 
@@ -259,7 +259,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteAgentSystemUser_ReturnsAccepted()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "61844188-3789-4b84-9314-2be1fdbc6633";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             HttpStatusCode expectedResponse = HttpStatusCode.Accepted;
@@ -279,7 +279,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task DeleteAgentSystemUser_ReturnsNotFound()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string systemUserId = "e60073ad-c661-4ca0-b74c-40238ad333e9";
             string partyUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             HttpStatusCode expectedResponse = HttpStatusCode.NotFound;

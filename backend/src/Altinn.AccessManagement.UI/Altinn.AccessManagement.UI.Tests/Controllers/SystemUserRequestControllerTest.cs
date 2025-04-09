@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserRequest_ReturnsRequest()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             string path = Path.Combine(_expectedDataPath, "SystemUser", "systemUserRequest.json");
             SystemUserRequestFE expectedResponse = Util.GetMockData<SystemUserRequestFE>(path);
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task GetSystemUserRequest_ReturnsError()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
@@ -81,7 +81,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task ApproveSystemUserRequest_ApproveOk()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
@@ -102,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task ApproveSystemUserRequest_ReturnsError()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
@@ -123,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RejectSystemUserRequest_ApproveOk()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string requestId = "24c092ab-7ff0-4d13-8ab8-7dad51ca7ad3";
             bool expectedResponse = true;
 
@@ -144,7 +144,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public async Task RejectSystemUserRequest_ReturnsError()
         {
             // Arrange
-            int partyId = 51329012;
+            Guid partyId = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
             string requestId = "e71a293a-3e7b-42f4-9315-81aa8c2515e5";
             string expectedResponse = "AUTH-00010";
 
