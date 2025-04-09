@@ -20,7 +20,7 @@ const systemUsers = [
   {
     id: '93d4ac6b-8412-4600-8480-1a282359d2c8',
     integrationTitle: 'SmartCloud',
-    partyId: '51329012',
+    partyId: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
     created: '2025-02-21T12:25:41.26221Z',
     system: {
       systemId: '991825827_smartcloud',
@@ -34,7 +34,7 @@ const systemUsers = [
   {
     id: '5610454b-88e4-4934-a30d-b6f93f1b7683',
     integrationTitle: 'Fiken',
-    partyId: '51329012',
+    partyId: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
     created: '2025-02-21T12:25:41.26221Z',
     system: {
       systemId: '913312465_fiken_demo_product',
@@ -50,7 +50,7 @@ const agentSystemUsers = [
   {
     id: 'be16ce1b-e1fa-4369-896c-8562858a64d5',
     integrationTitle: 'Tripletex',
-    partyId: '51329012',
+    partyId: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
     created: '2025-02-21T12:25:41.26221Z',
     system: {
       systemId: '991825827_tripletex',
