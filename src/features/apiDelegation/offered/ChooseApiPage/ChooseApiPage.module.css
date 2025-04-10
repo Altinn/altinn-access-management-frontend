@@ -12,6 +12,8 @@
 .delegableApisContainer {
   height: 400px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-neutral-border-default) var(--ds-color-neutral-surface-default);
 }
 
 .unstyledListItem {

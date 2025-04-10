@@ -2,6 +2,12 @@ body {
   margin: 0;
 }
 
+html {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-base-default) var(--ds-color-background-subtle);
+}
+
 :root {
   font-family: 'Inter', sans-serif;
   --backgroundColorA2: #1eadf7;
