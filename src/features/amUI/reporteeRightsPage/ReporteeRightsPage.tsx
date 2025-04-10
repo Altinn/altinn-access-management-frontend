@@ -40,6 +40,7 @@ export const ReporteeRightsPage = () => {
 
   rerouteIfNotConfetti();
 
+  const { displayLimitedPreviewLaunch } = window.featureFlags;
   return (
     <SnackbarProvider>
       <PartyRepresentationProvider
@@ -55,6 +56,7 @@ export const ReporteeRightsPage = () => {
                   userType={party?.partyTypeName}
                   subHeading={t('reportee_rights_page.heading_subtitle', { name: reportee?.name })}
                   roles={
+                    displayLimitedPreviewLaunch &&
                     !!reportee?.partyUuid &&
                     !!party?.partyUuid && (
                       <UserRoles

@@ -6,6 +6,7 @@ declare global {
       displayPopularSingleRightsServices: boolean;
       displayResourceDelegation: boolean;
       displayConfettiPackage: boolean;
+      displayLimitedPreviewLaunch: boolean;
     };
   }
 }

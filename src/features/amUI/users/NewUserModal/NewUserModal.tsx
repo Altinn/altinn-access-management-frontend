@@ -22,7 +22,7 @@ export const NewUserButton: React.FC = () => {
       >
         {t('new_user_modal.trigger_button')}
       </Button>
-      <NewUserModal modalRef={modalRef}></NewUserModal>
+      <NewUserModal modalRef={modalRef} />
     </>
   );
 };
@@ -32,6 +32,7 @@ interface NewUserModalProps {
 }
 
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
+  const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
   return (
     <Dialog
       ref={modalRef}
@@ -51,12 +52,16 @@ const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
         data-size='sm'
       >
         <Tabs.List>
-          <Tabs.Tab value='person'>{t('new_user_modal.person')}</Tabs.Tab>
+          {displayLimitedPreviewLaunch && (
+            <Tabs.Tab value='person'>{t('new_user_modal.person')}</Tabs.Tab>
+          )}
           <Tabs.Tab value='org'>{t('new_user_modal.organization')}</Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value='person'>
-          <NewPersonContent />
-        </Tabs.Panel>
+        {displayLimitedPreviewLaunch && (
+          <Tabs.Panel value='person'>
+            <NewPersonContent />
+          </Tabs.Panel>
+        )}
         <Tabs.Panel value='org'>
           <NewOrgContent />
         </Tabs.Panel>

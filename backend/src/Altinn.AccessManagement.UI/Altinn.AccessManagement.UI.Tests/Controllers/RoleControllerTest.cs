@@ -2,13 +2,13 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.Role;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -19,6 +19,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
     public class RoleControllerTest : IClassFixture<CustomWebApplicationFactory<RoleController>>
     {
         private readonly HttpClient _client;
+        private readonly HttpClient _client_feature_off;
         private readonly CustomWebApplicationFactory<RoleController> _factory;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         private readonly string _expectedDataPath = "Data/ExpectedResults";
@@ -30,10 +31,15 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         public RoleControllerTest(CustomWebApplicationFactory<RoleController> factory)
         {
             _factory = factory;
-            _client = SetupUtils.GetTestClient(factory);
+            _client = SetupUtils.GetTestClient(factory, null);
+            _client_feature_off = SetupUtils.GetTestClient(factory, new FeatureFlags { DisplayLimitedPreviewLaunch = false });
+
             string token = PrincipalUtil.GetAccessToken("sbl.authorization");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            _client_feature_off.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _client_feature_off.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         /// <summary>
@@ -99,6 +105,23 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: get roles when feature toggle is off
+        ///     Expected: Returns NotFound  
+        /// </summary>
+        [Fact]
+        public async Task GetRolesForUser_Feature_Toggle_Off()
+        {
+            string rightOwnerUuid = "cd35779b-b174-4ecc-bbef-ece13611be7f"; // Valid reportee
+            string rightHolderUuid = "26ca8b02-c455-4dc0-96be-f92864837ff9"; // invalid uuid that will cause internal error
+
+            // Act
+            HttpResponseMessage response = await _client_feature_off.GetAsync($"accessmanagement/api/v1/role/assignments/{rightOwnerUuid}/{rightHolderUuid}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
         ///    Test case: Delegate role
         ///    Expected: Returns OK
         /// </summary>
@@ -137,6 +160,25 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///    Test case: Delegate role when feature toggle is off
+        ///    Expected: Returns NotFound
+        /// </summary>
+        [Fact]
+        public async Task DelegateRole_Feature_Toggle_Off ()
+        {
+            // Arrange
+            Guid from = Guid.NewGuid();
+            Guid to = Guid.NewGuid();
+            Guid roleId = Guid.NewGuid();
+
+            // Act
+            HttpResponseMessage response = await _client_feature_off.PostAsync($"accessmanagement/api/v1/role/delegate/{from}/{to}/{roleId}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
         ///   Test case: Revoke role
         ///   Expected: Returns OK
         /// </summary>
@@ -171,18 +213,36 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
+        /// <summary>
+        ///   Test case: Revoke role when feature toggle is off
+        ///   Expected: Returns NotFound
+        /// </summary>
         [Fact]
-        public async Task RoleDelegationCheck_CanDelegate() 
+        public async Task RevokeRole_Feature_Toggle_Off()
+        {
+            // Arrange
+            Guid assignmentId = Guid.NewGuid();
+
+            // Act
+            HttpResponseMessage response = await _client_feature_off.DeleteAsync($"accessmanagement/api/v1/role/assignments/{assignmentId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        }
+
+        [Fact]
+        public async Task RoleDelegationCheck_CanDelegate()
         {
             // uuid for Intelligent Albatross
-            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; 
+            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             // roleId for Tilgangsstyring
             var roleUuid = "4691c710-e0ad-4152-9783-9d1e787f02d3";
-            
+
             var res = await _client.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
 
             DelegationCheckResponse responseData = JsonSerializer.Deserialize<DelegationCheckResponse>(await res.Content.ReadAsStringAsync(), options);
-            
+
             // Assert
             Assert.Equal(HttpStatusCode.OK, res.StatusCode);
             Assert.True(responseData.CanDelegate);
@@ -191,22 +251,42 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         [Fact]
-        public async Task RoleDelegationCheck_MissingRoleAccess() 
+        public async Task RoleDelegationCheck_MissingRoleAccess()
         {
             // uuid for Intelligent Albatross
-            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb"; 
+            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
             // roleId for Programmeringsgrensesnitt (API)
             var roleUuid = "37d2ba7f-187f-45f5-9a96-2f23cf328dab";
-            
+
             var res = await _client.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
 
             DelegationCheckResponse responseData = JsonSerializer.Deserialize<DelegationCheckResponse>(await res.Content.ReadAsStringAsync(), options);
-            
+
             // Assert
             Assert.Equal(HttpStatusCode.OK, res.StatusCode);
             Assert.False(responseData.CanDelegate);
             Assert.Equal(DetailCode.MissingRoleAccess, responseData.DetailCode);
 
+        }
+
+        /// <summary>
+        ///   Test case: Role delegation check when feature toggle is off
+        ///   Expected: Returns NotFound
+        /// </summary>
+        /// <returns></returns>
+
+        [Fact]
+        public async Task RoleDelegationCheck_Disabled_Feature_Toggle()
+        {
+            
+            // uuid for Intelligent Albatross
+            string rightOwnerUuid = "5c0656db-cf51-43a4-bd64-6a91c8caacfb";
+            // roleId for Tilgangsstyring
+            var roleUuid = "4691c710-e0ad-4152-9783-9d1e787f02d3";
+                       
+            var res = await _client_feature_off.GetAsync($"accessmanagement/api/v1/role/delegationcheck/{rightOwnerUuid}/{roleUuid}");
+
+            Assert.Equal(HttpStatusCode.NotFound, res.StatusCode);
         }
 
         /// <summary>
@@ -228,7 +308,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             List<RoleAreaFE> actualResources = JsonSerializer.Deserialize<List<RoleAreaFE>>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertCollections(expectedResult, actualResources, AssertionUtil.AssertEqual);
         }
-                
+
         /// <summary>
         ///     Test case: Search roles with "hovedadmin" as input
         ///     Expected: Search returns all matching roles
