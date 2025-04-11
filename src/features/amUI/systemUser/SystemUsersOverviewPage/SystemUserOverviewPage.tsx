@@ -21,7 +21,7 @@ export const SystemUserOverviewPage = () => {
   const { t } = useTranslation();
   useDocumentTitle(t('systemuser_overviewpage.page_title'));
 
-  const partyId = getCookie('AltinnPartyId');
+  const partyId = getCookie('AltinnPartyUuid');
 
   const {
     data: systemUsers,

@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The system user request</returns>
-        Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(int partyId, Guid changeRequestId, string languageCode, CancellationToken cancellationToken);
+        Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(Guid partyId, Guid changeRequestId, string languageCode, CancellationToken cancellationToken);
         
         /// <summary>
         /// Approve a system user request to create a new system user
@@ -25,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="changeRequestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the create system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> ApproveSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken);
+        Task<Result<bool>> ApproveSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken);
         
         /// <summary>
         /// Reject a system user request
@@ -34,6 +34,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="changeRequestId">The id of the system user request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
-        Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken);
+        Task<Result<bool>> RejectSystemUserChangeRequest(Guid partyId, Guid changeRequestId, CancellationToken cancellationToken);
     }
 }

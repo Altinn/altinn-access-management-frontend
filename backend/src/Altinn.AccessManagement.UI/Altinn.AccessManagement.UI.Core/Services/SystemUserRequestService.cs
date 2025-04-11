@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<SystemUserRequestFE>> GetSystemUserRequest(int partyId, Guid requestId, string languageCode, CancellationToken cancellationToken)
+        public async Task<Result<SystemUserRequestFE>> GetSystemUserRequest(Guid partyId, Guid requestId, string languageCode, CancellationToken cancellationToken)
         {
             Result<SystemUserRequest> request = await _systemUserRequestClient.GetSystemUserRequest(partyId, requestId, cancellationToken);
             
@@ -64,13 +64,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> ApproveSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> ApproveSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             return await _systemUserRequestClient.ApproveSystemUserRequest(partyId, requestId, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RejectSystemUserRequest(Guid partyId, Guid requestId, CancellationToken cancellationToken)
         {
             return await _systemUserRequestClient.RejectSystemUserRequest(partyId, requestId, cancellationToken);
         }
