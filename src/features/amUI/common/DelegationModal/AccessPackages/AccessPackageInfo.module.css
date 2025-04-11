@@ -8,7 +8,6 @@
   overflow-x: visible;
   gap: 10px;
   scrollbar-width: thin;
-  scrollbar-color: var(--ds-color-neutral-border-default) var(--ds-color-neutral-surface-default);
 }
 
 .services {
