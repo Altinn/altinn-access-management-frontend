@@ -1,5 +1,5 @@
 # Building accessmanagement frontend
-FROM node:22-slim@sha256:373f9e53a753877bcbd21e6e7884682f6b1988ee63a4c4129e9051bb96546081 AS generate-accessmanagement-frontend
+FROM node:22-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b AS generate-accessmanagement-frontend
 
 WORKDIR /build
 COPY . .
