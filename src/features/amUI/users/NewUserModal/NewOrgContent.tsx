@@ -4,9 +4,10 @@ import { t } from 'i18next';
 import { Paragraph } from '@digdir/designsystemet-react';
 
 import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
-import { NewUserAlert } from './NewUserAlert';
+import { createErrorDetails, NewUserAlert } from './NewUserAlert';
 
 export const NewOrgContent = () => {
   const [orgNumber, setOrgNumber] = useState('');
@@ -14,32 +15,36 @@ export const NewOrgContent = () => {
   const {
     data: orgData,
     isLoading,
-    error,
-    isError,
+    error: getOrgError,
+    isError: isGetOrgError,
   } = useGetOrganizationQuery(orgNumber, { skip: orgNumber.length !== 9 });
 
-  const errorDetails =
-    isError && error && 'status' in error
-      ? {
-          status: error.status.toString(),
-          time: error.data as string,
-        }
-      : null;
+  const [addRightHolder, { isError: isAddError, error: addError }] = useAddRightHolderMutation();
 
   const onAdd = () => {
     if (orgData?.partyUuid) {
-      window.location.href = `${window.location.href}/${orgData?.partyUuid}`;
+      addRightHolder(orgData.partyUuid)
+        .unwrap()
+        .then(() => {
+          window.location.href = `${window.location.href}/${orgData?.partyUuid}`;
+        })
+        .catch(() => {});
     }
   };
 
   return (
     <div className={classes.newOrgContent}>
-      {isError && (
-        <NewUserAlert
-          userType='org'
-          error={errorDetails}
-        />
-      )}
+      {isGetOrgError ||
+        (isAddError && (
+          <NewUserAlert
+            userType='org'
+            error={
+              isGetOrgError
+                ? createErrorDetails(isGetOrgError, getOrgError)
+                : createErrorDetails(isAddError, addError)
+            }
+          />
+        ))}
       <TextField
         className={classes.textField}
         label={t('common.org_number')}
@@ -61,7 +66,7 @@ export const NewOrgContent = () => {
 
       <div className={classes.validationButton}>
         <Button
-          disabled={orgNumber.length !== 9 || isLoading || !orgData || isError}
+          disabled={orgNumber.length !== 9 || isLoading || !orgData || isGetOrgError}
           loading={isLoading}
           onClick={onAdd}
         >

@@ -18,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
+        private readonly IRightHolderClient _rightHolderClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
@@ -107,6 +108,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Party personParty = await _registerClient.GetPartyForPerson(ssn_cleaned);
 
             return personParty?.PartyUuid;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid)
+        {
+            return await _rightHolderClient.PostNewRightHolder(partyUuid, rightholderPartyUuid);
         }
     }
 }

@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { getCookie } from '@/resources/Cookie/CookieMethods';
-import { Party } from './lookupApi';
+
+import type { Party } from './lookupApi';
 
 interface UserInfoApiResponse {
   party: Party;
@@ -74,6 +75,17 @@ export const userInfoApi = createApi({
       query: () => `reportee/${getCookie('AltinnPartyId')}/rightholders`,
       keepUnusedDataFor: 300,
     }),
+    addRightHolder: builder.mutation<void, string>({
+      query: (partyUuidToBeAdded) => ({
+        url: `reportee/${getCookie('AltinnPartyId')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
+        method: 'POST',
+        transformErrorResponse: (response: {
+          status: string | number;
+        }): { status: string | number; data: string } => {
+          return { status: response.status, data: new Date().toISOString() };
+        },
+      }),
+    }),
     getReporteeListForParty: builder.query<User[], void>({
       query: () => {
         const partyUuid = getCookie('AltinnPartyUuid');
@@ -110,6 +122,7 @@ export const {
   useGetUserInfoQuery,
   useGetReporteeQuery,
   useGetRightHoldersQuery,
+  useAddRightHolderMutation,
   useGetUserAccessesQuery,
   useValidateNewUserPersonMutation,
   useGetReporteeListForPartyQuery,
