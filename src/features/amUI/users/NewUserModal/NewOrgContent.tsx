@@ -20,6 +20,7 @@ export const NewOrgContent = () => {
   } = useGetOrganizationQuery(orgNumber, { skip: orgNumber.length !== 9 });
 
   const [addRightHolder, { isError: isAddError, error: addError }] = useAddRightHolderMutation();
+  const isError = isGetOrgError || isAddError;
 
   const onAdd = () => {
     if (orgData?.partyUuid) {
@@ -27,24 +28,22 @@ export const NewOrgContent = () => {
         .unwrap()
         .then(() => {
           window.location.href = `${window.location.href}/${orgData?.partyUuid}`;
-        })
-        .catch(() => {});
+        });
     }
   };
 
   return (
     <div className={classes.newOrgContent}>
-      {isGetOrgError ||
-        (isAddError && (
-          <NewUserAlert
-            userType='org'
-            error={
-              isGetOrgError
-                ? createErrorDetails(isGetOrgError, getOrgError)
-                : createErrorDetails(isAddError, addError)
-            }
-          />
-        ))}
+      {isError && (
+        <NewUserAlert
+          userType='org'
+          error={
+            isGetOrgError
+              ? createErrorDetails(isGetOrgError, getOrgError)
+              : addError && createErrorDetails(isAddError, addError)
+          }
+        />
+      )}
       <TextField
         className={classes.textField}
         label={t('common.org_number')}

@@ -77,14 +77,14 @@ export const userInfoApi = createApi({
     }),
     addRightHolder: builder.mutation<void, string>({
       query: (partyUuidToBeAdded) => ({
-        url: `reportee/${getCookie('AltinnPartyId')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
+        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder?rightholderPartyUuid=${partyUuidToBeAdded}`,
         method: 'POST',
-        transformErrorResponse: (response: {
-          status: string | number;
-        }): { status: string | number; data: string } => {
-          return { status: response.status, data: new Date().toISOString() };
-        },
       }),
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number; data: string } => {
+        return { status: response.status, data: new Date().toISOString() };
+      },
     }),
     getReporteeListForParty: builder.query<User[], void>({
       query: () => {
@@ -108,12 +108,12 @@ export const userInfoApi = createApi({
         url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
         method: 'POST',
         body: JSON.stringify({ ssn, lastName }),
-        transformErrorResponse: (response: {
-          status: string | number;
-        }): { status: string | number } => {
-          return { status: response.status };
-        },
       }),
+      transformErrorResponse: (response: {
+        status: string | number;
+      }): { status: string | number } => {
+        return { status: response.status };
+      },
     }),
   }),
 });

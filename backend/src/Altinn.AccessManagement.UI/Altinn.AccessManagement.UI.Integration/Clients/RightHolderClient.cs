@@ -49,10 +49,18 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <inheritdoc />
         public async Task<HttpResponseMessage> PostNewRightHolder(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            string endpointUrl = $"accessmanagement/api/v1/enduser/access/parties?party={party}&to={to}";
+            string endpointUrl = $"enduser/access/parties?party={party}&to={to}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            return await _client.PostAsync(token, endpointUrl, null);
+            var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+            }
+
+            return httpResponse;
 
         }
     }

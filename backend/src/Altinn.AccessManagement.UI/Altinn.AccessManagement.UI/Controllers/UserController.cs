@@ -256,16 +256,11 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 var response = await _userService.AddReporteeRightHolder(partyUuid, rightholderPartyUuid);
-                return response;
+                return Ok();
             }
             catch (HttpStatusException ex)
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "ValidatePerson failed unexpectedly");
-                return StatusCode(500);
             }
         }
 

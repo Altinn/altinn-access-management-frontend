@@ -20,7 +20,7 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   if (error && error.status === '404' && userType === 'person') {
     errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
   } else if (error && error.status === '400' && userType === 'org') {
-    errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
+    errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_org')}</Paragraph>;
   } else if (error && error.status === '429') {
     errorText = <Paragraph data-size='sm'>{t('new_user_modal.too_many_requests_error')}</Paragraph>;
   } else if (error) {

@@ -34,13 +34,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
             IProfileClient profileClient,
             IAccessManagementClient accessManagementClient,
             IAccessManagementClientV0 accessManagementClientV0,
-            IRegisterClient registerClient)
+            IRegisterClient registerClient,
+            IRightHolderClient rightHolderClient)
         {
             _logger = logger;
             _profileClient = profileClient;
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
             _registerClient = registerClient;
+            _rightHolderClient = rightHolderClient;
         }
 
         /// <inheritdoc/>
