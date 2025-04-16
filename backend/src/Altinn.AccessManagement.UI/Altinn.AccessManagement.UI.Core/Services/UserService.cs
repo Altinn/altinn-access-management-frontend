@@ -29,6 +29,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
         /// <param name="registerClient">handler for register client</param>
+        /// <param name="rightHolderClient">handler for right holder client</param>  
         public UserService(
             ILogger<IAPIDelegationService> logger,
             IProfileClient profileClient,
@@ -49,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<UserProfileFE> GetUserProfile(int userId)
         {
             UserProfile userProfile = await _profileClient.GetUserProfile(userId);
-            return userProfile == null ? null : new UserProfileFE(userProfile);         
+            return userProfile == null ? null : new UserProfileFE(userProfile);
         }
 
         /// <inheritdoc/>        
