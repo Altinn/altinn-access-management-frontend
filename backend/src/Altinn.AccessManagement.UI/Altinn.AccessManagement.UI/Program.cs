@@ -323,6 +323,15 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddHttpClient<IAccessPackageClient, AccessPackageClient>();
     }
 
+    if (mockSettings.RightHolder)
+    {
+        services.AddHttpClient<IRightHolderClient, RightHolderClientMock>();
+    }
+    else
+    {
+        services.AddHttpClient<IRightHolderClient, RightHolderClient>();
+    }
+
     if (mockSettings.Register)
     {
         services.AddHttpClient<IRegisterClient, RegisterClientMock>();

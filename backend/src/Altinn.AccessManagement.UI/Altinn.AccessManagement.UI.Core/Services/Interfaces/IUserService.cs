@@ -58,5 +58,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="lastname">The last name of the user</param>
         /// <returns>The person's partyUuid if ssn and lastname correspond to the same person. Returns null if matching person is not found</returns>
         Task<Guid?> ValidatePerson(string ssn, string lastname);
+
+        /// <summary>
+        /// Endpoint for adding a new party as a right holder to reportee party.
+        /// </summary>
+        /// <param name="partyUuid">The uuid of the reportee party</param>
+        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
+        /// <returns>The result of the adding</returns>
+        Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid);
     }
 }

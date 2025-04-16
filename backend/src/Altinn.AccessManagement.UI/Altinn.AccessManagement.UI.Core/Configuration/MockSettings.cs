@@ -21,6 +21,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool AccessPackage { get; set; }
 
         /// <summary>
+        /// Set to mock RightHolderClient during runtime
+        /// </summary>
+        public bool RightHolder { get; set; }
+
+        /// <summary>
         /// Set to mock ProfileClient during runtime
         /// </summary>
         public bool Profile { get; set; }
