@@ -1,14 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSnackbar } from '@altinn/altinn-components';
+
+import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import type { Party } from '@/rtk/features/lookupApi';
-
-import { useSnackbar } from '../../common/Snackbar';
-import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
-import { SnackbarDuration, SnackbarMessageVariant } from '../../common/Snackbar/SnackbarProvider';
 
 interface DeleteResourceButton {
   resource: ServiceResource;
@@ -27,6 +26,7 @@ export const DeleteResourceButton = ({
   const revoke = useRevokeResource();
 
   const snackbar = (isSuccessful: boolean) => {
+    const color: 'success' | 'alert' = isSuccessful ? 'success' : 'alert';
     const snackbarData = {
       message:
         t(
@@ -34,8 +34,7 @@ export const DeleteResourceButton = ({
             ? 'single_rights.delete_singleRight_success_message'
             : 'single_rights.delete_singleRight_error_message',
         ) + resource.title,
-      variant: SnackbarMessageVariant.Default,
-      duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
+      color,
     };
     openSnackbar(snackbarData);
   };

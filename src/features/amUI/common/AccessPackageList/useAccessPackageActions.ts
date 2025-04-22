@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useSnackbar } from '@altinn/altinn-components';
 
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
@@ -6,8 +7,6 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { Party } from '@/rtk/features/lookupApi';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
-
-import { useSnackbar } from '../Snackbar';
 
 interface useAccessPackageActionsProps {
   toUuid: string;
@@ -40,6 +39,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'success',
       });
     }
   };
@@ -57,6 +57,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'alert',
       });
     }
   };
@@ -69,6 +70,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'success',
       });
     }
   };
@@ -86,6 +88,7 @@ export const useAccessPackageActions = ({
           name: toParty.name,
           accessPackage: accessPackage.name,
         }),
+        color: 'alert',
       });
     }
   };

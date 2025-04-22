@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
 
-import store from '@/rtk/app/store';
-
-import { SnackbarProvider } from '../Snackbar';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { DelegationModal, DelegationType } from './DelegationModal';
-import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationModalProvider } from './DelegationModalContext';
+
+import store from '@/rtk/app/store';
 
 type DelegationModalProps = React.ComponentProps<typeof DelegationModal>;
 
@@ -21,18 +20,16 @@ export default {
     },
   },
   render: (props) => (
-    <SnackbarProvider>
-      <DelegationModalProvider>
-        <Provider store={store}>
-          <PartyRepresentationProvider
-            fromPartyUuid='123'
-            toPartyUuid='123'
-          >
-            <DelegationModal {...(props as DelegationModalProps)} />
-          </PartyRepresentationProvider>
-        </Provider>
-      </DelegationModalProvider>
-    </SnackbarProvider>
+    <DelegationModalProvider>
+      <Provider store={store}>
+        <PartyRepresentationProvider
+          fromPartyUuid='123'
+          toPartyUuid='123'
+        >
+          <DelegationModal {...(props as DelegationModalProps)} />
+        </PartyRepresentationProvider>
+      </Provider>
+    </DelegationModalProvider>
   ),
 } as Meta;
 

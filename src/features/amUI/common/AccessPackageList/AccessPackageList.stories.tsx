@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
+import { RootProvider } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { AccessPackageList } from './AccessPackageList';
-import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { SnackbarProvider } from '../Snackbar/SnackbarProvider';
+
+import store from '@/rtk/app/store';
 
 type AreaListPropsAndCustomArgs = React.ComponentProps<typeof AccessPackageList>;
 
@@ -14,14 +15,14 @@ export default {
   component: AccessPackageList,
   render: (args) => (
     <Provider store={store}>
-      <SnackbarProvider>
+      <RootProvider>
         <PartyRepresentationProvider
           fromPartyUuid='123'
           toPartyUuid='456'
         >
           <AccessPackageList {...args} />
         </PartyRepresentationProvider>
-      </SnackbarProvider>
+      </RootProvider>
     </Provider>
   ),
 } as Meta;
