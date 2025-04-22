@@ -226,7 +226,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
-        [Route("reportee/{partyId}/rightholder/validateperson")]
+        [Route("reportee/{partyUuid}/rightholder/validateperson")]
         public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput)
         {
             if (!ModelState.IsValid)
@@ -267,6 +267,35 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 _logger.LogError(ex, "ValidatePerson failed unexpectedly");
                 return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for adding a new party as a right holder to reportee party.
+        /// </summary>
+        /// <param name="partyUuid">The uuid of the reportee party</param>
+        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
+        /// <returns>The result of the adding</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("reportee/{partyUuid}/rightholder")]
+        public async Task<ActionResult<HttpResponseMessage>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid rightholderPartyUuid)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var response = await _userService.AddReporteeRightHolder(partyUuid, rightholderPartyUuid);
+                return Ok();
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
         }
 

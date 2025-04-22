@@ -18,6 +18,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IProfileClient _profileClient;
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAccessManagementClientV0 _accessManagementClientV0;
+        private readonly IRightHolderClient _rightHolderClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
@@ -28,25 +29,28 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="accessManagementClient">handler for AM client</param>
         /// <param name="accessManagementClientV0">handler for old AM client</param>
         /// <param name="registerClient">handler for register client</param>
+        /// <param name="rightHolderClient">handler for right holder client</param>  
         public UserService(
             ILogger<IAPIDelegationService> logger,
             IProfileClient profileClient,
             IAccessManagementClient accessManagementClient,
             IAccessManagementClientV0 accessManagementClientV0,
-            IRegisterClient registerClient)
+            IRegisterClient registerClient,
+            IRightHolderClient rightHolderClient)
         {
             _logger = logger;
             _profileClient = profileClient;
             _accessManagementClient = accessManagementClient;
             _accessManagementClientV0 = accessManagementClientV0;
             _registerClient = registerClient;
+            _rightHolderClient = rightHolderClient;
         }
 
         /// <inheritdoc/>
         public async Task<UserProfileFE> GetUserProfile(int userId)
         {
             UserProfile userProfile = await _profileClient.GetUserProfile(userId);
-            return userProfile == null ? null : new UserProfileFE(userProfile);         
+            return userProfile == null ? null : new UserProfileFE(userProfile);
         }
 
         /// <inheritdoc/>        
@@ -114,6 +118,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             HttpResponseMessage response = await _accessManagementClient.RevokeRightHolder(partyUuid, rightHolderPartyUuid);
             return response;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid)
+        {
+            return await _rightHolderClient.PostNewRightHolder(partyUuid, rightholderPartyUuid);
         }
     }
 }

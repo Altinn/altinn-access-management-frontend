@@ -442,6 +442,78 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///    Test case: AddReporteeRightHolder succeeds with valid inputs
+        ///    Expected: Returns 200 OK
+        /// </summary>
+        [Fact]
+        public async Task AddReporteeRightHolder_ValidInput_ReturnsOk()
+        {
+            // Arrange
+            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
+            var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb"); // Valid right holder
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync(
+                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}", 
+                null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: AddReporteeRightHolder with invalid model state
+        ///    Expected: Returns 400 Bad Request
+        /// </summary>
+        [Fact]
+        public async Task AddReporteeRightHolder_InvalidModelState_ReturnsBadRequest()
+        {
+            // Arrange
+            var reporteePartyUuid = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f"); // Valid reportee
+            var invalidRightHolderUuid = "not-a-guid"; // Invalid UUID format
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync(
+                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={invalidRightHolderUuid}", 
+                null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: AddReporteeRightHolder that triggers an HttpStatusException
+        ///    Expected: Returns status code based on the exception
+        /// </summary>
+        [Fact]
+        public async Task AddReporteeRightHolder_TriggersHttpStatusException_ReturnsErrorStatus()
+        {
+            // Arrange
+            // Using Guid.Empty will trigger the HttpStatusException in RightHolderClientMock
+            var reporteePartyUuid = Guid.Empty;
+            var rightHolderPartyUuid = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+
+            var token = PrincipalUtil.GetToken(1234, 1234, 2);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync(
+                $"accessmanagement/api/v1/user/reportee/{reporteePartyUuid}/rightholder?rightholderPartyUuid={rightHolderPartyUuid}", 
+                null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+            string content = await httpResponse.Content.ReadAsStringAsync();
+            Assert.Contains("Unexpected HttpStatus response", content);
+        }
+
+        /// <summary>
         ///   Test case: GetReporteeListForUser returns a list of reportees for the user
         ///   Expected: Returns a list of reportees
         /// </summary>

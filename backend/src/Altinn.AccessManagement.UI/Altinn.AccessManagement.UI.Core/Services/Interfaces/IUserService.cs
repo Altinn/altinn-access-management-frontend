@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="userId">The user id</param>
         /// <returns></returns>
         Task<List<User>> GetReporteeList(Guid userId);
-        
+
         /// <summary>
         /// Gets a Party based on partyId if the party is in the users reporteelist
         /// </summary>
@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">The party Id of the reportee</param>
         /// <returns>List of right holders</returns>
         Task<List<User>> GetReporteeRightHolders(int partyId);
-        
+
         /// <summary>
         /// Gets all accesses of a given right holder for a reportee
         /// </summary>
@@ -66,5 +66,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="rightHolderPartyUuid">The party that is to lose their right holder status</param>
         /// <returns>A HttpResponseMessage denoting whether or not the action was successfull.</returns>
         Task<HttpResponseMessage> RevokeRightHolder(Guid partyUuid, Guid rightHolderPartyUuid);
+
+        /// <summary>
+        /// Endpoint for adding a new party as a right holder to reportee party.
+        /// </summary>
+        /// <param name="partyUuid">The uuid of the reportee party</param>
+        /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder</param>
+        /// <returns>The result of the adding</returns>
+        Task<HttpResponseMessage> AddReporteeRightHolder(Guid partyUuid, Guid rightholderPartyUuid);
     }
 }
