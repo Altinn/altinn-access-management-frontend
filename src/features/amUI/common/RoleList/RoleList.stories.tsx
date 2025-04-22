@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
-import { RootProvider } from '@altinn/altinn-components';
+import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -26,6 +26,7 @@ export default {
             onSelect={(id) => console.log(`onselect: ${id}`)}
           />
         </PartyRepresentationProvider>
+        <Snackbar />
       </RootProvider>
     </Provider>
   ),

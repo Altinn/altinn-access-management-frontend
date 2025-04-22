@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
+import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
 import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -20,16 +21,19 @@ export default {
     },
   },
   render: (props) => (
-    <DelegationModalProvider>
-      <Provider store={store}>
-        <PartyRepresentationProvider
-          fromPartyUuid='123'
-          toPartyUuid='123'
-        >
-          <DelegationModal {...(props as DelegationModalProps)} />
-        </PartyRepresentationProvider>
-      </Provider>
-    </DelegationModalProvider>
+    <RootProvider>
+      <DelegationModalProvider>
+        <Provider store={store}>
+          <PartyRepresentationProvider
+            fromPartyUuid='123'
+            toPartyUuid='123'
+          >
+            <DelegationModal {...(props as DelegationModalProps)} />
+          </PartyRepresentationProvider>
+        </Provider>
+      </DelegationModalProvider>
+      <Snackbar />
+    </RootProvider>
   ),
 } as Meta;
 
