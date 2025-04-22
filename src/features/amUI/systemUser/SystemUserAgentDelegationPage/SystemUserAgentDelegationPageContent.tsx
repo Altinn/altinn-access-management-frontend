@@ -5,16 +5,6 @@ import { useNavigate, useParams } from 'react-router';
 import { PencilIcon, PlusIcon } from '@navikt/aksel-icons';
 import { Snackbar, useSnackbar } from '@altinn/altinn-components';
 
-import { getCookie } from '@/resources/Cookie/CookieMethods';
-import {
-  useAssignCustomerMutation,
-  useDeleteAgentSystemuserMutation,
-  useRemoveCustomerMutation,
-} from '@/rtk/features/systemUserApi';
-import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
-import { SystemUserPath } from '@/routes/paths';
-import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-
 import { SystemUserHeader } from '../components/SystemUserHeader/SystemUserHeader';
 import type { AgentDelegation, AgentDelegationCustomer, SystemUser } from '../types';
 import { DeleteSystemUserPopover } from '../components/DeleteSystemUserPopover/DeleteSystemUserPopover';
@@ -22,6 +12,16 @@ import { RightsList } from '../components/RightsList/RightsList';
 
 import classes from './SystemUserAgentDelegationPage.module.css';
 import { CustomerList } from './CustomerList';
+
+import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { SystemUserPath } from '@/routes/paths';
+import { PageContainer } from '@/features/amUI/common/PageContainer/PageContainer';
+import {
+  useAssignCustomerMutation,
+  useDeleteAgentSystemuserMutation,
+  useRemoveCustomerMutation,
+} from '@/rtk/features/systemUserApi';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 const getAssignedCustomers = (
   customers: AgentDelegationCustomer[],
