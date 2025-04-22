@@ -58,5 +58,13 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="lastname">The last name of the user</param>
         /// <returns>The person's partyUuid if ssn and lastname correspond to the same person. Returns null if matching person is not found</returns>
         Task<Guid?> ValidatePerson(string ssn, string lastname);
+
+        /// <summary>
+        ///     Revokes all rights associated with a right holder by revoking their status as a right holder for another party.
+        /// </summary>
+        /// <param name="partyUuid">The uuid pf the reportee party, from which the right holder is have their rights revoked</param>
+        /// <param name="rightHolderPartyUuid">The party that is to lose their right holder status</param>
+        /// <returns>A HttpResponseMessage denoting whether or not the action was successfull.</returns>
+        Task<HttpResponseMessage> RevokeRightHolder(Guid partyUuid, Guid rightHolderPartyUuid);
     }
 }

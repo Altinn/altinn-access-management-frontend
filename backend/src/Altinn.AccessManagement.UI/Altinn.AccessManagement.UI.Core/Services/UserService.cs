@@ -108,5 +108,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return personParty?.PartyUuid;
         }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeRightHolder(Guid partyUuid, Guid rightHolderPartyUuid)
+        {
+            HttpResponseMessage response = await _accessManagementClient.RevokeRightHolder(partyUuid, rightHolderPartyUuid);
+            return response;
+        }
     }
 }

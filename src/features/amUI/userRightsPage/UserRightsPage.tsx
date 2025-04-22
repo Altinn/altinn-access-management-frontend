@@ -18,12 +18,13 @@ import { SnackbarProvider } from '../common/Snackbar/SnackbarProvider';
 import { UserRoles } from '../common/UserRoles/UserRoles';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { RightsTabs } from '../common/RightsTabs/RightsTabs';
+import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
+import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
 import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
-import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { DeleteUserModal } from './DeleteUserModal';
 
 export const UserRightsPage = () => {
   const { t } = useTranslation();
@@ -52,7 +53,10 @@ export const UserRightsPage = () => {
         >
           <DelegationModalProvider>
             <PageLayoutWrapper>
-              <PageContainer backUrl={`/${amUIPath.Users}`}>
+              <PageContainer
+                backUrl={`/${amUIPath.Users}`}
+                contentActions={<DeleteUserModal />}
+              >
                 {!isLoading && allAccesses ? (
                   <>
                     <UserPageHeader
