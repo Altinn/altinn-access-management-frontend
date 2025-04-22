@@ -57,7 +57,7 @@ export const DelegateRoleButton = ({
           name: toParty?.name,
         }),
         color: color,
-        duration: isSuccessful ? SnackbarDuration.infinite : SnackbarDuration.normal,
+        duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
       };
       openSnackbar(snackbarData);
     };

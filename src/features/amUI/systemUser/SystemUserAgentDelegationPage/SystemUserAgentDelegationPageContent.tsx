@@ -88,6 +88,7 @@ export const SystemUserAgentDelegationPageContent = ({
     openSnackbar({
       message: message,
       color: color,
+      dismissable: false,
       className: classes.customerListSnackbar,
     });
   };

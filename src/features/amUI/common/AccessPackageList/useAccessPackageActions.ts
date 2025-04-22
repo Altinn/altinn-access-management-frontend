@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useSnackbar } from '@altinn/altinn-components';
+import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { useDelegateAccessPackage } from '@/resources/hooks/useDelegateAccessPackage';
 import { useRevokeAccessPackage } from '@/resources/hooks/useRevokeAccessPackage';
@@ -58,6 +58,7 @@ export const useAccessPackageActions = ({
           accessPackage: accessPackage.name,
         }),
         color: 'alert',
+        duration: SnackbarDuration.infinite,
       });
     }
   };
@@ -89,6 +90,7 @@ export const useAccessPackageActions = ({
           accessPackage: accessPackage.name,
         }),
         color: 'alert',
+        duration: SnackbarDuration.infinite,
       });
     }
   };

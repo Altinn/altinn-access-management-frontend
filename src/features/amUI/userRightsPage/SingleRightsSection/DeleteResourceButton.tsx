@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSnackbar } from '@altinn/altinn-components';
+import { SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { ButtonWithConfirmPopup } from '../../common/ButtonWithConfirmPopup/ButtonWithConfirmPopup';
 
@@ -35,6 +35,7 @@ export const DeleteResourceButton = ({
             : 'single_rights.delete_singleRight_error_message',
         ) + resource.title,
       color,
+      duration: isSuccessful ? SnackbarDuration.normal : SnackbarDuration.infinite,
     };
     openSnackbar(snackbarData);
   };

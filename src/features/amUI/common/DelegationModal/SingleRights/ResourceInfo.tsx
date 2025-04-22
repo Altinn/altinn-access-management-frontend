@@ -3,7 +3,7 @@ import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Avatar, Badge, useSnackbar } from '@altinn/altinn-components';
+import { Avatar, Badge, SnackbarDuration, useSnackbar } from '@altinn/altinn-components';
 
 import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
 import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
@@ -189,6 +189,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty?.name }),
             color: 'alert',
+            duration: SnackbarDuration.infinite,
           }),
       );
     }
