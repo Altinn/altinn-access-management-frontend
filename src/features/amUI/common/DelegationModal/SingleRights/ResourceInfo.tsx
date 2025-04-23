@@ -191,14 +191,13 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
           openSnackbar({
             message: t('delegation_modal.edit_success', { name: toParty?.name }),
             color: 'success',
-            duration: SnackbarDuration.long,
           });
           onDelegate?.();
         },
         () =>
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty?.name }),
-            color: 'danger',
+            color: 'alert',
             duration: SnackbarDuration.infinite,
           }),
       );
@@ -217,8 +216,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
 
         openSnackbar({
           message: t('delegation_modal.success_message', { name: toParty?.name }),
-          variant: SnackbarMessageVariant.Default,
-          duration: SnackbarDuration.long,
+          color: 'success',
         });
 
         const notDelegatedActions = response.rightDelegationResults.filter(

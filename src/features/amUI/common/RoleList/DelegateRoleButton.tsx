@@ -5,6 +5,8 @@ import { ExclamationmarkTriangleIcon, PlusCircleIcon } from '@navikt/aksel-icons
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
+import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
+
 import type { Role } from '@/rtk/features/roleApi';
 import { useDelegateMutation, useDelegationCheckQuery } from '@/rtk/features/roleApi';
 import type { ActionError } from '@/resources/hooks/useActionError';

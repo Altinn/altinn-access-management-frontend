@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Provider } from 'react-redux';
+import { RootProvider, Snackbar } from '@altinn/altinn-components';
 
-import store from '@/rtk/app/store';
+import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
 
 import { RoleList } from './RoleList';
-import { PartyRepresentationProvider } from '../PartyRepresentationContext/PartyRepresentationContext';
-import { SnackbarProvider } from '../Snackbar/SnackbarProvider';
+
+import store from '@/rtk/app/store';
 
 type RoleListPropsAndCustomArgs = React.ComponentProps<typeof RoleList>;
 
@@ -14,7 +15,7 @@ export default {
   component: RoleList,
   render: (args) => (
     <Provider store={store}>
-      <SnackbarProvider>
+      <RootProvider>
         <PartyRepresentationProvider
           fromPartyUuid='123'
           toPartyUuid='456'
@@ -25,7 +26,8 @@ export default {
             onSelect={(id) => console.log(`onselect: ${id}`)}
           />
         </PartyRepresentationProvider>
-      </SnackbarProvider>
+        <Snackbar />
+      </RootProvider>
     </Provider>
   ),
 } as Meta;
