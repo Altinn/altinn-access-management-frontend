@@ -1,4 +1,4 @@
-import { Avatar, DsParagraph, Heading } from '@altinn/altinn-components';
+import { Avatar, DsParagraph, DsHeading } from '@altinn/altinn-components';
 import type { ReactNode } from 'react';
 
 import classes from './UserPageHeader.module.css';
@@ -21,13 +21,13 @@ export const UserPageHeader = ({ userName, userType, subHeading, roles }: UserPa
         size={'lg'}
         type={userType === PartyType.Organization ? 'company' : 'person'}
       />
-      <Heading
-        as='h1'
+      <DsHeading
+        level={1}
         data-size='sm'
         className={classes.heading}
       >
         {userName}
-      </Heading>
+      </DsHeading>
       {subHeading && (
         <DsParagraph
           className={classes.subheading}

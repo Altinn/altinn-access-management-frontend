@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { List, Button, Icon, DsAlert, Heading, DsParagraph } from '@altinn/altinn-components';
+import { List, Button, Icon, DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -106,12 +106,12 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           svgElement={PackageIcon}
           className={classes.headerIcon}
         />
-        <Heading
-          as='h1'
+        <DsHeading
+          level={1}
           data-size='md'
         >
           {accessPackage?.name}
-        </Heading>
+        </DsHeading>
       </div>
 
       {isActionLoading || actionSuccess ? (
@@ -126,9 +126,9 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               data-color='danger'
               data-size='sm'
             >
-              <Heading as='h2'>
+              <DsHeading level={2}>
                 {t('access_packages.delegation_check.delegation_check_error_heading')}
-              </Heading>
+              </DsHeading>
               <TechnicalErrorParagraphs
                 message={t(
                   'access_packages.delegation_check.delegation_check_error_message_singular',
@@ -144,19 +144,19 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
               data-size='sm'
             >
               {userHasPackage ? (
-                <Heading
-                  as='h2'
+                <DsHeading
+                  level={2}
                   data-size='2xs'
                 >
                   {t('delegation_modal.general_error.revoke_heading')}
-                </Heading>
+                </DsHeading>
               ) : (
-                <Heading
-                  as='h2'
+                <DsHeading
+                  level={2}
                   data-size='2xs'
                 >
                   {t('delegation_modal.general_error.delegate_heading')}
-                </Heading>
+                </DsHeading>
               )}
               <TechnicalErrorParagraphs
                 size='xs'
@@ -174,15 +174,15 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
 
           <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
           <div className={classes.services}>
-            <Heading
+            <DsHeading
+              level={2}
               data-size='xs'
-              as='h2'
             >
               {t('delegation_modal.package_services', {
                 count: accessPackage.resources.length,
                 name: accessPackage?.name,
               })}
-            </Heading>
+            </DsHeading>
             <div className={classes.service_list}>
               <List
                 items={listItems}

@@ -1,4 +1,11 @@
-import { ListBase, DsAlert, DsHeading, DsParagraph, Button } from '@altinn/altinn-components';
+import {
+  ListBase,
+  DsAlert,
+  DsHeading,
+  DsParagraph,
+  Button,
+  DsButton,
+} from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import React, { useMemo, useState } from 'react';
 import cn from 'classnames';
@@ -86,8 +93,8 @@ export const AreaItemContent = ({
       )}
 
       {!showAvailablePackagesExternal && (
-        <Button
-          variant='text'
+        <DsButton
+          variant='tertiary'
           onClick={() => setShowAvailablePackages((prev) => !prev)}
           className={classes.showAvailablePackagesButton}
           data-size='sm'
@@ -98,7 +105,7 @@ export const AreaItemContent = ({
           ) : (
             <ChevronDownIcon aria-label={t('common.open')} />
           )}
-        </Button>
+        </DsButton>
       )}
       {showAvailablePackages && delegationCheckError && (
         <DsAlert data-color='danger'>

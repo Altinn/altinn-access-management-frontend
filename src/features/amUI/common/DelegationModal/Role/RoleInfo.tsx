@@ -1,4 +1,4 @@
-import { Avatar, DsAlert, DsParagraph, Heading } from '@altinn/altinn-components';
+import { Avatar, DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -62,12 +62,12 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
           imageUrlAlt={role?.area?.name}
           type='company'
         />
-        <Heading
-          as='h3'
+        <DsHeading
+          level={3}
           data-size='sm'
         >
           {role?.name}
-        </Heading>
+        </DsHeading>
       </div>
 
       {!!actionError && (
@@ -76,11 +76,19 @@ export const RoleInfo = ({ role, availableActions = [] }: PackageInfoProps) => {
           data-size='sm'
         >
           {userHasRole ? (
-            <Heading data-size='2xs'>{t('delegation_modal.general_error.revoke_heading')}</Heading>
+            <DsHeading
+              level={4}
+              data-size='2xs'
+            >
+              {t('delegation_modal.general_error.revoke_heading')}
+            </DsHeading>
           ) : (
-            <Heading data-size='2xs'>
+            <DsHeading
+              level={4}
+              data-size='2xs'
+            >
               {t('delegation_modal.general_error.delegate_heading')}
-            </Heading>
+            </DsHeading>
           )}
           <TechnicalErrorParagraphs
             size='xs'

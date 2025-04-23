@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph, Heading } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsHeading } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
@@ -63,12 +63,12 @@ export const ResourceAlert = ({ resource, error, rightReasons }: ResourceAlertPr
   }
   return (
     <DsAlert data-color='danger'>
-      <Heading
-        as='span'
+      <DsHeading
+        level={2}
         data-size='2xs'
       >
         {headingText}
-      </Heading>
+      </DsHeading>
       {content}
     </DsAlert>
   );

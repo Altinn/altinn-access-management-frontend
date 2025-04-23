@@ -1,6 +1,6 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useCallback, useState } from 'react';
-import { DsSearch, Heading } from '@altinn/altinn-components';
+import { DsSearch, DsHeading } from '@altinn/altinn-components';
 
 import type { DelegationAction } from '../EditModal';
 import { useDelegationModalContext } from '../DelegationModalContext';
@@ -41,8 +41,8 @@ export const PackageSearch = ({
   return (
     toParty && (
       <>
-        <Heading
-          as='h2'
+        <DsHeading
+          level={2}
           data-size='sm'
         >
           <Trans
@@ -50,7 +50,7 @@ export const PackageSearch = ({
             values={{ name: toParty.name }}
             components={{ strong: <strong /> }}
           />
-        </Heading>
+        </DsHeading>
         <search className={classes.searchSection}>
           <div className={classes.searchInputs}>
             <div className={classes.searchField}>

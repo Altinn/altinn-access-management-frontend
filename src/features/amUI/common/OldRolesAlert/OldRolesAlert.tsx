@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Link } from 'react-router';
-import { DsAlert, DsParagraph, DsLink, Heading } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsLink, DsHeading } from '@altinn/altinn-components';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -23,13 +23,13 @@ export const OldRolesAlert = () => {
   return (
     <DsAlert data-color='info'>
       <div className={styles.container}>
-        <Heading
-          size='xs'
-          as='h2'
+        <DsHeading
+          level={2}
+          data-size='xs'
           className={styles.heading}
         >
           {t('a2Alerts.launchAlertHeading')}
-        </Heading>
+        </DsHeading>
 
         <DsParagraph>{t('a2Alerts.launchAlertContent')}</DsParagraph>
         <DsLink asChild>

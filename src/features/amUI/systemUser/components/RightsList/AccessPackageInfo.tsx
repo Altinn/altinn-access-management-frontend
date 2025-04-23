@@ -1,14 +1,13 @@
 import React from 'react';
-import { ResourceList } from '@altinn/altinn-components';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import { DsHeading, DsParagraph, ResourceList } from '@altinn/altinn-components';
 import { PackageIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import type { SystemUserAccessPackage } from '../../types';
 
 import classes from './RightsList.module.css';
+
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 interface AccessPackageInfoProps {
   accessPackage: SystemUserAccessPackage;
@@ -24,15 +23,15 @@ export const AccessPackageInfo = ({
     <div className={classes.accessPackages}>
       <div className={classes.resourceInfoHeader}>
         <PackageIcon fontSize={28} />
-        <Heading
+        <DsHeading
           level={1}
           data-size='xs'
         >
           {accessPackage.name}
-        </Heading>
+        </DsHeading>
       </div>
-      <Paragraph data-size='sm'>{accessPackage.description}</Paragraph>
-      <Heading
+      <DsParagraph data-size='sm'>{accessPackage.description}</DsParagraph>
+      <DsHeading
         data-size='2xs'
         level={2}
       >
@@ -41,7 +40,7 @@ export const AccessPackageInfo = ({
           : t('systemuser_detailpage.accesspackage_resources_plural', {
               resourcesCount: accessPackage.resources.length,
             })}
-      </Heading>
+      </DsHeading>
       <ResourceList
         defaultItemSize='sm'
         items={accessPackage.resources.map((resource) => {

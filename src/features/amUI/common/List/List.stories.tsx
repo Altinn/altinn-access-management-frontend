@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Heading } from '@altinn/altinn-components';
+import { DsHeading } from '@altinn/altinn-components';
 
 import { List } from './List';
 import { ListItem } from './ListItem';
@@ -7,12 +7,12 @@ import { ListItem } from './ListItem';
 type ListPropsAndCustomArgs = React.ComponentProps<typeof List>;
 const exampleListArgs = {
   heading: (
-    <Heading
-      as='h1'
+    <DsHeading
+      level={2}
       data-size='md'
     >
       List heading
-    </Heading>
+    </DsHeading>
   ),
   spacing: true,
   background: true,
