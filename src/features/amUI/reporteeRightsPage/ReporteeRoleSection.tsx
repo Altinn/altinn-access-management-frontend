@@ -1,14 +1,14 @@
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
-
-import type { Role } from '@/rtk/features/roleApi';
+import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { RoleInfoModal } from '../common/RoleList/RoleInfoModal';
 import { RoleList } from '../common/RoleList/RoleList';
 import { DelegationAction } from '../common/DelegationModal/EditModal';
 import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { OldRolesAlert } from '../common/OldRolesAlert/OldRolesAlert';
+
+import type { Role } from '@/rtk/features/roleApi';
 
 interface ReporteeRoleSectionProps {
   numberOfAccesses?: number;
@@ -23,14 +23,14 @@ export const ReporteeRoleSection = ({ numberOfAccesses }: ReporteeRoleSectionPro
   return (
     <>
       <OldRolesAlert />
-      <Heading
+      <DsHeading
         level={2}
         data-size='2xs'
         id='access_packages_title'
       >
         {t('role.current_roles_title', { count: numberOfAccesses })}
-      </Heading>
-      <Paragraph data-size='sm'>{t('role.roles_description')}</Paragraph>
+      </DsHeading>
+      <DsParagraph data-size='sm'>{t('role.roles_description')}</DsParagraph>
       <RoleList
         onSelect={(role) => {
           setModalItem(role);

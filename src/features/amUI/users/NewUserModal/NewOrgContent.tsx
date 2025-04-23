@@ -1,13 +1,12 @@
-import { Button, TextField } from '@altinn/altinn-components';
+import { Button, TextField, DsParagraph } from '@altinn/altinn-components';
 import { useState } from 'react';
 import { t } from 'i18next';
-import { Paragraph } from '@digdir/designsystemet-react';
-
-import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
-import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 import classes from './NewUserModal.module.css';
 import { createErrorDetails, NewUserAlert } from './NewUserAlert';
+
+import { useGetOrganizationQuery } from '@/rtk/features/lookupApi';
+import { useAddRightHolderMutation } from '@/rtk/features/userInfoApi';
 
 export const NewOrgContent = () => {
   const [orgNumber, setOrgNumber] = useState('');
@@ -52,14 +51,14 @@ export const NewOrgContent = () => {
       />
       {orgData && (
         <div className={classes.searchResult}>
-          <Paragraph>
+          <DsParagraph>
             <strong>{orgData.name}</strong>
-          </Paragraph>
-          <Paragraph data-size='sm'>
+          </DsParagraph>
+          <DsParagraph data-size='sm'>
             {t('common.org_nr')} {orgData.orgNumber}
             {orgData.unitType === 'AAFY' ||
               (orgData?.unitType === 'BEDR' && ' - ' + t('common.subunit'))}
-          </Paragraph>
+          </DsParagraph>
         </div>
       )}
 

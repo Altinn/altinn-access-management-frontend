@@ -1,20 +1,9 @@
 import * as React from 'react';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import type { ListItemProps } from '@altinn/altinn-components';
-import { List, Button, Icon } from '@altinn/altinn-components';
+import { List, Button, Icon, DsAlert, Heading, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { MenuElipsisHorizontalIcon, PackageIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
-
-import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
-import {
-  useGetUserDelegationsQuery,
-  type PackageResource,
-  type AccessPackage,
-} from '@/rtk/features/accessPackageApi';
-import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
-import type { ActionError } from '@/resources/hooks/useActionError';
-import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { DelegationAction } from '../EditModal';
@@ -23,6 +12,16 @@ import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { StatusSection } from '../StatusSection';
 
 import classes from './AccessPackageInfo.module.css';
+
+import { useAccessPackageDelegationCheck } from '@/resources/hooks/useAccessPackageDelegationCheck';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import { useAccessPackageActions } from '@/features/amUI/common/AccessPackageList/useAccessPackageActions';
+import {
+  useGetUserDelegationsQuery,
+  type PackageResource,
+  type AccessPackage,
+} from '@/rtk/features/accessPackageApi';
+import { TechnicalErrorParagraphs } from '@/features/amUI/common/TechnicalErrorParagraphs';
 
 export interface PackageInfoProps {
   accessPackage: AccessPackage;
@@ -108,8 +107,8 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
           className={classes.headerIcon}
         />
         <Heading
+          as='h1'
           data-size='md'
-          level={1}
         >
           {accessPackage?.name}
         </Heading>
@@ -123,11 +122,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
       ) : (
         <>
           {!!delegationCheckError && (
-            <Alert
+            <DsAlert
               data-color='danger'
               data-size='sm'
             >
-              <Heading level={3}>
+              <Heading as='h2'>
                 {t('access_packages.delegation_check.delegation_check_error_heading')}
               </Heading>
               <TechnicalErrorParagraphs
@@ -137,19 +136,25 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 status={delegationCheckError.httpStatus}
                 time={delegationCheckError.timestamp}
               />
-            </Alert>
+            </DsAlert>
           )}
           {!!actionError && (
-            <Alert
+            <DsAlert
               data-color='danger'
               data-size='sm'
             >
               {userHasPackage ? (
-                <Heading data-size='2xs'>
+                <Heading
+                  as='h2'
+                  data-size='2xs'
+                >
                   {t('delegation_modal.general_error.revoke_heading')}
                 </Heading>
               ) : (
-                <Heading data-size='2xs'>
+                <Heading
+                  as='h2'
+                  data-size='2xs'
+                >
                   {t('delegation_modal.general_error.delegate_heading')}
                 </Heading>
               )}
@@ -158,7 +163,7 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
                 status={actionError.httpStatus}
                 time={actionError.timestamp}
               />
-            </Alert>
+            </DsAlert>
           )}
 
           <StatusSection
@@ -167,11 +172,11 @@ export const AccessPackageInfo = ({ accessPackage, availableActions = [] }: Pack
             inheritedFrom={accessPackage.inherited ? accessPackage.inheritedFrom?.name : undefined}
           />
 
-          <Paragraph variant='long'>{accessPackage?.description}</Paragraph>
+          <DsParagraph variant='long'>{accessPackage?.description}</DsParagraph>
           <div className={classes.services}>
             <Heading
               data-size='xs'
-              level={2}
+              as='h2'
             >
               {t('delegation_modal.package_services', {
                 count: accessPackage.resources.length,

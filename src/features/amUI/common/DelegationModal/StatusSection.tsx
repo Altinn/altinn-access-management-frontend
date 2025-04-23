@@ -1,4 +1,3 @@
-import { Paragraph } from '@digdir/designsystemet-react';
 import {
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
@@ -6,6 +5,7 @@ import {
 } from '@navikt/aksel-icons';
 import { Trans } from 'react-i18next';
 import { t } from 'i18next';
+import { DsParagraph } from '@altinn/altinn-components';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
@@ -39,14 +39,14 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.hasPackageInfoIcon}
           />
-          <Paragraph data-size='xs'>
+          <DsParagraph data-size='xs'>
             <Trans
               i18nKey='delegation_modal.has_package_message'
               values={{
                 user_name: toParty?.name,
               }}
             />
-          </Paragraph>
+          </DsParagraph>
         </div>
       )}
       {inheritedFrom !== undefined && inheritedFrom.length > 0 && (
@@ -55,7 +55,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.inheritedInfoIcon}
           />
-          <Paragraph data-size='xs'>
+          <DsParagraph data-size='xs'>
             <Trans
               i18nKey='delegation_modal.inherited_role_org_message'
               values={{
@@ -63,7 +63,7 @@ export const StatusSection = ({
                 org_name: inheritedFrom ?? fromParty?.name,
               }}
             />
-          </Paragraph>
+          </DsParagraph>
         </div>
       )}
       {showMissingRightsMessage && (
@@ -72,7 +72,7 @@ export const StatusSection = ({
             fontSize='1.5rem'
             className={classes.delegationCheckInfoIcon}
           />
-          <Paragraph data-size='xs'>
+          <DsParagraph data-size='xs'>
             <Trans
               i18nKey={delegationCheckText ?? 'delegation_modal.delegation_check_not_delegable'}
               components={{ b: <strong /> }}
@@ -81,7 +81,7 @@ export const StatusSection = ({
                 reporteeorg: fromParty?.name,
               }}
             />
-          </Paragraph>
+          </DsParagraph>
         </div>
       )}
     </div>

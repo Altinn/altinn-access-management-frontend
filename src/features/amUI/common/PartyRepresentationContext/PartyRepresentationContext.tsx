@@ -1,4 +1,5 @@
-import { createContext, JSX, useContext } from 'react';
+import type { JSX } from 'react';
+import { createContext, useContext } from 'react';
 
 import { useGetPartyByUUIDQuery, type Party } from '@/rtk/features/lookupApi';
 import { useGetUserInfoQuery } from '@/rtk/features/userInfoApi';

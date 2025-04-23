@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { Dialog } from '@digdir/designsystemet-react';
 import { forwardRef, useEffect } from 'react';
-
-import type { Role } from '@/rtk/features/roleApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { ActionError } from '@/resources/hooks/useActionError';
+import { DsDialog } from '@altinn/altinn-components';
 
 import { ResourceInfo } from './SingleRights/ResourceInfo';
 import classes from './DelegationModal.module.css';
 import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
 import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
+
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
+import type { Role } from '@/rtk/features/roleApi';
 
 export enum DelegationAction {
   DELEGATE = 'DELEGATE',
@@ -60,7 +60,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
     }, [onClosing, ref]);
 
     return (
-      <Dialog
+      <DsDialog
         ref={ref}
         className={classes.modalDialog}
         closedby='any'
@@ -71,7 +71,7 @@ export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
         <div className={classes.content}>
           {renderModalContent(resource, accessPackage, role, availableActions)}
         </div>
-      </Dialog>
+      </DsDialog>
     );
   },
 );

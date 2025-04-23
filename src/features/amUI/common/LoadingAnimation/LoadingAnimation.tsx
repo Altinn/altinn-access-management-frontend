@@ -1,10 +1,10 @@
 import Lottie from 'lottie-react';
-import { Spinner } from '@digdir/designsystemet-react';
 import { t } from 'i18next';
-
-import checkMarkAnimation from '@/assets/AltinnCheckmarkAnimation.json';
+import { DsSpinner } from '@altinn/altinn-components';
 
 import classes from './LoadingAnimation.module.css';
+
+import checkMarkAnimation from '@/assets/AltinnCheckmarkAnimation.json';
 
 export const LoadingAnimation = ({
   isLoading,
@@ -16,7 +16,7 @@ export const LoadingAnimation = ({
   if (isLoading) {
     return (
       <div className={classes.loadingSection}>
-        <Spinner
+        <DsSpinner
           data-size='lg'
           aria-label={t('common.loading')}
         />

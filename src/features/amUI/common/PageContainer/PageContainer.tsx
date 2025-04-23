@@ -1,10 +1,10 @@
 import React from 'react';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import { Link as DSLink } from '@digdir/designsystemet-react';
-import classes from './PageContainer.module.css';
 import { Link } from 'react-router';
-import { Button } from '@altinn/altinn-components';
+import { Button, DsLink } from '@altinn/altinn-components';
+
+import classes from './PageContainer.module.css';
 
 /**
  * Layout component that provides consistent structure for pages.
@@ -50,7 +50,7 @@ export const PageContainer = ({
       <div className={classes.topActions}>
         <div className={classes.pageActions}>
           {backUrl ? (
-            <DSLink
+            <DsLink
               asChild={true}
               data-size='md'
               data-color='neutral'
@@ -62,7 +62,7 @@ export const PageContainer = ({
                 />
                 {t('common.back')}
               </Link>
-            </DSLink>
+            </DsLink>
           ) : onNavigateBack ? (
             <Button
               onClick={onNavigateBack}

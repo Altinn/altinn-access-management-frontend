@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Paragraph } from '@digdir/designsystemet-react';
-
-import type { User } from '@/rtk/features/userInfoApi';
+import { Button, DsParagraph } from '@altinn/altinn-components';
 
 import { ListWrapper } from './ListWrapper';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
+
+import type { User } from '@/rtk/features/userInfoApi';
 
 export interface UserListProps {
   userList: User[];
@@ -23,12 +23,12 @@ export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }:
 
   return (
     <>
-      <Paragraph
+      <DsParagraph
         role='alert'
         data-size='lg'
       >
         {users.length === 0 ? t('users_page.user_no_search_result') : ''}
-      </Paragraph>
+      </DsParagraph>
       <ListWrapper
         userList={users}
         spacing={2}
@@ -42,8 +42,8 @@ export const UserList = ({ userList, searchString, isLoading, listItemTitleAs }:
             className={classes.showMoreButton}
             onClick={goNextPage}
             disabled={!hasNextPage}
-            variant='tertiary'
-            data-size='md'
+            variant='text'
+            size='md'
           >
             {t('common.show_more')}
           </Button>

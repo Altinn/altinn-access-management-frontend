@@ -1,16 +1,16 @@
-import { Heading } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-
-import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
+import { DsHeading } from '@altinn/altinn-components';
 
 import { DelegationModal, DelegationType } from '../../common/DelegationModal/DelegationModal';
 import { DelegationAction } from '../../common/DelegationModal/EditModal';
-
-import { ActiveDelegations } from './ActiveDelegations';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { OldRolesAlert } from '../../common/OldRolesAlert/OldRolesAlert';
+
+import { ActiveDelegations } from './ActiveDelegations';
+
+import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
 
 export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: number }) => {
   const { t } = useTranslation();
@@ -23,13 +23,13 @@ export const AccessPackageSection = ({ numberOfAccesses }: { numberOfAccesses: n
     party && (
       <>
         <OldRolesAlert />
-        <Heading
+        <DsHeading
           level={2}
           data-size='2xs'
           id='access_packages_title'
         >
           {t('access_packages.current_access_packages_title', { count: numberOfAccesses })}
-        </Heading>
+        </DsHeading>
         <DelegationModal
           delegationType={DelegationType.AccessPackage}
           availableActions={[

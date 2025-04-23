@@ -1,5 +1,4 @@
-import { ListBase, ListItem } from '@altinn/altinn-components';
-import { Heading, Paragraph, Skeleton } from '@digdir/designsystemet-react';
+import { ListBase, ListItem, DsSkeleton, DsParagraph, DsHeading } from '@altinn/altinn-components';
 
 import classes from './roleSection.module.css';
 
@@ -14,20 +13,20 @@ export const SkeletonRoleList = () => {
 
   return (
     <div className={classes.areas}>
-      <Heading data-size='md'>
-        <Skeleton variant='text'>
-          <Skeleton
+      <DsHeading data-size='md'>
+        <DsSkeleton variant='text'>
+          <DsSkeleton
             variant='text'
             width={40}
           />
-        </Skeleton>
-      </Heading>
-      <Paragraph data-size='md'>
-        <Skeleton
+        </DsSkeleton>
+      </DsHeading>
+      <DsParagraph data-size='md'>
+        <DsSkeleton
           variant='text'
           width={100}
         />
-      </Paragraph>
+      </DsParagraph>
       <ListBase>
         {listSkeleton.map((role) => (
           <ListItem

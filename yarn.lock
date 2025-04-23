@@ -19,10 +19,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/altinn-components@npm:0.23.3":
-  version: 0.23.3
-  resolution: "@altinn/altinn-components@npm:0.23.3"
+"@altinn/altinn-components@npm:0.25.0":
+  version: 0.25.0
+  resolution: "@altinn/altinn-components@npm:0.25.0"
   dependencies:
+    "@digdir/designsystemet-css": "npm:^1.0.3"
+    "@digdir/designsystemet-react": "npm:^1.0.3"
+    "@digdir/designsystemet-theme": "npm:^1.0.3"
     "@navikt/aksel-icons": "npm:^7.9.2"
     "@tanstack/react-virtual": "npm:^3.13.4"
     classnames: "npm:^2.5.1"
@@ -31,7 +34,7 @@ __metadata:
   peerDependencies:
     react: ">=18.3.1 || ^19.0.0"
     react-dom: ">=18.3.1 || ^19.0.0"
-  checksum: 10/93b8706c6a2afa3d1271af68f1d77a7c06346ffb52db92a0c16ba69c86b6e0ffb043634518a5d7e2c8f34de07ebb303f407b80594eaccd6a13a43ee0e0770118
+  checksum: 10/b1d9e76a3ec8e901be9b68b1f319e55a53c07f1e1a95e61d89763802157f4b88d7c2651c9503a6d0099a6d09a0dbda59b9b320b206281252253ae3b14d167e40
   languageName: node
   linkType: hard
 
@@ -617,14 +620,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-css@npm:1.0.3":
+"@digdir/designsystemet-css@npm:1.0.3, @digdir/designsystemet-css@npm:^1.0.3":
   version: 1.0.3
   resolution: "@digdir/designsystemet-css@npm:1.0.3"
   checksum: 10/0f3008912c0cfa3a51d3ffb0e4be93c0b36e89d2eac4ba7c2585581b3a3556f3df1e18eb45cb6abffe75357b7385536c19185829ed99918b16227d63d9e89889
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:1.0.3":
+"@digdir/designsystemet-react@npm:1.0.3, @digdir/designsystemet-react@npm:^1.0.3":
   version: 1.0.3
   resolution: "@digdir/designsystemet-react@npm:1.0.3"
   dependencies:
@@ -644,7 +647,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-theme@npm:1.0.3":
+"@digdir/designsystemet-theme@npm:1.0.3, @digdir/designsystemet-theme@npm:^1.0.3":
   version: 1.0.3
   resolution: "@digdir/designsystemet-theme@npm:1.0.3"
   checksum: 10/7ca07d6769b3ee7143349a4ae3d6ec02fdadfbe882c183f906179bd08e93d8af977192c10021e5a242cb856dd1b11be39cfff602aec412c5dde119a26120a3b7
@@ -3113,7 +3116,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "access-management@workspace:."
   dependencies:
-    "@altinn/altinn-components": "npm:0.23.3"
+    "@altinn/altinn-components": "npm:0.25.0"
     "@axe-core/playwright": "npm:^4.10.1"
     "@digdir/designsystemet-css": "npm:1.0.3"
     "@digdir/designsystemet-react": "npm:1.0.3"

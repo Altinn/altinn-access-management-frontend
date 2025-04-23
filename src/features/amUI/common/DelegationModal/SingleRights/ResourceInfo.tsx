@@ -1,9 +1,24 @@
 import * as React from 'react';
-import { Alert, Button, Chip, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Avatar, Badge } from '@altinn/altinn-components';
+import {
+  Avatar,
+  Badge,
+  Button,
+  DsAlert,
+  DsChip,
+  DsParagraph,
+  Heading,
+  SnackbarDuration,
+  useSnackbar,
+} from '@altinn/altinn-components';
+
+import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
+import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+
+import classes from './ResourceInfo.module.css';
+import { ResourceAlert } from './ResourceAlert';
 
 import type {
   DelegationCheckedRight,
@@ -24,14 +39,6 @@ import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { ErrorCode } from '@/resources/utils/errorCodeUtils';
 import { BFFDelegatedStatus } from '@/rtk/features/singleRights/singleRightsSlice';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
-
-import { useSnackbar } from '../../Snackbar';
-import { SnackbarDuration, SnackbarMessageVariant } from '../../Snackbar/SnackbarProvider';
-import { DeleteResourceButton } from '../../../userRightsPage/SingleRightsSection/DeleteResourceButton';
-
-import classes from './ResourceInfo.module.css';
-import { ResourceAlert } from './ResourceAlert';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
 
 export type ChipRight = {
   action: string;
@@ -183,7 +190,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
         () => {
           openSnackbar({
             message: t('delegation_modal.edit_success', { name: toParty?.name }),
-            variant: SnackbarMessageVariant.Default,
+            color: 'success',
             duration: SnackbarDuration.long,
           });
           onDelegate?.();
@@ -191,7 +198,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
         () =>
           openSnackbar({
             message: t('delegation_modal.error_message', { name: toParty?.name }),
-            variant: SnackbarMessageVariant.Default,
+            color: 'danger',
             duration: SnackbarDuration.infinite,
           }),
       );
@@ -240,7 +247,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
 
   const chips = () =>
     resource?.resourceType === 'AltinnApp' ? (
-      <Chip.Checkbox
+      <DsChip.Checkbox
         data-size='sm'
         checked={rights.some((r) => r.checked === true)}
         disabled={!rights.some((r) => r.delegable === true)}
@@ -249,7 +256,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
         }}
       >
         {t('common.action_access')}
-      </Chip.Checkbox>
+      </DsChip.Checkbox>
     ) : (
       rights.map((right: ChipRight) => {
         const actionText = Object.values(LocalizedAction).includes(right.action as LocalizedAction)
@@ -257,7 +264,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
           : right.action;
         return (
           <div key={right.rightKey}>
-            <Chip.Checkbox
+            <DsChip.Checkbox
               data-size='sm'
               checked={right.checked}
               disabled={!right.delegable}
@@ -273,7 +280,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
               }}
             >
               {actionText}
-            </Chip.Checkbox>
+            </DsChip.Checkbox>
           </div>
         );
       })
@@ -296,7 +303,7 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
             <div className={classes.resource}>
               <div className={classes.infoHeading}>
                 <Heading
-                  level={3}
+                  as='h3'
                   data-size='sm'
                 >
                   {resource.title}
@@ -310,11 +317,11 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
                 )}
               </div>
 
-              <Paragraph>{resource.resourceOwnerName}</Paragraph>
+              <DsParagraph>{resource.resourceOwnerName}</DsParagraph>
             </div>
           </div>
-          {resource.description && <Paragraph>{resource.description}</Paragraph>}
-          {resource.rightDescription && <Paragraph>{resource.rightDescription}</Paragraph>}
+          {resource.description && <DsParagraph>{resource.description}</DsParagraph>}
+          {resource.rightDescription && <DsParagraph>{resource.rightDescription}</DsParagraph>}
           {displayResourceAlert ? (
             <ResourceAlert
               error={delegationCheckErrorDetails}
@@ -324,33 +331,33 @@ export const ResourceInfo = ({ resource, onDelegate }: ResourceInfoProps) => {
           ) : (
             <>
               {delegationErrorMessage && (
-                <Alert
+                <DsAlert
                   data-color='danger'
                   data-size='sm'
                 >
                   <Heading
-                    level={3}
+                    as='h3'
                     data-size='xs'
                   >
                     {t('delegation_modal.technical_error_message.heading')}
                   </Heading>
-                  <Paragraph>
+                  <DsParagraph>
                     {t('delegation_modal.technical_error_message.message')} {delegationErrorMessage}
-                  </Paragraph>
-                </Alert>
+                  </DsParagraph>
+                </DsAlert>
               )}
               {missingAccessMessage && (
-                <Alert
+                <DsAlert
                   data-color='info'
                   data-size='sm'
                 >
                   {missingAccessMessage}
-                </Alert>
+                </DsAlert>
               )}
               <div className={classes.rightsSection}>
                 <Heading
                   data-size='xs'
-                  level={4}
+                  as='h4'
                 >
                   {hasAccess && !hasUnsavedChanges ? (
                     <Trans

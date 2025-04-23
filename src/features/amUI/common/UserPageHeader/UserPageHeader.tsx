@@ -1,10 +1,9 @@
-import { Avatar } from '@altinn/altinn-components';
+import { Avatar, DsParagraph, Heading } from '@altinn/altinn-components';
 import type { ReactNode } from 'react';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
-
-import { PartyType } from '@/rtk/features/userInfoApi';
 
 import classes from './UserPageHeader.module.css';
+
+import { PartyType } from '@/rtk/features/userInfoApi';
 
 interface UserPageHeaderProps {
   userName?: string;
@@ -23,19 +22,19 @@ export const UserPageHeader = ({ userName, userType, subHeading, roles }: UserPa
         type={userType === PartyType.Organization ? 'company' : 'person'}
       />
       <Heading
-        level={1}
+        as='h1'
         data-size='sm'
         className={classes.heading}
       >
         {userName}
       </Heading>
       {subHeading && (
-        <Paragraph
+        <DsParagraph
           className={classes.subheading}
           data-size='xs'
         >
           {subHeading}
-        </Paragraph>
+        </DsParagraph>
       )}
       {roles && <div className={classes.userRoles}>{roles}</div>}
     </div>

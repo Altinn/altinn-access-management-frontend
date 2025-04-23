@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Heading, Search } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
+import { DsHeading, DsSearch } from '@altinn/altinn-components';
+
+import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
+import { UserList } from '../common/UserList/UserList';
+
+import classes from './ReporteePage.module.css';
 
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
@@ -8,11 +13,6 @@ import { useGetReporteeListForPartyQuery } from '@/rtk/features/userInfoApi';
 import { useGetReporteePartyQuery } from '@/rtk/features/lookupApi';
 import { debounce } from '@/resources/utils';
 import { rerouteIfNotConfetti } from '@/resources/utils/featureFlagUtils';
-
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { UserList } from '../common/UserList/UserList';
-
-import classes from './ReporteePage.module.css';
 
 export const ReporteesPage = () => {
   const { t } = useTranslation();
@@ -35,28 +35,28 @@ export const ReporteesPage = () => {
     <PageWrapper>
       <PageLayoutWrapper>
         <div className={classes.reporteeListHeading}>
-          <Heading
+          <DsHeading
             level={1}
             data-size='md'
           >
             {t('reportees_page.main_page_heading', { name: party?.name || '' })}
-          </Heading>
+          </DsHeading>
         </div>
         <div className={classes.search}>
-          <Search className={classes.searchBar}>
-            <Search.Input
+          <DsSearch className={classes.searchBar}>
+            <DsSearch.Input
               aria-label={t('users_page.user_search_placeholder')}
               placeholder={t('users_page.user_search_placeholder')}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 onSearch(event.target.value)
               }
             />
-            <Search.Clear
+            <DsSearch.Clear
               onClick={() => {
                 setSearchString('');
               }}
             />
-          </Search>
+          </DsSearch>
         </div>
         <UserList
           userList={userList || []}

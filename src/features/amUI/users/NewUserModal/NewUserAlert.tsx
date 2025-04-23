@@ -1,8 +1,8 @@
-import { Alert, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { SerializedError } from '@reduxjs/toolkit';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import { TechnicalErrorParagraphs } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
@@ -18,11 +18,15 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   let errorText;
 
   if (error && error.status === '404' && userType === 'person') {
-    errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</Paragraph>;
+    errorText = (
+      <DsParagraph data-size='sm'>{t('new_user_modal.not_found_error_person')}</DsParagraph>
+    );
   } else if (error && error.status === '400' && userType === 'org') {
-    errorText = <Paragraph data-size='sm'>{t('new_user_modal.not_found_error_org')}</Paragraph>;
+    errorText = <DsParagraph data-size='sm'>{t('new_user_modal.not_found_error_org')}</DsParagraph>;
   } else if (error && error.status === '429') {
-    errorText = <Paragraph data-size='sm'>{t('new_user_modal.too_many_requests_error')}</Paragraph>;
+    errorText = (
+      <DsParagraph data-size='sm'>{t('new_user_modal.too_many_requests_error')}</DsParagraph>
+    );
   } else if (error) {
     errorText = (
       <TechnicalErrorParagraphs
@@ -34,12 +38,12 @@ export const NewUserAlert = ({ error, userType }: NewUserAlertProps) => {
   }
 
   return (
-    <Alert
+    <DsAlert
       data-size='sm'
       data-color='danger'
     >
       {errorText}
-    </Alert>
+    </DsAlert>
   );
 };
 

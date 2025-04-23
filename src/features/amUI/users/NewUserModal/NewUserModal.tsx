@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import { Button } from '@altinn/altinn-components';
-import { Heading, Dialog, Tabs } from '@digdir/designsystemet-react';
+import { Button, DsDialog, DsHeading, DsTabs } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
 import { NewPersonContent } from './NewPersonContent';
@@ -34,39 +33,39 @@ interface NewUserModalProps {
 const NewUserModal: React.FC<NewUserModalProps> = ({ modalRef }) => {
   const displayLimitedPreviewLaunch = window.featureFlags?.displayLimitedPreviewLaunch;
   return (
-    <Dialog
+    <DsDialog
       ref={modalRef}
       closedby='any'
       aria-labelledby='newUserModal'
     >
-      <Heading
+      <DsHeading
         data-size='xs'
         level={2}
         className={classes.modalHeading}
         id='newUserModal'
       >
         {t('new_user_modal.modal_title')}
-      </Heading>
-      <Tabs
+      </DsHeading>
+      <DsTabs
         defaultValue='person'
         data-size='sm'
       >
-        <Tabs.List>
+        <DsTabs.List>
           {displayLimitedPreviewLaunch && (
-            <Tabs.Tab value='person'>{t('new_user_modal.person')}</Tabs.Tab>
+            <DsTabs.Tab value='person'>{t('new_user_modal.person')}</DsTabs.Tab>
           )}
-          <Tabs.Tab value='org'>{t('new_user_modal.organization')}</Tabs.Tab>
-        </Tabs.List>
+          <DsTabs.Tab value='org'>{t('new_user_modal.organization')}</DsTabs.Tab>
+        </DsTabs.List>
         {displayLimitedPreviewLaunch && (
-          <Tabs.Panel value='person'>
+          <DsTabs.Panel value='person'>
             <NewPersonContent />
-          </Tabs.Panel>
+          </DsTabs.Panel>
         )}
-        <Tabs.Panel value='org'>
+        <DsTabs.Panel value='org'>
           <NewOrgContent />
-        </Tabs.Panel>
-      </Tabs>
-    </Dialog>
+        </DsTabs.Panel>
+      </DsTabs>
+    </DsDialog>
   );
 };
 
