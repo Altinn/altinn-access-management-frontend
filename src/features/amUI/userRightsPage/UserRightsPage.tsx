@@ -15,18 +15,6 @@ import { AccessPackageSection } from './AccessPackageSection/AccessPackageSectio
 import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
 import { RoleSection } from './RoleSection/RoleSection';
 
-import { PageContainer } from '../common/PageContainer/PageContainer';
-import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
-import { UserRoles } from '../common/UserRoles/UserRoles';
-import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
-import { RightsTabs } from '../common/RightsTabs/RightsTabs';
-import { DelegationModalProvider } from '../common/DelegationModal/DelegationModalContext';
-import { PartyRepresentationProvider } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import { AccessPackageSection } from './AccessPackageSection/AccessPackageSection';
-import { SingleRightsSection } from './SingleRightsSection/SingleRightsSection';
-import { RoleSection } from './RoleSection/RoleSection';
-
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { PageWrapper } from '@/components';
 import { useGetPartyByUUIDQuery } from '@/rtk/features/lookupApi';
