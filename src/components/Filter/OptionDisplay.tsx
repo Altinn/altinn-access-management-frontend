@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsCheckbox, DsParagraph } from '@altinn/altinn-components';
+import { DsCheckbox, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
 import { optionSearch } from './utils';
 import type { FilterOption } from './utils';

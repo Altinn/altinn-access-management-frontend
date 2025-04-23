@@ -119,7 +119,7 @@ export const RightsActionBarContent = ({
                 : right.action;
               return (
                 <div key={index}>
-                  <Chip.Checkbox
+                  <DsChip.Checkbox
                     data-size='sm'
                     checked={right.checked}
                     onClick={() => {
@@ -127,7 +127,7 @@ export const RightsActionBarContent = ({
                     }}
                   >
                     {actionText}
-                  </Chip.Checkbox>
+                  </DsChip.Checkbox>
                 </div>
               );
             })
