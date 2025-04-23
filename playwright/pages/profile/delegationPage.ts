@@ -123,10 +123,6 @@ export class delegateRoleToUser {
     await this.page.locator('span.col', { hasText: roleName1 }).click();
     await this.page.locator('span.col', { hasText: roleName2 }).click();
     await this.page.getByRole('button', { name: 'Ferdig' }).click();
-    await this.page.getByPlaceholder('f.eks post@karinordmann.no').click();
-    await this.page.getByPlaceholder('f.eks post@karinordmann.no').fill('test@email.com');
-    await this.page.getByRole('button', { name: 'Fullfør' }).first().click();
-    await this.page.getByRole('link', { name: 'Ferdig' }).click();
     await this.page.goto(process.env.BASE_URL + '/ui/profile');
     await this.page.getByRole('link', { name: 'Andre med rettigheter til' }).click();
     await this.page.getByRole('link', { name: reporteeName }).click();
